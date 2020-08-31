@@ -74,12 +74,17 @@ public interface RegisterService {
 	//Fabrics Item Create 
 	public boolean saveFabricsItem(FabricsItem fabricsItem);
 	public boolean editFabricsItem(FabricsItem fabricsItem);
+	public FabricsItem getFabricsItem(String fabricsItemId);
 	public List<FabricsItem> getFabricsItemList();
 	public boolean isFabricsItemExist(FabricsItem fabricsItem);
+	
+	public boolean addItemUnits(Unit unit,String itemId,String itemType); 
+	public List<Unit> getItemUnitsList(String itemId,String itemType);
 
 	//Acccessories Item Create
 	public boolean saveAccessoriesItem(AccessoriesItem accessoriesItem);
 	public boolean editAccessoriesItem(AccessoriesItem accessoriesItem);
+	public AccessoriesItem getAccessoriesItem(String accessoriesItem);
 	public List<AccessoriesItem> getAccessoriesItemList();
 	public boolean isAccessoriesItemExist(AccessoriesItem accessoriesItem);
 

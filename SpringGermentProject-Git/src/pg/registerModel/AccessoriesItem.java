@@ -1,19 +1,23 @@
 package pg.registerModel;
 
+import java.util.List;
+
 public class AccessoriesItem {
 	String accessoriesItemId;
 	String accessoriesItemName;
 	String accessoriesItemCode;
+	String unitId;
 	String userId;
-	
+	List<Unit> unitList;
 	
 	public AccessoriesItem() {};
 	public AccessoriesItem(String accessoriesItemId, String accessoriesItemName, String accessoriesItemCode,
-			String userId) {
+			String unitId,String userId) {
 		super();
 		this.accessoriesItemId = accessoriesItemId;
 		this.accessoriesItemName = accessoriesItemName;
 		this.accessoriesItemCode = accessoriesItemCode;
+		this.unitId = unitId;
 		this.userId = userId;
 	}
 	public String getAccessoriesItemId() {
@@ -39,6 +43,18 @@ public class AccessoriesItem {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getUnitId() {
+		return unitId;
+	}
+	public void setUnitId(String unitId) {
+		this.unitId = unitId;
+	}
+	public List<Unit> getUnitList() {
+		return unitList;
+	}
+	public void setUnitList(List<Unit> unitList) {
+		this.unitList = unitList;
 	}
 	
 

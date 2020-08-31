@@ -31,6 +31,7 @@ import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
 import pg.share.HibernateUtil;
+import pg.share.ItemType;
 
 @Repository
 public class RegisterDaoImpl implements RegisterDao{
@@ -1717,8 +1718,18 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into TbFabricsItem(ItemName,refferance,entrytime,UserId) values('"+fabricsItem.getFabricsItemName()+"','"+fabricsItem.getReference()+"',current_timestamp,'"+fabricsItem.getUserId()+"')";
+			String sql="insert into TbFabricsItem(ItemName,refferance,unitId,entrytime,UserId) values('"+fabricsItem.getFabricsItemName()+"','"+fabricsItem.getReference()+"','"+fabricsItem.getUnitId()+"',current_timestamp,'"+fabricsItem.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
+			
+			String itemId = "0";
+			sql = "select max(id) from tbFaricsItem where itemName='"+fabricsItem.getFabricsItemName()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				itemId = list.get(0).toString();
+			}
+			sql = "insert into tbItemUnits (unitId,unitQty,itemId,itemType,entryTime,createBy) values('"+fabricsItem.getUnitId()+"','1','"+itemId+"','"+ItemType.FABRICS.getType()+"',current_timestamp,'"+fabricsItem.getUserId()+"');";
+			session.createSQLQuery(sql).executeUpdate();
+			
 			tx.commit();
 			return true;
 		}
@@ -1746,8 +1757,12 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="update TbFabricsItem set itemName='"+fabricsItem.getFabricsItemName()+"',refferance='"+fabricsItem.getReference()+"' where id='"+fabricsItem.getFabricsItemId()+"'";
+			String sql="update TbFabricsItem set itemName='"+fabricsItem.getFabricsItemName()+"',refferance='"+fabricsItem.getReference()+"',unitId='"+fabricsItem.getUnitId()+"' where id='"+fabricsItem.getFabricsItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
+			
+			sql="update tbItemUnits set unitId='"+fabricsItem.getUnitId()+"' where itemId='"+fabricsItem.getFabricsItemId()+"' and unitQty='1' and itemType='"+ItemType.FABRICS.getType()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			
 			tx.commit();
 			return true;
 		}
@@ -1768,6 +1783,54 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 
 	@Override
+	public FabricsItem getFabricsItem(String fabricsItemId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FabricsItem fabricsItem= null;
+		List<Unit> unitList = new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select id,ItemName,refferance,unitId,UserId from TbFabricsItem where id='"+fabricsItemId+"' order by ItemName";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+			{	
+				Object[] element = (Object[]) list.get(0);
+				fabricsItem = new FabricsItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),element[4].toString());
+			}
+			
+			sql="select iu.unitId,u.unitname,unitQty \r\n" + 
+					"from tbItemUnits iu\r\n" + 
+					"left join tbunits u\r\n" + 
+					"on iu.unitId = u.Unitid\r\n" + 
+					"where itemId='"+fabricsItemId+"' and itemType='"+ItemType.FABRICS.getType()+"' \r\n" + 
+					"order by iu.autoId";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				
+				Object[] element = (Object[]) iter.next();
+				unitList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
+			}
+			
+			fabricsItem.setUnitList(unitList);
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return fabricsItem;
+	}
+
+	@Override
 	public List<FabricsItem> getFabricsItemList() {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
@@ -1777,7 +1840,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select id,ItemName,refferance,UserId from TbFabricsItem order by ItemName";
+			String sql="select id,ItemName,refferance,unitId,UserId from TbFabricsItem order by ItemName";
 			
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1785,7 +1848,7 @@ public class RegisterDaoImpl implements RegisterDao{
 				
 				Object[] element = (Object[]) iter.next();
 				
-				dataList.add(new FabricsItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				dataList.add(new FabricsItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),element[4].toString()));
 			}
 			tx.commit();
 		}
@@ -1829,6 +1892,74 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 	
 	
+	@Override
+	public boolean addItemUnits(Unit unit, String itemId, String itemType) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="delete from tbItemUnits where itemId='"+itemId+"' and itemType='"+itemType+"' and unitId='"+unit.getUnitId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			
+			sql = "insert into tbItemUnits (unitId,unitQty,itemId,itemType,entryTime,createBy) values('"+unit.getUnitId()+"','"+unit.getUnitQty()+"','"+itemId+"','"+itemType+"',current_timestamp,'"+unit.getUserId()+"');";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public List<Unit> getItemUnitsList(String itemId, String itemType) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Unit> dataList=new ArrayList<Unit>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select iu.unitId,u.unitname,unitQty \r\n" + 
+					"from tbItemUnits iu\r\n" + 
+					"left join tbunits u\r\n" + 
+					"on iu.unitId = u.Unitid\r\n" + 
+					"where itemId='"+itemId+"' and itemType='"+itemType+"' \r\n" + 
+					"order by iu.autoId";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
 	//Accessories Item Create
 	@Override
 	public boolean saveAccessoriesItem(AccessoriesItem accessoriesItem) {
@@ -1838,7 +1969,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into TbAccessoriesItem (Itemname,ItemCode,entrytime,UserId) values('"+accessoriesItem.getAccessoriesItemName()+"','"+accessoriesItem.getAccessoriesItemCode()+"', CURRENT_TIMESTAMP,'"+accessoriesItem.getUserId()+"')";
+			String sql="insert into TbAccessoriesItem (Itemname,ItemCode,unitId,entrytime,UserId) values('"+accessoriesItem.getAccessoriesItemName()+"','"+accessoriesItem.getAccessoriesItemCode()+"','"+accessoriesItem.getUnitId()+"', CURRENT_TIMESTAMP,'"+accessoriesItem.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -1867,7 +1998,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="update TbAccessoriesItem set Itemname='"+accessoriesItem.getAccessoriesItemName()+"',Itemcode='"+accessoriesItem.getAccessoriesItemCode()+"' where itemid='"+accessoriesItem.getAccessoriesItemId()+"'";
+			String sql="update TbAccessoriesItem set Itemname='"+accessoriesItem.getAccessoriesItemName()+"',Itemcode='"+accessoriesItem.getAccessoriesItemCode()+"',unitId='"+accessoriesItem.getUnitId()+"' where itemid='"+accessoriesItem.getAccessoriesItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -1887,6 +2018,54 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
+	
+	@Override
+	public AccessoriesItem getAccessoriesItem(String accessoriesItemId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		AccessoriesItem accessoriesItem= null;
+		List<Unit> unitList = new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select itemId,itemName,itemCode,unitId,userid from TbAccessoriesItem where itemId='"+accessoriesItemId+"' order by ItemName";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+			{	
+				Object[] element = (Object[]) list.get(0);
+				accessoriesItem = new AccessoriesItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString());
+			}
+			
+			sql="select iu.unitId,u.unitname,unitQty \r\n" + 
+					"from tbItemUnits iu\r\n" + 
+					"left join tbunits u\r\n" + 
+					"on iu.unitId = u.Unitid\r\n" + 
+					"where itemId='"+accessoriesItemId+"' and itemType='"+ItemType.ACCESSORIES.getType()+"' \r\n" + 
+					"order by iu.autoId";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				
+				Object[] element = (Object[]) iter.next();
+				unitList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
+			}
+			
+			accessoriesItem.setUnitList(unitList);
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return accessoriesItem;
+	}
 
 	@Override
 	public List<AccessoriesItem> getAccessoriesItemList() {
@@ -1898,7 +2077,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select itemId,itemName,itemCode,userid from TbAccessoriesItem order by itemName";
+			String sql="select itemId,itemName,itemCode,unitId,userid from TbAccessoriesItem order by itemName";
 			
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1906,7 +2085,7 @@ public class RegisterDaoImpl implements RegisterDao{
 				
 				Object[] element = (Object[]) iter.next();
 				
-				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
 			}
 			tx.commit();
 		}
@@ -3655,4 +3834,6 @@ public class RegisterDaoImpl implements RegisterDao{
 			}
 			return unit;
 		}
+
+		
 }

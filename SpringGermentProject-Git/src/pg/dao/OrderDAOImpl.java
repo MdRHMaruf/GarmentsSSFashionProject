@@ -3260,7 +3260,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on rf.fabricsid = fi.id \r\n" + 
 						"where styleid='"+styleId+"'  group by fi.id,fi.ItemName";
 			}else if(type.equals("2")) {
-				sql = "select a.itemid,a.itemname \r\n" + 
+				sql = "select a.itemid,a.itemname,a.unitId \r\n" + 
 						"from tbAccessoriesIndent ai \r\n" + 
 						"left join TbAccessoriesItem a \r\n" + 
 						"on ai.accessoriesItemId = a.itemid \r\n" + 
@@ -3274,7 +3274,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), "", ""));
+				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), "",element[2].toString(), ""));
 			}
 			tx.commit();
 		}

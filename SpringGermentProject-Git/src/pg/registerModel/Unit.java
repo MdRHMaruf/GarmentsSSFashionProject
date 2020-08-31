@@ -4,6 +4,7 @@ public class Unit {
 	String unitId;
 	String unitName;
 	String unitValue;
+	double unitQty;
 	String userId;
 	
 	public Unit() {}
@@ -13,6 +14,13 @@ public class Unit {
 		this.unitName = unitName;
 		this.unitValue = unitValue;
 		this.userId = userId;
+	}
+	public Unit(String unitId, String unitName, double unitQty) {
+		super();
+		this.unitId = unitId;
+		this.unitName = unitName;
+		this.unitQty = unitQty;
+		
 	}
 	public String getUnitId() {
 		return unitId;
@@ -37,6 +45,12 @@ public class Unit {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public double getUnitQty() {
+		return unitQty;
+	}
+	public void setUnitQty(double unitQty) {
+		this.unitQty = unitQty;
 	}
 	
 	

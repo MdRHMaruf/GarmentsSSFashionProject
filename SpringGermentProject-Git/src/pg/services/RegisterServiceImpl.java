@@ -72,9 +72,26 @@ public class RegisterServiceImpl implements RegisterService{
 	}
 
 	@Override
+	public FabricsItem getFabricsItem(String fabricsItemId) {
+		// TODO Auto-generated method stub
+		return registerDao.getFabricsItem(fabricsItemId);
+	}
+
+	@Override
 	public List<FabricsItem> getFabricsItemList() {
 		// TODO Auto-generated method stub
 		return registerDao.getFabricsItemList();
+	}
+	
+	@Override
+	public boolean addItemUnits(Unit unit, String itemId, String itemType) {
+		// TODO Auto-generated method stub
+		return registerDao.addItemUnits(unit, itemId, itemType);
+	}
+	@Override
+	public List<Unit> getItemUnitsList(String itemId, String itemType) {
+		// TODO Auto-generated method stub
+		return registerDao.getItemUnitsList(itemId, itemType);
 	}
 
 	@Override
@@ -95,6 +112,11 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.editAccessoriesItem(accessoriesItem);
 	}
 
+	@Override
+	public AccessoriesItem getAccessoriesItem(String accessoriesItem) {
+		// TODO Auto-generated method stub
+		return registerDao.getAccessoriesItem(accessoriesItem);
+	}
 	@Override
 	public List<AccessoriesItem> getAccessoriesItemList() {
 		// TODO Auto-generated method stub
@@ -599,5 +621,9 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.getFactoryNameList();
 	}
 
+
+	
+
+	
 
 }
