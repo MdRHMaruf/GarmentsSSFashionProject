@@ -147,7 +147,7 @@
 													<td
 														id='accessoriesItemCode${accessoriesItem.accessoriesItemId}'>${accessoriesItem.accessoriesItemCode}</td>
 													<td><i class="fa fa-edit"
-														onclick="setData(${accessoriesItem.accessoriesItemId})">
+														onclick="setData(${accessoriesItem.accessoriesItemId})" style="cursor:pointer;">
 													</i></td>
 												</tr>
 											</c:forEach>

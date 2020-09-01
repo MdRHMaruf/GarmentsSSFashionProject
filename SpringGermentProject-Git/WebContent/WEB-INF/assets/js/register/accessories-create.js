@@ -18,6 +18,7 @@ function saveAction() {
           accessoriesItemId: "0",
           accessoriesItemName: accessoriesItemName,
           accessoriesItemCode: accessoriesItemCode,
+          unitId : unitId,
           userId: userId
         },
         success: function (data) {
@@ -63,13 +64,14 @@ function editAction() {
           accessoriesItemId: accessoriesItemId,
           accessoriesItemName: accessoriesItemName,
           accessoriesItemCode: accessoriesItemCode,
+          unitId : unitId,
           userId: userId
         },
         success: function (data) {
           if (data.result == "Something Wrong") {
             dangerAlert("Something went wrong");
           } else if (data.result == "duplicate") {
-            dangerAlert("Duplicate Accessories Item Name..This Accessories Item Name Allreary Exist")
+            dangerAlert("Duplicate Accessories Item Name..This Accessories Item Name Already Exist")
           } else {
             successAlert("Accessories Item Name Edit Successfully");
 
@@ -121,7 +123,7 @@ function unitAddAction(){
               unitId : unitId,
               unitQty : unitQty,
               userId : userId,
-              itemId : fabricsItemId,
+              itemId : accessoriesItemId,
               itemType : itemType
             },
             success: function (data) {
@@ -157,7 +159,7 @@ function setData(accessoriesItemId) {
     dataType: 'json',
     url: './getAccessoriesItem',
     data: {
-      fabricsItemId: fabricsItemId,
+      accessoriesItemId: accessoriesItemId,
     },
     success: function (data) {
       if (data.result == "Something Wrong") {
@@ -212,7 +214,7 @@ function drawRowDataTable(rowData, c) {
   row.append($("<td>" + rowData.accessoriesItemId + "</td>"));
   row.append($("<td id='accessoriesItemName" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemName + "</td>"));
   row.append($("<td id='accessoriesItemCode" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemCode + "</td>"));
-  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.accessoriesItemId + ")\"> </i></td>"));
+  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.accessoriesItemId + ")\" style='cursor:pointer;'>  </i></td>"));
 
   return row;
 }
