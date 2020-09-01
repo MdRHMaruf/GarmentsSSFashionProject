@@ -1,3 +1,4 @@
+<%@page import="pg.share.ItemType"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
@@ -14,17 +15,25 @@
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
 			style="display: none;">
-			<p id="successAlert" class="mb-0"><strong>Success!</strong> Fabrics Item Name Save Successfully..</p>
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Fabrics Item Name Save Successfully..
+			</p>
 		</div>
 		<div class="alert alert-warning alert-dismissible fade show"
 			style="display: none;">
-			<p id="warningAlert" class="mb-0"><strong>Warning!</strong> Fabrics Item Name Empty.Please Enter Fabrics Item Name...</p>
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Fabrics Item Name Empty.Please Enter
+				Fabrics Item Name...
+			</p>
 		</div>
 		<div class="alert alert-danger alert-dismissible fade show"
 			style="display: none;">
-			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+		<input type="hidden" id="itemType" value="<%=ItemType.FABRICS.getType()%>">
 		<input type="hidden" id="fabricsItemId" value="0">
 
 		<div class="row">
@@ -41,18 +50,62 @@
 							<hr>
 
 							<div class="form-group">
-								<label for="fabricsItemName">Fabrics Item Name:</label> <input type="text"
-									class="form-control" id="fabricsItemName" name="text">
+								<label for="fabricsItemName">Fabrics Item Name:</label> <input
+									type="text" class="form-control" id="fabricsItemName"
+									name="text">
 							</div>
 							<div class="form-group">
 								<label for="reference">Reference:</label> <input type="text"
 									class="form-control" id="reference" name="text">
 							</div>
+							<div class="row">
+
+								<div class="col-md-6 form-group mb-0 row">
+
+									<label for="unit" class="col-md-3 col-form-label-sm pr-0">Unit</label>
+									<select id="unit" class="selectpicker col-md-9 px-0"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-light-gray">
+										<option id="unit" value="0">Select Unit</option>
+										<c:forEach items="${unitList}" var="unit">
+											<option id="unit" value="${unit.unitId}">${unit.unitName}</option>
+										</c:forEach>
+									</select>
+								</div>
+
+
+
+								<div class="col-md-6">
+									<div class="input-group input-group-sm my-0">
+										<input type="text" class="form-control"
+											placeholder="Unit Qty" aria-describedby="addUnit"
+											id="unitQty">
+										<div class="input-group-append">
+											<button class="btn btn-primary" type="button" id="addUnit" onclick="unitAddAction()">
+												<i class="fas fa-plus-circle"></i>
+											</button>
+										</div>
+									</div>
+									<table class="table table-hover table-bordered table-sm">
+										<thead>
+											<tr>
+												<th scope="col">Unit</th>
+												<th scope="col">Minimum Qty</th>
+											</tr>
+										</thead>
+										<tbody id="unitList">
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-primary btn-sm" onclick="editAction()"
-								disabled>Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-primary btn-sm"
+								onclick="editAction()" disabled>Edit</button>
 							<button type="button" id="btnRefresh"
 								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>
 
@@ -69,43 +122,37 @@
 								</div>
 							</div>
 							<hr>
-							<div class="row" >
-								<div class="col-sm-12 col-md-12 col-lg-12" style="overflow: auto; max-height: 600px;">
-								<table class="table table-hover table-bordered table-sm" >
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Fabrics Item Name</th>
-										<th scope="col">Reference</th>
-										<th scope="col">edit</th>
-									</tr>
-								</thead>
-								<tbody id="dataList">
-									<c:forEach items="${fabricsItemList}" var="fabricsItem"
-													varStatus="counter">
-										<tr>
-											<td>${fabricsItem.fabricsItemId}</td>
-											<td id='fabricsItemName${fabricsItem.fabricsItemId}'>${fabricsItem.fabricsItemName}</td>
-											<td id='reference${fabricsItem.fabricsItemId}'>${fabricsItem.reference}</td>
-											<td><i class="fa fa-edit" onclick="setData(${fabricsItem.fabricsItemId})"> </i></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12"
+									style="overflow: auto; max-height: 600px;">
+									<table class="table table-hover table-bordered table-sm">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Fabrics Item Name</th>
+												<th scope="col">Reference</th>
+												<th scope="col">edit</th>
+											</tr>
+										</thead>
+										<tbody id="dataList">
+											<c:forEach items="${fabricsItemList}" var="fabricsItem"
+												varStatus="counter">
+												<tr>
+													<td>${fabricsItem.fabricsItemId}</td>
+													<td id='fabricsItemName${fabricsItem.fabricsItemId}'>${fabricsItem.fabricsItemName}</td>
+													<td id='reference${fabricsItem.fabricsItemId}'>${fabricsItem.reference}</td>
+													<td><i class="fa fa-edit"
+														onclick="setData(${fabricsItem.fabricsItemId})" style='cursor:pointer;'> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
 								</div>
-								
 							</div>
-							
 						</div>
 					</div>
-
-
-
 				</div>
-
 			</div>
-
-
 		</div>
 	</div>
 </div>
