@@ -1,15 +1,15 @@
 
-$("#purchaseOrderSearchBtn").click(function () {
+$("#itemSearchBtn").click(function () {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getAccessoriesPurchaseOrderList',
+    url: './getFabricsPurchaseOrderIndentList',
     data: {},
     success: function (data) {
 
       console.log(data);
-      $("#purchaseOrderList").empty();
-      $("#purchaseOrderList").append(drawPurchaseOrderListTable(data.purchaseOrderList));
+      //$("#purchaseOrderList").empty();
+      drawPurchaseOrderListTable(data.purchaseOrderList);
 
     }
   });
@@ -265,7 +265,7 @@ function setData(unitId) {
 
 }
 
-function setFabricsList(purchaseOrder, styleId, itemId) {
+function setFabricsInfo(purchaseOrder, styleId, itemId,itemColorId,fabricsId,fabricsColorId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -456,21 +456,25 @@ function drawFabricsListTable(data) {
 }
 
 function drawPurchaseOrderListTable(data) {
-  let rows = [];
+  let rows = "";
   const length = data.length;
-
+  
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
-    let row = $("<tr/>")
-    row.append($("<td>" + rowData.purchaseOrder + "</td>"));
-    row.append($("<td>" + rowData.styleNo + "</td>"));
-    row.append($("<td>" + rowData.indentItemName + "</td>"));
-    row.append($("<td ><i class='fa fa-search' onclick=\"setFabricsList('" + rowData.purchaseOrder + "'," + rowData.styleId + "," + rowData.indentItemId + ")\" style='cursor:pointer;'> </i></td>"));
-  
-    rows.push(row);
+    
+    rows += "<tr id='"+rowData.autoId+"'>"
+    +"<td id='purchaseOrder-"+rowData.autoId+"'>"+rowData.purchaseOrder+"</td>"
+    +"<td id='styleName-"+rowData.autoId+"'>"+rowData.styleName+"</td>"
+    +"<td id='itemName-"+rowData.autoId+"'>"+rowData.itemName+"</td>"
+    +"<td id='itemColor-"+rowData.autoId+"'>"+rowData.itemColorName+"</td>"
+    +"<td id='fabricsName-"+rowData.autoId+"'>"+rowData.fabricsName+"</td>"
+    +"<td id='fabricsColor-"+rowData.autoId+"'>"+rowData.fabricsColor+"</td>"
+    +"<td><i class='fa fa-search' onclick=\"setFabricsInfo('" + rowData.purchaseOrder + "'," + rowData.styleId + "," + rowData.itemId + "," + rowData.itemColorId + "," + rowData.fabricsId + "," + rowData.fabricsColorId + ")\" style='cursor:pointer;'> </i></td>"
+    +"</tr>";
+    
   }
 
-  return rows;
+  $("#purchaseOrderList").html(rows);
 }
 
 
@@ -505,9 +509,35 @@ $(document).ready(function () {
   $("input").focus(function () { $(this).select(); });
 });
 $(document).ready(function () {
-  $("#search").on("keyup", function () {
+  $("#purchaseOrderSearch , #styleNoSearch, #itemNameSearch,#fabricsItemSearch,#colorSearch").on("keyup", function () {
+    const po = $("#purchaseOrderSearch").val().toLowerCase();
+    const style = $("#styleNoSearch").val().toLowerCase();
+    const item = $("#itemNameSearch").val().toLowerCase();
+    const fabrics = $("#fabricsItemSearch").val().toLowerCase();
+    const color = $("#colorSearch").val().toLowerCase();
+
+    $("#purchaseOrderList tr").filter(function () {
+      const id = this.id;
+      
+      if( ( !po.length || $("#purchaseOrder-"+id).text().toLowerCase().indexOf(po) ) && 
+      ( !style.length || $("#styleName-"+id).text().toLowerCase().indexOf(style) ) &&
+       ( !item.length || $("#itemName-"+id).text().toLowerCase().indexOf(item) ) &&
+       ( !fabrics.length || $("#styleName-"+id).text().toLowerCase().indexOf(fabrics) ) &&
+       ( !color.length || $("#itemColor-"+id).text().toLowerCase().indexOf(color) || $("#fabricsColor-"+id).text().toLowerCase().indexOf(color) )){
+        $(this).toggle(false);
+       }else{
+        $(this).toggle(true);
+       }
+
+      
+    });
+  });
+});
+
+$(document).ready(function () {
+  $("#searchEverything").on("keyup", function () {
     var value = $(this).val().toLowerCase();
-    $("#poList tr").filter(function () {
+    $("#purchaseOrderList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });

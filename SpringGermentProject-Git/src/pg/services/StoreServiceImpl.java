@@ -10,6 +10,7 @@ import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrderItem;
 import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
+import pg.storeModel.FabricsReturn;
 
 @Service
 public class StoreServiceImpl implements StoreService{
@@ -18,9 +19,9 @@ public class StoreServiceImpl implements StoreService{
 	StoreDAO storeDao;
 
 	@Override
-	public List<PurchaseOrderItem> getAccessoriesPurchaseOrderList() {
+	public List<FabricsIndent> getFabricsPurchaseOrdeIndentrList() {
 		// TODO Auto-generated method stub
-		return storeDao.getAccessoriesPurchaseOrderList();
+		return storeDao.getFabricsPurchaseOrdeIndentrList();
 	}
 
 	@Override
@@ -75,6 +76,36 @@ public class StoreServiceImpl implements StoreService{
 	public FabricsQualityControl getFabricsQCInfo(String qcTransectionId) {
 		// TODO Auto-generated method stub
 		return storeDao.getFabricsQCInfo(qcTransectionId);
+	}
+
+	@Override
+	public boolean submitFabricsReturn(FabricsReturn fabricsReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.submitFabricsReturn(fabricsReceive);
+	}
+
+	@Override
+	public boolean editFabricsReturn(FabricsReturn fabricsReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.editFabricsReturn(fabricsReceive);
+	}
+
+	@Override
+	public List<FabricsReturn> getFabricsReturnList() {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsReturnList();
+	}
+
+	@Override
+	public FabricsReturn getFabricsReturnInfo(String returnTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsReturnInfo(returnTransectionId);
+	}
+
+	@Override
+	public FabricsReceive getFabricsReceiveInfoForReturn(String transectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsReceiveInfoForReturn(transectionId);
 	}
 
 	

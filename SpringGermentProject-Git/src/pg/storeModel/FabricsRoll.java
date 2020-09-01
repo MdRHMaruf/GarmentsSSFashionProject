@@ -21,6 +21,9 @@ public class FabricsRoll {
 	String qcTransectionId;
 	int qcPassedType;
 	
+	String returnTransectionId;
+	boolean isReturn;
+	
 	public FabricsRoll() {}
 	
 	public FabricsRoll(String autoId, String transectionId, String rollId, String supplierRollId, String unitId,
@@ -43,6 +46,7 @@ public class FabricsRoll {
 		this.rackName = rackName;
 		this.binName = binName;
 		this.qcPassedType = 1;
+		this.isReturn = false;
 		this.userId = userId;
 	}
 	public FabricsRoll(String autoId, String transectionId, String rollId, String supplierRollId, String unitId,
@@ -69,14 +73,53 @@ public class FabricsRoll {
 		this.userId = userId;
 	}
 	
-	public FabricsRoll(String autoId,String qcTransectionId,double qcPassedQty,int qcPassedType,String userId) {
+	public FabricsRoll(String autoId,String qcTransectionId,double qcPassedQty,int qcPassedType,boolean isReturn,String userId) {
 		this.autoId = autoId;
 		this.qcTransectionId = qcTransectionId;
 		this.qcPassedQty = qcPassedQty;
 		this.qcPassedType = qcPassedType;
+		this.isReturn = isReturn;
 		this.userId = userId;
 	}
 	
+	
+	
+	public FabricsRoll(String autoId, String returnTransectionId, String rollId, String supplierRollId, String unitId,
+			String unit, double rollQty, double qcPassedQty, String rackName, String binName,
+			int qcPassedType, boolean isReturn, String userId) {
+		super();
+		this.autoId = autoId;
+		this.returnTransectionId = returnTransectionId;
+		this.rollId = rollId;
+		this.supplierRollId = supplierRollId;
+		this.unitId = unitId;
+		this.unit = unit;
+		this.rollQty = rollQty;
+		this.qcPassedQty = qcPassedQty;
+		this.rackName = rackName;
+		this.binName = binName;
+		this.qcPassedType = qcPassedType;
+		this.isReturn = isReturn;
+		this.userId = userId;
+		
+	}
+
+	public String getReturnTransectionId() {
+		return returnTransectionId;
+	}
+
+	public void setReturnTransectionId(String returnTransectionId) {
+		this.returnTransectionId = returnTransectionId;
+	}
+
+	public boolean isReturn() {
+		return isReturn;
+	}
+
+	public void setReturn(boolean isReturn) {
+		this.isReturn = isReturn;
+	}
+
 	public String getQcTransectionId() {
 		return qcTransectionId;
 	}
