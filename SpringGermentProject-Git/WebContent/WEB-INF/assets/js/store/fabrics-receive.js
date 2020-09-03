@@ -70,7 +70,7 @@ function submitAction() {
     const rackName = $("#rackName-" + id).text();
     const binName = $("#binName-" + id).text();
     console.log(id,purchaseOrder,styleId,itemId,itemColorId,fabricsId,rollId,unitQty);
-    rollList += `rollId : ${rollId},unitId : ${unitId},unit : ${unit},rollQty : ${rollQty},qcPassedQty : ${qcPassedQty},issueQty : ${issueQty},balanceQty : ${balanceQty},rate : ${rate},totalAmount : ${totalAmount},remarks : ${remarks},rackName : ${rackName},binName : ${binName} #`;
+    rollList += `rollId : ${rollId},unitId : ${unitId},rollQty : ${rollQty},qcPassedQty : ${qcPassedQty},issueQty : ${issueQty},balanceQty : ${balanceQty},rate : ${rate},totalAmount : ${totalAmount},remarks : ${remarks},rackName : ${rackName},binName : ${binName} #`;
   }
 
   rollList = rollList.slice(0, -1);
