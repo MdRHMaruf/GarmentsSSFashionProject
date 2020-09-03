@@ -24,17 +24,13 @@ public class FabricsIndent {
 	double gsm;
 	double grandQty;
 	double rate;
-	public double getRate() {
-		return rate;
-	}
-
-	public void setRate(double rate) {
-		this.rate = rate;
-	}
-
+	String fabricsColor;
 	String fabricsColorId;
 	String brandId;
 	String userId;
+	
+
+	
 	
 	public FabricsIndent() {}
 	
@@ -43,6 +39,21 @@ public class FabricsIndent {
 		this.itemName = itemName;
 		this.itemColorName = itemColorName;
 		this.fabricsName = fabricsName;
+	}
+	
+	public FabricsIndent(String autoId,String purchaseOrder,String styleId,String styleName,String itemId,String itemName,String itemColorId,String itemColorName,String fabricsId,String fabricsName,String fabricsColorId,String fabricsColor) {
+		this.autoId = autoId;
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleName = styleName;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.itemColorId = itemColorId;
+		this.itemColorName = itemColorName;
+		this.fabricsId = fabricsId;
+		this.fabricsName = fabricsName;
+		this.fabricsColorId = fabricsColorId;
+		this.fabricsColor = fabricsColor;
 	}
 	
 	public FabricsIndent(String autoId, String purchaseOrder, String styleId, String itemId, String itemColorId,
@@ -95,6 +106,43 @@ public class FabricsIndent {
 		this.totalQty = totalQty;
 		this.unitId = unitId;
 		this.unit = unit;
+	}
+	
+	public FabricsIndent(String autoId, String purchaseOrder, String styleId, String styleName,
+			String itemId, String itemName, String itemColorId, String itemColorName, String fabricsId,
+			String fabricsName, String fabricsColorId, String fabricsColor, String unitId,
+			String unit, double grandQty) {
+		super();
+		this.autoId = autoId;
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleName = styleName;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.itemColorId = itemColorId;
+		this.itemColorName = itemColorName;
+		this.fabricsId = fabricsId;
+		this.fabricsName = fabricsName;
+		this.fabricsColorId = fabricsColorId;
+		this.fabricsColor = fabricsColor;
+		this.unitId = unitId;
+		this.unit = unit;
+		this.grandQty = grandQty;
+	}
+
+	public String getFabricsColor() {
+		return fabricsColor;
+	}
+
+	public void setFabricsColor(String fabricsColor) {
+		this.fabricsColor = fabricsColor;
+	}
+
+	public double getRate() {
+		return rate;
+	}
+	public void setRate(double rate) {
+		this.rate = rate;
 	}
 	public String getAutoId() {
 		return autoId;

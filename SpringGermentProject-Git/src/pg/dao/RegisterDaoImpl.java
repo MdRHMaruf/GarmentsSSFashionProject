@@ -2010,11 +2010,9 @@ public class RegisterDaoImpl implements RegisterDao{
 			String sql="update TbAccessoriesItem set Itemname='"+accessoriesItem.getAccessoriesItemName()+"',Itemcode='"+accessoriesItem.getAccessoriesItemCode()+"',unitId='"+accessoriesItem.getUnitId()+"' where itemid='"+accessoriesItem.getAccessoriesItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			
-			/*sql="update tbItemUnits set unitId='"+accessoriesItem.getUnitId()+"' where itemId='"+accessoriesItem.getAccessoriesItemId()+"' and unitQty='1' and itemType='"+ItemType.ACCESSORIES.getType()+"'";
-			session.createSQLQuery(sql).executeUpdate();*/
-			
-			sql = "insert into tbItemUnits (unitId,unitQty,itemId,itemType,entryTime,createBy) values('"+accessoriesItem.getUnitId()+"','1','"+accessoriesItem.getAccessoriesItemId()+"','"+ItemType.ACCESSORIES.getType()+"',current_timestamp,'"+accessoriesItem.getUserId()+"');";
+			sql="update tbItemUnits set unitId='"+accessoriesItem.getUnitId()+"' where itemId='"+accessoriesItem.getAccessoriesItemId()+"' and unitQty='1' and itemType='"+ItemType.ACCESSORIES.getType()+"'";
 			session.createSQLQuery(sql).executeUpdate();
+			
 			
 			tx.commit();
 			return true;

@@ -36,7 +36,7 @@
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics QC</h5>
+			<h5 class="text-center" style="display: inline;">Fabrics Return</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#searchModal">
 				<i class="fa fa-search"></i>
@@ -46,32 +46,26 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="qcTransectionId"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Tran
+					<label for="returnId"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return
 						ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="qcTransectionId" type="text" class=" form-control-sm" readonly>
-							<button id="newFabricsQCBtn" type="button"
+							<input id="returnTransectionId" type="text"
+								class=" form-control-sm" readonly>
+							<button id="newFabricsReturnBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsQCBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#qcSearchModal">
+							<button id="findFabricsReturnBtn" type="button"
+								class="btn btn-outline-dark btn-sm form-control-sm"
+								data-toggle="modal" data-target="#returnSearchModal">
 								<i class="fa fa-search"></i>
 							</button>
 
 						</div>
 					</div>
 				</div>
-				<div class="form-group mb-0  row">
-					<label for="qcDate"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Date:</label>
-					<input id="qcDate" type="date" class="col-md-9 form-control-sm">
-				</div>
-
-			</div>
-			<div class="col-md-4">
 
 				<div class="form-group mb-0  row">
 					<label for="grnNo"
@@ -80,13 +74,21 @@
 						<div class="input-group-append width-100">
 							<input id="grnNo" type="text" class=" form-control-sm" readonly>
 							<button id="grnSearchBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#grnSearchModal">
+								class="btn btn-outline-dark btn-sm form-control-sm"
+								data-toggle="modal" data-target="#grnSearchModal">
 								<i class="fa fa-search"></i>
 							</button>
 						</div>
 					</div>
 				</div>
-
+			</div>
+			<div class="col-md-4">
+				<div class="form-group mb-0  row">
+					<label for="qcDate"
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Return
+						Date:</label> <input id="returnDate" type="date"
+						class="col-md-8 form-control-sm">
+				</div>
 				<div class="form-group mb-0  row">
 					<label for="receiveDate"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Fabrics
@@ -139,14 +141,10 @@
 							<th>UOM</th>
 							<th>Rate</th>
 							<th>QC Passed Qty</th>
-							<th>Shade</th>
-							<th>Shrinkage</th>
-							<th>GSM</th>
-							<th>Width</th>
-							<th>Defect</th>
 							<th>Rack Name</th>
 							<th>Bin name</th>
 							<th>QC Passed</th>
+							<th>Return</th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -158,13 +156,12 @@
 
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button id="btnSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="submitAction()">
+				<button id="btnSubmit" type="button" class="btn btn-primary btn-sm"
+					onclick="submitAction()">
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-					disabled>
+					class="btn btn-primary btn-sm ml-1" onclick="editAction()" disabled>
 					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
@@ -180,7 +177,7 @@
 	</div>
 </div>
 <!--QC search modal -->
-<div class="modal fade" id="qcSearchModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="returnSearchModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -209,7 +206,7 @@
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsQCList">
+					<tbody id="fabricsReturnList">
 
 					</tbody>
 				</table>
@@ -262,4 +259,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-quality-control.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/fabrics-return.js"></script>

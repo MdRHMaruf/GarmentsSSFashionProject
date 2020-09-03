@@ -3,42 +3,67 @@ package pg.storeModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricsQualityControl {
+public class FabricsReturn {
+	
 	String autoId;
-	String qcTransectionId;
-	String qcDate;
+	String returnTransectionId;
+	String returnDate;
 	String grnNo;
 	String receiveDate;
-	String remarks;
 	String fabricsName;
 	String supplierId;
+	String remarks;
 	String rollList;
 	List<FabricsRoll> fabricsRollList;
 	String userId;
-	public FabricsQualityControl() {}
-	public FabricsQualityControl(String autoId, String qcTransectionId, String qcDate, String grnNo, String remarks,String userId) {
-		super();
-		this.autoId = autoId;
-		this.qcTransectionId = qcTransectionId;
-		this.qcDate = qcDate;
-		this.grnNo = grnNo;
-		this.remarks = remarks;
-		this.userId = userId;
-	}
 	
-	public FabricsQualityControl(String autoId, String qcTransectionId, String qcDate, String grnNo,String receiveDate, String remarks,
-			String fabricsName, String supplierId, String userId) {
+	public FabricsReturn() {}
+	public FabricsReturn(String autoId, String returnTransectionId, String returnDate, String grnNo, String grnDate,
+			String fabricsName, String supplierId, String remarks, String userId) {
 		super();
 		this.autoId = autoId;
-		this.qcTransectionId = qcTransectionId;
-		this.qcDate = qcDate;
+		this.returnTransectionId = returnTransectionId;
+		this.returnDate = returnDate;
 		this.grnNo = grnNo;
-		this.receiveDate = receiveDate;
-		this.remarks = remarks;
+		this.receiveDate = grnDate;
 		this.fabricsName = fabricsName;
 		this.supplierId = supplierId;
+		this.remarks = remarks;
 		this.userId = userId;
 	}
+	public String getAutoId() {
+		return autoId;
+	}
+	public void setAutoId(String autoId) {
+		this.autoId = autoId;
+	}
+	public String getReturnTransectionId() {
+		return returnTransectionId;
+	}
+	public void setReturnTransectionId(String returnTransectionId) {
+		this.returnTransectionId = returnTransectionId;
+	}
+	public String getReturnDate() {
+		return returnDate;
+	}
+	public void setReturnDate(String returnDate) {
+		this.returnDate = returnDate;
+	}
+	public String getGrnNo() {
+		return grnNo;
+	}
+	public void setGrnNo(String grnNo) {
+		this.grnNo = grnNo;
+	}
+	
+	public String getReceiveDate() {
+		return receiveDate;
+	}
+
+	public void setReceiveDate(String receiveDate) {
+		this.receiveDate = receiveDate;
+	}
+
 	public String getFabricsName() {
 		return fabricsName;
 	}
@@ -50,43 +75,6 @@ public class FabricsQualityControl {
 	}
 	public void setSupplierId(String supplierId) {
 		this.supplierId = supplierId;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getAutoId() {
-		return autoId;
-	}
-	public void setAutoId(String autoId) {
-		this.autoId = autoId;
-	}
-	public String getQcTransectionId() {
-		return qcTransectionId;
-	}
-	public void setQcTransectionId(String qcTransectionId) {
-		this.qcTransectionId = qcTransectionId;
-	}
-	public String getQcDate() {
-		return qcDate;
-	}
-	public void setQcDate(String qcDate) {
-		this.qcDate = qcDate;
-	}
-	
-	public String getReceiveDate() {
-		return receiveDate;
-	}
-	public void setReceiveDate(String receiveDate) {
-		this.receiveDate = receiveDate;
-	}
-	public String getGrnNo() {
-		return grnNo;
-	}
-	public void setGrnNo(String grnNo) {
-		this.grnNo = grnNo;
 	}
 	public String getRemarks() {
 		return remarks;
@@ -104,7 +92,7 @@ public class FabricsQualityControl {
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
 			String autoId,transectionId,userId;
 			double qcPassedQty; int qcPassedType;
-			
+			boolean isReturn;
 			for (String item : rollLists) {
 				String[] itemProperty = item.split(",");
 
@@ -112,10 +100,11 @@ public class FabricsQualityControl {
 				transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
 				qcPassedQty = Double.valueOf(itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim());
 				qcPassedType = Integer.valueOf(itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim());
-				userId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				isReturn = Boolean.valueOf(itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim());
+				userId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
 
 
-				list.add(new FabricsRoll(autoId, transectionId, qcPassedQty, qcPassedType, false,userId));
+				list.add(new FabricsRoll(autoId, transectionId, qcPassedQty, qcPassedType,isReturn, userId));
 			}
 
 			this.fabricsRollList = list;
@@ -130,7 +119,14 @@ public class FabricsQualityControl {
 	public void setFabricsRollList(List<FabricsRoll> fabricsRollList) {
 		this.fabricsRollList = fabricsRollList;
 	}
-
-
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	
+	
 
 }

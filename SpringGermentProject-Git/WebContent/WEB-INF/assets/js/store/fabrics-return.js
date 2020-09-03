@@ -1,21 +1,19 @@
 
-$("#newFabricsQCBtn").click(function () {
+$("#newFabricsReturnBtn").click(function () {
 
-  $("#qcTransectionId").val("-- New Transection --");
+  $("#returnTransectionId").val("-- New Transection --");
   $("#btnSubmit").prop("disabled", false);
   $("#btnEdit").prop("disabled", true);
 });
 
-$("#findFabricsQCBtn").click(function () {
+$("#findFabricsReturnBtn").click(function () {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsQCList',
+    url: './getFabricsReturnList',
     data: {},
     success: function (data) {
-
-      console.log(data);
-      drawFabricsQCListTable(data.fabricsQCList);
+      drawFabricsReturnListTable(data.fabricsReturnList);
     }
   });
 });
@@ -39,15 +37,14 @@ function setFabricsReceiveInfo(transectionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsReceiveInfo',
+    url: './getFabricsReceiveInfoForReturn',
     data: {
       transectionId: transectionId
     },
     success: function (data) {
 
       const fabricsReceive = data.fabricsReceive;
-      $("#qcTransectionId").val(fabricsReceive.transectionId);
-      $("#indentId").val(fabricsReceive.indentId);
+      //$("#returnTransectionId").val(fabricsReceive.transectionId);
       $("#fabricsId").val(fabricsReceive.fabricsId);
       $("#fabrics").val(fabricsReceive.fabricsName);
       $("#grnNo").val(fabricsReceive.grnNo);
@@ -58,35 +55,32 @@ function setFabricsReceiveInfo(transectionId) {
       $("#supplier").val(fabricsReceive.supplierId).change();
       $('#grnSearchModal').modal('hide');
       drawFabricsRollListTable(fabricsReceive.fabricsRollList);
-      $("#btnSubmit").prop("disabled", true);
-      $("#btnEdit").prop("disabled", false);
 
     }
   });
 }
 
-function setFabricsQCInfo(qcTransectionId) {
+function setFabricsReturnInfo(returnTransectionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsQCInfo',
+    url: './getFabricsReturnInfo',
     data: {
-      qcTransectionId: qcTransectionId
+      returnTransectionId: returnTransectionId
     },
     success: function (data) {
 
-      const fabricsQC = data.fabricsQC;
-      console.log(fabricsQC);
-      $("#qcTransectionId").val(fabricsQC.qcTransectionId);
-      $("#fabrics").val(fabricsQC.fabricsName);
-      $("#grnNo").val(fabricsQC.grnNo);
-      let date = fabricsQC.receiveDate.split("/");
+      const fabricsReturn = data.fabricsReturn;
+      $("#returnTransectionId").val(fabricsReturn.returnTransectionId);
+      $("#fabrics").val(fabricsReturn.fabricsName);
+      $("#grnNo").val(fabricsReturn.grnNo);
+      let date = fabricsReturn.receiveDate.split("/");
       $("#receiveDate").val(date[2] + "-" + date[1] + "-" + date[0]);
       
-      $("#remarks").val(fabricsQC.remarks);
-      $("#supplier").val(fabricsQC.supplierId).change();
-      $('#qcSearchModal').modal('hide');
-      drawFabricsRollListTable(fabricsQC.fabricsRollList);
+      $("#remarks").val(fabricsReturn.remarks);
+      $("#supplier").val(fabricsReturn.supplierId).change();
+      $('#returnSearchModal').modal('hide');
+      drawFabricsRollListTable(fabricsReturn.fabricsRollList);
       $("#btnSubmit").prop("disabled", true);
       $("#btnEdit").prop("disabled", false);
 
@@ -98,8 +92,8 @@ function submitAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
 
-  const qcTransectionId = $("#qcTransectionId").val();
-  const qcDate = $("#qcDate").val();
+  const returnTransectionId = $("#returnTransectionId").val();
+  const returnDate = $("#returnDate").val();
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
   const userId = $("#userId").val();
@@ -111,23 +105,24 @@ function submitAction() {
     const id = rowList[i].id.slice(4);
     const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
     const qcPassedType = $("#qcPassed-" + id).val();
+    const isReturn = $("#check-"+id).prop('checked');;
 
-    rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    rollList += `autoId : ${id},returnTransectionId : ${returnTransectionId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},isReturn : ${isReturn},userId : ${userId} #`;
   }
 
   rollList = rollList.slice(0, -1);
-  console.log(rollList);
+  
   if (length > 0) {
-    if (qcTransectionId != '') {
+    if (returnTransectionId != '') {
       if(grnNo != ''){
-          if (confirm("Are you sure to submit this Fabrics Quality Control...")) {
+          if (confirm("Are you sure to submit this Fabrics Return...")) {
             $.ajax({
               type: 'POST',
               dataType: 'json',
-              url: './submitFabricsQC',
+              url: './submitFabricsReturn',
               data: {
-                qcTransectionId: qcTransectionId,
-                qcDate : qcDate,
+                returnTransectionId: returnTransectionId,
+                returnDate : returnDate,
                 grnNo: grnNo,
                 remarks : remarks,
                 rollList: rollList,
@@ -164,8 +159,8 @@ function editAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
 
-  const qcTransectionId = $("#qcTransectionId").val();
-  const qcDate = $("#qcDate").val();
+  const returnTransectionId = $("#returnTransectionId").val();
+  const returnDate = $("#returnDate").val();
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
   const userId = $("#userId").val();
@@ -177,23 +172,24 @@ function editAction() {
     const id = rowList[i].id.slice(4);
     const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
     const qcPassedType = $("#qcPassed-" + id).val();
+    const isReturn = $("#check-"+id).prop('checked');;
 
-    rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    rollList += `autoId : ${id},returnTransectionId : ${returnTransectionId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},isReturn : ${isReturn},userId : ${userId} #`;
   }
 
   rollList = rollList.slice(0, -1);
-  console.log(rollList);
+  
   if (length > 0) {
-    if (qcTransectionId != '') {
+    if (returnTransectionId != '') {
       if(grnNo != ''){
-          if (confirm("Are you sure to Edit this Fabrics Quality Control...")) {
+          if (confirm("Are you sure to Edit this Fabrics Return...")) {
             $.ajax({
               type: 'POST',
               dataType: 'json',
-              url: './editFabricsQC',
+              url: './editFabricsReturn',
               data: {
-                qcTransectionId: qcTransectionId,
-                qcDate : qcDate,
+                returnTransectionId: returnTransectionId,
+                returnDate : returnDate,
                 grnNo: grnNo,
                 remarks : remarks,
                 rollList: rollList,
@@ -253,11 +249,17 @@ function drawFabricsReceiveListTable(data) {
 function drawFabricsRollListTable(data){
     const length = data.length;
     let tr_list="";
+    let isCheck = "";
     $("#rollList").empty();
     let options="<option  id='qcPassed-1' value='1'>QC Passed</option><option  id='qcPassed-1' value='2'>QC Failed</option>";
     for (var i = 0; i < length; i++) {
       
       const rowData = data[i];
+      
+      if(rowData.return) isCheck = "checked";
+      else isCheck = "";
+      console.log(rowData);
+      console.log(rowData.return,isCheck);
       tr_list=tr_list+"<tr id='row-" + rowData.autoId + "'>"
                 +"<td id='rollId-" + i + "' contenteditable = 'true'>" + rowData.rollId + "</td>"
                 +"<td id='supplierRollId-" + i + "'>" + rowData.supplierRollId + "</td>"
@@ -265,21 +267,16 @@ function drawFabricsRollListTable(data){
                 +"<td id='rollQty-" + i + "'>" + rowData.unit + "</td>"
                 +"<td id='rate-" + i + "'> " + rowData.rate + "</td>"
                 +"<td id='qcPassedQty-" + rowData.autoId + "'  contenteditable = 'true'>"+rowData.rollQty+"</td>"
-                +"<td id='shade-" + i + "'>0</td>"
-                +"<td id='shrinkage-" + i + "'>0</td>"
-                +"<td id='gsm-" + i + "'>0</td>"
-                +"<td id='width-" + i + "'>0</td>"
-                +"<td id='defect-" + i + "'>0</td>"
                 +"<td id='rackName-" + i + "'>"+rowData.rackName+"</td>"
                 +"<td id='binName-" + i + "'>"+rowData.binName+"</td>"
                 +"<td><select id='qcPassed-" + rowData.autoId + "' class='form-control-sm px-0 bg-success' onchange='qcPassedChangeBackground(this)'>"+options+"</select></td>"
+              +"<td><input id='check-"+rowData.autoId+"' type='checkbox' class='form-control-sm' "+isCheck+"></td>"
               +"</tr>";
     }
     $("#rollList").html(tr_list);
 
     for(var i = 0;i<length;i++){
       const rowData = data[i];
-      console.log("qcPassed="+rowData.qcPassedType);
       var element = document.getElementById("qcPassed-"+rowData.autoId);
       if(rowData.qcPassedType == 1){
         
@@ -293,22 +290,22 @@ function drawFabricsRollListTable(data){
     }
 }
 
-function drawFabricsQCListTable(data){
+function drawFabricsReturnListTable(data){
   const length = data.length;
   var tr_list="";
-  $("#fabricsQCList").empty();
+  $("#fabricsReturnList").empty();
   var options="<option value='1'>QC Passed</option><option value='2'>QC Failed</option>";
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list=tr_list+"<tr id='row-" + rowData.autoId + "'>"
-              +"<td>" + rowData.qcTransectionId + "</td>"
-              +"<td>" + rowData.qcDate + "</td>"
+              +"<td>" + rowData.returnTransectionId + "</td>"
+              +"<td>" + rowData.returnDate + "</td>"
               +"<td>" + rowData.grnNo + "</td>"
               +"<td>" + rowData.fabricsName + "</td>"
-              +"<td ><i class='fa fa-search' onclick=\"setFabricsQCInfo('" + rowData.qcTransectionId + "')\" style='cursor:pointer;'> </i></td>"
+              +"<td ><i class='fa fa-search' onclick=\"setFabricsReturnInfo('" + rowData.returnTransectionId + "')\" style='cursor:pointer;'> </i></td>"
             +"</tr>";
   }
-  $("#fabricsQCList").html(tr_list);
+  $("#fabricsReturnList").html(tr_list);
 }
 
 function qcPassedChangeBackground(element){
@@ -362,4 +359,4 @@ $(document).ready(function () {
 
 
 var today = new Date();
-document.getElementById("qcDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+document.getElementById("returnDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);

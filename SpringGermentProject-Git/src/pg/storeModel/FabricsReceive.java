@@ -12,22 +12,8 @@ public class FabricsReceive {
 	String grnNo;
 	String grnDate;
 	String location;
-	String purcharOrder;
-	String styleId;
-	String styleNo;
-	String itemId;
-	String itemName;
-	String colorId;
-	String colorName;
-	String fabricsId;
-	String fabricsName;
-	String indentId;
 	String rollList;
-	String unitId;
-	double grnQty;
-	double noOfRoll;
 	String supplierId;
-	String buyer;
 	String challanNo;
 	String challanDate;
 	String remarks;
@@ -36,13 +22,9 @@ public class FabricsReceive {
 	List<FabricsRoll> fabricsRollList;
 	
 	public FabricsReceive() {}
-	
-	
-	
+		
 	public FabricsReceive(String autoId, String transectionId, String grnNo, String grnDate, String location,
-			String purcharOrder, String styleId, String styleNo, String itemId, String itemName,String colorId,String colorName,
-			String fabricsId, String fabricsName, String indentId, String unitId, double grnQty, double noOfRoll,
-			String supplierId, String buyer, String challanNo, String challanDate, String remarks, String preparedBy,
+			String rollList, String supplierId, String challanNo, String challanDate, String remarks, String preparedBy,
 			String userId) {
 		super();
 		this.autoId = autoId;
@@ -50,183 +32,116 @@ public class FabricsReceive {
 		this.grnNo = grnNo;
 		this.grnDate = grnDate;
 		this.location = location;
-		this.purcharOrder = purcharOrder;
-		this.styleId = styleId;
-		this.styleNo = styleNo;
-		this.itemId = itemId;
-		this.itemName = itemName;
-		this.colorId = colorId;
-		this.colorName = colorName;
-		this.fabricsId = fabricsId;
-		this.fabricsName = fabricsName;
-		this.indentId = indentId;
-		this.unitId = unitId;
-		this.grnQty = grnQty;
-		this.noOfRoll = noOfRoll;
-		this.supplierId = supplierId;
-		this.buyer = buyer;
-		this.challanNo = challanNo;
-		this.challanDate = challanDate;
-		this.remarks = remarks;
-		this.preparedBy = preparedBy;
-		this.userId = userId;	
-	}
-
-
-
-	/*public FabricsReceive(String autoId, String transectionId, String grnNo, String grnDate, String location,
-			String indentId,String fabricsId,String fabricsName, String rollList, String grnQty, String noOfRoll, String supplierId, String buyer,
-			String challanNo, String challanDate, String remarks,String preparedBy, String userId) {
-		super();
-		this.autoId = autoId;
-		this.transectionId = transectionId;
-		this.grnNo = grnNo;
-		this.grnDate = grnDate;
-		this.location = location;
-		this.indentId = indentId;
-		this.fabricsId = fabricsId;
-		this.fabricsName =fabricsName;
 		this.rollList = rollList;
-		this.grnQty = grnQty;
-		this.noOfRoll = noOfRoll;
 		this.supplierId = supplierId;
-		this.buyer = buyer;
 		this.challanNo = challanNo;
 		this.challanDate = challanDate;
 		this.remarks = remarks;
 		this.preparedBy = preparedBy;
 		this.userId = userId;
-	}*/
 	
-	
-	public String getColorId() {
-		return colorId;
-	}
-
-
-
-	public void setColorId(String colorId) {
-		this.colorId = colorId;
-	}
-
-
-
-	public String getColorName() {
-		return colorName;
-	}
-
-
-
-	public void setColorName(String colorName) {
-		this.colorName = colorName;
-	}
-
-
-
-	public String getPurcharOrder() {
-		return purcharOrder;
-	}
-
-	public void setPurcharOrder(String purcharOrder) {
-		this.purcharOrder = purcharOrder;
-	}
-
-	public String getStyleId() {
-		return styleId;
-	}
-
-	public void setStyleId(String styleId) {
-		this.styleId = styleId;
-	}
-
-	public String getStyleNo() {
-		return styleNo;
-	}
-
-	public void setStyleNo(String styleNo) {
-		this.styleNo = styleNo;
-	}
-
-	public String getItemId() {
-		return itemId;
-	}
-
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
-	}
-
-	public String getItemName() {
-		return itemName;
-	}
-
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
-
-	public String getFabricsName() {
-		return fabricsName;
-	}
-
-	public void setFabricsName(String fabricsName) {
-		this.fabricsName = fabricsName;
-	}
-
-	public String getUnitId() {
-		return unitId;
-	}
-
-	public void setUnitId(String unitId) {
-		this.unitId = unitId;
 	}
 
 	public String getAutoId() {
 		return autoId;
 	}
+
 	public void setAutoId(String autoId) {
 		this.autoId = autoId;
 	}
+
 	public String getTransectionId() {
 		return transectionId;
 	}
+
 	public void setTransectionId(String transectionId) {
 		this.transectionId = transectionId;
 	}
+
 	public String getGrnNo() {
 		return grnNo;
 	}
+
 	public void setGrnNo(String grnNo) {
 		this.grnNo = grnNo;
 	}
+
 	public String getGrnDate() {
 		return grnDate;
 	}
+
 	public void setGrnDate(String grnDate) {
 		this.grnDate = grnDate;
 	}
+
 	public String getLocation() {
 		return location;
 	}
+
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
-	public String getIndentId() {
-		return indentId;
+
+	public String getSupplierId() {
+		return supplierId;
 	}
 
-	public void setIndentId(String indentId) {
-		this.indentId = indentId;
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
 	}
 
-	public String getFabricsId() {
-		return fabricsId;
+	public String getChallanNo() {
+		return challanNo;
 	}
-	public void setFabricsId(String fabricsId) {
-		this.fabricsId = fabricsId;
+
+	public void setChallanNo(String challanNo) {
+		this.challanNo = challanNo;
 	}
+
+	public String getChallanDate() {
+		return challanDate;
+	}
+
+	public void setChallanDate(String challanDate) {
+		this.challanDate = challanDate;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+
+	public String getPreparedBy() {
+		return preparedBy;
+	}
+
+	public void setPreparedBy(String preparedBy) {
+		this.preparedBy = preparedBy;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public List<FabricsRoll> getFabricsRollList() {
+		return fabricsRollList;
+	}
+
+	public void setFabricsRollList(List<FabricsRoll> fabricsRollList) {
+		this.fabricsRollList = fabricsRollList;
+	}
+
 	public String getRollList() {
 		return rollList;
 	}
+
 	public void setRollList(String rollList) {
 		try {
 			
@@ -263,68 +178,6 @@ public class FabricsReceive {
 			}
 		
 	}
-	public double getGrnQty() {
-		return grnQty;
-	}
-	public void setGrnQty(double grnQty) {
-		this.grnQty = grnQty;
-	}
-	public double getNoOfRoll() {
-		return noOfRoll;
-	}
-	public void setNoOfRoll(double noOfRoll) {
-		this.noOfRoll = noOfRoll;
-	}
-	public String getSupplierId() {
-		return supplierId;
-	}
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
-	}
-	public String getBuyer() {
-		return buyer;
-	}
-	public void setBuyer(String buyer) {
-		this.buyer = buyer;
-	}
-	public String getChallanNo() {
-		return challanNo;
-	}
-	public void setChallanNo(String challanNo) {
-		this.challanNo = challanNo;
-	}
-	public String getChallanDate() {
-		return challanDate;
-	}
-	public void setChallanDate(String challanDate) {
-		this.challanDate = challanDate;
-	}
-	public String getRemarks() {
-		return remarks;
-	}
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	
-	public String getPreparedBy() {
-		return preparedBy;
-	}
-	public void setPreparedBy(String preparedBy) {
-		this.preparedBy = preparedBy;
-	}
-	public List<FabricsRoll> getFabricsRollList() {
-		return fabricsRollList;
-	}
-	public void setFabricsRollList(List<FabricsRoll> fabricsRollList) {
-		this.fabricsRollList = fabricsRollList;
-	}
 	
 	
-
 }
