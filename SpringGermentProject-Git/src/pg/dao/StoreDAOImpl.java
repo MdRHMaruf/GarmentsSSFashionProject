@@ -68,30 +68,39 @@ public class StoreDAOImpl implements StoreDAO{
 		return datalist;
 	}
 
+	
+	
 	@Override
-	public List<FabricsIndent> getFabricsListByItemId(String purchaseOrder, String styleId, String itemId) {
+	public FabricsIndent getFabricsIndentInfo(String autoId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<FabricsIndent> datalist=new ArrayList<FabricsIndent>();	
+		FabricsIndent indent= null;
 		try{	
 			tx=session.getTransaction();
-			tx.begin();		
-			String sql="select fi.id,id.itemname,c.Colorname,f.ItemName \r\n" + 
-					"from tbFabricsIndent fi\r\n" + 
+			tx.begin();	
+			String sql="select rf.id,PurchaseOrder,rf.styleId,sc.StyleNo,rf.itemid,id.itemname,rf.itemcolor,c.colorName,rf.fabricsid,fi.ItemName as fabricsName,rf.fabricscolor,fc.Colorname,rf.unitId,u.unitname,rf.RequireUnitQty \r\n" + 
+					"from tbFabricsIndent rf\r\n" + 
+					"left join TbStyleCreate  sc\r\n" + 
+					"on rf.styleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
-					"on fi.itemid = id.itemid\r\n" + 
+					"on rf.itemid = id.itemid\r\n" + 
 					"left join tbColors c\r\n" + 
-					"on fi.itemcolor = c.ColorId\r\n" + 
-					"left join TbFabricsItem f\r\n" + 
-					"on fi.fabricsid = f.id\r\n" + 
-					"where fi.PurchaseOrder = '"+purchaseOrder+"' and fi.styleId = '"+styleId+"' and fi.itemid = '"+itemId+"'";		
+					"on rf.itemcolor = c.ColorId\r\n" + 
+					"left join TbFabricsItem fi\r\n" + 
+					"on rf.fabricsid = fi.id\r\n" + 
+					"left join tbColors fc\r\n" + 
+					"on rf.fabricscolor = fc.ColorId\r\n" + 
+					"left join tbunits u\r\n" + 
+					"on rf.unitId = u.Unitid\r\n" + 
+					" where rf.id = '"+autoId+"'";
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				datalist.add(new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));				
+				indent = new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), Double.valueOf(element[14].toString()));
 			}			
 			tx.commit();			
 		}	
@@ -104,8 +113,10 @@ public class StoreDAOImpl implements StoreDAO{
 		finally {
 			session.close();
 		}
-		return datalist;
+		return indent;
 	}
+
+
 
 	@Override
 	public boolean submitFabricsReceive(FabricsReceive fabricsReceive) {
@@ -145,13 +156,7 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "'"+fabricsReceive.getGrnNo()+"',"
 					+ "'"+fabricsReceive.getGrnDate()+"',"
 					+ "'"+fabricsReceive.getLocation()+"',"
-					+ "'"+fabricsReceive.getFabricsId()+"',"
-					+ "'"+fabricsReceive.getIndentId()+"',"
-					+ "'"+fabricsReceive.getUnitId()+"',"
-					+ "'"+fabricsReceive.getGrnQty()+"',"
-					+ "'"+fabricsReceive.getNoOfRoll()+"',"
 					+ "'"+fabricsReceive.getSupplierId()+"',"
-					+ "'"+fabricsReceive.getBuyer()+"',"
 					+ "'"+fabricsReceive.getChallanNo()+"',"
 					+ "'"+fabricsReceive.getChallanDate()+"',"
 					+ "'"+fabricsReceive.getRemarks()+"',"
@@ -163,7 +168,7 @@ public class StoreDAOImpl implements StoreDAO{
 			int length = fabricsReceive.getFabricsRollList().size();
 			for (FabricsRoll roll : fabricsReceive.getFabricsRollList()) {
 				sql="insert into tbFabricsRollDetails (transectionId,rollId,supplierRollId,unitId,rollQty,qcPassedQty,issueQty,balanceQty,rate,totalAmount,remarks,rackName,binName,entryTime,createBy) \r\n" + 
-						"values('"+transectionId+"','"+roll.getRollId()+"','"+roll.getSupplierRollId()+"','"+fabricsReceive.getUnitId()+"','"+roll.getRollQty()+"','"+roll.getQcPassedQty()+"','"+roll.getIssueQty()+"','"+roll.getBalanceQty()+"','"+roll.getRate()+"','"+roll.getTotalAmount()+"','"+roll.getRemarks()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
+						"values('"+transectionId+"','"+roll.getRollId()+"','"+roll.getSupplierRollId()+"','','"+roll.getRollQty()+"','"+roll.getQcPassedQty()+"','"+roll.getIssueQty()+"','"+roll.getBalanceQty()+"','"+roll.getRate()+"','"+roll.getTotalAmount()+"','"+roll.getRemarks()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -202,12 +207,7 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "grnNo='"+fabricsReceive.getGrnNo()+"',"
 					+ "grnDate='"+fabricsReceive.getGrnDate()+"',"
 					+ "location='"+fabricsReceive.getLocation()+"',"
-					+ "fabricsId='"+fabricsReceive.getFabricsId()+"',"
-					+ "indentId='"+fabricsReceive.getIndentId()+"',"
-					+ "grnQty='"+fabricsReceive.getGrnQty()+"',"
-					+ "noOfRoll='"+fabricsReceive.getNoOfRoll()+"',"
 					+ "supplierId='"+fabricsReceive.getSupplierId()+"',"
-					+ "buyer='"+fabricsReceive.getBuyer()+"',"
 					+ "challanNo='"+fabricsReceive.getChallanNo()+"',"
 					+ "challanDate='"+fabricsReceive.getChallanDate()+"',"
 					+ "remarks='"+fabricsReceive.getRemarks()+"',"
@@ -222,7 +222,7 @@ public class StoreDAOImpl implements StoreDAO{
 			int length = fabricsReceive.getFabricsRollList().size();
 			for (FabricsRoll roll : fabricsReceive.getFabricsRollList()) {
 				sql="insert into tbFabricsRollDetails (transectionId,rollId,supplierRollId,rollQty,qcPassedQty,issueQty,balanceQty,rate,totalAmount,remarks,rackName,binName,entryTime,createBy) \r\n" + 
-						"values('"+fabricsReceive.getFabricsId()+"','"+roll.getRollId()+"','"+roll.getSupplierRollId()+"','"+roll.getRollQty()+"','"+roll.getQcPassedQty()+"','"+roll.getIssueQty()+"','"+roll.getBalanceQty()+"','"+roll.getRate()+"','"+roll.getTotalAmount()+"','"+roll.getRemarks()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
+						"values('','"+roll.getRollId()+"','"+roll.getSupplierRollId()+"','"+roll.getRollQty()+"','"+roll.getQcPassedQty()+"','"+roll.getIssueQty()+"','"+roll.getBalanceQty()+"','"+roll.getRate()+"','"+roll.getTotalAmount()+"','"+roll.getRemarks()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -272,7 +272,7 @@ public class StoreDAOImpl implements StoreDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				datalist.add(new FabricsReceive(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), Double.valueOf(element[16].toString()), Double.valueOf(element[17].toString()), element[18].toString(),element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString()));				
+				datalist.add(new FabricsReceive());				
 			}			
 			tx.commit();			
 		}	
@@ -328,7 +328,7 @@ public class StoreDAOImpl implements StoreDAO{
 			{	
 				Object[] element = (Object[]) list.get(0);
 
-				fabricsReceive = new FabricsReceive(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), Double.valueOf(element[16].toString()), Double.valueOf(element[17].toString()), element[18].toString(),element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString());
+				fabricsReceive = new FabricsReceive();
 				fabricsReceive.setFabricsRollList(fabricsRollList);
 			}
 
@@ -774,7 +774,7 @@ public class StoreDAOImpl implements StoreDAO{
 			{	
 				Object[] element = (Object[]) list.get(0);
 				boolean  isReturn = element[24].toString()=="1"?true:false;
-				fabricsReceive = new FabricsReceive(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), Double.valueOf(element[16].toString()), Double.valueOf(element[17].toString()), element[18].toString(),element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(),element[24].toString());
+				fabricsReceive = new FabricsReceive();
 				fabricsReceive.setFabricsRollList(fabricsRollList);
 			}
 			tx.commit();			

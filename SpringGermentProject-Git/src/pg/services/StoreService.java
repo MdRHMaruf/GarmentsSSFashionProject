@@ -11,7 +11,7 @@ import pg.storeModel.FabricsReturn;
 public interface StoreService {
 	//Fabrics Receive
 	List<FabricsIndent> getFabricsPurchaseOrdeIndentrList();
-	List<FabricsIndent> getFabricsListByItemId(String purchaseOrder,String styleId,String itemId);
+	FabricsIndent getFabricsIndentInfo(String autoId);
 	boolean submitFabricsReceive(FabricsReceive fabricsReceive);
 	boolean editFabricsReceive(FabricsReceive fabricsReceive);
 	List<FabricsReceive> getFabricsReceiveList();

@@ -32,9 +32,15 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="poNo" value="0"> <input type="hidden"
-		id="indentId" value="0"> <input type="hidden" id="fabricsId"
-		value="0"> <input type="hidden" id="fabricsRate" value="0">
+	<input type="hidden" id="poNo" value="0">
+	<input type="hidden"
+		id="indentId" value="0"> 
+		<input type="hidden" id="styleId" value="0">
+		<input type="hidden" id="styleItemId" value="0">
+		<input type="hidden" id="itemColorId" value="0">
+		<input type="hidden" id="fabricsColorId" value="0">
+		<input type="hidden" id="fabricsId" value="0"> 
+		<input type="hidden" id="fabricsRate" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -97,11 +103,10 @@
 				<div class="row">
 					<div class="col-md-6 pr-0">
 						<div class="form-group mb-0  row">
-							<label for="grnQty"
-								class="col-md-5 col-form-label-sm pr-0 mb-1 pb-1">GRN
-								Qty</label> <input id="grnQty" type="number"
+							<label for="receiveQty"
+								class="col-md-5 col-form-label-sm pr-0 mb-1 pb-1">Receive
+								Qty</label> <input id="receiveQty" type="number"
 								class="col-md-7 form-control-sm">
-
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -135,14 +140,6 @@
 					</div>
 					<div class="col-md-9 px-1">
 						<b><label id="purchaseOrder"></label></b>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="buyer">Buyer:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="buyer"></label></b>
 					</div>
 				</div>
 
@@ -356,18 +353,14 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
+							<th>Fabrics Name</th>
+							<th>Fabrics Color</th>
 							<th>Roll Id</th>
-							<th>Sup.Roll Id</th>
-							<th>Roll Qty</th>
+							<th>Unit</th>
+							<th>Unit Qty</th>
 							<th>QC Passed Qty</th>
-							<th>Issue Qty</th>
-							<th>Balance Qty</th>
-							<th>Rate</th>
-							<th>Total Amount</th>
-							<th>Remarks</th>
 							<th>Rack Name</th>
 							<th>Bin Name</th>
-
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -465,12 +458,12 @@
 		<div class="modal-content">
 			<div class="modal-header py-2">
 				<div class="input-group input-group-sm">
-					
-						<input id="searchEverything" type="text" class="form-control"
-							placeholder="Search Every Thing"
-							aria-label="Recipient's username" aria-describedby="basic-addon2">
-<div class="input-group-append">
-						<button class="form-control-sm">
+
+					<input id="searchEverything" type="text" class="form-control"
+						placeholder="Search Every Thing" aria-label="Recipient's username"
+						aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<button class="form-control-sm" id="searchRefreshBtn">
 							<i class="fa fa-refresh" style="cursor: pointer;"></i>
 						</button>
 					</div>

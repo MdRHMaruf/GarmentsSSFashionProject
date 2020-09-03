@@ -25,9 +25,9 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public List<FabricsIndent> getFabricsListByItemId(String purchaseOrder, String styleId, String itemId) {
+	public FabricsIndent getFabricsIndentInfo(String autoId) {
 		// TODO Auto-generated method stub
-		return storeDao.getFabricsListByItemId(purchaseOrder, styleId, itemId);
+		return storeDao.getFabricsIndentInfo(autoId);
 	}
 
 	@Override

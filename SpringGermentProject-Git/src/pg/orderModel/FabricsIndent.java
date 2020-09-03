@@ -108,6 +108,28 @@ public class FabricsIndent {
 		this.unit = unit;
 	}
 	
+	public FabricsIndent(String autoId, String purchaseOrder, String styleId, String styleName,
+			String itemId, String itemName, String itemColorId, String itemColorName, String fabricsId,
+			String fabricsName, String fabricsColorId, String fabricsColor, String unitId,
+			String unit, double grandQty) {
+		super();
+		this.autoId = autoId;
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleName = styleName;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.itemColorId = itemColorId;
+		this.itemColorName = itemColorName;
+		this.fabricsId = fabricsId;
+		this.fabricsName = fabricsName;
+		this.fabricsColorId = fabricsColorId;
+		this.fabricsColor = fabricsColor;
+		this.unitId = unitId;
+		this.unit = unit;
+		this.grandQty = grandQty;
+	}
+
 	public String getFabricsColor() {
 		return fabricsColor;
 	}

@@ -57,18 +57,11 @@ public class StoreController {
 		return mainObject;
 	}
 
-	@RequestMapping(value = "/getFabricsListByItemId",method = RequestMethod.GET)
-	public JSONObject getFabricsListByItemId(String purchaseOrder,String styleId,String itemId) {
-		JSONObject mainObject = new JSONObject();
-		List<FabricsIndent> fabricsList = storeService.getFabricsListByItemId(purchaseOrder,styleId,itemId);
-		mainObject.put("fabricsList", fabricsList);
-		return mainObject;
-	}
 
 	@RequestMapping(value = "/getFabricsIndentInfo", method = RequestMethod.GET)
 	public JSONObject getFabricsIndentInfo(String autoId) {
 		JSONObject mainObject = new JSONObject();
-		FabricsIndent fabricsIndentInfo = orderService.getFabricsIndent(autoId);
+		FabricsIndent fabricsIndentInfo = storeService.getFabricsIndentInfo(autoId);
 		mainObject.put("fabricsInfo",fabricsIndentInfo);
 		return mainObject;
 	}
