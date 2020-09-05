@@ -7,6 +7,7 @@ import java.util.StringTokenizer;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.springframework.stereotype.Repository;
 
 import pg.orderModel.SampleRequisitionItem;
@@ -105,6 +106,42 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return false;
 	}
 
+	private String getMaxCuttingEntryId() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		String query="";
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select isnull(max(CuttingEntryId),0)+1 from TbCuttingInformationSummary";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				query=iter.next().toString();
+			}
+
+			tx.commit();
+			return query;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return query;
+	}
+
 	private String getMaxCuttingReqId() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -186,7 +223,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 	@Override
 	public boolean checkDoplicationPlanSet(ProductionPlan v) {
-		
+
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -202,7 +239,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 			{	
 				return true;
 			}
-			
+
 		}
 		catch(Exception e){
 
@@ -314,9 +351,9 @@ public class ProductionDAOImpl implements ProductionDAO{
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),Double.toString(Double.parseDouble(element[9].toString())),Double.toString(Double.parseDouble(element[10].toString())),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString()));
 			}
 			tx.commit();
@@ -442,7 +479,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			String sql="select boed.autoId,boed.BuyerId,boed.BuyerOrderId,boed.StyleId,sc.StyleNo,boed.ItemId,id.itemname,boed.ColorId,c.Colorname,boed.PurchaseOrder,boed.sizeGroupId,boed.userId\r\n" + 
 					"										from TbBuyerOrderEstimateDetails boed \r\n" + 
 					"										left join TbBuyerOrderEstimateSummary boesr\r\n" + 
@@ -463,7 +500,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 				dataList.add(new CuttingInformation(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString()));
 			}
-			
+
 			for (CuttingInformation cuttingItem : dataList) {
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
@@ -479,6 +516,240 @@ public class ProductionDAOImpl implements ProductionDAO{
 					sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
 				}
 				cuttingItem.setSizeList(sizeList);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean cuttingInformationEnty(CuttingInformation v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String cuttingEntryId=getMaxCuttingEntryId();
+			//System.out.println("v "+v.getResultvalue());
+			String resultValue=v.getResultvalue().substring(v.getResultvalue().indexOf("[")+1, v.getResultvalue().indexOf("]"));
+			System.out.println("resultValue "+resultValue);
+
+
+			String sizegroupValue=v.getSizegroupvalue().substring(v.getSizegroupvalue().indexOf("[")+1, v.getSizegroupvalue().indexOf("]"));
+			//System.out.println("sizegroupValue "+sizegroupValue);
+
+			String colorValue=v.getColorlistvalue().substring(v.getColorlistvalue().indexOf("[")+1, v.getColorlistvalue().indexOf("]"));
+			System.out.println("colorValue "+colorValue);
+
+			String cuttinglistvalue=v.getCuttinglistvalue().substring(v.getCuttinglistvalue().indexOf("[")+1, v.getCuttinglistvalue().indexOf("]"));
+			System.out.println("cuttinglistvalue "+cuttinglistvalue);
+
+			int colorsave=0;
+			String sql="";
+			String colorId="",sizeGroupId="";
+			String colorArrElement="";
+			StringTokenizer colortarroken=new StringTokenizer(colorValue,",");
+			while(colortarroken.hasMoreElements()) {
+				colorArrElement=colortarroken.nextToken();
+
+
+				StringTokenizer colorArrToken=new StringTokenizer(colorArrElement,":");
+				while(colorArrToken.hasMoreTokens()) {
+					colorId=colorArrToken.nextToken();
+
+
+					sizeGroupId=colorArrToken.nextToken();
+					String ratiototalpcs=colorArrToken.nextToken();
+					String ratiototalbox=colorArrToken.nextToken();
+					String ratiototalexcess=colorArrToken.nextToken();
+					String ratiototalshort=colorArrToken.nextToken();
+					String cuttingtotalpcs=colorArrToken.nextToken();
+					String cuttingtotaldozen=colorArrToken.nextToken();
+					String cuttingtotalexcess=colorArrToken.nextToken();
+					String cuttingtotalshort=colorArrToken.nextToken();
+
+
+					sql="insert into TbCuttingInformationDetails (ColorId,SizeGroupId,TotalQty,DozenQty,ExcessQty,ShortQty,Type,Date,EntryTime,UserId) "
+							+ "values('"+colorId+"','"+sizeGroupId+"','"+ratiototalpcs+"','"+ratiototalbox+"','"+ratiototalexcess+"','"+ratiototalshort+"','Ratio',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+					//System.out.println("sql "+sql);
+					session.createSQLQuery(sql).executeUpdate();
+
+					String sqlcutting="insert into TbCuttingInformationDetails (ColorId,SizeGroupId,TotalQty,DozenQty,ExcessQty,ShortQty,Type,Date,EntryTime,UserId) "
+							+ "values('"+colorId+"','"+sizeGroupId+"','"+cuttingtotalpcs+"','"+cuttingtotaldozen+"','"+cuttingtotalexcess+"','"+cuttingtotalshort+"','Cutting',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+					//System.out.println("sqlcutting "+sqlcutting);
+					session.createSQLQuery(sqlcutting).executeUpdate();
+
+
+					colorsave++;
+				}
+
+
+
+			}
+
+
+
+			//Ratio
+			int i=0;
+			String tokenResult="";
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+
+
+
+				String itemAutoId ="";
+
+
+				tokenResult=firstToken.nextToken();
+
+				String holdcolorId="";
+				String sizegroupId,sizeId="",ratioQty="";
+				StringTokenizer token=new StringTokenizer(tokenResult,":");
+				while(token.hasMoreTokens()) {
+					colorId=token.nextToken();
+					sizegroupId=token.nextToken();
+					sizeId=token.nextToken();
+					ratioQty=token.nextToken();
+
+					sql="select cuttingAutoId from TbCuttingInformationDetails where CuttingEntryId IS NULL and userId='"+v.getUserId()+"' and ColorId='"+colorId+"' and SizeGroupId='"+sizeGroupId+"' and type='Ratio'";
+					System.out.println(sql);
+					List<?> list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						itemAutoId =  iter.next().toString();	
+					}
+
+
+					sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+itemAutoId+"','"+sizegroupId+"','"+sizeId+"','"+ratioQty+"','"+SizeValuesType.CUTTING_RATIO.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+					session.createSQLQuery(sql).executeUpdate();
+
+				}
+
+			}
+
+			//Cutting
+			String tokenCuttingResult="";
+			StringTokenizer firstCuttingToken=new StringTokenizer(cuttinglistvalue,",");
+			while(firstCuttingToken.hasMoreTokens()) {
+
+
+
+				String itemAutoId ="";
+
+
+				tokenCuttingResult=firstCuttingToken.nextToken();
+
+				String holdcolorId="";
+				String sizegroupId,sizeId="",ratioQty="";
+				StringTokenizer token=new StringTokenizer(tokenCuttingResult,":");
+				while(token.hasMoreTokens()) {
+					colorId=token.nextToken();
+					sizegroupId=token.nextToken();
+					sizeId=token.nextToken();
+					ratioQty=token.nextToken();
+
+					sql="select cuttingAutoId from TbCuttingInformationDetails where CuttingEntryId IS NULL and userId='"+v.getUserId()+"' and ColorId='"+colorId+"' and SizeGroupId='"+sizeGroupId+"' and type='Cutting'";
+					System.out.println(sql);
+					List<?> list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						itemAutoId =  iter.next().toString();	
+					}
+
+
+					sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+itemAutoId+"','"+sizegroupId+"','"+sizeId+"','"+ratioQty+"','"+SizeValuesType.CUTTING_QTY.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+					session.createSQLQuery(sql).executeUpdate();
+
+				}
+
+			}
+
+			if(colorsave!=0) {
+				sql = "insert into TbCuttingInformationSummary ("
+						+ "CuttingEntryId,"
+						+ "BuyerId,"
+						+ "purchaseOrder,"
+						+ "StyleId,"
+						+ "ItemId,"
+						+ "CuttingNo,"
+						+ "CuttingDate,"
+						+ "FactoryId,"
+						+ "DepartmentId,"
+						+ "LineId,"
+						+ "InchargeId,"
+						+ "MarkingLayer,"
+						+ "MarkingLenght,"
+						+ "MarkingWidth,"
+						+ "Date,"
+						+ "entryTime,"
+						+ "userId) values('"+cuttingEntryId+"',"
+						+ "'"+v.getBuyerId()+"',"
+						+ "'"+v.getPurchaseOrder()+"',"
+						+ "'"+v.getStyleId()+"',"
+						+ "'"+v.getItemId()+"',"
+						+ "'"+v.getCuttingNo()+"',"
+						+ "'"+v.getCuttingDate()+"',"
+						+ "'"+v.getFactoryId()+"',"
+						+ "'"+v.getDepartmentId()+"',"
+						+ "'"+v.getLineId()+"',"
+						+ "'"+v.getInchargeId()+"',"
+						+ "'"+v.getMarkingLayer()+"',"
+						+ "'"+v.getMarkingLength()+"',"
+						+ "'"+v.getMarkingWidth()+"',"
+						+ "CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+				session.createSQLQuery(sql).executeUpdate();
+				
+				String updateSql="update TbCuttingInformationDetails set CuttingEntryId='"+cuttingEntryId+"' where UserId='"+v.getUserId()+"' and CuttingEntryId IS NULL";
+				session.createSQLQuery(updateSql).executeUpdate();
+			}
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public List<CuttingInformation> getCuttingInformationList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CuttingInformation> dataList=new ArrayList<CuttingInformation>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="select a.CuttingEntryId,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleName,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,a.CuttingNo,convert(varchar,a.CuttingDate,23) as CuttingDate from TbCuttingInformationSummary a";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CuttingInformation(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 			}
 			tx.commit();
 		}

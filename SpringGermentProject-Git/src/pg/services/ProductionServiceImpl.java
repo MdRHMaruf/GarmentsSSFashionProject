@@ -87,5 +87,19 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getBuyerPoDetails(buyerId, buyerorderId, styleId, itemId);
 	}
+
+
+	@Override
+	public boolean cuttingInformationEnty(CuttingInformation v) {
+		// TODO Auto-generated method stub
+		return productionDao.cuttingInformationEnty(v);
+	}
+
+
+	@Override
+	public List<CuttingInformation> getCuttingInformationList() {
+		// TODO Auto-generated method stub
+		return productionDao.getCuttingInformationList();
+	}
 	
 }

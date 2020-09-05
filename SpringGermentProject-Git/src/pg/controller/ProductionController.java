@@ -40,6 +40,7 @@ import pg.services.RegisterService;
 @RestController
 public class ProductionController {
 
+	String CuttingEntryId="";
 	DecimalFormat df = new DecimalFormat("#.00");
 	
 	@Autowired
@@ -170,6 +171,7 @@ public class ProductionController {
 		List<commonModel> merchendizerList = orderService.getMerchendizerList();
 		
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();
 
 		view.addObject("groupList",groupList);
 		view.addObject("factoryList",factoryList);
@@ -177,6 +179,7 @@ public class ProductionController {
 		view.addObject("inchargeList",inchargeList);
 		view.addObject("merchendizerList",merchendizerList);
 		view.addObject("productionPlanList",productionPlanList);
+		view.addObject("cuttingInformationList",cuttingInformationList);
 	
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -212,4 +215,30 @@ public class ProductionController {
 		return objmain;
 	}
 	
+	@RequestMapping(value = "/cuttingInformationEnty",method=RequestMethod.POST)
+	public @ResponseBody String cuttingInformationEnty(CuttingInformation v) {
+		String msg="Create occure while entry cutting information entry";
+		boolean flag= productionService.cuttingInformationEnty(v);
+		if(flag) {
+			msg="Cutting information entry successfull!!";
+		}
+		return msg;
+	}
+	
+	@RequestMapping(value = "/setCuttingEntryId",method=RequestMethod.GET)
+	public @ResponseBody String setCuttingEntryId(String cuttingEntryId) {
+		
+		this.CuttingEntryId=cuttingEntryId;
+		System.out.println("CuttingEntryId "+CuttingEntryId);
+		return "Sucess"; 
+	}
+	
+	@RequestMapping(value = "/printCuttingInformationReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printCuttingInformationReport() {
+		
+		System.out.println("printCuttingInformationReport");
+		ModelAndView view=new ModelAndView("production/printCuttingInformationReport");
+		
+		return view;
+	}
 }

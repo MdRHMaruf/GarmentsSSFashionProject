@@ -27,4 +27,7 @@ public interface ProductionDAO {
 	List<Department> getFactoryWiseDepartmentLoad(String factoryId);
 	List<Line> getFactoryDepartmentWiseLineLoad(String factoryId, String departmentId);
 	List<CuttingInformation> getBuyerPoDetails(String buyerId, String buyerorderId, String styleId, String itemId);
+	
+	boolean cuttingInformationEnty(CuttingInformation v);
+	List<CuttingInformation> getCuttingInformationList();
 }
