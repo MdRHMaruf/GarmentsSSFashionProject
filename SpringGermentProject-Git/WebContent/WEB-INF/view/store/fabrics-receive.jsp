@@ -40,6 +40,8 @@
 		<input type="hidden" id="itemColorId" value="0">
 		<input type="hidden" id="fabricsColorId" value="0">
 		<input type="hidden" id="fabricsId" value="0"> 
+		<input type="hidden" id="unitId" value="0"> 
+		
 		<input type="hidden" id="fabricsRate" value="0">
 
 	<div class="card-box">

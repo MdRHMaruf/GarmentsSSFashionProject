@@ -147,28 +147,29 @@ public class FabricsReceive {
 			
 			String[] rollLists = rollList.split("#");
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
-			String autoId,transectionId,rollId,supplierRollId,unitId,unit,remarks,rackName,binName;
-			double rollQty,qcPassedQty,issueQty,balanceQty,rate,totalAmount;
-			
+			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,unitId,unit,rackName,binName;
+			double unitQty,qcPassedQty;
 			for (String item : rollLists) {
+				System.out.println(item);
 				String[] itemProperty = item.split(",");
 				autoId="";
 				transectionId = "";
-				rollId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
-				supplierRollId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
-				unitId = itemProperty[2].substring(itemProperty[2].indexOf(":")+2).trim();
-				unit = itemProperty[3].substring(itemProperty[3].indexOf(":")+3).trim();
-				rollQty = Double.valueOf(itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim());
-				qcPassedQty = Double.valueOf(itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim());
-				issueQty = Double.valueOf(itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim());
-				balanceQty = Double.valueOf(itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim());
-				rate = Double.valueOf(itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim());
-				totalAmount = Double.valueOf(itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim());
-				remarks = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
-				rackName = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
-				binName = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+				itemId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				itemColorId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				fabricsId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				fabricsName = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();;
+				fabricsColorId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+				fabricsColorName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();;
+				rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				unitId = itemProperty[9].substring(itemProperty[9].indexOf(":")+2).trim();
+				unitQty = Double.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
+				qcPassedQty = Double.valueOf(itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim());
+				rackName = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				binName = itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim();
 				
-				list.add(new FabricsRoll(autoId, transectionId,rollId, supplierRollId,unitId,unit, rollQty, qcPassedQty, issueQty, balanceQty, rate, totalAmount, remarks, rackName, binName, item));
+				list.add(new FabricsRoll(autoId, transectionId, purchaseOrder, styleId, itemId, itemColorId, fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId, unitId,"unitName", unitQty, rackName, binName));
 			}
 			
 			this.fabricsRollList = list;
