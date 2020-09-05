@@ -21,6 +21,45 @@ function loadData() {
 
 window.onload = loadData;
 
+function searchCuttingInformation(cuttingEntryId){
+	
+	
+	$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './setCuttingEntryId',
+        data:{cuttingEntryId:cuttingEntryId},
+        success: function (data) {
+          if (data== "Sucess") {
+      		var url = "printCuttingInformationReport";
+    		window.open(url, '_blank');
+
+          }
+        }
+      });
+	
+/*    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './checkCuttingInformation',
+        data:{
+        	buyerId:buyerId,
+        	buyerorderId:buyerorderId,
+        	styleId:styleId,
+        	itemId:itemId
+        },
+        success: function (data) {
+          if (data.result == "Something Wrong") {
+            dangerAlert("Something went wrong");
+          } else if (data.result == "duplicate") {
+            dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+          } else {
+            drawItemTable(data.result);
+          }
+        }
+      });*/
+}
+
 function searchProductPlan(buyerId,buyerorderId,styleId,itemId){
     $.ajax({
         type: 'GET',
@@ -84,13 +123,16 @@ function drawItemTable(dataList) {
 	      isClosingNeed = true;
 	    }
 	    tables += "<tr class='itemRow' data-id='" + item.autoId + "'><td>" + item.colorName + "</td><td class='min-width-150'>Order Qty</td>"
+	  
+	    //Order
 	    var sizeList = item.sizeList;
 	    var sizeListLength = sizeList.length;
 	    var totalSizeQty=0;
 	    var dzQty=0;
 	    for (var j = 0; j < sizeListLength; j++) {
+	       groupId=sizeList[j].groupId;
 	      totalSizeQty=totalSizeQty+parseFloat(sizeList[j].sizeQuantity);
-	      tables += "<td  class='sizeOrderQty1-" + item.autoId + "' sizeOrderQty-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' ><input readonly type='text' value='"+sizeList[j].sizeQuantity+"' class='from-control min-height-20 order_value-"+sizeList[j].sizeId+"''/> <input readonly type='hidden' value='"+sizeList[j].groupId+"' class='from-control min-height-20 sizegroup_value-"+sizeList[j].sizeId+"''/></td>"
+	      tables += "<td  class='sizeOrderQty1-" + item.autoId + "' sizeOrderQty-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' ><input readonly type='text' value='"+sizeList[j].sizeQuantity+"' class='from-control min-height-20 order_value-"+item.autoId+"-"+sizeList[j].sizeId+" ' /> <input readonly type='hidden' value='"+item.colorId+"' class='from-control min-height-20 color_value-"+item.autoId+"''/> <input readonly type='hidden' value='"+sizeList[j].groupId+"' class='from-control min-height-20 sizegroup_value-"+sizeList[j].sizeId+"''/></td>"
 	    }
 	    dzQty=totalSizeQty/12;
 	    tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td class='totalorder-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input  id='totalorder-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' value='"+parseFloat(dzQty).toFixed(2)+"' type='text' class='from-control min-height-20'/></td><td class='totalorderexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalorderexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalordershort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalordershort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"'  type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
@@ -106,9 +148,9 @@ function drawItemTable(dataList) {
 	    for (var j = 0; j < sizeListLength; j++) {
 	      //totalSizeQty=totalSizeQty+parseFloat(sizeList[j].sizeQuantity);
 	      groupId=sizeList[j].groupId;
-	      tables += "<td class='sizeReqRatio1-"+item.autoId+" sizeReqRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' >  <input  onkeyup='setTotalRatio("+item.styleId+","+item.itemId+","+item.colorId+","+sizeList[j].groupId+")' type='text' class='from-control min-height-20 result_value-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+" ratio_value-"+sizeList[j].sizeId+"'/></td>"
+	      tables += "<td class='sizeReqRatio1-"+item.autoId+" sizeReqRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' >  <input  onkeyup='setTotalRatio("+item.styleId+","+item.itemId+","+item.colorId+","+sizeList[j].groupId+")' type='text' class='from-control min-height-20 result_value-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+" ratio_value-"+item.autoId+"-"+sizeList[j].sizeId+"''/></td>"
 	    }
-	    tables += "<td class='totalRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalRatiobox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input id='totalRatiobox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalrationexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalrationexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalratioshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalratioshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' '> </i></td><td><i class='fa fa-trash' '> </i></td></tr>";
+	    tables += "<td class='totalRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalRatio-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalRatioPcs-"+item.colorId+"-"+item.autoId+"-"+groupId+"'/></td><td class='totalRatiobox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input id='totalRatiobox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalRatioBox-"+item.colorId+"-"+item.autoId+"-"+groupId+"'/></td><td class='totalrationexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalrationexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalRatioExcess-"+item.colorId+"-"+item.autoId+"-"+groupId+"'/></td><td class='totalratioshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalratioshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalRatioShort-"+item.colorId+"-"+item.autoId+"-"+groupId+"'/></td><td><i class='fa fa-edit' '> </i></td><td><i class='fa fa-trash' '> </i></td></tr>";
 
 	    
 	    tables += "<tr class='itemRow' data-id='" + item.autoId + "'><td>,,</td><td class='min-width-150'>Cutting Qty</td>"
@@ -121,10 +163,9 @@ function drawItemTable(dataList) {
 	    for (var j = 0; j < sizeListLength; j++) {
 	      //totalSizeQty=totalSizeQty+parseFloat(sizeList[j].sizeQuantity);
 	      groupId=sizeList[j].groupId;
-	      tables += "<td class='sizeReqWard1-"+item.autoId+" sizeReqWard-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' >  <input readonly  type='text' class='from-control min-height-20 cutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+"  cutting_value-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+" cutting_value-"+sizeList[j].sizeId+"'/></td>"
+	      tables += "<td class='sizeReqWard1-"+item.autoId+" sizeReqWard-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"' data-id='"+sizeList[j].sizeId+"' >  <input readonly  type='text' class='from-control min-height-20 cutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+"  cutting_value-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId+" cutting_value-"+item.autoId+"-"+sizeList[j].sizeId+"''/></td>"
 	    }
-	    tables += "<td class='totalCutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input   type='text' class='totalCutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+" from-control min-height-20'/></td><td class='totalcuttingbox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalcuttingbox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalcuttingexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input  id='totalcuttingexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td class='totalcuttingshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input  id='totalcuttingshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
-
+	    tables += "<td class='totalCutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input   type='text' class='totalCutting-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+" from-control min-height-20 totalCuttingPcs-"+item.colorId+"-"+item.autoId+"-"+groupId+"''/></td><td class='totalcuttingbox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input readonly id='totalcuttingbox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalcuttingbox-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+" totalCuttingBox-"+item.colorId+"-"+item.autoId+"-"+groupId+"''/></td><td class='totalcuttingexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input  id='totalcuttingexcess-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalCuttingExcess-"+item.colorId+"-"+item.autoId+"-"+groupId+"''/></td><td class='totalcuttingshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' ><input  id='totalcuttingshort-"+item.styleId+"-"+item.itemId+"-"+item.colorId+"-"+groupId+"' type='text' class='from-control min-height-20 totalCuttingShort-"+item.colorId+"-"+item.autoId+"-"+groupId+"''/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
 	    
 	  }
 	  tables += "</tbody></table> </div></div>";
@@ -139,6 +180,7 @@ function drawItemTable(dataList) {
 	  $('#hid_buyerOrderId').val(dataList[0].buyerOrderId);
 	  $('#hid_styleId').val(dataList[0].styleId);
 	  $('#hid_itemId').val(dataList[0].itemId);
+	  $('#hid_purchaseOrder').val(dataList[0].purchaseOrder);
 	  
 
 /*	 $('.selectpicker').selectpicker('refresh');
@@ -155,9 +197,7 @@ function drawItemTable(dataList) {
 
 function setTotalRatio(styleId,itemId,colorId,groupId){
 	
-	
 
-	
 	var value=0;
 	
 	var size='.sizeReqRatio-'+styleId+"-"+itemId+'-'+colorId+'-'+groupId;
@@ -166,6 +206,7 @@ function setTotalRatio(styleId,itemId,colorId,groupId){
 	var result='.result_value-'+styleId+"-"+itemId+'-'+colorId+'-'+groupId;
 	var cutting='.cutting-'+styleId+"-"+itemId+'-'+colorId+'-'+groupId;
 	var totalcutting='.totalCutting-'+styleId+"-"+itemId+'-'+colorId+'-'+groupId;
+	var totalcuttingbox='.totalcuttingbox-'+styleId+"-"+itemId+'-'+colorId+'-'+groupId;
 	
 	$(size).each(function(){
 		var id=$(this).attr("data-id");
@@ -186,10 +227,7 @@ function setTotalRatio(styleId,itemId,colorId,groupId){
 		var id=$(this).attr("data-id");
 		
 		ratio=parseFloat(($(result+"-"+id).val()==''?"0":$(result+"-"+id).val()));
-		//alert("result "+result);
-		//alert("ratio "+ratio);
-		//alert("markingLayer "+markingLayer);
-		//alert("totalratio "+value);
+
 		var cuttingQty=((markingLayer*value)/value)*ratio;
 		totalCuttingQty=totalCuttingQty+cuttingQty;
 		
@@ -198,6 +236,7 @@ function setTotalRatio(styleId,itemId,colorId,groupId){
 	});
 	
 	$(totalcutting).val(totalCuttingQty);
+	$(totalcuttingbox).val(parseFloat(totalCuttingQty/12).toFixed());
 	value=0;
 
 
@@ -205,61 +244,153 @@ function setTotalRatio(styleId,itemId,colorId,groupId){
 
 function confrimAction(){
 	
+	var colorlist=[];
+	var m=0;
+	
 	var sizegrouplist=[];
 	var k=0;
-	var resultlist=[];
+	var ratioresultlist=[];
 	var i=0;
 	var value=0;
 	
+	var cuttingresultlist=[];
+
 	
+	var userId=$('#hid_userId').val();
 	var buyerId=$('#hid_buyerId').val();
 	var buyerOrderId=$('#hid_buyerOrderId').val();
+	var purchaseOrder=$('#hid_purchaseOrder').val();
 	var styleId=$('#hid_styleId').val();
 	var itemId=$('#hid_itemId').val();
 	
+	var factoryId=$('#factoryId').val();
+	var departmentId=$('#departmentId').val();
+	var lineId=$('#lineId').val();
+	var inchargeId=$('#inchargeId').val();
+	var cuttingNo=$('#cuttingNo').val();
+	var cuttingDate=$('#cuttingDate').val();
+	var markingLayer=$('#markingLayer').val();
+	var markingLength=$('#markingLength').val();
+	var markingWidth=$('#markingWidth').val();
+
+
+	
 	if(buyerId!=0 || buyerOrderId!='0' || styleId!='0' || itemId!='0'){
-		var j=0;
-		$(".itemRow").each(function(){
-			
-
-			if(j==2){
-				var rowid=$(this).attr("data-id");
+		if(factoryId!='0' || departmentId!='0' || lineId!='0' || cuttingNo!='' || markingLayer!='' ){
+			var j=0;
+			$(".itemRow").each(function(){
 				
-				alert("rowid "+rowid);
-				var orderrow='.sizeOrderQty1-'+rowid;
-				$(orderrow).each(function(){
-					
-					var id=$(this).attr("data-id");
 
-					var sizeGroupId=$(".sizegroup_value-"+id).val();
+				if(j==2){
+					var rowid=$(this).attr("data-id");
 					
-					var orderQty=parseFloat(($(".order_value-"+id).val()==''?"0":$(".order_value-"+id).val()));
-					var ratioQty=parseFloat(($(".ratio_value-"+id).val()==''?"0":$(".ratio_value-"+id).val()));
-					var cuttingQty=parseFloat(($(".cutting_value-"+id).val()==''?"0":$(".cutting_value-"+id).val()));
-					
-					
-				//	var wardQty=parseFloat(($(result_value-"+styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId).val()==''?"0":$(".result_value-"+id).val()));
-					
-					var value=sizeGroupId+":"+id+":"+orderQty+":"+ratioQty+":"+cuttingQty;
-					sizegrouplist[k]=sizeGroupId;
-					resultlist[i]=value;
-					i++;
-					
-				});
-				k++;
 				
-				j=0;
-				j++;
-			}
+					var orderrow='.sizeOrderQty1-'+rowid;
+				
+					$(orderrow).each(function(){
+						
+						var id=$(this).attr("data-id");
+
+						var orderclass=".order_value-"+rowid+"-"+id;
+						var ratioclass=".ratio_value-"+rowid+"-"+id;
+						var cuttingclass=".cutting_value-"+rowid+"-"+id;
+						
+						var sizeGroupId=$(".sizegroup_value-"+id).val();
+						var color=$(".color_value-"+rowid).val();
+						
+						
+						var ratiototalpcs=$(".totalRatioPcs-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalRatioPcs-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var ratiototalbox=$(".totalRatioBox-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalRatioBox-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var ratiototalexcess=$(".totalRatioExcess-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalRatioExcess-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var ratiototalshort=$(".totalRatioShort-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalRatioShort-"+color+"-"+rowid+"-"+sizeGroupId).val();
+					
+						var cuttingtotalpcs=$(".totalCuttingPcs-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalCuttingPcs-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var cuttingtotalbox=$(".totalCuttingBox-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalCuttingBox-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var cuttingtotalexcess=$(".totalCuttingExcess-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalCuttingExcess-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						var cuttingtotalshort=$(".totalCuttingShort-"+color+"-"+rowid+"-"+sizeGroupId).val()==''?"0":$(".totalCuttingShort-"+color+"-"+rowid+"-"+sizeGroupId).val();
+						
+						var orderQty=parseFloat(($(orderclass).val()==''?"0":$(orderclass).val()));
+						var ratioQty=parseFloat(($(ratioclass).val()==''?"0":$(ratioclass).val()));
+						var cuttingQty=parseFloat(($(cuttingclass).val()==''?"0":$(cuttingclass).val()));
+						
+						
+					//	var wardQty=parseFloat(($(result_value-"+styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId).val()==''?"0":$(".result_value-"+id).val()));
+						
+						var value=color+":"+sizeGroupId+":"+id+":"+ratioQty;
+						var cuttingvalue=color+":"+sizeGroupId+":"+id+":"+cuttingQty;
+						var clolorvalue=color+":"+sizeGroupId+":"+ratiototalpcs+":"+ratiototalbox+":"+ratiototalexcess+":"+ratiototalshort+":"+cuttingtotalpcs+":"+cuttingtotalbox+":"+cuttingtotalexcess+":"+cuttingtotalshort;
+						
+						sizegrouplist[k]=sizeGroupId;
+						colorlist[m]=clolorvalue;
+						ratioresultlist[i]=value;
+						cuttingresultlist[i]=cuttingvalue;
+						i++;
+						
+					});
+					m++;
+					k++;
+					
+					j=0;
+					
+				}
+				else{
+					j++;
+				}
+				
+				
+				
+			});
 			
-			j++;
+			var resultvalue="["+ratioresultlist+"]";
 			
-		});
-		
-		var resultvalue="["+resultlist+"]";
-		
-		alert("resultvalue "+resultvalue);
-		//var sizegroupvalue="["+sizegrouplist+"]";
+			//alert("resultvalue "+resultvalue);
+			var sizegroupvalue="["+sizegrouplist+"]";
+			//alert("sizegroupvalue "+sizegroupvalue);
+			
+			var colorlistvalue="["+colorlist+"]";
+			var cuttinglistvalue="["+cuttingresultlist+"]";
+			
+	        $.ajax({
+	            type: 'POST',
+	            dataType: 'json',
+	            url: './cuttingInformationEnty',
+	            data: {
+	              userId:userId,
+	              buyerId : buyerId,
+	              buyerOrderId: buyerOrderId,
+	              purchaseOrder:purchaseOrder,
+	              styleId:styleId,
+	              itemId: itemId,
+	              factoryId:factoryId,
+	              departmentId:departmentId,
+	              lineId:lineId,
+	              inchargeId:inchargeId,
+	              cuttingNo:cuttingNo,
+	              cuttingDate:cuttingDate,
+	              markingLayer:markingLayer,
+	              markingLength:markingLength,
+	              markingWidth:markingWidth,
+	              resultvalue:resultvalue,
+	              sizegroupvalue:sizegroupvalue,
+	              colorlistvalue:colorlistvalue,
+	              cuttinglistvalue:cuttinglistvalue
+	              
+	            },
+	            success: function (data) {
+	              if (data.result == "Something Wrong") {
+	                dangerAlert("Something went wrong");
+	              } else if (data.result == "duplicate") {
+	                dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+	              } else {
+	                alert(data);
+	                refreshAction();
+	              }
+	            }
+	          });
+		}
+		else{
+			warningAlert("Provide Cutting Information");
+		}
 		
 	}
 	else{
@@ -267,6 +398,11 @@ function confrimAction(){
 	}
 	
 }
+
+function refreshAction(){
+	  location.reload();
+}
+
 function FactoryWiseDepartmentLoad(){
 	var factoryId=$("#factoryId").val();
 	if(factoryId!=0){		
