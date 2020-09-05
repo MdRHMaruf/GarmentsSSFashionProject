@@ -17,7 +17,6 @@ public class StoreServiceImpl implements StoreService{
 	
 	@Autowired
 	StoreDAO storeDao;
-
 	@Override
 	public List<FabricsIndent> getFabricsPurchaseOrdeIndentrList() {
 		// TODO Auto-generated method stub
