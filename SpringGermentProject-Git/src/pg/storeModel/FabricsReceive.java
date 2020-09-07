@@ -149,6 +149,7 @@ public class FabricsReceive {
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
 			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,unitId,unit,rackName,binName;
 			double unitQty,qcPassedQty;
+			int qcPassedType=0;
 			for (String item : rollLists) {
 				System.out.println(item);
 				String[] itemProperty = item.split(",");
@@ -168,8 +169,9 @@ public class FabricsReceive {
 				qcPassedQty = Double.valueOf(itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim());
 				rackName = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
 				binName = itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim();
+				qcPassedType = Integer.valueOf(itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim());
 				
-				list.add(new FabricsRoll(autoId, transectionId, purchaseOrder, styleId, itemId, itemColorId, fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId, unitId,"unitName", unitQty, rackName, binName));
+				list.add(new FabricsRoll(autoId, transectionId, purchaseOrder, styleId, itemId, itemColorId, fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId, unitId,"unitName", unitQty, rackName, binName,qcPassedType));
 			}
 			
 			this.fabricsRollList = list;

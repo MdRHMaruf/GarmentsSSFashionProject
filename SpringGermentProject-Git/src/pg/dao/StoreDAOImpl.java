@@ -212,8 +212,10 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			sql = "delete from tbFabricsRollDetails where transetionId = '"+fabricsReceive.getTransectionId()+"'";
-			session.createSQLQuery(sql).executeUpdate();
+			
+			//This Section Update After Quality Control and  Fabrics Return
+			/*sql = "delete from tbFabricsRollDetails where transetionId = '"+fabricsReceive.getTransectionId()+"'";
+			session.createSQLQuery(sql).executeUpdate();*/
 
 			int length = fabricsReceive.getFabricsRollList().size();
 			for (FabricsRoll roll : fabricsReceive.getFabricsRollList()) {
@@ -296,7 +298,7 @@ public class StoreDAOImpl implements StoreDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				fabricsRollList.add(new FabricsRoll(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(),element[7].toString(), element[8].toString(),element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), Double.valueOf(element[13].toString()), element[14].toString(), element[15].toString()));				
+				fabricsRollList.add(new FabricsRoll(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(),element[7].toString(), element[8].toString(),element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), Double.valueOf(element[13].toString()), element[14].toString(), element[15].toString(),1));				
 			}
 
 			sql = "select autoId,transectionId,grnNo,(select convert(varchar,grnDate,103))as grnDate,location,fri.supplierId,fri.challanNo,fri.challanDate,fri.remarks,fri.preperedBy,fri.createBy \r\n" + 
@@ -358,8 +360,10 @@ public class StoreDAOImpl implements StoreDAO{
 			session.createSQLQuery(sql).executeUpdate();
 
 			int length = fabricsQC.getFabricsRollList().size();
+			int departmentId = 1;
 			for (FabricsRoll roll : fabricsQC.getFabricsRollList()) {
-				sql="update tbFabricsRollDetails set QCTransectionId='"+transectionId+"',qcPassedQty='"+roll.getQcPassedQty()+"',qcPassedType='"+roll.getQcPassedType()+"' where autoId='"+roll.getAutoId()+"'";		
+				sql="insert into tbFabricsAccessoriesTransection (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transectionId,transectionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transectionId+"','"+StoreTransection.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 

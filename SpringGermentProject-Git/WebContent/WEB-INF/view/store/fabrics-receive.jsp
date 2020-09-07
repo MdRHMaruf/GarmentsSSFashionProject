@@ -438,8 +438,6 @@
 							<th>Transection Id</th>
 							<th>GRN No</th>
 							<th>GRN Date</th>
-							<th>GRN Qty</th>
-							<th>No Of Roll</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>

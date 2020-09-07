@@ -74,8 +74,9 @@ function submitAction() {
     const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
     const rackName = $("#rackName-" + id).text();
     const binName = $("#binName-" + id).text();
+    const qcPassedType = 0;
     console.log(id,purchaseOrder,styleId,itemId,itemColorId,fabricsId,rollId,unitQty,unitId);
-    rollList += `purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColor},rollId : ${rollId},unitId : ${unitId},unitQty : ${unitQty},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName} #`;
+    rollList += `purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColor},rollId : ${rollId},unitId : ${unitId},unitQty : ${unitQty},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType} #`;
   }
 
   rollList = rollList.slice(0, -1);
@@ -137,20 +138,11 @@ function editAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
 
-  
-
   const transectionId = $("#transectionId").val();
   const grnNo = $("#grnNo").val();
   const grnDate = $("#grnDate").val();
   const location = $("#location").val();
-  const indentId = $("#indentId").val();
-  const fabricsId = $("#fabricsId").val();
-  const receiveQty = $("#receiveQty").val();
-  const noOfRoll = $("#noOfRoll").val();
-  const unitId = $("#unit").val();
-  const unit = $( "#unit option:selected" ).text()
   const supplier = $("#supplier").val();
-  const buyer = $("#buyer").val();
   const challanNo = $("#challanNo").val();
   const challanDate = $("#challanDate").val();
   const remarks = $("#remarks").val();
@@ -161,25 +153,27 @@ function editAction() {
 
   for (let i = 0; i < length; i++) {
 
-    const id = rowList[i].id.slice(4);
+    const row = rowList[i];
+    const id = row.id.slice(6);
+    const purchaseOrder = row.getAttribute('data-purchase-order');
+    const styleId = row.getAttribute('data-style-id');
+    const itemId = row.getAttribute('data-item-id');
+    const itemColorId = row.getAttribute('data-item-color-id');
+    const fabricsId = row.getAttribute('data-fabrics-id');
+    const fabricsColorId = row.getAttribute('data-fabrics-color-id');
+    const unitId = row.getAttribute('data-unit-id');
+    const fabricsName = $("fabricsName-"+id).text();
+    const fabricsColor = $("fabricsColor-"+id).text();
     const rollId = $("#rollId-" + id).text();
-    const supplierRollId = $("#supplierRollId-" + id).text();
-    const rollQty = $("#rollQty-" + id).text().trim() == '' ? "0" : $("#rollQty-" + id).text();
+    const unitQty = $("#unitQty-" + id).text().trim() == '' ? "0" : $("#unitQty-" + id).text();
     const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
-    const issueQty = $("#issueQty-" + id).text().trim() == '' ? "0" : $("#issueQty-" + id).text();
-    const balanceQty = $("#amount-" + id).text().trim() == '' ? "0" : $("#amount-" + id).text();
-    const rate = $("#rate-" + id).text().trim() == '' ? "0" : $("#rate-" + id).text();
-    const totalAmount = $("#totalAmount-" + id).text().trim() == '' ? "0" : $("#totalAmount-" + id).text();
-    const remarks = $("#remarks-" + id).text();
     const rackName = $("#rackName-" + id).text();
     const binName = $("#binName-" + id).text();
-
-    rollList += `rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},rollQty : ${rollQty},qcPassedQty : ${qcPassedQty},issueQty : ${issueQty},balanceQty : ${balanceQty},rate : ${rate},totalAmount : ${totalAmount},remarks : ${remarks},rackName : ${rackName},binName : ${binName} #`;
+    console.log(id,purchaseOrder,styleId,itemId,itemColorId,fabricsId,rollId,unitQty,unitId);
+    rollList += `purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColor},rollId : ${rollId},unitId : ${unitId},unitQty : ${unitQty},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName} #`;
   }
 
   rollList = rollList.slice(0, -1);
-
-  
 
   if (length > 0) {
     if (transectionId != '') {
@@ -196,14 +190,8 @@ function editAction() {
                 grnNo: grnNo,
                 grnDate: grnDate,
                 location: location,
-                indentId: indentId,
-                fabricsId: fabricsId,
-                receiveQty: receiveQty,
-                noOfRoll: noOfRoll,
-                unitId : unitId,
                 rollList: rollList,
                 supplierId: supplier,
-                buyer: buyer,
                 challanNo: challanNo,
                 challanDate: challanDate,
                 remarks: remarks,
@@ -216,7 +204,7 @@ function editAction() {
                 } else if (data.result == "duplicate") {
                   dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                 } else {
-                  alert("Successfully Submit...");
+                  alert("Successfully Edit...");
                   refreshAction();
                 }
               }
@@ -331,7 +319,7 @@ function setFabricsReceiveInfo(transectionId) {
       $("#grnDate").val(date[2] + "-" + date[1] + "-" + date[0]);
       $("#indentId").val(fabricsReceive.indentId);
       $("#location").val(fabricsReceive.location);
-      $("#supplierId").val(fabricsReceive.supplierId);
+      $("#supplier").val(fabricsReceive.supplierId).change();
       $("#challanNo").val(fabricsReceive.challanNo);
       $("#challanDate").val(fabricsReceive.challanDate);
       // $("#fabricsItem").val(indent.fabricsName);
@@ -423,7 +411,6 @@ function drawFabricsRollListTable(data) {
     +"<td id='binName-" + i + "' contenteditable = 'true'>"+rowData.binName+"</td>"
     +"<td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + i + ")' style='cursor:pointer;'> </i></td>"
     +"</tr>";
-    rows.push(row);
   }
   $("#rollList").append(rows);
 

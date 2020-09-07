@@ -90,7 +90,7 @@ public class FabricsReturn {
 			System.out.println(rollList);
 			String[] rollLists = rollList.split("#");
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
-			String autoId,transectionId,userId;
+			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,userId;
 			double qcPassedQty; int qcPassedType;
 			boolean isReturn;
 			for (String item : rollLists) {
@@ -98,13 +98,19 @@ public class FabricsReturn {
 
 				autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 				transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
-				qcPassedQty = Double.valueOf(itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim());
-				qcPassedType = Integer.valueOf(itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim());
-				isReturn = Boolean.valueOf(itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim());
-				userId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+				purchaseOrder = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				styleId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				itemId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+				fabricsId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+				fabricsColorId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+				rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				qcPassedQty = Double.valueOf(itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim());
+				qcPassedType = Integer.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
+				userId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
 
 
-				list.add(new FabricsRoll(autoId, transectionId, qcPassedQty, qcPassedType,isReturn, userId));
+				list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId ,qcPassedQty, qcPassedType, false,userId));
 			}
 
 			this.fabricsRollList = list;
