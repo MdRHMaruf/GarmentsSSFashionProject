@@ -111,7 +111,7 @@ function submitAction() {
 
     const row = rowList[i];
     const id = row.id.slice(6);
-    const checked = $("#check-" + id).prop('checked');
+    const checked = $("#isCheck-" + id).prop('checked');
     if (checked) {
       const purchaseOrder = row.getAttribute('data-purchase-order');
       const styleId = row.getAttribute('data-style-id');
@@ -120,10 +120,13 @@ function submitAction() {
       const fabricsId = row.getAttribute('data-fabrics-id');
       const fabricsColorId = row.getAttribute('data-fabrics-color-id');
       const rollId = $("#rollId-" + id).text();
+      const unitId = row.getAttribute('data-unit-id');
       const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
       const qcPassedType = $("#qcPassed-" + id).val();
+      const rackName = $("#rackName-" + id).text();
+      const binName = $("#binName-" + id).text();
 
-      rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+      rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
     }
   }
 
@@ -314,7 +317,6 @@ function drawFabricsQCListTable(data) {
       + "<td>" + rowData.qcTransectionId + "</td>"
       + "<td>" + rowData.qcDate + "</td>"
       + "<td>" + rowData.grnNo + "</td>"
-      + "<td>" + rowData.fabricsName + "</td>"
       + "<td ><i class='fa fa-search' onclick=\"setFabricsQCInfo('" + rowData.qcTransectionId + "')\" style='cursor:pointer;'> </i></td>"
       + "</tr>";
   }

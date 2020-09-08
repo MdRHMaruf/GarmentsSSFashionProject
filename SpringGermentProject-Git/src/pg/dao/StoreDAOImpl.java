@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.catalina.Store;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
@@ -334,28 +335,33 @@ public class StoreDAOImpl implements StoreDAO{
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
+		StoreTransection transection = StoreTransection.FABRICS_QC;
+		ItemType itemType = ItemType.FABRICS;
+		
 
 		try{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select (isnull(max(qcTransectionId),0)+1) as maxId from tbfabricsQualityControlInfo";
+			String sql="select (isnull(max(transectionId),0)+1) as maxId from tbfabricsQualityControlInfo";
 			List<?> list = session.createSQLQuery(sql).list();
 			String transectionId="0";
 			if(list.size()>0) {
 				transectionId = list.get(0).toString();
 			}
 
-			sql="insert into tbfabricsQualityControlInfo (qcTransectionId"
+			sql="insert into tbfabricsQualityControlInfo (transectionId"
 					+ ",date"
 					+ ",grnNo"
 					+ ",remarks"
+					+ ",checkBy"
 					+ ",entryTime"
 					+ ",createBy) values("
 					+ "'"+transectionId+"'"
 					+ ",'"+fabricsQC.getQcDate()+"'"
 					+ ",'"+fabricsQC.getGrnNo()+"'"
-					+ ",'"+fabricsQC.getRemarks()+"',"
+					+ ",'"+fabricsQC.getRemarks()+"'"
+					+ ",'"+fabricsQC.getCheckBy()+"',"
 					+ "CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
@@ -363,7 +369,13 @@ public class StoreDAOImpl implements StoreDAO{
 			int departmentId = 1;
 			for (FabricsRoll roll : fabricsQC.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransection (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transectionId,transectionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transectionId+"','"+StoreTransection.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transectionId+"','"+transection.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";		
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			for (FabricsRoll roll : fabricsQC.getFabricsRollList()) {
+				sql="insert into tbQulityControlDetails (transectionId,transectionType,itemType,itemId,rollId,unitId,QCCheckQty,shade,shrinkage,gsm,width,defect,remarks,qcPassedType,entryTime,userId) \r\n" + 
+						"values('"+transectionId+"','"+transection.getType()+"','"+itemType.getType()+"','"+roll.getFabricsId()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getQcPassedQty()+"','"+roll.getShadeQty()+"','"+roll.getShrinkageQty()+"','"+roll.getGsmQty()+"','"+roll.getWidthQty()+"','"+roll.getDefectQty()+"','"+roll.getRemarks()+"','"+roll.getQcPassedType()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"')";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -440,14 +452,10 @@ public class StoreDAOImpl implements StoreDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql = "select qci.AutoId,qci.qcTransectionId,(select convert(varchar,qci.date,103))as qcDate,qci.grnNo,(select convert(varchar,fri.grnDate,103))as receiveDate,qci.remarks,f.ItemName,fri.supplierId,qci.createBy \r\n" + 
+			String sql = "select qci.AutoId,qci.TransectionId,(select convert(varchar,qci.date,103))as qcDate,qci.grnNo,(select convert(varchar,fri.grnDate,103))as receiveDate,qci.remarks,fri.supplierId,qci.checkBy,qci.createBy \r\n" + 
 					"from tbFabricsQualityControlInfo qci\r\n" + 
 					"left join tbFabricsReceiveInfo fri\r\n" + 
-					"on qci.grnNo = fri.grnNo\r\n" + 
-					"left join tbFabricsIndent fi\r\n" + 
-					"on fri.indentId = fi.id\r\n" + 
-					"left join TbFabricsItem f\r\n" + 
-					"on fi.fabricsid = f.id";		
+					"on qci.grnNo = fri.grnNo";		
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -479,27 +487,28 @@ public class StoreDAOImpl implements StoreDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql = "select autoId,transectionId,rollId,supplierRollId,frd.unitId,u.unitname,rollQty,qcPassedQty,issueQty,balanceQty,rate,totalAmount,remarks,rackName,BinName,QCTransectionId,qcPassedType,createBy \r\n" + 
-					"from tbFabricsRollDetails frd\r\n" + 
+			String sql = "select qcd.autoId,qcd.transectionId,qcd.rollId,fat.purchaseOrder,fat.styleId,fat.styleItemId,fat.colorId,fat.dItemId,fat.itemColorId,qcd.unitId,u.unitname,far.unitQty,QCCheckQty,shade,shrinkage,gsm,width,defect,remarks,fat.rackName,fat.BinName,qcPassedType,qcd.userId \r\n" + 
+					"from tbQulityControlDetails qcd\r\n" + 
 					"left join tbunits u\r\n" + 
-					"on frd.unitId = u.Unitid\r\n" + 
-					"where QCTransectionId = '"+qcTransectionId+"'";		
+					"on qcd.unitId = u.Unitid\r\n" + 
+					"left join tbFabricsAccessoriesTransection far\r\n" + 
+					"on qcd.transectionId = far.transectionId and far.transectionType = '"+StoreTransection.FABRICS_RECEIVE.getType()+"' and qcd.itemId = far.dItemId and qcd.rollId = far.rollId\r\n" + 
+					"left join tbFabricsAccessoriesTransection fat\r\n" + 
+					"on qcd.transectionId = fat.transectionId and qcd.transectionType = fat.transectionType and qcd.itemId = fat.dItemId and qcd.rollId = fat.rollId\r\n" + 
+					"where qcd.transectionId = '"+qcTransectionId+"' \r\n" + 
+					"";		
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				//fabricsRollList.add(new FabricsRoll(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),element[4].toString(),element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), Double.valueOf(element[10].toString()), Double.valueOf(element[11].toString()), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(),Integer.valueOf(element[16].toString()),element[17].toString()));				
+				fabricsRollList.add(new FabricsRoll(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), "", element[8].toString(), "", element[9].toString(), element[10].toString(), Double.valueOf(element[11].toString()), Double.valueOf(element[12].toString()), Double.valueOf(element[13].toString()), Double.valueOf(element[14].toString()), Double.valueOf(element[15].toString()), Double.valueOf(element[16].toString()),Double.valueOf(element[17].toString()), element[18].toString(), element[19].toString(), element[20].toString(), Integer.valueOf(element[21].toString())));				
 			}
 
-			sql = "select qci.AutoId,qci.qcTransectionId,(select convert(varchar,qci.date,103))as qcDate,qci.grnNo,(select convert(varchar,fri.grnDate,103))as receiveDate,qci.remarks,f.ItemName,fri.supplierId,qci.createBy \r\n" + 
+			sql = "select qci.AutoId,qci.TransectionId,(select convert(varchar,qci.date,103))as qcDate,qci.grnNo,(select convert(varchar,fri.grnDate,103))as receiveDate,qci.remarks,fri.supplierId,qci.checkBy,qci.createBy \r\n" + 
 					"from tbFabricsQualityControlInfo qci\r\n" + 
 					"left join tbFabricsReceiveInfo fri\r\n" + 
-					"on qci.grnNo = fri.grnNo\r\n" + 
-					"left join tbFabricsIndent fi\r\n" + 
-					"on fri.indentId = fi.id\r\n" + 
-					"left join TbFabricsItem f\r\n" + 
-					"on fi.fabricsid = f.id where qci.qcTransectionId = '"+qcTransectionId+"'";		
+					"on qci.grnNo = fri.grnNo where qci.transectionId = '"+qcTransectionId+"'";		
 			list = session.createSQLQuery(sql).list();
 			if(list.size()>0)
 			{	

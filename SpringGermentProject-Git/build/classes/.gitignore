@@ -1,3 +1,5 @@
 /hibernate.cfg.xml
 /.gitignore
+/*.bak
+/*.sql
 /pg/

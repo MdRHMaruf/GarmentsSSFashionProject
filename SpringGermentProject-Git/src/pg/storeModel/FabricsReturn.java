@@ -110,7 +110,7 @@ public class FabricsReturn {
 				userId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
 
 
-				list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId ,qcPassedQty, qcPassedType, false,userId));
+				//list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId ,qcPassedQty, qcPassedType, false,userId));
 			}
 
 			this.fabricsRollList = list;

@@ -29,7 +29,7 @@
                 <div class="account-box">
                     <div class="account-wrapper">
                         <div class="account-logo">
-                            <a href="index.php"><img src="assets/img/cursor.png" alt="Preadmin"></a>
+                            <a href=""><img src="assets/images/cursor.png" alt="Preadmin"></a>
                         </div>
                         
                         <s:url var="url_login"  value="/login"/>

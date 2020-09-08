@@ -169,7 +169,7 @@
 							<th>Rack Name</th>
 							<th>Bin name</th>
 							<th>QC Passed</th>
-							<th><label class="form-check-label" for="allCheck">Check <input id="check" type="checkbox"></label>
+							<th><label class="form-check-label" for="allCheck">Check <input id="allCheck" type="checkbox"></label>
 							</th>
 						</tr>
 					</thead>
@@ -229,7 +229,6 @@
 							<th>QC Transection Id</th>
 							<th>QC Date</th>
 							<th>GRN No</th>
-							<th>Fabrics</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>

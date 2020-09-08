@@ -27,17 +27,17 @@ public class FabricsQualityControl {
 		this.userId = userId;
 	}
 	
-	public FabricsQualityControl(String autoId, String qcTransectionId, String qcDate, String grnNo,String receiveDate, String remarks,
-			String fabricsName, String supplierId, String userId) {
+	public FabricsQualityControl(String autoId, String transectionId, String qcDate, String grnNo,String receiveDate, String remarks,
+			 String supplierId,String checkBy, String userId) {
 		super();
 		this.autoId = autoId;
-		this.qcTransectionId = qcTransectionId;
+		this.qcTransectionId = transectionId;
 		this.qcDate = qcDate;
 		this.grnNo = grnNo;
 		this.receiveDate = receiveDate;
 		this.remarks = remarks;
-		this.fabricsName = fabricsName;
 		this.supplierId = supplierId;
+		this.checkBy = checkBy;
 		this.userId = userId;
 	}
 	public String getFabricsName() {
@@ -103,7 +103,7 @@ public class FabricsQualityControl {
 			System.out.println(rollList);
 			String[] rollLists = rollList.split("#");
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
-			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,userId;
+			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId,remarks,rackName,binName,userId;
 			double qcPassedQty; int qcPassedType;
 			
 			for (String item : rollLists) {
@@ -118,12 +118,14 @@ public class FabricsQualityControl {
 				fabricsId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
 				fabricsColorId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
 				rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
-				qcPassedQty = Double.valueOf(itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim());
-				qcPassedType = Integer.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
-				userId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
-
-
-				list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId ,qcPassedQty, qcPassedType, false,userId));
+				unitId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+				qcPassedQty = Double.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
+				rackName = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+				binName = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				remarks = "";
+				qcPassedType = Integer.valueOf(itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim());
+				userId = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
+				list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId ,qcPassedQty,rackName,binName,remarks, qcPassedType, false,userId));
 			}
 
 			this.fabricsRollList = list;
