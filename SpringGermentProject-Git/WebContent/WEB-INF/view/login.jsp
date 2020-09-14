@@ -41,7 +41,7 @@
 	                            </div>
 	                            <div class="form-group form-focus">
 	                                <label class="control-label">Password</label>
-	                                <input password name="password" class="form-control floating" />
+	                                <input type="password" name="password" class="form-control floating" />
 	                            </div>
 	                            <div class="form-group text-center">
 	                                <button class="btn btn-primary btn-block account-btn" >Login</button>

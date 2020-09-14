@@ -24,6 +24,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/jquery-ui.css">
    	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-select.min.css">
+   	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-table-expandable.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css">
     
     <!--[if lt IE 9]>

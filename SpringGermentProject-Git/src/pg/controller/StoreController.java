@@ -25,6 +25,7 @@ import pg.services.StoreService;
 import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
+import pg.storeModel.FabricsRoll;
 
 @Controller
 @RestController
@@ -48,6 +49,17 @@ public class StoreController {
 		view.addObject("supplierList",supplierList);
 		return view; 
 	}
+	
+	//Fabrics Receive 
+		@RequestMapping(value = "/fabrics_receive_new",method=RequestMethod.GET)
+		public ModelAndView fabrics_receive_new(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/fabrics-receive-new");
+			List<Unit> unitList= registerService.getUnitList();
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("unitList", unitList);
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
 
 	@RequestMapping(value = "/getFabricsPurchaseOrderIndentList",method = RequestMethod.GET)
 	public JSONObject getFabricsPurchaseOrdeIndentrList() {
@@ -86,6 +98,26 @@ public class StoreController {
 		}else {
 			objmain.put("result", "duplicate");
 		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteReceiveRollFromTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject deleteReceiveRollFromTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+			objmain.put("result", storeService.deleteReceiveRollFromTransaction(fabricsRoll));
+		
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/editReceiveRollInTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject editReceiveRollInTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+		objmain.put("result", storeService.editReceiveRollInTransaction(fabricsRoll));
+		
 		return objmain;
 	}
 	@RequestMapping(value = "/getFabricsReceiveList", method = RequestMethod.GET)
@@ -160,6 +192,32 @@ public class StoreController {
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("supplierList",supplierList);
 		return view; 
+	}
+	
+	//Fabrics Return
+		@RequestMapping(value = "/fabrics_issue_return",method=RequestMethod.GET)
+		public ModelAndView fabrics_issue_return(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/fabrics-return");
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
+		
+		//Fabrics Return
+		@RequestMapping(value = "/fabrics_issue",method=RequestMethod.GET)
+		public ModelAndView fabrics_issue(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/fabrics-return");
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
+	
+	@RequestMapping(value = "/getFabricsRollList", method = RequestMethod.GET)
+	public JSONObject getFabricsRollList(String supplierId) {
+		JSONObject mainObject = new JSONObject();
+		List<FabricsRoll> fabricsRollList = storeService.getFabricsRollList(supplierId);
+		mainObject.put("fabricsRollList",fabricsRollList);
+		return mainObject;
 	}
 	
 	@RequestMapping(value = "/submitFabricsReturn",method=RequestMethod.POST)

@@ -184,17 +184,32 @@ function editAction() {
   const qcDate = $("#qcDate").val();
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
+  const checkBy = $("#checkBy").val();
   const userId = $("#userId").val();
 
   let rollList = ""
 
   for (let i = 0; i < length; i++) {
 
-    const id = rowList[i].id.slice(4);
-    const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
-    const qcPassedType = $("#qcPassed-" + id).val();
+    const row = rowList[i];
+    const id = row.id.slice(6);
+    const checked = $("#isCheck-" + id).prop('checked');
+    if (checked) {
+      const purchaseOrder = row.getAttribute('data-purchase-order');
+      const styleId = row.getAttribute('data-style-id');
+      const itemId = row.getAttribute('data-item-id');
+      const itemColorId = row.getAttribute('data-item-color-id');
+      const fabricsId = row.getAttribute('data-fabrics-id');
+      const fabricsColorId = row.getAttribute('data-fabrics-color-id');
+      const rollId = $("#rollId-" + id).text();
+      const unitId = row.getAttribute('data-unit-id');
+      const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
+      const qcPassedType = $("#qcPassed-" + id).val();
+      const rackName = $("#rackName-" + id).text();
+      const binName = $("#binName-" + id).text();
 
-    rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},qcPassedQty : ${qcPassedQty},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+      rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    }
   }
 
   rollList = rollList.slice(0, -1);

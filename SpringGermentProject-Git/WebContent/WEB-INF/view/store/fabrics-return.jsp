@@ -68,18 +68,27 @@
 				</div>
 
 				<div class="form-group mb-0  row">
-					<label for="grnNo"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">GRN No:</label>
+					<label for="supplier"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Supplier</label>
 					<div class="input-group col-md-9 px-0">
-						<div class="input-group-append width-100">
-							<input id="grnNo" type="text" class=" form-control-sm" readonly>
+						<div class="input-group-append">
+							<select id="supplier" class="selectpicker px-0"
+								data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="supplier" value="0">--- Select ---</option>
+								<c:forEach items="${supplierList}" var="supplier">
+									<option id="supplier" value="${supplier.supplierid}">${supplier.suppliername}</option>
+								</c:forEach>
+							</select>
 							<button id="grnSearchBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#grnSearchModal">
+								data-toggle="modal">
 								<i class="fa fa-search"></i>
 							</button>
 						</div>
 					</div>
+
+
 				</div>
 			</div>
 			<div class="col-md-4">
@@ -98,33 +107,15 @@
 
 			</div>
 			<div class="col-md-4">
-				<div class="form-group mb-0  row">
-					<label for="supplier"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Supplier</label>
-					<select id="supplier" class="selectpicker col-md-9 px-0"
-						data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option id="supplier" value="0">--- Select ---</option>
-						<c:forEach items="${supplierList}" var="supplier">
-							<option id="supplier" value="${supplier.supplierid}">${supplier.suppliername}</option>
-						</c:forEach>
-					</select>
 
-				</div>
 
 				<div class="form-group mb-0  row">
 					<label for="remarks"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Remarks</label>
-					<input id="remarks" type="text" class="col-md-9 form-control-sm">
+					<textarea id="remarks" class="col-md-9 form-control-sm"></textarea>
 
 				</div>
 			</div>
-		</div>
-		<div class="form-group mb-0 row">
-			<label for="fabrics"
-				class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">Fabrics</label> <input
-				id="fabrics" type="text" class="col-md-11 form-control-sm">
-
 		</div>
 
 		<hr class="my-1">
@@ -135,16 +126,14 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
+							<th>Fabrics Name</th>
+							<th>Fabrics Color</th>
 							<th>Roll Id</th>
-							<th>Supplier Roll Id</th>
-							<th>Roll Qty</th>
 							<th>UOM</th>
-							<th>Rate</th>
-							<th>QC Passed Qty</th>
+							<th>Balance Qty</th>
+							<th>Return Qty</th>
 							<th>Rack Name</th>
 							<th>Bin name</th>
-							<th>QC Passed</th>
-							<th>Return</th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -177,8 +166,8 @@
 	</div>
 </div>
 <!--QC search modal -->
-<div class="modal fade" id="returnSearchModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="returnSearchModal" tabindex="-1"
+	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -201,8 +190,7 @@
 						<tr>
 							<th>QC Transection Id</th>
 							<th>QC Date</th>
-							<th>GRN No</th>
-							<th>Fabrics</th>
+							<th>Supplier Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
@@ -216,46 +204,93 @@
 	</div>
 </div>
 
-<!--grn search modal -->
-<div class="modal fade" id="grnSearchModal" tabindex="-1" role="dialog"
+<!-- Item Search Modal -->
+<div class="modal fade" id="rollSearchModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
-			<div class="modal-header">
-				<div class="input-group">
-					<input type="text" class="form-control"
-						placeholder="Search Purchase Order"
-						aria-label="Recipient's username" aria-describedby="basic-addon2">
+			<div class="modal-header py-2">
+				<div class="input-group input-group-sm">
+
+					<input id="searchEverything" type="text" class="form-control"
+						placeholder="Search Every Thing" aria-label="Recipient's username"
+						aria-describedby="basic-addon2">
 					<div class="input-group-append">
-						<span class="input-group-text"><i class="fa fa-search"></i></span>
+						<button class="form-control-sm" id="searchRefreshBtn">
+							<i class="fa fa-refresh" style="cursor: pointer;"></i>
+						</button>
 					</div>
+
+
 				</div>
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-			<div class="modal-body">
+			<div class="row px-3">
+				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="supplierNameSearch"
+						placeholder="Supplier Name">
+				</div>
+				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="purchaseOrderSearch"
+						placeholder="Purchase Order">
+				</div>
+				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="styleNoSearch"
+						placeholder="Style No">
+				</div>
+				<div class="col-md-3 px-1">
+					<input type="text" class="form-control-sm" id="itemNameSearch"
+						placeholder="Item Name">
+				</div>
+				<div class="col-md-3 px-1">
+					<input type="text" class="form-control-sm" id="fabricsItemSearch"
+						placeholder="Fabrics Item">
+				</div>
+				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="colorSearch"
+						placeholder="Color">
+				</div>
+				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="rollIdSearch"
+						placeholder="Roll Id">
+				</div>
+			</div>
+			<div class="modal-body table-responsive" style="height: 70vh">
 				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead>
+					<thead class="no-wrap-text bg-light">
 						<tr>
-							<th>Transection Id</th>
-							<th>GRN No</th>
-							<th>GRN Date</th>
-							<th>GRN Qty</th>
-							<th>No Of Roll</th>
-							<th><span><i class="fa fa-search"></i></span></th>
+							<th>Supplier</th>
+							<th>Purchase Order No</th>
+							<th>Style No</th>
+							<th>Item Name</th>
+							<th>Item Color</th>
+							<th>Fabrics Name</th>
+							<th>Fabrics Color</th>
+							<th>RollId</th>
+							<th>Balance Qty</th>
+							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsReceiveList">
+					<tbody id="fabricsRollSearchList">
 
 					</tbody>
 				</table>
+			</div>
+			<div class="modal-footer py-2">
+				<div class="d-flex justify-content-end">
+					<button id="rollAddBtn" class="btn btn-primary btn-sm">
+						<span><i class="fas fa-plus-circle"></i></span> Add
+					</button>
+				</div>
 			</div>
 
 		</div>
 	</div>
 </div>
+
 <jsp:include page="../include/footer.jsp" />
 
 <script

@@ -8,28 +8,32 @@ public class FabricsReturn {
 	String autoId;
 	String returnTransectionId;
 	String returnDate;
-	String grnNo;
 	String receiveDate;
-	String fabricsName;
 	String supplierId;
+	String supplierName;
 	String remarks;
 	String rollList;
 	List<FabricsRoll> fabricsRollList;
 	String userId;
 	
 	public FabricsReturn() {}
-	public FabricsReturn(String autoId, String returnTransectionId, String returnDate, String grnNo, String grnDate,
-			String fabricsName, String supplierId, String remarks, String userId) {
+	public FabricsReturn(String autoId, String returnTransectionId, String returnDate,
+		String supplierId,String supplierName, String remarks, String userId) {
 		super();
 		this.autoId = autoId;
 		this.returnTransectionId = returnTransectionId;
-		this.returnDate = returnDate;
-		this.grnNo = grnNo;
-		this.receiveDate = grnDate;
-		this.fabricsName = fabricsName;
+		this.returnDate = returnDate;	
 		this.supplierId = supplierId;
+		this.supplierName = supplierName;
 		this.remarks = remarks;
 		this.userId = userId;
+	}
+	
+	public String getSupplierName() {
+		return supplierName;
+	}
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
 	}
 	public String getAutoId() {
 		return autoId;
@@ -49,27 +53,14 @@ public class FabricsReturn {
 	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
 	}
-	public String getGrnNo() {
-		return grnNo;
-	}
-	public void setGrnNo(String grnNo) {
-		this.grnNo = grnNo;
-	}
-	
 	public String getReceiveDate() {
 		return receiveDate;
 	}
-
 	public void setReceiveDate(String receiveDate) {
 		this.receiveDate = receiveDate;
 	}
 
-	public String getFabricsName() {
-		return fabricsName;
-	}
-	public void setFabricsName(String fabricsName) {
-		this.fabricsName = fabricsName;
-	}
+	
 	public String getSupplierId() {
 		return supplierId;
 	}
@@ -90,12 +81,11 @@ public class FabricsReturn {
 			System.out.println(rollList);
 			String[] rollLists = rollList.split("#");
 			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
-			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,userId;
-			double qcPassedQty; int qcPassedType;
+			String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,unitId,unit,userId,rackName,binName;
+			double qcReturnQty,unitQty,balanceQty; int qcPassedType;
 			boolean isReturn;
 			for (String item : rollLists) {
 				String[] itemProperty = item.split(",");
-
 				autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 				transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
 				purchaseOrder = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
@@ -103,14 +93,18 @@ public class FabricsReturn {
 				itemId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
 				itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
 				fabricsId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
-				fabricsColorId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
-				rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
-				qcPassedQty = Double.valueOf(itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim());
-				qcPassedType = Integer.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
-				userId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
-
-
-				//list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId ,qcPassedQty, qcPassedType, false,userId));
+				fabricsName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+				fabricsColorId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				fabricsColorName = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();;
+				balanceQty = 0;
+				rollId = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
+				unitId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+				unit = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				unitQty = Double.valueOf(itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim());
+				rackName = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
+				binName = itemProperty[15].substring(itemProperty[15].indexOf(":")+1).trim();
+				qcPassedType = 1;
+				list.add(new FabricsRoll(autoId, transectionId, purchaseOrder, styleId,"Style No", itemId,"item Name" ,itemColorId,"item color", fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId, unitId,"unitName", balanceQty,unitQty, rackName, binName,qcPassedType));
 			}
 
 			this.fabricsRollList = list;

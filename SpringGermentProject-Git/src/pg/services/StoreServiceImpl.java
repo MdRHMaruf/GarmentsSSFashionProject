@@ -11,6 +11,7 @@ import pg.orderModel.PurchaseOrderItem;
 import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
+import pg.storeModel.FabricsRoll;
 
 @Service
 public class StoreServiceImpl implements StoreService{
@@ -39,6 +40,18 @@ public class StoreServiceImpl implements StoreService{
 	public boolean editFabricsReceive(FabricsReceive fabricsReceive) {
 		// TODO Auto-generated method stub
 		return storeDao.editFabricsReceive(fabricsReceive);
+	}
+
+	@Override
+	public String editReceiveRollInTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editReceiveRollInTransaction(fabricsRoll);
+	}
+
+	@Override
+	public String deleteReceiveRollFromTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteReceiveRollFromTransaction(fabricsRoll);
 	}
 
 	@Override
@@ -75,6 +88,12 @@ public class StoreServiceImpl implements StoreService{
 	public FabricsQualityControl getFabricsQCInfo(String qcTransectionId) {
 		// TODO Auto-generated method stub
 		return storeDao.getFabricsQCInfo(qcTransectionId);
+	}
+
+	@Override
+	public List<FabricsRoll> getFabricsRollList(String supplierId) {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsRollList(supplierId);
 	}
 
 	@Override
