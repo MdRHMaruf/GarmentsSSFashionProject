@@ -44,14 +44,16 @@
 		</header>
 		<hr class="my-1">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-8">
+				<div class="row">
+				<div class="col-md-6">
 				<div class="form-group mb-0  row">
-					<label for="qcTransectionId"
+					<label for="qcTransactionId"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Tran
 						ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="qcTransectionId" type="text" class=" form-control-sm" readonly>
+							<input id="qcTransactionId" type="text" class=" form-control-sm" readonly>
 							<button id="newFabricsQCBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
@@ -71,7 +73,7 @@
 				</div>
 
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-6">
 
 				<div class="form-group mb-0  row">
 					<label for="grnNo"
@@ -95,6 +97,19 @@
 				</div>
 
 			</div>
+				</div>
+			
+			<div class="form-group mb-0 row">
+			<label for="fabrics"
+				class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">Fabrics</label> <input
+				id="fabrics" type="text" class="col-md-11 form-control-sm" readonly>
+
+		</div>
+			</div>
+			
+			
+			
+			
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
 					<label for="supplier"
@@ -116,14 +131,22 @@
 					<input id="remarks" type="text" class="col-md-9 form-control-sm">
 
 				</div>
+				
+				<div class="form-group mb-0  row">
+					<label for="checkBy"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Check By</label>
+					<select id="checkBy" class="selectpicker col-md-9 px-0"
+						data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option value="0">--- Select ---</option>
+						
+					</select>
+
+
+				</div>
 			</div>
 		</div>
-		<div class="form-group mb-0 row">
-			<label for="fabrics"
-				class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">Fabrics</label> <input
-				id="fabrics" type="text" class="col-md-11 form-control-sm">
-
-		</div>
+		
 
 		<hr class="my-1">
 		<div class="row mt-1">
@@ -134,11 +157,10 @@
 					<thead class="no-wrap-text">
 						<tr>
 							<th>Roll Id</th>
-							<th>Supplier Roll Id</th>
-							<th>Roll Qty</th>
-							<th>UOM</th>
-							<th>Rate</th>
+							<th>Unit Qty</th>
 							<th>QC Passed Qty</th>
+							<th>Check Qty</th>
+							<th>UOM</th>
 							<th>Shade</th>
 							<th>Shrinkage</th>
 							<th>GSM</th>
@@ -147,6 +169,8 @@
 							<th>Rack Name</th>
 							<th>Bin name</th>
 							<th>QC Passed</th>
+							<th><label class="form-check-label" for="allCheck">Check <input id="allCheck" type="checkbox"></label>
+							</th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -202,10 +226,9 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>QC Transection Id</th>
+							<th>QC Transaction Id</th>
 							<th>QC Date</th>
 							<th>GRN No</th>
-							<th>Fabrics</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
@@ -242,11 +265,9 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>Transection Id</th>
+							<th>Transaction Id</th>
 							<th>GRN No</th>
 							<th>GRN Date</th>
-							<th>GRN Qty</th>
-							<th>No Of Roll</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>

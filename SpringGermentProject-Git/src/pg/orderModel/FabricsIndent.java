@@ -23,6 +23,15 @@ public class FabricsIndent {
 	double yard;
 	double gsm;
 	double grandQty;
+	double previousReceiveQty;
+	public double getPreviousReceiveQty() {
+		return previousReceiveQty;
+	}
+
+	public void setPreviousReceiveQty(double previousReceiveQty) {
+		this.previousReceiveQty = previousReceiveQty;
+	}
+
 	double rate;
 	String fabricsColor;
 	String fabricsColorId;
@@ -111,7 +120,7 @@ public class FabricsIndent {
 	public FabricsIndent(String autoId, String purchaseOrder, String styleId, String styleName,
 			String itemId, String itemName, String itemColorId, String itemColorName, String fabricsId,
 			String fabricsName, String fabricsColorId, String fabricsColor, String unitId,
-			String unit, double grandQty) {
+			String unit, double grandQty,double previousReceiveQty) {
 		super();
 		this.autoId = autoId;
 		this.purchaseOrder = purchaseOrder;
@@ -128,6 +137,7 @@ public class FabricsIndent {
 		this.unitId = unitId;
 		this.unit = unit;
 		this.grandQty = grandQty;
+		this.previousReceiveQty = previousReceiveQty;
 	}
 
 	public String getFabricsColor() {

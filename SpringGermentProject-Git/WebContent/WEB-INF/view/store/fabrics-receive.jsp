@@ -40,6 +40,8 @@
 		<input type="hidden" id="itemColorId" value="0">
 		<input type="hidden" id="fabricsColorId" value="0">
 		<input type="hidden" id="fabricsId" value="0"> 
+		<input type="hidden" id="unitId" value="0"> 
+		
 		<input type="hidden" id="fabricsRate" value="0">
 
 	<div class="card-box">
@@ -54,18 +56,18 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="transectionId"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Transection
+					<label for="transactionId"
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Transaction
 						ID</label>
 					<div class="input-group col-md-8 px-0">
 						<div class="input-group-append">
-							<input id="transectionId" type="text" class=" form-control-sm"
+							<input id="transactionId" type="text" class=" form-control-sm"
 								readonly>
-							<button id="newTransectionBtn" type="button"
+							<button id="newTransactionBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findTransectionBtn" type="button"
+							<button id="findTransactionBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
 								data-toggle="modal" data-target="#searchModal">
 								<i class="fa fa-search"></i>
@@ -189,120 +191,32 @@
 				</div>
 
 				<div class="row">
-					<div class="col-md-3 px-1">
+					<div class="col-md-1 px-1">
 						<label for="unit">Unit:</label>
 					</div>
-					<div class="col-md-3 px-1">
+					<div class="col-md-2 px-1">
 						<b><label id="unit"></label></b>
 					</div>
 
-					<div class="col-md-3 px-1">
-						<label for="totalPoQty">Total PO Qty:</label>
+					<div class="col-md-2 px-1">
+						<label for="totalPoQty">T. PO Qty:</label>
 					</div>
-					<div class="col-md-3 px-1">
+					<div class="col-md-2 px-1">
 						<b><label id="totalPoQty"></label></b>
 					</div>
-				</div>
-
-
-
-
-				<%-- <div class="form-group mb-0  row">
-					<label for="supplier"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Supplier</label>
-					<select id="supplier" class="selectpicker col-md-8 px-0"
-						data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option id="supplier" value="0">--- Select ---</option>
-						<c:forEach items="${supplierList}" var="supplier">
-							<option id="supplier" value="${supplier.supplierid}">${supplier.suppliername}</option>
-						</c:forEach>
-					</select>
-
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="styleRefNo"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Style
-						Ref.No</label>
-					<div class="input-group col-md-8 px-0">
-						<div class="input-group-append">
-							<select id="styleRefNo" class="selectpicker "
-								data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleRefNo" value="0">--- Select ---</option>
-
-							</select>
-							<button type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
+					
+					<div class="col-md-2 px-1">
+						<label for="previousReceive">Prev. Rec.:</label>
+					</div>
+					<div class="col-md-2 px-1">
+						<b><label id="previousReceive"></label></b>
 					</div>
 				</div>
 
-				<div class="form-group mb-0  row">
-					<label for="purchaseOrderNo"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Pur.
-						Order No</label>
-					<div class="input-group col-md-8 px-0">
-						<div class="input-group-append width-100">
-							<input id="purchaseOrderNo" type="text" class="form-control-sm"
-								readonly>
-							<button id="purchaseOrderSearchBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#purchaseOrderModal">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="unit"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Unit</label>
-					<select id="unit" class="selectpicker col-md-8 px-0"
-						data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option id="unit" value="0">--- Select ---</option>
-						<c:forEach items="${unitList}" var="unit">
-							<option id="unit" value="${unit.unitId}">${unit.unitName}</option>
-						</c:forEach>
-					</select>
-
-				</div>
 
 
-				<div class="row">
-					<div class="col-md-6 pr-0">
-						<div class="form-group mb-0  row">
-							<label for="currency"
-								class="col-md-5 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
-							<select id="currency" class="form-control-sm col-md-7 px-0">
-								<option id="currency" value="0">Select Currency</option>
-								<%
-									int length = Currency.values().length;
-									for (int i = 0; i < length; i++) {
-								%>
-								<option id="currency"
-									value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
-								<%
-									}
-								%>
-							</select>
 
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group mb-0  row">
-							<label for="convertFactor"
-								class="col-md-5 col-form-label-sm pr-0 mb-1 pb-1">C.F.:</label>
-							<input id="convertFactor" type="number"
-								class="col-md-7 form-control-sm" placeholder="৳">
-
-						</div>
-					</div>
-				</div>
-				 --%>
+				
 
 			</div>
 			<div class="col-md-3">
@@ -350,17 +264,15 @@
 			<div style="overflow: auto; max-height: 300px;"
 				class="col-sm-12 px-1 table-responsive">
 				<table
-					class="table table-hover table-bordered table-sm mb-0 small-font">
+					class="table table-hover table-bordered table-sm mb-0 small-font table-expandable">
 					<thead class="no-wrap-text">
 						<tr>
 							<th>Fabrics Name</th>
 							<th>Fabrics Color</th>
-							<th>Roll Id</th>
 							<th>Unit</th>
-							<th>Unit Qty</th>
-							<th>QC Passed Qty</th>
-							<th>Rack Name</th>
-							<th>Bin Name</th>
+							<th>Order Qty</th>
+							<th>Previous Rec.</th>
+							<th>Receive Qty</th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -433,11 +345,9 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>Transection Id</th>
+							<th>Transaction Id</th>
 							<th>GRN No</th>
 							<th>GRN Date</th>
-							<th>GRN Qty</th>
-							<th>No Of Roll</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>

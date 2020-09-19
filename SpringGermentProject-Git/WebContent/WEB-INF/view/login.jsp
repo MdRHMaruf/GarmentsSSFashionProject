@@ -29,7 +29,7 @@
                 <div class="account-box">
                     <div class="account-wrapper">
                         <div class="account-logo">
-                            <a href="index.php"><img src="assets/img/cursor.png" alt="Preadmin"></a>
+                            <a href=""><img src="assets/images/cursor.png" alt="Preadmin"></a>
                         </div>
                         
                         <s:url var="url_login"  value="/login"/>
@@ -41,7 +41,7 @@
 	                            </div>
 	                            <div class="form-group form-focus">
 	                                <label class="control-label">Password</label>
-	                                <input password name="password" class="form-control floating" />
+	                                <input type="password" name="password" class="form-control floating" />
 	                            </div>
 	                            <div class="form-group text-center">
 	                                <button class="btn btn-primary btn-block account-btn" >Login</button>

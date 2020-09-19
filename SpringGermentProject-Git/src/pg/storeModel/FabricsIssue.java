@@ -3,38 +3,29 @@ package pg.storeModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricsReturn {
-	
+public class FabricsIssue {
 	String autoId;
-	String returnTransactionId;
-	String returnDate;
-	String receiveDate;
-	String supplierId;
-	String supplierName;
+	String transactionId;
+	String issueDate;
+	String issuedTo;
+	String issuedDepartmentName;
 	String remarks;
+	String receiveBy;
 	String departmentId;
 	String rollList;
 	List<FabricsRoll> fabricsRollList;
 	String userId;
 	
-	public FabricsReturn() {}
-	public FabricsReturn(String autoId, String returnTransectionId, String returnDate,
-		String supplierId,String supplierName, String remarks, String userId) {
+	public FabricsIssue() {}
+	public FabricsIssue(String autoId, String transectionId, String issueDate, String issuedTo, String receiveBy, String remarks, String userId) {
 		super();
 		this.autoId = autoId;
-		this.returnTransactionId = returnTransectionId;
-		this.returnDate = returnDate;	
-		this.supplierId = supplierId;
-		this.supplierName = supplierName;
+		this.transactionId = transectionId;
+		this.issueDate = issueDate;
+		this.issuedTo = issuedTo;
+		this.receiveBy = receiveBy;
 		this.remarks = remarks;
 		this.userId = userId;
-	}
-	
-	public String getSupplierName() {
-		return supplierName;
-	}
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
 	}
 	public String getAutoId() {
 		return autoId;
@@ -42,37 +33,47 @@ public class FabricsReturn {
 	public void setAutoId(String autoId) {
 		this.autoId = autoId;
 	}
-	public String getReturnTransactionId() {
-		return returnTransactionId;
+	public String getTransactionId() {
+		return transactionId;
 	}
-	public void setReturnTransactionId(String returnTransactionId) {
-		this.returnTransactionId = returnTransactionId;
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
 	}
-	public String getReturnDate() {
-		return returnDate;
+	public String getIssueDate() {
+		return issueDate;
 	}
-	public void setReturnDate(String returnDate) {
-		this.returnDate = returnDate;
+	public void setIssueDate(String issueDate) {
+		this.issueDate = issueDate;
 	}
-	public String getReceiveDate() {
-		return receiveDate;
+	public String getDepartmentId() {
+		return departmentId;
 	}
-	public void setReceiveDate(String receiveDate) {
-		this.receiveDate = receiveDate;
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
 	}
-
-	
-	public String getSupplierId() {
-		return supplierId;
+	public String getIssuedDepartmentName() {
+		return issuedDepartmentName;
 	}
-	public void setSupplierId(String supplierId) {
-		this.supplierId = supplierId;
+	public void setIssuedDepartmentName(String issuedDepartmentName) {
+		this.issuedDepartmentName = issuedDepartmentName;
+	}
+	public String getIssuedTo() {
+		return issuedTo;
+	}
+	public void setIssuedTo(String issuedTo) {
+		this.issuedTo = issuedTo;
 	}
 	public String getRemarks() {
 		return remarks;
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public String getReceiveBy() {
+		return receiveBy;
+	}
+	public void setReceiveBy(String receiveBy) {
+		this.receiveBy = receiveBy;
 	}
 	public String getRollList() {
 		return rollList;
@@ -111,8 +112,8 @@ public class FabricsReturn {
 				}
 
 				this.fabricsRollList = list;
+				
 			}
-			
 			this.rollList = rollList;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -130,14 +131,6 @@ public class FabricsReturn {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public String getDepartmentId() {
-		return departmentId;
-	}
-	public void setDepartmentId(String departmentId) {
-		this.departmentId = departmentId;
-	}
 	
 	
-	
-
 }

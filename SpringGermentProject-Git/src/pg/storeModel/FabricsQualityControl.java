@@ -5,13 +5,15 @@ import java.util.List;
 
 public class FabricsQualityControl {
 	String autoId;
-	String qcTransectionId;
+	String qcTransactionId;
 	String qcDate;
 	String grnNo;
 	String receiveDate;
 	String remarks;
 	String fabricsName;
 	String supplierId;
+	String checkBy;
+	String departmentId;
 	String rollList;
 	List<FabricsRoll> fabricsRollList;
 	String userId;
@@ -19,24 +21,24 @@ public class FabricsQualityControl {
 	public FabricsQualityControl(String autoId, String qcTransectionId, String qcDate, String grnNo, String remarks,String userId) {
 		super();
 		this.autoId = autoId;
-		this.qcTransectionId = qcTransectionId;
+		this.qcTransactionId = qcTransectionId;
 		this.qcDate = qcDate;
 		this.grnNo = grnNo;
 		this.remarks = remarks;
 		this.userId = userId;
 	}
 	
-	public FabricsQualityControl(String autoId, String qcTransectionId, String qcDate, String grnNo,String receiveDate, String remarks,
-			String fabricsName, String supplierId, String userId) {
+	public FabricsQualityControl(String autoId, String transectionId, String qcDate, String grnNo,String receiveDate, String remarks,
+			 String supplierId,String checkBy, String userId) {
 		super();
 		this.autoId = autoId;
-		this.qcTransectionId = qcTransectionId;
+		this.qcTransactionId = transectionId;
 		this.qcDate = qcDate;
 		this.grnNo = grnNo;
 		this.receiveDate = receiveDate;
 		this.remarks = remarks;
-		this.fabricsName = fabricsName;
 		this.supplierId = supplierId;
+		this.checkBy = checkBy;
 		this.userId = userId;
 	}
 	public String getFabricsName() {
@@ -63,11 +65,11 @@ public class FabricsQualityControl {
 	public void setAutoId(String autoId) {
 		this.autoId = autoId;
 	}
-	public String getQcTransectionId() {
-		return qcTransectionId;
+	public String getQcTransactionId() {
+		return qcTransactionId;
 	}
-	public void setQcTransectionId(String qcTransectionId) {
-		this.qcTransectionId = qcTransectionId;
+	public void setQcTransactionId(String qcTransactionId) {
+		this.qcTransactionId = qcTransactionId;
 	}
 	public String getQcDate() {
 		return qcDate;
@@ -100,25 +102,36 @@ public class FabricsQualityControl {
 	public void setRollList(String rollList) {
 		try {
 			System.out.println(rollList);
-			String[] rollLists = rollList.split("#");
-			List<FabricsRoll> list = new ArrayList<FabricsRoll>();
-			String autoId,transectionId,userId;
-			double qcPassedQty; int qcPassedType;
-			
-			for (String item : rollLists) {
-				String[] itemProperty = item.split(",");
+			if(rollList.trim().length()>0) {
+				String[] rollLists = rollList.split("#");
+				List<FabricsRoll> list = new ArrayList<FabricsRoll>();
+				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId,remarks,rackName,binName,userId;
+				double unitQty; int qcPassedType;
+				for (String item : rollLists) {
+					String[] itemProperty = item.split(",");
 
-				autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
-				transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
-				qcPassedQty = Double.valueOf(itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim());
-				qcPassedType = Integer.valueOf(itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim());
-				userId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+					autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+					transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+					purchaseOrder = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+					styleId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+					itemId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+					itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+					fabricsId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+					fabricsColorId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+					rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+					unitId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+					unitQty = Double.valueOf(itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim());
+					rackName = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+					binName = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+					remarks = "";
+					qcPassedType = Integer.valueOf(itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim());
+					userId = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
+					list.add(new FabricsRoll(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId ,unitQty,rackName,binName,remarks, qcPassedType, false,userId));
+				}
 
-
-				list.add(new FabricsRoll(autoId, transectionId, qcPassedQty, qcPassedType, false,userId));
+				this.fabricsRollList = list;
 			}
-
-			this.fabricsRollList = list;
+			
 			this.rollList = rollList;
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -129,6 +142,18 @@ public class FabricsQualityControl {
 	}
 	public void setFabricsRollList(List<FabricsRoll> fabricsRollList) {
 		this.fabricsRollList = fabricsRollList;
+	}
+	public String getCheckBy() {
+		return checkBy;
+	}
+	public void setCheckBy(String checkBy) {
+		this.checkBy = checkBy;
+	}
+	public String getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
 	}
 
 
