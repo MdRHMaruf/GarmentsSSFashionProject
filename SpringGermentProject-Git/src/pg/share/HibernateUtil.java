@@ -6,7 +6,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 public class HibernateUtil {
 
-    private static final SessionFactory sessionFactory;
+	  private static org.hibernate.SessionFactory sessionFactory;
 
     static {
         try {
@@ -16,8 +16,23 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
+    
+	public static SessionFactory getInstance() {
+		return sessionFactory;
+	}
 
-    public static Session openSession() {
-        return sessionFactory.openSession();
-    }
+	public static Session openSession() {
+		return sessionFactory.openSession();
+	}
+    
+	public Session getCurrentSession() {
+		return sessionFactory.getCurrentSession();
+	}
+	
+	public static void close(){
+		if (sessionFactory != null)
+			sessionFactory.close();
+		sessionFactory = null;
+	
+	}
 }

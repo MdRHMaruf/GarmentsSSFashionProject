@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import pg.dao.ProductionDAO;
 import pg.orderModel.SampleRequisitionItem;
-import pg.proudctModel.CuttingInformation;
-import pg.proudctModel.ProductionPlan;
-import pg.proudctModel.cuttingRequsition;
+import pg.orderModel.Style;
+import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.SewingLinesModel;
+import pg.proudctionModel.ProductionPlan;
+import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
 import pg.registerModel.SizeGroup;
@@ -100,6 +102,85 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<CuttingInformation> getCuttingInformationList() {
 		// TODO Auto-generated method stub
 		return productionDao.getCuttingInformationList();
+	}
+
+
+	@Override
+	public List<Style> stylename() {
+		// TODO Auto-generated method stub
+		return productionDao.stylename();
+	}
+
+
+	@Override
+	public List<Line> getLineNames() {
+		// TODO Auto-generated method stub
+		return productionDao.getLineNames();
+	}
+
+
+	@Override
+	public String InserLines(SewingLinesModel linemodels) {
+		// TODO Auto-generated method stub
+		return productionDao.InserLines(linemodels);
+	}
+
+
+	@Override
+	public List<SewingLinesModel> Lines() {
+		// TODO Auto-generated method stub
+		return productionDao.Lines();
+	}
+
+
+	@Override
+	public List<SewingLinesModel> getSewingProductionLines() {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingProductionLines();
+	}
+
+
+	@Override
+	public List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingLineSetupinfo(v);
+	}
+
+
+	@Override
+	public boolean saveSewingProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveSewingProductionDetails(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getSewingProductionReport() {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingProductionReport();
+	}
+
+
+	@Override
+	public List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
+			String productionDate) {
+		// TODO Auto-generated method stub
+		return productionDao.viewSewingProduction(buyerId, buyerorderId, styleId, itemId, productionDate);
+	}
+
+
+	@Override
+	public boolean saveFinishProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveFinishProductionDetails(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
+			String itemId, String productionDate) {
+		// TODO Auto-generated method stub
+		return productionDao.viewSewingFinishingProduction(buyerId, buyerorderId, styleId, itemId, productionDate);
 	}
 	
 }
