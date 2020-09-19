@@ -36,7 +36,7 @@
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Return</h5>
+			<h5 class="text-center" style="display: inline;">Fabrics Issue Return</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#searchModal">
 				<i class="fa fa-search"></i>
@@ -46,75 +46,68 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="returnId"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return
-						ID</label>
+					<label for="issueId"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="returnTransactionId" type="text"
+							<input id="issueTransactionId" type="text"
 								class=" form-control-sm" readonly>
-							<button id="newFabricsReturnBtn" type="button"
+							<button id="newFabricsIssueReturnBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsReturnBtn" type="button"
+							<button id="findFabricsIssueReturnBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#returnSearchModal">
+								data-toggle="modal" data-target="#issueSearchModal">
 								<i class="fa fa-search"></i>
 							</button>
 
 						</div>
 					</div>
 				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="supplier"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Supplier</label>
-					<div class="input-group col-md-9 px-0">
-						<div class="input-group-append">
-							<select id="supplier" class="selectpicker px-0"
-								data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option id="supplier" value="0">--- Select ---</option>
-								<c:forEach items="${supplierList}" var="supplier">
-									<option id="supplier" value="${supplier.supplierid}">${supplier.suppliername}</option>
-								</c:forEach>
-							</select>
-							<button id="grnSearchBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" placeholder="Search Fabrics Roll">
-								<i class="fa fa-search"> Fabrics</i>
-							</button>
-						</div>
-					</div>
-
-
-				</div>
-			</div>
-			<div class="col-md-4">
 				<div class="form-group mb-0  row">
 					<label for="qcDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Return
-						Date:</label> <input id="returnDate" type="date"
-						class="col-md-8 form-control-sm">
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="receiveDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Fabrics
-						Rec.Date</label> <input id="receiveDate" type="date"
-						class="col-md-8 form-control-sm">
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return
+						Date:</label> <input id="issueDate" type="date"
+						class="col-md-9 form-control-sm">
 				</div>
 
 			</div>
 			<div class="col-md-4">
+				<div class="form-group mb-0  row">
+					<label for="department"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Department</label>
+					
 
+						<select id="department" class="selectpicker col-md-9 px-0"
+							data-live-search="true"
+							data-style="btn-light btn-sm border-light-gray">
+							<option id="department" value="0">--- Select ---</option>
+							<c:forEach items="${departmentList}" var="department">
+								<option id="department" value="${department.departmentId}">${department.departmentName} (${department.factoryName})</option>
+							</c:forEach>
+						</select>
+				</div>
+				<div class="form-group mb-0  row">
+					<label for="receiveFrom"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Receive
+						From</label> <input id="receiveFrom" type="text"
+						class="col-md-9 form-control-sm">
+				</div>
 
+			</div>
+			<div class="col-md-4">
 				<div class="form-group mb-0  row">
 					<label for="remarks"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Remarks</label>
 					<textarea id="remarks" class="col-md-9 form-control-sm"></textarea>
 
 				</div>
+				<button id="fabricsSearchBtn" type="button"
+					class="btn btn-info btn-sm "
+					data-toggle="modal" placeholder="Search Fabrics Roll">
+					<i class="fa fa-search"></i> Fabrics Search
+				</button>
 			</div>
 		</div>
 
@@ -130,8 +123,8 @@
 							<th>Fabrics Color</th>
 							<th>UOM</th>
 							<th>Receive Qty</th>
-							<th>Issue Qty</th>
-							<th>Prev.Re. Qty</th>
+							<th>Prev.Return</th>
+							<th>Return Qty</th>
 							<th>Balance Qty</th>
 							<th>Return Qty</th>
 						</tr>
@@ -166,7 +159,7 @@
 	</div>
 </div>
 <!--QC search modal -->
-<div class="modal fade" id="returnSearchModal" tabindex="-1"
+<div class="modal fade" id="issueSearchModal" tabindex="-1"
 	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -190,11 +183,11 @@
 						<tr>
 							<th>QC Transaction Id</th>
 							<th>QC Date</th>
-							<th>Supplier Name</th>
+							<th>Department Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsReturnList">
+					<tbody id="fabricsIssueReturnList">
 
 					</tbody>
 				</table>
@@ -230,10 +223,6 @@
 			</div>
 			<div class="row px-3">
 				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="supplierNameSearch"
-						placeholder="Supplier Name">
-				</div>
-				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="purchaseOrderSearch"
 						placeholder="Purchase Order">
 				</div>
@@ -262,7 +251,6 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead class="no-wrap-text bg-light">
 						<tr>
-							<th>Supplier</th>
 							<th>Purchase Order No</th>
 							<th>Style No</th>
 							<th>Item Name</th>
@@ -270,7 +258,7 @@
 							<th>Fabrics Name</th>
 							<th>Fabrics Color</th>
 							<th>RollId</th>
-							<th>Balance Qty</th>
+							<th>Issued Qty</th>
 							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
@@ -294,4 +282,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-return.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/fabrics-issue-return.js"></script>

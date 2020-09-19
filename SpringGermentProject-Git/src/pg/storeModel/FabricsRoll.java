@@ -4,8 +4,9 @@ public class FabricsRoll {
 	String autoId;
 	String supplierId;
 	String supplierName;
-	String transectionId;
+	String transactionId;
 	String rollId;
+	String supplierRollId;
 	String purchaseOrder;
 	String styleId;
 	String styleNo;
@@ -41,16 +42,13 @@ public class FabricsRoll {
 	boolean isReturn;
 
 	public FabricsRoll() {}
-	
-	
-	
 
-	public FabricsRoll(String autoId, String transectionId, String purchaseOrder, String styleId, String styleNo, String itemId,String itemName,
-			String itemColorId,String itemColor, String fabricsId,String fabricsName, String fabricsColorId,String fabricsColorName, String rollId, String unitId, String unit,double balanceQty, double unitQty,
+	public FabricsRoll(String autoId, String transactionId, String purchaseOrder, String styleId, String styleNo, String itemId,String itemName,
+			String itemColorId,String itemColor, String fabricsId,String fabricsName, String fabricsColorId,String fabricsColorName, String rollId,String supplierRollId, String unitId, String unit,double balanceQty, double unitQty,
 			String rackName, String binName,int qcPassedType) {
 		super();
 		this.autoId = autoId;
-		this.transectionId = transectionId;
+		this.transactionId = transactionId;
 		this.purchaseOrder = purchaseOrder;
 		this.styleId = styleId;
 		this.styleNo = styleNo;
@@ -63,6 +61,7 @@ public class FabricsRoll {
 		this.fabricsColorId = fabricsColorId;
 		this.fabricsColorName = fabricsColorName;
 		this.rollId = rollId;
+		this.supplierRollId = supplierRollId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.balanceQty = balanceQty;
@@ -75,12 +74,12 @@ public class FabricsRoll {
 
 
 
-	public FabricsRoll(String autoId, String transectionId, String rollId, String unitId,
+	public FabricsRoll(String autoId, String TransactionId, String rollId, String unitId,
 			String unit, double unitQty, double qcPassedQty, double issueQty, double balanceQty, double rate,
 			double totalAmount, String remarks, String rackName, String binName,int qcPassedType,String userId) {
 		super();
 		this.autoId = autoId;
-		this.transectionId = transectionId;
+		this.transactionId = TransactionId;
 		this.rollId = rollId;
 		this.unitId = unitId;
 		this.unit = unit;
@@ -97,9 +96,9 @@ public class FabricsRoll {
 		this.userId = userId;
 	}
 	
-	public FabricsRoll(String autoId,String transectionId,String purchaseOrder,String styleId,String itemId,String itemColorId,String fabricsId,String fabricsColorId,String rollId,String unitId,double qcPassedQty,String rackName,String binName,String remarks,int qcPassedType,boolean isReturn,String userId) {
+	public FabricsRoll(String autoId,String TransactionId,String purchaseOrder,String styleId,String itemId,String itemColorId,String fabricsId,String fabricsColorId,String rollId,String unitId,double unitQty,String rackName,String binName,String remarks,int qcPassedType,boolean isReturn,String userId) {
 		this.autoId = autoId;
-		this.transectionId = transectionId;
+		this.transactionId = TransactionId;
 		this.purchaseOrder = purchaseOrder;
 		this.styleId = styleId;
 		this.itemId = itemId;
@@ -108,7 +107,7 @@ public class FabricsRoll {
 		this.fabricsColorId = fabricsColorId;
 		this.rollId = rollId;
 		this.unitId = unitId;
-		this.qcPassedQty = qcPassedQty;
+		this.unitQty = unitQty;
 		this.rackName = rackName;
 		this.binName = binName;
 		this.remarks = remarks;
@@ -116,15 +115,16 @@ public class FabricsRoll {
 		this.isReturn = isReturn;
 		this.userId = userId;
 	}
-	public FabricsRoll(String autoId, String transectionId, String rollId, String purchaseOrder, String styleId,
+	public FabricsRoll(String autoId, String TransactionId, String rollId,String supplierRollId, String purchaseOrder, String styleId,
 			String itemId, String itemColorId, String fabricsId, String fabricsName, String fabricsColorId,
 			String fabricsColorName, String unitId, String unit, double unitQty, double qcPassedQty, double shadeQty,
 			double shrinkageQty, double gsmQty, double widthQty, double defectQty, String remarks, String rackName,
 			String binName, int qcPassedType) {
 		super();
 		this.autoId = autoId;
-		this.transectionId = transectionId;
+		this.transactionId = TransactionId;
 		this.rollId = rollId;
+		this.supplierRollId = supplierRollId;
 		this.purchaseOrder = purchaseOrder;
 		this.styleId = styleId;
 		this.itemId = itemId;
@@ -152,7 +152,7 @@ public class FabricsRoll {
 	
 	public FabricsRoll(String autoId, String supplierId, String supplierName, String purchaseOrder, String styleId,
 			String styleNo, String itemId, String itemName, String itemColorId, String itemColor, String fabricsId,
-			String fabricsName, String fabricsColorId, String fabricsColorName, String rollId,String unitId,String unit, double balanceQty,String rackName,String binName) {
+			String fabricsName, String fabricsColorId, String fabricsColorName, String rollId,String supplierRollId,String unitId,String unit, double balanceQty,String rackName,String binName) {
 		super();
 		this.autoId = autoId;
 		this.supplierId = supplierId;
@@ -169,6 +169,7 @@ public class FabricsRoll {
 		this.fabricsColorId = fabricsColorId;
 		this.fabricsColorName = fabricsColorName;
 		this.rollId = rollId;
+		this.supplierRollId = supplierRollId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.balanceQty = balanceQty;
@@ -176,8 +177,12 @@ public class FabricsRoll {
 		this.binName = binName;
 	}
 
-
-
+	public String getSupplierRollId() {
+		return supplierRollId;
+	}
+	public void setSupplierRollId(String supplierRollId) {
+		this.supplierRollId = supplierRollId;
+	}
 
 	public double getShadeQty() {
 		return shadeQty;
@@ -329,12 +334,12 @@ public class FabricsRoll {
 		this.qcPassedType = qcPassedType;
 	}
 
-	public String getTransectionId() {
-		return transectionId;
+	public String getTransactionId() {
+		return transactionId;
 	}
 
-	public void setTransectionId(String transectionId) {
-		this.transectionId = transectionId;
+	public void setTransactionId(String TransactionId) {
+		this.transactionId = TransactionId;
 	}
 
 	public String getUnitId() {

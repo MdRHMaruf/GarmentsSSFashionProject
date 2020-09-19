@@ -17,11 +17,14 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.registerModel.Department;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
 import pg.services.RegisterService;
 import pg.services.StoreService;
+import pg.storeModel.FabricsIssue;
+import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
@@ -129,9 +132,9 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/getFabricsReceiveInfo", method = RequestMethod.GET)
-	public JSONObject getFabricsReceiveInfo(String transectionId) {
+	public JSONObject getFabricsReceiveInfo(String transactionId) {
 		JSONObject mainObject = new JSONObject();
-		FabricsReceive fabricsReceive = storeService.getFabricsReceiveInfo(transectionId);
+		FabricsReceive fabricsReceive = storeService.getFabricsReceiveInfo(transactionId);
 		mainObject.put("fabricsReceive",fabricsReceive);
 		return mainObject;
 	}
@@ -177,9 +180,9 @@ public class StoreController {
 		return mainObject;
 	}
 	@RequestMapping(value = "/getFabricsQCInfo", method = RequestMethod.GET)
-	public JSONObject getFabricsQCInfo(String qcTransectionId) {
+	public JSONObject getFabricsQCInfo(String qcTransactionId) {
 		JSONObject mainObject = new JSONObject();
-		FabricsQualityControl fabricsQC = storeService.getFabricsQCInfo(qcTransectionId);
+		FabricsQualityControl fabricsQC = storeService.getFabricsQCInfo(qcTransactionId);
 		mainObject.put("fabricsQC",fabricsQC);
 		return mainObject;
 	}
@@ -194,28 +197,10 @@ public class StoreController {
 		return view; 
 	}
 	
-	//Fabrics Return
-		@RequestMapping(value = "/fabrics_issue_return",method=RequestMethod.GET)
-		public ModelAndView fabrics_issue_return(ModelMap map,HttpSession session) {
-			ModelAndView view = new ModelAndView("store/fabrics-return");
-			List<SupplierModel> supplierList = registerService.getAllSupplier();
-			view.addObject("supplierList",supplierList);
-			return view; 
-		}
-		
-		//Fabrics Return
-		@RequestMapping(value = "/fabrics_issue",method=RequestMethod.GET)
-		public ModelAndView fabrics_issue(ModelMap map,HttpSession session) {
-			ModelAndView view = new ModelAndView("store/fabrics-return");
-			List<SupplierModel> supplierList = registerService.getAllSupplier();
-			view.addObject("supplierList",supplierList);
-			return view; 
-		}
-	
 	@RequestMapping(value = "/getFabricsRollList", method = RequestMethod.GET)
 	public JSONObject getFabricsRollList(String supplierId) {
 		JSONObject mainObject = new JSONObject();
-		List<FabricsRoll> fabricsRollList = storeService.getFabricsRollList(supplierId);
+		List<FabricsRoll> fabricsRollList = storeService.getFabricsRollListBySupplier(supplierId);
 		mainObject.put("fabricsRollList",fabricsRollList);
 		return mainObject;
 	}
@@ -243,6 +228,26 @@ public class StoreController {
 		}
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/deleteReturnRollFromTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject deleteReturnRollFromTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+			objmain.put("result", storeService.deleteReturnRollFromTransaction(fabricsRoll));
+		
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/editReturnRollInTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject editReturnRollInTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+		objmain.put("result", storeService.editReturnRollInTransaction(fabricsRoll));
+		
+		return objmain;
+	}
 	@RequestMapping(value = "/getFabricsReturnList", method = RequestMethod.GET)
 	public JSONObject getFabricsReturnList() {
 		JSONObject mainObject = new JSONObject();
@@ -251,19 +256,172 @@ public class StoreController {
 		return mainObject;
 	}
 	@RequestMapping(value = "/getFabricsReturnInfo", method = RequestMethod.GET)
-	public JSONObject getFabricsReturnInfo(String returnTransectionId) {
+	public JSONObject getFabricsReturnInfo(String returnTransactionId) {
 		JSONObject mainObject = new JSONObject();
-		FabricsReturn fabricsReturn = storeService.getFabricsReturnInfo(returnTransectionId);
+		FabricsReturn fabricsReturn = storeService.getFabricsReturnInfo(returnTransactionId);
 		mainObject.put("fabricsReturn",fabricsReturn);
 		return mainObject;
 	}
 	
 	@RequestMapping(value = "/getFabricsReceiveInfoForReturn", method = RequestMethod.GET)
-	public JSONObject getFabricsReceiveInfoForReturn(String transectionId) {
+	public JSONObject getFabricsReceiveInfoForReturn(String transactionId) {
 		JSONObject mainObject = new JSONObject();
-		FabricsReceive fabricsReceive = storeService.getFabricsReceiveInfoForReturn(transectionId);
+		FabricsReceive fabricsReceive = storeService.getFabricsReceiveInfoForReturn(transactionId);
 		mainObject.put("fabricsReceive",fabricsReceive);
 		return mainObject;
 	}
+	
+	
+	//Fabrics Issue
+	@RequestMapping(value = "/fabrics_issue",method=RequestMethod.GET)
+	public ModelAndView fabrics_issue(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("store/fabrics-issue");
+		List<Department> departmentList = registerService.getDepartmentList();
+		map.addAttribute("departmentList",departmentList);
+		return view; 
+	}
+	
+	@RequestMapping(value = "/getAvailableFabricsRollList", method = RequestMethod.GET)
+	public JSONObject getAvailableFabricsRollList(String departmentId) {
+		JSONObject mainObject = new JSONObject();
+		List<FabricsRoll> fabricsRollList = storeService.getAvailableFabricsRollListInDepartment(departmentId);
+		mainObject.put("fabricsRollList",fabricsRollList);
+		return mainObject;
+	}
+	
+	@RequestMapping(value = "/submitFabricsIssue",method=RequestMethod.POST)
+	public @ResponseBody JSONObject submitFabricsIssue(FabricsIssue	fabricsIssue) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		if(storeService.submitFabricsIssue(fabricsIssue)) {
+			objmain.put("result", "successfull");
+		}else {
+			objmain.put("result", "duplicate");
+		}
+		return objmain;
+	}
 
+	@RequestMapping(value = "/editFabricsIssue",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editFabricsIssue(FabricsIssue	fabricsIssue) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		if(storeService.editFabricsIssue(fabricsIssue)) {
+			objmain.put("result", "successfull");
+		}else {
+			objmain.put("result", "duplicate");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteIssueRollFromTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject deleteIssueRollFromTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+			objmain.put("result", storeService.deleteIssuedRollFromTransaction(fabricsRoll));
+		
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/editIssueRollInTransaction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject editIssueRollInTransaction(FabricsRoll fabricsRoll) {
+		System.out.println("it'Execute");
+		JSONObject objmain = new JSONObject();
+		
+		objmain.put("result", storeService.editIssuedRollInTransaction(fabricsRoll));
+		
+		return objmain;
+	}
+	@RequestMapping(value = "/getFabricsIssueList", method = RequestMethod.GET)
+	public JSONObject getFabricsIssueList() {
+		JSONObject mainObject = new JSONObject();
+		List<FabricsIssue> fabricsIssueList = storeService.getFabricsIssueList();
+		mainObject.put("fabricsIssueList",fabricsIssueList);
+		return mainObject;
+	}
+	@RequestMapping(value = "/getFabricsIssueInfo", method = RequestMethod.GET)
+	public JSONObject getFabricsIssueInfo(String transactionId) {
+		JSONObject mainObject = new JSONObject();
+		FabricsIssue fabricsIssue = storeService.getFabricsIssueInfo(transactionId);
+		mainObject.put("fabricsIssue",fabricsIssue);
+		return mainObject;
+	}
+
+	
+	
+	//Fabrics IssueReturn
+		@RequestMapping(value = "/fabrics_issue_return",method=RequestMethod.GET)
+		public ModelAndView fabrics_issue_return(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/fabrics-issue-return");
+			List<Department> departmentList = registerService.getDepartmentList();
+			map.addAttribute("departmentList",departmentList);
+			return view; 
+		}
+		
+		@RequestMapping(value = "/getIssuedFabricsRollList", method = RequestMethod.GET)
+		public JSONObject getIssuedFabricsRollList(String departmentId,String returnDepartmentId) {
+			JSONObject mainObject = new JSONObject();
+			List<FabricsRoll> fabricsRollList = storeService.getIssuedFabricsRollListInDepartment(departmentId,returnDepartmentId);
+			mainObject.put("fabricsRollList",fabricsRollList);
+			return mainObject;
+		}
+		
+	
+		@RequestMapping(value = "/submitFabricsIssueReturn",method=RequestMethod.POST)
+		public @ResponseBody JSONObject submitFabricsIssueReturn(FabricsIssueReturn	fabricsIssueReturn) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.submitFabricsIssueReturn(fabricsIssueReturn)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editFabricsIssueReturn",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editFabricsIssueReturn(FabricsIssueReturn	fabricsIssueReturn) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.editFabricsIssueReturn(fabricsIssueReturn)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/deleteIssueReturnRollFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteIssueReturnRollFromTransaction(FabricsRoll fabricsRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+				objmain.put("result", storeService.deleteIssueReturndRollFromTransaction(fabricsRoll));
+			
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/editIssueReturnRollInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editIssueReturnRollInTransaction(FabricsRoll fabricsRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+			objmain.put("result", storeService.editIssueReturndRollInTransaction(fabricsRoll));
+			
+			return objmain;
+		}
+		@RequestMapping(value = "/getFabricsIssueReturnList", method = RequestMethod.GET)
+		public JSONObject getFabricsIssueReturnList() {
+			JSONObject mainObject = new JSONObject();
+			List<FabricsIssueReturn> fabricsIssueReturnList = storeService.getFabricsIssueReturnList();
+			mainObject.put("fabricsIssueReturnList",fabricsIssueReturnList);
+			return mainObject;
+		}
+		@RequestMapping(value = "/getFabricsIssueReturnInfo", method = RequestMethod.GET)
+		public JSONObject getFabricsIssueReturnInfo(String transactionId) {
+			JSONObject mainObject = new JSONObject();
+			FabricsIssueReturn fabricsIssueReturn = storeService.getFabricsIssueReturnInfo(transactionId);
+			mainObject.put("fabricsIssueReturn",fabricsIssueReturn);
+			return mainObject;
+		}
 }

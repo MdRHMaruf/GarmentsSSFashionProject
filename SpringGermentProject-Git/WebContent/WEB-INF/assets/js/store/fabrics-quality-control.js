@@ -1,7 +1,7 @@
 
 $("#newFabricsQCBtn").click(function () {
 
-  $("#qcTransectionId").val("-- New Transection --");
+  $("#qcTransactionId").val("-- New Transaction --");
   $("#btnSubmit").prop("disabled", false);
   $("#btnEdit").prop("disabled", true);
 });
@@ -35,19 +35,19 @@ $("#grnSearchBtn").click(function () {
   });
 });
 
-function setFabricsReceiveInfo(transectionId) {
+function setFabricsReceiveInfo(transactionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './getFabricsReceiveInfo',
     data: {
-      transectionId: transectionId
+      transactionId: transactionId
     },
     success: function (data) {
 
       const fabricsReceive = data.fabricsReceive;
 
-      $("#qcTransectionId").val(fabricsReceive.transectionId);
+      $("#qcTransactionId").val(fabricsReceive.transactionId);
       $("#fabricsId").val(fabricsReceive.fabricsId);
       $("#fabrics").val(fabricsReceive.fabricsName);
       $("#grnNo").val(fabricsReceive.grnNo);
@@ -57,7 +57,7 @@ function setFabricsReceiveInfo(transectionId) {
       $("#remarks").val(fabricsReceive.remarks);
       $("#supplier").val(fabricsReceive.supplierId).change();
       $('#grnSearchModal').modal('hide');
-      drawFabricsRollListTable(fabricsReceive.fabricsRollList);
+      drawFabricsRollListTable(fabricsReceive.fabricsRollList,false);
       $("#btnSubmit").prop("disabled", false);
       $("#btnEdit").prop("disabled", true);
 
@@ -65,19 +65,19 @@ function setFabricsReceiveInfo(transectionId) {
   });
 }
 
-function setFabricsQCInfo(qcTransectionId) {
+function setFabricsQCInfo(qcTransactionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './getFabricsQCInfo',
     data: {
-      qcTransectionId: qcTransectionId
+      qcTransactionId: qcTransactionId
     },
     success: function (data) {
 
       const fabricsQC = data.fabricsQC;
       console.log(fabricsQC);
-      $("#qcTransectionId").val(fabricsQC.qcTransectionId);
+      $("#qcTransactionId").val(fabricsQC.qcTransactionId);
       $("#fabrics").val(fabricsQC.fabricsName);
       $("#grnNo").val(fabricsQC.grnNo);
       let date = fabricsQC.receiveDate.split("/");
@@ -86,7 +86,7 @@ function setFabricsQCInfo(qcTransectionId) {
       $("#remarks").val(fabricsQC.remarks);
       $("#supplier").val(fabricsQC.supplierId).change();
       $('#qcSearchModal').modal('hide');
-      drawFabricsRollListTable(fabricsQC.fabricsRollList);
+      drawFabricsRollListTable(fabricsQC.fabricsRollList,true);
       $("#btnSubmit").prop("disabled", true);
       $("#btnEdit").prop("disabled", false);
 
@@ -98,11 +98,12 @@ function submitAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
 
-  const qcTransectionId = $("#qcTransectionId").val();
+  const qcTransactionId = $("#qcTransactionId").val();
   const qcDate = $("#qcDate").val();
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
   const checkBy = $("#checkBy").val();
+  const departmentId = 1;
   const userId = $("#userId").val();
 
   let rollList = ""
@@ -119,21 +120,21 @@ function submitAction() {
       const itemColorId = row.getAttribute('data-item-color-id');
       const fabricsId = row.getAttribute('data-fabrics-id');
       const fabricsColorId = row.getAttribute('data-fabrics-color-id');
-      const rollId = $("#rollId-" + id).text();
+      const rollId = row.getAttribute('data-roll-id');
       const unitId = row.getAttribute('data-unit-id');
-      const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
+      const unitQty = $("#checkQty-" + id).text().trim() == '' ? "0" : $("#checkQty-" + id).text();
       const qcPassedType = $("#qcPassed-" + id).val();
       const rackName = $("#rackName-" + id).text();
       const binName = $("#binName-" + id).text();
 
-      rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+      rollList += `autoId : ${id},qcTransactionId : ${qcTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},unitQty : ${unitQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
     }
   }
 
   rollList = rollList.slice(0, -1);
   console.log(rollList);
   if (length > 0) {
-    if (qcTransectionId != '') {
+    if (qcTransactionId != '') {
       if (grnNo != '') {
         if (confirm("Are you sure to submit this Fabrics Quality Control...")) {
           $.ajax({
@@ -141,12 +142,13 @@ function submitAction() {
             dataType: 'json',
             url: './submitFabricsQC',
             data: {
-              qcTransectionId: qcTransectionId,
+              qcTransactionId: qcTransactionId,
               qcDate: qcDate,
               grnNo: grnNo,
               remarks: remarks,
               rollList: rollList,
               checkBy: checkBy,
+              departmentId : departmentId,
               userId: userId
             },
             success: function (data) {
@@ -166,8 +168,8 @@ function submitAction() {
         $("#grnNo").focus();
       }
     } else {
-      warningAlert("Please Get a transection Id")
-      $("#transectionId").focus();
+      warningAlert("Please Get a transaction Id")
+      $("#transactionId").focus();
     }
   } else {
     warningAlert("Please Enter Fabrics Roll");
@@ -180,7 +182,7 @@ function editAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
 
-  const qcTransectionId = $("#qcTransectionId").val();
+  const qcTransactionId = $("#qcTransactionId").val();
   const qcDate = $("#qcDate").val();
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
@@ -201,21 +203,21 @@ function editAction() {
       const itemColorId = row.getAttribute('data-item-color-id');
       const fabricsId = row.getAttribute('data-fabrics-id');
       const fabricsColorId = row.getAttribute('data-fabrics-color-id');
-      const rollId = $("#rollId-" + id).text();
+      const rollId = row.getAttribute('data-roll-id');;
       const unitId = row.getAttribute('data-unit-id');
       const qcPassedQty = $("#qcPassedQty-" + id).text().trim() == '' ? "0" : $("#qcPassedQty-" + id).text();
       const qcPassedType = $("#qcPassed-" + id).val();
       const rackName = $("#rackName-" + id).text();
       const binName = $("#binName-" + id).text();
 
-      rollList += `autoId : ${id},qcTransectionId : ${qcTransectionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+      rollList += `autoId : ${id},qcTransactionId : ${qcTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsColorId : ${fabricsColorId},rollId : ${rollId},unitId : ${unitId},qcPassedQty : ${qcPassedQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
     }
   }
 
   rollList = rollList.slice(0, -1);
   console.log(rollList);
   if (length > 0) {
-    if (qcTransectionId != '') {
+    if (qcTransactionId != '') {
       if (grnNo != '') {
         if (confirm("Are you sure to Edit this Fabrics Quality Control...")) {
           $.ajax({
@@ -223,7 +225,7 @@ function editAction() {
             dataType: 'json',
             url: './editFabricsQC',
             data: {
-              qcTransectionId: qcTransectionId,
+              qcTransactionId: qcTransactionId,
               qcDate: qcDate,
               grnNo: grnNo,
               remarks: remarks,
@@ -247,8 +249,8 @@ function editAction() {
         $("#grnNo").focus();
       }
     } else {
-      warningAlert("Please Get a transection Id")
-      $("#transectionId").focus();
+      warningAlert("Please Get a transaction Id")
+      $("#transactionId").focus();
     }
   } else {
     warningAlert("Please Enter Fabrics Roll");
@@ -268,10 +270,10 @@ function drawFabricsReceiveListTable(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     let row = $("<tr/>")
-    row.append($("<td>" + rowData.transectionId + "</td>"));
+    row.append($("<td>" + rowData.transactionId + "</td>"));
     row.append($("<td>" + rowData.grnNo + "</td>"));
     row.append($("<td>" + rowData.grnDate + "</td>"));
-    row.append($("<td ><i class='fa fa-search' onclick=\"setFabricsReceiveInfo('" + rowData.transectionId + "')\" style='cursor:pointer;'> </i></td>"));
+    row.append($("<td ><i class='fa fa-search' onclick=\"setFabricsReceiveInfo('" + rowData.transactionId + "')\" style='cursor:pointer;'> </i></td>"));
 
     rows.push(row);
   }
@@ -279,7 +281,7 @@ function drawFabricsReceiveListTable(data) {
   return rows;
 }
 
-function drawFabricsRollListTable(data) {
+function drawFabricsRollListTable(data,isSearch) {
   const length = data.length;
   let rows = "";
   $("#rollList").empty();
@@ -288,11 +290,11 @@ function drawFabricsRollListTable(data) {
 
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += "<tr id='rowId-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-fabrics-id='" + rowData.fabricsId + "' data-fabrics-color-id='" + rowData.fabricsColorId + "' data-unit-id='" + rowData.unitId + "'>"
-      + "<td id='rollId-" + id + "'>" + rowData.rollId + "</td>"
+    rows += "<tr id='rowId-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-fabrics-id='" + rowData.fabricsId + "' data-fabrics-color-id='" + rowData.fabricsColorId + "' data-roll-id='"+rowData.rollId+"' data-unit-id='" + rowData.unitId + "'>"
+      + "<td id='rollId-" + id + "'>" + rowData.supplierRollId + "</td>"
       + "<td id='unitQty-" + id + "'>" + rowData.unitQty + "</td>"
-      + "<td id='qcPassedQty-" + rowData.autoId + "'>0</td>"
-      + "<td id='checkQty-" + rowData.autoId + "'  contenteditable = 'true'>" + (rowData.unitQty - 0) + "</td>"
+      + "<td id='qcPassedQty-" + rowData.autoId + "'>"+rowData.qcPassedQty+"</td>"
+      + "<td id='checkQty-" + rowData.autoId + "'  contenteditable = 'true'>" + (isSearch? rowData.unitQty : (rowData.unitQty - rowData.qcPassedQty)) + "</td>"
       + "<td id='unit-" + id + "'>" + rowData.unit + "</td>"
       + "<td id='shade-" + id + "'>0</td>"
       + "<td id='shrinkage-" + id + "'>0</td>"
@@ -321,6 +323,8 @@ function drawFabricsRollListTable(data) {
   }
 }
 
+
+
 function drawFabricsQCListTable(data) {
   const length = data.length;
   var tr_list = "";
@@ -329,10 +333,10 @@ function drawFabricsQCListTable(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list = tr_list + "<tr id='row-" + rowData.autoId + "'>"
-      + "<td>" + rowData.qcTransectionId + "</td>"
+      + "<td>" + rowData.qcTransactionId + "</td>"
       + "<td>" + rowData.qcDate + "</td>"
       + "<td>" + rowData.grnNo + "</td>"
-      + "<td ><i class='fa fa-search' onclick=\"setFabricsQCInfo('" + rowData.qcTransectionId + "')\" style='cursor:pointer;'> </i></td>"
+      + "<td ><i class='fa fa-search' onclick=\"setFabricsQCInfo('" + rowData.qcTransactionId + "')\" style='cursor:pointer;'> </i></td>"
       + "</tr>";
   }
   $("#fabricsQCList").html(tr_list);

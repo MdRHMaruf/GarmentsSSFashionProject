@@ -56,18 +56,18 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="transectionId"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Transection
+					<label for="transactionId"
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Transaction
 						ID</label>
 					<div class="input-group col-md-8 px-0">
 						<div class="input-group-append">
-							<input id="transectionId" type="text" class=" form-control-sm"
+							<input id="transactionId" type="text" class=" form-control-sm"
 								readonly>
-							<button id="newTransectionBtn" type="button"
+							<button id="newTransactionBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findTransectionBtn" type="button"
+							<button id="findTransactionBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
 								data-toggle="modal" data-target="#searchModal">
 								<i class="fa fa-search"></i>
@@ -345,7 +345,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>Transection Id</th>
+							<th>Transaction Id</th>
 							<th>GRN No</th>
 							<th>GRN Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
@@ -472,4 +472,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-receive-new.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/fabrics-receive.js"></script>

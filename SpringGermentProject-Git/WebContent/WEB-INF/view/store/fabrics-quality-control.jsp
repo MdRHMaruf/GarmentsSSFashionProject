@@ -48,12 +48,12 @@
 				<div class="row">
 				<div class="col-md-6">
 				<div class="form-group mb-0  row">
-					<label for="qcTransectionId"
+					<label for="qcTransactionId"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Tran
 						ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="qcTransectionId" type="text" class=" form-control-sm" readonly>
+							<input id="qcTransactionId" type="text" class=" form-control-sm" readonly>
 							<button id="newFabricsQCBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
@@ -226,7 +226,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>QC Transection Id</th>
+							<th>QC Transaction Id</th>
 							<th>QC Date</th>
 							<th>GRN No</th>
 							<th><span><i class="fa fa-search"></i></span></th>
@@ -265,7 +265,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>Transection Id</th>
+							<th>Transaction Id</th>
 							<th>GRN No</th>
 							<th>GRN Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
