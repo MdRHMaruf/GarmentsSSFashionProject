@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,9 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.model.commonModel;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.proudctModel.CuttingInformation;
-import pg.proudctModel.ProductionPlan;
-import pg.proudctModel.cuttingRequsition;
+import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.SewingLinesModel;
+import pg.proudctionModel.ProductionPlan;
+import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Department;
 import pg.registerModel.FabricsItem;
@@ -51,6 +54,12 @@ public class ProductionController {
 	
 	@Autowired
 	private ProductionService productionService;
+	
+	String BuyerId="";
+	String BuyerorderId="";
+	String StyleId="";
+	String ItemId="";
+	String ProductionDate="";
 	
 	//Cutting Requisition
 	@RequestMapping(value = "/cutting_requisition",method=RequestMethod.GET)
@@ -241,4 +250,208 @@ public class ProductionController {
 		
 		return view;
 	}
+	
+	//Sewing 
+	@RequestMapping(value = "/sewing_line_setup",method=RequestMethod.GET)
+	public ModelAndView sewing_line_setup(ModelMap map,HttpSession session) {
+		
+		//List<SewingLinesModel> sewingLineList= productionService.getSewingProductionLines();
+		
+		//System.out.println("sewingLineList "+sewingLineList.size());
+		List<Line> lines=productionService.getLineNames();
+		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		ModelAndView view = new ModelAndView("production/sewinglinesetup");
+		view.addObject("productionPlanList",productionPlanList);
+		map.addAttribute("lines",lines);
+		//view.addObject("sewingLineList",sewingLineList);
+	
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	//@RequestParam(value = "Line[]", required = false) String[] Line,
+	
+	@RequestMapping(value = "/InsertLines",method=RequestMethod.POST,consumes = { "application/json" },headers = "content-type=application/x-www-form-urlencoded")
+	 public String InsertLines(@RequestParam(value = "user", required = false) String user,@RequestParam(value = "style", required = false) String style,
+			 @RequestParam(value = "Line[]", required = false) String[] Line,
+			 @RequestParam(value = "start", required = false) String start,
+			 @RequestParam(value = "end", required = false) String end,
+			 @RequestParam(value = "duration", required = false) String duration) throws JSONException {
+		
+		
+		
+		SewingLinesModel lin=new SewingLinesModel(user,style,Line, start, end, duration);
+		String insertlines=productionService.InserLines(lin);
+		
+		return insertlines; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/sewing_hourly_production",method=RequestMethod.GET)
+	public ModelAndView sewing_hourly_production(ModelMap map,HttpSession session) {
+		
+	
+
+		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
+		ModelAndView view = new ModelAndView("production/sewing_hourly_production");
+		view.addObject("productionPlanList",productionPlanList);
+		view.addObject("sewingProductionList",sewingProductionList);
+		
+	
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/saveSewingProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveSewingProductionDetails(ProductionPlan v) {
+		
+		String msg="Create Occure while saving sewing proudction";
+
+		boolean flag= productionService.saveSewingProductionDetails(v);
+
+		if(flag) {
+			msg="Saving sewing proudction success";
+		}
+	
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/searchProductionInfo",method=RequestMethod.GET)
+	public @ResponseBody String searchProductionInfo(String buyerId,String buyerorderId,String styleId,String itemId,String productionDate) {
+		
+		this.BuyerId=buyerId;
+		this.BuyerorderId=buyerorderId;
+		this.StyleId=styleId;
+		this.ItemId=itemId;
+		this.ProductionDate=productionDate;
+	
+		return "Success"; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/printSewingHourlyReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printSewingHourlyReport(ModelMap map) {
+		
+	
+		ModelAndView view=new ModelAndView("production/printSewingHourlyReport");
+		
+		
+		map.addAttribute("buyerId", BuyerId);
+		map.addAttribute("buyerorderId", BuyerorderId);
+		map.addAttribute("styleId", StyleId);
+		map.addAttribute("itemId", ItemId);
+		map.addAttribute("productionDate", ProductionDate);
+	
+		return view;
+	}
+	
+	//Finishing
+	
+	@RequestMapping(value = "/finishing_hourly_production",method=RequestMethod.GET)
+	public ModelAndView finishing_hourly_production(ModelMap map,HttpSession session) {
+		
+		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
+		ModelAndView view = new ModelAndView("production/finishing_hourly_production");
+		view.addObject("sewingProductionList",sewingProductionList);
+		
+	
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/saveFinishProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveFinishProductionDetails(ProductionPlan v) {
+		
+		String msg="Create Occure while saving finishing proudction";
+
+		boolean flag= productionService.saveFinishProductionDetails(v);
+
+		if(flag) {
+			msg="Saving finishing proudction success";
+		}
+	
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@RequestMapping(value = "/viewSewingProduction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject viewSewingProduction(String buyerId,String buyerorderId,String styleId,String itemId,String productionDate) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.viewSewingProduction(buyerId,buyerorderId,styleId,itemId,productionDate);
+		objmain.put("result",sewingList);
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/printFinishingHourlyReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printFinishingHourlyReport(ModelMap map) {
+		
+	
+		ModelAndView view=new ModelAndView("production/printFinishingHourlyReport");
+		
+		
+		map.addAttribute("buyerId", BuyerId);
+		map.addAttribute("buyerorderId", BuyerorderId);
+		map.addAttribute("styleId", StyleId);
+		map.addAttribute("itemId", ItemId);
+		map.addAttribute("productionDate", ProductionDate);
+	
+		return view;
+	}
+	
+	@RequestMapping(value = "/sewing_finishing_reject",method=RequestMethod.GET)
+	public ModelAndView sewing_finishing_reject(ModelMap map,HttpSession session) {
+		
+	
+
+		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
+
+		ModelAndView view = new ModelAndView("production/sewing_finishing_reject");
+		view.addObject("sewingProductionList",sewingProductionList);
+
+		
+	
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@RequestMapping(value = "/viewSewingFinishingProduction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject viewSewingFinishingProduction(String buyerId,String buyerorderId,String styleId,String itemId,String productionDate) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.viewSewingFinishingProduction(buyerId,buyerorderId,styleId,itemId,productionDate);
+		objmain.put("result",sewingList);
+
+		return objmain;
+	}
+	
+	
+	@RequestMapping(value = "/searchSewingLineSetup",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSewingLineSetup(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+		
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.getSewingLineSetupinfo(v);
+		objmain.put("result",sewingList);
+
+		return objmain;
+	}
+	
+	
+	@RequestMapping(value = "/printSewingFinishingHourlyReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printSewingFinishingHourlyReport(ModelMap map) {
+		
+	
+		ModelAndView view=new ModelAndView("production/printSewingFinishingHourlyReport");
+		
+		
+		map.addAttribute("buyerId", BuyerId);
+		map.addAttribute("buyerorderId", BuyerorderId);
+		map.addAttribute("styleId", StyleId);
+		map.addAttribute("itemId", ItemId);
+		map.addAttribute("productionDate", ProductionDate);
+	
+		return view;
+	}
+	
 }

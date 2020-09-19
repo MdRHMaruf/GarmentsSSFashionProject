@@ -3,9 +3,11 @@ package pg.services;
 import java.util.List;
 
 import pg.orderModel.SampleRequisitionItem;
-import pg.proudctModel.CuttingInformation;
-import pg.proudctModel.ProductionPlan;
-import pg.proudctModel.cuttingRequsition;
+import pg.orderModel.Style;
+import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.SewingLinesModel;
+import pg.proudctionModel.ProductionPlan;
+import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
 import pg.registerModel.SizeGroup;
@@ -37,4 +39,25 @@ public interface ProductionService {
 
 	List<CuttingInformation> getCuttingInformationList();
 
+	//Sewing Service
+	public List<Style> stylename();
+	public List<Line> getLineNames();
+	public String InserLines(SewingLinesModel linemodels);
+	public List<SewingLinesModel> Lines();
+
+	List<SewingLinesModel> getSewingProductionLines();
+
+	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
+
+	boolean saveSewingProductionDetails(ProductionPlan v);
+
+	List<ProductionPlan> getSewingProductionReport();
+
+	List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
+			String productionDate);
+
+	boolean saveFinishProductionDetails(ProductionPlan v);
+
+	List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
+			String itemId, String productionDate);
 }
