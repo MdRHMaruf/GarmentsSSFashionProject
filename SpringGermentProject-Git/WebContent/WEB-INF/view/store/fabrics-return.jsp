@@ -188,8 +188,8 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>QC Transaction Id</th>
-							<th>QC Date</th>
+							<th>Transaction Id</th>
+							<th>Transaction Date</th>
 							<th>Supplier Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>

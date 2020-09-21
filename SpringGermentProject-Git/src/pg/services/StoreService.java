@@ -10,6 +10,8 @@ import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
+import pg.storeModel.FabricsTransferIn;
+import pg.storeModel.FabricsTransferOut;
 
 public interface StoreService {
 	//Fabrics Receive
@@ -56,4 +58,20 @@ public interface StoreService {
 	String deleteIssueReturndRollFromTransaction(FabricsRoll fabricsRoll);
 	List<FabricsIssueReturn> getFabricsIssueReturnList();
 	FabricsIssueReturn getFabricsIssueReturnInfo(String issueReturnTransectionId);
+
+	//Fabrics TransferOut
+	boolean submitFabricsTransferOut(FabricsTransferOut fabricsTransferOut);
+	boolean editFabricsTransferOut(FabricsTransferOut fabricsTransferOut);
+	String editTransferOutdRollInTransaction(FabricsRoll fabricsRoll);
+	String deleteTransferOutdRollFromTransaction(FabricsRoll fabricsRoll);
+	List<FabricsTransferOut> getFabricsTransferOutList();
+	FabricsTransferOut getFabricsTransferOutInfo(String issueTransectionId);
+	
+	//Fabrics TransferIn
+		boolean submitFabricsTransferIn(FabricsTransferIn fabricsTransferIn);
+		boolean editFabricsTransferIn(FabricsTransferIn fabricsTransferIn);
+		String editTransferIndRollInTransaction(FabricsRoll fabricsRoll);
+		String deleteTransferIndRollFromTransaction(FabricsRoll fabricsRoll);
+		List<FabricsTransferIn> getFabricsTransferInList();
+		FabricsTransferIn getFabricsTransferInInfo(String issueTransectionId);
 }

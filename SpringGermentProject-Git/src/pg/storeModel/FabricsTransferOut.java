@@ -3,27 +3,27 @@ package pg.storeModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricsIssueReturn {
+public class FabricsTransferOut {
 	String autoId;
 	String transactionId;
-	String issueReturnDate;
-	String issueReturnFrom;
-	String issueReturnDepartmentName;
+	String transferDate;
+	String transferTo;
+	String transferDepartmentName;
 	String remarks;
-	String receiveFrom;
+	String receiveBy;
 	String departmentId;
 	String rollList;
 	List<FabricsRoll> fabricsRollList;
 	String userId;
 	
-	public FabricsIssueReturn() {}
-	public FabricsIssueReturn(String autoId, String transectionId, String issueReturnDate, String issueReturnFrom, String receiveFrom, String remarks, String userId) {
+	public FabricsTransferOut() {}
+	public FabricsTransferOut(String autoId, String transectionId, String transferDate, String transferTo, String receiveBy, String remarks, String userId) {
 		super();
 		this.autoId = autoId;
 		this.transactionId = transectionId;
-		this.issueReturnDate = issueReturnDate;
-		this.issueReturnFrom = issueReturnFrom;
-		this.receiveFrom = receiveFrom;
+		this.transferDate = transferDate;
+		this.transferTo = transferTo;
+		this.receiveBy = receiveBy;
 		this.remarks = remarks;
 		this.userId = userId;
 	}
@@ -39,17 +39,43 @@ public class FabricsIssueReturn {
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
 	}
+	
 	public String getDepartmentId() {
 		return departmentId;
 	}
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
+	
+	public String getTransferDate() {
+		return transferDate;
+	}
+	public void setTransferDate(String transferDate) {
+		this.transferDate = transferDate;
+	}
+	public String getTransferTo() {
+		return transferTo;
+	}
+	public void setTransferTo(String transferTo) {
+		this.transferTo = transferTo;
+	}
+	public String getTransferDepartmentName() {
+		return transferDepartmentName;
+	}
+	public void setTransferDepartmentName(String transferDepartmentName) {
+		this.transferDepartmentName = transferDepartmentName;
+	}
 	public String getRemarks() {
 		return remarks;
 	}
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	public String getReceiveBy() {
+		return receiveBy;
+	}
+	public void setReceiveBy(String receiveBy) {
+		this.receiveBy = receiveBy;
 	}
 	public String getRollList() {
 		return rollList;
@@ -106,30 +132,6 @@ public class FabricsIssueReturn {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	public String getIssueReturnDate() {
-		return issueReturnDate;
-	}
-	public void setIssueReturnDate(String issueReturnDate) {
-		this.issueReturnDate = issueReturnDate;
-	}
-	public String getIssueReturnFrom() {
-		return issueReturnFrom;
-	}
-	public void setIssueReturnFrom(String issueReturnFrom) {
-		this.issueReturnFrom = issueReturnFrom;
-	}
-	public String getIssueReturnDepartmentName() {
-		return issueReturnDepartmentName;
-	}
-	public void setIssueReturnDepartmentName(String issueReturnDepartmentName) {
-		this.issueReturnDepartmentName = issueReturnDepartmentName;
-	}
-	public String getReceiveFrom() {
-		return receiveFrom;
-	}
-	public void setReceiveFrom(String receiveFrom) {
-		this.receiveFrom = receiveFrom;
 	}
 	
 	

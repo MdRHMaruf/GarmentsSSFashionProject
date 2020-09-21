@@ -14,6 +14,8 @@ import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
+import pg.storeModel.FabricsTransferIn;
+import pg.storeModel.FabricsTransferOut;
 
 @Service
 public class StoreServiceImpl implements StoreService{
@@ -222,6 +224,78 @@ public class StoreServiceImpl implements StoreService{
 	public FabricsIssueReturn getFabricsIssueReturnInfo(String issueReturnTransectionId) {
 		// TODO Auto-generated method stub
 		return storeDao.getFabricsIssueReturnInfo(issueReturnTransectionId);
+	}
+
+	@Override
+	public boolean submitFabricsTransferOut(FabricsTransferOut fabricsTransferOut) {
+		// TODO Auto-generated method stub
+		return storeDao.submitFabricsTransferOut(fabricsTransferOut);
+	}
+
+	@Override
+	public boolean editFabricsTransferOut(FabricsTransferOut fabricsTransferOut) {
+		// TODO Auto-generated method stub
+		return storeDao.editFabricsTransferOut(fabricsTransferOut);
+	}
+
+	@Override
+	public String editTransferOutdRollInTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editTransferOutdRollInTransaction(fabricsRoll);
+	}
+
+	@Override
+	public String deleteTransferOutdRollFromTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteReturnRollFromTransaction(fabricsRoll);
+	}
+
+	@Override
+	public List<FabricsTransferOut> getFabricsTransferOutList() {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsTransferOutList();
+	}
+
+	@Override
+	public FabricsTransferOut getFabricsTransferOutInfo(String issueTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsTransferOutInfo(issueTransectionId);
+	}
+
+	@Override
+	public boolean submitFabricsTransferIn(FabricsTransferIn fabricsTransferIn) {
+		// TODO Auto-generated method stub
+		return storeDao.submitFabricsTransferIn(fabricsTransferIn);
+	}
+
+	@Override
+	public boolean editFabricsTransferIn(FabricsTransferIn fabricsTransferIn) {
+		// TODO Auto-generated method stub
+		return storeDao.editFabricsTransferIn(fabricsTransferIn);
+	}
+
+	@Override
+	public String editTransferIndRollInTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editTransferIndRollInTransaction(fabricsRoll);
+	}
+
+	@Override
+	public String deleteTransferIndRollFromTransaction(FabricsRoll fabricsRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteTransferIndRollFromTransaction(fabricsRoll);
+	}
+
+	@Override
+	public List<FabricsTransferIn> getFabricsTransferInList() {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsTransferInList();
+	}
+
+	@Override
+	public FabricsTransferIn getFabricsTransferInInfo(String transferTransactionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getFabricsTransferInInfo(transferTransactionId);
 	}
 
 	

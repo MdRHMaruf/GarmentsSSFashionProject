@@ -36,7 +36,7 @@
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Issue Return</h5>
+			<h5 class="text-center" style="display: inline;">Fabrics Transfer Out</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#searchModal">
 				<i class="fa fa-search"></i>
@@ -46,19 +46,19 @@
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="issueId"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return ID</label>
+					<label for="transferOutId"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Transfer ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="issueReturnTransactionId" type="text"
+							<input id="transferOutTransactionId" type="text"
 								class=" form-control-sm" readonly>
-							<button id="newFabricsIssueReturnBtn" type="button"
+							<button id="newFabricsTransferOutBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsIssueReturnBtn" type="button"
+							<button id="findFabricsTransferOutBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#issueReturnSearchModal">
+								data-toggle="modal" data-target="#transferOutSearchModal">
 								<i class="fa fa-search"></i>
 							</button>
 
@@ -66,9 +66,9 @@
 					</div>
 				</div>
 				<div class="form-group mb-0  row">
-					<label for="issueReturnDate"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return
-						Date:</label> <input id="issueReturnDate" type="date"
+					<label for="treansferDate"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Transfer
+						Date:</label> <input id="transferOutDate" type="date"
 						class="col-md-9 form-control-sm">
 				</div>
 
@@ -89,9 +89,9 @@
 						</select>
 				</div>
 				<div class="form-group mb-0  row">
-					<label for="receiveFrom"
+					<label for="receiveDate"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Receive
-						From</label> <input id="receiveFrom" type="text"
+						By</label> <input id="receiveBy" type="text"
 						class="col-md-9 form-control-sm">
 				</div>
 
@@ -122,9 +122,11 @@
 							<th>Fabrics Name</th>
 							<th>Fabrics Color</th>
 							<th>UOM</th>
-							<th>Issued Qty</th>
-							<th>Prev.Return Qty</th>
+							<th>Receive Qty</th>
+							<th>Issue Qty</th>
 							<th>Return Qty</th>
+							<th>Balance Qty</th>
+							<th>Transfer Qty</th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -157,7 +159,7 @@
 	</div>
 </div>
 <!--QC search modal -->
-<div class="modal fade" id="issueReturnSearchModal" tabindex="-1"
+<div class="modal fade" id="transferOutSearchModal" tabindex="-1"
 	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -179,13 +181,13 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>QC Transaction Id</th>
-							<th>QC Date</th>
+							<th>Transaction Id</th>
+							<th>Transaction Date</th>
 							<th>Department Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsIssueReturnList">
+					<tbody id="fabricsTransferOutList">
 
 					</tbody>
 				</table>
@@ -256,7 +258,7 @@
 							<th>Fabrics Name</th>
 							<th>Fabrics Color</th>
 							<th>RollId</th>
-							<th>Issued Qty</th>
+							<th>Balance Qty</th>
 							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
@@ -272,7 +274,6 @@
 					</button>
 				</div>
 			</div>
-
 		</div>
 	</div>
 </div>
@@ -280,4 +281,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-issue-return.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/fabrics-transfer-out.js"></script>

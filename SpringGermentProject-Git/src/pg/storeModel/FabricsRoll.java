@@ -25,6 +25,7 @@ public class FabricsRoll {
 	double previousReceiveQty;
 	double qcPassedQty;
 	double issueQty;
+	double previousReturnQty;
 	double returnQty;
 	double balanceQty;
 	double rate;
@@ -175,6 +176,30 @@ public class FabricsRoll {
 		this.balanceQty = balanceQty;
 		this.rackName = rackName;
 		this.binName = binName;
+	}
+	
+	public FabricsRoll( String purchaseOrder, String styleId,
+			String styleNo, String itemId, String itemName, String itemColorId, String itemColor, String fabricsId,
+			String fabricsName, String fabricsColorId, String fabricsColorName, String rollId,String supplierRollId,String unitId,String unit, double issueQty,double returnQty,double previousReturnQty) {
+		super();
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleNo = styleNo;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.itemColorId = itemColorId;
+		this.itemColor = itemColor;
+		this.fabricsId = fabricsId;
+		this.fabricsName = fabricsName;
+		this.fabricsColorId = fabricsColorId;
+		this.fabricsColorName = fabricsColorName;
+		this.rollId = rollId;
+		this.supplierRollId = supplierRollId;
+		this.unitId = unitId;
+		this.unit = unit;
+		this.issueQty = issueQty;
+		this.returnQty = returnQty;
+		this.previousReturnQty = previousReturnQty;
 	}
 
 	public String getSupplierRollId() {
@@ -460,6 +485,14 @@ public class FabricsRoll {
 	}
 	public void setItemColor(String itemColor) {
 		this.itemColor = itemColor;
+	}
+
+	public double getPreviousReturnQty() {
+		return previousReturnQty;
+	}
+
+	public void setPreviousReturnQty(double previousReturnQty) {
+		this.previousReturnQty = previousReturnQty;
 	}
 	
 

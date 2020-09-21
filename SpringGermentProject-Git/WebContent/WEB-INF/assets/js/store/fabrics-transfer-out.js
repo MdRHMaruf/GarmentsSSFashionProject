@@ -9,21 +9,21 @@ const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '9', rackName: 'EA' },
 { rackId: '10', rackName: 'EB' }];
 
-$("#newFabricsIssueBtn").click(function () {
+$("#newFabricsTransferOutBtn").click(function () {
 
-  $("#issueTransactionId").val("-- New Transaction --");
+  $("#transferOutTransactionId").val("-- New Transaction --");
   $("#btnSubmit").prop("disabled", false);
   $("#btnEdit").prop("disabled", true);
 });
 
-$("#findFabricsIssueBtn").click(function () {
+$("#findFabricsTransferOutBtn").click(function () {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsIssueList',
+    url: './getFabricsTransferOutList',
     data: {},
     success: function (data) {
-      drawFabricsIssueListTable(data.fabricsIssueList);
+      drawFabricsTransferOutListTable(data.fabricsTransferOutList);
     }
   });
 });
@@ -49,21 +49,21 @@ $("#fabricsSearchBtn").click(function () {
 
 
 function editItemInDatabase(autoId) {
-  const issueQty = $("#rollIssueQty-" + autoId).val();
+  const transferOutQty = $("#rollTransferOutQty-" + autoId).val();
 
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './editIssueRollInTransaction',
+    url: './editTransferOutRollInTransaction',
     data: {
       autoId: autoId,
-      unitQty: issueQty
+      unitQty: transferOutQty
     },
     success: function (data) {
       if (data.result == "Successful") {
         alert("Edit Successfully...");
-      } else if (data.result == "Issue Qty Exist") {
-        alert("Issue Qty Exist...");
+      } else if (data.result == "TransferOut Qty Exist") {
+        alert("TransferOut Qty Exist...");
       }
     }
   });
@@ -73,7 +73,7 @@ function deleteItemFromDatabase(autoId) {
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url: './deleteIssueRollFromTransaction',
+      url: './deleteTransferOutRollFromTransaction',
       data: {
         autoId: autoId
       },
@@ -103,16 +103,16 @@ function deleteItemFromList(rowId) {
   }
 }
 
-function totalIssueQtyCount(id) {
-  const elements = $(".rollIssueGroup-" + id);
+function totalTransferOutQtyCount(id) {
+  const elements = $(".rollTransferOutGroup-" + id);
   const length = elements.length;
   let total = 0;
   for (let i = 0; i < length; i++) {
 
     total += Number(elements[i].value);
   };
-  $("#issueQty-" + id).text(total);
-  $("#bottomTotalIssue-" + id).text(total);
+  $("#transferOutQty-" + id).text(total);
+  $("#bottomTotalTransferOut-" + id).text(total);
 }
 
 document.getElementById("checkAll").addEventListener("click", function () {
@@ -163,7 +163,7 @@ $("#rollAddBtn").click(function(){
           rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-                    <td id='bottomTotalIssue-${parentRowId}'>${tempTotalBalance}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalBalance}</td>         
                 </tr>
               </tbody>
             </table>
@@ -187,7 +187,7 @@ $("#rollAddBtn").click(function(){
                   <td>${issueQty}</td>
                   <td id='returnQty-${parentRowId}'>${returnQty}</td>
                   <td id='balanceQty-${parentRowId}'>0</td>
-                  <td id='issueQty-${parentRowId}'>0</td>
+                  <td id='transferOutQty-${parentRowId}'>0</td>
                   <td><div class="table-expandable-arrow"></div></td>
               </tr>
               <tr class='even parentRowGroup-${parentRowId}' style='display:none'>
@@ -228,7 +228,7 @@ $("#rollAddBtn").click(function(){
                         <th>Roll Id</th>
                         <th>Unit</th>
                         <th>Balance Qty</th>
-                        <th>Issue Qty</th>
+                        <th>TransferOut Qty</th>
                         <th>Rack Name</th>
                         <th>Bin Name</th>
                       </tr>
@@ -247,7 +247,7 @@ $("#rollAddBtn").click(function(){
                 +"<td id='listRollId-"+id+"'>" + supplierRollId + "</td>"
                 +"<td id='rollUnit-"+id+"'>" + unit + "</td>"
                 +"<td id='rollBalanceQty-"+id+"'>" + balanceQty + "</td>"
-                +"<td><input type='number' class='rollIssueGroup-" + parentRowId + " form-control-sm max-width-100' id='rollIssueQty-"+id+"' onblur='totalIssueQtyCount(" + parentRowId + ")' value='"+balanceQty+"'></td>"
+                +"<td><input type='number' class='rollTransferOutGroup-" + parentRowId + " form-control-sm max-width-100' id='rollTransferOutQty-"+id+"' onblur='totalTransferOutQtyCount(" + parentRowId + ")' value='"+balanceQty+"'></td>"
                 +"<td>" + rackSelect+"</td>"
                 +"<td>" + binSelect+"</td>"
                 + "<td><i class='fa fa-trash' onclick='deleteItemFromList(" + id + ")' style='cursor:pointer;'> </i></td>"
@@ -268,7 +268,7 @@ $("#rollAddBtn").click(function(){
     rows += `<tr>
                 <td colspan='2'>Total</td>
                 <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-                <td id='bottomTotalIssue-${parentRowId}'>${tempTotalBalance}</td>
+                <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalBalance}</td>
 
             </tr>
           </tbody>
@@ -283,7 +283,7 @@ $("#rollAddBtn").click(function(){
 
   balanceQtyList.forEach((qty, index) => {
     $("#balanceQty-" + index).text(qty);
-    $("#issueQty-" + index).text(qty);
+    $("#transferOutQty-" + index).text(qty);
   });
   
   rackIdList.forEach((rack,index)=>{
@@ -297,30 +297,30 @@ $("#rollAddBtn").click(function(){
 });
 
 
-function setFabricsIssueInfo(transactionId) {
+function setFabricsTransferOutInfo(transactionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsIssueInfo',
+    url: './getFabricsTransferOutInfo',
     data: {
       transactionId: transactionId
     },
     success: function (data) {
 
-      const fabricsIssue = data.fabricsIssue;
-      console.log(fabricsIssue)
-      $("#issueTransactionId").val(fabricsIssue.transactionId);
+      const fabricsTransferOut = data.fabricsTransferOut;
+      console.log(fabricsTransferOut)
+      $("#transferOutTransactionId").val(fabricsTransferOut.transactionId);
       
-      let date = fabricsIssue.issueDate.split("/");
-      $("#issueDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+      let date = fabricsTransferOut.transferDate.split("/");
+      $("#transferOutDate").val(date[2] + "-" + date[1] + "-" + date[0]);
       
-      $("#remarks").val(fabricsIssue.remarks);
-      $("#department").val(fabricsIssue.issuedTo).change();
-      $("#receiveBy").val(fabricsIssue.receiveBy).change();
-      drawFabricsRollListTable(fabricsIssue.fabricsRollList);
+      $("#remarks").val(fabricsTransferOut.remarks);
+      $("#department").val(fabricsTransferOut.transferTo).change();
+      $("#receiveBy").val(fabricsTransferOut.receiveBy).change();
+      drawFabricsRollListTable(fabricsTransferOut.fabricsRollList);
       $("#btnSubmit").prop("disabled", true);
       $("#btnEdit").prop("disabled", false);
-      $('#issueSearchModal').modal('hide');
+      $('#transferOutSearchModal').modal('hide');
 
     }
   });
@@ -329,9 +329,9 @@ function setFabricsIssueInfo(transactionId) {
 function submitAction() {
   const rowList = $("tr .newRollRow");
   const length = rowList.length;
-  const issueTransactionId = $("#issueTransactionId").val();
-  const issueDate = $("#issueDate").val();
-  const issuedDepartmentId = $("#department").val();
+  const transferOutTransactionId = $("#transferOutTransactionId").val();
+  const transferOutDate = $("#transferOutDate").val();
+  const transferOutDepartmentId = $("#department").val();
   const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
   const departmentId = 1;
@@ -354,13 +354,13 @@ function submitAction() {
     const unit = $("#rollUnit-"+id).text();
     const rollId = row.getAttribute("data-roll-id");
     const supplierRollId = $("#listRollId-"+id).text();
-    const issueQty = $("#rollIssueQty-"+id).val();
+    const transferOutQty = $("#rollTransferOutQty-"+id).val();
     const rackName = $("#rackId-" + id).val();
     const binName = $("#binId-" + id).val();
     
     const qcPassedType= 1;
     
-    rollList += `autoId : ${id},issueTransactionId : ${issueTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},issueQty : ${issueQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    rollList += `autoId : ${id},transferOutTransactionId : ${transferOutTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},transferOutQty : ${transferOutQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
   
   };
     
@@ -368,17 +368,17 @@ function submitAction() {
   rollList = rollList.slice(0, -1);
   
   if (length > 0) {
-    if (issueTransactionId != '') {   
-      if(issuedDepartmentId != '0'){
-        if (confirm("Are you sure to submit this Fabrics Issue...")) {
+    if (transferOutTransactionId != '') {   
+      if(transferOutDepartmentId != '0'){
+        if (confirm("Are you sure to submit this Fabrics TransferOut...")) {
           $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: './submitFabricsIssue',
+            url: './submitFabricsTransferOut',
             data: {
-              transactionId: issueTransactionId,
-              issueDate : issueDate,
-              issuedTo : issuedDepartmentId,
+              transactionId: transferOutTransactionId,
+              transferDate : transferOutDate,
+              transferTo : transferOutDepartmentId,
               receiveBy : receiveBy,
               remarks : remarks,
               departmentId : departmentId,
@@ -398,7 +398,7 @@ function submitAction() {
           });
         }
       }else{
-        warningAlert("Please Select a Issued To Department.")
+        warningAlert("Please Select a TransferOut To Department.")
         $("#department").focus();
       }       
     } else {
@@ -416,9 +416,9 @@ function editAction() {
 
   const rowList = $("tr .newRollRow");
   const length = rowList.length;
-  const issueTransactionId = $("#issueTransactionId").val();
-  const issueDate = $("#issueDate").val();
-  const issuedDepartmentId = $("#department").val();
+  const transferOutTransactionId = $("#transferOutTransactionId").val();
+  const transferOutDate = $("#transferOutDate").val();
+  const transferOutDepartmentId = $("#department").val();
   const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
   const userId = $("#userId").val();
@@ -440,13 +440,13 @@ function editAction() {
     const unit = $("#rollUnit-"+id).text();
     const rollId = row.getAttribute("data-roll-id");
     const supplierRollId = $("#listRollId-"+id).text();
-    const issueQty = $("#rollIssueQty-"+id).val();
+    const transferOutQty = $("#rollTransferOutQty-"+id).val();
     const rackName = $("#rackId-" + id).val();
     const binName = $("#binId-" + id).val();
     
     const qcPassedType= 1;
     
-    rollList += `autoId : ${id},issueTransactionId : ${issueTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},issueQty : ${issueQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    rollList += `autoId : ${id},transferOutTransactionId : ${transferOutTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},transferOutQty : ${transferOutQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
   
   };
     
@@ -454,17 +454,17 @@ function editAction() {
   rollList = rollList.slice(0, -1);
   
   
-    if (issueTransactionId != '') {   
-      if(issuedDepartmentId != '0'){
-        if (confirm("Are you sure to Edit this Fabrics Issue...")) {
+    if (transferOutTransactionId != '') {   
+      if(transferOutDepartmentId != '0'){
+        if (confirm("Are you sure to Edit this Fabrics TransferOut...")) {
           $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: './editFabricsIssue',
+            url: './editFabricsTransferOut',
             data: {
-              transactionId : issueTransactionId,
-              issueDate : issueDate,
-              issuedTo : issuedDepartmentId,
+              transactionId : transferOutTransactionId,
+              transferDate : transferOutDate,
+              transferTo : transferOutDepartmentId,
               receiveBy : receiveBy,
               remarks : remarks,
               rollList: rollList,
@@ -529,8 +529,8 @@ function drawFabricsRollListTable(data){
   
     const length = data.length;
 
-    let parentRowId = 0,tempTotalBalanceQty=0,tempTotalIssueQty=0;
-    let issueQtyList = [];
+    let parentRowId = 0,tempTotalBalanceQty=0,tempTotalTransferOutQty=0;
+    let transferOutQtyList = [];
     let balanceQtyList = [];
     $("#rollList").empty();
     
@@ -543,16 +543,16 @@ function drawFabricsRollListTable(data){
           rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalanceQty}</td>
-                    <td id='bottomTotalIssue-${parentRowId}'>${tempTotalIssueQty}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalTransferOutQty}</td>         
                 </tr>
               </tbody>
             </table>
           </td> 
           </tr>`;
-          issueQtyList.push(tempTotalIssueQty);
+          transferOutQtyList.push(tempTotalTransferOutQty);
           balanceQtyList.push(tempTotalBalanceQty);
           parentRowId++;
-          tempTotalIssueQty = 0;
+          tempTotalTransferOutQty = 0;
           tempTotalBalanceQty = 0;
         }
         tempFabricsColorId = rowData.fabricsColorId;
@@ -568,8 +568,8 @@ function drawFabricsRollListTable(data){
                   <td>${rowData.previousReceiveQty}</td>
                   <td>${rowData.issueQty}</td>
                   <td id='returnQty-${parentRowId}'>${rowData.returnQty}</td>
-                  <td id='balanceQty-${parentRowId}'>${rowData.previousReceiveQty-rowData.issueQty-rowData.returnQty}</td>
-                  <td id='issueQty-${parentRowId}'>0</td>
+                  <td id='balanceQty-${parentRowId}'>0</td>
+                  <td id='transferOutQty-${parentRowId}'>0</td>
                   <td><div class="table-expandable-arrow"></div></td>
               </tr>
               <tr class='even parentRowGroup-${parentRowId}' style='display:none'>
@@ -610,7 +610,7 @@ function drawFabricsRollListTable(data){
                         <th>Roll Id</th>
                         <th>Unit</th>
                         <th>Balance Qty</th>
-                        <th>Issue Qty</th>
+                        <th>TransferOut Qty</th>
                         <th>Rack Name</th>
                         <th>Bin Name</th>
                       </tr>
@@ -629,34 +629,34 @@ function drawFabricsRollListTable(data){
                                   +"<td id='listRollId-"+id+"'>" + rowData.supplierRollId + "</td>"
                                   +"<td id='rollUnit-"+id+"'>" + rowData.unit + "</td>"
                                   +"<td id='rollBalanceQty-"+id+"'>" + rowData.balanceQty + "</td>"
-                                  +"<td><input type='number' class='rollIssueGroup-" + parentRowId + " form-control-sm max-width-100' id='rollIssueQty-"+id+"' onblur='totalIssueQtyCount(" + parentRowId + ")' value='"+rowData.unitQty+"'></td>"
+                                  +"<td><input type='number' class='rollTransferOutGroup-" + parentRowId + " form-control-sm max-width-100' id='rollTransferOutQty-"+id+"' onblur='totalTransferOutQtyCount(" + parentRowId + ")' value='"+rowData.unitQty+"'></td>"
                                   +"<td>" + rackSelect+"</td>"
                                   +"<td>" + binSelect+"</td>"
                                   + "<td><i class='fa fa-edit' onclick='editItemInDatabase(" + id + ")' style='cursor:pointer;'> </i></td>"
                                   + "<td><i class='fa fa-trash' onclick='deleteItemFromDatabase(" + id + ")' style='cursor:pointer;'> </i></td>" 
                                 +"</tr>";
                         tempTotalBalanceQty += rowData.balanceQty;
-                        tempTotalIssueQty += rowData.unitQty;
+                        tempTotalTransferOutQty += rowData.unitQty;
       
     }
     if(rows){
       rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalanceQty}</td>
-                    <td id='bottomTotalIssue-${parentRowId}'>${tempTotalIssueQty}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalTransferOutQty}</td>         
                 </tr>
               </tbody>
             </table>
           </td> 
           </tr>`;
-          issueQtyList.push(tempTotalIssueQty);
+          transferOutQtyList.push(tempTotalTransferOutQty);
           balanceQtyList.push(tempTotalBalanceQty);
     }
 
     $("#rollList").html(rows);
-    issueQtyList.forEach((qty, index) => {
-      $("#issueQty-" + index).text(qty);
-
+    transferOutQtyList.forEach((qty, index) => {
+      $("#transferOutQty-" + index).text(qty);
+      $("#balanceQty-"+index).text(balanceQtyList[index]);
     });
     data.forEach((roll,index)=>{
       $("#rackId-"+roll.autoId).val(roll.rackName);
@@ -665,20 +665,20 @@ function drawFabricsRollListTable(data){
 
 }
 
-function drawFabricsIssueListTable(data){
+function drawFabricsTransferOutListTable(data){
   const length = data.length;
   var tr_list="";
-  $("#fabricsIssueList").empty();
+  $("#fabricsTransferOutList").empty();
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list=tr_list+"<tr id='row-" + rowData.transactionId + "'>"
               +"<td>" + rowData.transactionId + "</td>"
-              +"<td>" + rowData.issueDate + "</td>"
-              +"<td>" + rowData.issuedDepartmentName + "</td>"
-              +"<td ><i class='fa fa-search' onclick=\"setFabricsIssueInfo('" + rowData.transactionId + "')\" style='cursor:pointer;'> </i></td>"
+              +"<td>" + rowData.transferDate + "</td>"
+              +"<td>" + rowData.transferDepartmentName + "</td>"
+              +"<td ><i class='fa fa-search' onclick=\"setFabricsTransferOutInfo('" + rowData.transactionId + "')\" style='cursor:pointer;'> </i></td>"
             +"</tr>";
   }
-  $("#fabricsIssueList").html(tr_list);
+  $("#fabricsTransferOutList").html(tr_list);
 }
 
 $(document).ready(function () {
@@ -757,6 +757,6 @@ $(document).ready(function () {
 
 
 var today = new Date();
-document.getElementById("issueDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+document.getElementById("transferOutDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 
