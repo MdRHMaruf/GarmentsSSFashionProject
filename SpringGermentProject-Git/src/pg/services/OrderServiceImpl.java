@@ -17,7 +17,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.accessorieIndent;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
 import pg.registerModel.Factory;
@@ -244,13 +244,13 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean insertaccessoriesIndent(accessorieIndent ai) {
+	public boolean insertaccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
 		return orderDAO.insertaccessoriesIndent(ai);
 	}
 
 	@Override
-	public List<accessorieIndent> PendingList() {
+	public List<AccessoriesIndent> PendingList() {
 		// TODO Auto-generated method stub
 		return orderDAO.PendingList();
 	}
@@ -269,25 +269,25 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<accessorieIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor) {
+	public List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor) {
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesIndent(po, style, itemname, itemcolor);
 	}
 
 	@Override
-	public List<accessorieIndent> getPendingAccessoriesIndent() {
+	public List<AccessoriesIndent> getPendingAccessoriesIndent() {
 		// TODO Auto-generated method stub
 		return orderDAO.getPendingAccessoriesIndent();
 	}
 
 	@Override
-	public List<accessorieIndent> getAccessoriesIndentItemDetails(String id) {
+	public List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id) {
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesIndentItemDetails(id);
 	}
 
 	@Override
-	public boolean editaccessoriesIndent(accessorieIndent v) {
+	public boolean editaccessoriesIndent(AccessoriesIndent v) {
 		// TODO Auto-generated method stub
 		return orderDAO.editaccessoriesIndent(v);
 	}

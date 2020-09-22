@@ -17,12 +17,22 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.AccessoriesIndent;
+import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Department;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
 import pg.services.RegisterService;
 import pg.services.StoreService;
+import pg.storeModel.AccessoriesIssue;
+import pg.storeModel.AccessoriesIssueReturn;
+import pg.storeModel.AccessoriesQualityControl;
+import pg.storeModel.AccessoriesReceive;
+import pg.storeModel.AccessoriesReturn;
+import pg.storeModel.AccessoriesSize;
+import pg.storeModel.AccessoriesTransferIn;
+import pg.storeModel.AccessoriesTransferOut;
 import pg.storeModel.FabricsIssue;
 import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
@@ -54,17 +64,6 @@ public class StoreController {
 		view.addObject("supplierList",supplierList);
 		return view; 
 	}
-	
-	//Fabrics Receive 
-		@RequestMapping(value = "/fabrics_receive_new",method=RequestMethod.GET)
-		public ModelAndView fabrics_receive_new(ModelMap map,HttpSession session) {
-			ModelAndView view = new ModelAndView("store/fabrics-receive-new");
-			List<Unit> unitList= registerService.getUnitList();
-			List<SupplierModel> supplierList = registerService.getAllSupplier();
-			view.addObject("unitList", unitList);
-			view.addObject("supplierList",supplierList);
-			return view; 
-		}
 
 	@RequestMapping(value = "/getFabricsPurchaseOrderIndentList",method = RequestMethod.GET)
 	public JSONObject getFabricsPurchaseOrdeIndentrList() {
@@ -561,4 +560,514 @@ public class StoreController {
 			mainObject.put("fabricsTransferIn",fabricsTransferIn);
 			return mainObject;
 		}
+		
+		
+		
+		//Accessories Receive 
+		@RequestMapping(value = "/accessories_receive",method=RequestMethod.GET)
+		public ModelAndView accessories_receive(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/accessories-receive");
+			List<Unit> unitList= registerService.getUnitList();
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("unitList", unitList);
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
+		
+
+		@RequestMapping(value = "/getAccessoriesPurchaseOrderIndentList",method = RequestMethod.GET)
+		public JSONObject getAccessoriesPurchaseOrdeIndentrList() {
+			JSONObject mainObject = new JSONObject();	
+			List<AccessoriesIndent> purchaseOrderList = storeService.getAccessoriesPurchaseOrdeIndentrList();	
+			mainObject.put("purchaseOrderList", purchaseOrderList);
+			return mainObject;
+		}
+
+
+		@RequestMapping(value = "/getAccessoriesIndentInfo", method = RequestMethod.GET)
+		public JSONObject getAccessoriesIndentInfo(String autoId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesIndent accessoriesIndentInfo = storeService.getAccessoriesIndentInfo(autoId);
+			mainObject.put("accessoriesInfo",accessoriesIndentInfo);
+			return mainObject;
+		}
+		@RequestMapping(value = "/submitAccessoriesReceive",method=RequestMethod.POST)
+		public @ResponseBody JSONObject submitAccessoriesReceive(AccessoriesReceive	accessoriesReceive) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.submitAccessoriesReceive(accessoriesReceive)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editAccessoriesReceive",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editAccessoriesReceive(AccessoriesReceive	accessoriesReceive) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.editAccessoriesReceive(accessoriesReceive)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/deleteReceiveRollFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteReceiveRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+				objmain.put("result", storeService.deleteReceiveRollFromTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/editReceiveRollInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editReceiveRollInTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+			objmain.put("result", storeService.editReceiveRollInTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		@RequestMapping(value = "/getAccessoriesReceiveList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesReceiveList() {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesReceive> accessoriesReceiveList = storeService.getAccessoriesReceiveList();
+			mainObject.put("accessoriesReceiveList",accessoriesReceiveList);
+			return mainObject;
+		}
+
+		@RequestMapping(value = "/getAccessoriesReceiveInfo", method = RequestMethod.GET)
+		public JSONObject getAccessoriesReceiveInfo(String transactionId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesReceive accessoriesReceive = storeService.getAccessoriesReceiveInfo(transactionId);
+			mainObject.put("accessoriesReceive",accessoriesReceive);
+			return mainObject;
+		}
+
+
+		//Accessories Quality Control
+		@RequestMapping(value = "/accessories_quality_control",method=RequestMethod.GET)
+		public ModelAndView accessories_quality_control(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/accessories-quality-control");
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
+
+		@RequestMapping(value = "/submitAccessoriesQC",method=RequestMethod.POST)
+		public @ResponseBody JSONObject submitAccessoriesQC(AccessoriesQualityControl	accessoriesQualityControl) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.submitAccessoriesQC(accessoriesQualityControl)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editAccessoriesQC",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editAccessoriesQC(AccessoriesQualityControl	accessoriesQualityControl) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.editAccessoriesQC(accessoriesQualityControl)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+		@RequestMapping(value = "/getAccessoriesQCList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesQCList() {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesQualityControl> accessoriesQCList = storeService.getAccessoriesQCList();
+			mainObject.put("accessoriesQCList",accessoriesQCList);
+			return mainObject;
+		}
+		@RequestMapping(value = "/getAccessoriesQCInfo", method = RequestMethod.GET)
+		public JSONObject getAccessoriesQCInfo(String qcTransactionId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesQualityControl accessoriesQC = storeService.getAccessoriesQCInfo(qcTransactionId);
+			mainObject.put("accessoriesQC",accessoriesQC);
+			return mainObject;
+		}
+
+
+		//Accessories Return
+		@RequestMapping(value = "/accessories_return",method=RequestMethod.GET)
+		public ModelAndView accessories_return(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/accessories-return");
+			List<SupplierModel> supplierList = registerService.getAllSupplier();
+			view.addObject("supplierList",supplierList);
+			return view; 
+		}
+		
+		@RequestMapping(value = "/getAccessoriesRollList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesRollList(String supplierId) {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesSize> accessoriesRollList = storeService.getAccessoriesRollListBySupplier(supplierId);
+			mainObject.put("accessoriesRollList",accessoriesRollList);
+			return mainObject;
+		}
+		
+		@RequestMapping(value = "/submitAccessoriesReturn",method=RequestMethod.POST)
+		public @ResponseBody JSONObject submitAccessoriesReturn(AccessoriesReturn	accessoriesReturn) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.submitAccessoriesReturn(accessoriesReturn)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editAccessoriesReturn",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editAccessoriesReturn(AccessoriesReturn	accessoriesReturn) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.editAccessoriesReturn(accessoriesReturn)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/deleteReturnRollFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+				objmain.put("result", storeService.deleteReturnRollFromTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/editReturnRollInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+			objmain.put("result", storeService.editReturnRollInTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		@RequestMapping(value = "/getAccessoriesReturnList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesReturnList() {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesReturn> accessoriesReturnList = storeService.getAccessoriesReturnList();
+			mainObject.put("accessoriesReturnList",accessoriesReturnList);
+			return mainObject;
+		}
+		@RequestMapping(value = "/getAccessoriesReturnInfo", method = RequestMethod.GET)
+		public JSONObject getAccessoriesReturnInfo(String returnTransactionId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesReturn accessoriesReturn = storeService.getAccessoriesReturnInfo(returnTransactionId);
+			mainObject.put("accessoriesReturn",accessoriesReturn);
+			return mainObject;
+		}
+		
+		@RequestMapping(value = "/getAccessoriesReceiveInfoForReturn", method = RequestMethod.GET)
+		public JSONObject getAccessoriesReceiveInfoForReturn(String transactionId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesReceive accessoriesReceive = storeService.getAccessoriesReceiveInfoForReturn(transactionId);
+			mainObject.put("accessoriesReceive",accessoriesReceive);
+			return mainObject;
+		}
+		
+		
+		//Accessories Issue
+		@RequestMapping(value = "/accessories_issue",method=RequestMethod.GET)
+		public ModelAndView accessories_issue(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/accessories-issue");
+			List<Department> departmentList = registerService.getDepartmentList();
+			map.addAttribute("departmentList",departmentList);
+			return view; 
+		}
+		
+		@RequestMapping(value = "/getAvailableAccessoriesRollList", method = RequestMethod.GET)
+		public JSONObject getAvailableAccessoriesRollList(String departmentId) {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesSize> accessoriesRollList = storeService.getAvailableAccessoriesRollListInDepartment(departmentId);
+			mainObject.put("accessoriesRollList",accessoriesRollList);
+			return mainObject;
+		}
+		
+		@RequestMapping(value = "/submitAccessoriesIssue",method=RequestMethod.POST)
+		public @ResponseBody JSONObject submitAccessoriesIssue(AccessoriesIssue	accessoriesIssue) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.submitAccessoriesIssue(accessoriesIssue)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editAccessoriesIssue",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editAccessoriesIssue(AccessoriesIssue	accessoriesIssue) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			if(storeService.editAccessoriesIssue(accessoriesIssue)) {
+				objmain.put("result", "successfull");
+			}else {
+				objmain.put("result", "duplicate");
+			}
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/deleteIssueRollFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteIssueRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+				objmain.put("result", storeService.deleteIssuedRollFromTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		
+		@RequestMapping(value = "/editIssueRollInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editIssueRollInTransaction(AccessoriesSize accessoriesRoll) {
+			System.out.println("it'Execute");
+			JSONObject objmain = new JSONObject();
+			
+			objmain.put("result", storeService.editIssuedRollInTransaction(accessoriesRoll));
+			
+			return objmain;
+		}
+		@RequestMapping(value = "/getAccessoriesIssueList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesIssueList() {
+			JSONObject mainObject = new JSONObject();
+			List<AccessoriesIssue> accessoriesIssueList = storeService.getAccessoriesIssueList();
+			mainObject.put("accessoriesIssueList",accessoriesIssueList);
+			return mainObject;
+		}
+		@RequestMapping(value = "/getAccessoriesIssueInfo", method = RequestMethod.GET)
+		public JSONObject getAccessoriesIssueInfo(String transactionId) {
+			JSONObject mainObject = new JSONObject();
+			AccessoriesIssue accessoriesIssue = storeService.getAccessoriesIssueInfo(transactionId);
+			mainObject.put("accessoriesIssue",accessoriesIssue);
+			return mainObject;
+		}
+
+		
+		
+		//Accessories IssueReturn
+			@RequestMapping(value = "/accessories_issue_return",method=RequestMethod.GET)
+			public ModelAndView accessories_issue_return(ModelMap map,HttpSession session) {
+				ModelAndView view = new ModelAndView("store/accessories-issue-return");
+				List<Department> departmentList = registerService.getDepartmentList();
+				map.addAttribute("departmentList",departmentList);
+				return view; 
+			}
+			
+			@RequestMapping(value = "/getIssuedAccessoriesRollList", method = RequestMethod.GET)
+			public JSONObject getIssuedAccessoriesRollList(String departmentId,String returnDepartmentId) {
+				JSONObject mainObject = new JSONObject();
+				List<AccessoriesSize> accessoriesRollList = storeService.getIssuedAccessoriesRollListInDepartment(departmentId,returnDepartmentId);
+				mainObject.put("accessoriesRollList",accessoriesRollList);
+				return mainObject;
+			}
+			
+		
+			@RequestMapping(value = "/submitAccessoriesIssueReturn",method=RequestMethod.POST)
+			public @ResponseBody JSONObject submitAccessoriesIssueReturn(AccessoriesIssueReturn	accessoriesIssueReturn) {
+				
+				JSONObject objmain = new JSONObject();
+				if(storeService.submitAccessoriesIssueReturn(accessoriesIssueReturn)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+
+			@RequestMapping(value = "/editAccessoriesIssueReturn",method=RequestMethod.POST)
+			public @ResponseBody JSONObject editAccessoriesIssueReturn(AccessoriesIssueReturn	accessoriesIssueReturn) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				if(storeService.editAccessoriesIssueReturn(accessoriesIssueReturn)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/deleteIssueReturnRollFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteIssueReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+					objmain.put("result", storeService.deleteIssueReturndRollFromTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/editIssueReturnRollInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editIssueReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+				objmain.put("result", storeService.editIssueReturndRollInTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			@RequestMapping(value = "/getAccessoriesIssueReturnList", method = RequestMethod.GET)
+			public JSONObject getAccessoriesIssueReturnList() {
+				JSONObject mainObject = new JSONObject();
+				List<AccessoriesIssueReturn> accessoriesIssueReturnList = storeService.getAccessoriesIssueReturnList();
+				mainObject.put("accessoriesIssueReturnList",accessoriesIssueReturnList);
+				return mainObject;
+			}
+			@RequestMapping(value = "/getAccessoriesIssueReturnInfo", method = RequestMethod.GET)
+			public JSONObject getAccessoriesIssueReturnInfo(String transactionId) {
+				JSONObject mainObject = new JSONObject();
+				AccessoriesIssueReturn accessoriesIssueReturn = storeService.getAccessoriesIssueReturnInfo(transactionId);
+				mainObject.put("accessoriesIssueReturn",accessoriesIssueReturn);
+				return mainObject;
+			}
+			
+			
+			@RequestMapping(value = "/accessories_transfer_out",method=RequestMethod.GET)
+			public ModelAndView accessories_transer_out(ModelMap map,HttpSession session) {
+				ModelAndView view = new ModelAndView("store/accessories-transfer-out");
+				List<Department> departmentList = registerService.getDepartmentList();
+				map.addAttribute("departmentList",departmentList);
+				return view; 
+			}
+			
+			@RequestMapping(value = "/submitAccessoriesTransferOut",method=RequestMethod.POST)
+			public @ResponseBody JSONObject submitAccessoriesTransferOut(AccessoriesTransferOut	accessoriesTransferOut) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				if(storeService.submitAccessoriesTransferOut(accessoriesTransferOut)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+
+			@RequestMapping(value = "/editAccessoriesTransferOut",method=RequestMethod.POST)
+			public @ResponseBody JSONObject editAccessoriesTransferOut(AccessoriesTransferOut	accessoriesTransferOut) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				if(storeService.editAccessoriesTransferOut(accessoriesTransferOut)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/deleteTransferOutRollFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteTransferOutRollFromTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+					objmain.put("result", storeService.deleteTransferOutdRollFromTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/editTransferOutRollInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editTransferOutRollInTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+				objmain.put("result", storeService.editTransferOutdRollInTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			@RequestMapping(value = "/getAccessoriesTransferOutList", method = RequestMethod.GET)
+			public JSONObject getAccessoriesTransferOutList() {
+				JSONObject mainObject = new JSONObject();
+				List<AccessoriesTransferOut> accessoriesTransferOutList = storeService.getAccessoriesTransferOutList();
+				mainObject.put("accessoriesTransferOutList",accessoriesTransferOutList);
+				return mainObject;
+			}
+			@RequestMapping(value = "/getAccessoriesTransferOutInfo", method = RequestMethod.GET)
+			public JSONObject getAccessoriesTransferOutInfo(String transactionId) {
+				JSONObject mainObject = new JSONObject();
+				AccessoriesTransferOut accessoriesTransferOut = storeService.getAccessoriesTransferOutInfo(transactionId);
+				mainObject.put("accessoriesTransferOut",accessoriesTransferOut);
+				return mainObject;
+			}
+			
+			
+			
+			@RequestMapping(value = "/accessories_transfer_in",method=RequestMethod.GET)
+			public ModelAndView accessories_transfer_in(ModelMap map,HttpSession session) {
+				ModelAndView view = new ModelAndView("store/accessories-transfer-in");
+				List<Department> departmentList = registerService.getDepartmentList();
+				map.addAttribute("departmentList",departmentList);
+				return view; 
+			}
+			
+			@RequestMapping(value = "/submitAccessoriesTransferIn",method=RequestMethod.POST)
+			public @ResponseBody JSONObject submitAccessoriesTransferIn(AccessoriesTransferIn	accessoriesTransferIn) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				if(storeService.submitAccessoriesTransferIn(accessoriesTransferIn)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+
+			@RequestMapping(value = "/editAccessoriesTransferIn",method=RequestMethod.POST)
+			public @ResponseBody JSONObject editAccessoriesTransferIn(AccessoriesTransferIn	accessoriesTransferIn) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				if(storeService.editAccessoriesTransferIn(accessoriesTransferIn)) {
+					objmain.put("result", "successfull");
+				}else {
+					objmain.put("result", "duplicate");
+				}
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/deleteTransferInRollFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteTransferInRollFromTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+					objmain.put("result", storeService.deleteTransferIndRollFromTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			
+			@RequestMapping(value = "/editTransferInRollInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editTransferInRollInTransaction(AccessoriesSize accessoriesRoll) {
+				System.out.println("it'Execute");
+				JSONObject objmain = new JSONObject();
+				
+				objmain.put("result", storeService.editTransferIndRollInTransaction(accessoriesRoll));
+				
+				return objmain;
+			}
+			@RequestMapping(value = "/getAccessoriesTransferInList", method = RequestMethod.GET)
+			public JSONObject getAccessoriesTransferInList() {
+				JSONObject mainObject = new JSONObject();
+				List<AccessoriesTransferIn> accessoriesTransferInList = storeService.getAccessoriesTransferInList();
+				mainObject.put("accessoriesTransferInList",accessoriesTransferInList);
+				return mainObject;
+			}
+			@RequestMapping(value = "/getAccessoriesTransferInInfo", method = RequestMethod.GET)
+			public JSONObject getAccessoriesTransferInInfo(String transactionId) {
+				JSONObject mainObject = new JSONObject();
+				AccessoriesTransferIn accessoriesTransferIn = storeService.getAccessoriesTransferInInfo(transactionId);
+				mainObject.put("accessoriesTransferIn",accessoriesTransferIn);
+				return mainObject;
+			}
 }

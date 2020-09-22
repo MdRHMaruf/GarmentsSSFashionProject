@@ -6,8 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pg.dao.StoreDAO;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrderItem;
+import pg.storeModel.AccessoriesIssue;
+import pg.storeModel.AccessoriesIssueReturn;
+import pg.storeModel.AccessoriesQualityControl;
+import pg.storeModel.AccessoriesReceive;
+import pg.storeModel.AccessoriesReturn;
+import pg.storeModel.AccessoriesSize;
+import pg.storeModel.AccessoriesTransferIn;
+import pg.storeModel.AccessoriesTransferOut;
 import pg.storeModel.FabricsIssue;
 import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
@@ -299,5 +308,290 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesPurchaseOrdeIndentrList();
+	}
+
+	@Override
+	public AccessoriesIndent getAccessoriesIndentInfo(String autoId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesIndentInfo(autoId);
+	}
+
+	@Override
+	public boolean submitAccessoriesReceive(AccessoriesReceive accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesReceive(accessoriesReceive);
+	}
+
+	@Override
+	public boolean editAccessoriesReceive(AccessoriesReceive accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesReceive(accessoriesReceive);
+	}
+
+	@Override
+	public String editReceiveRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editReceiveRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String deleteReceiveRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteReceiveRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesReceive> getAccessoriesReceiveList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesReceiveList();
+	}
+
+	@Override
+	public AccessoriesReceive getAccessoriesReceiveInfo(String transectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesReceiveInfo(transectionId);
+	}
+
+	@Override
+	public boolean submitAccessoriesQC(AccessoriesQualityControl accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesQC(accessoriesReceive);
+	}
+
+	@Override
+	public boolean editAccessoriesQC(AccessoriesQualityControl accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesQC(accessoriesReceive);
+	}
+
+	@Override
+	public List<AccessoriesQualityControl> getAccessoriesQCList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesQCList();
+	}
+
+	@Override
+	public AccessoriesQualityControl getAccessoriesQCInfo(String qcTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesQCInfo(qcTransectionId);
+	}
+
+	@Override
+	public List<AccessoriesSize> getAccessoriesRollListBySupplier(String supplierId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesRollListBySupplier(supplierId);
+	}
+
+	@Override
+	public boolean submitAccessoriesReturn(AccessoriesReturn accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesReturn(accessoriesReceive);
+	}
+
+	@Override
+	public boolean editAccessoriesReturn(AccessoriesReturn accessoriesReceive) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesReturn(accessoriesReceive);
+	}
+
+	@Override
+	public String deleteReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteReturnRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String editReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editReturnRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesReturn> getAccessoriesReturnList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesReturnList();
+	}
+
+	@Override
+	public AccessoriesReturn getAccessoriesReturnInfo(String returnTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesReturnInfo(returnTransectionId);
+	}
+
+	@Override
+	public AccessoriesReceive getAccessoriesReceiveInfoForReturn(String transectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesReceiveInfoForReturn(transectionId);
+	}
+
+	@Override
+	public List<AccessoriesSize> getAvailableAccessoriesRollListInDepartment(String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAvailableAccessoriesRollListInDepartment(departmentId);
+	}
+
+	@Override
+	public boolean submitAccessoriesIssue(AccessoriesIssue accessoriesIssue) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesIssue(accessoriesIssue);
+	}
+
+	@Override
+	public boolean editAccessoriesIssue(AccessoriesIssue accessoriesIssue) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesIssue(accessoriesIssue);
+	}
+
+	@Override
+	public String editIssuedRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editIssuedRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String deleteIssuedRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteIssuedRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesSize> getIssuedAccessoriesRollListInDepartment(String departmentId, String returnDepartmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getIssuedAccessoriesRollListInDepartment(departmentId, returnDepartmentId);
+	}
+
+	@Override
+	public List<AccessoriesIssue> getAccessoriesIssueList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesIssueList();
+	}
+
+	@Override
+	public AccessoriesIssue getAccessoriesIssueInfo(String issueTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesIssueInfo(issueTransectionId);
+	}
+
+	@Override
+	public boolean submitAccessoriesIssueReturn(AccessoriesIssueReturn accessoriesIssueReturn) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesIssueReturn(accessoriesIssueReturn);
+	}
+
+	@Override
+	public boolean editAccessoriesIssueReturn(AccessoriesIssueReturn accessoriesIssueReturn) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesIssueReturn(accessoriesIssueReturn);
+	}
+
+	@Override
+	public String editIssueReturndRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editIssueReturndRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String deleteIssueReturndRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteIssueReturndRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesIssueReturn> getAccessoriesIssueReturnList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesIssueReturnList();
+	}
+
+	@Override
+	public AccessoriesIssueReturn getAccessoriesIssueReturnInfo(String issueReturnTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesIssueReturnInfo(issueReturnTransectionId);
+	}
+
+	@Override
+	public boolean submitAccessoriesTransferOut(AccessoriesTransferOut accessoriesTransferOut) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesTransferOut(accessoriesTransferOut);
+	}
+
+	@Override
+	public boolean editAccessoriesTransferOut(AccessoriesTransferOut accessoriesTransferOut) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesTransferOut(accessoriesTransferOut);
+	}
+
+	@Override
+	public String editTransferOutdRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editTransferOutdRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String deleteTransferOutdRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteReturnRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesTransferOut> getAccessoriesTransferOutList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesTransferOutList();
+	}
+
+	@Override
+	public AccessoriesTransferOut getAccessoriesTransferOutInfo(String issueTransectionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesTransferOutInfo(issueTransectionId);
+	}
+
+	@Override
+	public boolean submitAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn) {
+		// TODO Auto-generated method stub
+		return storeDao.submitAccessoriesTransferIn(accessoriesTransferIn);
+	}
+
+	@Override
+	public boolean editAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn) {
+		// TODO Auto-generated method stub
+		return storeDao.editAccessoriesTransferIn(accessoriesTransferIn);
+	}
+
+	@Override
+	public String editTransferIndRollInTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.editTransferIndRollInTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public String deleteTransferIndRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		// TODO Auto-generated method stub
+		return storeDao.deleteTransferIndRollFromTransaction(accessoriesRoll);
+	}
+
+	@Override
+	public List<AccessoriesTransferIn> getAccessoriesTransferInList() {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesTransferInList();
+	}
+
+	@Override
+	public AccessoriesTransferIn getAccessoriesTransferInInfo(String transferTransactionId) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesTransferInInfo(transferTransactionId);
+	}
+
 
 }

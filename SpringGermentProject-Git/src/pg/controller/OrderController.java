@@ -38,7 +38,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.accessorieIndent;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
@@ -504,7 +504,7 @@ public class OrderController {
 
 		List<commonModel>purchaseorders=orderService.PurchaseOrders();
 
-		List<accessorieIndent>listAccPending=orderService.getPendingAccessoriesIndent();
+		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 
 		List<commonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
@@ -777,13 +777,13 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
-	public JSONObject insertAccessoriesIndent(accessorieIndent v) {
+	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 		boolean insert= orderService.insertaccessoriesIndent(v);
 
 		if(insert) {
-			List<accessorieIndent>qty=orderService.getAccessoriesIndent(v.getPo(),v.getStyle(),v.getItemname(),v.getItemcolor());
+			List<AccessoriesIndent>qty=orderService.getAccessoriesIndent(v.getPo(),v.getStyle(),v.getItemname(),v.getItemcolor());
 
 			for (int i = 0; i < qty.size(); i++) {
 				JSONObject obj=new JSONObject();
@@ -827,7 +827,7 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/editAccessoriesIndent",method=RequestMethod.POST)
-	public String editAccessoriesIndent(accessorieIndent v) {
+	public String editAccessoriesIndent(AccessoriesIndent v) {
 		//JSONObject objmain = new JSONObject();
 		//JSONArray mainarray = new JSONArray();
 		String msg="Create Occured while updating accessories indent";
@@ -873,7 +873,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<accessorieIndent>list=orderService.getAccessoriesIndentItemDetails(id);
+		List<AccessoriesIndent>list=orderService.getAccessoriesIndentItemDetails(id);
 
 		for (int i = 0; i < list.size(); i++) {
 			JSONObject obj=new JSONObject();
