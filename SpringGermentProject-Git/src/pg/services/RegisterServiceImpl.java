@@ -28,6 +28,7 @@ import pg.registerModel.StyleItem;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
+import pg.storeModel.StoreGeneralCategory;
 
 @Service
 public class RegisterServiceImpl implements RegisterService{
@@ -619,6 +620,12 @@ public class RegisterServiceImpl implements RegisterService{
 	public List<Factory> getFactoryNameList() {
 		// TODO Auto-generated method stub
 		return registerDao.getFactoryNameList();
+	}
+
+	@Override
+	public List<StoreGeneralCategory> getStoreCategoryList() {
+		// TODO Auto-generated method stub
+		return registerDao.getStoreCategoryList();
 	}
 
 

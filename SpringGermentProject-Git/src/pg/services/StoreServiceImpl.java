@@ -25,6 +25,8 @@ import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+import pg.storeModel.StoreGeneralCategory;
+import pg.storeModel.StoreGeneralReceived;
 
 @Service
 public class StoreServiceImpl implements StoreService{
@@ -235,7 +237,7 @@ public class StoreServiceImpl implements StoreService{
 		return storeDao.getFabricsIssueReturnInfo(issueReturnTransectionId);
 	}
 
-	@Override
+
 	public boolean submitFabricsTransferOut(FabricsTransferOut fabricsTransferOut) {
 		// TODO Auto-generated method stub
 		return storeDao.submitFabricsTransferOut(fabricsTransferOut);
@@ -305,6 +307,61 @@ public class StoreServiceImpl implements StoreService{
 	public FabricsTransferIn getFabricsTransferInInfo(String transferTransactionId) {
 		// TODO Auto-generated method stub
 		return storeDao.getFabricsTransferInInfo(transferTransactionId);
+	}
+	
+	@Override
+	public boolean isStoreGenralItemExist(StoreGeneralCategory v) {
+		// TODO Auto-generated method stub
+		return storeDao.isStoreGenralItemExist(v);
+	}
+
+	@Override
+	public boolean saveGeneralItem(StoreGeneralCategory v) {
+		// TODO Auto-generated method stub
+		return storeDao.saveGeneralItem(v);
+	}
+
+	@Override
+	public List<StoreGeneralCategory> getStoreGeneralItemList() {
+		// TODO Auto-generated method stub
+		return storeDao.getStoreGeneralItemList();
+	}
+
+	@Override
+	public boolean editGeneralItem(StoreGeneralCategory v) {
+		// TODO Auto-generated method stub
+		return storeDao.editGeneralItem(v);
+	}
+
+	@Override
+	public boolean addGeneralReceivedItem(StoreGeneralReceived v) {
+		// TODO Auto-generated method stub
+		return storeDao.addGeneralReceivedItem(v);
+	}
+
+	@Override
+	public String getMaxInvoiceId(String string) {
+		// TODO Auto-generated method stub
+		return storeDao.getMaxInvoiceId(string);
+	}
+
+	@Override
+	public List<StoreGeneralReceived> getStoreGeneralReceivedItemList(String invoiceNo, String type) {
+		// TODO Auto-generated method stub
+		return storeDao.getStoreGeneralReceivedItemList(invoiceNo, type);
+	}
+
+	@Override
+	public boolean confrimtoreGeneralReceivedItemt(StoreGeneralReceived v) {
+		// TODO Auto-generated method stub
+		return storeDao.confrimtoreGeneralReceivedItemt(v);
+	}
+
+	@Override
+	public List<StoreGeneralReceived> getStoreGeneralReceivedIList(String string) {
+		// TODO Auto-generated method stub
+		return storeDao.getStoreGeneralReceivedIList(string);
+
 	}
 
 	

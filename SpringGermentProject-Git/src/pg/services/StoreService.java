@@ -19,8 +19,13 @@ import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
+
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+
+import pg.storeModel.StoreGeneralCategory;
+import pg.storeModel.StoreGeneralReceived;
+
 
 public interface StoreService {
 	//Fabrics Receive
@@ -67,6 +72,7 @@ public interface StoreService {
 	String deleteIssueReturndRollFromTransaction(FabricsRoll fabricsRoll);
 	List<FabricsIssueReturn> getFabricsIssueReturnList();
 	FabricsIssueReturn getFabricsIssueReturnInfo(String issueReturnTransectionId);
+
 
 	//Fabrics TransferOut
 	boolean submitFabricsTransferOut(FabricsTransferOut fabricsTransferOut);
@@ -147,4 +153,19 @@ public interface StoreService {
 	String deleteTransferIndSizeFromTransaction(AccessoriesSize accessoriesSize);
 	List<AccessoriesTransferIn> getAccessoriesTransferInList();
 	AccessoriesTransferIn getAccessoriesTransferInInfo(String issueTransectionId);
+
+	
+	//General Store Item
+	boolean isStoreGenralItemExist(StoreGeneralCategory v);
+	boolean saveGeneralItem(StoreGeneralCategory v);
+	List<StoreGeneralCategory> getStoreGeneralItemList();
+	boolean editGeneralItem(StoreGeneralCategory v);
+	
+	//General Store Item Received
+	boolean addGeneralReceivedItem(StoreGeneralReceived v);
+	String getMaxInvoiceId(String string);
+	List<StoreGeneralReceived> getStoreGeneralReceivedItemList(String invoiceNo, String type);
+	boolean confrimtoreGeneralReceivedItemt(StoreGeneralReceived v);
+	List<StoreGeneralReceived> getStoreGeneralReceivedIList(String string);
+
 }

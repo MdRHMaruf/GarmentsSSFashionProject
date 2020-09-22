@@ -35,6 +35,9 @@ import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+import pg.storeModel.StoreGeneralCategory;
+import pg.storeModel.StoreGeneralReceived;
+
 
 @Repository
 public class StoreDAOImpl implements StoreDAO{
@@ -192,7 +195,7 @@ public class StoreDAOImpl implements StoreDAO{
 				rollId++;
 				sql="insert into tbFabricsRollInfo (rollId,supplierRollId,entryTime,createBy) values('"+rollId+"','"+roll.getSupplierRollId()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
 						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+rollId+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
@@ -252,14 +255,14 @@ public class StoreDAOImpl implements StoreDAO{
 					rollId++;
 					sql="insert into tbFabricsRollInfo (rollId,supplierRollId,entryTime,createBy) values('"+rollId+"','"+roll.getSupplierRollId()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
-					
+
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
 							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsReceive.getTransactionId()+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 
 			}
-			
+
 			tx.commit();
 
 			return true;
@@ -297,7 +300,7 @@ public class StoreDAOImpl implements StoreDAO{
 			if(list.size()==0) {
 				sql = "update tbFabricsRollInfo set supplierRollId = '"+fabricsRoll.getSupplierRollId()+"' where rollId = '"+fabricsRoll.getRollId()+"'";
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql = "update tbFabricsAccessoriesTransaction set unitQty = '"+fabricsRoll.getUnitQty()+"',qty = '"+fabricsRoll.getUnitQty()+"' where autoId = '"+fabricsRoll.getAutoId()+"'";
 				if(session.createSQLQuery(sql).executeUpdate()==1) {
 					tx.commit();
@@ -514,7 +517,7 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
-			
+
 			int departmentId = 1;
 			for (FabricsRoll roll : fabricsQC.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
@@ -572,7 +575,7 @@ public class StoreDAOImpl implements StoreDAO{
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -726,7 +729,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempRoll.setPreviousReceiveQty(Double.valueOf(element[21].toString()));
 				tempRoll.setIssueQty(Double.valueOf(element[22].toString()));
 				tempRoll.setReturnQty(Double.valueOf(element[23].toString()));
-				
+
 				datalist.add(tempRoll);				
 			}			
 			tx.commit();			
@@ -832,7 +835,7 @@ public class StoreDAOImpl implements StoreDAO{
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -1009,7 +1012,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempRoll.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempRoll.setReturnQty(Double.valueOf(element[23].toString()));
 				tempRoll.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				fabricsRollList.add(tempRoll);				
 			}
 			sql = "select fri.autoId,fri.transactionId,(select convert(varchar,fri.date,103))as date,fri.supplierId,s.name as supplierName,fri.remarks,fri.createBy \r\n" + 
@@ -1097,7 +1100,7 @@ public class StoreDAOImpl implements StoreDAO{
 		return fabricsReceive;
 
 	}
-	
+
 	@Override
 	public List<FabricsRoll> getAvailableFabricsRollListInDepartment(String departmentId) {
 		Session session=HibernateUtil.openSession();
@@ -1242,7 +1245,7 @@ public class StoreDAOImpl implements StoreDAO{
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -1451,7 +1454,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempRoll.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempRoll.setReturnQty(Double.valueOf(element[23].toString()));
 				tempRoll.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				fabricsRollList.add(tempRoll);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.issuedTo,fii.receiveBy,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -1485,8 +1488,8 @@ public class StoreDAOImpl implements StoreDAO{
 		return fabricsIssue;
 	}
 
-	
-	
+
+
 	@Override
 	public boolean submitFabricsIssueReturn(FabricsIssueReturn fabricsIssueReturn) {
 		// TODO Auto-generated method stub
@@ -4726,6 +4729,351 @@ public class StoreDAOImpl implements StoreDAO{
 			session.close();
 		}
 		return accessoriesTransfer;
+	}
+
+
+
+	@Override
+	public boolean isStoreGenralItemExist(StoreGeneralCategory v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ItemName from tbStoreItemInformation where ItemName='"+v.getItemName()+"' and ItemId != '"+v.getItemId()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) return true;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public boolean saveGeneralItem(StoreGeneralCategory v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="insert into tbStoreItemInformation(ItemName,CatagoryId,UnitId,PcsBuyPrice,OpeningStock,StockLimit,Date,entrytime,UserId) values('"+v.getItemName()+"','"+v.getCategoryId()+"','"+v.getUnitId()+"','"+v.getBuyPrice()+"','"+v.getOpeningStock()+"','"+v.getStockLimit()+"',current_timestamp,current_timestamp,'"+v.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+	@Override
+	public List<StoreGeneralCategory> getStoreGeneralItemList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<StoreGeneralCategory> datalist=new ArrayList<StoreGeneralCategory>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select a.ItemId,a.ItemName,(select headTitle from tbStoreItemCatagory where headId=a.CatagoryId) as Category,a.CatagoryId,a.UnitId,a.PcsBuyPrice,a.OpeningStock,a.StockLimit from tbStoreItemInformation a order by Category";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				datalist.add(new StoreGeneralCategory(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+
+	@Override
+	public boolean editGeneralItem(StoreGeneralCategory v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update tbStoreItemInformation set  ItemName='"+v.getItemName()+"',CatagoryId='"+v.getCategoryId()+"',UnitId='"+v.getUnitId()+"',PcsBuyPrice='"+v.getBuyPrice()+"',OpeningStock='"+v.getOpeningStock()+"',StockLimit='"+v.getStockLimit()+"',UserId='"+v.getUserId()+"',entrytime=current_timestamp where ItemId='"+v.getItemId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+	@Override
+	public boolean addGeneralReceivedItem(StoreGeneralReceived v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+
+			int exist=0;
+			String sql="select ItemId from TbStoreTransectionDetails where ItemId='"+v.getItemId()+"' and InvoiceNo='"+v.getInvoiceNo()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				exist=1;
+			}
+
+
+			if(exist==0) {
+				double TotalPrice=Double.parseDouble(v.getQty())*Double.parseDouble(v.getPirce());
+				sql="insert into TbStoreTransectionDetails(itemId,unit,qty,buyPrice,discount,totalPrice,type,invoiceNo,status,Date,entrytime,UserId) "
+						+ "values('"+v.getItemId()+"','"+v.getUnitId()+"','"+v.getQty()+"','"+v.getPirce()+"','0','"+TotalPrice+"','"+v.getType()+"','"+v.getInvoiceNo()+"','0',current_timestamp,current_timestamp,'"+v.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			else {
+				double TotalPrice=Double.parseDouble(v.getQty())*Double.parseDouble(v.getPirce());
+				sql="update TbStoreTransectionDetails set qty=qty+'"+v.getQty()+"',totalPrice=totalPrice+'"+TotalPrice+"',entryTime=current_timestamp where invoiceNo='"+v.getInvoiceNo()+"' ";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+	@Override
+	public String getMaxInvoiceId(String type) {
+		String InvoiceId="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select (isnull(max(invoiceNo),0)+1) as maxId from TbStoreTransectionInvoice where Type='"+type+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				InvoiceId = list.get(0).toString();
+			}
+
+			tx.commit();
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return InvoiceId;
+	}
+
+
+
+	@Override
+	public List<StoreGeneralReceived> getStoreGeneralReceivedItemList(String invoiceNo, String type) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<StoreGeneralReceived> datalist=new ArrayList<StoreGeneralReceived>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select a.autoId,(select ItemName from tbStoreItemInformation where ItemId=a.ItemId) as ItemName,(select UnitName from tbunits where UnitId=a.unit) as UnitName,a.Qty,a.buyPrice,a.TotalPrice from TbStoreTransectionDetails a where a.invoiceNo='"+invoiceNo+"' and a.type='"+type+"' and a.status='0'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				datalist.add(new StoreGeneralReceived(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+
+	@Override
+	public boolean confrimtoreGeneralReceivedItemt(StoreGeneralReceived v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="insert into TbStoreTransectionInvoice"
+					+ "("
+					+ "invoiceNo,"
+					+ "PersionId,"
+					+ "PersionName,"
+					+ "ChallanNo,"
+					+ "type,"
+					+ "amount,"
+					+ "netAmount,"
+					+ "discountPer,"
+					+ "discountManual,"
+					+ "discount,"
+					+ "paid,"
+					+ "cash,"
+					+ "card,"
+					+ "card_type,"
+					+ "p_type,"
+					+ "remark,"
+					+ "Date,"
+					+ "entrytime,"
+					+ "UserId"
+					+ ") "
+					+ "values('"+v.getInvoiceNo()+"',"
+					+ "'"+v.getSupplierId()+"',"
+					+ "'',"
+					+ "'"+v.getChallanNo()+"',"
+					+ "'"+v.getType()+"',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'0',"
+					+ "'',"
+					+ "'',"
+					+"current_timestamp,current_timestamp,'"+v.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+			
+			
+			sql="update TbStoreTransectionDetails set status='1' where invoiceNo='"+v.getInvoiceNo()+"' ";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+	@Override
+	public List<StoreGeneralReceived> getStoreGeneralReceivedIList(String type) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<StoreGeneralReceived> datalist=new ArrayList<StoreGeneralReceived>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select InvoiceNo,(select Name from tbSupplier where id=PersionId)as SupplierName,ChallanNo,(select convert(varchar,date,103))as Date  from TbStoreTransectionInvoice where type='"+type+"'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				datalist.add(new StoreGeneralReceived(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
 	}
 
 }
