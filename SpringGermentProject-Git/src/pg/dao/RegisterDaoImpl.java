@@ -32,6 +32,7 @@ import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
 import pg.share.HibernateUtil;
 import pg.share.ItemType;
+import pg.storeModel.StoreGeneralCategory;
 
 @Repository
 public class RegisterDaoImpl implements RegisterDao{
@@ -3847,6 +3848,39 @@ public class RegisterDaoImpl implements RegisterDao{
 				session.close();
 			}
 			return unit;
+		}
+
+		@Override
+		public List<StoreGeneralCategory> getStoreCategoryList() {
+			Session session=HibernateUtil.openSession();
+			Transaction tx=null;
+			List<StoreGeneralCategory> dataList=new ArrayList<StoreGeneralCategory>();
+			try{
+				tx=session.getTransaction();
+				tx.begin();
+
+				String sql="select headId,headTitle from tbStoreItemCatagory order by headTitle";
+				
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					
+					Object[] element = (Object[]) iter.next();
+					
+					dataList.add(new StoreGeneralCategory(element[0].toString().trim(), element[1].toString().trim()));
+				}
+				tx.commit();
+			}
+			catch(Exception e){
+				if (tx != null) {
+					tx.rollback();
+				}
+				e.printStackTrace();
+			}
+			finally {
+				session.close();
+			}
+			return dataList;
 		}
 
 		

@@ -24,6 +24,7 @@ import pg.registerModel.StyleItem;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
+import pg.storeModel.StoreGeneralCategory;
 
 
 public interface RegisterDao {
@@ -185,4 +186,7 @@ public interface RegisterDao {
 	
 	
 	public Unit getUnit(String unitId);
+	
+	//Store Category
+	public List<StoreGeneralCategory> getStoreCategoryList();
 }

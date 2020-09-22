@@ -24,6 +24,7 @@ import pg.registerModel.StyleItem;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
+import pg.storeModel.StoreGeneralCategory;
 
 public interface RegisterService {
 
@@ -176,5 +177,8 @@ public interface RegisterService {
 	
 	//Common get method
 	public List<Factory> getFactoryNameList();
+	
+	//Store Category
+	public List<StoreGeneralCategory> getStoreCategoryList();
 
 }
