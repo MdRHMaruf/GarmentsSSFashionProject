@@ -373,20 +373,8 @@ function showPreview(poNo,supplierId,type){
   window.open(url, '_blank');
 
   
-  // $.ajax({
-  //   type: 'GET',
-  //   dataType: 'json',
-  //   url: './getPurchaseOrderReport',
-  //   data:{poNo:cuttingEntryId},
-  //   success: function (data) {
-  //     if (data== "Sucess") {
-  //     var url = "printCuttingInformationReport";
-  //     window.open(url, '_blank');
-
-  //     }
-  //   }
-  // });
-});
+  
+};
 
 function getOptions(elementId){
   let options = "";
