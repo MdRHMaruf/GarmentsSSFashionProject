@@ -342,15 +342,15 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String editReceiveRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editReceiveSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editReceiveRollInTransaction(accessoriesRoll);
+		return storeDao.editReceiveSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String deleteReceiveRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteReceiveSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteReceiveRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteReceiveSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override
@@ -390,9 +390,9 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public List<AccessoriesSize> getAccessoriesRollListBySupplier(String supplierId) {
+	public List<AccessoriesSize> getAccessoriesSizeListBySupplier(String supplierId) {
 		// TODO Auto-generated method stub
-		return storeDao.getAccessoriesRollListBySupplier(supplierId);
+		return storeDao.getAccessoriesSizeListBySupplier(supplierId);
 	}
 
 	@Override
@@ -408,15 +408,15 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String deleteReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteReturnSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteReturnRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteReturnSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String editReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editReturnSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editReturnRollInTransaction(accessoriesRoll);
+		return storeDao.editReturnSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
@@ -438,9 +438,9 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public List<AccessoriesSize> getAvailableAccessoriesRollListInDepartment(String departmentId) {
+	public List<AccessoriesSize> getAvailableAccessoriesSizeListInDepartment(String departmentId) {
 		// TODO Auto-generated method stub
-		return storeDao.getAvailableAccessoriesRollListInDepartment(departmentId);
+		return storeDao.getAvailableAccessoriesSizeListInDepartment(departmentId);
 	}
 
 	@Override
@@ -456,21 +456,21 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String editIssuedRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editIssuedSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editIssuedRollInTransaction(accessoriesRoll);
+		return storeDao.editIssuedSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String deleteIssuedRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteIssuedSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteIssuedRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteIssuedSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override
-	public List<AccessoriesSize> getIssuedAccessoriesRollListInDepartment(String departmentId, String returnDepartmentId) {
+	public List<AccessoriesSize> getIssuedAccessoriesSizeListInDepartment(String departmentId, String returnDepartmentId) {
 		// TODO Auto-generated method stub
-		return storeDao.getIssuedAccessoriesRollListInDepartment(departmentId, returnDepartmentId);
+		return storeDao.getIssuedAccessoriesSizeListInDepartment(departmentId, returnDepartmentId);
 	}
 
 	@Override
@@ -498,15 +498,15 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String editIssueReturndRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editIssueReturndSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editIssueReturndRollInTransaction(accessoriesRoll);
+		return storeDao.editIssueReturndSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String deleteIssueReturndRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteIssueReturndSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteIssueReturndRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteIssueReturndSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override
@@ -534,15 +534,15 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String editTransferOutdRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editTransferOutdSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editTransferOutdRollInTransaction(accessoriesRoll);
+		return storeDao.editTransferOutdSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String deleteTransferOutdRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteTransferOutdSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteReturnRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteReturnSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override
@@ -570,15 +570,15 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public String editTransferIndRollInTransaction(AccessoriesSize accessoriesRoll) {
+	public String editTransferIndSizeInTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.editTransferIndRollInTransaction(accessoriesRoll);
+		return storeDao.editTransferIndSizeInTransaction(accessoriesSize);
 	}
 
 	@Override
-	public String deleteTransferIndRollFromTransaction(AccessoriesSize accessoriesRoll) {
+	public String deleteTransferIndSizeFromTransaction(AccessoriesSize accessoriesSize) {
 		// TODO Auto-generated method stub
-		return storeDao.deleteTransferIndRollFromTransaction(accessoriesRoll);
+		return storeDao.deleteTransferIndSizeFromTransaction(accessoriesSize);
 	}
 
 	@Override

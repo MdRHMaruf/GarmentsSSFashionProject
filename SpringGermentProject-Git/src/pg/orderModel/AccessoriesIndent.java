@@ -4,8 +4,11 @@ public class AccessoriesIndent {
 	String autoid;
 	String user;
 	String po;
+	String styleId;
 	String style;
+	String itemId;
 	String itemname;
+	String itemColorId;
 	String itemcolor;
 	String shippingmark;
 	String accessoriesname;
@@ -24,8 +27,10 @@ public class AccessoriesIndent {
 	String unit;
 	String grandqty;
 	String brand;
-	String accessoriescolor;
+	String accessoriesId;
 	String accessoriesName;
+	String accessoriesColorId;
+	String accessoriescolor;
 	String sizeName;
 	String requiredUnitQty;
 	String indentBrandId;
@@ -35,6 +40,20 @@ public class AccessoriesIndent {
 		
 	}
 	
+	public AccessoriesIndent(String purchaseOrder,String styleId,String styleName,String itemId,String itemName,String itemColorId,String itemColorName,String accessoriesId,String accessoriesName,String accessoriesColorId,String accessoriesColorName) {
+		this.po = purchaseOrder;
+		this.styleId = styleId;
+		this.style = styleName;
+		this.itemId = itemId;
+		this.itemname = itemName;
+		this.itemColorId = itemColorId;
+		this.itemcolor = itemColorName;
+		this.accessoriesId = accessoriesId;
+		this.accessoriesName = accessoriesName;
+		this.accessoriesColorId = accessoriesColorId;
+		this.accessoriescolor = accessoriesColorName;
+		
+	}
 	
 	public AccessoriesIndent(String AccIndentId,String PurchaseOrder,String StyleNo,String ItemName,String ColorName,String ShippingMarks,String AccessoriesName,String SizeName,String accessoriesSize,String PerUnit,String TotalBox,String OrderQty,String QtyInDozen,String ReqPerPices,String ReqPerDoz,String DividedBy,String PercentageExtra,String PercentageExtraQty,String TotalQty,String UnitName,String RequireUnitQty,String IndentBrandId,String IndentColorId) {
 		this.autoid=AccIndentId;
@@ -74,6 +93,8 @@ public class AccessoriesIndent {
 		this.sizeName=sizeName;
 		this.requiredUnitQty=requiredUnitQty;
 	}
+	
+	
 	
 	
 	
@@ -264,6 +285,55 @@ public class AccessoriesIndent {
 	}
 	public void setAccessoriescolor(String accessoriescolor) {
 		this.accessoriescolor = accessoriescolor;
+	}
+
+
+	public String getStyleId() {
+		return styleId;
+	}
+
+
+	public void setStyleId(String styleId) {
+		this.styleId = styleId;
+	}
+
+
+	public String getItemId() {
+		return itemId;
+	}
+
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+
+	public String getItemColorId() {
+		return itemColorId;
+	}
+
+
+	public void setItemColorId(String itemColorId) {
+		this.itemColorId = itemColorId;
+	}
+
+
+	public String getAccessoriesId() {
+		return accessoriesId;
+	}
+
+
+	public void setAccessoriesId(String accessoriesId) {
+		this.accessoriesId = accessoriesId;
+	}
+
+
+	public String getAccessoriesColorId() {
+		return accessoriesColorId;
+	}
+
+	public void setAccessoriesColorId(String accessoriesColorId) {
+		this.accessoriesColorId = accessoriesColorId;
 	}
 	
 	

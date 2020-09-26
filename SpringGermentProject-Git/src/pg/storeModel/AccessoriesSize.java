@@ -5,8 +5,8 @@ public class AccessoriesSize {
 	String supplierId;
 	String supplierName;
 	String transactionId;
-	String rollId;
-	String supplierRollId;
+	String sizeId;
+	String supplierSizeId;
 	String purchaseOrder;
 	String styleId;
 	String styleNo;
@@ -45,7 +45,7 @@ public class AccessoriesSize {
 	public AccessoriesSize() {}
 
 	public AccessoriesSize(String autoId, String transactionId, String purchaseOrder, String styleId, String styleNo, String itemId,String itemName,
-			String itemColorId,String itemColor, String accessoriesId,String accessoriesName, String accessoriesColorId,String accessoriesColorName, String rollId,String supplierRollId, String unitId, String unit,double balanceQty, double unitQty,
+			String itemColorId,String itemColor, String accessoriesId,String accessoriesName, String accessoriesColorId,String accessoriesColorName, String sizeId,String supplierSizeId, String unitId, String unit,double balanceQty, double unitQty,
 			String rackName, String binName,int qcPassedType) {
 		super();
 		this.autoId = autoId;
@@ -61,8 +61,8 @@ public class AccessoriesSize {
 		this.accessoriesName = accessoriesName;
 		this.accessoriesColorId = accessoriesColorId;
 		this.accessoriesColorName = accessoriesColorName;
-		this.rollId = rollId;
-		this.supplierRollId = supplierRollId;
+		this.sizeId = sizeId;
+		this.supplierSizeId = supplierSizeId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.balanceQty = balanceQty;
@@ -75,13 +75,13 @@ public class AccessoriesSize {
 
 
 
-	public AccessoriesSize(String autoId, String TransactionId, String rollId, String unitId,
+	public AccessoriesSize(String autoId, String TransactionId, String sizeId, String unitId,
 			String unit, double unitQty, double qcPassedQty, double issueQty, double balanceQty, double rate,
 			double totalAmount, String remarks, String rackName, String binName,int qcPassedType,String userId) {
 		super();
 		this.autoId = autoId;
 		this.transactionId = TransactionId;
-		this.rollId = rollId;
+		this.sizeId = sizeId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.unitQty = unitQty;
@@ -97,7 +97,7 @@ public class AccessoriesSize {
 		this.userId = userId;
 	}
 	
-	public AccessoriesSize(String autoId,String TransactionId,String purchaseOrder,String styleId,String itemId,String itemColorId,String accessoriesId,String accessoriesColorId,String rollId,String unitId,double unitQty,String rackName,String binName,String remarks,int qcPassedType,boolean isReturn,String userId) {
+	public AccessoriesSize(String autoId,String TransactionId,String purchaseOrder,String styleId,String itemId,String itemColorId,String accessoriesId,String accessoriesColorId,String sizeId,String unitId,double unitQty,String rackName,String binName,String remarks,int qcPassedType,boolean isReturn,String userId) {
 		this.autoId = autoId;
 		this.transactionId = TransactionId;
 		this.purchaseOrder = purchaseOrder;
@@ -106,7 +106,7 @@ public class AccessoriesSize {
 		this.itemColorId = itemColorId;
 		this.accessoriesId = accessoriesId;
 		this.accessoriesColorId = accessoriesColorId;
-		this.rollId = rollId;
+		this.sizeId = sizeId;
 		this.unitId = unitId;
 		this.unitQty = unitQty;
 		this.rackName = rackName;
@@ -116,7 +116,7 @@ public class AccessoriesSize {
 		this.isReturn = isReturn;
 		this.userId = userId;
 	}
-	public AccessoriesSize(String autoId, String TransactionId, String rollId,String supplierRollId, String purchaseOrder, String styleId,
+	public AccessoriesSize(String autoId, String TransactionId, String sizeId,String supplierSizeId, String purchaseOrder, String styleId,
 			String itemId, String itemColorId, String accessoriesId, String accessoriesName, String accessoriesColorId,
 			String accessoriesColorName, String unitId, String unit, double unitQty, double qcPassedQty, double shadeQty,
 			double shrinkageQty, double gsmQty, double widthQty, double defectQty, String remarks, String rackName,
@@ -124,8 +124,8 @@ public class AccessoriesSize {
 		super();
 		this.autoId = autoId;
 		this.transactionId = TransactionId;
-		this.rollId = rollId;
-		this.supplierRollId = supplierRollId;
+		this.sizeId = sizeId;
+		this.supplierSizeId = supplierSizeId;
 		this.purchaseOrder = purchaseOrder;
 		this.styleId = styleId;
 		this.itemId = itemId;
@@ -153,7 +153,7 @@ public class AccessoriesSize {
 	
 	public AccessoriesSize(String autoId, String supplierId, String supplierName, String purchaseOrder, String styleId,
 			String styleNo, String itemId, String itemName, String itemColorId, String itemColor, String accessoriesId,
-			String accessoriesName, String accessoriesColorId, String accessoriesColorName, String rollId,String supplierRollId,String unitId,String unit, double balanceQty,String rackName,String binName) {
+			String accessoriesName, String accessoriesColorId, String accessoriesColorName, String sizeId,String supplierSizeId,String unitId,String unit, double balanceQty,String rackName,String binName) {
 		super();
 		this.autoId = autoId;
 		this.supplierId = supplierId;
@@ -169,8 +169,8 @@ public class AccessoriesSize {
 		this.accessoriesName = accessoriesName;
 		this.accessoriesColorId = accessoriesColorId;
 		this.accessoriesColorName = accessoriesColorName;
-		this.rollId = rollId;
-		this.supplierRollId = supplierRollId;
+		this.sizeId = sizeId;
+		this.supplierSizeId = supplierSizeId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.balanceQty = balanceQty;
@@ -180,7 +180,7 @@ public class AccessoriesSize {
 	
 	public AccessoriesSize( String purchaseOrder, String styleId,
 			String styleNo, String itemId, String itemName, String itemColorId, String itemColor, String accessoriesId,
-			String accessoriesName, String accessoriesColorId, String accessoriesColorName, String rollId,String supplierRollId,String unitId,String unit, double issueQty,double returnQty,double previousReturnQty) {
+			String accessoriesName, String accessoriesColorId, String accessoriesColorName, String sizeId,String supplierSizeId,String unitId,String unit, double issueQty,double returnQty,double previousReturnQty) {
 		super();
 		this.purchaseOrder = purchaseOrder;
 		this.styleId = styleId;
@@ -193,8 +193,8 @@ public class AccessoriesSize {
 		this.accessoriesName = accessoriesName;
 		this.accessoriesColorId = accessoriesColorId;
 		this.accessoriesColorName = accessoriesColorName;
-		this.rollId = rollId;
-		this.supplierRollId = supplierRollId;
+		this.sizeId = sizeId;
+		this.supplierSizeId = supplierSizeId;
 		this.unitId = unitId;
 		this.unit = unit;
 		this.issueQty = issueQty;
@@ -202,11 +202,11 @@ public class AccessoriesSize {
 		this.previousReturnQty = previousReturnQty;
 	}
 
-	public String getSupplierRollId() {
-		return supplierRollId;
+	public String getSupplierSizeId() {
+		return supplierSizeId;
 	}
-	public void setSupplierRollId(String supplierRollId) {
-		this.supplierRollId = supplierRollId;
+	public void setSupplierSizeId(String supplierSizeId) {
+		this.supplierSizeId = supplierSizeId;
 	}
 
 	public double getShadeQty() {
@@ -395,11 +395,11 @@ public class AccessoriesSize {
 	public void setAutoId(String autoId) {
 		this.autoId = autoId;
 	}
-	public String getRollId() {
-		return rollId;
+	public String getSizeId() {
+		return sizeId;
 	}
-	public void setRollId(String rollId) {
-		this.rollId = rollId;
+	public void setSizeId(String sizeId) {
+		this.sizeId = sizeId;
 	}
 	public double getUnitQty() {
 		return unitQty;

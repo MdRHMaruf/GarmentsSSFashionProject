@@ -62,6 +62,14 @@ $("#findTransactionBtn").click(function () {
   });
 });
 
+document.getElementById("checkAll").addEventListener("click", function () {
+  if ($(this).prop('checked')) {
+    $(".check").prop('checked', true);
+  } else {
+    $(".check").prop('checked', false);
+  }
+});
+
 function submitAction() {
   const rowList = $("tr .newRollRow");
   const length = rowList.length;
@@ -724,14 +732,14 @@ function drawPurchaseOrderListTable(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
 
-    rows += "<tr id='" + rowData.autoId + "'>"
-      + "<td id='purchaseOrder-" + rowData.autoId + "'>" + rowData.purchaseOrder + "</td>"
-      + "<td id='styleName-" + rowData.autoId + "'>" + rowData.styleName + "</td>"
-      + "<td id='itemName-" + rowData.autoId + "'>" + rowData.itemName + "</td>"
-      + "<td id='itemColor-" + rowData.autoId + "'>" + rowData.itemColorName + "</td>"
-      + "<td id='accessoriesName-" + rowData.autoId + "'>" + rowData.accessoriesName + "</td>"
-      + "<td id='accessoriesColor-" + rowData.autoId + "'>" + rowData.accessoriesColor + "</td>"
-      + "<td><i class='fa fa-search' onclick=\"setAccessoriesInfo('" + rowData.autoId + "')\" style='cursor:pointer;'> </i></td>"
+    rows += "<tr id='" + i + "'>"
+      + "<td id='purchaseOrder-" + i + "'>" + rowData.po + "</td>"
+      + "<td id='styleName-" + i + "'>" + rowData.style + "</td>"
+      + "<td id='itemName-" + i + "'>" + rowData.itemname + "</td>"
+      + "<td id='itemColor-" + i + "'>" + rowData.itemcolor + "</td>"
+      + "<td id='accessoriesName-" + i + "'>" + rowData.accessoriesName + "</td>"
+      + "<td id='accessoriesColor-" + i + "'>" + rowData.accessoriescolor + "</td>"
+      +"<td ><input class='check' type='checkbox' id='check-"+i+"'></td>"
       + "</tr>";
 
   }

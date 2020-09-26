@@ -2017,7 +2017,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,(select sizeName from tbStyleSize where id=a.size) as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.PurchaseOrder='"+po+"' and a.StyleId='"+style+"' and a.ItemId='"+itemname+"' and a.ColorId='"+itemcolor+"'";
+			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,isnull((select sizeName from tbStyleSize where id=a.size),'') as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.PurchaseOrder='"+po+"' and a.StyleId='"+style+"' and a.ItemId='"+itemname+"' and a.ColorId='"+itemcolor+"'";
 			System.out.println(" max ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -2063,8 +2063,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,(select sizeName from tbStyleSize where id=a.size) as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.AINo IS NULL";
-
+			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,isnull((select sizeName from tbStyleSize where id=a.size),'') as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.AINo IS NULL";
 
 			List<?> list = session.createSQLQuery(sql).list();
 
@@ -2094,7 +2093,6 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
-
 		return query;
 	}
 
@@ -2109,14 +2107,13 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,a.StyleId,a.ItemId,a.ColorId,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,a.size,a.accessoriesSize,a.PerUnit,a.TotalBox,a.OrderQty,a.QtyInDozen,a.ReqPerPices,a.ReqPerDoz,a.DividedBy,a.PercentageExtra,a.PercentageExtraQty,a.TotalQty,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.RequireUnitQty,a.IndentBrandId,a.IndentColorId from tbAccessoriesIndent a where a.AccIndentId='"+id+"'";
+			String sql="select a.AccIndentId,a.PurchaseOrder,a.StyleId,a.ItemId,a.ColorId,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,a.size,a.accessoriesSize,a.PerUnit,a.TotalBox,a.OrderQty,a.QtyInDozen,a.ReqPerPices,a.ReqPerDoz,a.DividedBy,a.PercentageExtra,a.PercentageExtraQty,a.TotalQty,isnull((select UnitName from tbunits where UnitId=a.UnitId),'') as UnitName,a.RequireUnitQty,a.IndentBrandId,a.IndentColorId from tbAccessoriesIndent a where a.AccIndentId='"+id+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
 				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString(),element[21].toString(),element[22].toString()));
-
 			}
 
 			tx.commit();
@@ -3265,7 +3262,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"from tbAccessoriesIndent ai \r\n" + 
 						"left join TbAccessoriesItem a \r\n" + 
 						"on ai.accessoriesItemId = a.itemid \r\n" + 
-						"where styleid='"+styleId+"'  group by a.itemid,a.itemname";
+						"where styleid='"+styleId+"'  group by a.itemid,a.itemname,a.unitId";
 			}else {
 
 				return null;
@@ -3524,7 +3521,7 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"1", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),"",true));				
 			}
 
-			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,unit.unitname\r\n" + 
+			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName\r\n" + 
 					" from tbAccessoriesIndent ai \r\n" + 
 					" left join TbStyleCreate style\r\n" + 
 					" on ai.styleid = style.StyleId \r\n" + 
@@ -3608,7 +3605,7 @@ public class OrderDAOImpl implements OrderDAO{
 					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),purchaseOrderItem.getType(), element[2].toString(), purchaseOrderItem.getSupplierId(), purchaseOrderItem.getRate(), purchaseOrderItem.getDollar(), element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), Double.valueOf(element[6].toString()), element[7].toString(),"",false));
 				}
 			}else if(purchaseOrderItem.getType().equals("2")) {
-				sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,unit.unitname\r\n" + 
+				sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						" on ai.styleid = style.StyleId \r\n" + 

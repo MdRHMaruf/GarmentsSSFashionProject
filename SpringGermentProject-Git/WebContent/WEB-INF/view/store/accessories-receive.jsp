@@ -32,21 +32,19 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="poNo" value="0">
-	<input type="hidden"
-		id="indentId" value="0"> 
-		<input type="hidden" id="styleId" value="0">
-		<input type="hidden" id="styleItemId" value="0">
-		<input type="hidden" id="itemColorId" value="0">
-		<input type="hidden" id="fabricsColorId" value="0">
-		<input type="hidden" id="fabricsId" value="0"> 
-		<input type="hidden" id="unitId" value="0"> 
-		
-		<input type="hidden" id="fabricsRate" value="0">
+	<input type="hidden" id="poNo" value="0"> <input type="hidden"
+		id="indentId" value="0"> <input type="hidden" id="styleId"
+		value="0"> <input type="hidden" id="styleItemId" value="0">
+	<input type="hidden" id="itemColorId" value="0"> <input
+		type="hidden" id="accessoriesColorId" value="0"> <input
+		type="hidden" id="accessoriesId" value="0"> <input
+		type="hidden" id="unitId" value="0"> <input type="hidden"
+		id="accessoriesRate" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Receive</h5>
+			<h5 class="text-center" style="display: inline;">Accessories
+				Receive</h5>
 		</header>
 		<hr class="my-1">
 		<div class="row">
@@ -98,31 +96,11 @@
 
 				</div>
 
-				<div class="row">
-					<div class="col-md-6 pr-0">
-						<div class="form-group mb-0  row">
-							<label for="receiveQty"
-								class="col-md-5 col-form-label-sm pr-0 mb-1 pb-1">Receive
-								Qty</label> <input id="receiveQty" type="number"
-								class="col-md-7 form-control-sm">
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group mb-0  row">
-							<label for="noOfRoll"
-								class="col-md-6 col-form-label-sm pr-0 mb-1 pb-1">No Of
-								Roll</label> <input id="noOfRoll" type="number"
-								class="col-md-6 form-control-sm" placeholder="">
-
-						</div>
-					</div>
-				</div>
-
 			</div>
 			<div class="col-md-5">
 				<div class="row">
 					<div class="col-md-10 px-1">
-						<u><h5>Fabrics Purchase Order Information</h5></u>
+						<u><h5>Accessories Purchase Order Information</h5></u>
 					</div>
 					<div class="col-md-2">
 						<button id="itemSearchBtn" type="button"
@@ -170,19 +148,19 @@
 
 				<div class="row">
 					<div class="col-md-3 px-1">
-						<label for="fabricsItem">Fabrics Item:</label>
+						<label for="accessoriesItem">Accessories Item:</label>
 					</div>
 					<div class="col-md-9 px-1">
-						<b><label id="fabricsItem"></label></b>
+						<b><label id="accessoriesItem"></label></b>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-md-3 px-1">
-						<label for="fabricsColor">Fabrics Color:</label>
+						<label for="accessoriesColor">Accessories Color:</label>
 					</div>
 					<div class="col-md-9 px-1">
-						<b><label id="fabricsColor"></label></b>
+						<b><label id="accessoriesColor"></label></b>
 					</div>
 				</div>
 
@@ -200,7 +178,7 @@
 					<div class="col-md-2 px-1">
 						<b><label id="totalPoQty"></label></b>
 					</div>
-					
+
 					<div class="col-md-2 px-1">
 						<label for="previousReceive">Prev. Rec.:</label>
 					</div>
@@ -212,7 +190,7 @@
 
 
 
-				
+
 
 			</div>
 			<div class="col-md-3">
@@ -263,8 +241,8 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font table-expandable">
 					<thead class="no-wrap-text">
 						<tr>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th>Unit</th>
 							<th>Order Qty</th>
 							<th>Previous Rec.</th>
@@ -347,7 +325,7 @@
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsReceiveList">
+					<tbody id="accessoriesReceiveList">
 
 					</tbody>
 				</table>
@@ -395,8 +373,8 @@
 						placeholder="Item Name">
 				</div>
 				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="fabricsItemSearch"
-						placeholder="Fabrics Item">
+					<input type="text" class="form-control-sm"
+						id="accessoriesItemSearch" placeholder="Accessories Item">
 				</div>
 				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="colorSearch"
@@ -411,9 +389,9 @@
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th><span><i class="fa fa-search"></i></span></th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
+							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
 					<tbody id="purchaseOrderList">
@@ -421,20 +399,26 @@
 					</tbody>
 				</table>
 			</div>
-
+			<div class="modal-footer py-2">
+				<div class="d-flex justify-content-end">
+					<button id="accessoriesAddBtn" class="btn btn-primary btn-sm">
+						<span><i class="fas fa-plus-circle"></i></span> Add
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
 
-<!-- Fabrics Search Modal -->
-<div class="modal fade" id="fabricsModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Accessories Search Modal -->
+<div class="modal fade" id="accessoriesModal" tabindex="-1"
+	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="itemSearch" type="text" class="form-control"
-						placeholder="Fabrics Search" aria-label="Recipient's username"
+						placeholder="Accessories Search" aria-label="Recipient's username"
 						aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -451,11 +435,11 @@
 						<tr>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics</th>
+							<th>Accessories</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsList">
+					<tbody id="accessoriesList">
 
 					</tbody>
 				</table>
@@ -468,4 +452,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-receive.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/accessories-receive.js"></script>

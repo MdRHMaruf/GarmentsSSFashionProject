@@ -10,7 +10,7 @@
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
         
         <property name="hibernate.connection.password">Cursor777</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://Cursor-PC5:1433</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://192.168.0.110:1433</property>
         <property name="hibernate.connection.databaseName">SSFashionSpringProject</property>
         <property name="hibernate.connection.username">sa</property>
         

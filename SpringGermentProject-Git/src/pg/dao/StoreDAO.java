@@ -93,8 +93,8 @@ public interface StoreDAO {
 		AccessoriesIndent getAccessoriesIndentInfo(String autoId);
 		boolean submitAccessoriesReceive(AccessoriesReceive accessoriesReceive);
 		boolean editAccessoriesReceive(AccessoriesReceive accessoriesReceive);
-		String editReceiveRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteReceiveRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editReceiveSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteReceiveSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesReceive> getAccessoriesReceiveList();
 		AccessoriesReceive getAccessoriesReceiveInfo(String transectionId);
 
@@ -106,47 +106,47 @@ public interface StoreDAO {
 
 
 		//Accessories Return
-		List<AccessoriesSize> getAccessoriesRollListBySupplier(String supplierId);
+		List<AccessoriesSize> getAccessoriesSizeListBySupplier(String supplierId);
 		boolean submitAccessoriesReturn(AccessoriesReturn accessoriesReceive);
 		boolean editAccessoriesReturn(AccessoriesReturn accessoriesReceive);
-		String editReturnRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteReturnRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editReturnSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteReturnSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesReturn> getAccessoriesReturnList();
 		AccessoriesReturn getAccessoriesReturnInfo(String returnTransectionId);
 		AccessoriesReceive getAccessoriesReceiveInfoForReturn(String transectionId);
 
 
 		//Accessories Issue
-		List<AccessoriesSize> getAvailableAccessoriesRollListInDepartment(String departmentId);
+		List<AccessoriesSize> getAvailableAccessoriesSizeListInDepartment(String departmentId);
 		boolean submitAccessoriesIssue(AccessoriesIssue accessoriesIssue);
 		boolean editAccessoriesIssue(AccessoriesIssue accessoriesIssue);
-		String editIssuedRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteIssuedRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editIssuedSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteIssuedSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesIssue> getAccessoriesIssueList();
 		AccessoriesIssue getAccessoriesIssueInfo(String issueTransectionId);
 
 		//Accessories Issue Return
-		List<AccessoriesSize> getIssuedAccessoriesRollListInDepartment(String departmentId,String returnDepartmentId);
+		List<AccessoriesSize> getIssuedAccessoriesSizeListInDepartment(String departmentId,String returnDepartmentId);
 		boolean submitAccessoriesIssueReturn(AccessoriesIssueReturn accessoriesIssueReturn);
 		boolean editAccessoriesIssueReturn(AccessoriesIssueReturn accessoriesIssueReturn);
-		String editIssueReturndRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteIssueReturndRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editIssueReturndSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteIssueReturndSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesIssueReturn> getAccessoriesIssueReturnList();
 		AccessoriesIssueReturn getAccessoriesIssueReturnInfo(String issueReturnTransectionId);
 
 		//Accessories TransferOut
 		boolean submitAccessoriesTransferOut(AccessoriesTransferOut accessoriesTransferOut);
 		boolean editAccessoriesTransferOut(AccessoriesTransferOut accessoriesTransferOut);
-		String editTransferOutdRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteTransferOutdRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editTransferOutdSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteTransferOutdSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesTransferOut> getAccessoriesTransferOutList();
 		AccessoriesTransferOut getAccessoriesTransferOutInfo(String issueTransectionId);
 
 		//Accessories TransferIn
 		boolean submitAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn);
 		boolean editAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn);
-		String editTransferIndRollInTransaction(AccessoriesSize accessoriesRoll);
-		String deleteTransferIndRollFromTransaction(AccessoriesSize accessoriesRoll);
+		String editTransferIndSizeInTransaction(AccessoriesSize accessoriesSize);
+		String deleteTransferIndSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesTransferIn> getAccessoriesTransferInList();
 		AccessoriesTransferIn getAccessoriesTransferInInfo(String issueTransectionId);
 

@@ -615,22 +615,22 @@ public class StoreController {
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/deleteReceiveRollFromTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject deleteReceiveRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/deleteReceiveSizeFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteReceiveSizeFromTransaction(AccessoriesSize accessoriesRoll) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-				objmain.put("result", storeService.deleteReceiveRollFromTransaction(accessoriesRoll));
+				objmain.put("result", storeService.deleteReceiveSizeFromTransaction(accessoriesRoll));
 			
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/editReceiveRollInTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject editReceiveRollInTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/editReceiveSizeInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editReceiveSizeInTransaction(AccessoriesSize accessoriesRoll) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-			objmain.put("result", storeService.editReceiveRollInTransaction(accessoriesRoll));
+			objmain.put("result", storeService.editReceiveSizeInTransaction(accessoriesRoll));
 			
 			return objmain;
 		}
@@ -649,7 +649,6 @@ public class StoreController {
 			mainObject.put("accessoriesReceive",accessoriesReceive);
 			return mainObject;
 		}
-
 
 		//Accessories Quality Control
 		@RequestMapping(value = "/accessories_quality_control",method=RequestMethod.GET)
@@ -708,11 +707,11 @@ public class StoreController {
 			return view; 
 		}
 		
-		@RequestMapping(value = "/getAccessoriesRollList", method = RequestMethod.GET)
-		public JSONObject getAccessoriesRollList(String supplierId) {
+		@RequestMapping(value = "/getAccessoriesSizeList", method = RequestMethod.GET)
+		public JSONObject getAccessoriesSizeList(String supplierId) {
 			JSONObject mainObject = new JSONObject();
-			List<AccessoriesSize> accessoriesRollList = storeService.getAccessoriesRollListBySupplier(supplierId);
-			mainObject.put("accessoriesRollList",accessoriesRollList);
+			List<AccessoriesSize> accessoriesSizeList = storeService.getAccessoriesSizeListBySupplier(supplierId);
+			mainObject.put("accessoriesSizeList",accessoriesSizeList);
 			return mainObject;
 		}
 		
@@ -740,22 +739,22 @@ public class StoreController {
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/deleteReturnRollFromTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject deleteReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/deleteReturnSizeFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteReturnSizeFromTransaction(AccessoriesSize accessoriesSize) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-				objmain.put("result", storeService.deleteReturnRollFromTransaction(accessoriesRoll));
+				objmain.put("result", storeService.deleteReturnSizeFromTransaction(accessoriesSize));
 			
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/editReturnRollInTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject editReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/editReturnSizeInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editReturnSizeInTransaction(AccessoriesSize accessoriesSize) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-			objmain.put("result", storeService.editReturnRollInTransaction(accessoriesRoll));
+			objmain.put("result", storeService.editReturnSizeInTransaction(accessoriesSize));
 			
 			return objmain;
 		}
@@ -792,11 +791,11 @@ public class StoreController {
 			return view; 
 		}
 		
-		@RequestMapping(value = "/getAvailableAccessoriesRollList", method = RequestMethod.GET)
-		public JSONObject getAvailableAccessoriesRollList(String departmentId) {
+		@RequestMapping(value = "/getAvailableAccessoriesSizeList", method = RequestMethod.GET)
+		public JSONObject getAvailableAccessoriesSizeList(String departmentId) {
 			JSONObject mainObject = new JSONObject();
-			List<AccessoriesSize> accessoriesRollList = storeService.getAvailableAccessoriesRollListInDepartment(departmentId);
-			mainObject.put("accessoriesRollList",accessoriesRollList);
+			List<AccessoriesSize> accessoriesSizeList = storeService.getAvailableAccessoriesSizeListInDepartment(departmentId);
+			mainObject.put("accessoriesSizeList",accessoriesSizeList);
 			return mainObject;
 		}
 		
@@ -824,22 +823,22 @@ public class StoreController {
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/deleteIssueRollFromTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject deleteIssueRollFromTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/deleteIssueSizeFromTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject deleteIssueSizeFromTransaction(AccessoriesSize accessoriesSize) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-				objmain.put("result", storeService.deleteIssuedRollFromTransaction(accessoriesRoll));
+				objmain.put("result", storeService.deleteIssuedSizeFromTransaction(accessoriesSize));
 			
 			return objmain;
 		}
 		
-		@RequestMapping(value = "/editIssueRollInTransaction",method=RequestMethod.GET)
-		public @ResponseBody JSONObject editIssueRollInTransaction(AccessoriesSize accessoriesRoll) {
+		@RequestMapping(value = "/editIssueSizeInTransaction",method=RequestMethod.GET)
+		public @ResponseBody JSONObject editIssueSizeInTransaction(AccessoriesSize accessoriesSize) {
 			System.out.println("it'Execute");
 			JSONObject objmain = new JSONObject();
 			
-			objmain.put("result", storeService.editIssuedRollInTransaction(accessoriesRoll));
+			objmain.put("result", storeService.editIssuedSizeInTransaction(accessoriesSize));
 			
 			return objmain;
 		}
@@ -869,11 +868,11 @@ public class StoreController {
 				return view; 
 			}
 			
-			@RequestMapping(value = "/getIssuedAccessoriesRollList", method = RequestMethod.GET)
-			public JSONObject getIssuedAccessoriesRollList(String departmentId,String returnDepartmentId) {
+			@RequestMapping(value = "/getIssuedAccessoriesSizeList", method = RequestMethod.GET)
+			public JSONObject getIssuedAccessoriesSizeList(String departmentId,String returnDepartmentId) {
 				JSONObject mainObject = new JSONObject();
-				List<AccessoriesSize> accessoriesRollList = storeService.getIssuedAccessoriesRollListInDepartment(departmentId,returnDepartmentId);
-				mainObject.put("accessoriesRollList",accessoriesRollList);
+				List<AccessoriesSize> accessoriesSizeList = storeService.getIssuedAccessoriesSizeListInDepartment(departmentId,returnDepartmentId);
+				mainObject.put("accessoriesSizeList",accessoriesSizeList);
 				return mainObject;
 			}
 			
@@ -902,22 +901,22 @@ public class StoreController {
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/deleteIssueReturnRollFromTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject deleteIssueReturnRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/deleteIssueReturnSizeFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteIssueReturnSizeFromTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-					objmain.put("result", storeService.deleteIssueReturndRollFromTransaction(accessoriesRoll));
+					objmain.put("result", storeService.deleteIssueReturndSizeFromTransaction(accessoriesSize));
 				
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/editIssueReturnRollInTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject editIssueReturnRollInTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/editIssueReturnSizeInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editIssueReturnSizeInTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-				objmain.put("result", storeService.editIssueReturndRollInTransaction(accessoriesRoll));
+				objmain.put("result", storeService.editIssueReturndSizeInTransaction(accessoriesSize));
 				
 				return objmain;
 			}
@@ -969,22 +968,22 @@ public class StoreController {
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/deleteTransferOutRollFromTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject deleteTransferOutRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/deleteTransferOutSizeFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteTransferOutSizeFromTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-					objmain.put("result", storeService.deleteTransferOutdRollFromTransaction(accessoriesRoll));
+					objmain.put("result", storeService.deleteTransferOutdSizeFromTransaction(accessoriesSize));
 				
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/editTransferOutRollInTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject editTransferOutRollInTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/editTransferOutSizeInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editTransferOutSizeInTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-				objmain.put("result", storeService.editTransferOutdRollInTransaction(accessoriesRoll));
+				objmain.put("result", storeService.editTransferOutdSizeInTransaction(accessoriesSize));
 				
 				return objmain;
 			}
@@ -1037,22 +1036,22 @@ public class StoreController {
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/deleteTransferInRollFromTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject deleteTransferInRollFromTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/deleteTransferInSizeFromTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject deleteTransferInSizeFromTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-					objmain.put("result", storeService.deleteTransferIndRollFromTransaction(accessoriesRoll));
+					objmain.put("result", storeService.deleteTransferIndSizeFromTransaction(accessoriesSize));
 				
 				return objmain;
 			}
 			
-			@RequestMapping(value = "/editTransferInRollInTransaction",method=RequestMethod.GET)
-			public @ResponseBody JSONObject editTransferInRollInTransaction(AccessoriesSize accessoriesRoll) {
+			@RequestMapping(value = "/editTransferInSizeInTransaction",method=RequestMethod.GET)
+			public @ResponseBody JSONObject editTransferInSizeInTransaction(AccessoriesSize accessoriesSize) {
 				System.out.println("it'Execute");
 				JSONObject objmain = new JSONObject();
 				
-				objmain.put("result", storeService.editTransferIndRollInTransaction(accessoriesRoll));
+				objmain.put("result", storeService.editTransferIndSizeInTransaction(accessoriesSize));
 				
 				return objmain;
 			}

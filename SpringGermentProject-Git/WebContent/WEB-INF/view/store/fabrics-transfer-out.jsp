@@ -37,10 +37,6 @@
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
 			<h5 class="text-center" style="display: inline;">Fabrics Transfer Out</h5>
-			<button type="button" class="btn btn-outline-dark btn-sm"
-				data-toggle="modal" data-target="#searchModal">
-				<i class="fa fa-search"></i>
-			</button>
 		</header>
 		<hr class="my-1">
 		<div class="row">
