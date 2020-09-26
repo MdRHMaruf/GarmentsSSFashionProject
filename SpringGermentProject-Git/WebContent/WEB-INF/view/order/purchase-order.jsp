@@ -358,7 +358,7 @@
 								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchPurchaseOrder(${po.poNo})"> </i></td>
 								<td><i class="fa fa-print" style="cursor: pointer;"
-									onclick="showPreview(${po.poNo},${po.supplierId},${po.type})"> </i></td>
+									onclick="showPreview('${po.poNo}','${po.supplierId}','${po.type}')"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

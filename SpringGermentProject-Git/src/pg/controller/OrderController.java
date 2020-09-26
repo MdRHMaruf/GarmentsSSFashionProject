@@ -1318,18 +1318,16 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}")
-	public @ResponseBody ModelAndView getPurchaseOrderReport(@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
+	public @ResponseBody ModelAndView getPurchaseOrderReport(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
 		
 		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
-		view.addObject("poNo",poNo);
-		view.addObject("supplierId",supplierId);
-		view.addObject("type",type);
+		System.out.println("null test"+poNo+" "+supplierId+" "+type);
+		map.addAttribute("poNo",poNo);
+		map.addAttribute("supplierId",supplierId);
+		map.addAttribute("type",type);
 		
 		return view;
 		
 	}
 	
-	
-	
-
 }

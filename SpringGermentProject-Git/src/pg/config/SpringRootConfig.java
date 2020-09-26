@@ -18,10 +18,9 @@ public class SpringRootConfig {
        
        @Bean
        public BasicDataSource getDataSource(){
-       
            BasicDataSource bds=new BasicDataSource();
            bds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-           bds.setUrl("jdbc:sqlserver://localhost;databaseName =SSFashionSpringProject");
+           bds.setUrl("jdbc:sqlserver://192.168.0.110:1433;databaseName =SSFashionSpringProject");
            bds.setUsername("sa");
            bds.setPassword("Cursor777");
            bds.setMaxTotal(2);
