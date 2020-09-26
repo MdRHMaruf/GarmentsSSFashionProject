@@ -28,6 +28,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
+import pg.orderModel.fileUpload;
 import pg.orderModel.accessorieIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
@@ -1822,6 +1823,52 @@ public class OrderDAOImpl implements OrderDAO{
 		return query;
 
 	}
+	
+	@Override
+	public List<accessorieIndent> getPostedAccessoriesIndent() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.AINo,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName from tbAccessoriesIndent a where AiNo IS NOT NULL group by a.AINo,a.PurchaseOrder,a.styleid,a.Itemid";
+			System.out.println(" max ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				query.add(new accessorieIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
+
+			}
+
+
+
+			tx.commit();
+
+			return query;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return query;
+	}
 
 	@Override
 	public List<commonModel> Styles(String po) {
@@ -2017,7 +2064,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,(select sizeName from tbStyleSize where id=a.size) as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.PurchaseOrder='"+po+"' and a.StyleId='"+style+"' and a.ItemId='"+itemname+"' and a.ColorId='"+itemcolor+"'";
+			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,ISNULL((select sizeName from tbStyleSize where id=a.size),'') as SizeName,a.RequireUnitQty from tbAccessoriesIndent a where a.PurchaseOrder='"+po+"' and a.StyleId='"+style+"' and a.ItemId='"+itemname+"' and a.ColorId='"+itemcolor+"'";
 			System.out.println(" max ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -2493,6 +2540,49 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 
+		return inserted;
+	}
+	
+	@Override
+	public boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
+			String installAccessories, String forAccessories) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		boolean inserted=false;
+
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+
+			String sql="insert into tbAccessoriesIndent (styleid,PurchaseOrder,ItemId,ColorId,ShippingMarks,accessoriesItemId,accessoriesSize,SizeSorting,size,PerUnit,TotalBox,OrderQty,QtyInDozen,ReqPerPices,ReqPerDoz,DividedBy,PercentageExtra,PercentageExtraQty,TotalQty,UnitId,RequireUnitQty,IndentColorId,IndentBrandId) select styleid,PurchaseOrder,ItemId,ColorId,ShippingMarks,'"+forAccessories+"',accessoriesSize,SizeSorting,size,PerUnit,TotalBox,OrderQty,QtyInDozen,ReqPerPices,ReqPerDoz,DividedBy,PercentageExtra,PercentageExtraQty,TotalQty,UnitId,RequireUnitQty,IndentColorId,IndentBrandId from tbAccessoriesIndent where styleid='"+styleId+"' and PurchaseOrder='"+purchaseOrder+"' and Itemid='"+itemId+"' and ColorId='"+colorId+"' and accessoriesItemId='"+installAccessories+"'";
+
+			System.out.println(sql);
+			session.createSQLQuery(sql).executeUpdate();
+			
+			String updateSql="update tbAccessoriesIndent set IndentDate=CURRENT_TIMESTAMP,IndentTime=CURRENT_TIMESTAMP,IndentPostBy='"+userId+"' where styleid='"+styleId+"' and PurchaseOrder='"+purchaseOrder+"' and Itemid='"+itemId+"' and ColorId='"+colorId+"' and accessoriesItemId='"+forAccessories+"'";
+			System.out.println(updateSql);
+			session.createSQLQuery(updateSql).executeUpdate();
+			
+			inserted=true;
+
+			tx.commit();
+
+			return inserted;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
 		return inserted;
 	}
 
@@ -2986,8 +3076,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 			
-			String sql="insert into TbSampleRequisitionDetails (BuyerId,purchaseOrder,StyleId,ItemId,ColorId,SampleTypeId,sizeGroupId,EntryTime,UserId) "
-					+ "values('"+v.getBuyerId()+"','"+v.getPurchaseOrder()+"','"+v.getStyleId()+"','"+v.getItemId()+"','"+v.getColorId()+"','"+v.getSampleId()+"','"+v.getSizeGroupId()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+			String sql="insert into TbSampleRequisitionDetails (BuyerId,purchaseOrder,StyleId,ItemId,ColorId,SampleTypeId,sizeGroupId,Date,EntryTime,UserId) "
+					+ "values('"+v.getBuyerId()+"','"+v.getPurchaseOrder()+"','"+v.getStyleId()+"','"+v.getItemId()+"','"+v.getColorId()+"','"+v.getSampleId()+"','"+v.getSizeGroupId()+"',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
 			String itemAutoId ="";
@@ -3710,5 +3800,180 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+
+	@Override
+	public boolean fileUpload(String Filename, String pcname, String ipaddress,String purpose,String user) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			if (!duplicateFile(user, Filename)) {
+				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP)";
+				session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			}
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
 	
+	
+	public boolean duplicateFile(String user, String filename) {
+		
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from TbUploadFileLogInfo where FileName like '"+filename+"' and uploadby='"+user+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();							
+				//dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				exists=true;
+			}
+
+	
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return exists;
+	
+		
+	}
+
+	@Override
+	public List<pg.orderModel.fileUpload> findfiles(String start, String end, String user) {
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<pg.orderModel.fileUpload> dataList=new ArrayList<pg.orderModel.fileUpload>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="SELECT  autoid, FileName,(select username from Tblogin where id=a.UploadBy) as UploadBy, UploadIp, UploadMachine, Purpose,convert(varchar, UploadDate, 23) as UploadDate, convert(varchar, UploadEntryTime, 25) as uploaddatetime ,isnull((select username from Tblogin where id=a.DownloadBy),'') as DownloadBy, isnull(DownloadIp,'') as downloadip,isnull( DownloadMachine,'') as downloadmachine,isnull(convert(varchar, DownloadDate, 23),'') as DownloadDate, isnull(convert(varchar, DownloadEntryTime, 25),'') as downloaddatetime  FROM  TbUploadFileLogInfo a where UploadBy='"+user+"' and a.UploadDate between '"+start+"' and '"+end+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();							
+				dataList.add(new fileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
+				exists=true;
+			}
+
+	
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean fileDownload(String filename, String user, String ip,String computername) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+		
+				String sql="update TbUploadFileLogInfo set DownloadBy='"+user+"',DownloadIp='"+ip+"',DownloadMachine='"+computername+"',DownloadDate=convert(varchar, getdate(), 23),DownloadEntryTime=CURRENT_TIMESTAMP where filename like '%"+filename+"%'";
+				session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			}
+		
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deletefile(String filename) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+		
+				String sql="delete from TbUploadFileLogInfo where filename like '%"+filename+"%' and DownloadBy is null and DownloadIp is null and DownloadMachine is null and DownloadDate is null and DownloadEntryTime is null";
+				session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			}
+		
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+
 }

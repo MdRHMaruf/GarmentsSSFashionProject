@@ -1,5 +1,28 @@
 var itemIdForSet = 0;
 var particularItemIdForSet = 0;
+
+function itemWiseCostingReport(styleId,itemId){
+	
+	
+	$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './costingReportInfo',
+        data:{
+        	styleId:styleId,
+        	itemId:itemId
+        	},
+        success: function (data) {
+          if (data== "Success") {
+      		var url = "printCostingReport";
+    		window.open(url, '_blank');
+
+          }
+        }
+      });
+	
+}
+
 function styleWiseItemLoad() {
   var styleId = $("#styleName").val();
 

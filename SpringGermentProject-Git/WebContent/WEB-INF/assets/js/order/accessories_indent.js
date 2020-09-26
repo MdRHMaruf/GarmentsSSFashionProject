@@ -11,6 +11,108 @@ $('#size').prop('disabled', true);
 $('#btnSave').prop('disabled', false);
 $('#btnEdit').prop('disabled', true);
 
+function searchAccessoriesIndent(aiNo){
+	$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './accessoriesIndentInfo',
+        data:{
+        	aiNo:aiNo
+        	},
+        success: function (data) {
+          if (data== "Success") {
+      		var url = "printAccessoriesIndent";
+    		window.open(url, '_blank');
+
+          }
+        }
+      });
+	
+}
+
+function btnInstallEvent(){
+	var purchaseOrder=$("#purchaseOrder option:selected").text();
+	var userId=$("#user_hidden").val();
+	var styleId=$("#styleNo").val();
+	var itemId = $("#itemName").val();
+	var colorId = $("#colorName").val();
+	var installAccessories = $("#sameAsAccessories").val();
+	var forAccessories = $("#accessoriesItem").val();
+
+	if(purchaseOrder!=''){
+		if(styleId!='0'){
+			if(itemId!='0'){
+				if(colorId!='0'){
+					if(installAccessories!='0'){
+						if(forAccessories!='0'){
+							$.ajax({
+								type: 'POST',
+								dataType: 'json',
+								url: './InstallDataAsSameParticular',
+								data: {
+									userId:userId,
+									purchaseOrder:purchaseOrder,
+									styleId:styleId,
+									itemId:itemId,
+									colorId:colorId,
+									installAccessories:installAccessories,
+									forAccessories:forAccessories
+								},
+								success: function (data) {
+
+							        $("#dataList").empty();
+							        $("#dataList").append(AccessoriesDataShowInTable(data.result));
+
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+									//alert("Server Error");
+									if (jqXHR.status === 0) {
+										alert('Not connect.\n Verify Network.');
+									} else if (jqXHR.status == 404) {
+										alert('Requested page not found.');
+									} else if (jqXHR.status == 500) {
+										alert('Internal Server Error.');
+									} else if (errorThrown === 'parsererror') {
+										alert('Requested JSON parse failed');
+									} else if (errorThrown === 'timeout') {
+										alert('Time out error');
+									} else if (errorThrown === 'abort') {
+										alert('Ajax request aborted ');
+									} else {
+										alert('Uncaught Error.\n' + jqXHR.responseText);
+									}
+
+								}
+							});
+						}
+						else{
+							alert("Provide Accessories Name");
+						}
+					}
+					else{
+						alert("Provide Accessories Name");
+					}
+
+				}
+				else{
+					alert("Provide Color Name");
+				}
+			}
+			else{
+				alert("Provide Item Name");
+			}
+		}
+		else{
+			alert("Provide Style No");
+		}
+	}
+	else{
+		alert("Provide Purchase Order");
+	}
+	
+
+}
+
 function sizeReqCheck(){
 
 	var checkvalue = $("#sizeReqCheck").is(':checked') ? 'checked' : 'unchecked';

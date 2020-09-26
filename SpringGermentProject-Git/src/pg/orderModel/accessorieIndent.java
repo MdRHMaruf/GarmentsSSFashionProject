@@ -30,7 +30,10 @@ public class accessorieIndent {
 	String requiredUnitQty;
 	String indentBrandId;
 	String indentColorId;
+	String aiNo;
+	String purchaseOrder;
 	
+	String styleNo;
 	public accessorieIndent() {
 		
 	}
@@ -75,7 +78,12 @@ public class accessorieIndent {
 		this.requiredUnitQty=requiredUnitQty;
 	}
 	
-	
+	public accessorieIndent(String AINo,String PurchaseOrder,String StyleNo,String ItemName) {
+		this.aiNo=AINo;
+		this.purchaseOrder=PurchaseOrder;
+		this.styleNo=StyleNo;
+		this.itemname=ItemName;
+	}
 	
 	public String getIndentBrandId() {
 		return indentBrandId;
@@ -264,6 +272,36 @@ public class accessorieIndent {
 	}
 	public void setAccessoriescolor(String accessoriescolor) {
 		this.accessoriescolor = accessoriescolor;
+	}
+
+
+	public String getAiNo() {
+		return aiNo;
+	}
+
+
+	public void setAiNo(String aiNo) {
+		this.aiNo = aiNo;
+	}
+
+
+	public String getPurchaseOrder() {
+		return purchaseOrder;
+	}
+
+
+	public void setPurchaseOrder(String purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+
+
+	public String getStyleNo() {
+		return styleNo;
+	}
+
+
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
 	}
 	
 	

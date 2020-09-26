@@ -72,7 +72,7 @@
 								<div class="modal-body">
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Buyer
+										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Buyer
 											Name</label>
 										<div class="col-sm-4">
 											<input id="buyer_name" type="text" class="form-control">
@@ -95,7 +95,7 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Buyer
+										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Buyer
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="5" cols="5" id="buyer_address"
@@ -118,7 +118,7 @@
 												class="form-control" placeholder="Enter text here"></textarea>
 										</div>
 
-										<label class="col-sm-2">Country</label>
+										<label class="col-sm-2"><span id="redwarning" style="color:red">*</span>Country</label>
 										<div class="col-sm-4">
 											<%--  <select class="form-control">
 	                         <option>-- Select --</option>
@@ -136,7 +136,7 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Telphone</label>
+										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Telphone</label>
 										<div class="col-sm-4">
 											<input id="telphone" type="text" class="form-control">
 										</div>
@@ -153,7 +153,7 @@
 											<input id="fax" type="text" class="form-control">
 										</div>
 
-										<label style="text-align: left;" class="col-sm-2">E-mail</label>
+										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>E-mail</label>
 										<div class="col-sm-5">
 											<input id="e_mail" type="text" class="form-control">
 										</div>

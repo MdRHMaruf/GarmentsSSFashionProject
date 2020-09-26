@@ -482,4 +482,41 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getIncomepleteSampleRequisitionItemList(userId);
 	}
 
+	@Override
+	public boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user) {
+		// TODO Auto-generated method stub
+		return orderDAO.fileUpload(uploadFileName, computerName, string, purpose, user);
+	}
+
+	@Override
+	public List<pg.orderModel.fileUpload> findfiles(String start, String end, String user) {
+		// TODO Auto-generated method stub
+		return orderDAO.findfiles(start, end, user);
+	}
+
+	@Override
+	public boolean fileDownload(String fileName, String user, String string, String computerName) {
+		// TODO Auto-generated method stub
+		return orderDAO.fileDownload(fileName, user, string, computerName);
+	}
+
+	@Override
+	public boolean deletefile(String filename) {
+		// TODO Auto-generated method stub
+		return orderDAO.deletefile(filename);
+	}
+
+	@Override
+	public boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
+			String installAccessories, String forAccessories) {
+		// TODO Auto-generated method stub
+		return orderDAO.InstallDataAsSameParticular(userId, purchaseOrder, styleId, itemId, colorId, installAccessories, forAccessories);
+	}
+
+	@Override
+	public List<accessorieIndent> getPostedAccessoriesIndent() {
+		// TODO Auto-generated method stub
+		return orderDAO.getPostedAccessoriesIndent();
+	}
+
 }
