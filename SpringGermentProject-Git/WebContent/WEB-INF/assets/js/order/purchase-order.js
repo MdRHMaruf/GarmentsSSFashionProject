@@ -361,13 +361,31 @@ function purchaseOrderEdit(){
 }
 
 
+
+
 function refreshAction() {
   location.reload();
   
 }
-$("#btnPreview").click(()=>{
-  console.log("Supplier = "+getOptions("supplierName"));
-  console.log("Currency = "+getOptions("currency"));
+function showPreview(poNo,supplierId,type){
+  
+  var url = "getPurchaseOrderReport/"+poNo+"/"+supplierId+"/"+type;
+  window.open(url, '_blank');
+
+  
+  // $.ajax({
+  //   type: 'GET',
+  //   dataType: 'json',
+  //   url: './getPurchaseOrderReport',
+  //   data:{poNo:cuttingEntryId},
+  //   success: function (data) {
+  //     if (data== "Sucess") {
+  //     var url = "printCuttingInformationReport";
+  //     window.open(url, '_blank');
+
+  //     }
+  //   }
+  // });
 });
 
 function getOptions(elementId){
@@ -420,6 +438,8 @@ function searchPurchaseOrder(poNo){
         setSupplierValue(purchaseOrder.itemList);
         $("#btnPOSubmit").prop("disabled", true);
         $("#btnPOEdit").prop("disabled", false);
+        $("#btnPreview").prop("disabled", false);
+        
 
         $('#searchModal').modal('hide');
 

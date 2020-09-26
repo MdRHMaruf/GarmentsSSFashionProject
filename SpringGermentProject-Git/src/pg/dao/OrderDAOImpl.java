@@ -3461,18 +3461,67 @@ public class OrderDAOImpl implements OrderDAO{
 	public List<PurchaseOrder> getPurchaseOrderSummeryList() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
+		PurchaseOrder tempPo;
 		List<PurchaseOrder> dataList=new ArrayList<PurchaseOrder>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
 			String sql;
 
-			sql=" select pono,(select convert(varchar,orderDate,103))as orderDate from tbPurchaseOrderSummary order by pono desc";
+			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,fi.supplierid,s.name \r\n" + 
+					" from tbPurchaseOrderSummary pos\r\n" + 
+					"join tbFabricsIndent fi\r\n" + 
+					" on pos.pono = fi.pono \r\n" + 
+					" left join tbSupplier s\r\n" + 
+					" on fi.supplierid = s.id\r\n" + 
+					" order by pos.pono desc";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrder(element[0].toString(),element[1].toString()));
+				tempPo = new PurchaseOrder(element[0].toString(),element[1].toString());
+				tempPo.setSupplierId(element[2].toString());
+				tempPo.setSupplierName(element[3].toString());
+				tempPo.setType("Fabrics");
+				dataList.add(tempPo);
+			}
+			
+			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,ai.supplierid,s.name \r\n" + 
+					" from tbPurchaseOrderSummary pos\r\n" + 
+					"join tbAccessoriesIndent ai\r\n" + 
+					" on pos.pono = ai.pono \r\n" + 
+					" left join tbSupplier s\r\n" + 
+					" on ai.supplierid = s.id\r\n" + 
+					" group by pos.pono,orderDate,ai.supplierid,s.name\r\n" + 
+					" order by pos.pono desc";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempPo = new PurchaseOrder(element[0].toString(),element[1].toString());
+				tempPo.setSupplierId(element[2].toString());
+				tempPo.setSupplierName(element[3].toString());
+				tempPo.setType("Accessories");
+				dataList.add(tempPo);
+			}
+			
+			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,aif.supplierid,s.name \r\n" + 
+					" from tbPurchaseOrderSummary pos\r\n" + 
+					"join tbAccessoriesIndentForCarton aif\r\n" + 
+					" on pos.pono = aif.pono \r\n" + 
+					" left join tbSupplier s\r\n" + 
+					" on aif.supplierid = s.id\r\n" + 
+					" group by pos.pono,orderDate,aif.supplierid,s.name\r\n" + 
+					" order by pos.pono desc";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempPo = new PurchaseOrder(element[0].toString(),element[1].toString());
+				tempPo.setSupplierId(element[2].toString());
+				tempPo.setSupplierName(element[3].toString());
+				tempPo.setType("curton");
+				dataList.add(tempPo);
 			}
 
 			tx.commit();

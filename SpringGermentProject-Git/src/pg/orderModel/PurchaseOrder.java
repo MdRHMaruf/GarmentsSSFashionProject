@@ -20,6 +20,9 @@ public class PurchaseOrder {
 	List<PurchaseOrderItem> itemList;
 	String userId;
 	
+	String supplierId;
+	String supplierName;
+	String type;
 	public PurchaseOrder() {}
 	
 	public PurchaseOrder(String poNo,String orderDate) {
@@ -163,6 +166,30 @@ public class PurchaseOrder {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getSupplierId() {
+		return supplierId;
+	}
+
+	public void setSupplierId(String supplierId) {
+		this.supplierId = supplierId;
+	}
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

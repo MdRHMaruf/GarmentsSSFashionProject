@@ -1317,5 +1317,19 @@ public class OrderController {
 		return objmain;
 	}
 	
+	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}")
+	public @ResponseBody ModelAndView getPurchaseOrderReport(@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
+		
+		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
+		view.addObject("poNo",poNo);
+		view.addObject("supplierId",supplierId);
+		view.addObject("type",type);
+		
+		return view;
+		
+	}
+	
+	
+	
 
 }

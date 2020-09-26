@@ -78,10 +78,10 @@
 				<div class="form-group mb-0  row">
 					<label for="deliveryTo"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Delivery
-						To</label> <select id="deliveryTo"
-						class="selectpicker col-md-9 px-0" data-live-search="true"
+						To</label> <select id="deliveryTo" class="selectpicker col-md-9 px-0"
+						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="deliveryTo" value="0">--- Select --- </option>
+						<option id="deliveryTo" value="0">--- Select ---</option>
 						<c:forEach items="${factoryList}" var="factory">
 							<option id="deliveryTo" value="${factory.factoryId}">${factory.factoryName}</option>
 						</c:forEach>
@@ -91,10 +91,10 @@
 				<div class="form-group mb-0  row">
 					<label for="orderBy"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Order By</label>
-					<select id="orderBy"
-						class="selectpicker col-md-9 px-0" data-live-search="true"
+					<select id="orderBy" class="selectpicker col-md-9 px-0"
+						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="orderBy" value="0">--- Select --- </option>
+						<option id="orderBy" value="0">--- Select ---</option>
 						<c:forEach items="${merchendiserList}" var="merchandiser">
 							<option id="orderBy" value="${merchandiser.merchendiserId}">${merchandiser.name}</option>
 						</c:forEach>
@@ -104,10 +104,10 @@
 				<div class="form-group mb-0  row">
 					<label for="billTo"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Bill To</label>
-					<select id="billTo"
-						class="selectpicker col-md-9 px-0" data-live-search="true"
+					<select id="billTo" class="selectpicker col-md-9 px-0"
+						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="billTo" value="0">--- Select --- </option>
+						<option id="billTo" value="0">--- Select ---</option>
 						<c:forEach items="${factoryList}" var="factory">
 							<option id="billTo" value="${factory.factoryId}">${factory.factoryName}</option>
 						</c:forEach>
@@ -126,16 +126,18 @@
 				<div class="form-group mb-0  row">
 					<label for="paymentType"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Payment
-						Type</label> 
-						<select id="paymentType" 
+						Type</label> <select id="paymentType"
 						class="form-control-sm col-md-8 px-0">
 						<option id="paymentType" value="0">Select Payment Type</option>
-						<% 		
+						<%
 							int length = PaymentType.values().length;
-							for(int i=0;i<length;i++){			
+							for (int i = 0; i < length; i++) {
 						%>
-							<option id="paymentType" value="<%=PaymentType.values()[i].getType() %>"><%=PaymentType.values()[i].name()%></option>
-						<% }%>
+						<option id="paymentType"
+							value="<%=PaymentType.values()[i].getType()%>"><%=PaymentType.values()[i].name()%></option>
+						<%
+							}
+						%>
 					</select>
 
 				</div>
@@ -144,12 +146,14 @@
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
 					<select id="currency" class="form-control-sm col-md-8 px-0">
 						<option id="currency" value="0">Select Currency</option>
-						<% 
+						<%
 							length = Currency.values().length;
-							for(int i=0;i<length;i++){			
+							for (int i = 0; i < length; i++) {
 						%>
-							<option id="currency" value="<%=Currency.values()[i].getType() %>"><%=Currency.values()[i].name()%></option>
-						<% }%>
+						<option id="currency" value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+						<%
+							}
+						%>
 					</select>
 
 				</div>
@@ -158,8 +162,8 @@
 		<div class="row">
 			<div class="col-md-2 pr-0 pl-1">
 				<label for="styleNo" class="col-form-label-sm my-0 py-0">Style
-					No</label> <select id="styleNo"
-					onchange="typeWiseIndentItemLoad()" class="selectpicker col-md-12 px-0" data-live-search="true"
+					No</label> <select id="styleNo" onchange="typeWiseIndentItemLoad()"
+					class="selectpicker col-md-12 px-0" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
 					<option id="styleNo" value="0">Select Style</option>
 				</select>
@@ -178,8 +182,8 @@
 
 			<div class="col-md-3 pr-0 pl-1">
 				<label for="indentItem" class="col-form-label-sm my-0 py-0">Indent
-					Item</label> <select id="indentItem" 
-					class="selectpicker col-md-12 px-0" data-live-search="true"
+					Item</label> <select id="indentItem" class="selectpicker col-md-12 px-0"
+					data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
 					<option id="indentItem" value="0">--Select Indent Item--</option>
 				</select>
@@ -192,7 +196,8 @@
 					<select id="supplierName" class="selectpicker col-md-12"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="supplierName" value="0">--Select SupplierName--</option>
+						<option id="supplierName" value="0">--Select
+							SupplierName--</option>
 						<c:forEach items="${supplierList}" var="supplier">
 							<option id="supplierName" value="${supplier.supplierid}">${supplier.suppliername}</option>
 						</c:forEach>
@@ -213,8 +218,8 @@
 					</div>
 					<div class="col-md-4 pr-0 pl-1">
 
-						<button id="btnAdd" type="button" style="margin-top:1.3rem;" class="btn btn-primary btn-sm"
-							onclick="indentItemAdd()">
+						<button id="btnAdd" type="button" style="margin-top: 1.3rem;"
+							class="btn btn-primary btn-sm" onclick="indentItemAdd()">
 							<i class="fa fa-plus-circle"></i> Add
 						</button>
 					</div>
@@ -251,7 +256,7 @@
 						<c:forEach items="${fabricsIndentList}" var="indent"
 							varStatus="counter">
 							<tr>
-								
+
 								<td>${indent.styleName}</td>
 								<td>${indent.itemName}</td>
 								<td>${indent.itemColorName}</td>
@@ -307,10 +312,6 @@
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
-				<button id="btnPreview" type="button"
-					class="btn btn-primary btn-sm ml-1" disabled>
-					<i class="fa fa-print"></i> Preview
-				</button>
 			</div>
 		</div>
 	</div>
@@ -339,17 +340,25 @@
 					<thead>
 						<tr>
 							<th>Purchase Order No</th>
+							<th>Supplier Name</th>
 							<th>Date</th>
+							<th>Type</th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="purchaseOrderList">
-						<c:forEach items="${purchaseOrderList}" var="po" varStatus="counter">
-							<tr>
+						<c:forEach items="${purchaseOrderList}" var="po"
+							varStatus="counter">
+							<tr id="row-${counter.count}" data-supplierId="${po.supplierId}">
 								<td>${po.poNo}</td>
+								<td>${po.supplierName}</td>
 								<td>${po.orderDate}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
+								<td>${po.type}</td>
+								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchPurchaseOrder(${po.poNo})"> </i></td>
+								<td><i class="fa fa-print" style="cursor: pointer;"
+									onclick="showPreview(${po.poNo},${po.supplierId},${po.type})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
