@@ -46,21 +46,21 @@
 							</div>
 							<div class="form-group">
 								<label for="fabricsItemName">Factory Name:</label> 
-								    <select class="form-control" id="factoryname">
+								    <select class="form-control" id="factoryId">
 								   		 <option >Select Factory</option>
 								    	<c:forEach items="${factoryList}" var="factoryinfo" varStatus="counter">
 													
-										  <option  id="factoryname" value="${factoryinfo.factoryid}">${factoryinfo.factoryname}</option>
+										  <option  id="factoryId" value="${factoryinfo.factoryid}">${factoryinfo.factoryname}</option>
 
 										</c:forEach>
 								    </select>
 							</div>
 							<div class="form-group">
 								<label for="departmentname">Department:</label>
-								    <select class="form-control" id="departmentname">
+								    <select class="form-control" id="depId">
 								   		 <option>Select Deartment</option>
-										  <option id="departmentname" value="1">A</option>
-										  <option id="departmentname" value="2">B</option>
+										  <option id="depId" value="1">A</option>
+										  <option id="depId" value="2">B</option>
 								    </select>
 							</div>
 							<div class="form-group">

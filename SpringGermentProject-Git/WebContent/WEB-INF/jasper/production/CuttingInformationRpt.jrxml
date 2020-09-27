@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MainReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ad6d462e-55f6-4ddb-818a-46318f10b9f2">
-	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\CURSOR-3\\Desktop\\5-9-2020\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select b.BuyerId,b.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=b.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=b.ItemId) as ItemName,b.DepartmentId,b.LineId,b.CuttingNo,b.CuttingDate,a.CuttingEntryId,a.SizeGroupId from TbCuttingInformationDetails a join TbCuttingInformationSummary b on b.CuttingEntryId=a.CuttingEntryId where a.CuttingEntryId='5' group by a.SizeGroupId,b.BuyerId,b.PurchaseOrder,b.StyleId,b.ItemId,b.DepartmentId,b.LineId,b.CuttingNo,b.CuttingDate,a.CuttingEntryId"]]></defaultValueExpression>

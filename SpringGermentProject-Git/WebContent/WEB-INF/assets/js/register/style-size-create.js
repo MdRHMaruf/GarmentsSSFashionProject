@@ -183,6 +183,8 @@ function groupEditAction() {
 
             $("#groupTableList").empty();
             $("#groupTableList").append(drawGroupTable(data.result));
+            document.getElementById("btnGroupSave").disabled = false;
+            document.getElementById("btnGroupEdit").disabled = true;
 
           }
         }

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
+	<property name="ireport.zoom" value="1.9487171000000127"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="sql" class="java.lang.String">
+		<defaultValueExpression><![CDATA["select a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='3007' group by a.BuyerOrderId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId order by a.BuyerOrderId,a.sizeGroupId "]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FactoryName" class="java.lang.String"/>
+	<parameter name="FactoryTelePhone" class="java.lang.String"/>
+	<parameter name="FactoryMobile" class="java.lang.String"/>
+	<parameter name="FactoryFax" class="java.lang.String"/>
+	<parameter name="FactoryEmail" class="java.lang.String"/>
+	<parameter name="FactoryAddress" class="java.lang.String"/>
+	<parameter name="BuyerName" class="java.lang.String"/>
+	<parameter name="BuyerTelePhone" class="java.lang.String"/>
+	<parameter name="BuyerMobile" class="java.lang.String"/>
+	<parameter name="BuyerFax" class="java.lang.String"/>
+	<parameter name="BuyerEmail" class="java.lang.String"/>
+	<parameter name="BuyerAddress" class="java.lang.String"/>
+	<parameter name="CosingeAddress" class="java.lang.String"/>
+	<parameter name="NotifyTelePhone" class="java.lang.String"/>
+	<parameter name="NotifyMobile" class="java.lang.String"/>
+	<parameter name="NotifyFax" class="java.lang.String"/>
+	<parameter name="NotifyEmail" class="java.lang.String"/>
+	<parameter name="NotifyAddress" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="BuyerOrderId" class="java.lang.String"/>
+	<field name="PurchaseOrder" class="java.lang.String"/>
+	<field name="CustomerOrder" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="ShippingMarks" class="java.lang.String"/>
+	<field name="SizeReg" class="java.lang.String"/>
+	<field name="StyleNo" class="java.lang.String"/>
+	<field name="itemname" class="java.lang.String"/>
+	<field name="sizeGroupId" class="java.lang.String"/>
+	<group name="ItemGp">
+		<groupExpression><![CDATA[$F{itemname}]]></groupExpression>
+		<groupHeader>
+			<band height="15">
+				<textField>
+					<reportElement x="369" y="1" width="186" height="13" uuid="30a6f7d5-2e09-41d9-aa07-67f362807e5a"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression><![CDATA[$F{itemname}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="7" y="0" width="787" height="1" uuid="a2f82a1d-c289-4c8c-bcb3-e09ae511d945"/>
+				</line>
+				<line>
+					<reportElement x="7" y="14" width="787" height="1" uuid="bdf4f450-bef8-4a1b-8e99-3a580da8c822"/>
+				</line>
+				<line>
+					<reportElement x="7" y="1" width="1" height="13" uuid="4b233506-26b7-46c6-bd9c-19dc41cea892"/>
+				</line>
+				<staticText>
+					<reportElement x="298" y="1" width="71" height="13" uuid="bf39ebea-ad24-4634-b332-d68c195f3eb7"/>
+					<textElement verticalAlignment="Bottom">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[DESCRIPTION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="19" y="1" width="43" height="13" uuid="56a1c441-dc08-4017-bf90-d0226d1b698f"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[#STYLE]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="64" y="1" width="108" height="13" uuid="b61a7b8c-d8c0-475e-a921-647cea13b96d"/>
+					<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<rectangle>
+				<reportElement x="246" y="3" width="321" height="12" uuid="0f1f66b5-c6dc-44c3-8fe6-ddbdfaff65f3"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="246" y="3" width="320" height="13" uuid="07997bc9-d7a8-4b86-8b5e-c9c6f16c4864"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[***THIS PO SHOULD BE SIGN & RETURN]]></text>
+			</staticText>
+			<line>
+				<reportElement x="8" y="25" width="785" height="1" uuid="6f095852-7300-49d2-8727-b0a69bbce9c3"/>
+			</line>
+			<line>
+				<reportElement x="8" y="103" width="785" height="1" uuid="6de0fb94-e2ea-4c6f-9ff2-35048ab819b5"/>
+			</line>
+			<line>
+				<reportElement x="7" y="25" width="1" height="78" uuid="0fba3ea6-cce8-45a1-a0c5-4f3bf083c40a"/>
+			</line>
+			<line>
+				<reportElement x="793" y="26" width="1" height="78" uuid="21c431ef-cec1-42a6-bf62-15008e59449d"/>
+			</line>
+			<line>
+				<reportElement x="543" y="25" width="1" height="78" uuid="75040ed6-d03e-4bde-9acd-faaceaa63bb8"/>
+			</line>
+			<line>
+				<reportElement x="267" y="25" width="1" height="78" uuid="b608e64f-2f44-408e-90ef-0f22dc72b8dd"/>
+			</line>
+			<staticText>
+				<reportElement x="47" y="105" width="730" height="15" uuid="2db782dd-f6ba-442c-bb52-335cf6e02e50"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[*MAKE SURE TO ADVISE FOR INSPECTION WHILE PRODUCTION IS ON FLOOR AND START TO GO OUT/IF LAST MINUTE, YOU'LL PAY THE LAST MINUTE INSPECTION FEES]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="26" width="259" height="14" uuid="05785b91-ffe9-45e9-bb78-7860bb912375"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FACTORY NAME:"+$P{FactoryName}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="38" width="259" height="14" uuid="3a350ad8-b04d-4dae-a917-f8a26dd2eb3f"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TELEPHONE:"+$P{FactoryTelePhone}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="52" width="259" height="14" uuid="5990d2f0-07aa-478e-a291-8fa1d045037d"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MOBILE:"+$P{FactoryMobile}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="65" width="259" height="14" uuid="a63bae89-eea0-45bc-9d95-08edc4181985"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FAX:"+$P{FactoryFax}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="8" y="79" width="259" height="14" uuid="cdcf857c-6e0e-4540-a36b-10c3f1a56f07"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["EMAIL:"+$P{FactoryEmail}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="27" width="273" height="14" uuid="b8fa6931-b587-401e-914f-f304f203a829"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["BUYER NAME:"+$P{BuyerName}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="39" width="273" height="14" uuid="e0e7727f-1bd1-48b7-8108-3e68af966e51"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TELEPHONE:"+$P{BuyerTelePhone}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="53" width="273" height="14" uuid="57fd6887-79aa-4be0-bd3d-6d0da7c125d6"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MOBILE:"+$P{BuyerMobile}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="80" width="273" height="14" uuid="725416a3-b111-4f3e-b43f-afb474340b99"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["EMAIL:"+$P{BuyerEmail}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="270" y="66" width="273" height="14" uuid="30c317c1-ef76-433f-a636-33914c6758f2"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FAX:"+$P{BuyerFax}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="545" y="27" width="257" height="14" uuid="1caa7aef-a901-4897-8858-9932dce0b7d4"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TELEPHONE:"+$P{NotifyTelePhone}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="545" y="41" width="257" height="14" uuid="7c17aac9-c06b-4d1c-adf3-441e9bc1cee0"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MOBILE:"+$P{NotifyMobile}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="545" y="54" width="257" height="14" uuid="dfbc62d1-2090-459c-8f23-d7c98a778038"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FAX:"+$P{NotifyFax}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="545" y="68" width="257" height="14" uuid="572981ce-c16b-4774-b585-84f427b0a244"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["EMAIL:"+$P{NotifyEmail}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="546" y="83" width="257" height="14" uuid="1012eb63-a7df-4e6c-bbe5-04f3fe14d8e3"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ADDRESS:"+$P{NotifyAddress}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<line>
+				<reportElement x="793" y="-15" width="1" height="14" uuid="09fea481-8162-4d73-8274-25e0b418a7ed"/>
+			</line>
+			<subreport>
+				<reportElement x="-14" y="0" width="260" height="13" uuid="3d7f2c00-c502-48d0-b81a-3e674149edbf"/>
+				<subreportParameter name="BuyerOrderId">
+					<subreportParameterExpression><![CDATA[$F{BuyerOrderId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="sizeGroupId">
+					<subreportParameterExpression><![CDATA[$F{sizeGroupId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Sql"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "BuyerPoSizeValue.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="60" splitType="Stretch">
+			<line>
+				<reportElement x="6" y="38" width="136" height="1" uuid="4b8ad87f-3a29-4b87-8be2-0b0a7add00dc"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="40" width="136" height="15" uuid="ab7fe0b2-7141-4c39-9c97-36db532391c3"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SUPPLIER SIGNATURE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="2" width="100" height="12" uuid="382aec0d-6539-42f5-b3be-86dda3847643"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[REMARKS:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="617" y="37" width="181" height="1" uuid="d2ad3609-589d-4567-a5c2-8d5533c6033d"/>
+			</line>
+			<staticText>
+				<reportElement x="618" y="39" width="100" height="17" uuid="17a200bb-503d-4c5e-a9d3-140803a47cbd"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BUYER SIGNATURE:]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

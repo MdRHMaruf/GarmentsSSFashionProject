@@ -53,8 +53,10 @@ function saveAction() {
 
 
 function editAction() {
-  var merchendiserId = $("#merchendiserId").val();
+  var inchargeId = $("#inchargeId").val();
   var name = $("#name").val();
+  var factoryId = $("#factoryId").val();
+  var depId = $("#depId").val();
   var telephone = $("#telephone").val();
   var mobile = $("#mobile").val();
   var fax = $("#fax").val();
@@ -67,10 +69,12 @@ function editAction() {
     $.ajax({
       type: 'POST',
       dataType: 'json',
-      url: './editMerchandiser',
+      url: './editIncharge',
       data: {
-    	merchendiserId: merchendiserId,
+    	inchargeId: inchargeId,
     	name: name,
+    	factoryId:factoryId,
+    	depId:depId,
     	telephone: telephone,
     	mobile:mobile,
     	fax:fax,
@@ -83,9 +87,9 @@ function editAction() {
         if (data.result == "Something Wrong") {
           dangerAlert("Something went wrong");
         } else if (data.result == "duplicate") {
-          dangerAlert("Duplicate Merchandiser Name..This Merchandiser Name Allreary Exist")
+          dangerAlert("Duplicate Incharge Name..This Incharge Name Allreary Exist")
         } else {
-          successAlert("Merchandiser Name Edit Successfully");
+          successAlert("Incharge Name Edit Successfully");
 
           $("#dataList").empty();
           $("#dataList").append(drawDataTable(data.result));
@@ -122,8 +126,8 @@ function setData(inchargeId) {
   document.getElementById("email").value = document.getElementById("email" + inchargeId).value;
   document.getElementById("skype").value = document.getElementById("skype" + inchargeId).value;
   document.getElementById("address").value = document.getElementById("address" + inchargeId).value;
-  document.getElementById("factoryname").value = document.getElementById("factory" + inchargeId).value;
-  document.getElementById("departmentname").value = document.getElementById("depId" + inchargeId).value;
+  document.getElementById("factoryId").value = document.getElementById("factory" + inchargeId).value;
+  document.getElementById("depId").value = document.getElementById("depId" + inchargeId).value;
   document.getElementById("btnSave").disabled = true;
   document.getElementById("btnEdit").disabled = false;
 

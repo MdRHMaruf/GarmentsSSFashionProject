@@ -53,7 +53,7 @@
 									<option value="0">Select Factory</option>
 									<c:forEach items="${factoryList}" var="factory"
 										varStatus="counter">
-										<option id='factoryName' value="${factory.factoryId}">${factory.factoryName}</option>
+										<option id='factoryName' value="${factory.factoryid}">${factory.factoryname}</option>
 									</c:forEach>
 
 

@@ -1649,6 +1649,38 @@ public class RegisterController {
 		return objmain;
 	}
 
+	@RequestMapping(value = "/editIncharge",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editIncharge(InchargeInfo v) {
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isInchargeExist(v)) {
+			if(registerService.editIncharge(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<InchargeInfo> List= registerService.getInchargeList();
+
+				for(int a=0;a<List.size();a++) {
+					JSONObject obj = new JSONObject();
+					obj.put("InchargeId", List.get(a).getInchargeId());
+					obj.put("Name", List.get(a).getName());
+					obj.put("Telephone", List.get(a).getTelephone());
+
+					mainarray.add(obj);
+				}
+
+
+				objmain.put("result", mainarray);
+
+			}else {
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
+		}
+
+		return objmain;
+	}
+	
 	//Line Create 
 	@RequestMapping(value = "/line_create",method=RequestMethod.GET)
 	public ModelAndView line_create(ModelMap map,HttpSession session) {

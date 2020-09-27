@@ -83,6 +83,8 @@ public interface OrderDAO {
 	boolean editaccessoriesIndent(accessorieIndent v);
 	boolean confrimAccessoriesIndent(String user, String aiNo);
 	
+	List<accessorieIndent> getPostedAccessoriesIndent();
+	
 	//Accessories Carton
 	boolean saveAccessoriesCurton(accessoriesindentcarton v);
 	List<accessoriesindentcarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
@@ -90,6 +92,8 @@ public interface OrderDAO {
 	
 	List<accessoriesindentcarton> getAccessoriesIndentCartonItemDetails(String id);
 	boolean editAccessoriesCurton(accessoriesindentcarton v);
+	boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
+			String installAccessories, String forAccessories);
 	
 	//Fabrics Indent
 	List<String> getPurchaseOrderList();
@@ -123,5 +127,10 @@ public interface OrderDAO {
 	List<PurchaseOrder> getPurchaseOrderSummeryList();
 	PurchaseOrder getPurchaseOrder(String poNo);
 	List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem);
-
+	
+	//File Upload
+	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user);
+	List<pg.orderModel.fileUpload> findfiles(String start, String end, String user);
+	boolean fileDownload(String fileName, String user, String string, String computerName);
+	boolean deletefile(String filename);
 }

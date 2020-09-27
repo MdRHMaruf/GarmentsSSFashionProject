@@ -1291,11 +1291,11 @@ public class RegisterDaoImpl implements RegisterDao{
 			if (checkDuplicateCourier(courier.getCouriername())) {
 				return false;
 			}else {
-				String sql="insert into tbCourier (id, name, CourierCode, CourierAddress, "
+				String sql="insert into tbCourier (name, CourierCode, CourierAddress, "
 						+ "ConsigneeAddress, NutifyAddress, CourierCountry, "
 						+ "Telephone, MobileNo, Fax, Email, SkypeId, BankName,"
 						+ " BankAddress, SwiftCode, BankCountry, EntryTime, UserId) values"
-						+ " ('"+courier.getCourierid()+"','"+courier.getCouriername()+"',"
+						+ " ('"+courier.getCouriername()+"',"
 						+ "'"+courier.getCouriercode()+"','"+courier.getCourierAddress()+"',"
 						+ "'"+courier.getConsigneeAddress()+"','"+courier.getNotifyAddress()+"',"
 						+ "'"+getCountryname(courier.getCountry())+"','"+courier.getTelephone()+"',"
@@ -1723,7 +1723,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			session.createSQLQuery(sql).executeUpdate();
 			
 			String itemId = "0";
-			sql = "select max(id) from tbFaricsItem where itemName='"+fabricsItem.getFabricsItemName()+"'";
+			sql = "select max(id) from TbFabricsItem where itemName='"+fabricsItem.getFabricsItemName()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) {
 				itemId = list.get(0).toString();
@@ -2151,7 +2151,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into tbGermentStyleItem (Itemname,ItemCode,entrytime,UserId) values('"+styleItem.getStyleItemName()+"','"+styleItem.getStyleItemCode()+"', CURRENT_TIMESTAMP,'"+styleItem.getUserId()+"')";
+			String sql="insert into tbItemDescription (Itemname,ItemCode,entrytime,UserId) values('"+styleItem.getStyleItemName()+"','"+styleItem.getStyleItemCode()+"', CURRENT_TIMESTAMP,'"+styleItem.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -2180,7 +2180,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="update tbGermentStyleItem set Itemname='"+styleItem.getStyleItemName()+"',Itemcode='"+styleItem.getStyleItemCode()+"' where itemid='"+styleItem.getStyleItemId()+"'";
+			String sql="update tbItemDescription set Itemname='"+styleItem.getStyleItemName()+"',Itemcode='"+styleItem.getStyleItemCode()+"' where itemid='"+styleItem.getStyleItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -2211,7 +2211,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select itemId,itemName,itemCode,userid from tbGermentStyleItem order by itemName";
+			String sql="select itemId,itemName,itemCode,userid from tbItemDescription order by itemName";
 			
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -2244,7 +2244,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select itemId,itemName,itemCode,userid from tbGermentStyleItem where itemName='"+styleItem.getStyleItemName()+"' and itemId !='"+styleItem.getStyleItemId()+"'";
+			String sql="select itemId,itemName,itemCode,userid from tbItemDescription where itemName='"+styleItem.getStyleItemName()+"' and itemId !='"+styleItem.getStyleItemId()+"'";
 			
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
@@ -3105,7 +3105,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select * from TbMerchendiserInfo where MerchendiserName='"+v.getName()+"' and departmentId != '"+v.getMerchendiserId()+"'";
+			String sql="select * from TbMerchendiserInfo where MerchendiserName='"+v.getName()+"' and MerchendiserId != '"+v.getMerchendiserId()+"'";
 			
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
@@ -3249,6 +3249,34 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			String sql="insert into TbInchargeInfo(InchargeName,FactoryId,DepId,TelePhone,Mobile,Fax,Email,SkypeId,Address,entrytime,UserId) values('"+v.getName()+"','"+v.getFactoryId()+"','"+v.getDepId()+"','"+v.getTelephone()+"','"+v.getMobile()+"','"+v.getFax()+"','"+v.getEmail()+"','"+v.getSkype()+"','"+v.getAddress()+"',current_timestamp,'"+v.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public boolean editIncharge(InchargeInfo v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update TbInchargeInfo set InchargeName='"+v.getName()+"',FactoryId='"+v.getFactoryId()+"',DepId='"+v.getDepId()+"',TelePhone='"+v.getTelephone()+"',Mobile='"+v.getMobile()+"',Fax='"+v.getFax()+"',Email='"+v.getEmail()+"',SkypeId='"+v.getSkype()+"',Address='"+v.getAddress()+"',entrytime=current_timestamp,UserId='"+v.getUserId()+"' where InchargeId='"+v.getInchargeId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

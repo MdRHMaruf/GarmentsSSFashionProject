@@ -156,6 +156,7 @@ public interface RegisterDao {
 	public boolean isInchargeExist(InchargeInfo v);
 	public boolean saveIncharge(InchargeInfo v);
 	public List<InchargeInfo> getInchargeList();
+	public boolean editIncharge(InchargeInfo v);
 	
 	//Ware House Create 
 	public boolean saveWareHouse(WareHouse wareHouse);

@@ -628,9 +628,12 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.getStoreCategoryList();
 	}
 
+	@Override
+	public boolean editIncharge(InchargeInfo v) {
+		// TODO Auto-generated method stub
+		return registerDao.editIncharge(v);
+	}
 
-	
 
-	
 
 }
