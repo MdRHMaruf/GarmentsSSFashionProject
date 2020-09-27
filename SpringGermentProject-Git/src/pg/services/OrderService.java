@@ -80,6 +80,7 @@ public interface OrderService {
 	List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id);
 	boolean editaccessoriesIndent(AccessoriesIndent v);
 	boolean confrimAccessoriesIndent(String user, String aiNo);
+	List<AccessoriesIndent> getPostedAccessoriesIndent();
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(accessoriesindentcarton v);

@@ -298,6 +298,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.confrimAccessoriesIndent(user, aiNo);
 	}
+	
+	@Override
+	public List<AccessoriesIndent> getPostedAccessoriesIndent() {
+		// TODO Auto-generated method stub
+		return orderDAO.getPostedAccessoriesIndent();
+	}
 
 	@Override
 	public boolean saveAccessoriesCurton(accessoriesindentcarton v) {
@@ -513,6 +519,8 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.InstallDataAsSameParticular(userId, purchaseOrder, styleId, itemId, colorId, installAccessories, forAccessories);
 	}
+
+	
 
 }
 
