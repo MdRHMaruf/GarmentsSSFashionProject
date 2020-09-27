@@ -37,9 +37,31 @@ function loadData() {
 
 window.onload = loadData;
 
+
+function printBuyerPO(buyerPoId){
+	
+	
+	$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './buyerIndentInfo',
+        data:{
+        	buyerPoId:buyerPoId
+        	},
+        success: function (data) {
+          if (data== "Success") {
+      		var url = "printBuyerPoOrder";
+    		window.open(url, '_blank');
+
+          }
+        }
+      });
+}
+
 function buyerWiseStyleLoad() {
   var buyerId = $("#buyerName").val();
 
+ // alert("buyerId "+buyerId);
   if (buyerId != 0) {
     $.ajax({
       type: 'GET',

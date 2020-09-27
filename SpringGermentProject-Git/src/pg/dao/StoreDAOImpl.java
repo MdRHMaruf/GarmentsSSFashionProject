@@ -37,6 +37,8 @@ import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
 import pg.storeModel.StoreGeneralCategory;
 import pg.storeModel.StoreGeneralReceived;
+import pg.storeModel.StoreGeneralCategory;
+import pg.storeModel.StoreGeneralReceived;
 
 
 @Repository
@@ -4730,8 +4732,6 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return accessoriesTransfer;
 	}
-
-
 
 	@Override
 	public boolean isStoreGenralItemExist(StoreGeneralCategory v) {

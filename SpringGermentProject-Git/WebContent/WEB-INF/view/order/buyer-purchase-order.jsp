@@ -306,6 +306,7 @@
 							<th>Buyer Name</th>
 							<th>Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th>Print</th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -316,6 +317,9 @@
 								<td >${po.date}</td>
 								<td><i class="fa fa-search"
 									onclick="searchBuyerPO(${po.buyerPoId})">
+								</i></td>
+								<td><i class="fa fa-print"
+									onclick="printBuyerPO(${po.buyerPoId})">
 								</i></td>
 							</tr>
 						</c:forEach>

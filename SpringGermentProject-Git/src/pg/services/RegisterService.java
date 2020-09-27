@@ -181,4 +181,7 @@ public interface RegisterService {
 	//Store Category
 	public List<StoreGeneralCategory> getStoreCategoryList();
 
+	public boolean editIncharge(InchargeInfo v);
+
+
 }

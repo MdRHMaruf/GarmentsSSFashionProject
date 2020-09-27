@@ -153,10 +153,10 @@ function insertSupplier(){
 			success: function (data) {
 				console.log(data);
 				if(data==true){
-					alert("Buyer Created Successfully");
+					alert("Supplier Created Successfully");
 					reloadPage();
 				}else{
-					alert("Buyer Creation Failed. Could be Duplicate Buyer Name Problem");
+					alert("Supplier Creation Failed. Could be Duplicate Supplier Name Problem");
 				}
 
 			},

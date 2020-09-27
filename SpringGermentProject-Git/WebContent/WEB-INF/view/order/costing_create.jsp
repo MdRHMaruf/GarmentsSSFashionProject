@@ -238,10 +238,10 @@
 								class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 								<i class="fa fa-refresh"></i> Refresh
 							</button>
-							<button id="btnPreview" type="button"
-								class="btn btn-primary btn-sm ml-1" disabled>
+<!-- 							<button id="btnPreview" type="button"
+								class="btn btn-primary btn-sm ml-1" onclick="confrimAction()">
 								<i class="fa fa-print"></i> Preview
-							</button>
+							</button> -->
 						</div>
 					</div>
 				</div>
@@ -276,6 +276,7 @@
 							<th>Item Name</th>
 							<th>Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th>Print</th>
 						</tr>
 					</thead>
 					<tbody id="costingListTable">
@@ -287,6 +288,8 @@
 								<td>${costing.date}</td>
 								<td><i class="fa fa-search"
 									onclick="searchCosting(${costing.styleId}, ${costing.itemId})"></i></td>
+								<td><i class="fa fa-print"
+									onclick="itemWiseCostingReport(${costing.styleId}, ${costing.itemId})"></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

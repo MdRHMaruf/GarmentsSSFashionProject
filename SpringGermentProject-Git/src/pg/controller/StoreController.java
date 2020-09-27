@@ -398,8 +398,6 @@ public class StoreController {
 		return objmain;
 	}
 
-
-
 	@RequestMapping(value = "/deleteIssueReturnRollFromTransaction",method=RequestMethod.GET)
 	public @ResponseBody JSONObject deleteIssueReturnRollFromTransaction(FabricsRoll fabricsRoll) {
 		System.out.println("it'Execute");
@@ -409,11 +407,6 @@ public class StoreController {
 
 		return objmain;
 	}
-
-
-
-	
-
 
 	@RequestMapping(value = "/editIssueReturnRollInTransaction",method=RequestMethod.GET)
 	public @ResponseBody JSONObject editIssueReturnRollInTransaction(FabricsRoll fabricsRoll) {
@@ -1098,6 +1091,9 @@ public class StoreController {
 		return view; 
 	}
 
+	
+
+
 	@RequestMapping(value = "/saveGeneralItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveGeneralItem(StoreGeneralCategory v) {
 		JSONObject objmain = new JSONObject();
@@ -1127,8 +1123,6 @@ public class StoreController {
 		}
 		return objmain;
 	}
-
-
 
 
 	@RequestMapping(value = "/editGeneralItem",method=RequestMethod.POST)
@@ -1219,7 +1213,6 @@ public class StoreController {
 		return msg;
 	}
 
-
 	@RequestMapping(value = "/GeneralReceivedInvoiceInfo",method=RequestMethod.POST)
 	public @ResponseBody String GeneralReceivedInvoiceInfo(String invoiceNo,String type) {
 		this.InvoiceNo=invoiceNo;
@@ -1238,5 +1231,6 @@ public class StoreController {
 
 		return view;
 	}
+
 
 }

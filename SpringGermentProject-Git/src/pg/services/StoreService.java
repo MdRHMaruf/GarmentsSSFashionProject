@@ -19,6 +19,8 @@ import pg.storeModel.FabricsQualityControl;
 import pg.storeModel.FabricsReceive;
 import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
+import pg.storeModel.StoreGeneralCategory;
+import pg.storeModel.StoreGeneralReceived;
 
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;

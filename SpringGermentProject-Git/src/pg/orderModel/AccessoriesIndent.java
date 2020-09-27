@@ -11,6 +11,7 @@ public class AccessoriesIndent {
 	String itemColorId;
 	String itemcolor;
 	String shippingmark;
+	String accessoriesId;
 	String accessoriesname;
 	String accessoriessize;
 	String size;
@@ -27,15 +28,17 @@ public class AccessoriesIndent {
 	String unit;
 	String grandqty;
 	String brand;
-	String accessoriesId;
-	String accessoriesName;
 	String accessoriesColorId;
 	String accessoriescolor;
+	String accessoriesName;
 	String sizeName;
 	String requiredUnitQty;
 	String indentBrandId;
 	String indentColorId;
+	String aiNo;
+	String purchaseOrder;
 	
+	String styleNo;
 	public AccessoriesIndent() {
 		
 	}
@@ -94,9 +97,12 @@ public class AccessoriesIndent {
 		this.requiredUnitQty=requiredUnitQty;
 	}
 	
-	
-	
-	
+	public AccessoriesIndent(String AINo,String PurchaseOrder,String StyleNo,String ItemName) {
+		this.aiNo=AINo;
+		this.purchaseOrder=PurchaseOrder;
+		this.styleNo=StyleNo;
+		this.itemname=ItemName;
+	}
 	
 	public String getIndentBrandId() {
 		return indentBrandId;
@@ -117,6 +123,46 @@ public class AccessoriesIndent {
 		this.indentColorId = indentColorId;
 	}
 
+
+	public String getStyleId() {
+		return styleId;
+	}
+
+	public void setStyleId(String styleId) {
+		this.styleId = styleId;
+	}
+
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getItemColorId() {
+		return itemColorId;
+	}
+
+	public void setItemColorId(String itemColorId) {
+		this.itemColorId = itemColorId;
+	}
+
+	public String getAccessoriesId() {
+		return accessoriesId;
+	}
+
+	public void setAccessoriesId(String accessoriesId) {
+		this.accessoriesId = accessoriesId;
+	}
+
+	public String getAccessoriesColorId() {
+		return accessoriesColorId;
+	}
+
+	public void setAccessoriesColorId(String accessoriesColorId) {
+		this.accessoriesColorId = accessoriesColorId;
+	}
 
 	public String getAccessoriesName() {
 		return accessoriesName;
@@ -288,52 +334,33 @@ public class AccessoriesIndent {
 	}
 
 
-	public String getStyleId() {
-		return styleId;
+	public String getAiNo() {
+		return aiNo;
 	}
 
 
-	public void setStyleId(String styleId) {
-		this.styleId = styleId;
+	public void setAiNo(String aiNo) {
+		this.aiNo = aiNo;
 	}
 
 
-	public String getItemId() {
-		return itemId;
+	public String getPurchaseOrder() {
+		return purchaseOrder;
 	}
 
 
-	public void setItemId(String itemId) {
-		this.itemId = itemId;
+	public void setPurchaseOrder(String purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
 	}
 
 
-	public String getItemColorId() {
-		return itemColorId;
+	public String getStyleNo() {
+		return styleNo;
 	}
 
 
-	public void setItemColorId(String itemColorId) {
-		this.itemColorId = itemColorId;
-	}
-
-
-	public String getAccessoriesId() {
-		return accessoriesId;
-	}
-
-
-	public void setAccessoriesId(String accessoriesId) {
-		this.accessoriesId = accessoriesId;
-	}
-
-
-	public String getAccessoriesColorId() {
-		return accessoriesColorId;
-	}
-
-	public void setAccessoriesColorId(String accessoriesColorId) {
-		this.accessoriesColorId = accessoriesColorId;
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
 	}
 	
 	

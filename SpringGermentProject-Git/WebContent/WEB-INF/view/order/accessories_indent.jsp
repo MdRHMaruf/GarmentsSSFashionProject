@@ -30,22 +30,12 @@
 						</div>
 
 						<div class="p-0">
-							<div class="input-group">
-								<div class="input-group-append">
-									<input type="text"
-										class="form-control mdb-autocomplete input-sm ml-1"
-										placeholder="Search" aria-label="Search"><span
-										style="height: 30px;" class="input-group-text" id="search"><i
-										class="fa fa-cog" aria-hidden="true"></i></span>
-								</div>
-							</div>
+						<button type="button" class="btn btn-outline-dark btn-sm"
+							data-toggle="modal" data-target="#exampleModal" title="Search">
+							Accessories Indent List<i class="fa fa-search"></i>
+						</button>
 						</div>
-						<div class="p-0">
-							<div class="col-sm-3 col-md-3 col-lg-3">
-								<button style="height: 30px;" id="find" type="button"
-									class="btn btn-primary btn-sm">Find</button>
-							</div>
-						</div>
+
 
 					</div>
 
@@ -181,7 +171,7 @@
 										<option id="accessoriesItem" value="0">Select Item</option>
 										<c:forEach items="${accessories}" var="acc"
 											varStatus="counter">
-											<option id='sameAs' value="${acc.id}">${acc.name}</option>
+											<option id='accessoriesItem' value="${acc.id}">${acc.name}</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -201,13 +191,13 @@
 								</div>
 								</div>
 								<div class="col-sm-7 p-0">
-									<select id="sameAs" class="selectpicker form-control"
+									<select id="sameAsAccessories" class="selectpicker form-control"
 										data-live-search="true"
 										data-style="btn-light border-secondary form-control-sm">
-										<option id="sameAs" value="0">Select Item</option>
+										<option id="sameAsAccessories" value="0">Select Item</option>
 										<c:forEach items="${accessories}" var="acc"
 											varStatus="counter">
-											<option id='sameAs' value="${acc.id}">${acc.name}</option>
+											<option id='sameAsAccessories' value="${acc.id}">${acc.name}</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -222,7 +212,7 @@
 							<div class="row">
 							<div class="col-sm-5"></div>
 								<div class="col-sm-7">
-									<button height: 30px;" class="btn btn-primary btn-block btn-sm">Save</button>
+									<button height: 30px;" onclick="btnInstallEvent()" class="btn btn-info btn-block btn-sm">Install From</button>
 								</div>
 							</div>
 						</div>
@@ -529,6 +519,57 @@
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Accessories Indent"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Indent No</th>
+							<th>Purchase Order</th>
+							<th>Style No</th>
+							<th>Item Name</th>
+							<th><span><i class="fa fa-search"></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${listAccPostedData}" var="list" varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td >${list.aiNo}</td>
+								<td >${list.purchaseOrder}</td>
+								<td>${list.styleNo}</td>
+								<td>${list.itemname}</td>
+								<td><i class="fa fa-search"
+									onclick="searchAccessoriesIndent(${list.aiNo})">
+								</i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
 <%-- <script>
 				$('.bsdatepicker').datepicker({
 
