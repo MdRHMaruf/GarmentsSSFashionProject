@@ -240,6 +240,8 @@ function itemSizeEdit() {
   var customerOrder = $("#customerOrder").val();
   var purchaseOrder = $("#purchaseOrder").val();
   var shippingMark = $("#shippingMark").val();
+  var itemAutoId = $("#itemAutoId").val();
+  var unitFob = $("#unitFob"+itemAutoId).text();
   var userId = $("#userId").val();
   var totalUnit = 0;
 
@@ -281,7 +283,7 @@ function itemSizeEdit() {
                     totalUnit: totalUnit,
                     unitCmt: 1,
                     totalPrice: 1,
-                    unitFob: 1,
+                    unitFob: unitFob,
                     totalAmount: 1,
                     userId: userId
                   },
@@ -665,7 +667,7 @@ function drawItemTable(dataList) {
 
       tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
     }
-    tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + item.totalUnit + "</td><td class='unitCmt' id='unitCmt" + item.autoId + "'>" + item.unitCmt + "</td><td class='totalPrice' id='totalPrice" + item.autoId + "'>" + item.totalPrice + "</td><td class='unitFob' id='unitFob" + item.autoId + "'>" + item.unitFob + "</td><td class='totalAmount' id='totalAmount" + item.autoId + "'>" + item.totalAmount + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+    tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + item.totalUnit + "</td><td class='unitCmt' id='unitCmt" + item.autoId + "'>" + item.unitCmt + "</td><td class='totalPrice' id='totalPrice" + item.autoId + "'>" + item.totalPrice + "</td><td class='unitFob' id='unitFob" + item.autoId + "' contenteditable='true'>" + item.unitFob + "</td><td class='totalAmount' id='totalAmount" + item.autoId + "'>" + item.totalAmount + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
 
   }
   tables += "</tbody></table> </div></div>";

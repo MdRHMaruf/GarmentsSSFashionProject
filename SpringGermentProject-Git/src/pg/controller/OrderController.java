@@ -391,13 +391,8 @@ public class OrderController {
 	@RequestMapping(value = "/printBuyerPoOrder",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printBuyerPoOrder(ModelMap map) {
 		
-	
 		ModelAndView view=new ModelAndView("order/printBuyerPoOrder");
-		
-		
 		map.addAttribute("BuyerPoId", BuyerPoId);
-		
-	
 		return view;
 	}
 
