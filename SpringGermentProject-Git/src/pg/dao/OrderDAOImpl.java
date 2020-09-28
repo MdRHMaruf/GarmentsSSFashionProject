@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +30,7 @@ import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.fileUpload;
-import pg.orderModel.accessorieIndent;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
 import pg.registerModel.ItemDescription;
@@ -178,16 +179,15 @@ public class OrderDAOImpl implements OrderDAO{
 				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
 				System.out.println(sql);
 				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
+				
+				StringTokenizer token=new StringTokenizer(itemId,",");
+				while(token.hasMoreTokens()) {
+					String itemIdValue=token.nextToken();
+					String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemIdValue+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
+					System.out.println(sqlStyleItem);
+					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
+				}
 
-				String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemId+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
-				System.out.println(sqlStyleItem);
-				sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
-			}
-			else {
-				StyleId=getStyleId(buyerId,styleNo);
-				String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemId+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
-				System.out.println(sqlStyleItem);
-				sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
 			}
 
 
@@ -411,13 +411,29 @@ public class OrderDAOImpl implements OrderDAO{
 
 			List<?> list = session.createSQLQuery(sql).list();
 
-
+			String StyleNo="",PerStyle="";
+			int i=0;
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
+				if(i==0) {
+					StyleNo=element[1].toString();
+					PerStyle=StyleNo;
+				}
+				
+				if(i!=0 && PerStyle.equals(element[1].toString())) {
+					StyleNo="";
 
-				datalist.add(new Style(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
-
+				}
+				else{
+					StyleNo=element[1].toString();
+					PerStyle=StyleNo;
+				}
+				
+				
+				
+				datalist.add(new Style(element[0].toString(),StyleNo,element[2].toString(),element[3].toString()));
+				i++;
 			}
 
 			tx.commit();
@@ -1712,7 +1728,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public boolean insertaccessoriesIndent(accessorieIndent ai) {
+	public boolean insertaccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
@@ -1774,13 +1790,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessorieIndent> PendingList() {
+	public List<AccessoriesIndent> PendingList() {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
@@ -1825,11 +1841,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 	
 	@Override
-	public List<accessorieIndent> getPostedAccessoriesIndent() {
+	public List<AccessoriesIndent> getPostedAccessoriesIndent() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
@@ -1845,7 +1861,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new accessorieIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
+				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
 
 			}
 
@@ -2054,11 +2070,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessorieIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor) {
+	public List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
@@ -2074,7 +2090,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new accessorieIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
 
 			}
 
@@ -2100,11 +2116,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessorieIndent> getPendingAccessoriesIndent() {
+	public List<AccessoriesIndent> getPendingAccessoriesIndent() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
@@ -2120,7 +2136,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new accessorieIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
 
 			}
 
@@ -2146,11 +2162,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessorieIndent> getAccessoriesIndentItemDetails(String id) {
+	public List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessorieIndent> query=new ArrayList<accessorieIndent>();
+		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
@@ -2162,7 +2178,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new accessorieIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString(),element[21].toString(),element[22].toString()));
+				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString(),element[21].toString(),element[22].toString()));
 
 			}
 
@@ -2186,7 +2202,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean editaccessoriesIndent(accessorieIndent ai) {
+	public boolean editaccessoriesIndent(AccessoriesIndent ai) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -3185,7 +3201,8 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "values('"+sampleReqId+"','"+v.getInchargeId()+"','"+v.getMarchendizerId()+"','"+v.getInstruction()+"','"+v.getSampleDeadline()+"',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 			
-			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
+			//String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
+			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' ";
 			session.createSQLQuery(sqlupdate).executeUpdate();
 			
 			tx.commit();

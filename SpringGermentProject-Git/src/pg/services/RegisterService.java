@@ -9,14 +9,18 @@ import pg.registerModel.Color;
 import pg.registerModel.Country;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Department;
+import pg.registerModel.Designation;
+import pg.registerModel.Employee;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.InchargeInfo;
 import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
+import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
+import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
@@ -138,6 +142,7 @@ public interface RegisterService {
 	public boolean editDepartment(Department department);
 	public List<Department> getDepartmentList();
 	public boolean isDepartmentExist(Department department);
+	public List<Department> getFactoryWiseDepartment(String factoryId);
 	
 	//Merchandiser Create 
 	public boolean isMerchandiserExist(MerchandiserInfo v);
@@ -161,6 +166,7 @@ public interface RegisterService {
 	public boolean editLine(Line line);
 	public List<Line> getLineList();
 	public boolean isLineExist(Line line);
+	public List<Line> getDepartmentWiseLine(String departmentId);
 
 	//Style Size Create 
 	public boolean saveStyleSize(Size size);
@@ -181,5 +187,35 @@ public interface RegisterService {
 	//Store Category
 	public List<StoreGeneralCategory> getStoreCategoryList();
 	public boolean editIncharge(InchargeInfo v);
+	
+	// Designation
+	
+		public boolean saveDesignation(Designation designation);
+		public List<Designation> getDesignationList();
+		public boolean editDesignation(Designation designation);
+		public boolean isDesignationExist(Designation v);
+		
+		//Employee
+		
+		public boolean saveEmployee(Employee saveEmployee);
+		public List<Employee> getEmployeeList();
+		public boolean editEmployee(Employee editEmployee);
+		public boolean isEmployeeExist(Employee v);
+		
+		
+		//Machine
+		
+		public boolean saveMachine(Machine saveMachine);
+		public List<Machine> getMachineList();
+		public boolean editMachine(Machine editMachine);
+		public boolean isMachineExist(Machine v);
+		
+		//Process
+		public boolean isProcessExist(ProcessInfo v);
+		public boolean saveProcess(ProcessInfo v);
+		public List<ProcessInfo> getProcessList();
+		public boolean editProcess(ProcessInfo v);
+		
+	
 
 }

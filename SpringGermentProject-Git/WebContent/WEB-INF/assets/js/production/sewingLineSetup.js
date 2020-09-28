@@ -1,3 +1,67 @@
+var lineId=0;
+var departmentId=0;
+
+function factoryWiseLine(){
+	  var factoryId = $("#factoryId").val();
+	  if(factoryId!=0){
+		    $.ajax({
+		        type: 'GET',
+		        dataType: 'json',
+		        url: './factorytWiseDepartment/'+factoryId,
+		        success: function (data) {
+		        	loadDepartment(data.departmentList);
+		        }
+		      });
+	  }
+}
+
+function loadDepartment(data){
+
+	var itemList = data;
+	var options = "<option id='departmentId' value='0' selected>Select Department</option>";
+	var length = itemList.length;
+	for(var i=0;i<length;i++) {
+
+		options += "<option id='departmentId' value='"+itemList[i].departmentId+"'>"+itemList[i].departmentName+"</option>";
+	};
+	document.getElementById("departmentId").innerHTML = options;
+	$('.selectpicker').selectpicker('refresh');
+	$('#departmentId').val(departmentId).change();
+	departmentId=0;
+
+}
+
+function departmentWiseLine(){
+	
+	  var departmentId = $("#departmentId").val();
+	  
+	  if(departmentId!=0){
+		    $.ajax({
+		        type: 'GET',
+		        dataType: 'json',
+		        url: './departmentWiseLine/'+departmentId,
+		        success: function (data) {
+		        	loadLine(data.lineList);
+		        }
+		      });
+	  }
+}
+
+function loadLine(data){
+
+	var itemList = data;
+	var options = "<option id='lineId' value='0' selected>Select Line</option>";
+	var length = itemList.length;
+	for(var i=0;i<length;i++) {
+		options += "<option id='lineId' value='"+itemList[i].lineId+"'>"+itemList[i].lineName+"</option>";
+	};
+	document.getElementById("lineId").innerHTML = options;
+	$('.selectpicker').selectpicker('refresh');
+	$('#lineId').val(lineId).change();
+	lineId=0;
+
+}
+
 function setProductPlanInfoForSewing(buyerId,buyerorderId,styleId,itemId){
 	
 	
@@ -13,6 +77,9 @@ function setProductPlanInfoForSewing(buyerId,buyerorderId,styleId,itemId){
 	
 
 	$('#styleId').val(styleId);
+	$('#itemId').val(itemId);
+	$('#buyerorderId').val(buyerorderId);
+
 }
 
 function duration(){
@@ -35,17 +102,24 @@ function duration(){
 function saveAction(){
 	var i=0;
 	var hexvalues = [];
-	$('#lines :selected').each(function(i, selectedElement) {
+	$('#lineId :selected').each(function(i, selectedElement) {
 		 hexvalues[i]=$(selectedElement).val();
 		var txt=$(selectedElement).text();
 		i++;
 	});
 
+	
+	
 	var user=$("#userId").val();
 	var style=$("#styleId").val();
+	var itemId=$("#itemId").val();
+	var poNo=$("#purchaseOrder").html();
+	var buyerOrderId=$("#buyerorderId").val();
 	var start=$("#start").val();
 	var end=$("#end").val();
 	var duration=$("#duration").val();
+	
+	
 	
 	var conv_list={
 			
@@ -69,6 +143,9 @@ function saveAction(){
 			data:{
 				user:user,
 				style:style,
+				itemId:itemId,
+				poNo:poNo,
+				buyerOrderId:buyerOrderId,
 				Line:hexvalues,
 				start:start,
 				end:end,
@@ -84,6 +161,7 @@ function saveAction(){
 					}
 			}
 		});
+		
 	}
 
 }

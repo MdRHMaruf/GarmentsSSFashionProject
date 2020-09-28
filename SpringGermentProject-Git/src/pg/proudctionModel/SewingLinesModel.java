@@ -14,6 +14,9 @@ public class SewingLinesModel {
 	String selectUnselect;
 	String selectedLines;
 	
+	String itemId="";
+	String buyerOrderId="";
+	String poNo="";		
 	String styleId="";
 	String styleNo="";
 	String allLineList="";
@@ -44,9 +47,12 @@ public class SewingLinesModel {
 		this.selectUnselect=selectUnselect;
 	}
 	
-	public SewingLinesModel(String user, String style,String[] Line, String start, String end, String duration) {
+	public SewingLinesModel(String PurchaseOrder,String buyerorderId,String user, String style,String itemId,String[] Line, String start, String end, String duration) {
+		this.poNo=PurchaseOrder;
+		this.buyerOrderId=buyerorderId;
 		this.user=user;
 		this.style=style;
+		this.itemId=itemId;
 		this.Line=Line;
 		this.start=start;
 		this.end=end;
@@ -160,6 +166,30 @@ public class SewingLinesModel {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getBuyerOrderId() {
+		return buyerOrderId;
+	}
+
+	public void setBuyerOrderId(String buyerOrderId) {
+		this.buyerOrderId = buyerOrderId;
+	}
+
+	public String getPoNo() {
+		return poNo;
+	}
+
+	public void setPoNo(String poNo) {
+		this.poNo = poNo;
 	}
 
 	

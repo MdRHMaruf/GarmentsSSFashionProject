@@ -50,7 +50,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.accessorieIndent;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
@@ -95,7 +95,7 @@ public class OrderController {
 	
 	String FrontImg="",BackImg;
 	
-	String StyleId="",ItemId="",AiNo="",BuyerPoId="";
+	String StyleId="",ItemId="",AiNo="",BuyerPoId="",SampleReqId="";
 
 
 	@RequestMapping(value = "style_create")
@@ -111,11 +111,7 @@ public class OrderController {
 		map.addAttribute("itemList",itemList);
 		map.addAttribute("styleList",styleList);
 		
-		map.addAttribute("buyerId", "0");
-		map.addAttribute("styleNo", styleNo);
-		map.addAttribute("date", date);
-		map.addAttribute("FrontImg", FrontImg);
-		map.addAttribute("BackImg", BackImg);
+
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -125,7 +121,6 @@ public class OrderController {
 	public ModelAndView submitFiles(@RequestParam String buyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam CommonsMultipartFile frontImage,@RequestParam CommonsMultipartFile backImage,HttpSession session,ModelMap map) throws IOException, SQLException {
 
 		List<login> user=(List<login>)session.getAttribute("pg_admin");
-
 
 
 		String frontimg=getImageName(frontImage,session);
@@ -147,12 +142,7 @@ public class OrderController {
 		ModelAndView view=new ModelAndView("redirect:style_create");
 		map.addAttribute("buyerId", buyerId);
 		
-		this.date=date;
-		this.styleNo=styleNo;
 
-		
-		//return "redirect:style_create";
-		
 		return view;
 	}
 
@@ -807,11 +797,11 @@ public class OrderController {
 
 		List<commonModel>purchaseorders=orderService.PurchaseOrders();
 
-		List<accessorieIndent>listAccPending=orderService.getPendingAccessoriesIndent();
+		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 
 		List<commonModel>accessoriesitem=orderService.AccessoriesItem("1");
 		
-		List<accessorieIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
+		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
 
 		List<commonModel>unit=orderService.Unit();
 		List<commonModel>brand=orderService.Brands();
@@ -1083,13 +1073,13 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
-	public JSONObject insertAccessoriesIndent(accessorieIndent v) {
+	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 		boolean insert= orderService.insertaccessoriesIndent(v);
 
 		if(insert) {
-			List<accessorieIndent>qty=orderService.getAccessoriesIndent(v.getPo(),v.getStyle(),v.getItemname(),v.getItemcolor());
+			List<AccessoriesIndent>qty=orderService.getAccessoriesIndent(v.getPo(),v.getStyle(),v.getItemname(),v.getItemcolor());
 
 			for (int i = 0; i < qty.size(); i++) {
 				JSONObject obj=new JSONObject();
@@ -1126,7 +1116,7 @@ public class OrderController {
 		boolean insert= orderService.InstallDataAsSameParticular(userId,purchaseOrder,styleId,itemId,colorId,installAccessories,forAccessories);
 
 		if(insert) {
-			List<accessorieIndent>qty=orderService.getAccessoriesIndent(purchaseOrder,styleId,itemId,colorId);
+			List<AccessoriesIndent>qty=orderService.getAccessoriesIndent(purchaseOrder,styleId,itemId,colorId);
 
 			for (int i = 0; i < qty.size(); i++) {
 				JSONObject obj=new JSONObject();
@@ -1192,7 +1182,7 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/editAccessoriesIndent",method=RequestMethod.POST)
-	public String editAccessoriesIndent(accessorieIndent v) {
+	public String editAccessoriesIndent(AccessoriesIndent v) {
 		//JSONObject objmain = new JSONObject();
 		//JSONArray mainarray = new JSONArray();
 		String msg="Create Occured while updating accessories indent";
@@ -1212,7 +1202,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<accessorieIndent>list=orderService.getAccessoriesIndentItemDetails(id);
+		List<AccessoriesIndent>list=orderService.getAccessoriesIndentItemDetails(id);
 
 		for (int i = 0; i < list.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1553,6 +1543,7 @@ public class OrderController {
 	}
 
 
+	
 	@RequestMapping(value = "/addItemToSampleRequisition",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addItemToSampleRequisition(SampleRequisitionItem v) {
 		JSONObject objmain = new JSONObject();
@@ -1591,6 +1582,30 @@ public class OrderController {
 
 		return objmain;
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/sampleRequisitionInfo",method=RequestMethod.GET)
+	public String sampleRequisitionInfo(String sampleReqId) {
+		this.SampleReqId=sampleReqId;
+		return "Success";
+	}
+	
+	
+	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
+		
+		
+		ModelAndView view=new ModelAndView("order/printsampleRequisition");
+		
+		
+		map.addAttribute("SampleReqId", SampleReqId);
+
+	
+		return view;
+	}
+
+
 	
 	//Purchase Order
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)

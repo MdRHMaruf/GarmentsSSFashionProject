@@ -34,19 +34,19 @@
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Hourly Sewing Production</h5>
+			<h5 class="text-center" style="display: inline;">Sewing Production</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
 			</button>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModalForSewiing">
-				<i class="fa fa-search"></i>Sewing Production List
+				<i class="fa fa-search"></i>Layout Plan List
 			</button>
 		</header>
 		<hr class="my-1">
 		<div class="row">
-			<div class="col-md-10 mb-1 pr-1">
+			<div class="col-md-12 mb-1 pr-1">
 				<div class="row">
 					<div class="form-group col-md-4 mb-1" style="padding-left: 30px;padding-right: 35px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0">Buyer
@@ -95,18 +95,58 @@
 						</div>
 					</div>					
 					
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 36px;padding-left: 20px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Daily Target</label>
+						<div class="row">
+								<input type="text" readonly id="dailyTargetQty" class="col-md-12 form-control-sm" />
+						</div>
+					</div>		
 					
-					<div class="form-group col-md-2 mb-1" style="padding-right: 36px;">
+					<div class="form-group col-md-1 mb-1"
+						style="padding-left: 15px; padding-right: 0px;padding-left: 3px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Line Target</label>
+						<div class="row">
+								<input type="text" readonly id="dailyLineTargetQty" class="col-md-12 form-control-sm" />
+						</div>
+					</div>
+										
+					<div class="form-group col-md-1 mb-1"
+						style="padding-left: 15px; padding-right: 0px;padding-left: 35px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Hours</label>
+						<div class="row">
+								<input type="text" readonly id="hours" class="col-md-12 form-control-sm" />
+						</div>
+					</div>	
+					
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 0px;padding-left: 35px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Hourly Target</label>
+						<div class="row">
+								<input type="text" readonly id="hourlyTarget" class="col-md-12 form-control-sm" />
+						</div>
+					</div>
+										
+					<div class="form-group col-md-2" style="padding-left: 35px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Date</label>
 						<div class="row">
-							<input type="date" id="Date"
+							<input type="date" id="layoutDate"
 								class="col-md-12 form-control-sm" />
 						</div>
 					</div>
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 26px;padding-left: 25px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Line</label>
+						<div class="row">
+							<select id="lineId" 
+												class="selectpicker form-control" data-live-search="true"
+												data-style="btn-light border-secondary form-control-sm">
 
+								</select>
+						</div>
+					</div>	
 
 				</div>
-	
 
 
 			</div>
@@ -164,10 +204,7 @@
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
-				<button id="btnPreview" type="button"
-					class="btn btn-primary btn-sm ml-1" disabled>
-					<i class="fa fa-print"></i> Preview
-				</button>
+	
 			</div>
 		</div>	
 		</div>
@@ -182,7 +219,7 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control"
-						placeholder="Search Sample Requisition"
+						placeholder="Search Production Plan"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -255,11 +292,12 @@
 								<th>Style No</th>
 								<th>Item Name</th>
 								<th>Date</th>
-								<th><span><i class="fa fa-search"></i></span></th>
+								<th>Search</th>
+								<th>Print</th>
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${sewingProductionList}" var="list"
+							<c:forEach items="${layoutList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>
@@ -267,9 +305,12 @@
 									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
 									<td id='styleId${list.styleId}'>${list.styleNo}</td>
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
-									<td id='production${list.itemId}'>${list.productionDate}</td>
+									<td id='layout${list.itemId}'>${list.productionDate}</td>
 									<td><i class="fa fa-search"
-										onclick="searchSewingProduction(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.productionDate})">
+										onclick="searchLayoutDetails(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.productionDate})">
+									</i></td>
+									<td><i class="fa fa-search"
+										onclick="printLayoutDetails(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.productionDate})">
 									</i></td>
 								</tr>
 							</c:forEach>

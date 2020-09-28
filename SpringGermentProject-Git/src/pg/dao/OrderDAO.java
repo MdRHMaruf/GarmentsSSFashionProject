@@ -12,7 +12,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.accessorieIndent;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
 import pg.registerModel.Factory;
@@ -72,18 +72,18 @@ public interface OrderDAO {
 	public List<commonModel>AllColors();
 	public List<commonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 	
-	public boolean insertaccessoriesIndent(accessorieIndent ai);
+	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 	
-	public List<accessorieIndent>PendingList();
+	public List<AccessoriesIndent>PendingList();
 	List<commonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
 	
-	List<accessorieIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
-	List<accessorieIndent> getPendingAccessoriesIndent();
-	List<accessorieIndent> getAccessoriesIndentItemDetails(String id);
-	boolean editaccessoriesIndent(accessorieIndent v);
+	List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
+	List<AccessoriesIndent> getPendingAccessoriesIndent();
+	List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id);
+	boolean editaccessoriesIndent(AccessoriesIndent v);
 	boolean confrimAccessoriesIndent(String user, String aiNo);
 	
-	List<accessorieIndent> getPostedAccessoriesIndent();
+	List<AccessoriesIndent> getPostedAccessoriesIndent();
 	
 	//Accessories Carton
 	boolean saveAccessoriesCurton(accessoriesindentcarton v);

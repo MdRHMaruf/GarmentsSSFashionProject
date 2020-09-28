@@ -71,7 +71,7 @@
 										<label class="col-sm-3">Purchase Order</label>
 
 										<div class="col-sm-8">
-											<label class="col-sm-8" id="purchaseOrder"></label>
+											<label class="col-sm-8" id="purchaseOrder"></label><input type="hidden" id="buyerorderId"/>
 										</div>
 									</div>
 								</div>
@@ -90,7 +90,7 @@
 										<label class="col-sm-3">Item Name</label>
 
 										<div class="col-sm-8">
-											<label class="col-sm-8" id="itemName"></label>
+											<label class="col-sm-8" id="itemName"></label><input type="hidden" id="itemId"/>
 										</div>
 									</div>
 								</div>
@@ -127,17 +127,42 @@
 
 								<div class="form-group">
 									<div class="row ">
+										<label for="department" class="col-sm-3">Factory</label>
+										<div class="col-sm-8">
+										 <select
+										id="factoryId" class="selectpicker form-control"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-secondary form-control-sm" onchange="factoryWiseLine()">
+											<option value="0">Select Factory</option>
+											<c:forEach items="${factorylist}" var="factory"
+												varStatus="counter">
+												<option id='factoryId' value="${factory.factoryId}">${factory.factoryName}</option>
+											</c:forEach>
+		
+										</select>
+										</div>	
+									</div>	
+									<div class="row ">
+										<label for="department" class="col-sm-3">Department</label>
+										<div class="col-sm-8">
+										 <select
+										id="departmentId" class="selectpicker form-control"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-secondary form-control-sm" onchange="departmentWiseLine()">
+		
+		
+										</select>
+										</div>	
+									</div>															
+									<div class="row ">
 										<label class="col-sm-3" for="accessoriesItemName">Line
 											No</label>
 
 										<div class="col-sm-8">
-											<select id="lines" multiple="multiple"
+											<select id="lineId" multiple="multiple"
 												class="selectpicker form-control" data-live-search="true"
 												data-style="btn-light border-secondary form-control-sm">
-												<option id="style" value="0">Select Line Name(s)</option>
-												<c:forEach items="${lines}" var="llist" varStatus="counter">
-													<option name="stylename" id="style" value="${llist.lineId}">${llist.lineName}</option>
-												</c:forEach>
+
 											</select>
 										</div>
 									</div>
@@ -156,7 +181,7 @@
 							<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 								<div class="input-group my-2">
 									<input type="text" class="form-control"
-										placeholder="Search Accessories Item"
+										placeholder="Search Line Setup"
 										aria-describedby="findButton" id="search" name="search">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="button" id="findButton">

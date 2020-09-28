@@ -13,14 +13,18 @@ import pg.registerModel.Color;
 import pg.registerModel.Country;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Department;
+import pg.registerModel.Designation;
+import pg.registerModel.Employee;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.InchargeInfo;
 import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
+import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
+import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
@@ -635,5 +639,115 @@ public class RegisterServiceImpl implements RegisterService{
 	}
 
 
+	@Override
+	public boolean saveDesignation(Designation designation) {
+		// TODO Auto-generated method stub
+		return registerDao.saveDesignation(designation);
+	}
+
+	@Override
+	public List<Designation> getDesignationList() {
+		// TODO Auto-generated method stub
+		return registerDao.getDesignationList();
+	}
+
+	@Override
+	public boolean editDesignation(Designation designation) {
+		// TODO Auto-generated method stub
+		return registerDao.editDesignation(designation);
+	}
+
+	@Override
+	public boolean isDesignationExist(Designation v) {
+		// TODO Auto-generated method stub
+		return registerDao.isDesignationExist(v);
+	}
+	
+	
+	//Employee Create
+	
+	@Override
+	public boolean saveEmployee(Employee saveEmployee) {
+		// TODO Auto-generated method stub
+		return registerDao.saveEmployee(saveEmployee);
+	}
+
+	@Override
+	public List<Employee> getEmployeeList() {
+		// TODO Auto-generated method stub
+		return registerDao.getEmployeeList();
+	}
+
+	@Override
+	public boolean editEmployee(Employee editEmployee) {
+		// TODO Auto-generated method stub
+		return registerDao.editEmployee(editEmployee);
+	}
+
+	@Override
+	public boolean isEmployeeExist(Employee v) {
+		// TODO Auto-generated method stub
+		return registerDao.isEmployeeExist(v);
+	}
+
+	@Override
+	public boolean saveMachine(Machine saveMachine) {
+		// TODO Auto-generated method stub
+		return registerDao.saveMachine(saveMachine);
+	}
+
+	@Override
+	public List<Machine> getMachineList() {
+		// TODO Auto-generated method stub
+		return registerDao.getMachineList();
+	}
+
+	@Override
+	public boolean editMachine(Machine editMachine) {
+		// TODO Auto-generated method stub
+		return registerDao.editMachine(editMachine);
+	}
+
+	@Override
+	public boolean isMachineExist(Machine v) {
+		// TODO Auto-generated method stub
+		return registerDao.isMachineExist(v);
+	}
+
+	@Override
+	public boolean isProcessExist(ProcessInfo v) {
+		// TODO Auto-generated method stub
+		return registerDao.isProcessExist(v);
+	}
+
+	@Override
+	public boolean saveProcess(ProcessInfo v) {
+		// TODO Auto-generated method stub
+		return registerDao.saveProcess(v);
+	}
+
+	@Override
+	public List<ProcessInfo> getProcessList() {
+		// TODO Auto-generated method stub
+		return registerDao.getProcessList();
+	}
+
+	@Override
+	public boolean editProcess(ProcessInfo v) {
+		// TODO Auto-generated method stub
+		return registerDao.editProcess(v);
+	}
+
+	@Override
+	public List<Line> getDepartmentWiseLine(String departmentId) {
+		// TODO Auto-generated method stub
+		return registerDao.getDepartmentWiseLine(departmentId);
+	}
+
+	@Override
+	public List<Department> getFactoryWiseDepartment(String factoryId) {
+		// TODO Auto-generated method stub
+		return registerDao.getFactoryWiseDepartment(factoryId);
+	}
 
 }

@@ -1,6 +1,6 @@
 package pg.orderModel;
 
-public class accessorieIndent {
+public class AccessoriesIndent {
 	String autoid;
 	String user;
 	String po;
@@ -34,12 +34,12 @@ public class accessorieIndent {
 	String purchaseOrder;
 	
 	String styleNo;
-	public accessorieIndent() {
+	public AccessoriesIndent() {
 		
 	}
 	
 	
-	public accessorieIndent(String AccIndentId,String PurchaseOrder,String StyleNo,String ItemName,String ColorName,String ShippingMarks,String AccessoriesName,String SizeName,String accessoriesSize,String PerUnit,String TotalBox,String OrderQty,String QtyInDozen,String ReqPerPices,String ReqPerDoz,String DividedBy,String PercentageExtra,String PercentageExtraQty,String TotalQty,String UnitName,String RequireUnitQty,String IndentBrandId,String IndentColorId) {
+	public AccessoriesIndent(String AccIndentId,String PurchaseOrder,String StyleNo,String ItemName,String ColorName,String ShippingMarks,String AccessoriesName,String SizeName,String accessoriesSize,String PerUnit,String TotalBox,String OrderQty,String QtyInDozen,String ReqPerPices,String ReqPerDoz,String DividedBy,String PercentageExtra,String PercentageExtraQty,String TotalQty,String UnitName,String RequireUnitQty,String IndentBrandId,String IndentColorId) {
 		this.autoid=AccIndentId;
 		System.out.println("StyleNo "+StyleNo);
 		this.style=StyleNo;
@@ -66,7 +66,7 @@ public class accessorieIndent {
 		this.indentColorId=IndentColorId;
 	}
 	
-	public accessorieIndent(String autoId,String po, String style, String itemname, String itemcolor,String shippingmark,String accessoriesName,String sizeName,String requiredUnitQty) {
+	public AccessoriesIndent(String autoId,String po, String style, String itemname, String itemcolor,String shippingmark,String accessoriesName,String sizeName,String requiredUnitQty) {
 		this.autoid=autoId;
 		this.po=po;
 		this.style=style;
@@ -78,7 +78,7 @@ public class accessorieIndent {
 		this.requiredUnitQty=requiredUnitQty;
 	}
 	
-	public accessorieIndent(String AINo,String PurchaseOrder,String StyleNo,String ItemName) {
+	public AccessoriesIndent(String AINo,String PurchaseOrder,String StyleNo,String ItemName) {
 		this.aiNo=AINo;
 		this.purchaseOrder=PurchaseOrder;
 		this.styleNo=StyleNo;
