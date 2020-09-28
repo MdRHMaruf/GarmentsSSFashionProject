@@ -1708,5 +1708,21 @@ public class OrderController {
 		}
 		return objmain;
 	}
+	
+	@RequestMapping(value="/getSampleProductionReport/{idList}/{printType}")
+	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable String idList,@PathVariable String printType) {
+
+		ModelAndView view = new ModelAndView("order/sample-production-report-view");
+		
+		map.addAttribute("purchaseOrder","");
+		map.addAttribute("styleId","");
+		map.addAttribute("itemId","");
+		map.addAttribute("sampleTypeId","");
+		map.addAttribute("printType",printType);
+		map.addAttribute("sampleCommentId",idList);
+
+		return view;
+
+	}
 
 }

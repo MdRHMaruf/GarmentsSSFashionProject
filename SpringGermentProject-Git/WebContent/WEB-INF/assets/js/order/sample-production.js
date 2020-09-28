@@ -33,7 +33,8 @@ function setSampleProductionInfo(sampleCommentId) {
                 //drawSampleCommentsListSearchTable(data.sampleCommentsList);
                 const sample = data.sampleProduction;
                 console.log(data.sampleProduction);
-                $("#sampleCommentsId").val(sample.sampleCommentId)
+                $("#sampleCommentsNo").val(sample.sampleCommentId);
+                $("#sampleCommentsId").val(sample.sampleCommentId);
                 $("#purchaseOrder").val(sample.purchaseOrder);
                 $("#styleNo").val(sample.styleNo);
                 $("#itemName").val(sample.itemName);
@@ -122,6 +123,13 @@ function refreshAction() {
     location.reload();
   
   }
+
+  function showPreview(){
+   const commentsId =  $("#sampleCommentsId").val();
+   const printType = "sizeWise";
+    var url = "getSampleProductionReport/"+commentsId+"/"+printType;
+    window.open(url, '_blank'); 
+  };
 
 function drawSampleCommentsListSearchTable(data) {
     const length = data.length;
