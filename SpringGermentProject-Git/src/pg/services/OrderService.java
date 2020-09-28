@@ -11,6 +11,7 @@ import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
@@ -128,6 +129,11 @@ public interface OrderService {
 		boolean deletefile(String filename);
 		boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
 				String installAccessories, String forAccessories);
+		
+		//Sample Production
+		List<SampleCadAndProduction> getSampleCommentsList();
+		SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId);
+		boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
 
 
 }

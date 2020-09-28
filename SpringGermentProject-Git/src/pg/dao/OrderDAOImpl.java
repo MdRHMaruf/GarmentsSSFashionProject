@@ -29,6 +29,7 @@ import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
@@ -4063,6 +4064,151 @@ public class OrderDAOImpl implements OrderDAO{
 				return false;
 			}
 			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleCommentsList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleCadAndProduction> dataList=new ArrayList<SampleCadAndProduction>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select sampleCommentId,PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,ss.sizeName,SampleTypeId,sti.name \r\n" + 
+					"from TbSampleCadInfo sci\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on sci.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on sci.ItemId = id.itemid\r\n" + 
+					"left join tbColors c\r\n" + 
+					"on sci.ColorId = c.ColorId\r\n" + 
+					"left join tbStyleSize ss\r\n" + 
+					"on sci.size = ss.id\r\n" + 
+					"left join TbSampleTypeInfo sti\r\n" + 
+					"on sci.SampleTypeId = sti.AutoId";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();							
+				dataList.add(new SampleCadAndProduction(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString()));
+			}
+
+			
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		SampleCadAndProduction sampleCadAndProduction= null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,ss.sizeName,sci.SampleTypeId,sti.name as sampleTypeName,isnull(sci.CuttingDate,'') cuttingDate,isnull(sci.CuttingQty,'') cuttingQty, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
+					"from TbSampleCadInfo sci\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on sci.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on sci.ItemId = id.itemid\r\n" + 
+					"left join tbColors c\r\n" + 
+					"on sci.ColorId = c.ColorId\r\n" + 
+					"left join tbStyleSize ss\r\n" + 
+					"on sci.size = ss.id\r\n" + 
+					"left join TbSampleTypeInfo sti\r\n" + 
+					"on sci.SampleTypeId = sti.AutoId\r\n" + 
+					"left join TbSampleRequisitionDetails srd\r\n" + 
+					"on sci.PurchaseOrder = srd.purchaseOrder and sci.StyleId = srd.StyleId and sci.itemId = srd.ItemId and sci.ColorId = srd.ColorId and sci.SampleTypeId = srd.SampleTypeId\r\n" + 
+					"left join tbSizeValues sv\r\n" + 
+					"on srd.sampleAutoId = sv.linkedAutoId and sci.size = sv.sizeId and sv.type = '"+SizeValuesType.SAMPLE.getType()+"'\r\n" + 
+					"where sci.sampleCommentId = '"+sampleCommentsId+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();							
+				sampleCadAndProduction =  new SampleCadAndProduction(element[0].toString(), element[1].toString(),element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString());
+			}
+
+			
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return sampleCadAndProduction;
+	}
+
+	@Override
+	public boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<commonModel> query=new ArrayList<commonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="update TbSampleCadInfo set "
+					+ "CuttingQty='"+sampleCadAndProduction.getCuttingQty()+"',"
+					+ " CuttingDate='"+sampleCadAndProduction.getCuttingDate()+"',"
+					+ "PrintSendDate='"+sampleCadAndProduction.getPrintSendDate()+"',"
+					+ "PrintReceivedDate='"+sampleCadAndProduction.getPrintReceivedDate()+"',"
+					+ "EmbroiderySendDate='"+sampleCadAndProduction.getEmbroiderySendDate()+"',"
+					+ "EmbroideryReceivedDate='"+sampleCadAndProduction.getEmbroideryReceivedDate()+"',"
+					+ "SewingSendDate='"+sampleCadAndProduction.getSewingSendDate()+"',"
+					//+ "SewingReceivedDate='"+SewingReceivedDate+"',"
+					+ "SewingFinishedDate='"+sampleCadAndProduction.getSewingFinishDate()+"',"
+					+ "SampleProductionUserId='"+sampleCadAndProduction.getSampleProductionUserId()+"',"
+					+ "SampleProductionUserIp='"+sampleCadAndProduction.getSampleProductionUserIp()+"',"
+					+ "SampleCommentFlag='"+sampleCadAndProduction.getSampleCommentFlag()+"',"
+					+ "SampleProductionDate=CURRENT_TIMESTAMP,"
+					+ "SampleProductionEntryTime=CURRENT_TIMESTAMP,"
+					+ "OperatorName='"+sampleCadAndProduction.getOperatorName()+"',"
+					+ "quality='"+sampleCadAndProduction.getQuality()+"'"
+					+ " where SampleCommentId='"+sampleCadAndProduction.getSampleCommentId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+
+			return true;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
 		}
 
 		finally {

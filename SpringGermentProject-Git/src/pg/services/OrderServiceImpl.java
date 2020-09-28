@@ -16,6 +16,7 @@ import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
@@ -518,6 +519,25 @@ public class OrderServiceImpl implements OrderService{
 			String colorId, String installAccessories, String forAccessories) {
 		// TODO Auto-generated method stub
 		return orderDAO.InstallDataAsSameParticular(userId, purchaseOrder, styleId, itemId, colorId, installAccessories, forAccessories);
+	}
+
+	
+	
+	@Override
+	public List<SampleCadAndProduction> getSampleCommentsList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCommentsList();
+	}
+	@Override
+	public SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleProductionInfo(sampleCommentsId);
+	}
+
+	@Override
+	public boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction) {
+		// TODO Auto-generated method stub
+		return orderDAO.postSampleProductionInfo(sampleCadAndProduction);
 	}
 
 	

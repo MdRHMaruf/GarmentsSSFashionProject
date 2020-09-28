@@ -17,6 +17,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.sun.istack.internal.logging.Logger;
+
+import javassist.tools.reflect.Sample;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -49,6 +52,7 @@ import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
@@ -79,9 +83,9 @@ public class OrderController {
 	private static final String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
 
 	private static final String UPLOAD_DIRECTORY ="/WEB-INF/upload";  
-	
-	 private static final String DIRECTORY="E:/uploadspringfiles/";
-	 
+
+	private static final String DIRECTORY="E:/uploadspringfiles/";
+
 
 	DecimalFormat df = new DecimalFormat("#.00");
 
@@ -91,11 +95,11 @@ public class OrderController {
 	private RegisterService registerService;
 
 	//Style Create 
-	
+
 	String styleNo="",date="";
-	
+
 	String FrontImg="",BackImg;
-	
+
 	String StyleId="",ItemId="",AiNo="",BuyerPoId="";
 
 
@@ -111,7 +115,7 @@ public class OrderController {
 		map.addAttribute("buyerList",List);
 		map.addAttribute("itemList",itemList);
 		map.addAttribute("styleList",styleList);
-		
+
 		map.addAttribute("buyerId", "0");
 		map.addAttribute("styleNo", styleNo);
 		map.addAttribute("date", date);
@@ -144,16 +148,16 @@ public class OrderController {
 		if(flag) {
 			System.out.println("Sucess");
 		}
-		
+
 		ModelAndView view=new ModelAndView("redirect:style_create");
 		map.addAttribute("buyerId", buyerId);
-		
+
 		this.date=date;
 		this.styleNo=styleNo;
 
-		
+
 		//return "redirect:style_create";
-		
+
 		return view;
 	}
 
@@ -188,7 +192,7 @@ public class OrderController {
 
 
 		for(int a=0;a<lablist.size();a++) {
-			
+
 
 			JSONObject obj = new JSONObject();
 
@@ -290,24 +294,24 @@ public class OrderController {
 		objmain.put("result",costing);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/costingReportInfo",method=RequestMethod.GET)
 	public @ResponseBody String costingReportInfo(String styleId,String itemId) {
 		this.StyleId=styleId;
 		this.ItemId=itemId;
 		return "Success";
 	}
-	
+
 	@RequestMapping(value = "/printCostingReport",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printCostingReport(ModelMap map) {
-		
-	
+
+
 		ModelAndView view=new ModelAndView("order/printCostingReport");
-		
-		
+
+
 		map.addAttribute("StyleId", StyleId);
 		map.addAttribute("ItemId", ItemId);
-	
+
 		return view;
 	}
 
@@ -386,11 +390,11 @@ public class OrderController {
 		this.BuyerPoId=buyerPoId;
 		return "Success";
 	}
-	
-	
+
+
 	@RequestMapping(value = "/printBuyerPoOrder",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printBuyerPoOrder(ModelMap map) {
-		
+
 		ModelAndView view=new ModelAndView("order/printBuyerPoOrder");
 		map.addAttribute("BuyerPoId", BuyerPoId);
 		return view;
@@ -465,7 +469,7 @@ public class OrderController {
 	}
 
 
-	
+
 	@RequestMapping(value = "/editBuyerPoItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject editBuyerPoItem(BuyerPoItem buyerPoItem) {
 		JSONObject objmain = new JSONObject();
@@ -572,230 +576,230 @@ public class OrderController {
 
 		return objmain;
 	}
-	
-	
-	
+
+
+
 	//File Upload
-	
+
 	@RequestMapping(value = "/file_upload",method=RequestMethod.GET)
 	public ModelAndView fileUpload(ModelMap map,HttpSession session) {
 
-		
+
 		ModelAndView view = new ModelAndView("order/fileupload");
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
-	
-	
-	
-    
-   
-	 // Process multiple file upload action and return a result page to user. 
-	  @RequestMapping(value="/save-product/{purpose}/{user}", method={RequestMethod.PUT, RequestMethod.POST})
-	    public String uploadFileSubmit(@PathVariable ("purpose") String purpose,@PathVariable ("user") String user, MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
-	        try
-	        {
-	           
-	        	
-	        	Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
-	 		    response.setContentType("text/html");
-
-	 		    String hostname = request.getRemoteHost(); // hostname
-	 		    System.out.println("hostname "+hostname);
-
-	 		    String computerName = null;
-	 		    String remoteAddress = request.getRemoteAddr();
-	 		    InetAddress inetAddress=null;
-	 		    
-	 		  
-	 		        inetAddress = InetAddress.getByName(remoteAddress);
-	 		        System.out.println("inetAddress: " + inetAddress);
-	 		        computerName = inetAddress.getHostName();
-
-	 		        System.out.println("computerName: " + computerName);
 
 
-	 		        if (computerName.equalsIgnoreCase("localhost")) {
-	 		            computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
-	 		        }else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
-	 		        	inetAddress = InetAddress.getLocalHost();
-	 		        	computerName=inetAddress.getHostName();
-	 		        }
-	 		       System.out.println("ip : " + inetAddress);
-	 		        System.out.println("computerName: " + computerName);
 
-	 		     //   Date date=new Date();
-	 		        
-	 		        
 
-	            // Get multiple file control names.
-	            Iterator<String> it = multipartRequest.getFileNames();
 
-	            while(it.hasNext())
-	            {
-	                String fileControlName = it.next();
 
-	                MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+	// Process multiple file upload action and return a result page to user. 
+	@RequestMapping(value="/save-product/{purpose}/{user}", method={RequestMethod.PUT, RequestMethod.POST})
+	public String uploadFileSubmit(@PathVariable ("purpose") String purpose,@PathVariable ("user") String user, MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
+		try
+		{
 
-	                String uploadFileName = srcFile.getOriginalFilename();
-	                
-	                System.out.println(" file names "+uploadFileName);
-	                
-	                orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user);
 
-	                // Create server side target file path.
-	                
-	                
-	                String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
+			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+			response.setContentType("text/html");
 
-	                File destFile = new File(destFilePath);
+			String hostname = request.getRemoteHost(); // hostname
+			System.out.println("hostname "+hostname);
 
-	                // Save uploaded file to target.
-	                srcFile.transferTo(destFile);
+			String computerName = null;
+			String remoteAddress = request.getRemoteAddr();
+			InetAddress inetAddress=null;
 
-	                //msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
-	            }
 
-	            // Set message that will be displayed in return page.
-	          //  model.addAttribute("message", msgBuf.toString());
+			inetAddress = InetAddress.getByName(remoteAddress);
+			System.out.println("inetAddress: " + inetAddress);
+			computerName = inetAddress.getHostName();
 
-	        }catch(IOException ex)
-	        {
-	            ex.printStackTrace();
-	        }finally
-	        {
-	            return "upload_file_result";
-	        }
-	    }
-	  
-	  @RequestMapping(value = "/findfile/{start}/{end}/{user}",method=RequestMethod.POST)
-		public @ResponseBody JSONObject findfile(@PathVariable ("start") String start,@PathVariable ("end") String end,@PathVariable ("user") String user) {
-		  
-		  	List<pg.orderModel.fileUpload> FileList=orderService.findfiles(start, end,user);
-			JSONObject objmain = new JSONObject();
+			System.out.println("computerName: " + computerName);
 
-			JSONArray mainArray = new JSONArray();
-			
-			for (int i = 0; i < FileList.size(); i++) {
-				JSONObject obj = new JSONObject();
-				obj.put("id", FileList.get(i).getAutoid());
-				obj.put("filename", FileList.get(i).getFilename());
-				obj.put("upby", FileList.get(i).getUploadby());
-				obj.put("upIp", FileList.get(i).getUploadip());
-				obj.put("upMachine", FileList.get(i).getUploadmachine());
-				obj.put("purpose", FileList.get(i).getPurpose());
-				obj.put("upDate", FileList.get(i).getUploaddate());
-				obj.put("upDateTime", FileList.get(i).getDatetime());
-				obj.put("DownBy", FileList.get(i).getDownloadby());
-				obj.put("DownIp", FileList.get(i).getDownloadip());
-				obj.put("DownMachine", FileList.get(i).getDownloadmachine());
-				obj.put("DownDate", FileList.get(i).getDownloaddate());
-				obj.put("DownDatetime", FileList.get(i).getDownloadtime());
-				
-				mainArray.add(obj);
-				
+
+			if (computerName.equalsIgnoreCase("localhost")) {
+				computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+			}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+				inetAddress = InetAddress.getLocalHost();
+				computerName=inetAddress.getHostName();
 			}
-			
-			objmain.put("result", mainArray);
-			return objmain;
-		}
-	  
-		    
-	    @RequestMapping(value="/download/{fileName:.+}/{user}", method=RequestMethod.POST)
-	    public @ResponseBody void downloadfile(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
-	    	System.out.println(" download controller ");
-	    	
-	    	Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
- 		    response.setContentType("text/html");
+			System.out.println("ip : " + inetAddress);
+			System.out.println("computerName: " + computerName);
 
- 		    String hostname = request.getRemoteHost(); // hostname
- 		    System.out.println("hostname "+hostname);
-
- 		    String computerName = null;
- 		    String remoteAddress = request.getRemoteAddr();
- 		    InetAddress inetAddress=null;
- 		    
- 		  
- 		    inetAddress = InetAddress.getByName(remoteAddress);
- 		   System.out.println("inetAddress: " + inetAddress);
- 		   computerName = inetAddress.getHostName();
-
- 		  System.out.println("computerName: " + computerName);
+			//   Date date=new Date();
 
 
- 		        if (computerName.equalsIgnoreCase("localhost")) {
- 		            computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
- 		        }else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
- 		        	inetAddress = InetAddress.getLocalHost();
- 		        	computerName=inetAddress.getHostName();
- 		        }
- 		       System.out.println("ip : " + inetAddress);
- 		       System.out.println("computerName: " + computerName);
 
- 		    
+			// Get multiple file control names.
+			Iterator<String> it = multipartRequest.getFileNames();
 
-	    	
-	    	try {
-	    		
-	    		
-	    		
-	    		
-	    	    String filePath = DIRECTORY+fileName;
-	    	    
-	    	    System.out.println(" filename "+fileName);
-	    	    
-	    	    try {
-	    	     File file = new File(filePath);
-	    	     System.out.println(" file "+file.length()/(1024*1024));
-	    	     FileInputStream in = new FileInputStream(file);
-	    	     System.out.println(" file in "+in);
-	    	     response.setHeader("Expires", new Date().toGMTString());
-	    	     response.setContentType(URLConnection.guessContentTypeFromStream(in));
-	    	     
-	    	    // response.setContentLength(Files.readAllBytes(file.toPath()).length);
-	    	     
-	    	     response.setContentLength((int)file.length());
-	    	    
-	    	     response.setHeader("Content-Disposition","attachment; filename=\"" + fileName +"\"");
-	    	     response.setHeader("Pragma", "no-cache");
-	    	      
-	    	     response.setContentType("application/octet-stream");
-	    	    // FileCopyUtils.copy(in, response.getOutputStream());
-	    	     
-	    	     
-	    	     IOUtils.copyLarge(in, response.getOutputStream());
-	    	   
-	    	     
-	    	     boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
-	    	     
-	    	     in.close();
-	    	     response.flushBuffer();
+			while(it.hasNext())
+			{
+				String fileControlName = it.next();
 
-	    	    } catch (FileNotFoundException e) {
-	    	     e.printStackTrace();
-	    	    } catch (IOException e) {
-	    	     e.printStackTrace();
-	    	    }
-	    	   } catch (Exception e) {
-	    	    e.printStackTrace();
-	    	   }
-	    }
-	    
-	    
-	    @RequestMapping(value = "/delete/{filename:.+}",method=RequestMethod.POST)
-		public @ResponseBody boolean findfile(@PathVariable ("filename") String filename) {
-	    	
-	    	boolean delete=orderService.deletefile(filename);
-	    	
-	    	if (delete) {
-				File file=new File(DIRECTORY+filename);
-				file.delete();
+				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+
+				String uploadFileName = srcFile.getOriginalFilename();
+
+				System.out.println(" file names "+uploadFileName);
+
+				orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user);
+
+				// Create server side target file path.
+
+
+				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
+
+				File destFile = new File(destFilePath);
+
+				// Save uploaded file to target.
+				srcFile.transferTo(destFile);
+
+				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
 			}
-		  
-		  	return delete;
+
+			// Set message that will be displayed in return page.
+			//  model.addAttribute("message", msgBuf.toString());
+
+		}catch(IOException ex)
+		{
+			ex.printStackTrace();
+		}finally
+		{
+			return "upload_file_result";
 		}
-	    
+	}
+
+	@RequestMapping(value = "/findfile/{start}/{end}/{user}",method=RequestMethod.POST)
+	public @ResponseBody JSONObject findfile(@PathVariable ("start") String start,@PathVariable ("end") String end,@PathVariable ("user") String user) {
+
+		List<pg.orderModel.fileUpload> FileList=orderService.findfiles(start, end,user);
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+
+		for (int i = 0; i < FileList.size(); i++) {
+			JSONObject obj = new JSONObject();
+			obj.put("id", FileList.get(i).getAutoid());
+			obj.put("filename", FileList.get(i).getFilename());
+			obj.put("upby", FileList.get(i).getUploadby());
+			obj.put("upIp", FileList.get(i).getUploadip());
+			obj.put("upMachine", FileList.get(i).getUploadmachine());
+			obj.put("purpose", FileList.get(i).getPurpose());
+			obj.put("upDate", FileList.get(i).getUploaddate());
+			obj.put("upDateTime", FileList.get(i).getDatetime());
+			obj.put("DownBy", FileList.get(i).getDownloadby());
+			obj.put("DownIp", FileList.get(i).getDownloadip());
+			obj.put("DownMachine", FileList.get(i).getDownloadmachine());
+			obj.put("DownDate", FileList.get(i).getDownloaddate());
+			obj.put("DownDatetime", FileList.get(i).getDownloadtime());
+
+			mainArray.add(obj);
+
+		}
+
+		objmain.put("result", mainArray);
+		return objmain;
+	}
+
+
+	@RequestMapping(value="/download/{fileName:.+}/{user}", method=RequestMethod.POST)
+	public @ResponseBody void downloadfile(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
+		System.out.println(" download controller ");
+
+		Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+		response.setContentType("text/html");
+
+		String hostname = request.getRemoteHost(); // hostname
+		System.out.println("hostname "+hostname);
+
+		String computerName = null;
+		String remoteAddress = request.getRemoteAddr();
+		InetAddress inetAddress=null;
+
+
+		inetAddress = InetAddress.getByName(remoteAddress);
+		System.out.println("inetAddress: " + inetAddress);
+		computerName = inetAddress.getHostName();
+
+		System.out.println("computerName: " + computerName);
+
+
+		if (computerName.equalsIgnoreCase("localhost")) {
+			computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			inetAddress = InetAddress.getLocalHost();
+			computerName=inetAddress.getHostName();
+		}
+		System.out.println("ip : " + inetAddress);
+		System.out.println("computerName: " + computerName);
+
+
+
+
+		try {
+
+
+
+
+			String filePath = DIRECTORY+fileName;
+
+			System.out.println(" filename "+fileName);
+
+			try {
+				File file = new File(filePath);
+				System.out.println(" file "+file.length()/(1024*1024));
+				FileInputStream in = new FileInputStream(file);
+				System.out.println(" file in "+in);
+				response.setHeader("Expires", new Date().toGMTString());
+				response.setContentType(URLConnection.guessContentTypeFromStream(in));
+
+				// response.setContentLength(Files.readAllBytes(file.toPath()).length);
+
+				response.setContentLength((int)file.length());
+
+				response.setHeader("Content-Disposition","attachment; filename=\"" + fileName +"\"");
+				response.setHeader("Pragma", "no-cache");
+
+				response.setContentType("application/octet-stream");
+				// FileCopyUtils.copy(in, response.getOutputStream());
+
+
+				IOUtils.copyLarge(in, response.getOutputStream());
+
+
+				boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
+
+				in.close();
+				response.flushBuffer();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@RequestMapping(value = "/delete/{filename:.+}",method=RequestMethod.POST)
+	public @ResponseBody boolean findfile(@PathVariable ("filename") String filename) {
+
+		boolean delete=orderService.deletefile(filename);
+
+		if (delete) {
+			File file=new File(DIRECTORY+filename);
+			file.delete();
+		}
+
+		return delete;
+	}
+
 
 	//Accessoires Indent Create
 	@RequestMapping(value = "/accessories_indent",method=RequestMethod.GET)
@@ -806,7 +810,7 @@ public class OrderController {
 		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 
 		List<commonModel>accessoriesitem=orderService.AccessoriesItem("1");
-		
+
 		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
 
 		List<commonModel>unit=orderService.Unit();
@@ -1113,7 +1117,7 @@ public class OrderController {
 		}
 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/InstallDataAsSameParticular",method=RequestMethod.POST)
 	public JSONObject InstallDataAsSameParticular(String userId,String purchaseOrder,String styleId,String itemId,String colorId,String installAccessories,String forAccessories) {
@@ -1163,25 +1167,25 @@ public class OrderController {
 
 		return msg;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/accessoriesIndentInfo",method=RequestMethod.GET)
 	public String accessoriesIndentInfo(String aiNo) {
 		this.AiNo=aiNo;
 		return "Success";
 	}
-	
-	
+
+
 	@RequestMapping(value = "/printAccessoriesIndent",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printAccessoriesIndent(ModelMap map) {
-		
-	
+
+
 		ModelAndView view=new ModelAndView("order/printAccessoriesIndent");
-		
-		
+
+
 		map.addAttribute("AiNo", AiNo);
 
-	
+
 		return view;
 	}
 
@@ -1573,10 +1577,10 @@ public class OrderController {
 		if(orderService.confrimItemToSampleRequisition(v)) {
 			msg="Sample Requisition Confrim Successfully";
 		}
-		
+
 		return msg;
 	}
-	
+
 	@RequestMapping(value = "/searchSampleReuisition/{sampleReqId}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchSampleReuisition(@PathVariable ("sampleReqId") String sampleReqId) {
 		JSONObject objmain = new JSONObject();
@@ -1587,7 +1591,7 @@ public class OrderController {
 
 		return objmain;
 	}
-	
+
 	//Purchase Order
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)
 	public ModelAndView purchase_order(ModelMap map,HttpSession session) {
@@ -1613,7 +1617,7 @@ public class OrderController {
 		objmain.put("itemList", itemList);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/addIndentItem",method=RequestMethod.GET)
 	public @ResponseBody JSONObject addIndentItem(PurchaseOrderItem purchaseOrderItem) {
 		JSONObject objmain = new JSONObject();
@@ -1632,7 +1636,7 @@ public class OrderController {
 		}
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/editPurchaseOrder",method=RequestMethod.POST)
 	public @ResponseBody JSONObject editPurchaseOrder(PurchaseOrder	purchaseOrder) {
 		JSONObject objmain = new JSONObject();
@@ -1643,7 +1647,7 @@ public class OrderController {
 		}
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/searchPurchaseOrder",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchPurchaseOrder(String poNo) {
 		JSONObject objmain = new JSONObject();
@@ -1651,18 +1655,58 @@ public class OrderController {
 		objmain.put("poInfo", purchaseOrder);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}")
 	public @ResponseBody ModelAndView getPurchaseOrderReport(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
-		
+
 		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
 		System.out.println("null test"+poNo+" "+supplierId+" "+type);
 		map.addAttribute("poNo",poNo);
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
-		
+
 		return view;
-		
+
+	}
+
+
+
+	
+	//Sample Production
+	@RequestMapping(value = "/sample_production",method=RequestMethod.GET)
+	public ModelAndView sample_production(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("order/sample_production");
+		//List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
+		//view.addObject("sampleCommentsList",sampleCommentsList);
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/getSampleCommentsList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getSampleCommentsList() {
+		JSONObject objmain = new JSONObject();
+		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
+		objmain.put("sampleCommentsList", sampleCommentsList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/getSampleProductionInfo",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
+		JSONObject objmain = new JSONObject();
+		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
+		objmain.put("sampleProduction", sampleProduction);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/postSampleProduction",method=RequestMethod.POST)
+	public @ResponseBody JSONObject postSampleProduction(SampleCadAndProduction	sampleCadAndProduction) {
+		JSONObject objmain = new JSONObject();
+		if(orderService.postSampleProductionInfo(sampleCadAndProduction)) {
+			objmain.put("result", "successfull");
+		}else {
+			objmain.put("result", "duplicate");
+		}
+		return objmain;
 	}
 
 }
