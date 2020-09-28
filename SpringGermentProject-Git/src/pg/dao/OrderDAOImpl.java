@@ -47,7 +47,7 @@ import pg.registerModel.AccessoriesItem;
 @Repository
 public class OrderDAOImpl implements OrderDAO{
 
-	DecimalFormat df = new DecimalFormat("#2");
+	DecimalFormat df = new DecimalFormat("#00");
 	@Override
 	public List<ItemDescription> getItemDescriptionList() {
 		// TODO Auto-generated method stub

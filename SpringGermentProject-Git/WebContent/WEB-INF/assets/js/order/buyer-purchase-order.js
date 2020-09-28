@@ -51,7 +51,7 @@ function printBuyerPO(buyerPoId){
         success: function (data) {
           if (data== "Success") {
       		var url = "printBuyerPoOrder";
-    		window.open(url, '_blank');
+    		  window.open(url, '_blank');
 
           }
         }
@@ -497,6 +497,32 @@ function searchBuyerPO(buyerPoNo) {
     }
   });
 }
+
+// $("#btnPreview").click(()=>{
+
+//   const buyerPoNo = $("#buyerPOId").val();
+
+//   $.ajax({
+//     type: 'GET',
+//     dataType: 'json',
+//     url: './getBuyerPO',
+//     data: {
+//       buyerPoNo: buyerPoNo
+//     },
+//     success: function (data) {
+//       if (data.buyerPO == "Something Wrong") {
+//         dangerAlert("Something went wrong");
+//       } else if (data.buyerPO == "duplicate") {
+//         dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
+//       } else {
+
+//         var buyerPo = data.buyerPO;
+//         console.log(buyerPo);
+//         alert(buyerPoNo);
+//       }
+//     }
+//   });
+// });
 
 function setBuyerPoItemDataForEdit(itemAutoId) {
   $.ajax({
