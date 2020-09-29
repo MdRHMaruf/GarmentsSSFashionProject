@@ -8,7 +8,7 @@ public class Line {
 	String departmentName;
 	String lineName;
 	String userId;
-	
+
 	
 	public Line() {}
 	
@@ -28,7 +28,15 @@ public class Line {
 		this.lineId = LineId;
 		this.lineName = LineName;
 	}
+	
 
+	public Line(String LineId, String LineName,String DepartmentId) {
+		this.lineId = LineId;
+		this.lineName = LineName;
+		this.departmentId=DepartmentId;
+	}
+
+	
 	public String getLineId() {
 		return lineId;
 	}

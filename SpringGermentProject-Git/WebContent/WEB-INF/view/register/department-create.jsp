@@ -51,7 +51,7 @@
 								<label for="factoryName">Factory Name:</label> <select
 									class="form-control" id="factoryName">
 									<option value="0">Select Factory</option>
-									<c:forEach items="${factoryList}" var="factory"
+									<c:forEach items="${factorylist}" var="factory"
 										varStatus="counter">
 										<option id='factoryName' value="${factory.factoryId}">${factory.factoryName}</option>
 									</c:forEach>

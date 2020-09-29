@@ -15,14 +15,18 @@ import pg.registerModel.Color;
 import pg.registerModel.Country;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Department;
+import pg.registerModel.Designation;
+import pg.registerModel.Employee;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.InchargeInfo;
 import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
+import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
+import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
@@ -38,7 +42,7 @@ import pg.storeModel.StoreGeneralCategory;
 public class RegisterDaoImpl implements RegisterDao{
 
 	boolean existsbuyer;
-	
+
 
 	@Override
 	public String maxBuyerId() {
@@ -46,9 +50,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		String query="";
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -64,13 +68,13 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				query=iter.next().toString();
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return query;
 		}
 		catch(Exception e){
@@ -96,9 +100,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -114,14 +118,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				countrylist.add(iter.next().toString());
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -137,17 +141,17 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return countrylist;
 
-	
+
 	}
-	
-	
+
+
 	public boolean checkDuplicateBuyer(String buyername) {
 		boolean exists=false;
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -165,15 +169,15 @@ public class RegisterDaoImpl implements RegisterDao{
 				exists=true;
 				existsbuyer=true;
 				break;
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
 			return exists;
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -188,15 +192,15 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return exists;
 	}
-	
-	
+
+
 	public String getCountryname(String countryid) {
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -212,14 +216,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				countryname=iter.next().toString();
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -234,7 +238,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return countryname;
 	}
-	
+
 
 	@Override
 	public boolean insertBuyer(BuyerModel buyer) {
@@ -243,9 +247,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-	
-		
+
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -255,14 +259,14 @@ public class RegisterDaoImpl implements RegisterDao{
 			}else {
 				String sql="insert into tbbuyer ( name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress, BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode, BankCountry, EntryTime, UserId ) "
 						+ "values('"+buyer.getBuyername()+"','"+buyer.getBuyercode()+"','"+buyer.getBuyerAddress()+"','"+buyer.getConsigneeAddress()+"','"+buyer.getNotifyAddress()+"','"+getCountryname(buyer.getCountry())+"','"+buyer.getTelephone()+"','"+buyer.getMobile()+"','"+buyer.getFax()+"','"+buyer.getEmail()+"','"+buyer.getSkypeid()+"','"+buyer.getBankname()+"','"+buyer.getBankaddress()+"','"+buyer.getSwiftcode()+"','"+getCountryname(buyer.getBankcountry())+"',GETDATE(),'"+buyer.getUser()+"')";
-				
+
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return true;
 		}
 		catch(Exception e){
@@ -279,7 +283,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 
-	
+
 	}
 
 	@Override
@@ -287,9 +291,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> Buyers=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -305,14 +309,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				Buyers.add(iter.next().toString());
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -333,9 +337,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<BuyerModel> Buyers=new ArrayList<BuyerModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -351,14 +355,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				Buyers.add(new BuyerModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -380,53 +384,53 @@ public class RegisterDaoImpl implements RegisterDao{
 		// TODO Auto-generated method stub
 		boolean success=false;
 		//success=checkDuplicateBuyer(buyer.getBuyername());
-				
+
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-		
+
+
 		String sql="";
-	
-		
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			
-			
+
+
+
 
 			if (checkDuplicateBuyer(buyer.getBuyername())) {
-				 sql="update  tbbuyer set  BuyerCode='"+buyer.getBuyercode()+"', BuyerAddress='"+buyer.getBuyerAddress()+"', ConsigneeAddress='"+buyer.getConsigneeAddress()+"', NutifyAddress='"+buyer.getNotifyAddress()+"', BuyerCountry='"+getCountryname(buyer.getCountry())+"', Telephone='"+buyer.getTelephone()+"', MobileNo='"+buyer.getMobile()+"', Fax='"+buyer.getFax()+"', Email='"+buyer.getEmail()+"', SkypeId='"+buyer.getSkypeid()+"', BankName='"+buyer.getBankname()+"', BankAddress='"+buyer.getBankaddress()+"', SwiftCode='"+buyer.getSwiftcode()+"',bankcountry='"+getCountryname(buyer.getBankcountry())+"' where id='"+buyer.getBuyerid()+"'";
+				sql="update  tbbuyer set  BuyerCode='"+buyer.getBuyercode()+"', BuyerAddress='"+buyer.getBuyerAddress()+"', ConsigneeAddress='"+buyer.getConsigneeAddress()+"', NutifyAddress='"+buyer.getNotifyAddress()+"', BuyerCountry='"+getCountryname(buyer.getCountry())+"', Telephone='"+buyer.getTelephone()+"', MobileNo='"+buyer.getMobile()+"', Fax='"+buyer.getFax()+"', Email='"+buyer.getEmail()+"', SkypeId='"+buyer.getSkypeid()+"', BankName='"+buyer.getBankname()+"', BankAddress='"+buyer.getBankaddress()+"', SwiftCode='"+buyer.getSwiftcode()+"',bankcountry='"+getCountryname(buyer.getBankcountry())+"' where id='"+buyer.getBuyerid()+"'";
 				System.out.println(" edit buyer query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
-				
+
+
 			}else if(!checkDuplicateBuyer(buyer.getBuyername())) {
-				 sql="update  tbbuyer set name='"+buyer.getBuyername()+"', BuyerCode='"+buyer.getBuyercode()+"', BuyerAddress='"+buyer.getBuyerAddress()+"', ConsigneeAddress='"+buyer.getConsigneeAddress()+"', NutifyAddress='"+buyer.getNotifyAddress()+"', BuyerCountry='"+getCountryname(buyer.getCountry())+"', Telephone='"+buyer.getTelephone()+"', MobileNo='"+buyer.getMobile()+"', Fax='"+buyer.getFax()+"', Email='"+buyer.getEmail()+"', SkypeId='"+buyer.getSkypeid()+"', BankName='"+buyer.getBankname()+"', BankAddress='"+buyer.getBankaddress()+"', SwiftCode='"+buyer.getSwiftcode()+"',bankcountry='"+getCountryname(buyer.getBankcountry())+"' where id='"+buyer.getBuyerid()+"'";
+				sql="update  tbbuyer set name='"+buyer.getBuyername()+"', BuyerCode='"+buyer.getBuyercode()+"', BuyerAddress='"+buyer.getBuyerAddress()+"', ConsigneeAddress='"+buyer.getConsigneeAddress()+"', NutifyAddress='"+buyer.getNotifyAddress()+"', BuyerCountry='"+getCountryname(buyer.getCountry())+"', Telephone='"+buyer.getTelephone()+"', MobileNo='"+buyer.getMobile()+"', Fax='"+buyer.getFax()+"', Email='"+buyer.getEmail()+"', SkypeId='"+buyer.getSkypeid()+"', BankName='"+buyer.getBankname()+"', BankAddress='"+buyer.getBankaddress()+"', SwiftCode='"+buyer.getSwiftcode()+"',bankcountry='"+getCountryname(buyer.getBankcountry())+"' where id='"+buyer.getBuyerid()+"'";
 				System.out.println(" edit buyer query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
-				
+
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
+
 			}
-			
+
 			tx.commit();
-			
-			
+
+
 			System.out.println("duplicat t buyer check "+success);
-			
-			
+
+
 			return success;
 
-			
+
 		}
 		catch(Exception e){
 
@@ -442,7 +446,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return success;
 
-	
+
 	}
 
 	@Override
@@ -450,9 +454,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<BuyerModel> Buyers=new ArrayList<BuyerModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -468,14 +472,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				Buyers.add(new BuyerModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -490,8 +494,8 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return Buyers;
 	}
-	
-	
+
+
 	//Supplier create
 
 	@Override
@@ -500,9 +504,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		String query="";
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -518,13 +522,13 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				query=iter.next().toString();
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return query;
 		}
 		catch(Exception e){
@@ -542,14 +546,14 @@ public class RegisterDaoImpl implements RegisterDao{
 		return query;
 
 	}
-	
+
 	public boolean checkDuplicateSupplier(String supplier) {
 		boolean exists=false;
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -567,15 +571,15 @@ public class RegisterDaoImpl implements RegisterDao{
 				exists=true;
 				existsbuyer=true;
 				break;
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
 			return exists;
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -598,9 +602,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-	
-		
+
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -609,29 +613,29 @@ public class RegisterDaoImpl implements RegisterDao{
 				return false;
 			}else {
 				String sql="insert into tbsupplier (  name, SupplierCode,"
-												+ " ContactPerson, SupplierAddress, "
-												+ "ConsigneeAddress, NutifyAddress, "
-												+ "SupplierCountry, Telephone, MobileNo, "
-												+ "Fax, Email, SkypeId, BankName, "
-												+ "BankAddress, AccountsNo, AccountsName,  "
-												+ " SwiftCode, BankCountry, EntryTime, UserId  ) "
-												+ "values('"+supplier.getSuppliername()+"',"
-												+ "'"+supplier.getSuppliercode()+"','"+supplier.getContcatPerson()+"',"
-												+ "'"+supplier.getSupplieraddress()+"','"+supplier.getConsigneeAddress()+"',"
-												+ "'"+supplier.getNotifyAddress()+"','"+getCountryname(supplier.getCountry())+"',"
-												+ "'"+supplier.getTelephone()+"','"+supplier.getMobile()+"',"
-												+ "'"+supplier.getFax()+"','"+supplier.getEmail()+"','"+supplier.getSkypeid()+"',"
-												+ "'"+supplier.getBankname()+"','"+supplier.getBankaddress()+"',"
-												+ "'"+supplier.getAccountno()+"','"+supplier.getAccountname()+"','"+supplier.getSwiftcode()+"',"
-												+ "'"+getCountryname(supplier.getBankcountry())+"',GETDATE(),'"+supplier.getUser()+"')";
-				
+						+ " ContactPerson, SupplierAddress, "
+						+ "ConsigneeAddress, NutifyAddress, "
+						+ "SupplierCountry, Telephone, MobileNo, "
+						+ "Fax, Email, SkypeId, BankName, "
+						+ "BankAddress, AccountsNo, AccountsName,  "
+						+ " SwiftCode, BankCountry, EntryTime, UserId  ) "
+						+ "values('"+supplier.getSuppliername()+"',"
+						+ "'"+supplier.getSuppliercode()+"','"+supplier.getContcatPerson()+"',"
+						+ "'"+supplier.getSupplieraddress()+"','"+supplier.getConsigneeAddress()+"',"
+						+ "'"+supplier.getNotifyAddress()+"','"+getCountryname(supplier.getCountry())+"',"
+						+ "'"+supplier.getTelephone()+"','"+supplier.getMobile()+"',"
+						+ "'"+supplier.getFax()+"','"+supplier.getEmail()+"','"+supplier.getSkypeid()+"',"
+						+ "'"+supplier.getBankname()+"','"+supplier.getBankaddress()+"',"
+						+ "'"+supplier.getAccountno()+"','"+supplier.getAccountname()+"','"+supplier.getSwiftcode()+"',"
+						+ "'"+getCountryname(supplier.getBankcountry())+"',GETDATE(),'"+supplier.getUser()+"')";
+
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return true;
 		}
 		catch(Exception e){
@@ -648,7 +652,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 
-	
+
 	}
 
 	@Override
@@ -656,9 +660,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> suppliers=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -674,14 +678,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				suppliers.add(iter.next().toString());
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -702,9 +706,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<SupplierModel> supplier=new ArrayList<SupplierModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -720,14 +724,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				supplier.add(new SupplierModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -749,53 +753,53 @@ public class RegisterDaoImpl implements RegisterDao{
 		// TODO Auto-generated method stub
 		boolean success=false;
 		//success=checkDuplicateBuyer(buyer.getBuyername());
-				
+
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-		
+
+
 		String sql="";
-	
-		
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			
-			
+
+
+
 
 			if (checkDuplicateBuyer(supplier.getSuppliername())) {
-				 sql="update  tbsupplier set  suppliercode='"+supplier.getSuppliercode()+"', SupplierAddress='"+supplier.getSupplieraddress()+"', ConsigneeAddress='"+supplier.getConsigneeAddress()+"', ContactPerson='"+supplier.getContcatPerson()+"', NutifyAddress='"+supplier.getNotifyAddress()+"', SupplierCountry='"+getCountryname(supplier.getCountry())+"', Telephone='"+supplier.getTelephone()+"', MobileNo='"+supplier.getMobile()+"', Fax='"+supplier.getFax()+"', Email='"+supplier.getEmail()+"', SkypeId='"+supplier.getSkypeid()+"', BankName='"+supplier.getBankname()+"', BankAddress='"+supplier.getBankaddress()+"',AccountsNo='"+supplier.getAccountno()+"',AccountsName='"+supplier.getAccountname()+"', SwiftCode='"+supplier.getSwiftcode()+"',bankcountry='"+getCountryname(supplier.getBankcountry())+"' where id='"+supplier.getSupplierid()+"'";
+				sql="update  tbsupplier set  suppliercode='"+supplier.getSuppliercode()+"', SupplierAddress='"+supplier.getSupplieraddress()+"', ConsigneeAddress='"+supplier.getConsigneeAddress()+"', ContactPerson='"+supplier.getContcatPerson()+"', NutifyAddress='"+supplier.getNotifyAddress()+"', SupplierCountry='"+getCountryname(supplier.getCountry())+"', Telephone='"+supplier.getTelephone()+"', MobileNo='"+supplier.getMobile()+"', Fax='"+supplier.getFax()+"', Email='"+supplier.getEmail()+"', SkypeId='"+supplier.getSkypeid()+"', BankName='"+supplier.getBankname()+"', BankAddress='"+supplier.getBankaddress()+"',AccountsNo='"+supplier.getAccountno()+"',AccountsName='"+supplier.getAccountname()+"', SwiftCode='"+supplier.getSwiftcode()+"',bankcountry='"+getCountryname(supplier.getBankcountry())+"' where id='"+supplier.getSupplierid()+"'";
 				System.out.println(" edit buyer query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
-				
+
+
 			}else if(!checkDuplicateBuyer(supplier.getSuppliername())) {
-				 sql="update  tbsupplier set name='"+supplier.getSuppliername()+"', suppliercode='"+supplier.getSuppliercode()+"', SupplierAddress='"+supplier.getSupplieraddress()+"', ConsigneeAddress='"+supplier.getConsigneeAddress()+"', ContactPerson='"+supplier.getContcatPerson()+"', NutifyAddress='"+supplier.getNotifyAddress()+"', SupplierCountry='"+getCountryname(supplier.getCountry())+"', Telephone='"+supplier.getTelephone()+"', MobileNo='"+supplier.getMobile()+"', Fax='"+supplier.getFax()+"', Email='"+supplier.getEmail()+"', SkypeId='"+supplier.getSkypeid()+"', BankName='"+supplier.getBankname()+"', BankAddress='"+supplier.getBankaddress()+"',AccountsNo='"+supplier.getAccountno()+"',AccountsName='"+supplier.getAccountname()+"', SwiftCode='"+supplier.getSwiftcode()+"',bankcountry='"+getCountryname(supplier.getBankcountry())+"' where id='"+supplier.getSupplierid()+"'";
-					System.out.println(" edit buyer query ");
-				
+				sql="update  tbsupplier set name='"+supplier.getSuppliername()+"', suppliercode='"+supplier.getSuppliercode()+"', SupplierAddress='"+supplier.getSupplieraddress()+"', ConsigneeAddress='"+supplier.getConsigneeAddress()+"', ContactPerson='"+supplier.getContcatPerson()+"', NutifyAddress='"+supplier.getNotifyAddress()+"', SupplierCountry='"+getCountryname(supplier.getCountry())+"', Telephone='"+supplier.getTelephone()+"', MobileNo='"+supplier.getMobile()+"', Fax='"+supplier.getFax()+"', Email='"+supplier.getEmail()+"', SkypeId='"+supplier.getSkypeid()+"', BankName='"+supplier.getBankname()+"', BankAddress='"+supplier.getBankaddress()+"',AccountsNo='"+supplier.getAccountno()+"',AccountsName='"+supplier.getAccountname()+"', SwiftCode='"+supplier.getSwiftcode()+"',bankcountry='"+getCountryname(supplier.getBankcountry())+"' where id='"+supplier.getSupplierid()+"'";
+				System.out.println(" edit buyer query ");
+
 				session.createSQLQuery(sql).executeUpdate();
-				
-				
+
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
+
 			}
-			
+
 			tx.commit();
-			
-			
+
+
 			System.out.println("duplicat t buyer check "+success);
-			
-			
+
+
 			return success;
 
-			
+
 		}
 		catch(Exception e){
 
@@ -811,7 +815,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return success;
 
-	
+
 	}
 
 	@Override
@@ -819,9 +823,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<SupplierModel> supplier=new ArrayList<SupplierModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -837,14 +841,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				supplier.add(new SupplierModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),"","",""));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -859,8 +863,8 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return supplier;
 	}
-	
-	
+
+
 	//Factory Create
 
 	@Override
@@ -869,9 +873,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		String query="";
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -887,13 +891,13 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				query=iter.next().toString();
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return query;
 		}
 		catch(Exception e){
@@ -919,9 +923,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-	
-		
+
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -935,19 +939,19 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "BankName, BankAddress, SwiftCode, "
 						+ "BankCountry, AccountsName, AccountsNo, "
 						+ "BondLicense, EntryTime, UserId) values ('"+factory.getFactoryid()+"','"+factory.getFactoryname()+"',"
-								+ "'"+factory.getTelephone()+"','"+factory.getMobile()+"',"
-								+ "'"+factory.getFax()+"','"+factory.getEmail()+"','"+factory.getSkypeid()+"',"
-								+ "'"+factory.getFactoryaddress()+"','"+factory.getBankname()+"','"+factory.getBankaddress()+"',"
-								+ "'"+factory.getSwiftcode()+"','"+getCountryname(factory.getBankcountry())+"','"+factory.getAccountname()+"',"
-								+ "'"+factory.getAccountno()+"','"+factory.getBondlicense()+"',GETDATE(),'"+factory.getUser()+"')";
-				
+						+ "'"+factory.getTelephone()+"','"+factory.getMobile()+"',"
+						+ "'"+factory.getFax()+"','"+factory.getEmail()+"','"+factory.getSkypeid()+"',"
+						+ "'"+factory.getFactoryaddress()+"','"+factory.getBankname()+"','"+factory.getBankaddress()+"',"
+						+ "'"+factory.getSwiftcode()+"','"+getCountryname(factory.getBankcountry())+"','"+factory.getAccountname()+"',"
+						+ "'"+factory.getAccountno()+"','"+factory.getBondlicense()+"',GETDATE(),'"+factory.getUser()+"')";
+
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return true;
 		}
 		catch(Exception e){
@@ -964,17 +968,17 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 
-	
+
 	}
-	
-	
+
+
 	public boolean checkDuplicateFactory(String factory) {
 		boolean exists=false;
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -990,17 +994,17 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				exists=true;
-				
+
 				break;
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
 			return exists;
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1021,9 +1025,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<FactoryModel> supplier=new ArrayList<FactoryModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1039,14 +1043,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				supplier.add(new FactoryModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1067,9 +1071,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> suppliers=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1085,14 +1089,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				suppliers.add(iter.next().toString());
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1114,53 +1118,53 @@ public class RegisterDaoImpl implements RegisterDao{
 		// TODO Auto-generated method stub
 		boolean success=false;
 		//success=checkDuplicateBuyer(buyer.getBuyername());
-				
+
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-		
+
+
 		String sql="";
-	
-		
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			
-			
+
+
+
 
 			if (checkDuplicateBuyer(factory.getFactoryname())) {
-				 sql="update  tbfactoryinfo set    TelePhone='"+factory.getTelephone()+"', Mobile='"+factory.getMobile()+"', Fax='"+factory.getFax()+"', Email='"+factory.getEmail()+"', SkypeId='"+factory.getSkypeid()+"', Address='"+factory.getFactoryaddress()+"', BankName='"+factory.getBankname()+"', BankAddress='"+factory.getBankaddress()+"', SwiftCode='"+factory.getSwiftcode()+"', BankCountry='"+getCountryname(factory.getBankcountry())+"', AccountsName='"+factory.getAccountname()+"', AccountsNo='"+factory.getAccountno()+"', BondLicense='"+factory.getBondlicense()+"' where FactoryId='"+factory.getFactoryid()+"'";
+				sql="update  tbfactoryinfo set    TelePhone='"+factory.getTelephone()+"', Mobile='"+factory.getMobile()+"', Fax='"+factory.getFax()+"', Email='"+factory.getEmail()+"', SkypeId='"+factory.getSkypeid()+"', Address='"+factory.getFactoryaddress()+"', BankName='"+factory.getBankname()+"', BankAddress='"+factory.getBankaddress()+"', SwiftCode='"+factory.getSwiftcode()+"', BankCountry='"+getCountryname(factory.getBankcountry())+"', AccountsName='"+factory.getAccountname()+"', AccountsNo='"+factory.getAccountno()+"', BondLicense='"+factory.getBondlicense()+"' where FactoryId='"+factory.getFactoryid()+"'";
 				System.out.println(" edit buyer query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
-				
+
+
 			}else if(!checkDuplicateBuyer(factory.getFactoryname())) {
 				sql="update  tbfactoryinfo set   FactoryName='"+factory.getFactoryname()+"', TelePhone='"+factory.getTelephone()+"', Mobile='"+factory.getMobile()+"', Fax='"+factory.getFax()+"', Email='"+factory.getEmail()+"', SkypeId='"+factory.getSkypeid()+"', Address='"+factory.getFactoryaddress()+"', BankName='"+factory.getBankname()+"', BankAddress='"+factory.getBankaddress()+"', SwiftCode='"+factory.getSwiftcode()+"', BankCountry='"+getCountryname(factory.getBankcountry())+"', AccountsName='"+factory.getAccountname()+"', AccountsNo='"+factory.getAccountno()+"', BondLicense='"+factory.getBondlicense()+"' where FactoryId='"+factory.getFactoryid()+"'";
 				System.out.println(" edit buyer query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
-				
+
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
+
 			}
-			
+
 			tx.commit();
-			
-			
+
+
 			System.out.println("duplicat t buyer check "+success);
-			
-			
+
+
 			return success;
 
-			
+
 		}
 		catch(Exception e){
 
@@ -1176,7 +1180,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return success;
 
-	
+
 	}
 
 	@Override
@@ -1184,9 +1188,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<FactoryModel> factory=new ArrayList<FactoryModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1202,14 +1206,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				factory.add(new FactoryModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1231,9 +1235,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		String query="";
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1249,13 +1253,13 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				query=iter.next().toString();
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return query;
 		}
 		catch(Exception e){
@@ -1281,9 +1285,9 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-	
-		
+
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1302,14 +1306,14 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "'"+courier.getMobile()+"','"+courier.getFax()+"','"+courier.getEmail()+"',"
 						+ "'"+courier.getSkypeid()+"','"+courier.getBankname()+"','"+courier.getBankaddress()+"',"
 						+ "'"+courier.getSwiftcode()+"','"+getCountryname(courier.getBankcountry())+"',GETDATE(),'"+courier.getUser()+"')";
-				
+
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
-			
+
+
 
 			tx.commit();
-			
+
 			return true;
 		}
 		catch(Exception e){
@@ -1326,17 +1330,17 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 
-	
+
 	}
-	
-	
+
+
 	public boolean checkDuplicateCourier(String buyername) {
 		boolean exists=false;
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> countrylist=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1354,15 +1358,15 @@ public class RegisterDaoImpl implements RegisterDao{
 				exists=true;
 				existsbuyer=true;
 				break;
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
 			return exists;
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1383,9 +1387,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<String> Buyers=new ArrayList<>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1401,14 +1405,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				//Object[] element = (Object[]) iter.next();
 
 				Buyers.add(iter.next().toString());
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1429,9 +1433,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<CourierModel> Buyers=new ArrayList<CourierModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1447,14 +1451,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				Buyers.add(new CourierModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1476,53 +1480,53 @@ public class RegisterDaoImpl implements RegisterDao{
 		// TODO Auto-generated method stub
 		boolean success=false;
 		//success=checkDuplicateBuyer(buyer.getBuyername());
-				
+
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
-		
+
+
 		String sql="";
-	
-		
+
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			
-			
+
+
+
 
 			if (checkDuplicateCourier(courier.getCouriername())) {
-				 sql="update  tbcourier set  couriercode='"+courier.getCouriercode()+"', courieraddress='"+courier.getCourierAddress()+"', ConsigneeAddress='"+courier.getConsigneeAddress()+"', NutifyAddress='"+courier.getNotifyAddress()+"', couriercountry='"+getCountryname(courier.getCountry())+"', Telephone='"+courier.getTelephone()+"', MobileNo='"+courier.getMobile()+"', Fax='"+courier.getFax()+"', Email='"+courier.getEmail()+"', SkypeId='"+courier.getSkypeid()+"', BankName='"+courier.getBankname()+"', BankAddress='"+courier.getBankaddress()+"', SwiftCode='"+courier.getSwiftcode()+"',bankcountry='"+getCountryname(courier.getBankcountry())+"' where id='"+courier.getCourierid()+"'";
+				sql="update  tbcourier set  couriercode='"+courier.getCouriercode()+"', courieraddress='"+courier.getCourierAddress()+"', ConsigneeAddress='"+courier.getConsigneeAddress()+"', NutifyAddress='"+courier.getNotifyAddress()+"', couriercountry='"+getCountryname(courier.getCountry())+"', Telephone='"+courier.getTelephone()+"', MobileNo='"+courier.getMobile()+"', Fax='"+courier.getFax()+"', Email='"+courier.getEmail()+"', SkypeId='"+courier.getSkypeid()+"', BankName='"+courier.getBankname()+"', BankAddress='"+courier.getBankaddress()+"', SwiftCode='"+courier.getSwiftcode()+"',bankcountry='"+getCountryname(courier.getBankcountry())+"' where id='"+courier.getCourierid()+"'";
 				System.out.println(" edit courier query ");
-				
+
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
-				
+
+
 			}else if(!checkDuplicateCourier(courier.getCouriername())) {
-				 sql="update  tbcourier set name='"+courier.getCouriername()+"', couriercode='"+courier.getCouriercode()+"', courieraddress='"+courier.getCourierAddress()+"', ConsigneeAddress='"+courier.getConsigneeAddress()+"', NutifyAddress='"+courier.getNotifyAddress()+"', couriercountry='"+getCountryname(courier.getCountry())+"', Telephone='"+courier.getTelephone()+"', MobileNo='"+courier.getMobile()+"', Fax='"+courier.getFax()+"', Email='"+courier.getEmail()+"', SkypeId='"+courier.getSkypeid()+"', BankName='"+courier.getBankname()+"', BankAddress='"+courier.getBankaddress()+"', SwiftCode='"+courier.getSwiftcode()+"',bankcountry='"+getCountryname(courier.getBankcountry())+"' where id='"+courier.getCourierid()+"'";
-					System.out.println(" edit courier query ");
-				
+				sql="update  tbcourier set name='"+courier.getCouriername()+"', couriercode='"+courier.getCouriercode()+"', courieraddress='"+courier.getCourierAddress()+"', ConsigneeAddress='"+courier.getConsigneeAddress()+"', NutifyAddress='"+courier.getNotifyAddress()+"', couriercountry='"+getCountryname(courier.getCountry())+"', Telephone='"+courier.getTelephone()+"', MobileNo='"+courier.getMobile()+"', Fax='"+courier.getFax()+"', Email='"+courier.getEmail()+"', SkypeId='"+courier.getSkypeid()+"', BankName='"+courier.getBankname()+"', BankAddress='"+courier.getBankaddress()+"', SwiftCode='"+courier.getSwiftcode()+"',bankcountry='"+getCountryname(courier.getBankcountry())+"' where id='"+courier.getCourierid()+"'";
+				System.out.println(" edit courier query ");
+
 				session.createSQLQuery(sql).executeUpdate();
-				
-				
+
+
 				success= true;
 				System.out.println("duplicat t buyer check "+success);
-				
+
 			}
-			
+
 			tx.commit();
-			
-			
+
+
 			System.out.println("duplicat t buyer check "+success);
-			
-			
+
+
 			return success;
 
-			
+
 		}
 		catch(Exception e){
 
@@ -1538,7 +1542,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return success;
 
-	
+
 	}
 
 	@Override
@@ -1546,9 +1550,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 		List<CourierModel> Buyers=new ArrayList<CourierModel>();
-		
+
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -1564,14 +1568,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) iter.next();
 
 				Buyers.add(new CourierModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
-				
+
 			}
-			
-			
+
+
 
 			tx.commit();
-			
-			
+
+
 		}
 		catch(Exception e){
 
@@ -1588,7 +1592,7 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 
 
-	
+
 	//Brand Create
 	@Override
 	public boolean saveBrand(Brand brand) {
@@ -1659,13 +1663,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,name,brandCode,UserId from tbbrands order by name";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Brand(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
@@ -1692,7 +1696,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,name,brandCode,UserId from tbbrands where name='"+brand.getBrandName()+"' and id !='"+brand.getBrandId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -1709,7 +1713,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		return false;
 	}
 
-	
+
 	//Fabrics Item Create
 	@Override
 	public boolean saveFabricsItem(FabricsItem fabricsItem) {
@@ -1721,7 +1725,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 			String sql="insert into TbFabricsItem(ItemName,refferance,unitId,entrytime,UserId) values('"+fabricsItem.getFabricsItemName()+"','"+fabricsItem.getReference()+"','"+fabricsItem.getUnitId()+"',current_timestamp,'"+fabricsItem.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			String itemId = "0";
 			sql = "select max(id) from TbFabricsItem where itemName='"+fabricsItem.getFabricsItemName()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
@@ -1730,7 +1734,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			}
 			sql = "insert into tbItemUnits (unitId,unitQty,itemId,itemType,entryTime,createBy) values('"+fabricsItem.getUnitId()+"','1','"+itemId+"','"+ItemType.FABRICS.getType()+"',current_timestamp,'"+fabricsItem.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			tx.commit();
 			return true;
 		}
@@ -1760,10 +1764,10 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 			String sql="update TbFabricsItem set itemName='"+fabricsItem.getFabricsItemName()+"',refferance='"+fabricsItem.getReference()+"',unitId='"+fabricsItem.getUnitId()+"' where id='"+fabricsItem.getFabricsItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			sql="update tbItemUnits set unitId='"+fabricsItem.getUnitId()+"' where itemId='"+fabricsItem.getFabricsItemId()+"' and unitQty='1' and itemType='"+ItemType.FABRICS.getType()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			tx.commit();
 			return true;
 		}
@@ -1801,7 +1805,7 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) list.get(0);
 				fabricsItem = new FabricsItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),element[4].toString());
 			}
-			
+
 			sql="select iu.unitId,u.unitname,unitQty \r\n" + 
 					"from tbItemUnits iu\r\n" + 
 					"left join tbunits u\r\n" + 
@@ -1811,11 +1815,11 @@ public class RegisterDaoImpl implements RegisterDao{
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
 				unitList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
 			}
-			
+
 			fabricsItem.setUnitList(unitList);
 			tx.commit();
 		}
@@ -1842,13 +1846,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,ItemName,refferance,unitId,UserId from TbFabricsItem order by ItemName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new FabricsItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),element[4].toString()));
 			}
 			tx.commit();
@@ -1875,7 +1879,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,ItemName,refferance,UserId from TbFabricsItem where ItemName='"+fabricsItem.getFabricsItemName()+"' and id !='"+fabricsItem.getFabricsItemId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -1891,8 +1895,8 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return false;
 	}
-	
-	
+
+
 	@Override
 	public boolean addItemUnits(Unit unit, String itemId, String itemType) {
 		// TODO Auto-generated method stub
@@ -1903,7 +1907,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 			String sql="delete from tbItemUnits where itemId='"+itemId+"' and itemType='"+itemType+"' and unitId='"+unit.getUnitId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			sql = "insert into tbItemUnits (unitId,unitQty,itemId,itemType,entryTime,createBy) values('"+unit.getUnitId()+"','"+unit.getUnitQty()+"','"+itemId+"','"+itemType+"',current_timestamp,'"+unit.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
@@ -1924,7 +1928,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
-	
+
 	@Override
 	public List<Unit> getItemUnitsList(String itemId, String itemType) {
 		Session session=HibernateUtil.openSession();
@@ -1943,7 +1947,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
 				dataList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
 			}
@@ -1972,7 +1976,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 			String sql="insert into TbAccessoriesItem (Itemname,ItemCode,unitId,entrytime,UserId) values('"+accessoriesItem.getAccessoriesItemName()+"','"+accessoriesItem.getAccessoriesItemCode()+"','"+accessoriesItem.getUnitId()+"', CURRENT_TIMESTAMP,'"+accessoriesItem.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			String itemId = "0";
 			sql = "select max(itemId) from TbAccessoriesItem where itemName='"+accessoriesItem.getAccessoriesItemName()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
@@ -2010,11 +2014,11 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 			String sql="update TbAccessoriesItem set Itemname='"+accessoriesItem.getAccessoriesItemName()+"',Itemcode='"+accessoriesItem.getAccessoriesItemCode()+"',unitId='"+accessoriesItem.getUnitId()+"' where itemid='"+accessoriesItem.getAccessoriesItemId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			sql="update tbItemUnits set unitId='"+accessoriesItem.getUnitId()+"' where itemId='"+accessoriesItem.getAccessoriesItemId()+"' and unitQty='1' and itemType='"+ItemType.ACCESSORIES.getType()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
-			
+
+
 			tx.commit();
 			return true;
 		}
@@ -2033,7 +2037,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
-	
+
 	@Override
 	public AccessoriesItem getAccessoriesItem(String accessoriesItemId) {
 		// TODO Auto-generated method stub
@@ -2052,7 +2056,7 @@ public class RegisterDaoImpl implements RegisterDao{
 				Object[] element = (Object[]) list.get(0);
 				accessoriesItem = new AccessoriesItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString());
 			}
-			
+
 			sql="select iu.unitId,u.unitname,unitQty \r\n" + 
 					"from tbItemUnits iu\r\n" + 
 					"left join tbunits u\r\n" + 
@@ -2062,11 +2066,11 @@ public class RegisterDaoImpl implements RegisterDao{
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
 				unitList.add(new Unit(element[0].toString(), element[1].toString(), Double.valueOf(element[2].toString())));
 			}
-			
+
 			accessoriesItem.setUnitList(unitList);
 			tx.commit();
 		}
@@ -2093,13 +2097,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,itemName,itemCode,unitId,userid from TbAccessoriesItem order by itemName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
 			}
 			tx.commit();
@@ -2126,7 +2130,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,itemName,itemCode,userid from TbAccessoriesItem where itemName='"+accessoriesItem.getAccessoriesItemName()+"' and itemId !='"+accessoriesItem.getAccessoriesItemId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2212,13 +2216,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,itemName,itemCode,userid from tbItemDescription order by itemName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new StyleItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
@@ -2245,7 +2249,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,itemName,itemCode,userid from tbItemDescription where itemName='"+styleItem.getStyleItemName()+"' and itemId !='"+styleItem.getStyleItemId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2262,7 +2266,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		return false;
 	}
 
-	
+
 	//Unit Create
 	@Override
 	public boolean saveUnit(Unit unit) {
@@ -2333,13 +2337,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select unitId,unitName,unitValue,UserId from tbUnits order by unitName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Unit(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
@@ -2366,7 +2370,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select unitId,unitName,unitValue,UserId from tbUnits where unitName='"+unit.getUnitName()+"' and unitId != '"+unit.getUnitId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2452,13 +2456,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select colorId,colorName,colorCode,UserId from tbColors order by colorName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Color(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
@@ -2485,7 +2489,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select colorId,colorName,colorCode,UserId from tbColors where colorName='"+color.getColorName()+"' and colorId !='"+color.getColorId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2571,13 +2575,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,Itemname,ItemCode,UserId from TbLocalItem order by itemName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new LocalItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
@@ -2604,7 +2608,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select itemId,Itemname,ItemCode,UserId from TbLocalItem where Itemname='"+localItem.getLocalItemName()+"' and itemId !='"+localItem.getLocalItemId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2690,13 +2694,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select autoId,name,UserId from TbParticularItemInfo order by name";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new ParticularItem(element[0].toString(), element[1].toString(), element[2].toString()));
 			}
 			tx.commit();
@@ -2723,7 +2727,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select autoId,name,UserId from TbParticularItemInfo where name='"+particularItem.getParticularItemName()+"' and autoId !='"+particularItem.getParticularItemId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2809,13 +2813,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select autoId,countryName,UserId from TbCountryInfo order by countryName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Country(element[0].toString(), element[1].toString(), element[2].toString()));
 			}
 			tx.commit();
@@ -2842,7 +2846,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select autoId,countryName,UserId from TbCountryInfo where countryName='"+country.getCountryName()+"' and autoId !='"+country.getCountryId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -2928,13 +2932,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select AutoId,name,UserId from TbSampleTypeInfo order by name";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new SampleType(element[0].toString(), element[1].toString(), element[2].toString()));
 			}
 			tx.commit();
@@ -2961,7 +2965,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select AutoId,name,UserId from TbSampleTypeInfo where name='"+sampleType.getSampleTypeName()+"' and autoId !='"+sampleType.getSampleTypeId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3015,7 +3019,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="update TbDepartmentInfo set factoryId ='"+department.getFactoryId()+"',departmentName='"+department.getDepartmentName()+"',entrytime=CURRENT_TIMESTAMP,UserId='"+department.getUserId()+"' where deparmentId='"+department.getDepartmentId()+"'";
+			String sql="update TbDepartmentInfo set factoryId ='"+department.getFactoryId()+"',departmentName='"+department.getDepartmentName()+"',entrytime=CURRENT_TIMESTAMP,UserId='"+department.getUserId()+"' where DepartmentId='"+department.getDepartmentId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -3047,14 +3051,47 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select departmentId,factoryId,(select factoryName from tbfactoryInfo where factoryId=di.factoryId) as factoryName,departmentName,userId from TbDepartmentInfo di order by factoryName,departmentName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Department(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<Department> getFactoryWiseDepartment(String factoryId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Department> dataList=new ArrayList<Department>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select DepartmentId,DepartmentName from TbDepartmentInfo where FactoryId='"+factoryId+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
 				Object[] element = (Object[]) iter.next();
 				
-				dataList.add(new Department(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
+				dataList.add(new Department(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -3079,8 +3116,8 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select departmentId,factoryId,departmentName,userId from TbDepartmentInfo where departmentName='"+department.getDepartmentName()+"' and departmentId != '"+department.getDepartmentId()+"' and factoryId != '"+department.getFactoryId()+"'";
-			
+			String sql="select departmentId,factoryId,departmentName,userId from TbDepartmentInfo where departmentName='"+department.getDepartmentName()+"' and departmentId != '"+department.getDepartmentId()+"' and factoryId = '"+department.getFactoryId()+"'";
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3106,7 +3143,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select * from TbMerchendiserInfo where MerchendiserName='"+v.getName()+"' and MerchendiserId != '"+v.getMerchendiserId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3163,13 +3200,13 @@ public class RegisterDaoImpl implements RegisterDao{
 
 			int i=1;
 			String sql="select MerchendiserId,MerchendiserName,TelePhone,Mobile,Fax,Email,SkypeId,Address from TbMerchendiserInfo order by MerchendiserName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new MerchandiserInfo(Integer.toString(i),element[0].toString(), element[1].toString(), element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString()));
 				i++;
 			}
@@ -3224,7 +3261,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select * from TbInchargeInfo where InchargeName='"+v.getName()+"' and InchargeId != '"+v.getInchargeId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3268,7 +3305,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
-	
+
 	@Override
 	public boolean editIncharge(InchargeInfo v) {
 		Session session=HibernateUtil.openSession();
@@ -3308,13 +3345,13 @@ public class RegisterDaoImpl implements RegisterDao{
 
 			int i=1;
 			String sql="select InchargeId,InchargeName,FactoryId,DepId,TelePhone,Mobile,Fax,Email,SkypeId,Address from TbInchargeInfo order by InchargeName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new InchargeInfo(Integer.toString(i),element[0].toString(), element[1].toString(), element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString()));
 				i++;
 			}
@@ -3403,13 +3440,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select lineId,factoryId,(select factoryName from tbfactoryInfo where factoryId=lc.factoryId) as factoryName,departmentId,(select departmentName from TbDepartmentInfo where DepartmentId = lc.departmentId) as departmentName,lineName,userId from tblineCreate lc order by factoryName,departmentName,lineName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Line(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString()));
 			}
 			tx.commit();
@@ -3427,6 +3464,39 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 
 	@Override
+	public List<Line> getDepartmentWiseLine(String departmentId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Line> dataList=new ArrayList<Line>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select lineId,LineName,DepartmentId from TbLineCreate where DepartmentId='"+departmentId+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				
+				dataList.add(new Line(element[0].toString(),element[1].toString(),element[2].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
 	public boolean isLineExist(Line line) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
@@ -3436,7 +3506,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select departmentId,lineId,factoryId,lineName,userId from tbLineCreate where lineName='"+line.getLineName()+"' and lineId != '"+line.getLineId()+"' and factoryId = '"+line.getFactoryId()+"' and departmentId='"+line.getDepartmentId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3522,13 +3592,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,groupId,(select groupName from tbSizeGroup where id = s.groupId)as groupName,sizeName,sortingNo,userId from tbStyleSize s order by groupName,sortingNo";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Size(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString()));
 			}
 			tx.commit();
@@ -3555,7 +3625,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,groupId,sizeName,sortingNo,userId from tbStyleSize where sizeName='"+size.getSizeName()+"' and groupId='"+size.getGroupId()+"' and id !='"+size.getSizeId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3641,13 +3711,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,groupName,userId from tbSizeGroup order by groupName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new SizeGroup(element[0].toString(), element[1].toString(), element[2].toString()));
 			}
 			tx.commit();
@@ -3674,7 +3744,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select id,groupName,userId from tbSizeGroup where groupName='"+sizeGroup.getGroupName()+"' and id != '"+sizeGroup.getGroupId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3691,7 +3761,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		return false;
 	}
 
-	
+
 	@Override
 	public boolean saveWareHouse(WareHouse wareHouse) {
 		// TODO Auto-generated method stub
@@ -3761,13 +3831,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select wareHouseId,factoryId,(select factoryName from tbfactoryInfo where factoryId=di.factoryId) as factoryName,wareHouseName,userId from TbWareHouseInfo di order by factoryName,wareHouseName";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				
+
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new WareHouse(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
 			}
 			tx.commit();
@@ -3794,7 +3864,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			String sql="select wareHouseId,factoryId,wareHouseName,userId from TbWareHouseInfo where wareHouseName='"+wareHouse.getWareHouseName()+"' and wareHouseId != '"+wareHouse.getWareHouseId()+"' and factoryId = '"+wareHouse.getFactoryId()+"'";
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) return true;
 			tx.commit();
@@ -3810,106 +3880,585 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return false;
 	}
-	
+
 	//Common get Methods
-		@Override
-		public List<Factory> getFactoryNameList(){
-			Session session=HibernateUtil.openSession();
-			Transaction tx=null;
-			List<Factory> dataList=new ArrayList<Factory>();
-			try{
-				tx=session.getTransaction();
-				tx.begin();
+	@Override
+	public List<Factory> getFactoryNameList(){
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Factory> dataList=new ArrayList<Factory>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
 
-				String sql="select FactoryId,FactoryName from TbFactoryInfo order by FactoryName";
-				
-				List<?> list = session.createSQLQuery(sql).list();
-				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-				{	
-					
-					Object[] element = (Object[]) iter.next();
-					
-					dataList.add(new Factory(element[0].toString().trim(), element[1].toString().trim()));
-				}
-				tx.commit();
+			String sql="select FactoryId,FactoryName from TbFactoryInfo order by FactoryName";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Factory(element[0].toString().trim(), element[1].toString().trim()));
 			}
-			catch(Exception e){
-				if (tx != null) {
-					tx.rollback();
-				}
-				e.printStackTrace();
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
 			}
-			finally {
-				session.close();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public Unit getUnit(String unitId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		Unit unit= null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select unitId,unitName,unitValue,UserId from tbUnits where unitId= '"+unitId+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				unit = new Unit(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString());
 			}
-			return dataList;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return unit;
+	}
+
+	@Override
+	public List<StoreGeneralCategory> getStoreCategoryList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<StoreGeneralCategory> dataList=new ArrayList<StoreGeneralCategory>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select headId,headTitle from tbStoreItemCatagory order by headTitle";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new StoreGeneralCategory(element[0].toString().trim(), element[1].toString().trim()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	// Designation create
+
+	@Override
+	public boolean saveDesignation(Designation designation) {
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql = "insert into TbDesignationInfo (DepartmentId, DesignationName, EntryTime, UserId) values ('" + designation.getDepartmentId()+ "','" + designation.getDesignation()+ "', CURRENT_TIMESTAMP,'"+ designation.getUserId() + "')";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Designation> getDesignationList() {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Designation> dataList=new ArrayList<Designation>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			int i=1;
+			String sql="select DepartmentId,(select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesignationId, a.DesignationName from TbDesignationInfo a order by DepartmentId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Designation(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				i++;
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean editDesignation(Designation designation) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update TbDesignationInfo set DepartmentId='"+designation.getDepartmentId()+"', DesignationName='"+designation.getDesignation()+"', EntryTime=current_timestamp, UserId='"+designation.getUserId()+"' where DesignationId='"+designation.getId()+"' ";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
 		}
 
-		@Override
-		public Unit getUnit(String unitId) {
-			Session session=HibernateUtil.openSession();
-			Transaction tx=null;
-			Unit unit= null;
-			try{
-				tx=session.getTransaction();
-				tx.begin();
-
-				String sql="select unitId,unitName,unitValue,UserId from tbUnits where unitId= '"+unitId+"'";
-				
-				List<?> list = session.createSQLQuery(sql).list();
-				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-				{	
-					
-					Object[] element = (Object[]) iter.next();
-					
-					unit = new Unit(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString());
-				}
-				tx.commit();
-			}
-			catch(Exception e){
-				if (tx != null) {
-					tx.rollback();
-				}
-				e.printStackTrace();
-			}
-			finally {
-				session.close();
-			}
-			return unit;
+		finally {
+			session.close();
 		}
 
-		@Override
-		public List<StoreGeneralCategory> getStoreCategoryList() {
-			Session session=HibernateUtil.openSession();
-			Transaction tx=null;
-			List<StoreGeneralCategory> dataList=new ArrayList<StoreGeneralCategory>();
-			try{
-				tx=session.getTransaction();
-				tx.begin();
+		return false;
+	}
 
-				String sql="select headId,headTitle from tbStoreItemCatagory order by headTitle";
-				
-				List<?> list = session.createSQLQuery(sql).list();
-				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-				{	
-					
-					Object[] element = (Object[]) iter.next();
-					
-					dataList.add(new StoreGeneralCategory(element[0].toString().trim(), element[1].toString().trim()));
-				}
-				tx.commit();
+	@Override
+	public boolean isDesignationExist(Designation v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select * from TbDesignationInfo where DepartmentId='"+v.getDepartmentId()+"' and DesignationName='"+v.getDesignation()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+				return true;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
 			}
-			catch(Exception e){
-				if (tx != null) {
-					tx.rollback();
-				}
-				e.printStackTrace();
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean saveEmployee(Employee saveEmployee) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql = "insert into TbEmployeeInfo (EmployeeCode, Name, CardNo, DesginationId, DepartmentId, LineId, Grade, JoinDate, EntryTime, UserId) values ('" + saveEmployee.getEmployeeCode()+ "','" + saveEmployee.getEmployeeName()+ "','"+saveEmployee.getCardNo()+"','"+saveEmployee.getDesignation()+"','"+saveEmployee.getDepartment()+"','"+saveEmployee.getLine()+"','"+saveEmployee.getGrade()+"','"+saveEmployee.getJoinDate()+"', CURRENT_TIMESTAMP,'"+ saveEmployee.getUserId() + "')";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
 			}
-			finally {
-				session.close();
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Employee> getEmployeeList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Employee> dataList=new ArrayList<Employee>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			int i=1;
+			String sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, (select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesginationId, (select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId) as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo a";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Employee(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString()));
+				i++;
 			}
-			return dataList;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean editEmployee(Employee editEmployee) {
+		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update TbEmployeeInfo set Name='"+editEmployee.getEmployeeName()+"', CardNo='"+editEmployee.getCardNo()+"', DepartmentId='"+editEmployee.getDepartment()+"', DesginationId='"+editEmployee.getDesignation()+"', LineId='"+editEmployee.getLine()+"', Grade='"+editEmployee.getGrade()+"', JoinDate='"+editEmployee.getJoinDate()+"', EntryTime=current_timestamp, UserId='"+editEmployee.getUserId()+"' where EmployeeCode='"+editEmployee.getEmployeeCode()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
 		}
 
-		
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isEmployeeExist(Employee v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select EmployeeCode from TbEmployeeInfo where EmployeeCode='"+v.getEmployeeCode()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+				return true;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean saveMachine(Machine saveMachine) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql = "insert into TbMachineInfo (MachineName, Brand, ModelNo, Motor, OperatorId,FactoryId,DepartmentId,LineId,EntryTime, UserId) values ('" + saveMachine.getName()+ "','" + saveMachine.getBrand()+ "','"+saveMachine.getModelNo()+"','"+saveMachine.getMotor()+"','"+saveMachine.getEmployeeId()+"','"+saveMachine.getFactoryId()+"','"+saveMachine.getDepartmentId()+"','"+saveMachine.getLineId()+"', CURRENT_TIMESTAMP,'"+ saveMachine.getUserId() + "')";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Machine> getMachineList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Machine> dataList=new ArrayList<Machine>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			int i=1;
+			String sql="select a.MachineId, a.MachineName, a.Brand, a.ModelNo, a.Motor, a.OperatorId, (select b.Name from TbEmployeeInfo b where b.AutoId=a.OperatorId) as EmployeeName from TbMachineInfo a";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Machine(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString()));
+				i++;
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean editMachine(Machine editMachine) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update TbMachineInfo set MachineName='"+editMachine.getName()+"', Brand='"+editMachine.getBrand()+"', ModelNo='"+editMachine.getModelNo()+"', Motor='"+editMachine.getMotor()+"', OperatorId='"+editMachine.getEmployeeId()+"', EntryTime=current_timestamp, UserId='"+editMachine.getUserId()+"' where MachineId='"+editMachine.getMachineId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean isMachineExist(Machine v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select MachineName from TbMachineInfo where MachineName='"+v.getName()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+				return true;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public boolean isProcessExist(ProcessInfo v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ProcessName from TbProcessInfo where ProcessName='"+v.getProcessName()+"' and ProcessId!='"+v.getProcessId()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+				return true;
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean saveProcess(ProcessInfo v) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql = "insert into TbProcessInfo (ProcessName,EntryTime, UserId) values ('" + v.getProcessName()+ "',CURRENT_TIMESTAMP,'"+ v.getUserId() + "')";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<ProcessInfo> getProcessList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProcessInfo> dataList=new ArrayList<ProcessInfo>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			int i=1;
+			String sql="select ProcessId,ProcessName from TbProcessInfo order by ProcessId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ProcessInfo(element[0].toString(), element[1].toString()));
+				i++;
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean editProcess(ProcessInfo v) {
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql = "update TbProcessInfo set ProcessName='" + v.getProcessName()+ "',EntryTime=CURRENT_TIMESTAMP,UserId='"+ v.getUserId() + "' where ProcessId='"+v.getProcessId()+"'";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+
+
+
+
 }

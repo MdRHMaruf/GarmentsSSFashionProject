@@ -10,6 +10,24 @@ var find=0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
+function printSampleReuisition(sampleReqId){
+	$.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './sampleRequisitionInfo',
+        data:{
+        	sampleReqId:sampleReqId
+        	},
+        success: function (data) {
+          if (data== "Success") {
+      		var url = "printsampleRequisition";
+    		window.open(url, '_blank');
+
+          }
+        }
+      });
+}
+
 function loadData() {
 
 	  $.ajax({

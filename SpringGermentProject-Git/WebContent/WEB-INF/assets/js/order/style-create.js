@@ -30,7 +30,15 @@ function readBackURL(input) {
 
 function btnsaveAction(v){
 	
-		
+	
+	var i=0;
+	var hexvalues = [];
+	$('#itemId :selected').each(function(i, selectedElement) {
+		 hexvalues[i]=$(selectedElement).val();
+		var txt=$(selectedElement).text();
+		i++;
+	});
+	
 /*	var buyerId = $("#buyername").val().trim();
 	var itemId = $("#itemname").val().trim();
 	var styleNo = $("#styleno").val().trim();
@@ -101,12 +109,17 @@ function btnsaveAction(v){
 
 function setData(styleItemAutoId) {
 
+	
 	//alert("styleItemAutoId "+styleItemAutoId );
 
-	  document.getElementById("styleItemAutoId").value = styleItemAutoId;
-	  document.getElementById("styleNo").value = document.getElementById("styleNo" + styleItemAutoId).innerHTML;
+	  //document.getElementById("styleItemAutoId").value = styleItemAutoId;
+	  
+	  
+	alert("");
+	  
+/*	  document.getElementById("styleNo").value = document.getElementById("styleNo" + styleItemAutoId).innerHTML;
 	  document.getElementById("itemId").value = document.getElementById("itemId" + styleItemAutoId).value;
-	  /*  document.getElementById("mobile").value = document.getElementById("mobile" + merchendiserId).value;
+	    document.getElementById("mobile").value = document.getElementById("mobile" + merchendiserId).value;
 	  document.getElementById("fax").value = document.getElementById("fax" + merchendiserId).value;
 	  document.getElementById("email").value = document.getElementById("email" + merchendiserId).value;
 	  document.getElementById("skype").value = document.getElementById("skype" + merchendiserId).value;

@@ -1,4 +1,3 @@
-
 package pg.services;
 
 import java.sql.SQLException;
@@ -540,7 +539,4 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.postSampleProductionInfo(sampleCadAndProduction);
 	}
 
-	
-
 }
-

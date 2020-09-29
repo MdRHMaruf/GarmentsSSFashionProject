@@ -1,4 +1,3 @@
-
 package pg.services;
 
 import java.sql.SQLException;
@@ -29,13 +28,13 @@ public interface OrderService {
 	List<ItemDescription> getItemDescriptionList();
 	List<Style> getBuyerWiseStylesItem(String buyerId);
 	List<ItemDescription> getStyleWiseItem(String styleId);
-	
+
 	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
 			String frontimg, String backimg) throws SQLException;
 	List<Style> getStyleList();
 	List<Style> getStyleWiseItemList();
 	List<Style> getStyleAndItem(String value);
-	
+
 	//Costing Create
 	List<ParticularItem> getTypeWiseParticularList(String type);
 	public boolean saveCosting(Costing costing);
@@ -56,7 +55,7 @@ public interface OrderService {
 	List<BuyerPO> getBuyerPoList();
 	BuyerPO getBuyerPO(String buyerPoNo);
 	boolean cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId);
-	
+
 	//Accessories
 	public String maxAIno(); 
 	public List<commonModel>PurchaseOrders();
@@ -67,13 +66,13 @@ public interface OrderService {
 	public List<commonModel>Size(String style, String item, String color, String type);
 	public List<commonModel>Unit();
 	public List<commonModel>Brands();
-	
+
 	public List<commonModel>ShippingMark(String po, String style, String item);
 	public List<commonModel>AllColors();
 	public List<commonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
-	
+
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
-	
+
 	public List<AccessoriesIndent>PendingList();
 	List<commonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
 	List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
@@ -89,7 +88,7 @@ public interface OrderService {
 	List<accessoriesindentcarton> getAllAccessoriesCartonData();
 	List<accessoriesindentcarton> getAccessoriesIndentCartonItemDetails(String id);
 	boolean editAccessoriesCurton(accessoriesindentcarton v);
-	
+
 
 	//Fabrics Indent
 	List<String> getPurchaseOrderList();
@@ -102,7 +101,7 @@ public interface OrderService {
 	List<Color> getStyleItemWiseColor(String styleId,String itemId);
 	double getOrderQuantity(String purchaseOrder,String styleId,String itemId,String colorId);
 	List<commonModel> BuyerWisePo(String buyerId);
-	
+
 	//Sample Requisition
 	List<commonModel> getSampleList();
 	List<commonModel> getInchargeList();
@@ -113,7 +112,7 @@ public interface OrderService {
 	List<SampleRequisitionItem> getSampleRequisitionList();
 	List<SampleRequisitionItem> getSampleRequisitionDetails(String sampleReqId);
 	List<SampleRequisitionItem> getIncomepleteSampleRequisitionItemList(String userId);
-	
+
 	//Purchase Order
 	List<pg.registerModel.AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder,String styleId,String type);
 	boolean submitPurchaseOrder(PurchaseOrder purchaseOrder);
@@ -123,17 +122,16 @@ public interface OrderService {
 	List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem);
 
 	//File Upload
-		boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user);
-		List<pg.orderModel.fileUpload> findfiles(String start, String end, String user);
-		boolean fileDownload(String fileName, String user, String string, String computerName);
-		boolean deletefile(String filename);
-		boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
-				String installAccessories, String forAccessories);
-		
-		//Sample Production
-		List<SampleCadAndProduction> getSampleCommentsList();
-		SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId);
-		boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
+	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user);
+	List<pg.orderModel.fileUpload> findfiles(String start, String end, String user);
+	boolean fileDownload(String fileName, String user, String string, String computerName);
+	boolean deletefile(String filename);
+	boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
+			String installAccessories, String forAccessories);
 
+	//Sample Production
+	List<SampleCadAndProduction> getSampleCommentsList();
+	SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId);
+	boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
 
 }

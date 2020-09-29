@@ -923,7 +923,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 					}
 
 					System.out.println("selectionid");
-					sql="insert into tbsewinglinesetup (selectionId,styleid,startdate,enddate,duration,lineId,selectUnselect,entryby,entrytime) values ('"+selectionid+"','"+linemodels.getStyle()+"','"+linemodels.getStart()+"', '"+linemodels.getEnd()+"','"+linemodels.getDuration()+"','"+linemodels.getLine()[i]+"','1','"+linemodels.getUser()+"', GETDATE())";
+					sql="insert into tbsewinglinesetup (selectionId,BuyerOrderId,PoNo,styleid,itemId,startdate,enddate,duration,lineId,selectUnselect,entryby,entrytime) values ('"+selectionid+"','"+linemodels.getBuyerOrderId()+"','"+linemodels.getPoNo()+"','"+linemodels.getStyle()+"','"+linemodels.getItemId()+"','"+linemodels.getStart()+"', '"+linemodels.getEnd()+"','"+linemodels.getDuration()+"','"+linemodels.getLine()[i]+"','1','"+linemodels.getUser()+"', GETDATE())";
 					session.createSQLQuery(sql).executeUpdate();
 
 					count++;
@@ -1556,6 +1556,152 @@ public class ProductionDAOImpl implements ProductionDAO{
 				Object[] element = (Object[]) iter.next();
 
 				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString(),element[21].toString(),element[22].toString(),element[23].toString(),element[24].toString(),element[25].toString(),element[26].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean saveInceptionLayoutDetails(ProductionPlan v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
+			System.out.println("resultValue "+resultValue);
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+				String secondToken=firstToken.nextToken();
+				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
+				while(thirdToken.hasMoreTokens()) {
+					String employyeId=thirdToken.nextToken();
+					String lineId=thirdToken.nextToken();
+					String totalQty=thirdToken.nextToken();
+					String layoutvalue=thirdToken.nextToken();
+
+
+					//Passed
+					StringTokenizer layoutToken=new StringTokenizer(layoutvalue, ":");
+					while(layoutToken.hasMoreTokens()) {
+						String h1=layoutToken.nextToken();
+						String h2=layoutToken.nextToken();
+						String h3=layoutToken.nextToken();
+						String h4=layoutToken.nextToken();
+						String h5=layoutToken.nextToken();
+						String h6=layoutToken.nextToken();
+						String h7=layoutToken.nextToken();
+						String h8=layoutToken.nextToken();
+						String h9=layoutToken.nextToken();
+						String h10=layoutToken.nextToken();
+
+				
+
+						String productionSql="insert into tbLayoutPlanDetails ("
+								+ "BuyerId,"
+								+ "BuyerOrderId,"
+								+ "PurchaseOrder,"
+								+ "StyleId,"
+								+ "ItemId,"
+								+ "LineId,"
+								+ "EmployeeId,"
+								+ "Type,"
+								+ "DailyTarget,"
+								+ "HourlyTarget,"
+								+ "Hours,"
+								+ "hour1,"
+								+ "hour2,"
+								+ "hour3,"
+								+ "hour4,"
+								+ "hour5,"
+								+ "hour6,"
+								+ "hour7,"
+								+ "hour8,"
+								+ "hour9,"
+								+ "hour10,"
+								+ "total,"
+								+ "date,"
+								+ "entrytime,"
+								+ "userId) values ("
+								+ "'"+v.getBuyerId()+"',"
+								+ "'"+v.getBuyerorderId()+"',"
+								+ "'"+v.getPurchaseOrder()+"',"
+								+ "'"+v.getStyleId()+"',"
+								+ "'"+v.getItemId()+"',"
+								+ "'"+lineId+"',"
+								+ "'"+employyeId+"',"
+								+ "'"+v.getLayoutName()+"',"
+								+ "'"+v.getDailyTarget()+"',"
+								+ "'"+v.getHourlyTarget()+"',"
+								+ "'10',"
+								+ "'"+h1+"',"
+								+ "'"+h2+"',"
+								+ "'"+h3+"',"
+								+ "'"+h4+"',"
+								+ "'"+h5+"',"				
+								+ "'"+h6+"',"
+								+ "'"+h7+"',"
+								+ "'"+h8+"',"
+								+ "'"+h9+"',"
+								+ "'"+h10+"',"
+								+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+								+ ")";
+						session.createSQLQuery(productionSql).executeUpdate();
+					}
+
+				}
+			}
+
+
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<ProductionPlan> getLayoutPlanDetails(String type) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select (select name from tbBuyer where id=a.BuyerId) as BuyerName,a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.styleId,(select ItemName from tbItemDescription where itemid=a.itemId) as ItemName,a.ItemId,convert(varchar,a.date,23) as Date from tbLayoutPlanDetails a  where a.Type='"+type+"' group by a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,a.ItemId,a.date";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),""));
 			}
 			tx.commit();
 		}

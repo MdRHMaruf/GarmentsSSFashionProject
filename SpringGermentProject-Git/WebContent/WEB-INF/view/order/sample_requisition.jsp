@@ -324,7 +324,8 @@
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Date</th>
-							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span>Search</th>
+							<th><span>Print</th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -336,6 +337,9 @@
 								<td >${po.sampleDeadline}</td>
 								<td><i class="fa fa-search"
 									onclick="searchSampleReuisition(${po.autoId})">
+								</i></td>
+								<td><i class="fa fa-print"
+									onclick="printSampleReuisition(${po.autoId})">
 								</i></td>
 							</tr>
 						</c:forEach>

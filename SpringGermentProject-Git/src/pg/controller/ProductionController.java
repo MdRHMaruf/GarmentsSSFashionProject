@@ -28,6 +28,7 @@ import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Department;
+import pg.registerModel.Employee;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
@@ -60,6 +61,7 @@ public class ProductionController {
 	String StyleId="";
 	String ItemId="";
 	String ProductionDate="";
+	String LayoutDate="";
 	
 	//Cutting Requisition
 	@RequestMapping(value = "/cutting_requisition",method=RequestMethod.GET)
@@ -155,6 +157,18 @@ public class ProductionController {
 		}
 		
 		return objmain;
+	}
+	
+	
+	@RequestMapping(value="/getProductionPlan/{buyerId}/{styleId}/{buyerorderId}")
+	public @ResponseBody ModelAndView getPurchaseOrderReport(ModelMap map,@PathVariable String buyerId,@PathVariable String styleId,@PathVariable String buyerorderId) {
+		ModelAndView view = new ModelAndView("production/ProductionPlanReportView");
+
+		System.out.println("buyerId "+buyerId);
+		map.addAttribute("buyerId",buyerId);
+		map.addAttribute("styleId",styleId);
+		map.addAttribute("buyerorderId",buyerorderId);
+		return view;
 	}
 	
 	@RequestMapping(value = "/searchProductionPlan",method=RequestMethod.POST)
@@ -255,15 +269,14 @@ public class ProductionController {
 	@RequestMapping(value = "/sewing_line_setup",method=RequestMethod.GET)
 	public ModelAndView sewing_line_setup(ModelMap map,HttpSession session) {
 		
-		//List<SewingLinesModel> sewingLineList= productionService.getSewingProductionLines();
-		
-		//System.out.println("sewingLineList "+sewingLineList.size());
+		List<Factory> factorylist = registerService.getFactoryNameList();
 		List<Line> lines=productionService.getLineNames();
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		ModelAndView view = new ModelAndView("production/sewinglinesetup");
 		view.addObject("productionPlanList",productionPlanList);
+		view.addObject("factorylist",factorylist);
 		map.addAttribute("lines",lines);
-		//view.addObject("sewingLineList",sewingLineList);
+	
 	
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -273,6 +286,9 @@ public class ProductionController {
 	
 	@RequestMapping(value = "/InsertLines",method=RequestMethod.POST,consumes = { "application/json" },headers = "content-type=application/x-www-form-urlencoded")
 	 public String InsertLines(@RequestParam(value = "user", required = false) String user,@RequestParam(value = "style", required = false) String style,
+			 @RequestParam(value = "itemId", required = false) String itemId,
+			 @RequestParam(value = "buyerOrderId", required = false) String buyerOrderId,
+			 @RequestParam(value = "poNo", required = false) String poNo,
 			 @RequestParam(value = "Line[]", required = false) String[] Line,
 			 @RequestParam(value = "start", required = false) String start,
 			 @RequestParam(value = "end", required = false) String end,
@@ -280,16 +296,76 @@ public class ProductionController {
 		
 		
 		
-		SewingLinesModel lin=new SewingLinesModel(user,style,Line, start, end, duration);
+		SewingLinesModel lin=new SewingLinesModel(poNo,buyerOrderId,user,style,itemId,Line, start, end, duration);
 		String insertlines=productionService.InserLines(lin);
 		
 		return insertlines; //JSP - /WEB-INF/view/index.jsp
 	}
 	
+	@RequestMapping(value = "/layout_plan",method=RequestMethod.GET)
+	public ModelAndView layout_plan(ModelMap map,HttpSession session) {
+		
+	
+
+		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails("1");
+		ModelAndView view = new ModelAndView("production/inspection_layout_plan");
+		view.addObject("productionPlanList",productionPlanList);
+		view.addObject("layoutList",layoutList);
+		
+	
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/saveLineInceptionLayoutDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveLineInceptionLayoutDetails(ProductionPlan v) {
+		
+		String msg="Create Occure while Saving Inception Layout Details";
+
+		boolean flag= productionService.saveInceptionLayoutDetails(v);
+
+		if(flag) {
+			msg="Saving Sewing Inception Layout Details Sucessfully";
+		}
+	
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/searchLayoutInfo",method=RequestMethod.GET)
+	public @ResponseBody String searchLayoutInfo(String buyerId,String buyerorderId,String styleId,String itemId,String layoutDate) {
+		
+		this.BuyerId=buyerId;
+		this.BuyerorderId=buyerorderId;
+		this.StyleId=styleId;
+		this.ItemId=itemId;
+		this.LayoutDate=layoutDate;
+	
+		return "Success"; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/printLayoutInfo",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView searchLayoutInfo(ModelMap map) {
+		
+	
+		ModelAndView view=new ModelAndView("production/printLayoutPlanReport");
+		
+		
+		map.addAttribute("buyerId", BuyerId);
+		map.addAttribute("buyerorderId", BuyerorderId);
+		map.addAttribute("styleId", StyleId);
+		map.addAttribute("itemId", ItemId);
+		map.addAttribute("layoutDate", LayoutDate);
+		map.addAttribute("layoutType", "1");
+		map.addAttribute("layoutName", "Line Inspection");
+		
+	
+		return view;
+	}
+	
 	@RequestMapping(value = "/sewing_hourly_production",method=RequestMethod.GET)
 	public ModelAndView sewing_hourly_production(ModelMap map,HttpSession session) {
 		
-	
+		
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
@@ -432,7 +508,11 @@ public class ProductionController {
 		
 		JSONArray mainArray = new JSONArray();
 		List<ProductionPlan> sewingList = productionService.getSewingLineSetupinfo(v);
+		
+		List<Employee> employeeList = registerService.getEmployeeList();
+		
 		objmain.put("result",sewingList);
+		objmain.put("employeeresult",employeeList);
 
 		return objmain;
 	}

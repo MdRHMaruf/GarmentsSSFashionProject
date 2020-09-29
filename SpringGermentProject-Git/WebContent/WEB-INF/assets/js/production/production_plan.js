@@ -1,3 +1,10 @@
+function printProductPlan(buyerId,styleId,buyerorderId){
+	
+	//alert("buyerId "+buyerId);
+	 var url = "getProductionPlan/"+buyerId+"/"+styleId+"/"+buyerorderId;
+     window.open(url, '_blank');
+}
+
 function searchBuyerPoDetails(buyerId,buyerorderId,styleId,itemId){
 
     $.ajax({
@@ -176,7 +183,9 @@ function drawDataTable(data) {
 	  return row;
 	}
 
-
+function refreshAction(){
+	location.reload();
+}
 function saveAction(){
 	var userId=$("#userId").val();
 	var buyerId=$("#buyerId").val();
@@ -235,7 +244,7 @@ function saveAction(){
 												warningAlert(data.result);
 											}
 									
-											refreshAction();
+											
 
 										},
 										error: function (jqXHR, textStatus, errorThrown) {
@@ -292,9 +301,7 @@ function saveAction(){
 	}
 }
 
-function refreshAction(){
-	  location.reload();
-}
+
 
 function successAlert(message) {
 	  var element = $(".alert");

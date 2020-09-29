@@ -275,7 +275,8 @@
 							<th>Buyer</th>
 							<th>Purchase Order</th>
 							<th>Style No</th>
-							<th><span><i class="fa fa-search"></i></span></th>
+							<th>Search</th>
+							<th>Print</th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -287,6 +288,9 @@
 								<td id='styleId${list.styleId}'>${list.styleNo}</td>
 								<td><i class="fa fa-search"
 									onclick="searchProductPlan(${list.buyerId},${list.styleId},${list.buyerorderId})">
+								</i></td>
+								<td><i class="fa fa-search"
+									onclick="printProductPlan(${list.buyerId},${list.styleId},${list.buyerorderId})">
 								</i></td>
 							</tr>
 						</c:forEach>

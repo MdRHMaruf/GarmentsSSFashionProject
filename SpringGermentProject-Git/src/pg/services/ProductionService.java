@@ -60,4 +60,9 @@ public interface ProductionService {
 
 	List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
 			String itemId, String productionDate);
+
+	//Inception Layout
+	boolean saveInceptionLayoutDetails(ProductionPlan v);
+
+	List<ProductionPlan> getLayoutPlanDetails(String string);
 }

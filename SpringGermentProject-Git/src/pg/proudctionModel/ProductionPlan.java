@@ -31,6 +31,8 @@ public class ProductionPlan {
 	
 	String resultlist="";
 	String productionDate="";
+	String layoutDate="";
+	String layoutName="";
 	
 	
 	int line=0;
@@ -126,6 +128,8 @@ public class ProductionPlan {
 		
 
 		System.out.println("LineCount "+LineCount);
+		
+		this.dailyTarget=Double.toString((Double.parseDouble(planQty)/Double.parseDouble(duration)));
 		this.dailyLineTarget=Double.toString((Double.parseDouble(planQty)/Double.parseDouble(duration))/LineCount);
 
 		
@@ -167,6 +171,7 @@ public class ProductionPlan {
 		this.itemName=ItemName;
 		this.lineName=LineName;
 	}
+
 
 	public String getUserId() {
 		return userId;
@@ -487,6 +492,22 @@ public class ProductionPlan {
 
 	public void setProudctionType(String proudctionType) {
 		this.proudctionType = proudctionType;
+	}
+
+	public String getLayoutDate() {
+		return layoutDate;
+	}
+
+	public void setLayoutDate(String layoutDate) {
+		this.layoutDate = layoutDate;
+	}
+
+	public String getLayoutName() {
+		return layoutName;
+	}
+
+	public void setLayoutName(String layoutName) {
+		this.layoutName = layoutName;
 	}
 	
 	
