@@ -1,6 +1,7 @@
 package pg.orderModel;
 
 public class SampleCadAndProduction {
+	String user;
 	String autoId;
 	String sampleCommentId;
 	String styleId;
@@ -54,6 +55,66 @@ public class SampleCadAndProduction {
 	String feedbackComments;
 	String quality;
 	String userId;
+	String sizeid;
+	String sampleComment;
+	String POStatus;
+	String buyername;
+	
+	
+	
+	public SampleCadAndProduction(String sampleCommentId, String po,
+			String style, String item, String color, String size, 
+			String samapletype, String makingdate, String makingdipatch, 
+			String makingreceive, String correctiondate, String correctiondispatch, 
+			String correctionreceivedby, String gradingdate, String gradingdispatch, String gradingreceivedby,
+			String markingdare, String markingdispatch, String markingrecievedby,
+			String feedback, String POStatsus) {	
+		
+		super();
+		
+		this.sampleCommentId=sampleCommentId;
+		this.purchaseOrder=po;
+		this.styleId=style;
+		this.itemId=item;
+		this.colorId=color;
+		this.sizeid=size;
+		this.sampleTypeId=samapletype;
+		
+		
+		this.patternMakingDate=makingdate;
+		this.patternMakingDespatch=makingdipatch;
+		this.patternMadingReceived=makingreceive;
+		
+		this.patternCorrectionDate=correctiondate;
+		this.patternCorrectionDespatch=correctiondispatch;
+		this.PatternCorrectionReceived=correctionreceivedby;
+		
+		
+		this.patternGradingDate=gradingdate;
+		this.patternGradingDespatch=gradingdispatch;
+		this.patternGradingReceived=gradingreceivedby;
+		
+		this.patternMarkingDate=markingdare;
+		this.patternMarkingDespatch=markingdispatch;
+		this.patternMarkingReceived=markingrecievedby;
+		
+		this.feedbackComments=feedback;
+		this.POStatus=POStatsus;
+		
+	}
+	
+	
+	public SampleCadAndProduction(String sampleCommentId,String buyername,String po,String style,String itemname,String sampletype) {
+		super();
+		this.sampleCommentId=sampleCommentId;
+		this.buyername=buyername;
+		this.purchaseOrder=po;
+		this.styleNo=style;
+		this.itemName=itemname;
+		this.sampleTypeId=sampletype;
+		
+		
+	}
 	
 	
 	public String getUserId() {
@@ -459,6 +520,56 @@ public class SampleCadAndProduction {
 
 	public void setSizeId(String sizeId) {
 		this.sizeId = sizeId;
+	}
+
+
+	public String getUser() {
+		return user;
+	}
+
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+
+	public String getSizeid() {
+		return sizeid;
+	}
+
+
+	public void setSizeid(String sizeid) {
+		this.sizeid = sizeid;
+	}
+
+
+	public String getSampleComment() {
+		return sampleComment;
+	}
+
+
+	public void setSampleComment(String sampleComment) {
+		this.sampleComment = sampleComment;
+	}
+
+
+	public String getPOStatus() {
+		return POStatus;
+	}
+
+
+	public void setPOStatus(String pOStatus) {
+		POStatus = pOStatus;
+	}
+
+
+	public String getBuyername() {
+		return buyername;
+	}
+
+
+	public void setBuyername(String buyername) {
+		this.buyername = buyername;
 	}
 	
 	

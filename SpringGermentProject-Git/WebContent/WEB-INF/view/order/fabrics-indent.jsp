@@ -33,8 +33,12 @@
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 	<input type="hidden" id="fabricsIndentAutoId" value="0">
 	<div class="card-box m-2">
-		<header >
+			<header class="d-flex justify-content-between">
 			<h5 class="text-center" style="display: inline;">Fabrics Indent</h5>
+			<button type="button" class="btn btn-outline-dark btn-sm"
+				data-toggle="modal" data-target="#exampleModal">
+				<i class="fa fa-search"></i>
+			</button>
 		</header>
 
 		<hr class="my-1">
@@ -300,6 +304,55 @@
 			</div>
 		</div>
 
+	</div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Requisition"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>PO Id</th>
+							<th>Style No</th>
+							<th>Item Name</th>
+							<th><span><i class="fa fa-search"></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${fabricindentlist}" var="po" varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
+								<td >${po.styleName}</td>
+								<td >${po.itemName}</td>
+								<td><i class="fa fa-search"
+									onclick="FabricIndentReport(${po.purchaserOrderid},${po.styleId},${po.itemId})">
+								</i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
 	</div>
 </div>
 <jsp:include page="../include/footer.jsp" />

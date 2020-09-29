@@ -1,6 +1,4 @@
-/.class
-/.gitignore
-/hibernate.cfg.xml
 /SizeValues.jasper
 /SizeValues.jrxml
+/hibernate.cfg.xml
 /pg/

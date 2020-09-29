@@ -20,7 +20,9 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
+import pg.orderModel.parcelModel;
 import pg.registerModel.Color;
+import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
@@ -537,6 +539,67 @@ public class OrderServiceImpl implements OrderService{
 	public boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction) {
 		// TODO Auto-generated method stub
 		return orderDAO.postSampleProductionInfo(sampleCadAndProduction);
+	}
+	
+	
+	@Override
+	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
+		// TODO Auto-generated method stub
+		return orderDAO.getStyleDetailsForFabricsIndent();
+	}
+
+	@Override
+	public List<CourierModel> getcourierList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getcourierList();
+	}
+
+	@Override
+	public boolean insertParcel(parcelModel parcel) {
+		// TODO Auto-generated method stub
+		return orderDAO.insertParcel(parcel);
+	}
+
+	@Override
+	public List<parcelModel> parcelList( ) {
+		// TODO Auto-generated method stub
+		return orderDAO.parcelList();
+	}
+
+	@Override
+	public List<parcelModel> getParcelDetails(String id) {
+		// TODO Auto-generated method stub
+		return orderDAO.getParcelDetails(id);
+	}
+
+	@Override
+	public boolean editParecel(parcelModel parcel) {
+		// TODO Auto-generated method stub
+		return orderDAO.editParecel(parcel);
+	}
+
+	@Override
+	public boolean sampleCadInsert(SampleCadAndProduction sample) {
+		// TODO Auto-generated method stub
+		return orderDAO.sampleCadInsert(sample);
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleComments() {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleComments();
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleDetails(String id) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleDetails(id);
+	}
+
+	@Override
+	public boolean editSampleCad(SampleCadAndProduction sample) {
+		// TODO Auto-generated method stub
+		return orderDAO.editSampleCad(sample);
 	}
 
 }
