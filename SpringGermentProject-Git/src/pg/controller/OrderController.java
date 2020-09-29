@@ -58,10 +58,12 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
+import pg.orderModel.parcelModel;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
+import pg.registerModel.CourierModel;
 import pg.registerModel.Department;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
@@ -94,6 +96,13 @@ public class OrderController {
 	private OrderService orderService;
 	@Autowired
 	private RegisterService registerService;
+	
+	 String poid;
+	 String styleid;
+	 String itemid;
+	 String ParcelId;
+	 String sampleId;
+	 
 
 	//Style Create 
 
@@ -1325,7 +1334,7 @@ public class OrderController {
 	//Fabrics Indent 
 	@RequestMapping(value = "/fabrics_indent",method=RequestMethod.GET)
 	public ModelAndView fabrics_indent(ModelMap map,HttpSession session) {
-
+		List<FabricsIndent> fabricindentlist= orderService.getStyleDetailsForFabricsIndent();
 		List<String> poList = orderService.getPurchaseOrderList();
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
@@ -1333,6 +1342,8 @@ public class OrderController {
 		List<Unit> unitList = registerService.getUnitList();
 		List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
 		ModelAndView view = new ModelAndView("order/fabrics-indent");
+		
+		view.addObject("fabricindentlist", fabricindentlist);
 		view.addObject("poList", poList);
 		view.addObject("fabricsList",fabricsItemList);
 		view.addObject("colorList",colorList);
@@ -1733,6 +1744,212 @@ public class OrderController {
 		return objmain;
 
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/fabricsIndentReport/{poid}/{styleid}/{itemid}",method=RequestMethod.POST)
+	public String fabricsIndentReport(@PathVariable ("poid") String poid,@PathVariable ("styleid") String styleid,@PathVariable ("itemid") String itemid) {
+		System.out.println(" Open Ooudoor sales report 1");
+		
+		this.poid=poid;
+		this.styleid=styleid;
+		this.itemid=itemid;
+		
+		return "yes";
+		
+	}
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/fabricsIndentReportView",method=RequestMethod.GET)
+	public ModelAndView fabricsIndentReportView(ModelAndView map, FabricsIndent p) {
+		
+			System.out.println(" Open Ooudoor sales report ");	
+			ModelAndView view = new ModelAndView("order/fabricsIndentReport");
+	
+			view.addObject("poid",poid);
+		 	view.addObject("styleid",styleid);
+		 	view.addObject("itemid",itemid);
+		 	
+			
+			
+			return view;
+		
+	}
+	
+	//Parcel
+	@RequestMapping(value = "/parcel",method=RequestMethod.GET)
+	public ModelAndView parcel(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("order/parcel");
+		List<commonModel> sampleList = orderService.getSampleList();
+		List<Style> styleList= orderService.getStyleList();
+		List<CourierModel> courierList=orderService.getcourierList();
+		List<Unit> unitList= registerService.getUnitList();	
+		List<parcelModel> parcelList= orderService.parcelList();	
+		
+		view.addObject("StyleList",styleList);
+		view.addObject("sampletype",sampleList);
+		view.addObject("courierList",courierList);
+		view.addObject("unitList",unitList);
+		view.addObject("parcelList",parcelList);
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	
+	
+		@ResponseBody
+		@RequestMapping(value = "/insertParcel",method=RequestMethod.GET)
+		public String insertParcel(parcelModel parcel) {
+		 boolean insert=orderService.insertParcel(parcel);
+		 
+		 if (insert) {
+			return "success";
+		}
+			return "fail";
+		
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/getParcelDetails/{id}",method=RequestMethod.GET)
+		public List<parcelModel> insertParcel(@PathVariable ("id") String id) {
+		 List<parcelModel> List=orderService.getParcelDetails(id);
+			
+		return List;
+		
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/editParcel",method=RequestMethod.GET)
+		public String editParcel(parcelModel parcel) {
+		
+			
+		 boolean insert=orderService.editParecel(parcel);
+		 
+		 if (insert) {
+			return "success";
+		}			
+		return "fail";
+		
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/parcelRepor/{id}",method=RequestMethod.POST)
+		public String parcelRepor(@PathVariable ("id") String id) {
+			System.out.println(" Open Ooudoor sales report 1");
+			
+			this.ParcelId=id;
+			return "yes";
+			
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/parcelReportView",method=RequestMethod.GET)
+		public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
+			
+				System.out.println(" Open Ooudoor sales report ");	
+				ModelAndView view = new ModelAndView("order/ParcelReportView");
+		
+				view.addObject("id",ParcelId);					
+				
+				return view;			
+		}
+		
+		
+		
+		@RequestMapping(value = "/sample_cad",method=RequestMethod.GET)
+		public ModelAndView sample_cad(ModelMap map,HttpSession session) {
+
+			ModelAndView view = new ModelAndView("order/sample_cad");
+			
+			
+			List<String> poList = orderService.getPurchaseOrderList();
+			List<commonModel> sampleList = orderService.getSampleList();
+			List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
+			view.addObject("Samples",Samples);
+			view.addObject("poList",poList);
+			view.addObject("sampletype",sampleList);
+			view.addObject("SampleList",Samples);
+			
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+		
+		
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/insertSamplCad",method=RequestMethod.GET)
+		public String insertSamplCad(SampleCadAndProduction sample) {
+		 boolean insert=orderService.sampleCadInsert(sample);
+		 
+		 if (insert) {
+			return "success";
+		}
+			return "fail";
+		
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/getSampleDetails/{id}",method=RequestMethod.GET)
+		public List<SampleCadAndProduction> insertSamplCad(@PathVariable ("id") String id) {
+		List<SampleCadAndProduction>  samplelist=orderService.getSampleDetails(id);
+		
+		return samplelist;
+		
+		}
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/editSampleCad",method=RequestMethod.GET)
+		public String editSampleCad(SampleCadAndProduction sample) {
+		 boolean insert=orderService.editSampleCad(sample);
+		 
+		 if (insert) {
+			return "success";
+		}
+			return "fail";
+		
+		}
+		 
+		
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/SampleReport/{id}",method=RequestMethod.POST)
+		public String SampleReport(@PathVariable ("id") String id) {
+			System.out.println(" Open Ooudoor sales report 1");
+			
+			this.sampleId=id;
+			return "yes";
+			
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/SampleReportView",method=RequestMethod.GET)
+		public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
+			
+				System.out.println(" Open Ooudoor sales report ");	
+				ModelAndView view = new ModelAndView("order/SampleCadReportView");
+		
+				view.addObject("id",sampleId);					
+				
+				return view;			
+		}
 
 }
 

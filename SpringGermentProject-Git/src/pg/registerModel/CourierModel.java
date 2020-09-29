@@ -25,7 +25,10 @@ public class CourierModel {
 		
 	}
 	
-	
+	public CourierModel(String courierid,String couriername) {
+		this.courierid=courierid;
+		this.couriername=couriername;
+	}
 	
 	
 	

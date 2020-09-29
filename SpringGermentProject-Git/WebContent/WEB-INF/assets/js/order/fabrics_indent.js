@@ -533,3 +533,28 @@ $(document).ready(function () {
   });
 });
 
+
+function FabricIndentReport(poID, Styleid, itemid) {
+	
+	console.log(" po "+poID)
+	console.log(" style "+Styleid)
+	console.log(" itemid "+itemid)
+	
+	
+	  $.ajax({
+	    type: 'POST',
+	    dataType: 'json',
+	    url: './fabricsIndentReport/'+poID+'/'+Styleid+'/'+itemid,
+	    data: {
+	    	
+	    },
+	    success: function (data) {
+	    	if(data=='yes'){
+				var url = "fabricsIndentReportView";
+        		window.open(url, '_blank');
+			}
+	    }
+	  });
+	}
+
+

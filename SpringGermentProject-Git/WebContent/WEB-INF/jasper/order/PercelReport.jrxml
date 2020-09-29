@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="86233f15-02fc-4cb0-a2c7-7a94e318baf1">
+	<property name="ireport.zoom" value="1.6105100000000112"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="47"/>
+	<parameter name="sql" class="java.lang.String">
+		<defaultValueExpression><![CDATA["select *,(select styleno from TbStyleCreate b where b.StyleId=a.styleid) as StyleNo,(select b.itemname from tbItemDescription b where b.itemid=a.itemid)  as ItemName,(select name from tbCourier where id= a.courierId) as CourierName,(select CourierAddress from tbCourier where id= a.courierId) as CourierAddress,(select Telephone from tbCourier where id= a.courierId) as Telephone,(select MobileNo from tbCourier where id= a.courierId) as MobileNo,(select Fax from tbCourier where id= a.courierId) as Fax,(select Email from tbCourier where id= a.courierId) as Email,(select SkypeId from tbCourier where id= a.courierId) as SkypeId from tbparcel a where a.autoId=1"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="autoId" class="java.lang.Integer"/>
+	<field name="styleid" class="java.lang.String"/>
+	<field name="itemid" class="java.lang.String"/>
+	<field name="sampletype" class="java.lang.String"/>
+	<field name="dispatchedDate" class="java.lang.String"/>
+	<field name="courierId" class="java.lang.String"/>
+	<field name="trackingNo" class="java.lang.String"/>
+	<field name="GrossWeight" class="java.lang.String"/>
+	<field name="unit" class="java.lang.String"/>
+	<field name="qty" class="java.lang.String"/>
+	<field name="percelQty" class="java.math.BigDecimal"/>
+	<field name="rate" class="java.math.BigDecimal"/>
+	<field name="totalAmount" class="java.math.BigDecimal"/>
+	<field name="deliverydate" class="java.lang.String"/>
+	<field name="deliverytime" class="java.lang.String"/>
+	<field name="deliveredto" class="java.lang.String"/>
+	<field name="entryby" class="java.lang.String"/>
+	<field name="entrytime" class="java.sql.Timestamp"/>
+	<field name="StyleNo" class="java.lang.String"/>
+	<field name="ItemName" class="java.lang.String"/>
+	<field name="CourierName" class="java.lang.String"/>
+	<field name="CourierAddress" class="java.lang.String"/>
+	<field name="Telephone" class="java.lang.String"/>
+	<field name="MobileNo" class="java.lang.String"/>
+	<field name="Fax" class="java.lang.String"/>
+	<field name="Email" class="java.lang.String"/>
+	<field name="SkypeId" class="java.lang.String"/>
+	<variable name="sl" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[1]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="291" splitType="Stretch">
+			<rectangle>
+				<reportElement x="25" y="34" width="214" height="45" uuid="687ec44e-f53b-4886-9b42-72868619b984"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="28" y="35" width="69" height="14" uuid="2ecd21d9-0a44-4524-9132-ffb99dfd433a"/>
+				<text><![CDATA[Style No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="50" width="70" height="14" uuid="218223aa-ecb6-496d-9fa4-b55607553157"/>
+				<text><![CDATA[Item Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="65" width="70" height="14" uuid="46ceb503-6d46-485d-958d-11e70903f0e3"/>
+				<text><![CDATA[Sample Type]]></text>
+			</staticText>
+			<line>
+				<reportElement x="98" y="34" width="1" height="45" uuid="82e87c25-6641-4f2e-beab-e9ed93571345"/>
+			</line>
+			<textField>
+				<reportElement x="101" y="35" width="139" height="14" uuid="1b737b1a-3219-45ef-a888-466df3f52e27"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="50" width="139" height="14" uuid="601e6793-894e-4d78-abf9-a08e5a4047dc"/>
+				<textFieldExpression><![CDATA[$F{ItemName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="101" y="65" width="139" height="14" uuid="ef964b54-70cc-4196-8e5a-c949ab80a7aa"/>
+				<textFieldExpression><![CDATA[$F{sampletype}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="35" width="69" height="14" uuid="6705d71c-7f19-4df1-85c1-6f53884578c0"/>
+				<text><![CDATA[Style No]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="409" y="35" width="122" height="14" uuid="b3f6354b-9f61-449e-9551-d7127fc17f8c"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="406" y="34" width="1" height="63" uuid="11ddcdcf-9dbb-4331-8884-5db755163b7c"/>
+			</line>
+			<rectangle>
+				<reportElement x="261" y="34" width="270" height="136" uuid="b1bede80-d699-444f-a6fd-017773dd5fcc"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="263" y="51" width="50" height="14" uuid="9d93e111-e9d5-464c-9618-6f46676f26cc"/>
+				<text><![CDATA[Telephone]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="316" y="51" width="161" height="14" uuid="a318f5b0-c916-4b3d-bb42-a9b29fa80904"/>
+				<textFieldExpression><![CDATA[$F{Telephone}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="66" width="50" height="14" uuid="0f872dee-3179-4a28-b083-876afbd1100f"/>
+				<text><![CDATA[Mobile]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="316" y="127" width="230" height="45" uuid="bf4191f2-cbe2-4cf6-9ed6-34f6b9563120"/>
+				<textFieldExpression><![CDATA[$F{CourierAddress}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="127" width="50" height="14" uuid="071f4282-f712-405b-b3b0-575e63319b31"/>
+				<text><![CDATA[Address]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="263" y="36" width="50" height="14" uuid="276a9c53-ade7-4d9f-84e2-2c5bcd8bd7e9"/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<line>
+				<reportElement x="314" y="34" width="1" height="136" uuid="e0015e84-da67-404b-81f1-15230b69d08e"/>
+			</line>
+			<textField>
+				<reportElement x="316" y="36" width="215" height="14" uuid="88404be2-3a58-4386-a0bd-8706931e1e3a"/>
+				<textFieldExpression><![CDATA[$F{CourierName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="66" width="161" height="14" uuid="9bc39558-c27c-48ae-8f37-6b5198a312d3"/>
+				<textFieldExpression><![CDATA[$F{MobileNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="316" y="81" width="161" height="14" uuid="be90d3b0-c2ae-4ead-9aec-d0253c6b064e"/>
+				<textFieldExpression><![CDATA[$F{Fax}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="81" width="50" height="14" uuid="067f7b98-7afc-4c5d-8801-2cc47ad1ead6"/>
+				<text><![CDATA[Fax]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="263" y="96" width="50" height="14" uuid="4a7e2eb3-3e15-4594-9d58-e6e2e55a2b0d"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="316" y="96" width="161" height="14" uuid="6426e5f4-11aa-4f90-9e59-df04e85d7fd7"/>
+				<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="317" y="111" width="161" height="14" uuid="db5f164c-d488-4dc6-ab82-94c32abd26ed"/>
+				<textFieldExpression><![CDATA[$F{SkypeId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="263" y="111" width="50" height="14" uuid="80079682-9abe-4117-9268-3202d08e6f76"/>
+				<text><![CDATA[SkypeId]]></text>
+			</staticText>
+			<line>
+				<reportElement x="262" y="50" width="269" height="1" uuid="0ebfe000-971a-4fb1-8a3e-1ba0ae30f7c4"/>
+			</line>
+			<line>
+				<reportElement x="261" y="66" width="270" height="1" uuid="c9ad2ad2-00d1-4f61-9402-821414b02f0a"/>
+			</line>
+			<line>
+				<reportElement x="261" y="81" width="270" height="1" uuid="8005ce20-6477-4f87-a132-3beb3d31869d"/>
+			</line>
+			<line>
+				<reportElement x="261" y="95" width="270" height="1" uuid="30f281bb-2fce-4342-85f9-e7ecdda876b8"/>
+			</line>
+			<line>
+				<reportElement x="262" y="110" width="269" height="1" uuid="a06a97b5-54db-4573-9bec-798295e3967b"/>
+			</line>
+			<line>
+				<reportElement x="261" y="126" width="270" height="1" uuid="821db128-1f6f-4e6d-9f59-953554291ec1"/>
+			</line>
+			<line>
+				<reportElement x="25" y="49" width="214" height="1" uuid="b1b29468-7468-4660-a4d8-a8b53588223d"/>
+			</line>
+			<line>
+				<reportElement x="25" y="64" width="214" height="1" uuid="d0b4d1f7-012c-46c4-b097-915a45f84aed"/>
+			</line>
+			<line>
+				<reportElement x="99" y="98" width="1" height="45" uuid="3c6ee819-4eb1-4ef8-9b87-eaebb0289b48"/>
+			</line>
+			<staticText>
+				<reportElement x="29" y="99" width="69" height="14" uuid="a4ec3d15-466b-4c09-aff9-b876cda474c7"/>
+				<text><![CDATA[Style No]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="113" width="214" height="1" uuid="35908157-80d1-424b-a1fb-d3b8639df969"/>
+			</line>
+			<staticText>
+				<reportElement x="28" y="129" width="70" height="14" uuid="0a9847c1-19bc-4c80-b1c5-985a89362657"/>
+				<text><![CDATA[Sample Type]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="26" y="98" width="214" height="61" uuid="33a666bc-10bd-484e-a54f-3511e2f40bd1"/>
+			</rectangle>
+			<textField>
+				<reportElement x="102" y="99" width="139" height="14" uuid="9d32fdd1-c8bd-4c75-9c78-74e7b0d3000e"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="114" width="139" height="14" uuid="9164a2c3-9f50-49f9-b880-d245af2d9ac0"/>
+				<textFieldExpression><![CDATA[$F{GrossWeight}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="114" width="70" height="14" uuid="01f9550e-4ed5-4bc7-914f-80406456e985"/>
+				<text><![CDATA[Gross Weight]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="128" width="214" height="1" uuid="2367ec22-d8e9-4081-acad-a751e6ba5ce9"/>
+			</line>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="102" y="129" width="139" height="13" uuid="c91e1a05-e6e2-49e6-bf5a-fa5247740529"/>
+				<textFieldExpression><![CDATA[$F{unit}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="26" y="113" width="214" height="1" uuid="10ca672a-351a-4303-a48d-705a7c526fe4"/>
+			</line>
+			<line>
+				<reportElement x="98" y="98" width="1" height="60" uuid="61fb5ae0-99ab-40b7-bafd-4cfd1d9c45d4"/>
+			</line>
+			<staticText>
+				<reportElement x="27" y="98" width="69" height="14" uuid="c79268f2-b49a-450c-badb-09437f951d85"/>
+				<text><![CDATA[Tracking No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="128" width="70" height="14" uuid="93a476c5-af57-4823-9deb-8313a3f4d6e7"/>
+				<text><![CDATA[Unit]]></text>
+			</staticText>
+			<line>
+				<reportElement x="26" y="142" width="214" height="1" uuid="3a9ca0e1-b469-4b55-bc84-dcbdc14e8ef9"/>
+			</line>
+			<staticText>
+				<reportElement x="28" y="143" width="70" height="14" uuid="b9060cba-6bd6-4699-8491-70f27fe06ae3"/>
+				<text><![CDATA[Total Qty]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="102" y="143" width="139" height="13" uuid="016674dd-8775-4dbb-a7ef-c915a4aab865"/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="175" width="139" height="14" uuid="1bf4c5c0-17bd-4dd3-aab2-f68c40c6cb60"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{trackingNo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="25" y="189" width="214" height="1" uuid="85afd87f-e616-4fd2-ac14-a5f645662e4b"/>
+			</line>
+			<line>
+				<reportElement x="25" y="189" width="214" height="1" uuid="c656d81f-c4a8-4b70-8d31-e1a3c1d41886"/>
+			</line>
+			<staticText>
+				<reportElement x="27" y="219" width="70" height="14" uuid="0e6994e7-97e2-489a-ac9f-a3fc8cf79c0f"/>
+				<text><![CDATA[Total Qty]]></text>
+			</staticText>
+			<line>
+				<reportElement x="25" y="218" width="214" height="1" uuid="a414debb-fe8f-4592-8a04-7fe17ca381a2"/>
+			</line>
+			<staticText>
+				<reportElement x="26" y="174" width="69" height="14" uuid="b2176f2a-72dd-4b51-b629-9b37a79fe39d"/>
+				<text><![CDATA[Tracking No]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="25" y="174" width="214" height="61" uuid="7c57e9a3-74e9-46ab-8553-dc902ae81394"/>
+			</rectangle>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="101" y="205" width="139" height="13" uuid="6819a29b-1241-44ac-882c-039813e7a542"/>
+				<textFieldExpression><![CDATA[$F{deliverytime}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="27" y="190" width="70" height="14" uuid="8208f319-1afd-4256-a456-4386c48cf95e"/>
+				<text><![CDATA[Delivery Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="204" width="70" height="14" uuid="3544c505-98b5-4625-884c-79fcf066433d"/>
+				<text><![CDATA[Delivery Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="219" width="70" height="14" uuid="643b7225-5b18-4b9e-9a82-b879ea692c42"/>
+				<text><![CDATA[Delivered To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="175" width="69" height="14" uuid="037e5293-f1ba-4a96-b26a-a516b950e032"/>
+				<text><![CDATA[Dispatched Date]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="101" y="190" width="139" height="14" uuid="c8f567b4-ee2f-42b4-8ead-2a2e82a65f99"/>
+				<textFieldExpression><![CDATA[$F{deliverydate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="101" y="219" width="139" height="13" uuid="97dbecd4-c1ba-44c6-8256-9985680d48cf"/>
+				<textFieldExpression><![CDATA[$F{deliveredto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="25" y="204" width="214" height="1" uuid="136a8ac6-3908-4826-b664-ef67fc636d02"/>
+			</line>
+			<line>
+				<reportElement x="98" y="174" width="1" height="61" uuid="1459604d-21e2-4bf6-bce2-63da3049750e"/>
+			</line>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="101" y="175" width="139" height="14" uuid="20de91a9-a73b-4b4a-ae61-7d36a85d556a"/>
+				<textFieldExpression><![CDATA[$F{dispatchedDate}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="24" y="189" width="214" height="1" uuid="1676e102-f069-487e-a9a5-c37b054a2d23"/>
+			</line>
+			<line>
+				<reportElement x="25" y="218" width="214" height="1" uuid="cffcaca1-0075-485c-9559-2a844dad349f"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
