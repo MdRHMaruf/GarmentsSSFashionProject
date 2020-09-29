@@ -37,7 +37,7 @@
 										<i class="fa fa-search"></i>
 									</button>
 								</div>
-									<div class="col-sm-12 col-md-4 col-lg-4">
+									<div class="col-sm-4 col-md-5 col-lg-6">
 									<button style="height: 38px;" type="button"
 										class="btn btn-primary" data-toggle="modal"
 										data-target="#exampleModalCenter">Create Factory</button>
@@ -78,7 +78,7 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Factory
+										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Factory
 											Name</label>
 										<div class="col-sm-8">
 											<input id="factory_name" type="text" class="form-control">
@@ -86,12 +86,12 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Telphone</label>
+										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Telphone</label>
 										<div class="col-sm-4">
 											<input id="telphone" type="text" class="form-control">
 										</div>
 
-										<label style="text-align: left;" class="col-sm-2">Mobile</label>
+										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Mobile</label>
 										<div class="col-sm-4">
 											<input id="mobile" type="text" class="form-control">
 										</div>
@@ -125,7 +125,7 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2">Address</label>
+										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Address</label>
 										<div class="col-sm-4">
 											<textarea rows="2" cols="2" id="address" class="form-control"
 												placeholder="Enter text here"></textarea>
