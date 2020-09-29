@@ -35,17 +35,17 @@
 
 							<div class="row ">
 								<h2>
-									<b>Style Item Create</b>
+									<b>Germents Item</b>
 								</h2>
 							</div>
 							<hr>
 
 							<div class="form-group">
-								<label for="styleItemName">Style Item Name:</label> <input type="text"
+								<label for="styleItemName">Item Name:</label> <input type="text"
 									class="form-control" id="styleItemName" name="text">
 							</div>
 							<div class="form-group">
-								<label for="styleItemCode">Style Item Code:</label> <input type="text"
+								<label for="styleItemCode">Item Code:</label> <input type="text"
 									class="form-control" id="styleItemCode" name="text">
 							</div>
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
@@ -60,7 +60,7 @@
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 							<div class="input-group my-2">
 								<input type="text" class="form-control"
-									placeholder="Search Style Item" aria-describedby="findButton"
+									placeholder="Search Germents Item" aria-describedby="findButton"
 									id="search" name="search">
 								<div class="input-group-append">
 									<button class="btn btn-primary" type="button" id="findButton">
@@ -75,8 +75,8 @@
 								<thead>
 									<tr>
 										<th scope="col">#</th>
-										<th scope="col">Style Item Name</th>
-										<th scope="col">Style Item Code</th>
+										<th scope="col">Item Name</th>
+										<th scope="col">Item Code</th>
 										<th scope="col">edit</th>
 									</tr>
 								</thead>

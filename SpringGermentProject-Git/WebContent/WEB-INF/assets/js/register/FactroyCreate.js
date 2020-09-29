@@ -99,13 +99,11 @@ function FactoryCreate(){
 	console.log("bcountry "+bankcountry);
 
 	if (factoryname=='') {
-		alert("Supplier Name Cannot be Empty");
+		alert("Factory Name Cannot be Empty");
 	}else if (address=='') {
-		alert("Supplier Address Cannot be Empty");
+		alert("Factory Address Cannot be Empty");
 	}else if (telephone=='' && mobile=='') {
 		alert("Telephone and Mobile Cannot be Empty");
-	}else if (email=='') {
-		alert("E-Mail Address Cannot be Empty");
 	}else{
 		$.ajax({
 			type: 'POST',
@@ -134,10 +132,10 @@ function FactoryCreate(){
 			success: function (data) {
 				console.log(data);
 				if(data==true){
-					alert("Buyer Created Successfully");
+					alert("Factory Created Successfully");
 					reloadPage();
 				}else{
-					alert("Buyer Creation Failed. Could be Duplicate Buyer Name Problem");
+					alert("Factory Creation Failed. Could be Duplicate Factory Name Problem");
 				}
 
 			},
@@ -277,13 +275,11 @@ console.log("user "+user);
 console.log("bcountry "+bankcountry);
 
 if (factoryname=='') {
-	alert("Supplier Name Cannot be Empty");
+	alert("Factory Name Cannot be Empty");
 }else if (address=='') {
-	alert("Supplier Address Cannot be Empty");
+	alert("Factory Address Cannot be Empty");
 }else if (telephone=='' && mobile=='') {
 	alert("Telephone and Mobile Cannot be Empty");
-}else if (email=='') {
-	alert("E-Mail Address Cannot be Empty");
 }else{
 	$.ajax({
 		type: 'POST',
@@ -312,7 +308,7 @@ if (factoryname=='') {
 		success: function (data) {
 			console.log(data);
 			if(data==true){
-				alert("Factory Created Successfully");
+				alert("Factory Update Successfully");
 				reloadPage();
 			}else{
 				alert("Factory Creation Failed. Could be Duplicate Factory Name Problem");
