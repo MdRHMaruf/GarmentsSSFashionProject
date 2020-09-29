@@ -35,9 +35,11 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.fileUpload;
+import pg.orderModel.parcelModel;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
+import pg.registerModel.CourierModel;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
@@ -4237,7 +4239,536 @@ public class OrderDAOImpl implements OrderDAO{
 		return false;
 	}
 
+	
+	@Override
+	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<FabricsIndent> dataList=new ArrayList<FabricsIndent>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+		
+				String sql="select (select BuyerOrderId from TbBuyerOrderEstimateDetails b where b.PurchaseOrder=a.PurchaseOrder group by b.BuyerOrderId) as purchaseorderid,  a.PurchaseOrder,(select styleid from TbStyleCreate where styleId=a.styleId) as styleid,(select StyleNo from TbStyleCreate where styleId=a.styleId) as styleno,a.itemid,(select itemname from tbItemDescription where itemid=a.itemid) from tbFabricsIndent a group by a.purchaseorder,a.styleId, a.itemid";
+				session.createSQLQuery(sql).list();
+				
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();							
+			
+					dataList.add(new FabricsIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+				}
+		
+							
+				tx.commit();
+				return dataList;
+			}
+		
+		catch(Exception ee){
 
+			if (tx != null) {
+				tx.rollback();
+				
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return dataList;
+	}
+
+	@Override
+	public List<CourierModel> getcourierList() {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<CourierModel> Buyers=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select * from tbCourier";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				Buyers.add(new CourierModel(element[0].toString(),element[1].toString()));
+				
+			}
+			
+			
+
+			tx.commit();
+			
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return Buyers;
+	}
+
+	@Override
+	public boolean insertParcel(parcelModel p) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			System.out.println(" d time "+p.getDelieryTime());
+			
+				String sql="insert into tbparcel (styleid, itemid, sampletype, dispatchedDate, courierId, trackingNo, GrossWeight, unit, qty, percelQty, rate, totalAmount, deliverydate, deliverytime, deliveredto, entryby, entrytime) values"
+						+ "('"+p.getStyleNo()+"',"
+							+ "'"+p.getItemName()+"',"
+							+ "'"+p.getSampletype()+"',"
+							+ "'"+p.getDispatchedDate()+"',"
+							+ "'"+p.getCourierName()+"',"
+							+ "'"+p.getTrackingNo()+"',"
+							+ "'"+p.getGrossWeight()+"',"
+							+ "'"+p.getUnit()+"',"
+							+ "'"+p.getTotalQty()+"',"
+							+ "'"+p.getParcel()+"',"
+							+ "'"+p.getRate()+"', "
+							+ "'"+p.getAmount()+"',"
+							+ " '"+p.getDeiveryDate()+"','"+p.getDelieryTime()+"','"+p.getDeliveryTo()+"',"
+							+ "'"+p.getUser()+"',"
+							+ "GETDATE())";
+				session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<parcelModel> parcelList() {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<parcelModel> Buyers=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.autoid,(select styleno from TbStyleCreate b where b.StyleId=a.styleid) as style,(select b.itemname from tbItemDescription b where b.itemid=a.itemid) as item, a.trackingNo  from tbparcel a";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				Buyers.add(new parcelModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
+				
+			}
+			
+			
+
+			tx.commit();
+			
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return Buyers;
+	}
+
+	@Override
+	public List<parcelModel> getParcelDetails(String id) {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<parcelModel> Buyers=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.autoid,a.styleid ,a.itemid, a.sampletype,convert(varchar, a.dispatchedDate) as dispatch,a.courierId, a.trackingNo,a.GrossWeight,a.unit,a.qty,a.percelQty,a.rate,a.totalAmount,convert(varchar, a.deliverydate) as deliverydate,convert(varchar,a.deliverytime,8) as deliverytime,a.deliveredto, a.entryby from tbparcel a where a.autoId='"+id+"'";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				Buyers.add(new parcelModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString()));
+				
+			}
+			
+			
+
+			tx.commit();
+			
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return Buyers;
+	}
+
+	@Override
+	public boolean editParecel(parcelModel p) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			System.out.println(" d time "+p.getDelieryTime());
+			
+				String sql="update  tbparcel set styleid='"+p.getStyleNo()+"', itemid='"+p.getItemName()+"', sampletype='"+p.getSampletype()+"', dispatchedDate='"+p.getDispatchedDate()+"', courierId='"+p.getCourierName()+"', trackingNo='"+p.getTrackingNo()+"', GrossWeight='"+p.getGrossWeight()+"', unit='"+p.getUnit()+"', qty='"+p.getTotalQty()+"', percelQty='"+p.getParcel()+"', rate='"+p.getRate()+"', totalAmount='"+p.getAmount()+"', deliverydate='"+p.getDeiveryDate()+"', deliverytime='"+p.getDelieryTime()+"', deliveredto='"+p.getDeliveryTo()+"' where autoid='"+p.getId()+"'";
+						
+				session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	
+	
+	public String POId(String purchaseOrder) {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		String POID="";
+		List<parcelModel> Buyers=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="SELECT  BuyerOrderId UserId FROM  TbBuyerOrderEstimateDetails where PurchaseOrder='"+purchaseOrder+"'";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();
+				POID=iter.next().toString();
+				break;
+								
+			}
+			
+			
+
+			tx.commit();
+			return POID;
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return POID;
+	}
+	
+
+	@Override
+	public boolean sampleCadInsert(SampleCadAndProduction s) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+				
+			
+				String sql="insert into TbSampleCadInfo  (StyleId, "
+						+ "PurchaseOrder, "
+						+ "ItemId, "
+						+ "ColorId, "
+						+ "Size, "
+						+ "SampleTypeId,"
+						+ " PatternMakingDate, "
+						+ "PatternMakingDespatch,"
+						+ " PatternMakingReceived,"
+						+ " PatternCorrectionDate, "
+						+ "PatternCorrectionDespatch, "
+						+ " PatternCorrectionReceived,"
+						+ " PatternGradingDate, "
+						+ "PatternGradingDespatch, "
+						+ "PatternGradingReceived,"
+						+ " PatternMarkingDate, "
+						+ "PatternMarkingDespatch, "
+						+ "PatternMarkingReceived, "
+						+ " FeedbackComments,"
+						+ " POStatus, "
+						+ "SampleCommentUserId,"
+						+ "entryTime) values('"+s.getStyleId()+"',"
+								+ "'"+POId(s.getPurchaseOrder())+"',"
+								+ "'"+s.getItemId()+"',"
+								+ "'"+s.getColorId()+"',"
+								+ "'"+s.getSizeid()+"',"
+								+ "'"+s.getSampleTypeId()+"',"
+								+ "'"+s.getPatternMakingDate()+"',"
+								+ "'"+s.getPatternMakingDespatch()+"',"
+								+ "'"+s.getPatternMadingReceived()+"',"
+								+ "'"+s.getPatternCorrectionDate()+"',"
+								+ "'"+s.getPatternCorrectionDespatch()+"',"
+								+ "'"+s.getPatternCorrectionReceived()+"',"
+								+ "'"+s.getPatternGradingDate()+"',"
+								+ "'"+s.getPatternGradingDespatch()+"',"
+								+ "'"+s.getPatternGradingReceived()+"',"
+								+ "'"+s.getPatternMarkingDate()+"',"
+								+ "'"+s.getPatternMarkingDespatch()+"',"
+								+ "'"+s.getPatternMarkingReceived()+"',"
+								+ "'"+s.getFeedbackComments()+"',"
+								+ "'"+s.getPOStatus()+"',"
+								+ "'"+s.getUser()+"',GETDATE())";
+						
+								session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleComments() {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<SampleCadAndProduction> Buyers=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.samplecommentid, (select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid) as buyername,(select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder) as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,(select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId) from TbSampleCadInfo a";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				Buyers.add(new SampleCadAndProduction(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+				
+			}
+			
+			
+
+			tx.commit();
+			
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return Buyers;
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleDetails(String id) {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		
+		List<SampleCadAndProduction> sampless=new ArrayList<>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.samplecommentid, (select PurchaseOrder from TbBuyerOrderEstimateDetails where BuyerOrderId=a.purchaseorder group by PurchaseOrder) as purchaseorder,a.styleid,a.ItemId, a.ColorId, a.Size, a.SampleTypeId, convert(varchar,a.patternmakingdate,10) as makingdate,a.PatternMakingDespatch, a.PatternMakingReceived, convert(varchar,a.PatternCorrectionDate,10) as correctiondate,a.PatternCorrectionDespatch, a.PatternCorrectionReceived, convert(varchar,a.PatternGradingDate,10) as gradingdate, a.PatternGradingDespatch, a.PatternGradingReceived,convert(varchar,a.PatternMarkingDate,10) as marking, a.PatternMarkingDespatch, a.PatternMarkingReceived, a.FeedbackComments,a.POStatus from TbSampleCadInfo a where a.sampleCommentId='"+id+"'";
+			System.out.println(" check duplicate buyer query ");
+
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				sampless.add(new SampleCadAndProduction(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString()));
+				
+			}
+			
+			
+
+			tx.commit();
+			
+			
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return sampless;
+	}
+
+	@Override
+	public boolean editSampleCad(SampleCadAndProduction s) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+				
+			
+				String sql="update TbSampleCadInfo set StyleId='"+s.getStyleId()+"', PurchaseOrder='"+POId(s.getPurchaseOrder())+"', "
+						+ "ItemId='"+s.getItemId()+"', "
+						+ "ColorId='"+s.getColorId()+"', "
+						+ "Size='"+s.getSizeid()+"', "
+						+ "SampleTypeId='"+s.getSampleTypeId()+"',"
+						+ " PatternMakingDate='"+s.getPatternMakingDate()+"', "
+						+ "PatternMakingDespatch='"+s.getPatternMakingDespatch()+"',"
+						+ " PatternMakingReceived='"+s.getPatternMadingReceived()+"',"
+						+ " PatternCorrectionDate='"+s.getPatternCorrectionDate()+"', "
+						+ "PatternCorrectionDespatch='"+s.getPatternCorrectionDespatch()+"', "
+						+ " PatternCorrectionReceived='"+s.getPatternCorrectionReceived()+"',"
+						+ " PatternGradingDate='"+s.getPatternGradingDate()+"', "
+						+ "PatternGradingDespatch='"+s.getPatternGradingDespatch()+"', "
+						+ "PatternGradingReceived='"+s.getPatternGradingReceived()+"',"
+						+ " PatternMarkingDate='"+s.getPatternMarkingDate()+"', "
+						+ "PatternMarkingDespatch='"+s.getPatternMarkingDespatch()+"', "
+						+ "PatternMarkingReceived='"+s.getPatternMarkingReceived()+"', "
+						+ " FeedbackComments='"+s.getFeedbackComments()+"',"
+						+ " POStatus='"+s.getPOStatus()+"' where samplecommentid='"+s.getSampleCommentId()+"'";
+						
+						session.createSQLQuery(sql).executeUpdate();
+		
+							
+				tx.commit();
+				return true;
+			
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
 
 
 }

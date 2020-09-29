@@ -24,6 +24,19 @@ public class FabricsIndent {
 	double gsm;
 	double grandQty;
 	double previousReceiveQty;
+	String purchaserOrderid;
+	
+	public FabricsIndent(String purchaserOrderid, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
+		this.purchaserOrderid=purchaserOrderid;
+		this.purchaseOrder = PurchaseOrder;
+		this.styleId=styleId;
+		this.styleName=Stylename;
+		this.itemId=itemid;
+		this.itemName=ItemName;
+	}
+	
+	
+	
 	public double getPreviousReceiveQty() {
 		return previousReceiveQty;
 	}
@@ -313,6 +326,13 @@ public class FabricsIndent {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
+	}
+	public String getPurchaserOrderid() {
+		return purchaserOrderid;
+	}
+
+	public void setPurchaserOrderid(String purchaserOrderid) {
+		this.purchaserOrderid = purchaserOrderid;
 	}
 	
 	
