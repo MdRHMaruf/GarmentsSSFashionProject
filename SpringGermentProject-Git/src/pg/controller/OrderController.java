@@ -1,4 +1,5 @@
 
+
 package pg.controller;
 
 import java.io.BufferedOutputStream;
@@ -100,68 +101,7 @@ public class OrderController {
 
 	String FrontImg="",BackImg;
 
-	String StyleId="",ItemId="",AiNo="",BuyerPoId="";
-
-
-	@RequestMapping(value = "style_create")
-	public ModelAndView style_create(ModelMap map,HttpSession session) {
-
-		ModelAndView view = new ModelAndView("order/style_create");
-		List<BuyerModel> List= registerService.getAllBuyers();
-		List<ItemDescription> itemList= orderService.getItemDescriptionList();
-
-		List<Style> styleList= orderService.getStyleWiseItemList();
-
-		map.addAttribute("buyerList",List);
-		map.addAttribute("itemList",itemList);
-		map.addAttribute("styleList",styleList);
-
-		map.addAttribute("buyerId", "0");
-		map.addAttribute("styleNo", styleNo);
-		map.addAttribute("date", date);
-		map.addAttribute("FrontImg", FrontImg);
-		map.addAttribute("BackImg", BackImg);
-
-		return view; //JSP - /WEB-INF/view/index.jsp
-	}
-
-	@ResponseBody
-	@RequestMapping(value = "/submitStyleFiles", method = RequestMethod.POST)
-	public ModelAndView submitFiles(@RequestParam String buyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam CommonsMultipartFile frontImage,@RequestParam CommonsMultipartFile backImage,HttpSession session,ModelMap map) throws IOException, SQLException {
-
-		List<login> user=(List<login>)session.getAttribute("pg_admin");
-
-
-
-		String frontimg=getImageName(frontImage,session);
-		System.out.println("frontimg "+frontimg);
-		this.FrontImg=frontimg;
-
-		String backimg=getImageName(backImage,session);
-		this.BackImg=backimg;
-		System.out.println("backimg "+backimg);
-
-		String userId=Integer.toString(user.get(0).getId());
-
-		boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontimg,backimg) ;
-
-		if(flag) {
-			System.out.println("Sucess");
-		}
-
-		ModelAndView view=new ModelAndView("redirect:style_create");
-		map.addAttribute("buyerId", buyerId);
-
-		this.date=date;
-		this.styleNo=styleNo;
-
-
-		//return "redirect:style_create";
-
-		return view;
-	}
-
-
+	String StyleId="",ItemId="",AiNo="",BuyerPoId="",SampleReqId="";
 
 
 	private String getImageName(CommonsMultipartFile frontImage, HttpSession session) throws IOException  {
@@ -189,30 +129,20 @@ public class OrderController {
 		JSONArray mainarray = new JSONArray();
 
 		List<Style> lablist=orderService.getStyleAndItem(value);
-
-
 		for(int a=0;a<lablist.size();a++) {
-
-
 			JSONObject obj = new JSONObject();
-
 			obj.put("id", lablist.get(a).getItemId());
 			obj.put("value", lablist.get(a).getItemName());
 
 			mainarray.add(obj);
-
 		}
-
-
 		objmain.put("result", mainarray);
-
 		System.out.println(objmain.toString());
-
 		return objmain;
-
-
-
 	}
+	
+	
+	
 	//Costing Create Work of nasir bai...
 	@RequestMapping(value = "/costing_create",method=RequestMethod.GET)
 	public ModelAndView costing_create(ModelMap map,HttpSession session) {
@@ -562,20 +492,6 @@ public class OrderController {
 		return objmain;
 	}
 
-	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
-	public @ResponseBody JSONObject cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
-		JSONObject objmain = new JSONObject();
-
-		if(orderService.cloningCosting(oldStyleId,oldItemId,newStyleId,newItemId,userId)) {
-
-			List<Costing> costingList = orderService.getCostingList(newStyleId,newItemId);
-			objmain.put("result",costingList);
-		}else {
-			objmain.put("result", "Something Wrong");
-		}
-
-		return objmain;
-	}
 
 
 
@@ -844,33 +760,7 @@ public class OrderController {
 
 	}
 
-	@ResponseBody
-	@RequestMapping(value = "/buyerWisePoLoad/{buyerId}",method=RequestMethod.POST)
-	public JSONObject buyerWisePoNo(@PathVariable ("buyerId") String buyerId) {
-		System.out.println(" powisestyles ");
-
-
-		JSONObject objmain = new JSONObject();
-		JSONArray mainarray = new JSONArray();
-
-		List<commonModel>styles=orderService.BuyerWisePo(buyerId);
-
-		for (int i = 0; i < styles.size(); i++) {
-			JSONObject obj=new JSONObject();
-
-			obj.put("id", styles.get(i).getId());
-			obj.put("name", styles.get(i).getName());
-
-			mainarray.add(obj);
-
-		}
-
-		objmain.put("result", mainarray);
-		System.out.println(" obj main "+objmain);
-
-		return objmain;
-
-	}
+	
 
 	@ResponseBody
 	@RequestMapping(value = "/poWiseStyles/{po}",method=RequestMethod.POST)
@@ -1592,6 +1482,27 @@ public class OrderController {
 		return objmain;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/sampleRequisitionInfo",method=RequestMethod.GET)
+	public String sampleRequisitionInfo(String sampleReqId) {
+		this.SampleReqId=sampleReqId;
+		return "Success";
+	}
+	
+	
+	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
+		
+		
+		ModelAndView view=new ModelAndView("order/printsampleRequisition");
+		
+		
+		map.addAttribute("SampleReqId", SampleReqId);
+
+	
+		return view;
+	}
+	
 	//Purchase Order
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)
 	public ModelAndView purchase_order(ModelMap map,HttpSession session) {
@@ -1724,5 +1635,104 @@ public class OrderController {
 		return view;
 
 	}
+	
+	
+	 
+
+
+
+
+	@RequestMapping(value = "style_create")
+	public ModelAndView style_create(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("order/style_create");
+		List<BuyerModel> List= registerService.getAllBuyers();
+		List<ItemDescription> itemList= orderService.getItemDescriptionList();
+
+		List<Style> styleList= orderService.getStyleWiseItemList();
+
+		map.addAttribute("buyerList",List);
+		map.addAttribute("itemList",itemList);
+		map.addAttribute("styleList",styleList);
+		
+
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/submitStyleFiles", method = RequestMethod.POST)
+	public ModelAndView submitFiles(@RequestParam String buyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam CommonsMultipartFile frontImage,@RequestParam CommonsMultipartFile backImage,HttpSession session,ModelMap map) throws IOException, SQLException {
+
+		List<login> user=(List<login>)session.getAttribute("pg_admin");
+
+
+		String frontimg=getImageName(frontImage,session);
+		System.out.println("frontimg "+frontimg);
+		this.FrontImg=frontimg;
+
+		String backimg=getImageName(backImage,session);
+		this.BackImg=backimg;
+		System.out.println("backimg "+backimg);
+
+		String userId=Integer.toString(user.get(0).getId());
+
+		boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontimg,backimg) ;
+
+		if(flag) {
+			System.out.println("Sucess");
+		}
+		
+		ModelAndView view=new ModelAndView("redirect:style_create");
+		map.addAttribute("buyerId", buyerId);
+		
+
+		return view;
+	}
+
+
+	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
+	public @ResponseBody JSONObject cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
+		JSONObject objmain = new JSONObject();
+
+		if(orderService.cloningCosting(oldStyleId,oldItemId,newStyleId,newItemId,userId)) {
+
+			List<Costing> costingList = orderService.getCostingList(newStyleId,newItemId);
+			objmain.put("result",costingList);
+		}else {
+			objmain.put("result", "Something Wrong");
+		}
+
+		return objmain;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/buyerWisePoLoad/{buyerId}",method=RequestMethod.POST)
+	public JSONObject buyerWisePoNo(@PathVariable ("buyerId") String buyerId) {
+		System.out.println(" powisestyles ");
+
+
+		JSONObject objmain = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		List<commonModel>styles=orderService.BuyerWisePo(buyerId);
+
+		for (int i = 0; i < styles.size(); i++) {
+			JSONObject obj=new JSONObject();
+
+			obj.put("id", styles.get(i).getId());
+			obj.put("name", styles.get(i).getName());
+
+			mainarray.add(obj);
+
+		}
+
+		objmain.put("result", mainarray);
+		System.out.println(" obj main "+objmain);
+
+		return objmain;
+
+	}
 
 }
+

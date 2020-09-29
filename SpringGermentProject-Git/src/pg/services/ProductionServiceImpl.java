@@ -182,5 +182,19 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.viewSewingFinishingProduction(buyerId, buyerorderId, styleId, itemId, productionDate);
 	}
+
+
+	@Override
+	public boolean saveInceptionLayoutDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveInceptionLayoutDetails(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getLayoutPlanDetails(String string) {
+		// TODO Auto-generated method stub
+		return productionDao.getLayoutPlanDetails(string);
+	}
 	
 }

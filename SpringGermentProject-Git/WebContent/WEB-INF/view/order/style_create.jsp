@@ -8,11 +8,7 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 <%	
-	String buyerId=(String) request.getAttribute("buyerId");
-	String styleNo=(String) request.getAttribute("styleNo");
-	String date=(String) request.getAttribute("date");
-	String FrontImg=(String) request.getAttribute("FrontImg");
-	String BackImg=(String) request.getAttribute("BackImg");
+
 	List<login> lg = (List<login>) session.getAttribute("pg_admin");
 %>
 <div class="page-wrapper">
@@ -53,7 +49,7 @@
 									<select id="buyerId" name="buyerId" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
 										<option name="buyerId" id="buyerId" value="0">Select Buyer Name</option>
 										<c:forEach items="${buyerList}" var="blist" varStatus="counter">
-											<option name="buyerId"  id="buyerId" value="3" value="${blist.buyerid}">${blist.buyername}</option>
+											<option name="buyerId"  id="buyerId" value="${blist.buyerid}">${blist.buyername}</option>
 										</c:forEach>
 									</select>		
 	
@@ -62,14 +58,14 @@
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="styleno">Style No:</label> 
-										<input type="text" name="styleNo" value="<%=styleNo%>" class="form-control" id="styleNo" >
+										<input type="text" name="styleNo" class="form-control" id="styleNo" >
 									</div>							
 								</div>							
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="unitValue">Date:</label> 									
 										<div class="input-group date" data-provide="datepicker">
-												    <input id="date" name="date" value="<%=date%>" type="date" class="form-control">
+												    <input id="date" name="date"  type="date" class="form-control">
 										</div>
 									</div>						
 								</div>									
@@ -83,7 +79,7 @@
 							</div>	
 
 								<div class="row">
-									<select id="itemId" name="itemId" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
+									<select id="itemId" name="itemId" multiple="multiple" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
 										<option id="itemId" name="itemId" value="0">Select Item Name</option>
 										<c:forEach items="${itemList}" var="list" varStatus="counter">
 											<option id="itemId" name="itemId" value="${list.itemId}">${list.itemName}</option>
@@ -108,7 +104,7 @@
 										
 									     <input type="file" name="backImage" onchange="readBackURL(this);" id accept=".png" />
 										
-										 <img id="blahBack" src="<%=BackImg%>" alt="Preadmin">
+										 <img id="blahBack" src="" alt="Preadmin">
 									</div>								
 								</div>
 							</div>		

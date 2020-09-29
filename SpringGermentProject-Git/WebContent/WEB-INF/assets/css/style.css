@@ -2864,8 +2864,8 @@ table.table-expandable > tbody > tr select{
     width: 100%;
 } 
 
-#redwarning{
-	color:red;
-	font-size: 16px;
-	font-weight:bold;
-}
+
+/* .employee-width{
+	min-width: 200px; 
+	max-width: 200px; 
+} */

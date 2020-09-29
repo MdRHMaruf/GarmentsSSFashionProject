@@ -91,7 +91,7 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2"<span  style="color:red">*</span>Courier
+										<label style="text-align: left;" class="col-sm-2"><span  style="color:red">*</span>Courier
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="5" cols="5" id="courier_address"

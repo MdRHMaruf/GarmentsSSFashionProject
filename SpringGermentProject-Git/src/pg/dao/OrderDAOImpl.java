@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
@@ -34,6 +35,7 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.fileUpload;
+import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
 import pg.registerModel.ItemDescription;
@@ -183,16 +185,15 @@ public class OrderDAOImpl implements OrderDAO{
 				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
 				System.out.println(sql);
 				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
+				
+				StringTokenizer token=new StringTokenizer(itemId,",");
+				while(token.hasMoreTokens()) {
+					String itemIdValue=token.nextToken();
+					String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemIdValue+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
+					System.out.println(sqlStyleItem);
+					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
+				}
 
-				String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemId+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
-				System.out.println(sqlStyleItem);
-				sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
-			}
-			else {
-				StyleId=getStyleId(buyerId,styleNo);
-				String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemId+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
-				System.out.println(sqlStyleItem);
-				sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
 			}
 
 
@@ -416,13 +417,29 @@ public class OrderDAOImpl implements OrderDAO{
 
 			List<?> list = session.createSQLQuery(sql).list();
 
-
+			String StyleNo="",PerStyle="";
+			int i=0;
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
+				if(i==0) {
+					StyleNo=element[1].toString();
+					PerStyle=StyleNo;
+				}
+				
+				if(i!=0 && PerStyle.equals(element[1].toString())) {
+					StyleNo="";
 
-				datalist.add(new Style(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
-
+				}
+				else{
+					StyleNo=element[1].toString();
+					PerStyle=StyleNo;
+				}
+				
+				
+				
+				datalist.add(new Style(element[0].toString(),StyleNo,element[2].toString(),element[3].toString()));
+				i++;
 			}
 
 			tx.commit();
@@ -3236,7 +3253,9 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "values('"+sampleReqId+"','"+v.getInchargeId()+"','"+v.getMarchendizerId()+"','"+v.getInstruction()+"','"+v.getSampleDeadline()+"',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
-			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
+			//String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
+			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' ";
+
 			session.createSQLQuery(sqlupdate).executeUpdate();
 
 			tx.commit();

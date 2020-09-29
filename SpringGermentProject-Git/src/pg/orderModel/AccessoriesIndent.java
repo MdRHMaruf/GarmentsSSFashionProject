@@ -1,3 +1,4 @@
+
 package pg.orderModel;
 
 public class AccessoriesIndent {
@@ -42,6 +43,7 @@ public class AccessoriesIndent {
 	public AccessoriesIndent() {
 		
 	}
+	
 	
 	public AccessoriesIndent(String purchaseOrder,String styleId,String styleName,String itemId,String itemName,String itemColorId,String itemColorName,String accessoriesId,String accessoriesName,String accessoriesColorId,String accessoriesColorName) {
 		this.po = purchaseOrder;
@@ -363,8 +365,6 @@ public class AccessoriesIndent {
 		this.styleNo = styleNo;
 	}
 	
-	
-	
-	
 
 }
+
