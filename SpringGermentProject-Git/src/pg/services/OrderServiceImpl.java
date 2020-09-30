@@ -541,7 +541,6 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.postSampleProductionInfo(sampleCadAndProduction);
 	}
 	
-	
 	@Override
 	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
 		// TODO Auto-generated method stub
@@ -600,6 +599,18 @@ public class OrderServiceImpl implements OrderService{
 	public boolean editSampleCad(SampleCadAndProduction sample) {
 		// TODO Auto-generated method stub
 		return orderDAO.editSampleCad(sample);
+	}
+	
+	@Override
+	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType) {
+		// TODO Auto-generated method stub
+		return orderDAO.getPurchaseOrderApprovalList(fromDate, toDate, itemType,approveType);
+	}
+
+	@Override
+	public boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList) {
+		// TODO Auto-generated method stub
+		return orderDAO.purchaseOrderApproveConfirm(purchaseOrderList);
 	}
 
 }

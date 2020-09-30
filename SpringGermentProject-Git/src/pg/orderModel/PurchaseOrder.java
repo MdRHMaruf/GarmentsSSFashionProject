@@ -20,11 +20,46 @@ public class PurchaseOrder {
 	List<PurchaseOrderItem> itemList;
 	String userId;
 	
+	String purchaseOrder;
+	String styleId;
+	String styleNo;
 	String supplierId;
 	String supplierName;
 	String type;
+	int mdApproval = 0;
+	
 	public PurchaseOrder() {}
 	
+	
+	
+	public PurchaseOrder( String purchaseOrder, String styleId, String styleNo, String supplierId,
+			String supplierName, String poNo,String type,String orderDate,int mdApproval) {
+		super();
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleNo = styleNo;
+		this.supplierId = supplierId;
+		this.supplierName = supplierName;
+		this.poNo = poNo;
+		this.type = type;
+		this.orderDate = orderDate;
+		this.mdApproval = mdApproval;
+	}
+
+
+
+	public int getMdApproval() {
+		return mdApproval;
+	}
+
+
+
+	public void setMdApproval(int mdApproval) {
+		this.mdApproval = mdApproval;
+	}
+
+
+
 	public PurchaseOrder(String poNo,String orderDate) {
 		this.poNo = poNo;
 		this.orderDate = orderDate;
@@ -192,6 +227,25 @@ public class PurchaseOrder {
 		this.type = type;
 	}
 	
-	
+	public String getPurchaseOrder() {
+		return purchaseOrder;
+	}
+	public void setPurchaseOrder(String purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+	public String getStyleId() {
+		return styleId;
+	}
+	public void setStyleId(String styleId) {
+		this.styleId = styleId;
+	}
+
+	public String getStyleNo() {
+		return styleNo;
+	}
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
+	}
+
 
 }

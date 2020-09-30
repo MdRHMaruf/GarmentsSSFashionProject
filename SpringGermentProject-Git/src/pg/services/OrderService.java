@@ -131,26 +131,34 @@ public interface OrderService {
 	boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
 			String installAccessories, String forAccessories);
 
+
 	//Sample Production
 	List<SampleCadAndProduction> getSampleCommentsList();
 	SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId);
 	boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
-	
-	
+
+
 	public List<FabricsIndent> getStyleDetailsForFabricsIndent();
 	public List<CourierModel> getcourierList();
 	public boolean insertParcel(parcelModel parcel);
-	
+
 	public List<parcelModel> parcelList();
-	
+
 	public List<parcelModel> getParcelDetails(String id);
 	public boolean editParecel(parcelModel parcel);
-	
-	
+
+
 	public boolean sampleCadInsert(SampleCadAndProduction sample);
-	
+
 	public List<SampleCadAndProduction> getSampleComments();
 	public List<SampleCadAndProduction> getSampleDetails(String id);
 	public boolean editSampleCad(SampleCadAndProduction sample);
 
+
+	//Purchase Order Approval for MD
+	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
+	boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
+
 }
+
+

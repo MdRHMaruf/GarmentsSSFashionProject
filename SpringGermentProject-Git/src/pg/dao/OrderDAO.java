@@ -159,6 +159,11 @@ public interface OrderDAO {
 	public List<SampleCadAndProduction> getSampleDetails(String id);
 	public boolean editSampleCad(SampleCadAndProduction sample);
 
+	//Purchase Order Approval for MD
+	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
+	boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
+
+
 }
 
 

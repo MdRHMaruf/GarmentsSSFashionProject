@@ -1647,12 +1647,6 @@ public class OrderController {
 
 	}
 	
-	
-	 
-
-
-
-
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
@@ -1950,6 +1944,59 @@ public class OrderController {
 				
 				return view;			
 		}
+
+
+	@RequestMapping(value="/purchase_order_approve_from_md",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView purchase_order_approve_from_md(ModelMap map){
+	
+		ModelAndView view = new ModelAndView("order/purchase-order-approve-from-md");
+		
+		return view;
+	}
+	
+	
+	@RequestMapping(value = "/getPOListForMd",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getPOListForMd(String fromDate,String toDate,String itemType,String approveType) {
+		JSONObject objmain = new JSONObject();
+		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderApprovalList(fromDate, toDate, itemType, approveType);
+		objmain.put("purchaseOrderList", purchaseOrderList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/confirmPurchaseOrder",method=RequestMethod.GET)
+	public @ResponseBody JSONObject confirmPurchaseOrder(String purchaseOrderList) {
+		JSONObject objmain = new JSONObject();
+		try {
+			String[] itemList = purchaseOrderList.split("#");
+			List<PurchaseOrder> poList = new ArrayList<PurchaseOrder>();
+			String purchaseOrder,styleId,supplierId,poNo,type;
+			int approval=0;
+			for (String item : itemList) {
+				String[] itemProperty = item.split(",");
+				purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+				supplierId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				poNo = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				type = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				approval = Integer.valueOf(itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim());
+				
+				poList.add(new PurchaseOrder(purchaseOrder, styleId, "", supplierId, "", poNo, type, "",approval));
+			}
+			
+			if(orderService.purchaseOrderApproveConfirm(poList)) {
+				objmain.put("result", "Successfull");
+			}else {
+				objmain.put("result", "Something Wrong");
+			}
+				
+			}catch(Exception e) {
+				objmain.put("result", "Something Wrong");
+				e.printStackTrace();
+			}
+		
+		
+		return objmain;
+	}
 
 }
 
