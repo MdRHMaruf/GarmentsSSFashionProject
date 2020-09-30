@@ -334,32 +334,8 @@
 							<button type="button" id="edit" class="btn btn-warning btn-sm"	onclick="editSmapleCad()">Edit</button>
 							<button type="button" id="btnRefresh" class="btn btn-dark btn-sm"
 								onclick="">Refresh</button>
-							<button type="button" id="btnPreview" class="btn btn-info btn-sm"
-								onclick="">Preview</button>
+								
 
-
-
-							<div class="form-check form-check-inline">
-								<input class="form-check-input ml-1" type="radio"
-									name="styleWise" id="styleWise" value="" checked> <label
-									class="form-check-label" for="styleWise">Style Wise</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="itemWise"
-									id="itemWise" value=""> <label class="form-check-label"
-									for="itemWise">Item Wise</label>
-							</div>
-
-							<div class="form-check form-check-inline">
-								<input class="form-check-input ml-1" type="radio"
-									name="sampleWise" id="sampleWise" value=""> <label
-									class="form-check-label" for="sampleWise">Sample Wise</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="sizeWise"
-									id="sizeWise" value=""> <label class="form-check-label"
-									for="sizeWise">Size Wise</label>
-							</div>
 
 
 						</div>

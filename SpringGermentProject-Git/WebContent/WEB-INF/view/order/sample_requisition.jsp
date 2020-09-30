@@ -289,10 +289,7 @@
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
-				<button id="btnPreview" type="button"
-					class="btn btn-primary btn-sm ml-1" disabled>
-					<i class="fa fa-print"></i> Preview
-				</button>
+
 			</div>
 		</div>
 	</div>

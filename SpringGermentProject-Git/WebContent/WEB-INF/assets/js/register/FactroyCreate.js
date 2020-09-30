@@ -308,6 +308,7 @@ if (factoryname=='') {
 		success: function (data) {
 			console.log(data);
 			if(data==true){
+				
 				alert("Factory Update Successfully");
 				reloadPage();
 			}else{

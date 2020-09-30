@@ -39,7 +39,10 @@ function styleWiseItemLoad() {
 }
 
 
+function refreshAction() {
+	  location.reload();
 
+	}
 
 function insertParcel() {
 	
@@ -93,6 +96,7 @@ function insertParcel() {
       success: function (data) {
     	  if(data=='success'){
     		  alert("Successfully Inserted")
+    		  refreshAction();
     	  }else{
     		  alert("Parcel Insertion Failed")
     	  }
@@ -243,3 +247,14 @@ function parcelReport(id) {
 	  });
 	}
 
+
+
+	function amountCalculate() {
+	
+		let grossweight=parseFloat($("#grossWeight").val());
+		let rate=parseFloat($("#rate").val());
+		
+		let totalamount=parseFloat(grossweight*rate);
+		$("#amount").val(totalamount);
+		
+	}

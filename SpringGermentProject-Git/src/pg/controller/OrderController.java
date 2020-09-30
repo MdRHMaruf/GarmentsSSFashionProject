@@ -87,7 +87,7 @@ public class OrderController {
 
 	private static final String UPLOAD_DIRECTORY ="/WEB-INF/upload";  
 
-	private static final String DIRECTORY="E:/uploadspringfiles/";
+	//private static final String DIRECTORY="E:/uploadspringfiles/";
 
 
 	DecimalFormat df = new DecimalFormat("#.00");
@@ -670,7 +670,7 @@ public class OrderController {
 
 
 
-			String filePath = DIRECTORY+fileName;
+			String filePath = UPLOAD_FILE_SAVE_FOLDER+fileName;
 
 			System.out.println(" filename "+fileName);
 
@@ -718,7 +718,7 @@ public class OrderController {
 		boolean delete=orderService.deletefile(filename);
 
 		if (delete) {
-			File file=new File(DIRECTORY+filename);
+			File file=new File(UPLOAD_FILE_SAVE_FOLDER+filename);
 			file.delete();
 		}
 
