@@ -284,32 +284,7 @@
 								onclick="refreshAction()">Refresh</button>
 							<button type="button" id="btnPreview" class="btn btn-info btn-sm"
 								onclick="showPreview()">Preview</button>
-
-
-
-							<div class="form-check form-check-inline">
-								<input class="form-check-input ml-1" type="radio"
-									name="printType" id="styleWise" value="" checked> <label
-									class="form-check-label" for="styleWise">Style Wise</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="printType"
-									id="itemWise" value=""> <label class="form-check-label"
-									for="itemWise">Item Wise</label>
-							</div>
-
-							<div class="form-check form-check-inline">
-								<input class="form-check-input ml-1" type="radio"
-									name="printType" id="sampleWise" value=""> <label
-									class="form-check-label" for="sampleWise">Sample Wise</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="printType"
-									id="sizeWise" value=""> <label class="form-check-label"
-									for="sizeWise">Size Wise</label>
-							</div>
-
-
+							
 						</div>
 					</div>
 

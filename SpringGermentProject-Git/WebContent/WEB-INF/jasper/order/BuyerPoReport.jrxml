@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
-	<property name="ireport.zoom" value="1.1000000000000068"/>
+	<property name="ireport.zoom" value="1.6105100000000103"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='3007' group by a.BuyerOrderId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId order by a.BuyerOrderId,a.sizeGroupId "]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.itemid,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='4025' group by a.BuyerOrderId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemid,e.itemname,a.sizeGroupId order by a.BuyerOrderId,a.sizeGroupId "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
@@ -37,6 +37,7 @@
 	<field name="ShippingMarks" class="java.lang.String"/>
 	<field name="SizeReg" class="java.lang.String"/>
 	<field name="StyleNo" class="java.lang.String"/>
+	<field name="itemid" class="java.lang.Integer"/>
 	<field name="itemname" class="java.lang.String"/>
 	<field name="sizeGroupId" class="java.lang.String"/>
 	<group name="ItemGp">
@@ -235,12 +236,15 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="14" splitType="Stretch">
+		<band height="3" splitType="Stretch">
 			<line>
 				<reportElement x="793" y="-15" width="1" height="14" uuid="09fea481-8162-4d73-8274-25e0b418a7ed"/>
 			</line>
 			<subreport>
-				<reportElement x="-14" y="0" width="260" height="13" uuid="3d7f2c00-c502-48d0-b81a-3e674149edbf"/>
+				<reportElement x="-14" y="0" width="260" height="1" uuid="3d7f2c00-c502-48d0-b81a-3e674149edbf"/>
+				<subreportParameter name="ItemId">
+					<subreportParameterExpression><![CDATA[$F{itemid}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="BuyerOrderId">
 					<subreportParameterExpression><![CDATA[$F{BuyerOrderId}]]></subreportParameterExpression>
 				</subreportParameter>
