@@ -135,5 +135,7 @@ public interface OrderService {
 		SampleCadAndProduction getSampleProductionInfo(String sampleCommentsId);
 		boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
 
-
+		//Purchase Order Approval for MD
+		List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
+		boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
 }

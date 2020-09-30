@@ -59,10 +59,10 @@ function setSampleProductionInfo(sampleCommentId) {
     });
 }
 
-$("#btnPost").click(()=>{
+$("#btnPost").click(() => {
 
     const sampleCommentsId = $("#sampleCommentsId").val();
-    
+
     const cuttingDate = $("#cuttingDate").val();
     const cuttingQty = $("#cuttingQty").val();
     const printSendDate = $("#printSendDate").val();
@@ -77,20 +77,20 @@ $("#btnPost").click(()=>{
     const quality = $("#quality").val();
     const userId = $("#userId").val();
 
-    if(sampleCommentsId != ""){
-        if(confirm("Are you sure to update this Sample Production...")){
+    if (sampleCommentsId != "") {
+        if (confirm("Are you sure to update this Sample Production...")) {
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: './postSampleProduction',
                 data: {
                     sampleCommentId: sampleCommentsId,
-                    cuttingDate : cuttingDate,
-                    cuttingQty : cuttingQty,
-                    printSendDate : printSendDate,
-                    printReceivedDate : printReceivedDate,
-                    printReceivedQty : printReceivedQty,
-                    embroiderySendDate : embroiderySendDate,
+                    cuttingDate: cuttingDate,
+                    cuttingQty: cuttingQty,
+                    printSendDate: printSendDate,
+                    printReceivedDate: printReceivedDate,
+                    printReceivedQty: printReceivedQty,
+                    embroiderySendDate: embroiderySendDate,
                     embroideryReceivedDate: embroideryReceivedDate,
                     embroideryReceivedQty: embroideryReceivedQty,
                     sewingSendDate: sewingSendDate,
@@ -103,33 +103,32 @@ $("#btnPost").click(()=>{
                     userId: userId
                 },
                 success: function (data) {
-                  if (data.result == "Something Wrong") {
-                    dangerAlert("Something went wrong");
-                  } else if (data.result == "duplicate") {
-                    dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                  } else {
-                    alert("Successfully Submit...");
-                    refreshAction();
-                  }
+                    if (data.result == "Something Wrong") {
+                        dangerAlert("Something went wrong");
+                    } else if (data.result == "duplicate") {
+                        dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                    } else {
+                        alert("Successfully Submit...");
+                        refreshAction();
+                    }
                 }
-              });
+            });
         }
-    }else{
+    } else {
         warningAlert("Please Select a Sample Comments ");
     }
-    
+
 });
 function refreshAction() {
     location.reload();
-  
-  }
+}
 
-  function showPreview(){
-   const commentsId =  $("#sampleCommentsId").val();
-   const printType = "sizeWise";
-    var url = "getSampleProductionReport/"+commentsId+"/"+printType;
-    window.open(url, '_blank'); 
-  };
+function showPreview() {
+    const commentsId = $("#sampleCommentsId").val();
+    const printType = "sizeWise";
+    var url = "getSampleProductionReport/" + commentsId + "/" + printType;
+    window.open(url, '_blank');
+};
 
 function drawSampleCommentsListSearchTable(data) {
     const length = data.length;
@@ -147,7 +146,7 @@ function drawSampleCommentsListSearchTable(data) {
             + "<td id='colorName-" + id + "'>" + rowData.colorName + "</td>"
             + "<td id='size-" + id + "'>" + rowData.size + "</td>"
             + "<td id='sampleTypeName-" + id + "'>" + rowData.sampleTypeName + "</td>"
-            + "<td ><i class='fa fa-search' style='cursor:pointer' onclick='setSampleProductionInfo("+ id +")'></td>"
+            + "<td ><i class='fa fa-search' style='cursor:pointer' onclick='setSampleProductionInfo(" + id + ")'></td>"
             + "</tr>";
     }
     $("#sampleCommentsList").html(tr_list);
@@ -177,3 +176,10 @@ function dangerAlert(message) {
     document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
     element.show();
 }
+
+$(document).ready(function () {
+    $("input:text").focus(function () { $(this).select(); });
+});
+$(document).ready(function () {
+    $("input").focus(function () { $(this).select(); });
+});
