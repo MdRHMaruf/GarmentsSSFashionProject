@@ -2767,7 +2767,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 			String sql="insert into tbFabricsIndent  "
-					+ "(PurchaseOrder,"
+					+ "(BuyerOrderId,PurchaseOrder,"
 					+ "styleId,"
 					+ "itemid,"
 					+ "itemcolor,"
@@ -2788,6 +2788,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "mdapproval,"
 					+ "entrytime,"
 					+ "entryby) values ("
+					+ "'"+fabricsIndent.getBuyerOrderId()+"',"
 					+ "'"+fabricsIndent.getPurchaseOrder()+"',"
 					+ "'"+fabricsIndent.getStyleId()+"',"
 					+ "'"+fabricsIndent.getItemId()+"',"
@@ -4250,7 +4251,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			
 		
-				String sql="select (select BuyerOrderId from TbBuyerOrderEstimateDetails b where b.PurchaseOrder=a.PurchaseOrder group by b.BuyerOrderId) as purchaseorderid,  a.PurchaseOrder,(select styleid from TbStyleCreate where styleId=a.styleId) as styleid,(select StyleNo from TbStyleCreate where styleId=a.styleId) as styleno,a.itemid,(select itemname from tbItemDescription where itemid=a.itemid) from tbFabricsIndent a group by a.purchaseorder,a.styleId, a.itemid";
+				String sql="select (select (select name from tbBuyer where id=buyerId) as BuyerName from TbBuyerOrderEstimateDetails where BuyerOrderId=a.BuyerOrderId and PurchaseOrder=a.PurchaseOrder group by buyerId) as BuyerName,a.BuyerOrderId,a.PurchaseOrder,(select styleid from TbStyleCreate where styleId=a.styleId) as styleid,(select StyleNo from TbStyleCreate where styleId=a.styleId) as styleno,a.itemid,(select itemname from tbItemDescription where itemid=a.itemid) as ItemName from tbFabricsIndent a group by a.BuyerOrderId,a.purchaseorder,a.styleId, a.itemid";
 				session.createSQLQuery(sql).list();
 				
 				List<?> list = session.createSQLQuery(sql).list();
@@ -4258,7 +4259,7 @@ public class OrderDAOImpl implements OrderDAO{
 				{	
 					Object[] element = (Object[]) iter.next();							
 			
-					dataList.add(new FabricsIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+					dataList.add(new FabricsIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 				}
 		
 							

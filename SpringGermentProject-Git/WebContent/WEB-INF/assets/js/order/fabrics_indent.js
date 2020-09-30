@@ -156,7 +156,12 @@ function saveAction() {
 
   var autoId = $("#fabricsIndentAutoId").val();
 
+  var buyerOrderId = $("#purchaseOrder").val();
+  
   var purchaseOrder = $("#purchaseOrder option:selected").text();
+
+  
+  
   var styleId = $("#styleNo").val();
   var itemId = $("#itemName").val();
   var itemColorId = $("#itemColor").val();
@@ -193,6 +198,7 @@ function saveAction() {
                     data: {
                       autoId  : autoId,
                       purchaseOrder : purchaseOrder,
+                      buyerOrderId:buyerOrderId,
                       styleId : styleId,
                       itemId  : itemId,
                       itemColorId : itemColorId,
@@ -221,39 +227,39 @@ function saveAction() {
                         
                         $("#dataList").empty();
                         $("#dataList").append(drawDataTable(data.result));
-                        successAlert("Costing Item Save Successfully");
+                        successAlert("Fabrics Indent Item Save Successfully");
                       }
                     }
                   });
   
                 }
               } else {
-                warningAlert("Consumption is empty ... Please Enter Consumption");
+            	  alert("Consumption is empty ... Please Enter Consumption");
                 $("#consumption").focus();
               }
             } else {
-              warningAlert("Dozen Quantity is empty ... Please Enter dozen quantity");
+            	alert("Dozen Quantity is empty ... Please Enter dozen quantity");
               $("#dozen").focus();
             }
 
           } else {
-            warningAlert("Quantity is empty ... Please Enter Quantity");
+        	  alert("Quantity is empty ... Please Enter Quantity");
             $("#quantity").focus();
           }
         } else {
-          warningAlert("Fabrics item Not Selected... Please Select any Fabrics item");
+        	alert("Fabrics item Not Selected... Please Select any Fabrics item");
           $("#fabricsItem").focus();
         }
       } else {
-        warningAlert("Color not selected... Please Select Color Name");
+    	  alert("Color not selected... Please Select Color Name");
         $("#itemColor").focus();
       }
     } else {
-      warningAlert("Item Name not selected... Please Select Item Name");
+    	alert("Item Name not selected... Please Select Item Name");
       $("#itemName").focus();
     }
   } else {
-    warningAlert("Style No not selected... Please Select Style No");
+	  alert("Style No not selected... Please Select Style No");
     $("#styleNo").focus();
   }
 
@@ -338,16 +344,16 @@ function editAction() {
   
                 }
               } else {
-                warningAlert("Consumption is empty ... Please Enter Consumption");
+            	  alert("Consumption is empty ... Please Enter Consumption");
                 $("#consumption").focus();
               }
             } else {
-              warningAlert("Dozen Quantity is empty ... Please Enter dozen quantity");
+            	alert("Dozen Quantity is empty ... Please Enter dozen quantity");
               $("#dozen").focus();
             }
 
           } else {
-            warningAlert("Quantity is empty ... Please Enter Quantity");
+        	  alert("Quantity is empty ... Please Enter Quantity");
             $("#quantity").focus();
           }
         } else {
@@ -355,15 +361,15 @@ function editAction() {
           $("#fabricsItem").focus();
         }
       } else {
-        warningAlert("Color not selected... Please Select Color Name");
+    	  alert("Color not selected... Please Select Color Name");
         $("#itemColor").focus();
       }
     } else {
-      warningAlert("Item Name not selected... Please Select Item Name");
+    	alert("Item Name not selected... Please Select Item Name");
       $("#itemName").focus();
     }
   } else {
-    warningAlert("Style No not selected... Please Select Style No");
+    alert("Style No not selected... Please Select Style No");
     $("#styleNo").focus();
   }
 }
