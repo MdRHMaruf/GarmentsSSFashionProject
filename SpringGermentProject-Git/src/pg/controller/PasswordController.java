@@ -158,7 +158,7 @@ public class PasswordController {
 	
 
 	
-	@RequestMapping(value = "user_management_create_user",method=RequestMethod.GET)
+	@RequestMapping(value = "user_create",method=RequestMethod.GET)
 	public ModelAndView create_user(ModelMap modelmap,HttpSession session) {
 		
 		List<module> modulelist=(List<module>)session.getAttribute("modulelist");
@@ -167,7 +167,7 @@ public class PasswordController {
 		List<menu> menulist=(List<menu>)session.getAttribute("menulist");
 		modelmap.put("menulist", menulist);
 		
-		ModelAndView view = new ModelAndView("admin/create_user");
+		ModelAndView view = new ModelAndView("setting/create_user");
 		view.addObject("modulelist",modulelist);
 		view.addObject("menulist",menulist);
 		

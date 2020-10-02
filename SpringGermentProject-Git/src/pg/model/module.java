@@ -14,9 +14,10 @@ public class module implements Serializable{
 
 
 
-	public module(int id, String Modulename) {
+	public module(int id, String Modulename,int ware) {
 		this.id = id;
 		this.modulename = Modulename;
+		this.ware = ware;
 	}
 
 	public int getId() {

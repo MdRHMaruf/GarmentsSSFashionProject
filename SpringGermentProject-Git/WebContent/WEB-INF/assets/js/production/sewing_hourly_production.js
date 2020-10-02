@@ -169,25 +169,83 @@ function setProductPlanInfoForSewing(buyerId,buyerorderId,styleId,itemId,planQty
 			} else if (data.result == "duplicate") {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
-				drawItemTable(data.result);
+				drawLineItem(data.result);
 			}
 		}
 	});
 }
 
-function drawItemTable(dataList) {
+function drawLineItem(dataList) {
 
 
+	let lineoption = "";
+	lineoption += "<select id='lineId' class='selectpicker lineselect form-control' data-live-search='true' data-style='btn-light border-secondary form-control-sm' onchange='linewisemachineload()'>"; 
+	
+	lineoption += "<option id='lineId' value='0'>Select Line</option>" 
+		
 	var length = dataList.length;
 	sizeGroupId = "";
 	var tables = "";
 	var isClosingNeed = false;
 	for (var i = 0; i < length; i++) {
 		var item = dataList[i];
+		
+		lineoption += "<option id='lineId' value='"+item.lineId+"'>"+item.lineName+"</option>" 
+		
+	}
 
-		/*      if (isClosingNeed) {
-	        tables += "</tbody></table> </div></div>";
-	      }*/
+	lineoption+="</select>";
+	
+	document.getElementById("lineoption").innerHTML = lineoption;
+	
+	 $('.lineselect').selectpicker('refresh');
+	
+	 $('#planQty').val(parseFloat(dataList[0].planQty).toFixed(2));
+	 $('#dailyTargetQty').val(parseFloat(dataList[0].dailyTarget).toFixed(2));
+	 $('#dailyLineTargetQty').val(parseFloat(dataList[0].dailyLineTarget).toFixed(2));
+	 $('#hours').val(parseFloat(dataList[0].hours).toFixed(2));
+	 $('#hourlyTarget').val(parseFloat(dataList[0].hourlyTarget).toFixed(2));
+
+}
+
+
+function linewisemachineload(){
+	var lineId=$('#lineId').val();
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		data:{
+			lineId:lineId
+		},
+		url: './lineWiseMachineList/',
+		success: function (data) {
+
+		
+			
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+			} else {
+				drawTableItem(data.result,data.sizelistresult);
+			}
+		}
+	});
+}
+
+function drawTableItem(dataList,sizeList) {
+
+	var length = dataList.length;
+	
+	var sizeLength = sizeList.length;
+
+	
+	sizeGroupId = "";
+	var tables = "";
+	var isClosingNeed = false;
+	for (var i = 0; i < length; i++) {
+		var item = dataList[i];
+
 
 		if(i==0){
 			tables += `<div class="row">
@@ -197,14 +255,10 @@ function drawItemTable(dataList) {
 
 				<tr>
 
-				<th scope="col" class="min-width-120">Line </th>
-				<th scope="col">Style no</th>
-				<th scope="col">Daily Line </br> Wise Target</th>
-				<th scope="col">Hours </br>Target</th>
-				<th scope="col">Hours</th>
-				<th scope="col">Sew.Sup.</br>Signature</th>
-				<th scope="col">Q.C.</br>Signature</th>
-				<th scope="col">Qty </br>Type</th>
+				<th scope="col" class="min-width-120">Machine Name </th>
+				<th scope="col">Employee Name</th>
+
+
 				<th scope="col">08-09</th>
 				<th scope="col">09-10</th>
 				<th scope="col">10-11</th>
@@ -217,22 +271,19 @@ function drawItemTable(dataList) {
 				<th scope="col">06-07</th>
 				<th scope="col">Total</th>
 				<th scope="col">Edit</th>
+				<th scope="col">+Size Entry</th>
 				</tr>
 				</thead>
 				<tbody id="dataList">`
 
 		}
 
+		
+		
+		tables += "<tr class='itemRow' data-id='"+ item.sewingLineAutoId +"' class='accordion-toggle collapsed' id='accordion1' data-toggle='collapse' data-parent='#accordion1' href='#collapseOne'>" +
+		"<th >" + item.machineName + "</br><input  type='hidden' class='from-control min-height-20 sewingline-"+item.sewingLineAutoId+"'  value='"+parseFloat(item.lineId).toFixed()+"' /></th>" +
+		"<th >" + item.operatorName + "</th>"+ 
 
-		tables += "<tr class='itemRow' data-id='"+ item.sewingLineAutoId +"'>" +
-		"<th rowspan='2'>" + item.lineName + "</br> Sewing<input  type='hidden' class='from-control min-height-20 sewingline-"+item.sewingLineAutoId+"'  value='"+parseFloat(item.lineId).toFixed()+"' /></th>" +
-		"<th rowspan='2'>" + item.styleNo + "</th>"+ 
-		"<th rowspan='2'>" + parseFloat(item.dailyLineTarget).toFixed() + "<input  type='hidden' class='from-control min-height-20 sewingdailytarget-"+item.sewingLineAutoId+"'  value='"+parseFloat(item.dailyLineTarget).toFixed()+"' /></th>"+
-		"<th rowspan='2'>"+ parseFloat(item.hourlyTarget).toFixed() +"<input  type='hidden' class='from-control min-height-20 sewinghourlytarget-"+item.sewingLineAutoId+"'  value='"+parseFloat(item.hourlyTarget).toFixed()+"' /></th>"+
-		"<th rowspan='2'>10</th>"+
-		"<th rowspan='2'></th>"+
-		"<th rowspan='2'></th>"+
-		"<th>Production</th>"+
 		"<td><input  type='text' class='from-control min-height-20 prouduction-"+item.sewingLineAutoId+"-h1'  value='' /></td>"+ 
 		"<td><input  type='text' class='from-control min-height-20 prouduction-"+item.sewingLineAutoId+"-h2'  value=''/></td>"+ 
 		"<td><input  type='text' class='from-control min-height-20 prouduction-"+item.sewingLineAutoId+"-h3'  value=''/></td>"+ 
@@ -244,29 +295,31 @@ function drawItemTable(dataList) {
 		"<td><input  type='text' class='from-control min-height-20 prouduction-"+item.sewingLineAutoId+"-h9'  value=''/></td>"+ 
 		"<td><input  type='text' class='from-control min-height-20 prouduction-"+item.sewingLineAutoId+"-h10'  value=''/></td>"+
 		"<td><input  type='text' readonly class='from-control min-height-20  prouduction-"+item.sewingLineAutoId+"-total'/></td>"+
-		"<td><button type='button' class='btn btn-outline-dark btn-sm max-height-20'><i class='fa fa-edit'></i></button></td></tr>"
+		"<td><button type='button' class='btn btn-outline-dark btn-sm max-height-20'><i class='fa fa-edit'></i></button></td> <td class='expand-button'>+Size Add</td></tr>"
 		
-		tables += "<tr class='itemRow' data-id='"+ item.sewingLineAutoId +"'>" +
-		"<th>Reject</th>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h1'/></td>"+ 
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h2'/></td>"+ 
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h3'/></td>"+ 
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h4'/></td>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h5'/></td>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h6'/></td>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h7'/></td>"+ 
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h8'/></td>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h9'/></td>"+
-		"<td><input  type='text' class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-h10'/></td>"+
-		"<td><input  type='text' readonly class='from-control min-height-20 reject-"+item.sewingLineAutoId+"-total'/></td>"+
-		"<td><button type='button' class='btn btn-outline-dark btn-sm max-height-20''><i class='fa fa-edit'></i></button></td></tr>"
+/*		for (var i = 0; i < length; i++) {
+			
+		}*/
+		
+		tables+="<tr class='hide-table-padding'>+<td></td><td colspan='1'>"+
+		"<div id='collapseOne' class='collapse in p-3'>"+
+		"<div class='row'>"+
+		"<div class='col-2'>label</div>"+
+		"<div class='col-6'>value 1</div>"+
+		"</div>"+
+		"<div class='row'>"+
+		"<div class='col-2'>label</div>"+
+		"<div class='col-6'>value 2</div>"+
+		"</div>"+
+
+		"</div></td>"+
+		"</tr>"
 
 	}
 
+
 	tables += "</tbody></table> </div></div>";
-	// tables += "</tbody></table> </div></div>";
-
+	
 	document.getElementById("tableList").innerHTML = tables;
-
 
 }

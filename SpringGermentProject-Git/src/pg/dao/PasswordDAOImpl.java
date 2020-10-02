@@ -118,7 +118,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString()));
+				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
 			}
 			
 			tx.commit();
@@ -190,7 +190,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString()));
+				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
 			}
 			
 			tx.commit();

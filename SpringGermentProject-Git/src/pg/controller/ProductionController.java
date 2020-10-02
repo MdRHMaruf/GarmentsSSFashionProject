@@ -367,15 +367,17 @@ public class ProductionController {
 		
 		
 
-		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails("1");
 		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
 		ModelAndView view = new ModelAndView("production/sewing_hourly_production");
-		view.addObject("productionPlanList",productionPlanList);
+		view.addObject("layoutList",layoutList);
 		view.addObject("sewingProductionList",sewingProductionList);
 		
 	
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
+	
+	
 	
 	@RequestMapping(value = "/saveSewingProductionDetails",method=RequestMethod.POST)
 	public @ResponseBody String saveSewingProductionDetails(ProductionPlan v) {
@@ -509,10 +511,26 @@ public class ProductionController {
 		JSONArray mainArray = new JSONArray();
 		List<ProductionPlan> sewingList = productionService.getSewingLineSetupinfo(v);
 		
-		List<Employee> employeeList = registerService.getEmployeeList();
+		//List<Employee> employeeList = registerService.getEmployeeList();
 		
 		objmain.put("result",sewingList);
-		objmain.put("employeeresult",employeeList);
+		//objmain.put("employeeresult",employeeList);
+
+		return objmain;
+	}
+	
+	
+	@RequestMapping(value = "/lineWiseMachineList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject lineWiseMachineList(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+		
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> machineList = productionService.getLineWiseMachineList(v);
+		
+		List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+		
+		objmain.put("result",machineList);
+		objmain.put("sizelistresult",sizelist);
 
 		return objmain;
 	}

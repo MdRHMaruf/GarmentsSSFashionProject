@@ -1079,7 +1079,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 
 
-			String sql="select a.styleid,(select StyleNo from TbStyleCreate where styleId=a.styleid) as StyleNo,a.itemId,(select ItemName from tbItemDescription where ItemId=a.itemId) as ItemName,a.id,a.duration,a.lineId,(select LineName from TbLineCreate where LineId=a.lineId) as LineName,(select isnull(sum(PlanQty),0)  from TbProductTargetPlan b where b.BuyerOrderId=a.BuyerOrderId and b.PoNo=a.PoNo and b.styleid=a.styleid and b.itemId=a.itemId) as PlanQty from tbSewingLineSetup a where a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.PoNo='"+v.getPurchaseOrder()+"' and a.styleid='"+v.getStyleId()+"' and a.itemId='"+v.getItemId()+"'";
+			String sql="select (select name from tbBuyer where id=a.BuyerId) as BuyerName,a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.styleId,(select ItemName from tbItemDescription where itemid=a.itemId) as ItemName,a.ItemId,(select PlanQty from TbProductTargetPlan where BuyerId=a.BuyerId and BuyerOrderId=a.BuyerOrderId and PoNo=a.PurchaseOrder and StyleId=a.StyleId and ItemId=a.ItemId) as PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.LineId,(select LineName from TbLineCreate where LineId=a.LineId) as LineName from tbLayoutPlanDetails a where a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.PurchaseOrder='"+v.getPurchaseOrder()+"' and a.styleid='"+v.getStyleId()+"' and a.itemId='"+v.getItemId()+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			System.out.println("list"+list.size());
@@ -1089,16 +1089,13 @@ public class ProductionDAOImpl implements ProductionDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				System.out.println("value");
+				//System.out.println("value");
 
-				ListData.add(new ProductionPlan(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),lineCount));
+				ListData.add(new ProductionPlan(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
 
 			}
 
-
-
-
-
+			
 			tx.commit();
 		}
 		catch(Exception ee){
@@ -1618,6 +1615,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 								+ "EmployeeId,"
 								+ "Type,"
 								+ "DailyTarget,"
+								+ "LineTarget,"
 								+ "HourlyTarget,"
 								+ "Hours,"
 								+ "hour1,"
@@ -1643,6 +1641,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 								+ "'"+employyeId+"',"
 								+ "'"+v.getLayoutName()+"',"
 								+ "'"+v.getDailyTarget()+"',"
+								+ "'"+v.getDailyLineTarget()+"',"
 								+ "'"+v.getHourlyTarget()+"',"
 								+ "'10',"
 								+ "'"+h1+"',"
@@ -1702,6 +1701,72 @@ public class ProductionDAOImpl implements ProductionDAO{
 				Object[] element = (Object[]) iter.next();
 
 				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),""));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<ProductionPlan> getLineWiseMachineList(ProductionPlan v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select MachineId,MachineName,OperatorId,(select Name from TbEmployeeInfo where AutoId=TbMachineInfo.OperatorId) as OperatorName from TbMachineInfo where LineId='"+v.getLineId()+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<ProductionPlan> getSizeListForProduction(ProductionPlan v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.ColorId,(select colorName from tbColors where ColorId=a.ColorId) as ColorName,a.sizeGroupId,b.sizeId,(select sizename from tbStyleSize  where id=b.sizeId and groupId=b.sizeGroupId) as sizeName from TbBuyerOrderEstimateDetails a join tbSizeValues b on b.linkedAutoId=a.autoId where a.BuyerOrderId='5015' and a.PurchaseOrder='P2908' and a.styleid='1' and a.itemId='21' order by a.ItemId,a.ColorId,a.sizeGroupId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString()));
 			}
 			tx.commit();
 		}

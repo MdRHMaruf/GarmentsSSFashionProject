@@ -65,4 +65,9 @@ public interface ProductionService {
 	boolean saveInceptionLayoutDetails(ProductionPlan v);
 
 	List<ProductionPlan> getLayoutPlanDetails(String string);
+
+	//Sewing
+	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
+
+	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
 }
