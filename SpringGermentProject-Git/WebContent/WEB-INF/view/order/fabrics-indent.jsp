@@ -50,8 +50,8 @@
 					class="selectpicker col-md-12 px-0" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
 					<option id="purchaseOrder" value="0">Select Purchase Order</option>
-					<c:forEach items="${poList}" var="po">
-						<option id="purchaseOrder" value="${po}">${po}</option>
+					<c:forEach items="${purchaseorders}" var="acc" varStatus="counter">
+						<option name="purchaseOrder" id='purchaseOrder' value="${acc.id}">${acc.name}</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -314,7 +314,7 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control"
-						placeholder="Search Sample Requisition"
+						placeholder="Search Fabric Indent"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -330,6 +330,7 @@
 					<thead>
 						<tr>
 							<th>SL#</th>
+							<th>Buyer Name</th>
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Item Name</th>
@@ -337,14 +338,16 @@
 						</tr>
 					</thead>
 					<tbody id="poList">
-						<c:forEach items="${fabricindentlist}" var="po" varStatus="counter">
+						<c:forEach items="${fabricindentsummarylist}" var="po" varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
-								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
+								<td >${po.buyerName}</td>
+						<%-- 		/*<td >${po.buyerOrderId}</td>*/ --%>
+								<td >${po.purchaseOrder}</td>
 								<td >${po.styleName}</td>
 								<td >${po.itemName}</td>
 								<td><i class="fa fa-search"
-									onclick="FabricIndentReport(${po.purchaserOrderid},${po.styleId},${po.itemId})">
+									onclick="FabricIndentReport(${po.buyerOrderId},${po.styleId},${po.itemId})">
 								</i></td>
 							</tr>
 						</c:forEach>

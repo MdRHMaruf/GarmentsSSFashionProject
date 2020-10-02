@@ -37,11 +37,11 @@
 			<h5 class="text-center" style="display: inline;">Sewing Production</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
-				<i class="fa fa-search"></i>
+				<i class="fa fa-search"></i>Layout Plan List
 			</button>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModalForSewiing">
-				<i class="fa fa-search"></i>Layout Plan List
+				<i class="fa fa-search"></i>Sewing Production List
 			</button>
 		</header>
 		<hr class="my-1">
@@ -138,11 +138,13 @@
 						style="padding-left: 15px; padding-right: 26px;padding-left: 25px;">
 						<label for="sample" class="col-form-label-sm mb-0 pb-0">Line</label>
 						<div class="row">
-							<select id="lineId" 
+						<div id="lineoption">
+						</div>
+							<%-- <select id="lineId" 
 												class="selectpicker form-control" data-live-search="true"
 												data-style="btn-light border-secondary form-control-sm">
 
-								</select>
+								</select> --%>
 						</div>
 					</div>	
 
@@ -239,11 +241,12 @@
 								<th>Purchase Order</th>
 								<th>Style No</th>
 								<th>Item Name</th>
-								<th><span><i class="fa fa-search"></i></span></th>
+								<th>Date</th>
+								<th>Search</th>
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${productionPlanList}" var="list"
+							<c:forEach items="${layoutList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>
@@ -251,9 +254,11 @@
 									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
 									<td id='styleId${list.styleId}'>${list.styleNo}</td>
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
+									<td id='layout${list.itemId}'>${list.productionDate}</td>
 									<td><i class="fa fa-search"
 										onclick="setProductPlanInfoForSewing(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.planQty})">
 									</i></td>
+			
 								</tr>
 							</c:forEach>
 						</tbody>

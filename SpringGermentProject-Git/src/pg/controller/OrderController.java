@@ -1334,8 +1334,8 @@ public class OrderController {
 	//Fabrics Indent 
 	@RequestMapping(value = "/fabrics_indent",method=RequestMethod.GET)
 	public ModelAndView fabrics_indent(ModelMap map,HttpSession session) {
-		List<FabricsIndent> fabricindentlist= orderService.getStyleDetailsForFabricsIndent();
-		List<String> poList = orderService.getPurchaseOrderList();
+		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent();
+		List<commonModel>purchaseorders=orderService.PurchaseOrders();
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Brand> brandList = registerService.getBrandList();
@@ -1343,8 +1343,8 @@ public class OrderController {
 		List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
 		ModelAndView view = new ModelAndView("order/fabrics-indent");
 		
-		view.addObject("fabricindentlist", fabricindentlist);
-		view.addObject("poList", poList);
+		view.addObject("fabricindentsummarylist", fabricindentsummarylist);
+		view.addObject("purchaseorders", purchaseorders);
 		view.addObject("fabricsList",fabricsItemList);
 		view.addObject("colorList",colorList);
 		view.addObject("brandList",brandList);

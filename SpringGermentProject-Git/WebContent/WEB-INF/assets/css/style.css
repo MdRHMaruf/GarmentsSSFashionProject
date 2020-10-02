@@ -2865,6 +2865,10 @@ table.table-expandable > tbody > tr select{
 } 
 
 
+.rate-width{
+	width:180px;
+}
+
 /* .employee-width{
 	min-width: 200px; 
 	max-width: 200px; 

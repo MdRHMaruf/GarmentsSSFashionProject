@@ -53,6 +53,14 @@ public class ProductionPlan {
 	String total="";
 	String date="";
 	
+	String machineId="";
+	String machineName="";
+	String operatorId="";
+	String operatorName="";
+	String sizeGroupId="";
+	String sizeId="";
+	String sizeName="";
+	
 	String proudctionType="";
 
 	public ProductionPlan() {
@@ -172,6 +180,32 @@ public class ProductionPlan {
 		this.lineName=LineName;
 	}
 
+
+	public ProductionPlan(String BuyerName, String BuyerId, String BuyerOrderId, String PurchaseOrder, String StyleNo, String StyleId,
+			String ItemName, String ItemId, String PlanQty, String DailyTarget, String LineTarget, String HourlryTarget,String Hours,String LineId,String LineName) {
+		this.buyerName=BuyerName;
+		this.buyerId=BuyerId;
+		this.buyerorderId=BuyerOrderId;
+		this.purchaseOrder=PurchaseOrder;
+		this.styleNo=StyleNo;
+		this.styleId=StyleId;
+		this.itemName=ItemName;
+		this.itemId=ItemId;
+		this.planQty=PlanQty;
+		this.dailyTarget=DailyTarget;
+		this.dailyLineTarget=LineTarget;
+		this.hourlyTarget=HourlryTarget;
+		this.hours=Hours;
+		this.lineId=LineId;
+		this.lineName=LineName;
+	}
+
+	public ProductionPlan(String MachineId, String MachineName, String OperatorId, String OperatorName) {
+		this.machineId=MachineId;
+		this.machineName=MachineName;
+		this.operatorId=OperatorId;
+		this.operatorName=OperatorName;
+	}
 
 	public String getUserId() {
 		return userId;
@@ -508,6 +542,62 @@ public class ProductionPlan {
 
 	public void setLayoutName(String layoutName) {
 		this.layoutName = layoutName;
+	}
+
+	public String getMachineId() {
+		return machineId;
+	}
+
+	public void setMachineId(String machineId) {
+		this.machineId = machineId;
+	}
+
+	public String getMachineName() {
+		return machineName;
+	}
+
+	public void setMachineName(String machineName) {
+		this.machineName = machineName;
+	}
+
+	public String getOperatorId() {
+		return operatorId;
+	}
+
+	public void setOperatorId(String operatorId) {
+		this.operatorId = operatorId;
+	}
+
+	public String getOperatorName() {
+		return operatorName;
+	}
+
+	public void setOperatorName(String operatorName) {
+		this.operatorName = operatorName;
+	}
+
+	public String getSizeGroupId() {
+		return sizeGroupId;
+	}
+
+	public void setSizeGroupId(String sizeGroupId) {
+		this.sizeGroupId = sizeGroupId;
+	}
+
+	public String getSizeId() {
+		return sizeId;
+	}
+
+	public void setSizeId(String sizeId) {
+		this.sizeId = sizeId;
+	}
+
+	public String getSizeName() {
+		return sizeName;
+	}
+
+	public void setSizeName(String sizeName) {
+		this.sizeName = sizeName;
 	}
 	
 	

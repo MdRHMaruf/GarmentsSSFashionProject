@@ -196,5 +196,19 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getLayoutPlanDetails(string);
 	}
+
+
+	@Override
+	public List<ProductionPlan> getLineWiseMachineList(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getLineWiseMachineList(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getSizeListForProduction(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getSizeListForProduction(v);
+	}
 	
 }

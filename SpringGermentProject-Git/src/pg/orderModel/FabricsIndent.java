@@ -3,6 +3,8 @@ package pg.orderModel;
 public class FabricsIndent {
 	String autoId;
 	String purchaseOrder;
+	String buyerOrderId;
+	String buyerName;
 	String styleId;
 	String styleName;
 	String itemId;
@@ -26,8 +28,9 @@ public class FabricsIndent {
 	double previousReceiveQty;
 	String purchaserOrderid;
 	
-	public FabricsIndent(String purchaserOrderid, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
-		this.purchaserOrderid=purchaserOrderid;
+	public FabricsIndent(String BuyerName,String BuyerOrderId, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
+		this.buyerName=BuyerName;
+		this.buyerOrderId=BuyerOrderId;
 		this.purchaseOrder = PurchaseOrder;
 		this.styleId=styleId;
 		this.styleName=Stylename;
@@ -333,6 +336,30 @@ public class FabricsIndent {
 
 	public void setPurchaserOrderid(String purchaserOrderid) {
 		this.purchaserOrderid = purchaserOrderid;
+	}
+
+
+
+	public String getBuyerOrderId() {
+		return buyerOrderId;
+	}
+
+
+
+	public void setBuyerOrderId(String buyerOrderId) {
+		this.buyerOrderId = buyerOrderId;
+	}
+
+
+
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+
+
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
 	}
 	
 	
