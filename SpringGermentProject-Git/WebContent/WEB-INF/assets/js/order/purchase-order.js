@@ -124,7 +124,8 @@ function indentItemAdd() {
                       $("#dataList").append(drawDataTable(data.poItemList));
                       $('.tableSelect').selectpicker('refresh');
 
-                      setSupplierValue(data.poItemList)
+                      setSupplierValue(data.poItemList);
+                      setCurrencyValue(data.poItemList);
 
                     }
                   }
@@ -166,6 +167,14 @@ function setSupplierValue(dataList) {
   const length = dataList.length;
   for (let i = 0; i < length; i++) {
     $('#supplier-' + dataList[i].autoId).val(dataList[i].supplierId).change();
+  }
+}
+
+function setCurrencyValue(dataList) {
+  const length = dataList.length;
+  for (let i = 0; i < length; i++) {
+    console.log("currency",dataList[i].currency);
+    $('#currency-' + dataList[i].autoId).val(dataList[i].currency).change();
   }
 }
 
@@ -419,10 +428,11 @@ function searchPurchaseOrder(poNo) {
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
 
-        $("#dataList").append(drawDataTable(purchaseOrder.itemList));
+        $("#dataList").append(drawDataTable(purchaseOrder.itemList,"checked"));
         $('.tableSelect').selectpicker('refresh');
 
         setSupplierValue(purchaseOrder.itemList);
+        setCurrencyValue(purchaseOrder.itemList);
         $("#btnPOSubmit").prop("disabled", true);
         $("#btnPOEdit").prop("disabled", false);
         $("#btnPreview").prop("disabled", false);
@@ -454,12 +464,13 @@ function amountCalculation(autoId) {
 }
 
 
-function drawDataTable(data) {
+function drawDataTable(data , isChecked = "") {
   let rows = "";
   const length = data.length;
 
   const supplierNameOptions = getOptions("supplierName");
   const currencyOptions = getOptions("currency");
+  const currencyList = [];
 
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
@@ -474,11 +485,12 @@ function drawDataTable(data) {
     <td id='grandQty-${autoId}'>${rowData.grandQty}</td>
     <td>${rowData.unit}</td>
     <td id='dollar-${autoId}'>${rowData.dollar}</td>
-    <td><input id='rate-${autoId}' class='form-control-sm' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
+    <td><input id='rate-${autoId}' class='form-control-sm min-width-60' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
     <td><select id='currency-${autoId}' class='selectpicker tableSelect' data-live-search='true' data-style='btn-light btn-sm border-light-gray'>${currencyOptions}</select></td>
     <td id='amount-${autoId}'>${rowData.amount}</td>
-    <td><input type='checkbox' class='check' id='check-${autoId}'></td>
+    <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
     </tr>`
+   
   }
 
   return rows;

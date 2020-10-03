@@ -41,12 +41,12 @@
 							<hr>
 
 							<div class="form-group">
-								<label for="fabricsItemName">Name:</label> <input type="text"
+								<label for="fabricsItemName"><span style="color:red;">*</span>Name:</label> <input type="text"
 									class="form-control" id="name" name="text">
 							</div>
 							<div class="form-group">
-								<label for="fabricsItemName">Factory Name:</label> 
-								    <select class="form-control" id="factoryId">
+								<label for="fabricsName"><span style="color:red;">*</span>Factory Name:</label> 
+								    <select class="form-control" id="factoryName" onchange="factoryWiseDepartmentLoad()">
 								   		 <option >Select Factory</option>
 								    	<c:forEach items="${factoryList}" var="factoryinfo" varStatus="counter">
 													
@@ -56,11 +56,9 @@
 								    </select>
 							</div>
 							<div class="form-group">
-								<label for="departmentname">Department:</label>
-								    <select class="form-control" id="depId">
-								   		 <option>Select Deartment</option>
-										  <option id="depId" value="1">A</option>
-										  <option id="depId" value="2">B</option>
+								<label for="departmentName"><span style="color:red;">*</span>Department:</label>
+								    <select class="form-control" id="departmentName">
+								   		 <option>Select Department</option>
 								    </select>
 							</div>
 							<div class="form-group">
@@ -126,7 +124,21 @@
 											<td>${inchargeinfo.sl}</td>
 											<td id='name${inchargeinfo.inchargeId}'>${inchargeinfo.name}</td>
 											<td id='telephone${inchargeinfo.inchargeId}'>${inchargeinfo.telephone}</td>
-											<td><input type="hidden" id='mobile${inchargeinfo.inchargeId}' value="${inchargeinfo.mobile}" /><input type="hidden" id='fax${inchargeinfo.inchargeId}' value="${inchargeinfo.fax}" /><input type="hidden" id='email${inchargeinfo.inchargeId}' value="${inchargeinfo.email}"/><input type="hidden" id='address${inchargeinfo.inchargeId}' value="${inchargeinfo.address}"/> <input type="hidden" id='skype${inchargeinfo.inchargeId}' value="${inchargeinfo.skype}"/> <input type="hidden" id='factory${inchargeinfo.inchargeId}' value="${inchargeinfo.factoryId}"/> <input type="hidden" id='depId${inchargeinfo.inchargeId}' value="${inchargeinfo.depId}"/><i class="fa fa-edit"  onclick="setData(${inchargeinfo.inchargeId})"> </i></td>
+											<td><input type="hidden"
+														id='mobile${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.mobile}" /><input type="hidden"
+														id='fax${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.fax}" /><input type="hidden"
+														id='email${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.email}" /><input type="hidden"
+														id='address${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.address}" /> <input type="hidden"
+														id='skype${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.skype}" /> <input type="hidden"
+														id='factory${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.factoryId}" /> <input type="hidden"
+														id='depId${inchargeinfo.inchargeId}'
+														value="${inchargeinfo.depId}" /><i class="fa fa-edit"  onclick="setData(${inchargeinfo.inchargeId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>
