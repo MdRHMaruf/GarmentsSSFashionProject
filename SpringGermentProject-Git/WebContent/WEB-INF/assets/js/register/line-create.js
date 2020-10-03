@@ -1,5 +1,6 @@
 
 var departmentsByFactoryId  = JSON;
+let departmentIdForSet = 0;
 function loadData(){
   
     $.ajax({
@@ -39,7 +40,7 @@ function saveAction() {
             if (data.result == "Something Wrong") {
               dangerAlert("Something went wrong");
             } else if (data.result == "duplicate") {
-              dangerAlert("Duplicate Line Name..This Line Name Allreary Exist")
+              dangerAlert("Duplicate Line Name..This Line Name Already Exist")
             } else {
               successAlert("Line Name Save Successfully");
 
@@ -131,14 +132,18 @@ function loadDepartmentByFactory() {
   }
   
   document.getElementById("departmentName").innerHTML = options;
+  document.getElementById("departmentName").value = departmentIdForSet;
+  departmentIdForSet = 0;
+  
 }
 
 function setData(factoryId, departmentId, lineId) {
 
 
   document.getElementById("lineId").value = lineId;
+  departmentIdForSet = departmentId;
   document.getElementById("factoryName").value = factoryId;
-  document.getElementById("departmentName").value = departmentId;
+  $("#factoryName").change();
   document.getElementById("lineName").value = document.getElementById("lineName" + lineId).innerHTML;
   document.getElementById("btnSave").disabled = true;
   document.getElementById("btnEdit").disabled = false;

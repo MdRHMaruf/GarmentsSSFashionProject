@@ -69,8 +69,8 @@ public class PurchaseOrderItem {
 		this.size = size;
 		this.qty = qty;
 		this.grandQty = grandQty;
-		this.unit = unit;
 		this.amount = rate * grandQty;
+		this.unit = unit;
 		this.currency = currency;
 		this.isCheck = isCheck;
 	}

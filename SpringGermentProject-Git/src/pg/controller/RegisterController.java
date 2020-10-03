@@ -1662,21 +1662,12 @@ public class RegisterController {
 		if(!registerService.isInchargeExist(v)) {
 			if(registerService.saveIncharge(v)) {
 
-				JSONArray mainarray = new JSONArray();
+				
 
 				List<InchargeInfo> List= registerService.getInchargeList();
 
-				for(int a=0;a<List.size();a++) {
-					JSONObject obj = new JSONObject();
-					obj.put("InchargeId", List.get(a).getInchargeId());
-					obj.put("Name", List.get(a).getName());
-					obj.put("Telephone", List.get(a).getTelephone());
-
-					mainarray.add(obj);
-				}
-
-
-				objmain.put("result", mainarray);
+				
+				objmain.put("result", List);
 
 			}else {
 				objmain.put("result", "Something Wrong");
@@ -1694,21 +1685,11 @@ public class RegisterController {
 		if(!registerService.isInchargeExist(v)) {
 			if(registerService.editIncharge(v)) {
 
-				JSONArray mainarray = new JSONArray();
+				
 
 				List<InchargeInfo> List= registerService.getInchargeList();
 
-				for(int a=0;a<List.size();a++) {
-					JSONObject obj = new JSONObject();
-					obj.put("InchargeId", List.get(a).getInchargeId());
-					obj.put("Name", List.get(a).getName());
-					obj.put("Telephone", List.get(a).getTelephone());
-
-					mainarray.add(obj);
-				}
-
-
-				objmain.put("result", mainarray);
+				objmain.put("result", List);
 
 			}else {
 				objmain.put("result", "Something Wrong");

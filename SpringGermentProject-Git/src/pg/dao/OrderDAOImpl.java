@@ -3584,12 +3584,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select (isnull(max(poNo),0)+1) as maxId from tbPurchaseOrderSummary";
-			List<?> list = session.createSQLQuery(sql).list();
-			String poId="0";
-			if(list.size()>0) {
-				poId = list.get(0).toString();
-			}
+			String sql="";
 
 			sql="update tbPurchaseOrderSummary set "
 					+ "orderDate = '"+purchaseOrder.getOrderDate()+"',"
@@ -3609,20 +3604,20 @@ public class OrderDAOImpl implements OrderDAO{
 			for (PurchaseOrderItem item : purchaseOrder.getItemList()) {
 				if(item.getType().equals("1")) {
 					if(item.isCheck()) {
-						sql="Update tbFabricsIndent set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
+						sql="Update tbFabricsIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbFabricsIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}
 				}else if(item.getType().equals("2")) {
 					if(item.isCheck()) {
-						sql="Update tbAccessoriesIndent set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
+						sql="Update tbAccessoriesIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbAccessoriesIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
 
 				}else if(item.getType().equals("3")) {
 					if(item.isCheck()) {
-						sql="Update tbAccessoriesIndentForCarton set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
+						sql="Update tbAccessoriesIndentForCarton set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbAccessoriesIndentForCarton set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
@@ -3743,7 +3738,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			sql="select fi.id,style.StyleNo,f.ItemName as accessoriesname,fi.supplierId,fi.rate,fi.dolar,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
+			sql="select fi.id,style.StyleNo,f.ItemName as accessoriesname,fi.supplierId,fi.rate,fi.dolar,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname,isnull(fi.currency,'') as currency\r\n" + 
 					"from tbFabricsIndent fi \r\n" + 
 					"left join TbStyleCreate style\r\n" + 
 					"on fi.styleId = style.StyleId \r\n" + 
@@ -3759,10 +3754,10 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"1", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),"",true));				
+				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"1", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[11].toString(),true));				
 			}
 
-			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName\r\n" + 
+			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 					" from tbAccessoriesIndent ai \r\n" + 
 					" left join TbStyleCreate style\r\n" + 
 					" on ai.styleid = style.StyleId \r\n" + 
@@ -3777,10 +3772,10 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"2", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),"",true));
+				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"2", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
 			}
 
-			sql="select aic.AccIndentId ,style.StyleNo,'Curton' as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.size,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
+			sql="select aic.AccIndentId ,style.StyleNo,'Curton' as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.size,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\r\n" + 
 					" from tbAccessoriesIndentForCarton aic\r\n" + 
 					" left join TbStyleCreate style\r\n" + 
 					" on aic.styleid = style.StyleId \r\n" + 
@@ -3791,7 +3786,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"3", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),"",true));
+				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"3", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
 			}
 
 
