@@ -35,29 +35,29 @@ function poWiseStyleLoad() {
   }
 }
 
-function typeWiseIndentItemLoad(){
+function typeWiseIndentItemLoad() {
   const type = $("#type").val();
   const purchaseOrder = $("#purchaseOrder").val();
   const styleId = $("#styleNo").val();
-  if(type != "0"){ 
-    if(type == "3"){
+  if (type != "0") {
+    if (type == "3") {
       let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
       document.getElementById("indentItem").innerHTML = options;
       $('#indentItem').selectpicker('refresh');
       $('#indentItem').val(0).change();
 
-    }else{
+    } else {
       $.ajax({
         type: 'GET',
         dataType: 'json',
         url: './getTypeWiseIndentItems',
         data: {
-          purchaseOrder : purchaseOrder,
-          styleId : styleId,
-          type : type
+          purchaseOrder: purchaseOrder,
+          styleId: styleId,
+          type: type
         },
         success: function (data) {
-  
+
           const itemList = data.itemList;
           let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
           const length = itemList.length;
@@ -71,8 +71,8 @@ function typeWiseIndentItemLoad(){
         }
       });
     }
-    
-  }else{
+
+  } else {
     var options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
     $("#indentItem").html(options);
     $('#indentItem').selectpicker('refresh');
@@ -95,7 +95,7 @@ function indentItemAdd() {
 
   if (purchaseOrder != 0) {
     if (styleId != 0) {
-      if(type != 0){
+      if (type != 0) {
         if (type == 3 || itemId != 0) {
           if (supplierId != 0) {
             if (rate != '') {
@@ -107,11 +107,11 @@ function indentItemAdd() {
                   data: {
                     purchaseOrder: purchaseOrder,
                     styleId: styleId,
-                    type : type,
+                    type: type,
                     indentItemId: itemId,
-                    supplierId : supplierId,
-                    rate : rate,
-                    dollar : dollar,
+                    supplierId: supplierId,
+                    rate: rate,
+                    dollar: dollar,
                     userId: userId
                   },
                   success: function (data) {
@@ -121,15 +121,15 @@ function indentItemAdd() {
                       dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                     } else {
                       //$("#dataList").empty();
-                      $("#dataList").append(drawDataTable(data.poItemList));        
+                      $("#dataList").append(drawDataTable(data.poItemList));
                       $('.tableSelect').selectpicker('refresh');
-                      
+
                       setSupplierValue(data.poItemList)
-  
+
                     }
                   }
                 });
-  
+
               } else {
                 warningAlert("Dollar amount in empty... Please enter dollar amount");
                 $("#dollar").focus();
@@ -146,7 +146,7 @@ function indentItemAdd() {
           warningAlert("indent Item not selected... Please Select Indent Item");
           $("#indentItem").focus();
         }
-      }else{
+      } else {
         warningAlert("Type not selected... Please Select Type");
         $("#type").focus();
       }
@@ -162,132 +162,36 @@ function indentItemAdd() {
 }
 
 
-function setSupplierValue(dataList){
+function setSupplierValue(dataList) {
   const length = dataList.length;
-  for(let i = 0;i<length;i++){
-    $('#supplier-'+dataList[i].autoId).val(dataList[i].supplierId).change();
+  for (let i = 0; i < length; i++) {
+    $('#supplier-' + dataList[i].autoId).val(dataList[i].supplierId).change();
   }
 }
 
-function submitAction(){
-    const rowList = $("#dataList tr");
-    const length = rowList.length;
-
-    let itemList = ""
-
-    let isChecked = false;
-
-    for(let i = 0; i < length; i++){
-      
-      const id = rowList[i].id.slice(4);
-      const type = rowList[i].getAttribute("data-type");
-      const supplierId =  $("#supplier-"+id).val();
-      const rate = $("#rate-"+id).val();
-      const dollar = $("#dollar-"+id).text();
-      const currency = $("#currency-"+id).val();
-      const amount = $("#amount-"+id).text();
-      const checked = $("#check-"+id).prop('checked');
-      if(checked) isChecked = checked;
-      itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
-    }
-
-    itemList = itemList.slice(0,-1);
-
-    const poNo = $("#poNo").val();
-    const orderDate = $("#orderDate").val();
-    const deliveryDate = $("#deliveryDate").val();
-    const deliveryTo = $("#deliveryTo").val();
-    const orderBy = $("#orderBy").val();
-    const billTo = $("#billTo").val();
-    const manualPO = $("#manualPO").val();
-    const paymentType = $("#paymentType").val();
-    const currency = $("#currency").val();
-    const note = $("#note").val();
-    const subject = $("#subject").val();
-    const userId = $("#userId").val();
-
-    
-    if(length>0){
-      if(orderDate){
-        if(paymentType!= 0){
-          if(currency != 0){
-            if(isChecked){
-              if(confirm("Are you sure to submit this Purchase Order...")){
-                $.ajax({
-                  type: 'POST',
-                  dataType: 'json',
-                  url: './submitPurchaseOrder',
-                  data: {
-                    poNo : poNo,
-                    orderDate: orderDate,
-                    deliveryDate: deliveryDate,
-                    deliveryTo : deliveryTo,
-                    orderBy: orderBy,
-                    billTo : billTo,
-                    manualPO : manualPO,
-                    paymentType : paymentType,
-                    currency: currency,
-                    note : note,
-                    subject : subject,
-                    itemListString : itemList,
-                    userId : userId
-                  },
-                  success: function (data) {
-                    if (data.result == "Something Wrong") {
-                      dangerAlert("Something went wrong");
-                    } else if (data.result == "duplicate") {
-                      dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                    } else {
-                      alert("Successfully Submit...");
-                      refreshAction();
-                    }
-                  }
-                });
-              }
-            }else{
-              warningAlert("Please Select Any Item Checked..");
-            }
-            
-          }else{
-            warningAlert("Please Select Currency..");
-            $("#currency").focus();
-          }
-        }else{
-          warningAlert("Please Select Payment Type..");
-          $("#paymentType").focus();
-        }
-      }else{
-        warningAlert("Please Select Order Date")
-        $("#orderDate").focus();
-      }
-    }else{
-      warningAlert("Please Enter any indent id");
-    }
-}
-
-
-function purchaseOrderEdit(){
+function submitAction() {
   const rowList = $("#dataList tr");
   const length = rowList.length;
 
-  let itemList = "";
+  let itemList = ""
+
   let isChecked = false;
 
-  for(let i = 0; i < length; i++){
-    
+  for (let i = 0; i < length; i++) {
+
     const id = rowList[i].id.slice(4);
     const type = rowList[i].getAttribute("data-type");
-    const supplierId =  $("#supplier-"+id).val();
-    const rate = $("#rate-"+id).val();
-    const dollar = $("#dollar-"+id).text();
-    const currency = $("#currency-"+id).val();
-    const amount = $("#amount-"+id).text();
-    const checked = $("#check-"+id).prop('checked');
-    if(checked) isChecked = checked;
+    const supplierId = $("#supplier-" + id).val();
+    const rate = $("#rate-" + id).val();
+    const dollar = $("#dollar-" + id).text();
+    const currency = $("#currency-" + id).val();
+    const amount = $("#amount-" + id).text();
+    const checked = $("#check-" + id).prop('checked');
+    if (checked) isChecked = checked;
     itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
   }
 
-  itemList = itemList.slice(0,-1);
+  itemList = itemList.slice(0, -1);
 
   const poNo = $("#poNo").val();
   const orderDate = $("#orderDate").val();
@@ -302,31 +206,127 @@ function purchaseOrderEdit(){
   const subject = $("#subject").val();
   const userId = $("#userId").val();
 
-  
-  if(length>0){
-    if(orderDate){
-      if(paymentType!= 0){
-        if(currency != 0){
-          if(isChecked){
-            if(confirm("Are you sure to Edit this Purchase Order...")){
+
+  if (length > 0) {
+    if (orderDate) {
+      if (paymentType != 0) {
+        if (currency != 0) {
+          if (isChecked) {
+            if (confirm("Are you sure to submit this Purchase Order...")) {
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './submitPurchaseOrder',
+                data: {
+                  poNo: poNo,
+                  orderDate: orderDate,
+                  deliveryDate: deliveryDate,
+                  deliveryTo: deliveryTo,
+                  orderBy: orderBy,
+                  billTo: billTo,
+                  manualPO: manualPO,
+                  paymentType: paymentType,
+                  currency: currency,
+                  note: note,
+                  subject: subject,
+                  itemListString: itemList,
+                  userId: userId
+                },
+                success: function (data) {
+                  if (data.result == "Something Wrong") {
+                    dangerAlert("Something went wrong");
+                  } else if (data.result == "duplicate") {
+                    dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                  } else {
+                    alert("Successfully Submit...");
+                    refreshAction();
+                  }
+                }
+              });
+            }
+          } else {
+            warningAlert("Please Select Any Item Checked..");
+          }
+
+        } else {
+          warningAlert("Please Select Currency..");
+          $("#currency").focus();
+        }
+      } else {
+        warningAlert("Please Select Payment Type..");
+        $("#paymentType").focus();
+      }
+    } else {
+      warningAlert("Please Select Order Date")
+      $("#orderDate").focus();
+    }
+  } else {
+    warningAlert("Please Enter any indent id");
+  }
+}
+
+
+function purchaseOrderEdit() {
+  const rowList = $("#dataList tr");
+  const length = rowList.length;
+
+  let itemList = "";
+  let isChecked = false;
+
+  for (let i = 0; i < length; i++) {
+
+    const id = rowList[i].id.slice(4);
+    const type = rowList[i].getAttribute("data-type");
+    const supplierId = $("#supplier-" + id).val();
+    const rate = $("#rate-" + id).val();
+    const dollar = $("#dollar-" + id).text();
+    const currency = $("#currency-" + id).val();
+    const amount = $("#amount-" + id).text();
+    const checked = $("#check-" + id).prop('checked');
+    if (checked) isChecked = checked;
+    itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
+  }
+
+  itemList = itemList.slice(0, -1);
+
+  const poNo = $("#poNo").val();
+  const orderDate = $("#orderDate").val();
+  const deliveryDate = $("#deliveryDate").val();
+  const deliveryTo = $("#deliveryTo").val();
+  const orderBy = $("#orderBy").val();
+  const billTo = $("#billTo").val();
+  const manualPO = $("#manualPO").val();
+  const paymentType = $("#paymentType").val();
+  const currency = $("#currency").val();
+  const note = $("#note").val();
+  const subject = $("#subject").val();
+  const userId = $("#userId").val();
+
+
+  if (length > 0) {
+    if (orderDate) {
+      if (paymentType != 0) {
+        if (currency != 0) {
+          if (isChecked) {
+            if (confirm("Are you sure to Edit this Purchase Order...")) {
               $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: './editPurchaseOrder',
                 data: {
-                  poNo : poNo,
+                  poNo: poNo,
                   orderDate: orderDate,
                   deliveryDate: deliveryDate,
-                  deliveryTo : deliveryTo,
+                  deliveryTo: deliveryTo,
                   orderBy: orderBy,
-                  billTo : billTo,
-                  manualPO : manualPO,
-                  paymentType : paymentType,
+                  billTo: billTo,
+                  manualPO: manualPO,
+                  paymentType: paymentType,
                   currency: currency,
-                  note : note,
-                  subject : subject,
-                  itemListString : itemList,
-                  userId : userId
+                  note: note,
+                  subject: subject,
+                  itemListString: itemList,
+                  userId: userId
                 },
                 success: function (data) {
                   if (data.result == "Something Wrong") {
@@ -340,22 +340,22 @@ function purchaseOrderEdit(){
                 }
               });
             }
-          }else{
+          } else {
             warningAlert("Please Select Any Item Checked..");
-          }    
-        }else{
+          }
+        } else {
           warningAlert("Please Select Currency..");
           $("#currency").focus();
         }
-      }else{
+      } else {
         warningAlert("Please Select Payment Type..");
         $("#paymentType").focus();
       }
-    }else{
+    } else {
       warningAlert("Please Select Order Date")
       $("#orderDate").focus();
     }
-  }else{
+  } else {
     warningAlert("Please Enter any indent id");
   }
 }
@@ -365,27 +365,26 @@ function purchaseOrderEdit(){
 
 function refreshAction() {
   location.reload();
-  
+
 }
-function showPreview(poNo,supplierId,type){
-  
-  var url = "getPurchaseOrderReport/"+poNo+"/"+supplierId+"/"+type;
+function showPreview(poNo, supplierId, type) {
+
+  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type;
   window.open(url, '_blank');
 
-  
-  
+
+
 };
 
-function getOptions(elementId){
+function getOptions(elementId) {
   let options = "";
-  $("#"+elementId+" option").each(function()
-  {
-    options += "<option value='"+$(this).val()+"'>"+$(this).text()+"</option>" 
+  $("#" + elementId + " option").each(function () {
+    options += "<option value='" + $(this).val() + "'>" + $(this).text() + "</option>"
   });
- return options;
+  return options;
 };
 
-function searchPurchaseOrder(poNo){
+function searchPurchaseOrder(poNo) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -400,7 +399,7 @@ function searchPurchaseOrder(poNo){
         dangerAlert("Duplicate Item Name..This Item Name Already Exist")
       } else {
         //$("#dataList").empty();
-        
+
         console.log(data.poInfo);
         const purchaseOrder = data.poInfo;
 
@@ -411,7 +410,7 @@ function searchPurchaseOrder(poNo){
 
         date = purchaseOrder.deliveryDate.split("/");
         $("#deliveryDate").val(date[2] + "-" + date[1] + "-" + date[0]);
-        
+
         $("#deliveryTo").val(purchaseOrder.deliveryTo).change();
         $("#orderBy").val(purchaseOrder.orderBy).change();
         $("#billTo").val(purchaseOrder.billTo).change();
@@ -420,14 +419,14 @@ function searchPurchaseOrder(poNo){
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
 
-        $("#dataList").append(drawDataTable(purchaseOrder.itemList));        
+        $("#dataList").append(drawDataTable(purchaseOrder.itemList));
         $('.tableSelect').selectpicker('refresh');
-        
+
         setSupplierValue(purchaseOrder.itemList);
         $("#btnPOSubmit").prop("disabled", true);
         $("#btnPOEdit").prop("disabled", false);
         $("#btnPreview").prop("disabled", false);
-        
+
 
         $('#searchModal').modal('hide');
 
@@ -447,11 +446,11 @@ function setData(unitId) {
 
 }
 
-function amountCalculation(autoId){
-    const rate = $("#rate-"+autoId).val();
-    const grandQty = $("#grandQty-"+autoId).text();
-    const amount = rate * grandQty;
-    $("#amount-"+autoId).text(amount);
+function amountCalculation(autoId) {
+  const rate = $("#rate-" + autoId).val();
+  const grandQty = $("#grandQty-" + autoId).text();
+  const amount = rate * grandQty;
+  $("#amount-" + autoId).text(amount);
 }
 
 
@@ -489,7 +488,7 @@ function drawDataTable(data) {
 //   const autoId = rowData.autoId;
 //   supplierName.prop("id","supplier-"+autoId);
 //   currency.prop("id","currency-"+autoId);
-  
+
 //   let row = $("<tr id='row-"+autoId+"' data-type='"+rowData.type+"'/>")
 //   row.append($("<td>" + rowData.styleNo + "</td>"));
 //   row.append($("<td>" + rowData.indentItemName + "</td>"));
@@ -505,19 +504,19 @@ function drawDataTable(data) {
 //   row.append($("<td></td>").append(currency));
 //   row.append($("<td id='amount-"+autoId+"'>" + rowData.amount + "</td>"));
 //   row.append($("<td ><input type='checkbox' class='check' id='check-"+autoId+"'></td>"));
-  
+
 //   return row;
 // }
 
 
 
-document.getElementById("allCheck").addEventListener("click",function(){
-  if($(this).prop('checked')){
+document.getElementById("allCheck").addEventListener("click", function () {
+  if ($(this).prop('checked')) {
     $(".check").prop('checked', true);
-  }else{
+  } else {
     $(".check").prop('checked', false);
   }
-  
+
 });
 
 function successAlert(message) {
@@ -526,6 +525,9 @@ function successAlert(message) {
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function warningAlert(message) {
@@ -534,6 +536,9 @@ function warningAlert(message) {
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function dangerAlert(message) {
@@ -542,6 +547,9 @@ function dangerAlert(message) {
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 $(document).ready(function () {

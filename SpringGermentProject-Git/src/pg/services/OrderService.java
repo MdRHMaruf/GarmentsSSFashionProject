@@ -40,10 +40,12 @@ public interface OrderService {
 	//Costing Create
 	List<ParticularItem> getTypeWiseParticularList(String type);
 	public boolean saveCosting(Costing costing);
+	public String confirmCosting(List<Costing> costingList);
 	public boolean editCosting(Costing costing);
 	public boolean deleteCosting(String autoId);
 	List<Costing> getCostingList(String styleId,String itemId);
 	List<Costing> getCostingList();
+	public List<Costing> cloningCosting(String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
 	//Buyder Po Order
@@ -56,7 +58,7 @@ public interface OrderService {
 	boolean editBuyerPO(BuyerPO buyerPo);
 	List<BuyerPO> getBuyerPoList();
 	BuyerPO getBuyerPO(String buyerPoNo);
-	boolean cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId);
+	
 
 	//Accessories
 	public String maxAIno(); 

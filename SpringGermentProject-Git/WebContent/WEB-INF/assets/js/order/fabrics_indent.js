@@ -185,30 +185,30 @@ function saveAction() {
           if (quantity != 0) {
             if (dozen != 0) {
               if (consumption != 0) {
-                if(confirm("Are you Sure to Save this Fabrics Indent")){
+                if (confirm("Are you Sure to Save this Fabrics Indent")) {
                   $.ajax({
                     type: 'POST',
                     dataType: 'json',
                     url: './saveFabricsIndent',
                     data: {
-                      autoId  : autoId,
-                      purchaseOrder : purchaseOrder,
-                      styleId : styleId,
-                      itemId  : itemId,
-                      itemColorId : itemColorId,
-                      fabricsId : fabricsId,
+                      autoId: autoId,
+                      purchaseOrder: purchaseOrder,
+                      styleId: styleId,
+                      itemId: itemId,
+                      itemColorId: itemColorId,
+                      fabricsId: fabricsId,
                       qty: quantity,
-                      dozenQty : dozenQuantity,
+                      dozenQty: dozenQuantity,
                       consumption: consumption,
-                      inPercent : inPercent,
-                      percentQty : percentQuantity,
-                      totalQty : totalQuantity,
-                      unitId : unitId,
-                      width : width,
-                      yard  : yard,
-                      gsm : gsm,
-                      grandQty  : grandQuantity,
-                      fabricsColorId  : fabricsColorId,
+                      inPercent: inPercent,
+                      percentQty: percentQuantity,
+                      totalQty: totalQuantity,
+                      unitId: unitId,
+                      width: width,
+                      yard: yard,
+                      gsm: gsm,
+                      grandQty: grandQuantity,
+                      fabricsColorId: fabricsColorId,
                       brandId: brandId,
                       userId: userId
                     },
@@ -218,14 +218,14 @@ function saveAction() {
                       } else if (data.result == "duplicate") {
                         dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                       } else {
-                        
+
                         $("#dataList").empty();
                         $("#dataList").append(drawDataTable(data.result));
                         successAlert("Costing Item Save Successfully");
                       }
                     }
                   });
-  
+
                 }
               } else {
                 warningAlert("Consumption is empty ... Please Enter Consumption");
@@ -293,30 +293,30 @@ function editAction() {
           if (quantity != 0) {
             if (dozen != 0) {
               if (consumption != 0) {
-                if(confirm("Are you Sure to Edit this Fabrics Indent")){
+                if (confirm("Are you Sure to Edit this Fabrics Indent")) {
                   $.ajax({
                     type: 'POST',
                     dataType: 'json',
                     url: './editFabricsIndent',
                     data: {
-                      autoId  : autoId,
-                      purchaseOrder : purchaseOrder,
-                      styleId : styleId,
-                      itemId  : itemId,
-                      itemColorId : itemColorId,
-                      fabricsId : fabricsId,
+                      autoId: autoId,
+                      purchaseOrder: purchaseOrder,
+                      styleId: styleId,
+                      itemId: itemId,
+                      itemColorId: itemColorId,
+                      fabricsId: fabricsId,
                       qty: quantity,
-                      dozenQty : dozenQuantity,
+                      dozenQty: dozenQuantity,
                       consumption: consumption,
-                      inPercent : inPercent,
-                      percentQty : percentQuantity,
-                      totalQty : totalQuantity,
-                      unitId : unitId,
-                      width : width,
-                      yard  : yard,
-                      gsm : gsm,
-                      grandQty  : grandQuantity,
-                      fabricsColorId  : fabricsColorId,
+                      inPercent: inPercent,
+                      percentQty: percentQuantity,
+                      totalQty: totalQuantity,
+                      unitId: unitId,
+                      width: width,
+                      yard: yard,
+                      gsm: gsm,
+                      grandQty: grandQuantity,
+                      fabricsColorId: fabricsColorId,
                       brandId: brandId,
                       userId: userId
                     },
@@ -326,7 +326,7 @@ function editAction() {
                       } else if (data.result == "duplicate") {
                         dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                       } else {
-                        
+
                         $("#dataList").empty();
                         $("#dataList").append(drawDataTable(data.result));
                         successAlert("Costing Item Save Successfully");
@@ -335,7 +335,7 @@ function editAction() {
                       }
                     }
                   });
-  
+
                 }
               } else {
                 warningAlert("Consumption is empty ... Please Enter Consumption");
@@ -377,7 +377,7 @@ function refreshAction() {
 function unitChangeAction() {
   var unit = $("#unit option:selected").text();
   var unitId = $("#unit").val();
-  if(!isFind){
+  if (!isFind) {
     if (unit.toLowerCase() == "kg") {
       $("#gsm").val("0");
       $("#yard").val("0");
@@ -393,7 +393,7 @@ function unitChangeAction() {
       $("#gsm").prop("disabled", true);
       $("#width").prop("disabled", true);
     }
-  
+
     if (unitId != "0") {
       $.ajax({
         type: 'GET',
@@ -500,6 +500,9 @@ function successAlert(message) {
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function warningAlert(message) {
@@ -508,6 +511,9 @@ function warningAlert(message) {
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function dangerAlert(message) {
@@ -516,6 +522,9 @@ function dangerAlert(message) {
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 $(document).ready(function () {
@@ -535,26 +544,26 @@ $(document).ready(function () {
 
 
 function FabricIndentReport(poID, Styleid, itemid) {
-	
-	console.log(" po "+poID)
-	console.log(" style "+Styleid)
-	console.log(" itemid "+itemid)
-	
-	
-	  $.ajax({
-	    type: 'POST',
-	    dataType: 'json',
-	    url: './fabricsIndentReport/'+poID+'/'+Styleid+'/'+itemid,
-	    data: {
-	    	
-	    },
-	    success: function (data) {
-	    	if(data=='yes'){
-				var url = "fabricsIndentReportView";
-        		window.open(url, '_blank');
-			}
-	    }
-	  });
-	}
+
+  console.log(" po " + poID)
+  console.log(" style " + Styleid)
+  console.log(" itemid " + itemid)
+
+
+  $.ajax({
+    type: 'POST',
+    dataType: 'json',
+    url: './fabricsIndentReport/' + poID + '/' + Styleid + '/' + itemid,
+    data: {
+
+    },
+    success: function (data) {
+      if (data == 'yes') {
+        var url = "fabricsIndentReportView";
+        window.open(url, '_blank');
+      }
+    }
+  });
+}
 
 

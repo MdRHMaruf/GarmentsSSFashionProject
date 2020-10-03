@@ -82,6 +82,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.saveCosting(costing);
 	}
+	
+	@Override
+	public String confirmCosting(List<Costing> costingList) {
+		// TODO Auto-generated method stub
+		return orderDAO.confirmCosting(costingList);
+	}
 
 	@Override
 	public boolean editCosting(Costing costing) {
@@ -107,6 +113,12 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getCostingList();
 	}
 
+	@Override
+	public List<Costing> cloningCosting(String oldStyleId, String oldItemId) {
+		// TODO Auto-generated method stub
+		return orderDAO.cloningCosting(oldStyleId, oldItemId);
+	}
+	
 	@Override
 	public Costing getCostingItem(String autoId) {
 		// TODO Auto-generated method stub
@@ -258,12 +270,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.PendingList();
 	}
 
-	@Override
-	public boolean cloningCosting(String oldStyleId, String oldItemId, String newStyleId, String newItemId,
-			String userId) {
-		// TODO Auto-generated method stub
-		return orderDAO.cloningCosting(oldStyleId, oldItemId, newStyleId, newItemId, userId);
-	}
+	
 
 	@Override
 	public List<commonModel> styleItemsWiseColor(String buyerorderid, String style, String item) {
