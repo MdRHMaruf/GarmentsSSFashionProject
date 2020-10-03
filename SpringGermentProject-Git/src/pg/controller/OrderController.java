@@ -96,13 +96,13 @@ public class OrderController {
 	private OrderService orderService;
 	@Autowired
 	private RegisterService registerService;
-	
-	 String poid;
-	 String styleid;
-	 String itemid;
-	 String ParcelId;
-	 String sampleId;
-	 
+
+	String poid;
+	String styleid;
+	String itemid;
+	String ParcelId;
+	String sampleId;
+
 
 	//Style Create 
 
@@ -149,9 +149,9 @@ public class OrderController {
 		System.out.println(objmain.toString());
 		return objmain;
 	}
-	
-	
-	
+
+
+
 	//Costing Create Work of nasir bai...
 	@RequestMapping(value = "/costing_create",method=RequestMethod.GET)
 	public ModelAndView costing_create(ModelMap map,HttpSession session) {
@@ -169,17 +169,66 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
+	public @ResponseBody JSONObject cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
+		JSONObject objmain = new JSONObject();
+
+		List<Costing> costingList = orderService.cloningCosting(oldStyleId,oldItemId);
+		objmain.put("result",costingList);
+
+		return objmain;
+	}
+
 	@RequestMapping(value = "/saveCosting",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveCosting(Costing costing) {
 		JSONObject objmain = new JSONObject();
 		if(orderService.saveCosting(costing)) {
-
 			List<Costing> costingList = orderService.getCostingList(costing.getStyleId(),costing.getItemId());
-
 			objmain.put("result",costingList);
 		}else {
 			objmain.put("result", "Something Wrong");
 		}
+		return objmain;
+	}
+
+	@RequestMapping(value = "/confirmCosting",method=RequestMethod.POST)
+	public @ResponseBody JSONObject confirmCosting(String costingList) {
+		JSONObject objmain = new JSONObject();
+
+		try {
+			String[] itemList = costingList.split("#");
+			System.out.println("Item List size="+itemList.length);
+			List<Costing> list = new ArrayList<Costing>();
+			String autoId,styleId,styleNo,itemId,itemName,particularType,particularId,particularName,unitId,commission,width,yard,gsm,consumption,unitPrice,amount,date,userId;
+
+			for (String item : itemList) {
+				System.out.println(item);
+				String[] itemProperty = item.split(",");
+				autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+				styleNo = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				itemId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				itemName = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				particularType = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+				particularId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+				particularName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+				unitId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				commission = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+				width = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
+				yard = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+				gsm = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				consumption = itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim();
+				unitPrice = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
+				amount = itemProperty[15].substring(itemProperty[15].indexOf(":")+1).trim();
+				date = itemProperty[16].substring(itemProperty[16].indexOf(":")+1).trim();
+				userId = itemProperty[17].substring(itemProperty[17].indexOf(":")+1).trim();
+				list.add(new Costing(autoId, styleId, itemId, particularType, particularId, unitId, Double.valueOf(width), Double.valueOf(yard), Double.valueOf(gsm), Double.valueOf(consumption), Double.valueOf(unitPrice), Double.valueOf(amount), Double.valueOf(commission), date, userId));
+			}
+			objmain.put("result",orderService.confirmCosting(list));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+
 
 		return objmain;
 	}
@@ -769,7 +818,7 @@ public class OrderController {
 
 	}
 
-	
+
 
 	@ResponseBody
 	@RequestMapping(value = "/poWiseStyles/{po}",method=RequestMethod.POST)
@@ -1342,7 +1391,7 @@ public class OrderController {
 		List<Unit> unitList = registerService.getUnitList();
 		List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
 		ModelAndView view = new ModelAndView("order/fabrics-indent");
-		
+
 		view.addObject("fabricindentsummarylist", fabricindentsummarylist);
 		view.addObject("purchaseorders", purchaseorders);
 		view.addObject("fabricsList",fabricsItemList);
@@ -1499,21 +1548,21 @@ public class OrderController {
 		this.SampleReqId=sampleReqId;
 		return "Success";
 	}
-	
-	
+
+
 	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
-		
-		
+
+
 		ModelAndView view=new ModelAndView("order/printsampleRequisition");
-		
-		
+
+
 		map.addAttribute("SampleReqId", SampleReqId);
 
-	
+
 		return view;
 	}
-	
+
 	//Purchase Order
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)
 	public ModelAndView purchase_order(ModelMap map,HttpSession session) {
@@ -1593,7 +1642,7 @@ public class OrderController {
 
 
 
-	
+
 	//Sample Production
 	@RequestMapping(value = "/sample_production",method=RequestMethod.GET)
 	public ModelAndView sample_production(ModelMap map,HttpSession session) {
@@ -1603,7 +1652,7 @@ public class OrderController {
 		//view.addObject("sampleCommentsList",sampleCommentsList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
+
 	@RequestMapping(value = "/getSampleCommentsList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getSampleCommentsList() {
 		JSONObject objmain = new JSONObject();
@@ -1611,7 +1660,7 @@ public class OrderController {
 		objmain.put("sampleCommentsList", sampleCommentsList);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/getSampleProductionInfo",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
 		JSONObject objmain = new JSONObject();
@@ -1619,7 +1668,7 @@ public class OrderController {
 		objmain.put("sampleProduction", sampleProduction);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/postSampleProduction",method=RequestMethod.POST)
 	public @ResponseBody JSONObject postSampleProduction(SampleCadAndProduction	sampleCadAndProduction) {
 		JSONObject objmain = new JSONObject();
@@ -1630,12 +1679,12 @@ public class OrderController {
 		}
 		return objmain;
 	}
-	
+
 	@RequestMapping(value="/getSampleProductionReport/{idList}/{printType}")
 	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable String idList,@PathVariable String printType) {
 
 		ModelAndView view = new ModelAndView("order/sample-production-report-view");
-		
+
 		map.addAttribute("purchaseOrder","");
 		map.addAttribute("styleId","");
 		map.addAttribute("itemId","");
@@ -1646,7 +1695,7 @@ public class OrderController {
 		return view;
 
 	}
-	
+
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
@@ -1659,9 +1708,6 @@ public class OrderController {
 		map.addAttribute("buyerList",List);
 		map.addAttribute("itemList",itemList);
 		map.addAttribute("styleList",styleList);
-		
-
-
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1687,29 +1733,16 @@ public class OrderController {
 		if(flag) {
 			System.out.println("Sucess");
 		}
-		
+
 		ModelAndView view=new ModelAndView("redirect:style_create");
 		map.addAttribute("buyerId", buyerId);
-		
+
 
 		return view;
 	}
 
 
-	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
-	public @ResponseBody JSONObject cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
-		JSONObject objmain = new JSONObject();
 
-		if(orderService.cloningCosting(oldStyleId,oldItemId,newStyleId,newItemId,userId)) {
-
-			List<Costing> costingList = orderService.getCostingList(newStyleId,newItemId);
-			objmain.put("result",costingList);
-		}else {
-			objmain.put("result", "Something Wrong");
-		}
-
-		return objmain;
-	}
 
 	@ResponseBody
 	@RequestMapping(value = "/buyerWisePoLoad/{buyerId}",method=RequestMethod.POST)
@@ -1738,41 +1771,41 @@ public class OrderController {
 		return objmain;
 
 	}
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value = "/fabricsIndentReport/{poid}/{styleid}/{itemid}",method=RequestMethod.POST)
 	public String fabricsIndentReport(@PathVariable ("poid") String poid,@PathVariable ("styleid") String styleid,@PathVariable ("itemid") String itemid) {
 		System.out.println(" Open Ooudoor sales report 1");
-		
+
 		this.poid=poid;
 		this.styleid=styleid;
 		this.itemid=itemid;
-		
+
 		return "yes";
-		
+
 	}
-	
-	
-	
-	
+
+
+
+
 	@ResponseBody
 	@RequestMapping(value = "/fabricsIndentReportView",method=RequestMethod.GET)
 	public ModelAndView fabricsIndentReportView(ModelAndView map, FabricsIndent p) {
-		
-			System.out.println(" Open Ooudoor sales report ");	
-			ModelAndView view = new ModelAndView("order/fabricsIndentReport");
-	
-			view.addObject("poid",poid);
-		 	view.addObject("styleid",styleid);
-		 	view.addObject("itemid",itemid);
-		 	
-			
-			
-			return view;
-		
+
+		System.out.println(" Open Ooudoor sales report ");	
+		ModelAndView view = new ModelAndView("order/fabricsIndentReport");
+
+		view.addObject("poid",poid);
+		view.addObject("styleid",styleid);
+		view.addObject("itemid",itemid);
+
+
+
+		return view;
+
 	}
-	
+
 	//Parcel
 	@RequestMapping(value = "/parcel",method=RequestMethod.GET)
 	public ModelAndView parcel(ModelMap map,HttpSession session) {
@@ -1783,7 +1816,7 @@ public class OrderController {
 		List<CourierModel> courierList=orderService.getcourierList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<parcelModel> parcelList= orderService.parcelList();	
-		
+
 		view.addObject("StyleList",styleList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("courierList",courierList);
@@ -1791,170 +1824,170 @@ public class OrderController {
 		view.addObject("parcelList",parcelList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
-	
-	
-	
-		@ResponseBody
-		@RequestMapping(value = "/insertParcel",method=RequestMethod.GET)
-		public String insertParcel(parcelModel parcel) {
-		 boolean insert=orderService.insertParcel(parcel);
-		 
-		 if (insert) {
+
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/insertParcel",method=RequestMethod.GET)
+	public String insertParcel(parcelModel parcel) {
+		boolean insert=orderService.insertParcel(parcel);
+
+		if (insert) {
 			return "success";
 		}
-			return "fail";
-		
-		}
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/getParcelDetails/{id}",method=RequestMethod.GET)
-		public List<parcelModel> insertParcel(@PathVariable ("id") String id) {
-		 List<parcelModel> List=orderService.getParcelDetails(id);
-			
+		return "fail";
+
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/getParcelDetails/{id}",method=RequestMethod.GET)
+	public List<parcelModel> insertParcel(@PathVariable ("id") String id) {
+		List<parcelModel> List=orderService.getParcelDetails(id);
+
 		return List;
-		
-		}
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/editParcel",method=RequestMethod.GET)
-		public String editParcel(parcelModel parcel) {
-		
-			
-		 boolean insert=orderService.editParecel(parcel);
-		 
-		 if (insert) {
+
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/editParcel",method=RequestMethod.GET)
+	public String editParcel(parcelModel parcel) {
+
+
+		boolean insert=orderService.editParecel(parcel);
+
+		if (insert) {
 			return "success";
 		}			
 		return "fail";
-		
-		}
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/parcelRepor/{id}",method=RequestMethod.POST)
-		public String parcelRepor(@PathVariable ("id") String id) {
-			System.out.println(" Open Ooudoor sales report 1");
-			
-			this.ParcelId=id;
-			return "yes";
-			
-		}
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/parcelReportView",method=RequestMethod.GET)
-		public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
-			
-				System.out.println(" Open Ooudoor sales report ");	
-				ModelAndView view = new ModelAndView("order/ParcelReportView");
-		
-				view.addObject("id",ParcelId);					
-				
-				return view;			
-		}
-		
-		
-		
-		@RequestMapping(value = "/sample_cad",method=RequestMethod.GET)
-		public ModelAndView sample_cad(ModelMap map,HttpSession session) {
 
-			ModelAndView view = new ModelAndView("order/sample_cad");
-			
-			
-			List<String> poList = orderService.getPurchaseOrderList();
-			List<commonModel> sampleList = orderService.getSampleList();
-			List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
-			view.addObject("Samples",Samples);
-			view.addObject("poList",poList);
-			view.addObject("sampletype",sampleList);
-			view.addObject("SampleList",Samples);
-			
-			return view; //JSP - /WEB-INF/view/index.jsp
-		}
-		
-		
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/insertSamplCad",method=RequestMethod.GET)
-		public String insertSamplCad(SampleCadAndProduction sample) {
-		 boolean insert=orderService.sampleCadInsert(sample);
-		 
-		 if (insert) {
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/parcelRepor/{id}",method=RequestMethod.POST)
+	public String parcelRepor(@PathVariable ("id") String id) {
+		System.out.println(" Open Ooudoor sales report 1");
+
+		this.ParcelId=id;
+		return "yes";
+
+	}
+
+
+	@ResponseBody
+	@RequestMapping(value = "/parcelReportView",method=RequestMethod.GET)
+	public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
+
+		System.out.println(" Open Ooudoor sales report ");	
+		ModelAndView view = new ModelAndView("order/ParcelReportView");
+
+		view.addObject("id",ParcelId);					
+
+		return view;			
+	}
+
+
+
+	@RequestMapping(value = "/sample_cad",method=RequestMethod.GET)
+	public ModelAndView sample_cad(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("order/sample_cad");
+
+
+		List<String> poList = orderService.getPurchaseOrderList();
+		List<commonModel> sampleList = orderService.getSampleList();
+		List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
+		view.addObject("Samples",Samples);
+		view.addObject("poList",poList);
+		view.addObject("sampletype",sampleList);
+		view.addObject("SampleList",Samples);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/insertSamplCad",method=RequestMethod.GET)
+	public String insertSamplCad(SampleCadAndProduction sample) {
+		boolean insert=orderService.sampleCadInsert(sample);
+
+		if (insert) {
 			return "success";
 		}
-			return "fail";
-		
-		}
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/getSampleDetails/{id}",method=RequestMethod.GET)
-		public List<SampleCadAndProduction> insertSamplCad(@PathVariable ("id") String id) {
+		return "fail";
+
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/getSampleDetails/{id}",method=RequestMethod.GET)
+	public List<SampleCadAndProduction> insertSamplCad(@PathVariable ("id") String id) {
 		List<SampleCadAndProduction>  samplelist=orderService.getSampleDetails(id);
-		
+
 		return samplelist;
-		
-		}
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/editSampleCad",method=RequestMethod.GET)
-		public String editSampleCad(SampleCadAndProduction sample) {
-		 boolean insert=orderService.editSampleCad(sample);
-		 
-		 if (insert) {
+
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/editSampleCad",method=RequestMethod.GET)
+	public String editSampleCad(SampleCadAndProduction sample) {
+		boolean insert=orderService.editSampleCad(sample);
+
+		if (insert) {
 			return "success";
 		}
-			return "fail";
-		
-		}
-		 
-		
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/SampleReport/{id}",method=RequestMethod.POST)
-		public String SampleReport(@PathVariable ("id") String id) {
-			System.out.println(" Open Ooudoor sales report 1");
-			
-			this.sampleId=id;
-			return "yes";
-			
-		}
-		
-		
-		@ResponseBody
-		@RequestMapping(value = "/SampleReportView",method=RequestMethod.GET)
-		public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
-			
-				System.out.println(" Open Ooudoor sales report ");	
-				ModelAndView view = new ModelAndView("order/SampleCadReportView");
-		
-				view.addObject("id",sampleId);					
-				
-				return view;			
-		}
+		return "fail";
+
+	}
+
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/SampleReport/{id}",method=RequestMethod.POST)
+	public String SampleReport(@PathVariable ("id") String id) {
+		System.out.println(" Open Ooudoor sales report 1");
+
+		this.sampleId=id;
+		return "yes";
+
+	}
+
+
+	@ResponseBody
+	@RequestMapping(value = "/SampleReportView",method=RequestMethod.GET)
+	public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
+
+		System.out.println(" Open Ooudoor sales report ");	
+		ModelAndView view = new ModelAndView("order/SampleCadReportView");
+
+		view.addObject("id",sampleId);					
+
+		return view;			
+	}
 
 
 	@RequestMapping(value="/purchase_order_approve_from_md",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView purchase_order_approve_from_md(ModelMap map){
-	
+
 		ModelAndView view = new ModelAndView("order/purchase-order-approve-from-md");
-		
+
 		return view;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/getPOListForMd",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getPOListForMd(String fromDate,String toDate,String itemType,String approveType) {
 		JSONObject objmain = new JSONObject();
@@ -1962,7 +1995,7 @@ public class OrderController {
 		objmain.put("purchaseOrderList", purchaseOrderList);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/confirmPurchaseOrder",method=RequestMethod.GET)
 	public @ResponseBody JSONObject confirmPurchaseOrder(String purchaseOrderList) {
 		JSONObject objmain = new JSONObject();
@@ -1979,22 +2012,22 @@ public class OrderController {
 				poNo = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
 				type = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
 				approval = Integer.valueOf(itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim());
-				
+
 				poList.add(new PurchaseOrder(purchaseOrder, styleId, "", supplierId, "", poNo, type, "",approval));
 			}
-			
+
 			if(orderService.purchaseOrderApproveConfirm(poList)) {
 				objmain.put("result", "Successfull");
 			}else {
 				objmain.put("result", "Something Wrong");
 			}
-				
-			}catch(Exception e) {
-				objmain.put("result", "Something Wrong");
-				e.printStackTrace();
-			}
-		
-		
+
+		}catch(Exception e) {
+			objmain.put("result", "Something Wrong");
+			e.printStackTrace();
+		}
+
+
 		return objmain;
 	}
 

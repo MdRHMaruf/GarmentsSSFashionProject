@@ -600,6 +600,74 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 	}
+	
+	@Override
+	public String confirmCosting(List<Costing> costingList) {
+	
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="";
+			for(Costing costing:costingList) {
+				sql="insert into TbCostingCreate ("
+						+ "StyleId,"
+						+ "ItemId,"
+						+ "GroupType,"
+						+ "FabricationItemId,"
+						+ "size,"
+						+ "UnitId,"
+						+ "width,"
+						+ "yard,"
+						+ "gsm,"
+						+ "consumption,"
+						+ "UnitPrice,"
+						+ "Amount,"
+						+ "Comission,"
+						+ "SubmissionDate,"
+						+ "EntryTime,"
+						+ "UserId)"
+						+ " values "
+						+ "("
+						+ "'"+costing.getStyleId()+"',"
+						+ "'"+costing.getItemId()+"',"
+						+ "'"+costing.getParticularType()+"',"
+						+ "'"+costing.getParticularId()+"',"
+						+ "'"+costing.getSize()+"',"
+						+ "'"+costing.getUnitId()+"',"
+						+ "'"+costing.getWidth()+"',"
+						+ "'"+costing.getYard()+"',"
+						+ "'"+costing.getGsm()+"',"
+						+ "'"+costing.getConsumption()+"',"
+						+ "'"+costing.getUnitPrice()+"',"
+						+ "'"+costing.getAmount()+"',"
+						+ "'"+costing.getCommission()+"',"
+						+ "'"+costing.getDate()+"',"
+						+ "CURRENT_TIMESTAMP,"
+						+ "'"+costing.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			tx.commit();
+			return "Successfull";
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return "Something Wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		
+		return "Something Wrong";
+	}
 
 	@Override
 	public boolean editCosting(Costing costing) {
@@ -757,6 +825,56 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
+		return datalist;
+	}
+
+	@Override
+	public List<Costing> cloningCosting(String oldStyleId, String oldItemId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Costing> datalist=new ArrayList<Costing>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+	
+			String sql="select cc.AutoId,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,cc.GroupType,cc.FabricationItemId,ISNULL(fi.ItemName,pi.Name) as particula,isnull(si.size,'')as size,cc.UnitId,cc.width,cc.yard,cc.gsm,cc.consumption,cc.UnitPrice,cc.amount,cc.Comission,(select convert(varchar,cc.SubmissionDate,103))as date,cc.UserId \r\n" + 
+					"from TbCostingCreate cc\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on cc.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on cc.ItemId = id.itemid\r\n" + 
+					"left join tbStyleWiseItem si\r\n" + 
+					"on cc.ItemId = si.ItemId and cc.StyleId=si.styleid \r\n" + 
+					"left join TbFabricsItem fi\r\n" + 
+					"on cc.FabricationItemId = fi.id and cc.GroupType='1'\r\n" + 
+					"left join TbParticularItemInfo pi\r\n" + 
+					"on cc.FabricationItemId = pi.AutoId and cc.GroupType='2' \r\n"+
+					"where cc.styleId='"+oldStyleId+"' and cc.itemId='"+oldItemId+"'";
+	
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				String date[] = element[17].toString().split("/");	
+				datalist.add(new Costing(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(),element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), Double.valueOf(element[10].toString()), Double.valueOf(element[11].toString()), Double.valueOf(element[12].toString()),Double.valueOf(element[13].toString()), Double.valueOf(element[14].toString()), Double.valueOf(element[15].toString()), Double.valueOf(element[16].toString()), date[2]+"-"+date[1]+"-"+date[1], element[18].toString()));				
+			}
+	
+			tx.commit();
+			return datalist;
+		}
+		catch(Exception ee){
+	
+			if (tx != null) {
+				tx.rollback();
+				return datalist;
+			}
+			ee.printStackTrace();
+		}
+	
+		finally {
+			session.close();
+		}
+	
 		return datalist;
 	}
 
@@ -1988,97 +2106,6 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 
 		return query;
-	}
-
-	@Override
-	public boolean cloningCosting(String oldStyleId, String oldItemId, String newStyleId, String newItemId,
-			String userId) {
-		Session session=HibernateUtil.openSession();
-		Transaction tx=null;
-		List<Costing> datalist=new ArrayList<Costing>();
-		try{
-			tx=session.getTransaction();
-			tx.begin();
-
-			String sql="select cc.AutoId,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,cc.GroupType,cc.FabricationItemId,ISNULL(fi.ItemName,pi.Name) as particula,isnull(si.size,'')as size,cc.UnitId,cc.width,cc.yard,cc.gsm,cc.consumption,cc.UnitPrice,cc.amount,cc.Comission,(select convert(varchar,cc.SubmissionDate,103))as date,cc.UserId \r\n" + 
-					"from TbCostingCreate cc\r\n" + 
-					"left join TbStyleCreate sc\r\n" + 
-					"on cc.StyleId = sc.StyleId\r\n" + 
-					"left join tbItemDescription id\r\n" + 
-					"on cc.ItemId = id.itemid\r\n" + 
-					"left join tbStyleWiseItem si\r\n" + 
-					"on cc.ItemId = si.ItemId and cc.StyleId=si.styleid \r\n" + 
-					"left join TbFabricsItem fi\r\n" + 
-					"on cc.FabricationItemId = fi.id and cc.GroupType='1'\r\n" + 
-					"left join TbParticularItemInfo pi\r\n" + 
-					"on cc.FabricationItemId = pi.AutoId and cc.GroupType='2' \r\n"+
-					"where cc.styleId='"+oldStyleId+"' and cc.itemId='"+oldItemId+"'";
-
-			List<?> list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
-				String date[] = element[17].toString().split("/");
-
-				datalist.add(new Costing(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(),element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), Double.valueOf(element[10].toString()), Double.valueOf(element[11].toString()), Double.valueOf(element[12].toString()),Double.valueOf(element[13].toString()), Double.valueOf(element[14].toString()), Double.valueOf(element[15].toString()), Double.valueOf(element[16].toString()), date[2]+"-"+date[1]+"-"+date[1], element[18].toString()));				
-			}
-
-			for (Costing costing : datalist) {
-				sql="insert into TbCostingCreate ("
-						+ "StyleId,"
-						+ "ItemId,"
-						+ "GroupType,"
-						+ "FabricationItemId,"
-						+ "size,"
-						+ "UnitId,"
-						+ "width,"
-						+ "yard,"
-						+ "gsm,"
-						+ "consumption,"
-						+ "UnitPrice,"
-						+ "Amount,"
-						+ "Comission,"
-						+ "SubmissionDate,"
-						+ "EntryTime,"
-						+ "UserId)"
-						+ " values "
-						+ "("
-						+ "'"+newStyleId+"',"
-						+ "'"+newItemId+"',"
-						+ "'"+costing.getParticularType()+"',"
-						+ "'"+costing.getParticularId()+"',"
-						+ "'"+costing.getSize()+"',"
-						+ "'"+costing.getUnitId()+"',"
-						+ "'"+costing.getWidth()+"',"
-						+ "'"+costing.getYard()+"',"
-						+ "'"+costing.getGsm()+"',"
-						+ "'"+costing.getConsumption()+"',"
-						+ "'"+costing.getUnitPrice()+"',"
-						+ "'"+costing.getAmount()+"',"
-						+ "'"+costing.getCommission()+"',"
-						+ "'"+costing.getDate()+"',"
-						+ "CURRENT_TIMESTAMP,"
-						+ "'"+userId+"')";
-				session.createSQLQuery(sql).executeUpdate();
-			}
-
-			tx.commit();
-			return true;
-		}
-		catch(Exception ee){
-
-			if (tx != null) {
-				tx.rollback();
-				return false;
-			}
-			ee.printStackTrace();
-		}
-
-		finally {
-			session.close();
-		}
-
-		return false;
 	}
 
 	@Override

@@ -1,3 +1,4 @@
+
 var styleIdForSet = 0;
 var itemIdForSet = 0;
 var itemColorIdForSet = 0;

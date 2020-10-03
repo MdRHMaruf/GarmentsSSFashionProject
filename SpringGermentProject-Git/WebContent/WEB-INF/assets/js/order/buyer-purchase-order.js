@@ -38,30 +38,30 @@ function loadData() {
 window.onload = loadData;
 
 
-function printBuyerPO(buyerPoId){
-	
-	
-	$.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: './buyerIndentInfo',
-        data:{
-        	buyerPoId:buyerPoId
-        	},
-        success: function (data) {
-          if (data== "Success") {
-      		var url = "printBuyerPoOrder";
-    		  window.open(url, '_blank');
+function printBuyerPO(buyerPoId) {
 
-          }
-        }
-      });
+
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './buyerIndentInfo',
+    data: {
+      buyerPoId: buyerPoId
+    },
+    success: function (data) {
+      if (data == "Success") {
+        var url = "printBuyerPoOrder";
+        window.open(url, '_blank');
+
+      }
+    }
+  });
 }
 
 function buyerWiseStyleLoad() {
   var buyerId = $("#buyerName").val();
 
- // alert("buyerId "+buyerId);
+  // alert("buyerId "+buyerId);
   if (buyerId != 0) {
     $.ajax({
       type: 'GET',
@@ -187,7 +187,7 @@ function itemSizeAdd() {
                     userId: userId
                   },
                   success: function (data) {
-                	// warningAlert("");
+                    // warningAlert("");
                     if (data.result == "Something Wrong") {
                       dangerAlert("Something went wrong");
                     } else if (data.result == "duplicate") {
@@ -198,33 +198,33 @@ function itemSizeAdd() {
                   }
                 });
               } else {
-            	  alert("Purchase Order Not Set... Please Select Purchase Order");
+                alert("Purchase Order Not Set... Please Select Purchase Order");
                 //warningAlert("Purchase Order Not Set... Please Select Purchase Order");
                 $("#purchaseOrder").focus();
               }
             } else {
-            	alert("Size Group not selected ... Please Select Size group");
-             // warningAlert("Size Group not selected ... Please Select Size group");
+              alert("Size Group not selected ... Please Select Size group");
+              // warningAlert("Size Group not selected ... Please Select Size group");
               $("#sizeGroup").focus();
             }
           } else {
-        	  alert("Color Not Selected... Please Select Color");
+            alert("Color Not Selected... Please Select Color");
             $("#color").focus();
           }
         } else {
-        	alert("Factory not selected... Please Select Factory Name");
+          alert("Factory not selected... Please Select Factory Name");
           $("#factoryId").focus();
         }
       } else {
-    	  alert("Item Type not selected... Please Select Item Type");
+        alert("Item Type not selected... Please Select Item Type");
         $("#itemType").focus();
       }
     } else {
-    	alert("Style No not selected... Please Select Style No");
+      alert("Style No not selected... Please Select Style No");
       $("#styleNo").focus();
     }
   } else {
-	  alert("Buyer Name not selected... Please Select Buyer Name");
+    alert("Buyer Name not selected... Please Select Buyer Name");
     $("#buyerName").focus();
   }
 
@@ -244,7 +244,7 @@ function itemSizeEdit() {
   var purchaseOrder = $("#purchaseOrder").val();
   var shippingMark = $("#shippingMark").val();
   var itemAutoId = $("#itemAutoId").val();
-  var unitFob = $("#unitFob"+itemAutoId).text();
+  var unitFob = $("#unitFob" + itemAutoId).text();
   var userId = $("#userId").val();
   var totalUnit = 0;
 
@@ -301,31 +301,31 @@ function itemSizeEdit() {
                   }
                 });
               } else {
-            	  alert("Purchase Order Not Set... Please Select Purchase Order");
+                alert("Purchase Order Not Set... Please Select Purchase Order");
                 $("#purchaseOrder").focus();
               }
             } else {
-            	alert("Size Group not selected ... Please Select Size group");
+              alert("Size Group not selected ... Please Select Size group");
               $("#sizeGroup").focus();
             }
           } else {
-        	  alert("Color Not Selected... Please Select Color");
+            alert("Color Not Selected... Please Select Color");
             $("#color").focus();
           }
         } else {
-        	alert("Factory not selected... Please Select Factory Name");
+          alert("Factory not selected... Please Select Factory Name");
           $("#factoryId").focus();
         }
       } else {
-    	  alert("Item Type not selected... Please Select Item Type");
+        alert("Item Type not selected... Please Select Item Type");
         $("#itemType").focus();
       }
     } else {
-    	alert("Style No not selected... Please Select Style No");
+      alert("Style No not selected... Please Select Style No");
       $("#styleNo").focus();
     }
   } else {
-	  alert("Buyer Name not selected... Please Select Buyer Name");
+    alert("Buyer Name not selected... Please Select Buyer Name");
     $("#buyerName").focus();
   }
 
@@ -361,44 +361,44 @@ function submitAction() {
 
 
   if (buyerId != 0) {
-	  if(totalRow.length!=0){
-		    $.ajax({
-		        type: 'POST',
-		        dataType: 'json',
-		        url: './submitBuyerPO',
-		        data: {
-		          buyerPoId: buyerPoId,
-		          buyerId: buyerId,
-		          paymentTerm: paymentTerm,
-		          currency: currency,
-		          totalUnit: totalUnit,
-		          unitCmt: unitCmt,
-		          totalPrice: totalPrice,
-		          unitFob: unitFob,
-		          totalAmount: totalAmount,
-		          note: note,
-		          remarks: remarks,
-		          userId: userId
-		        },
-		        success: function (data) {
-		          if (data.result == "Something Wrong") {
-		            dangerAlert("Something went wrong");
-		          } else if (data.result == "duplicate") {
-		            dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
-		          } else {
-		            successAlert("Buyer Purchase Order Save Successfully");
-		            refreshAction();
-		          }
-		        }
-		      });
-	  }
-	  else{
-		  alert("At first Add Size Wise Buyer Order Estimate");
-	  }
+    if (totalRow.length != 0) {
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: './submitBuyerPO',
+        data: {
+          buyerPoId: buyerPoId,
+          buyerId: buyerId,
+          paymentTerm: paymentTerm,
+          currency: currency,
+          totalUnit: totalUnit,
+          unitCmt: unitCmt,
+          totalPrice: totalPrice,
+          unitFob: unitFob,
+          totalAmount: totalAmount,
+          note: note,
+          remarks: remarks,
+          userId: userId
+        },
+        success: function (data) {
+          if (data.result == "Something Wrong") {
+            dangerAlert("Something went wrong");
+          } else if (data.result == "duplicate") {
+            dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
+          } else {
+            successAlert("Buyer Purchase Order Save Successfully");
+            refreshAction();
+          }
+        }
+      });
+    }
+    else {
+      alert("At first Add Size Wise Buyer Order Estimate");
+    }
 
 
   } else {
-	  alert("Buyer Name not selected... Please Select Buyer Name");
+    alert("Buyer Name not selected... Please Select Buyer Name");
     $("#buyerName").focus();
   }
 }
@@ -463,11 +463,11 @@ function buyerPoEditAction() {
         }
       });
     } else {
-    	alert("Buyer Name not selected... Please Select Buyer Name");
+      alert("Buyer Name not selected... Please Select Buyer Name");
       $("#buyerName").focus();
     }
   } else {
-	  alert("Something Wrong... Buyer Purchase Order Id not found");
+    alert("Something Wrong... Buyer Purchase Order Id not found");
     $("#buyerName").focus();
   }
 
@@ -739,6 +739,9 @@ function successAlert(message) {
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function warningAlert(message) {
@@ -747,6 +750,9 @@ function warningAlert(message) {
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function dangerAlert(message) {
@@ -755,6 +761,9 @@ function dangerAlert(message) {
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 $(document).ready(function () {

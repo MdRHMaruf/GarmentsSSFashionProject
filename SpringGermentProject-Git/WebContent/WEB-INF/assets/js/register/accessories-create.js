@@ -225,6 +225,9 @@ function successAlert(message) {
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function warningAlert(message) {
@@ -233,6 +236,9 @@ function warningAlert(message) {
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 function dangerAlert(message) {
@@ -241,6 +247,9 @@ function dangerAlert(message) {
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
   element.show();
+  setTimeout(() => {
+    element.toggle('fade');
+  }, 2500);
 }
 
 $(document).ready(function () {

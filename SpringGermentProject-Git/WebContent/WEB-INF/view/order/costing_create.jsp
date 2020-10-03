@@ -33,6 +33,7 @@
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 		<input type="hidden" id="itemAutoId" value="0">
+		<input type="hidden" id="itemType" value="new">
 		<div class="card-box pt-1">
 			<header class="d-flex justify-content-between">
 				<h5 class="text-center" style="display: inline;">Costing Create</h5>
@@ -76,7 +77,7 @@
 									<label for="itemName" class="col-md-3 col-form-label-sm pr-0">Item
 										Name</label> <select id="itemName" class="selectpicker col-md-9 px-0"
 										data-live-search="true"
-										data-style="btn-light btn-sm border-light-gray">
+										data-style="btn-light btn-sm border-light-gray" onchange="loadCostingOnStyleChange()">
 
 										<option id="itemName" value="0">Select Item Name</option>
 
@@ -195,9 +196,9 @@
 									</div>
 								</div>
 							</div>
-							<button id="btnSave" type="button" class="btn btn-primary btn-sm"
-								onclick="saveAction()">
-								<i class="fas fa-save"></i> Save
+							<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
+								onclick="addAction()">
+								<i class="fa fa-plus-circle"></i> Add
 							</button>
 							<button id="btnEdit" type="button"
 								class="btn btn-primary btn-sm ml-1" onclick="editAction()"
@@ -215,7 +216,6 @@
 									<tr>
 										<th>Style</th>
 										<th>Fabrication</th>
-										<th>Size</th>
 										<th>Width</th>
 										<th>Yard</th>
 										<th>GSM</th>
@@ -234,14 +234,14 @@
 					</div>
 					<div class="row mt-1">
 						<div class="col-md-12 d-flex justify-content-end">
+							<button id="btnConfirm" type="button"
+								class="btn btn-primary btn-sm ml-1" >
+								<i class="fas fa-save"></i> Confirm
+							</button>
 							<button id="btnRefresh" type="button"
 								class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 								<i class="fa fa-refresh"></i> Refresh
 							</button>
-<!-- 							<button id="btnPreview" type="button"
-								class="btn btn-primary btn-sm ml-1" onclick="confrimAction()">
-								<i class="fa fa-print"></i> Preview
-							</button> -->
 						</div>
 					</div>
 				</div>

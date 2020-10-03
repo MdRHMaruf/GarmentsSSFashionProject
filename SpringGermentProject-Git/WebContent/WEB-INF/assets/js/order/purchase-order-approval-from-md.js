@@ -37,16 +37,16 @@ $("#btnSearch").click(() => {
     }
 });
 
-function printPurchaseOrder(autoId){
+function printPurchaseOrder(autoId) {
     const purchaseOrder = $("#purchaseOrder-" + autoId).text();
-    const row = document.getElementById("row-"+autoId);
+    const row = document.getElementById("row-" + autoId);
     console.log(row);
     const styleId = row.getAttribute("data-style-id");
     const supplierId = row.getAttribute("data-supplier-id");
     const poNo = $("#poNo-" + autoId).text();
     const type = $("#itemType-" + autoId).text();
 
-    var url = "getPurchaseOrderReport/"+poNo+"/"+supplierId+"/"+type;
+    var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type;
     window.open(url, '_blank');
 }
 
@@ -132,7 +132,7 @@ function drawPurchaseOrderList(data) {
             + "<td id='styleNo-" + id + "'>" + rowData.styleNo + "</td>"
             + "<td id='supplierName-" + id + "'>" + rowData.supplierName + "</td>"
             + "<td id='poNo-" + id + "'>" + rowData.poNo + "</td>"
-            + "<td ><input type='checkbox' id='check-" + id + "' class='form-control-sm check' "+(rowData.mdApproval==1?'Checked':'') +" ></td>"
+            + "<td ><input type='checkbox' id='check-" + id + "' class='form-control-sm check' " + (rowData.mdApproval == 1 ? 'Checked' : '') + " ></td>"
             + "<td id='itemType-" + id + "'>" + rowData.type + "</td>"
             + "<td id='orderDate-" + id + "'>" + rowData.orderDate + "</td>"
             + "<td ><i class='fa fa-eye' style='cursor:pointer' onclick='printPurchaseOrder(" + id + ")'></td>"
@@ -147,6 +147,9 @@ function successAlert(message) {
     element = $(".alert-success");
     document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
     element.show();
+    setTimeout(() => {
+        element.toggle('fade');
+    }, 2500);
 }
 
 function warningAlert(message) {
@@ -155,6 +158,9 @@ function warningAlert(message) {
     element = $(".alert-warning");
     document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
     element.show();
+    setTimeout(() => {
+        element.toggle('fade');
+    }, 2500);
 }
 
 function dangerAlert(message) {
@@ -163,6 +169,9 @@ function dangerAlert(message) {
     element = $(".alert-danger");
     document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
     element.show();
+    setTimeout(() => {
+        element.toggle('fade');
+    }, 2500);
 }
 
 $(document).ready(function () {
