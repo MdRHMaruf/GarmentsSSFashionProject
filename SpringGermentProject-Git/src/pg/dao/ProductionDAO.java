@@ -42,8 +42,8 @@ public interface ProductionDAO {
 	List<SewingLinesModel> getSewingProductionLines();
 	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
 	
-	boolean saveSewingProductionDetails(ProductionPlan v);
-	List<ProductionPlan> getSewingProductionReport();
+	boolean saveSewingLayoutDetails(ProductionPlan v);
+	List<ProductionPlan> getSewingProductionReport(String Type);
 	
 
 	List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
@@ -61,4 +61,7 @@ public interface ProductionDAO {
 	//Sewing Production
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
+	
+	List<ProductionPlan> getSewingLayoutLineProduction(ProductionPlan v);
+	boolean saveSewingProductionDetails(ProductionPlan v);
 }

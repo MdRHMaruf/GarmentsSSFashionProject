@@ -65,9 +65,11 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="profileLinkDropdown">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Setting</a>
-                            <a class="dropdown-item" href="login.php">Logout</a>
+     
+                            <li><a href="${url_login}">Profile</a></li>
+                            					<s:url var="url_login"
+									value="/loginout" />
+						<li><a href="${url_login}">Logout</a></li>
                         </div>
                     </div>
 

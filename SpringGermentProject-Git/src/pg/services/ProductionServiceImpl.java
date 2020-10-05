@@ -148,16 +148,16 @@ public class ProductionServiceImpl implements ProductionService {
 
 
 	@Override
-	public boolean saveSewingProductionDetails(ProductionPlan v) {
+	public boolean saveSewingLayoutDetails(ProductionPlan v) {
 		// TODO Auto-generated method stub
-		return productionDao.saveSewingProductionDetails(v);
+		return productionDao.saveSewingLayoutDetails(v);
 	}
 
 
 	@Override
-	public List<ProductionPlan> getSewingProductionReport() {
+	public List<ProductionPlan> getSewingProductionReport(String Type) {
 		// TODO Auto-generated method stub
-		return productionDao.getSewingProductionReport();
+		return productionDao.getSewingProductionReport(Type);
 	}
 
 
@@ -209,6 +209,20 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getSizeListForProduction(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.getSizeListForProduction(v);
+	}
+
+	
+	@Override
+	public List<ProductionPlan> getSewingLayoutLineProduction(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingLayoutLineProduction(v);
+	}
+
+
+	@Override
+	public boolean saveSewingProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveSewingProductionDetails(v);
 	}
 	
 }

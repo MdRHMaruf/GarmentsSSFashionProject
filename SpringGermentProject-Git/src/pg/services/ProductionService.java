@@ -49,9 +49,9 @@ public interface ProductionService {
 
 	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
 
-	boolean saveSewingProductionDetails(ProductionPlan v);
+	boolean saveSewingLayoutDetails(ProductionPlan v);
 
-	List<ProductionPlan> getSewingProductionReport();
+	List<ProductionPlan> getSewingProductionReport(String Type);
 
 	List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
 			String productionDate);
@@ -70,4 +70,8 @@ public interface ProductionService {
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 
 	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
+
+	List<ProductionPlan> getSewingLayoutLineProduction(ProductionPlan v);
+
+	boolean saveSewingProductionDetails(ProductionPlan v);
 }

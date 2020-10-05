@@ -233,6 +233,7 @@ function create_user() {
 
 	var active = $('input[name=active]:checked').val();
 	var user = $("#user").val();
+	var userId = $("#userId").val();
 	var pass = $("#password").val();
 	var type = $("#type").val();
 	var shop = $("#shop").val();
@@ -338,13 +339,13 @@ function create_user() {
 				dataType: 'json',
 				url: './addUser',
 				data: {
-					accesslist:valuelist,active: active, user: user, password: pass, type: type,
+					accesslist:valuelist,active: active, user: user,userId:userId, password: pass, type: type,
 					shop: shop, selectedItemsModule: modulelist,selectedItemsWare:warelist,
 					user_title: user_title,
 				},
 				success: function (data) {
 					alert(data);
-					window.location =  "user_management_create_user";
+					window.location =  "user_create";
 
 				},
 				error: function (jqXHR, textStatus, errorThrown) {

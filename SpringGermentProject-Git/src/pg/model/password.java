@@ -18,6 +18,7 @@ public class password {
 	int id;
 	String user;
 	String password;
+	String userId="";
 	int ware;
 	int type;
     int active;
@@ -103,6 +104,12 @@ public class password {
 	}
 	public void setSelectedItemsWare(String selectedItemsWare) {
 		this.selectedItemsWare = selectedItemsWare;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
     
 	

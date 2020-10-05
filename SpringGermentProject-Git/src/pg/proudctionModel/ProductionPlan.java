@@ -60,7 +60,9 @@ public class ProductionPlan {
 	String sizeGroupId="";
 	String sizeId="";
 	String sizeName="";
-	
+	String colorId="";
+	String colorName="";
+	String employeeId="";
 	String proudctionType="";
 
 	public ProductionPlan() {
@@ -94,6 +96,21 @@ public class ProductionPlan {
 		this.purchaseOrder=PoNo;
 		this.styleNo=StyleNo;
 		this.styleId=StyleId;
+	}
+	
+	public ProductionPlan(String BuyerName,String BuyerId,String BuyerOrderId,String PoNo,String StyleNo,String StyleId,String ItemName,String ItemId,String LineId,String LineName,String ProductionDate) {
+		this.buyerName=BuyerName;
+		this.buyerId=BuyerId;
+		this.buyerorderId=BuyerOrderId;
+		this.purchaseOrder=PoNo;
+		this.styleNo=StyleNo;
+		this.styleId=StyleId;
+		this.itemName=ItemName;
+		this.itemId=ItemId;
+		this.lineId=LineId;
+		this.lineName=LineName;
+		this.productionDate=ProductionDate;
+
 	}
 	
 	public ProductionPlan(String BuyerName,String BuyerId,String BuyerOrderId,String PoNo,String StyleNo,String StyleId,String ItemName,String ItemId,String ProductionDate,String s) {
@@ -134,6 +151,7 @@ public class ProductionPlan {
 		this.lineName=LineName;
 		this.planQty=PlanQty;
 		
+		this.hours="10";
 
 		System.out.println("LineCount "+LineCount);
 		
@@ -205,6 +223,45 @@ public class ProductionPlan {
 		this.machineName=MachineName;
 		this.operatorId=OperatorId;
 		this.operatorName=OperatorName;
+	}
+	
+	public ProductionPlan(String ColorId, String ColorName, String SizeGroupId, String SizeId,String SizeName) {
+		this.colorId=ColorId;
+		this.colorName=ColorName;
+		this.sizeGroupId=SizeGroupId;
+		this.sizeId=SizeId;
+		this.sizeName=SizeName;
+		System.out.println("sizeName "+SizeName);
+	}
+
+	public ProductionPlan(String SewingLineAutoId, String BuyerId, String BuyerOrderId, String PurchaseOrder, String StyleId, String ItemId,
+			String ColorId, String LineId, String MachineId, String EmployeeId, String SizeId, String DailyTarget,
+			String LineTarget, String HourlyTarget, String BuyerName, String StyleNo, String ItemName, String LineName,
+			String SizeName, String ColorName, String MachineName,String PlanQty) {
+		
+		this.sewingLineAutoId=SewingLineAutoId;
+		this.buyerId=BuyerId;
+		this.buyerorderId=BuyerOrderId;
+		this.purchaseOrder=PurchaseOrder;
+		this.styleId=StyleId;
+		this.itemId=ItemId;
+		this.colorId=ColorId;
+		this.lineId=LineId;
+		this.machineId=MachineId;
+		this.employeeId=EmployeeId;
+		this.sizeId=SizeId;
+		this.dailyTarget=DailyTarget;
+		this.dailyLineTarget=LineTarget;
+		this.hourlyTarget=HourlyTarget;
+		this.buyerName=BuyerName;
+		this.styleNo=StyleNo;
+		this.itemName=ItemName;
+		this.sizeName=SizeName;
+		this.colorName=ColorName;
+		this.machineName=MachineName;
+		this.planQty=PlanQty;
+		this.hours="10";
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getUserId() {
@@ -598,6 +655,30 @@ public class ProductionPlan {
 
 	public void setSizeName(String sizeName) {
 		this.sizeName = sizeName;
+	}
+
+	public String getColorId() {
+		return colorId;
+	}
+
+	public void setColorId(String colorId) {
+		this.colorId = colorId;
+	}
+
+	public String getColorName() {
+		return colorName;
+	}
+
+	public void setColorName(String colorName) {
+		this.colorName = colorName;
+	}
+
+	public String getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
 	}
 	
 	
