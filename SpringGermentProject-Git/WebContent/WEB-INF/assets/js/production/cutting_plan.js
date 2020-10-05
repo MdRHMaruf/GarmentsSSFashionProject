@@ -115,6 +115,7 @@ function drawItemTable(dataList) {
 	    	  		  <th scope="col" class="min-width-20">DOZEN</th>
 	    	  		  <th scope="col">EXCESS</th>
 	    	  		  <th scope="col">SHORT</th>
+	    	  		  <th scope="col">USED FABRICS</th>
 	                  <th scope="col"><i class="fa fa-edit"></i></th>
 	                  <th scope="col"><i class="fa fa-trash"></i></th>
 	                </tr>
@@ -135,7 +136,7 @@ function drawItemTable(dataList) {
 			tables += "<td  class='sizeOrderQty1-" + item.autoId + "' sizeOrderQty-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "' data-id='" + sizeList[j].sizeId + "' ><input readonly type='text' value='" + sizeList[j].sizeQuantity + "' class='from-control min-height-20 order_value-" + item.autoId + "-" + sizeList[j].sizeId + " ' /> <input readonly type='hidden' value='" + item.colorId + "' class='from-control min-height-20 color_value-" + item.autoId + "''/> <input readonly type='hidden' value='" + sizeList[j].groupId + "' class='from-control min-height-20 sizegroup_value-" + sizeList[j].sizeId + "''/></td>"
 		}
 		dzQty = totalSizeQty / 12;
-		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td class='totalorder-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input  id='totalorder-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' value='" + parseFloat(dzQty).toFixed(2) + "' type='text' class='from-control min-height-20'/></td><td class='totalorderexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalorderexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20'/></td><td class='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'  type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td readonly class='totalorder-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalorder-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' value='" + parseFloat(dzQty).toFixed(2) + "' type='text' class='from-control min-height-20'/></td><td class='totalorderexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalorderexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20'/></td><td class='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'  type='text' class='from-control min-height-20'/></td><td class='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalorderusedfabric-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'  type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
 
 
 		tables += "<tr class='itemRow' data-id='" + item.autoId + "'><td>,,</td><td class='min-width-150'>Ratio</td>"
@@ -150,7 +151,7 @@ function drawItemTable(dataList) {
 			groupId = sizeList[j].groupId;
 			tables += "<td class='sizeReqRatio1-" + item.autoId + " sizeReqRatio-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "' data-id='" + sizeList[j].sizeId + "' >  <input  onkeyup='setTotalRatio(" + item.styleId + "," + item.itemId + "," + item.colorId + "," + sizeList[j].groupId + ")' type='text' class='from-control min-height-20 result_value-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "-" + sizeList[j].sizeId + " ratio_value-" + item.autoId + "-" + sizeList[j].sizeId + "''/></td>"
 		}
-		tables += "<td class='totalRatio-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalRatio-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioPcs-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalRatiobox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input id='totalRatiobox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioBox-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalrationexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalrationexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioExcess-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalratioshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalratioshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioShort-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td><i class='fa fa-edit' '> </i></td><td><i class='fa fa-trash' '> </i></td></tr>";
+		tables += "<td class='totalRatio-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalRatio-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioPcs-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalRatiobox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalRatiobox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioBox-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalrationexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalrationexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioExcess-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalratioshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalratioshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalRatioShort-" + item.colorId + "-" + item.autoId + "-" + groupId + "'/></td><td class='totalordershort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalratiousedfabrics-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'  type='text' class='from-control min-height-20'/></td><td><i class='fa fa-edit' '> </i></td><td><i class='fa fa-trash' '> </i></td></tr>";
 
 
 		tables += "<tr class='itemRow' data-id='" + item.autoId + "'><td>,,</td><td class='min-width-150'>Cutting Qty</td>"
@@ -165,7 +166,7 @@ function drawItemTable(dataList) {
 			groupId = sizeList[j].groupId;
 			tables += "<td class='sizeReqWard1-" + item.autoId + " sizeReqWard-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "' data-id='" + sizeList[j].sizeId + "' >  <input readonly  type='text' class='from-control min-height-20 cutting-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "-" + sizeList[j].sizeId + "  cutting_value-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + sizeList[j].groupId + "-" + sizeList[j].sizeId + " cutting_value-" + item.autoId + "-" + sizeList[j].sizeId + "''/></td>"
 		}
-		tables += "<td class='totalCutting-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input   type='text' class='totalCutting-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + " from-control min-height-20 totalCuttingPcs-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + " totalCuttingBox-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input  id='totalcuttingexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalCuttingExcess-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input  id='totalcuttingshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalCuttingShort-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+		tables += "<td class='totalCutting-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input   type='text' class='totalCutting-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + " from-control min-height-20 totalCuttingPcs-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalcuttingbox-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + " totalCuttingBox-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input  id='totalcuttingexcess-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalCuttingExcess-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input  id='totalcuttingshort-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' type='text' class='from-control min-height-20 totalCuttingShort-" + item.colorId + "-" + item.autoId + "-" + groupId + "''/></td><td class='totalcuttingusedfabrics-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "' ><input readonly id='totalcuttingusedfabrics-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'  type='text' class='from-control min-height-20 totalcuttingusedfabricsqty-"+ item.colorId + "-" + item.autoId + "-" + groupId + " totalcuttingusedfabrics-" + item.styleId + "-" + item.itemId + "-" + item.colorId + "-" + groupId + "'/></td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
 
 	}
 	tables += "</tbody></table> </div></div>";
@@ -199,6 +200,10 @@ function setTotalRatio(styleId, itemId, colorId, groupId) {
 
 
 	var value = 0;
+	
+	var markinglenght=$('#markingLength').val();
+	
+	
 
 	var size = '.sizeReqRatio-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
 	var totalratio = '#totalRatio-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
@@ -207,6 +212,7 @@ function setTotalRatio(styleId, itemId, colorId, groupId) {
 	var cutting = '.cutting-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
 	var totalcutting = '.totalCutting-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
 	var totalcuttingbox = '.totalcuttingbox-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
+	var totalcuttingfabricsused = '.totalcuttingusedfabrics-' + styleId + "-" + itemId + '-' + colorId + '-' + groupId;
 
 	$(size).each(function () {
 		var id = $(this).attr("data-id");
@@ -237,6 +243,11 @@ function setTotalRatio(styleId, itemId, colorId, groupId) {
 
 	$(totalcutting).val(totalCuttingQty);
 	$(totalcuttingbox).val(parseFloat(totalCuttingQty / 12).toFixed());
+	
+	console.log("totalcuttingbox "+(totalCuttingQty / 12));
+	console.log("markinglenght "+markinglenght);
+	
+	$(totalcuttingfabricsused).val(parseFloat((totalCuttingQty / 12)*markinglenght).toFixed());
 	value = 0;
 
 
@@ -303,12 +314,16 @@ function confrimAction() {
 						var ratiototalbox = $(".totalRatioBox-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalRatioBox-" + color + "-" + rowid + "-" + sizeGroupId).val();
 						var ratiototalexcess = $(".totalRatioExcess-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalRatioExcess-" + color + "-" + rowid + "-" + sizeGroupId).val();
 						var ratiototalshort = $(".totalRatioShort-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalRatioShort-" + color + "-" + rowid + "-" + sizeGroupId).val();
+						var ratiototalusedfabrics ='0';
 
+						
 						var cuttingtotalpcs = $(".totalCuttingPcs-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalCuttingPcs-" + color + "-" + rowid + "-" + sizeGroupId).val();
 						var cuttingtotalbox = $(".totalCuttingBox-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalCuttingBox-" + color + "-" + rowid + "-" + sizeGroupId).val();
 						var cuttingtotalexcess = $(".totalCuttingExcess-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalCuttingExcess-" + color + "-" + rowid + "-" + sizeGroupId).val();
 						var cuttingtotalshort = $(".totalCuttingShort-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalCuttingShort-" + color + "-" + rowid + "-" + sizeGroupId).val();
+						var cuttingtotalusedfabrics = $(".totalcuttingusedfabricsqty-" + color + "-" + rowid + "-" + sizeGroupId).val() == '' ? "0" : $(".totalcuttingusedfabricsqty-" + color + "-" + rowid + "-" + sizeGroupId).val();
 
+						
 						var orderQty = parseFloat(($(orderclass).val() == '' ? "0" : $(orderclass).val()));
 						var ratioQty = parseFloat(($(ratioclass).val() == '' ? "0" : $(ratioclass).val()));
 						var cuttingQty = parseFloat(($(cuttingclass).val() == '' ? "0" : $(cuttingclass).val()));
@@ -316,9 +331,11 @@ function confrimAction() {
 
 						//	var wardQty=parseFloat(($(result_value-"+styleId+"-"+item.itemId+"-"+item.colorId+"-"+sizeList[j].groupId+"-"+sizeList[j].sizeId).val()==''?"0":$(".result_value-"+id).val()));
 
+						console.log("cuttingtotalusedfabrics "+cuttingtotalusedfabrics);
+						
 						var value = color + ":" + sizeGroupId + ":" + id + ":" + ratioQty;
 						var cuttingvalue = color + ":" + sizeGroupId + ":" + id + ":" + cuttingQty;
-						var clolorvalue = color + ":" + sizeGroupId + ":" + ratiototalpcs + ":" + ratiototalbox + ":" + ratiototalexcess + ":" + ratiototalshort + ":" + cuttingtotalpcs + ":" + cuttingtotalbox + ":" + cuttingtotalexcess + ":" + cuttingtotalshort;
+						var clolorvalue = color + ":" + sizeGroupId + ":" + ratiototalpcs + ":" + ratiototalbox + ":" + ratiototalexcess + ":" + ratiototalshort +":"+ratiototalusedfabrics+ ":" + cuttingtotalpcs + ":" + cuttingtotalbox + ":" + cuttingtotalexcess + ":" + cuttingtotalshort+":"+cuttingtotalusedfabrics;
 
 						sizegrouplist[k] = sizeGroupId;
 						colorlist[m] = clolorvalue;

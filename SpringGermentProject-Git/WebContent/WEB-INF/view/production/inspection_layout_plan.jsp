@@ -262,7 +262,7 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control"
-						placeholder="Search Sewing Production Report"
+						placeholder="Search Line Inspection Report"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>

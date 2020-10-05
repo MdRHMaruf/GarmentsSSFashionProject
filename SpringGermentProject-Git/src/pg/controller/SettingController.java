@@ -46,7 +46,7 @@ import pg.services.SettingService;
 
 
 @Controller
-@SessionAttributes({"accountdetailslist"})
+@SessionAttributes({"pg_admin","storelist","warelist","modulelist","menulist","accountdetailslist"})
 public class SettingController {
 
 

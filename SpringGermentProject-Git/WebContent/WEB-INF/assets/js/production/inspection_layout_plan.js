@@ -138,20 +138,20 @@ function drawItemTable(dataList,employeeresult) {
 		}
 
 
-		tables += "<tr class='itemRow' data-id='"+ item.sewingLineAutoId +"'>" +
-		"<th >" + item.lineName + "</br><input  type='hidden' class='from-control min-height-20 line-"+item.sewingLineAutoId+"'  value='"+parseFloat(item.lineId).toFixed()+"' /></th>" +
-		"<th><select id='employee-"+ item.sewingLineAutoId +"'  class='selectpicker employee-width tableSelect employee-"+ item.sewingLineAutoId +" col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>"+employeeList+"</select></th>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h1'  value='' /></td>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h2'  value=''/></td>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h3'  value=''/></td>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h4'  value=''/></td>"+
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h5'  value=''/></td>"+
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h6'  value=''/></td>"+
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h7'  value=''/></td>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h8'  value=''/></td>"+
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h9'  value=''/></td>"+ 
-		"<td><input  type='text' onkeyup='setTotalQty("+item.sewingLineAutoId+")' class='from-control min-height-20 layout-"+item.sewingLineAutoId+"-h10'  value=''/></td>"+
-		"<td><input  type='text' id='layout-"+item.sewingLineAutoId+"-total' readonly class='from-control min-height-20  layout-"+item.sewingLineAutoId+"-total'/></td>"+
+		tables += "<tr class='itemRow' data-id='"+ item.lineId +"'>" +
+		"<th >" + item.lineName + "</br><input  type='hidden' class='from-control min-height-20 line-"+item.lineId+"'  value='"+parseFloat(item.lineId).toFixed()+"' /></th>" +
+		"<th><select id='employee-"+ item.lineId +"'  class='selectpicker employee-width tableSelect employee-"+ item.lineId +" col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>"+employeeList+"</select></th>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h1'  value='' /></td>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h2'  value=''/></td>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h3'  value=''/></td>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h4'  value=''/></td>"+
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h5'  value=''/></td>"+
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h6'  value=''/></td>"+
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h7'  value=''/></td>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h8'  value=''/></td>"+
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h9'  value=''/></td>"+ 
+		"<td><input  type='text' onkeyup='setTotalQty("+item.lineId+")' class='from-control min-height-20 layout-"+item.lineId+"-h10'  value=''/></td>"+
+		"<td><input  type='text' id='layout-"+item.lineId+"-total' readonly class='from-control min-height-20  layout-"+item.lineId+"-total'/></td>"+
 		"<td><button type='button' class='btn btn-outline-dark btn-sm max-height-20'><i class='fa fa-edit'></i></button></td></tr>"
 		
 		$('#dailyTargetQty').val(parseFloat(item.dailyTarget).toFixed(2));

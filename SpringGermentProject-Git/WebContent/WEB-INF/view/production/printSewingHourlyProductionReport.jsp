@@ -25,14 +25,15 @@
     	String buyerorderId=(String)request.getAttribute("buyerorderId");
     	String styleId=(String)request.getAttribute("styleId");
     	String itemId=(String)request.getAttribute("itemId");
+       	String lineId=(String)request.getAttribute("lineId");
     	String productionDate=(String)request.getAttribute("productionDate");
     	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select *,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,(select LineName from TbLineCreate where LineId=a.LineId) as LineName from tbSewingProductionDetails a where a.BuyerId='"+buyerId+"' and a.BuyerOrderId='"+buyerorderId+"' and a.StyleId='"+styleId+"' and a.ItemId='"+itemId+"' and a.date='"+productionDate+"' and proudctionType like '%Sewing%'";
+		String Sql="select *,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,(select LineName from TbLineCreate where LineId=a.LineId) as LineName,(select sizeName from tbStyleSize where id=a.SizeId ) as SizeName,(select ColorName from tbColors where ColorId=a.ColorId ) as ColorName,(select MachineName from TbMachineInfo where MachineId=a.MachineId ) as MachineName from tbSewingProductionDetails a where a.BuyerId='"+buyerId+"' and a.BuyerOrderId='"+buyerorderId+"' and a.StyleId='"+styleId+"' and a.ItemId='"+itemId+"' and a.LineId='"+lineId+"' and a.Type='2' and a.date='"+productionDate+"'";
       	System.out.println("sql "+Sql);
       	
-		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/production/SewingHourlyProudctionReport.jrxml");
+		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/production/SewingHourlyProductionReport.jrxml");
         InputStream input = new FileInputStream(new File(jrxmlFile));
 
         

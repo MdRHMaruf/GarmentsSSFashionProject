@@ -62,6 +62,7 @@ public class ProductionController {
 	String ItemId="";
 	String ProductionDate="";
 	String LayoutDate="";
+	String LineId="";
 	
 	//Cutting Requisition
 	@RequestMapping(value = "/cutting_requisition",method=RequestMethod.GET)
@@ -257,10 +258,11 @@ public class ProductionController {
 	}
 	
 	@RequestMapping(value = "/printCuttingInformationReport",method=RequestMethod.GET)
-	public @ResponseBody ModelAndView printCuttingInformationReport() {
+	public @ResponseBody ModelAndView printCuttingInformationReport(ModelMap map) {
 		
 		System.out.println("printCuttingInformationReport");
 		ModelAndView view=new ModelAndView("production/printCuttingInformationReport");
+		map.addAttribute("CuttingEntryId", CuttingEntryId);
 		
 		return view;
 	}
@@ -362,14 +364,14 @@ public class ProductionController {
 		return view;
 	}
 	
-	@RequestMapping(value = "/sewing_hourly_production",method=RequestMethod.GET)
+	@RequestMapping(value = "/sewing_hourly_layout",method=RequestMethod.GET)
 	public ModelAndView sewing_hourly_production(ModelMap map,HttpSession session) {
 		
 		
 
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails("1");
-		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
-		ModelAndView view = new ModelAndView("production/sewing_hourly_production");
+		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport("1");
+		ModelAndView view = new ModelAndView("production/sewing_hourly_layout");
 		view.addObject("layoutList",layoutList);
 		view.addObject("sewingProductionList",sewingProductionList);
 		
@@ -379,9 +381,84 @@ public class ProductionController {
 	
 	
 	
+	@RequestMapping(value = "/saveSewingLayoutDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveSewingLayoutDetails(ProductionPlan v) {
+		
+		System.out.println("v swing");
+		String msg="Create Occure while saving sewing layout";
+
+		boolean flag= productionService.saveSewingLayoutDetails(v);
+
+		if(flag) {
+			msg="Saving sewing layout success";
+		}
+	
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/searchProductionInfo",method=RequestMethod.GET)
+	public @ResponseBody String searchProductionInfo(String buyerId,String buyerorderId,String styleId,String itemId,String lineId,String productionDate) {
+		
+		this.BuyerId=buyerId;
+		this.BuyerorderId=buyerorderId;
+		this.StyleId=styleId;
+		this.ItemId=itemId;
+		this.LineId=lineId;
+		this.ProductionDate=productionDate;
+	
+		return "Success"; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/printSewingHourlyReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printSewingHourlyReport(ModelMap map) {
+		
+	
+		ModelAndView view=new ModelAndView("production/printSewingHourlyLayoutReport");
+		
+		
+		map.addAttribute("buyerId", BuyerId);
+		map.addAttribute("buyerorderId", BuyerorderId);
+		map.addAttribute("styleId", StyleId);
+		map.addAttribute("itemId", ItemId);
+		map.addAttribute("lineId", LineId);
+		map.addAttribute("productionDate", ProductionDate);
+	
+		return view;
+	}
+	
+	
+	@RequestMapping(value = "/sewing_production",method=RequestMethod.GET)
+	public ModelAndView sewing_production(ModelMap map,HttpSession session) {
+		
+		List<ProductionPlan> sewingLayoutList = productionService.getSewingProductionReport("1");
+		List<ProductionPlan> sewingProudctiontList = productionService.getSewingProductionReport("2");
+		ModelAndView view = new ModelAndView("production/sewing_hourly_production");
+		view.addObject("sewingLayoutList",sewingLayoutList);
+		view.addObject("sewingProudctiontList",sewingProudctiontList);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@RequestMapping(value = "/searchSewingLayoutLineProduction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSewingLayoutLineProduction(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+		
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingLayyoutSizeList = productionService.getSewingLayoutLineProduction(v);
+		
+		//List<Employee> employeeList = registerService.getEmployeeList();
+		
+		objmain.put("result",sewingLayyoutSizeList);
+		//objmain.put("employeeresult",employeeList);
+
+		return objmain;
+	}
+	
 	@RequestMapping(value = "/saveSewingProductionDetails",method=RequestMethod.POST)
 	public @ResponseBody String saveSewingProductionDetails(ProductionPlan v) {
 		
+		System.out.println("v swing");
 		String msg="Create Occure while saving sewing proudction";
 
 		boolean flag= productionService.saveSewingProductionDetails(v);
@@ -393,29 +470,18 @@ public class ProductionController {
 		return msg; //JSP - /WEB-INF/view/index.jsp
 	}
 	
-	@RequestMapping(value = "/searchProductionInfo",method=RequestMethod.GET)
-	public @ResponseBody String searchProductionInfo(String buyerId,String buyerorderId,String styleId,String itemId,String productionDate) {
-		
-		this.BuyerId=buyerId;
-		this.BuyerorderId=buyerorderId;
-		this.StyleId=styleId;
-		this.ItemId=itemId;
-		this.ProductionDate=productionDate;
-	
-		return "Success"; //JSP - /WEB-INF/view/index.jsp
-	}
-	
-	@RequestMapping(value = "/printSewingHourlyReport",method=RequestMethod.GET)
-	public @ResponseBody ModelAndView printSewingHourlyReport(ModelMap map) {
+	@RequestMapping(value = "/printSewingHourlyProductionReport",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printSewingHourlyProductionReport(ModelMap map) {
 		
 	
-		ModelAndView view=new ModelAndView("production/printSewingHourlyReport");
+		ModelAndView view=new ModelAndView("production/printSewingHourlyProductionReport");
 		
 		
 		map.addAttribute("buyerId", BuyerId);
 		map.addAttribute("buyerorderId", BuyerorderId);
 		map.addAttribute("styleId", StyleId);
 		map.addAttribute("itemId", ItemId);
+		map.addAttribute("lineId", LineId);
 		map.addAttribute("productionDate", ProductionDate);
 	
 		return view;
@@ -426,9 +492,9 @@ public class ProductionController {
 	@RequestMapping(value = "/finishing_hourly_production",method=RequestMethod.GET)
 	public ModelAndView finishing_hourly_production(ModelMap map,HttpSession session) {
 		
-		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
+		//List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
 		ModelAndView view = new ModelAndView("production/finishing_hourly_production");
-		view.addObject("sewingProductionList",sewingProductionList);
+		//view.addObject("sewingProductionList",sewingProductionList);
 		
 	
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -481,10 +547,10 @@ public class ProductionController {
 		
 	
 
-		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
+		//List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
 
 		ModelAndView view = new ModelAndView("production/sewing_finishing_reject");
-		view.addObject("sewingProductionList",sewingProductionList);
+		//view.addObject("sewingProductionList",sewingProductionList);
 
 		
 	
@@ -511,10 +577,10 @@ public class ProductionController {
 		JSONArray mainArray = new JSONArray();
 		List<ProductionPlan> sewingList = productionService.getSewingLineSetupinfo(v);
 		
-		//List<Employee> employeeList = registerService.getEmployeeList();
+		List<Employee> employeeList = registerService.getEmployeeList();
 		
 		objmain.put("result",sewingList);
-		//objmain.put("employeeresult",employeeList);
+		objmain.put("employeeresult",employeeList);
 
 		return objmain;
 	}

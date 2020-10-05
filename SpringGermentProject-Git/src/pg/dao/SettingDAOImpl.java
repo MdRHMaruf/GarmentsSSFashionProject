@@ -291,7 +291,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 			//String sql="select a.module as moduleid,a.id as menuId,b.id as submenuId,a.name,b.name as SubMenu from Tbmenu a join TbSubMenu b on a.id=b.root where b.module in("+menulist+")  group by b.module,a.name,b.name";
-			String sql="select a.module as moduleid,a.id as menuId,b.id as submenuId,a.name,b.name as SubMenu from Tbmenu a join TbSubMenu b on a.id=b.root where b.module in("+menulist+")  ";
+			String sql="select a.module as moduleid,a.id as menuId,b.id as submenuId,a.name,b.name as SubMenu from Tbmenu a join TbSubMenu b on a.id=b.root where b.module in("+menulist+")  order by a.module ";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -375,22 +375,22 @@ public class SettingDAOImpl implements SettingDAO {
 			warelist=warelist.replace("]", "");
 			System.out.println("warelist "+warelist);
 			
-			String sql="insert into password ("
+			String sql="insert into Tblogin ("
 					+ "id,"
 					+ "password,"
-					+ "ware,"
-					+ "user,"
+					+ "username,"
 					+ "type,"
 					+ "active,"
+					+ "createby,"
 					+ "entrytime"
 					+ ") values ("
 					+ "'"+newUserId+"',"
 					+ "'"+v.getPassword()+"',"
-					+ "'"+v.getWare()+"',"
 					+ "'"+v.getUser()+"',"
 					+ "'"+v.getType()+"',"
 					+ "'"+v.getActive()+"',"
-					+ "NOW()"
+					+ "'"+v.getUserId()+"',"
+					+ "CURRENT_TIMESTAMP"
 					+ ")";
 
 			session.createSQLQuery(sql).executeUpdate();
@@ -409,9 +409,8 @@ public class SettingDAOImpl implements SettingDAO {
 					String edit=s2.nextToken();
 					String delete=s2.nextToken();
 
-					String sqlpass="insert into useraccess ("
-							+ "ware,"
-							+ "user,"
+					String sqlpass="insert into Tbuseraccess ("
+							+ "userId,"
 							+ "head,"
 							+ "sub,"
 							+ "module,"
@@ -422,7 +421,6 @@ public class SettingDAOImpl implements SettingDAO {
 							+ "entrytime"
 							+ ") "
 							+ "values ("
-							+ "'"+v.getWare()+"',"
 							+ "'"+newUserId+"',"
 							+ "'"+headId+"',"
 							+ "'"+subId+"',"
@@ -431,7 +429,7 @@ public class SettingDAOImpl implements SettingDAO {
 							+ "'"+edit+"',"
 							+ "'"+delete+"',"
 							+ "'0',"
-							+ "NOW()"
+							+ "CURRENT_TIMESTAMP"
 							+ ")";
 
 					session.createSQLQuery(sqlpass).executeUpdate();
@@ -448,20 +446,18 @@ public class SettingDAOImpl implements SettingDAO {
 				while(s3.hasMoreElements()) {
 					String wareId=s3.nextToken();
 					String moduleId=s3.nextToken();
-					String sqlpass="insert into user_access_module ("
+					String sqlpass="insert into Tbuser_access_module ("
 
-						+ "user,"
-						+ "ware,"
+						+ "userId,"
 						+ "module_id,"
 						+ "trash,"
 						+ "entrytime"
 						+ ") "
 						+ "values ("
 						+ "'"+newUserId+"',"
-						+ "'"+wareId+"',"
 						+ "'"+moduleId+"',"
 						+ "'0',"
-						+ "NOW()"
+						+ "CURRENT_TIMESTAMP"
 						+ ")";
 
 				session.createSQLQuery(sqlpass).executeUpdate();
@@ -518,7 +514,7 @@ public class SettingDAOImpl implements SettingDAO {
 			tx.begin();
 
 
-			String sql="select (IFNULL(max(id),0)+1)as id from password ";
+			String sql="select (ISNULL(max(id),0)+1)as id from Tblogin ";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)

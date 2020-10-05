@@ -37,6 +37,7 @@ import pg.services.PasswordServiceImpl;
 
 public class PasswordController {
 
+	String userName="",passWord="";
 
 
 	@Autowired
@@ -68,6 +69,8 @@ public class PasswordController {
 		System.out.println("Log In execute");
 		List<login> lg=passService.login(name, password);
 		
+		this.userName=name;
+		this.passWord=password;
 		
 		if(lg.size()>0) {
 
@@ -126,7 +129,7 @@ public class PasswordController {
 	@RequestMapping(value = {"dashboard"})
 	public String adminDashboard(ModelMap modelmap,HttpServletResponse response) {
 		try {
-			List<login> lg=passService.login("Admin", "123");
+			List<login> lg=passService.login(userName, passWord);
 			List<module> modulelist=passService.getUserModule(lg.get(0).getId());
 			modelmap.put("modulelist", modulelist);
 			
