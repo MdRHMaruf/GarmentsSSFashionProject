@@ -31,19 +31,19 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="type" value="<%=ProductionType.LINE_INSPECTION.getType()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.FINISHING_LAYOUT.getType()%>">
 	<input type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Line Inspection Layout Plan</h5>
+			<h5 class="text-center" style="display: inline;">Finishing Layout</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
 			</button>
 			<button type="button" class="btn btn-outline-dark btn-sm"
-				data-toggle="modal" data-target="#inspectionListModal">
-				<i class="fa fa-search"></i>Layout Plan List
+				data-toggle="modal" data-target="#finishingListModal">
+				<i class="fa fa-search"></i>Finishing List
 			</button>
 		</header>
 		<hr class="my-1">
@@ -64,7 +64,7 @@
 						style="padding-left: 1px; padding-right: 1px;">
 						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase Order:</label>
 						<div class="row">
-							<input type="text" readonly id="purchaseOrder" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerorderId"/>
+							<input type="text" readonly id="purchaseOrder" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerOrderId"/>
 						</div>
 
 					</div>
@@ -150,19 +150,44 @@
 		
 		
 		<div id="tableList">
- 
+<!--  				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>Line</th>
+							<th>Style No</th>
+							<th>Daily Target</th>
+							<th>Hours Target</th>
+							<th>Hours</th>
+							<th>Sew.Sup Signature</th>
+							<th>Q.C.Sup Signature</th>
+							<th>08-09</th>
+							<th>09-10</th>
+							<th>10-11</th>
+							<th>11-12</th>
+							<th>12-01</th>
+							<th>11-12</th>
+							<th>12-01</th>
+							<th>02-03</th>
+							<th>03-04</th>
+							<th>04-05</th>
+							<th>05-06</th>
+							<th>06-07</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody id="production_plan">
+							
+					</tbody>	 -->
+
+				</table>	 
 		
 		</div>
 		
 			<div class="row" style="margin-top: 15px;">
 			<div class="col-md-12">
-				<button id="btnPOSubmit" type="button"
+				<button id="btnSubmit" type="button"
 					class="btn btn-primary btn-sm" onclick="saveAction()">
-					<i class="fas fa-save"></i> Save
-				</button>
-				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" disabled>
-					<i class="fa fa-pencil-square" ></i> Edit
+					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
@@ -182,7 +207,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="searchProductionList" type="text" class="form-control"
+					<input id="searchProduction" type="text" class="form-control"
 						placeholder="Search Production Plan"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -228,14 +253,14 @@
 	</div>
 </div>
 
-<div class="modal fade" id="inspectionListModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="finishingListModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="searchInspectionList" type="text" class="form-control"
-						placeholder="Search Line Inspection Report"
+					<input id="searchFinishing" type="text" class="form-control"
+						placeholder="Search Finishing Layout"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -270,10 +295,10 @@
 									<td id='styleId${list.styleId}'>${list.styleNo}</td>
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
 									<td id='layout${list.itemId}'>${list.productionDate}</td>
-									<td><i class="fa fa-search" style="cursor:pointer;" 
+									<td><i class="fa fa-search" style="cursor:pointer;"
 										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
-									<td><i class="fa fa-print" style="cursor:pointer;" 
+									<td><i class="fa fa-print" style="cursor:pointer;"
 										onclick="printLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
 								</tr>
@@ -289,4 +314,4 @@
 
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/production/inspection_layout_plan.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/production/finishing_layout.js"></script>

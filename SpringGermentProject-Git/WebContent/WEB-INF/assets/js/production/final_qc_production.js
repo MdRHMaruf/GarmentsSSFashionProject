@@ -1,16 +1,13 @@
 
-function printLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
+function printProductionDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
 	var layoutDate = $('#layout' + itemId).html();
 	const type = $("#type").val();
-	const layoutName = "Finishing Layout";
+	const layoutName = "Final QC Production";
 	var url = `printLayoutInfo/${buyerId}@${buyerOrderId}@${styleId}@${itemId}@${layoutDate}@${type}@${layoutName}`;
 	window.open(url, '_blank');
-	
-
 }
 
 function setProductPlanInfo(buyerId, buyerOrderId, styleId, itemId, planQty) {
-
 
 	var buyerName = $('#buyerId' + buyerId).html();
 	var purchaseOrder = $('#purchaseOrder' + buyerOrderId).html();
@@ -289,8 +286,7 @@ function saveAction() {
 			i++;
 		});
 		resultList = "[" + resultList + "]"
-
-		if(confirm("Are you sure to Submit?")){
+		if (confirm("Are you sure to Submit?")) {
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -312,13 +308,13 @@ function saveAction() {
 				},
 				url: './saveLineInceptionLayoutDetails/',
 				success: function (data) {
-	
-					alert("Line Inspection Layout Save Successfully...");
+
+					alert("Final QC Production Save Successfully...");
 					//refreshAction();	        
 				}
 			});
 		}
-		
+
 	}
 }
 
@@ -341,32 +337,32 @@ function editLineData(lineId) {
 	var proQty10 = parseFloat(($("#line-" + id + "-h10").val() == '' ? "0" : $("#line-" + id + "-h10").val()));
 
 	const totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
-	
+
 	const userId = $("#userId").val();
-	if(confirm("Are you sure to Edit?")){
+	if (confirm("Are you sure to Edit?")) {
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
 			url: './editLayoutLineData',
-			data: {	
-				autoId : autoId,
-				lineId : lineId,
-				operatorId : employeeId,
-				hour1 : proQty1,
-				hour2 : proQty2,
-				hour3 : proQty3,
-				hour4 : proQty4,
-				hour5 : proQty5,
-				hour6 : proQty6,
-				hour7 : proQty7,
-				hour8 : proQty8,
-				hour9 : proQty9,
-				hour10 : proQty10,
-				total : totalQty,
+			data: {
+				autoId: autoId,
+				lineId: lineId,
+				operatorId: employeeId,
+				hour1: proQty1,
+				hour2: proQty2,
+				hour3: proQty3,
+				hour4: proQty4,
+				hour5: proQty5,
+				hour6: proQty6,
+				hour7: proQty7,
+				hour8: proQty8,
+				hour9: proQty9,
+				hour10: proQty10,
+				total: totalQty,
 				userId: userId
 			},
 			success: function (data) {
-				if(data.result=="Successful")
+				if (data.result == "Successful")
 					alert("Edit Successful...");
 				else
 					alert(data.result);
@@ -374,10 +370,9 @@ function editLineData(lineId) {
 			}
 		});
 	}
-
 }
 
-function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
+function searchProductionDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
 
 	const type = $("#type").val();
 	$.ajax({
@@ -393,7 +388,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 			layoutName: type
 		},
 		success: function (data) {
-			
+			console.log(data)
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
 			} else if (data.result == "duplicate") {
@@ -401,7 +396,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 			} else {
 				drawSearchItemTable(data.result, data.employeeList);
 				$("#btnSubmit").prop('disabled', true);
-				$("#inspectionListModal").modal('hide');
+				$("#finalQCListModal").modal('hide');
 			}
 		}
 	});

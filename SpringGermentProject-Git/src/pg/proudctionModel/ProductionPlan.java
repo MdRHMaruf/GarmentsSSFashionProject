@@ -1,6 +1,7 @@
 package pg.proudctionModel;
 
 public class ProductionPlan {
+	String autoId="";
 	String userId="";
 	String buyerId="";
 	String buyerName="";
@@ -23,12 +24,10 @@ public class ProductionPlan {
 	String sewingLineAutoId="";
 	String lineId="";
 	String lineName="";
-	
 	String duration="";
 	String dailyTarget="";
 	String dailyLineTarget="";
 	String hourlyTarget="";
-	
 	String resultlist="";
 	String productionDate="";
 	String layoutDate="";
@@ -37,7 +36,7 @@ public class ProductionPlan {
 	
 	int line=0;
 	
-	String TotalLine="";
+	String totalLine="";
 	
 	String hour1="";
 	String hour2="";
@@ -67,6 +66,50 @@ public class ProductionPlan {
 		
 	}
 	
+	public ProductionPlan(String autoId, String buyerId, String buyerName, String buyerorderId, String purchaseOrder,
+			String styleId, String styleNo, String itemId, String itemName, String lineId, String lineName,
+			String operatorId, String operatorName, String layoutName, String proudctionType,String orderQty,String planQty,
+			String dailyTarget, String dailyLineTarget, String hourlyTarget, String hours, String hour1, String hour2,
+			String hour3, String hour4, String hour5, String hour6, String hour7, String hour8, String hour9,
+			String hour10, String total, String layoutDate, String userId, String totalLine) {
+		super();
+		this.autoId = autoId;
+		this.buyerId = buyerId;
+		this.buyerName = buyerName;
+		this.buyerorderId = buyerorderId;
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleNo = styleNo;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.lineId = lineId;
+		this.lineName = lineName;
+		this.operatorId = operatorId;
+		this.operatorName = operatorName;
+		this.layoutName = layoutName;
+		this.proudctionType = proudctionType;
+		this.orderQty = orderQty;
+		this.planQty = planQty;
+		this.dailyTarget = dailyTarget;
+		this.dailyLineTarget = dailyLineTarget;
+		this.hourlyTarget = hourlyTarget;
+		this.hours = hours;
+		this.hour1 = hour1;
+		this.hour2 = hour2;
+		this.hour3 = hour3;
+		this.hour4 = hour4;
+		this.hour5 = hour5;
+		this.hour6 = hour6;
+		this.hour7 = hour7;
+		this.hour8 = hour8;
+		this.hour9 = hour9;
+		this.hour10 = hour10;
+		this.total = total;
+		this.layoutDate = layoutDate;
+		this.userId = userId;
+		this.totalLine = totalLine;
+	}
+
 	public ProductionPlan(String BuyerName,String BuyerId,String BuyerOrderId,String PoNo,String StyleNo,String StyleId,String ItemName,String ItemId,String shipDate,String OrderQty,String PlanQty,String FileSample,String PPStatus,String AccessoriesInhouseStatus,String FabricsInhouseStatus,String StartDate,String EndDate) {
 		this.buyerName=BuyerName;
 		this.buyerId=BuyerId;
@@ -385,11 +428,11 @@ public class ProductionPlan {
 	}
 
 	public String getTotalLine() {
-		return TotalLine;
+		return totalLine;
 	}
 
 	public void setTotalLine(String totalLine) {
-		TotalLine = totalLine;
+		this.totalLine = totalLine;
 	}
 
 	public String getHourlyTarget() {
@@ -598,6 +641,15 @@ public class ProductionPlan {
 
 	public void setSizeName(String sizeName) {
 		this.sizeName = sizeName;
+	}
+
+	public String getAutoId() {
+		return autoId;
+	}
+
+	public void setAutoId(String autoId) {
+		System.out.println("autoId="+autoId);
+		this.autoId = autoId;
 	}
 	
 	

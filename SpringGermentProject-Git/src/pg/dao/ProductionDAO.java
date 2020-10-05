@@ -61,4 +61,10 @@ public interface ProductionDAO {
 	//Sewing Production
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
+	
+	//Finishing
+	List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
+	String editLayoutLineData(ProductionPlan productionPlan);
+	
+	
 }
