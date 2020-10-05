@@ -1,3 +1,4 @@
+
 package pg.dao;
 
 import java.util.ArrayList;
@@ -1972,5 +1973,106 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return false;
 	}
 
+	@Override
+	public List<ProductionPlan> getLayoutData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.AutoId,a.BuyerId,b.name buyerName,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.LineId,lc.LineName,a.EmployeeId,isnull(e.name,'') as employeeName,a.Type,isnull(a.proudctionType,'') as productionType,ptp.OrderQty,ptp.PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.hour1,a.hour2,a.hour3,a.hour4,a.hour5,a.hour6,a.hour7,a.hour8,a.hour9,a.hour10,a.total,(select convert(varchar,a.date,103))as date,a.userId\r\n" + 
+					"from tbLayoutPlanDetails a\r\n" + 
+					"left join TbProductTargetPlan ptp\r\n" + 
+					"on a.BuyerId = ptp.BuyerId and a.BuyerOrderId = ptp.BuyerOrderId and a.StyleId = ptp.StyleId and a.ItemId = ptp.ItemId\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on a.BuyerId = b.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on a.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on a.ItemId = id.itemid\r\n" + 
+					"left join TbLineCreate lc\r\n" + 
+					"on a.LineId = lc.LineId\r\n" + 
+					"left join TbEmployeeInfo e \r\n" + 
+					"on a.EmployeeId = e.AutoId \r\n" + 
+					"where a.BuyerId='"+productionPlan.getBuyerId()+"' and a.BuyerOrderId='"+productionPlan.getBuyerorderId()+"' and a.StyleId='"+productionPlan.getStyleId()+"' and a.ItemId='"+productionPlan.getItemId()+"' and a.date='"+productionPlan.getLayoutDate()+"' and type='"+productionPlan.getLayoutName()+"'";
+			
+		
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			System.out.println("Size="+lineCount);
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString(), element[25].toString(), element[26].toString(), element[27].toString(), element[28].toString(), element[29].toString(), element[30].toString(), element[31].toString(),element[32].toString(),element[33].toString(),String.valueOf(lineCount)));
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public String editLayoutLineData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		String result = "";
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			
+				
+
+						String productionSql="update tbLayoutPlanDetails set "
+								+ "EmployeeId = '"+productionPlan.getOperatorId()+"',"
+								+ "hour1 = '"+productionPlan.getHour1()+"',"
+								+ "hour2 = '"+productionPlan.getHour2()+"',"
+								+ "hour3 = '"+productionPlan.getHour3()+"',"
+								+ "hour4 = '"+productionPlan.getHour4()+"',"
+								+ "hour5 = '"+productionPlan.getHour5()+"',"
+								+ "hour6 = '"+productionPlan.getHour6()+"',"
+								+ "hour7 = '"+productionPlan.getHour7()+"',"
+								+ "hour8 = '"+productionPlan.getHour8()+"',"
+								+ "hour9 = '"+productionPlan.getHour9()+"',"
+								+ "hour10 = '"+productionPlan.getHour10()+"',"
+								+ "total = '"+productionPlan.getTotal()+"',"
+								+ "userId = '"+productionPlan.getUserId()+"' where autoId= '"+productionPlan.getAutoId()+"';";
+								
+						session.createSQLQuery(productionSql).executeUpdate();
+
+						result = "Successful";
+			tx.commit();
+			return result;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return result="Something wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return result="Something wrong";
+	}
+
 
 }
+

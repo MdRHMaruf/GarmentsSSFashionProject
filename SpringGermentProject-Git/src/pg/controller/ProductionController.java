@@ -1,3 +1,4 @@
+
 package pg.controller;
 
 import java.text.DecimalFormat;
@@ -39,6 +40,7 @@ import pg.registerModel.Unit;
 import pg.services.OrderService;
 import pg.services.ProductionService;
 import pg.services.RegisterService;
+import pg.share.ProductionType;
 
 @Controller
 @RestController
@@ -310,7 +312,7 @@ public class ProductionController {
 	
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails("1");
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION.getType()));
 		ModelAndView view = new ModelAndView("production/inspection_layout_plan");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
@@ -618,4 +620,112 @@ public class ProductionController {
 		return view;
 	}
 	
+	
+	//Finishing 
+		@RequestMapping(value = "/finishing_layout",method=RequestMethod.GET)
+		public ModelAndView finshing_layout(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_LAYOUT.getType()));
+			ModelAndView view = new ModelAndView("production/finishing-layout");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		//Iron 
+		@RequestMapping(value = "/iron_layout",method=RequestMethod.GET)
+		public ModelAndView iron_layout(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_LAYOUT.getType()));
+			ModelAndView view = new ModelAndView("production/iron-layout");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		//Final QC 
+		@RequestMapping(value = "/final_qc_layout",method=RequestMethod.GET)
+		public ModelAndView final_qc_layout(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_LAYOUT.getType()));
+			ModelAndView view = new ModelAndView("production/final-qc-layout");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		//Line Inspection Production
+		@RequestMapping(value = "/line_inspection_production",method=RequestMethod.GET)
+		public ModelAndView line_inspection_production(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPETION_PRODUCTION.getType()));
+			ModelAndView view = new ModelAndView("production/line-inspection-production");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		//Finishing Production
+		@RequestMapping(value = "/finishing_production",method=RequestMethod.GET)
+		public ModelAndView finishing_production(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+			ModelAndView view = new ModelAndView("production/finishing-production");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+
+		//Iron Production
+		@RequestMapping(value = "/iron_production",method=RequestMethod.GET)
+		public ModelAndView iron_production(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PRODUCTION.getType()));
+			ModelAndView view = new ModelAndView("production/iron-production");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		//Final QC Production
+		@RequestMapping(value = "/final_qc_production",method=RequestMethod.GET)
+		public ModelAndView final_qc_production(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_PRODUCTION.getType()));
+			ModelAndView view = new ModelAndView("production/final-qc-production");
+			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("layoutList",layoutList);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+		
+		
+		@RequestMapping(value = "/searchLayoutData",method=RequestMethod.GET)
+		public @ResponseBody JSONObject searchLayoutData(ProductionPlan productionPlan) {
+			System.out.println("Controller Execute");
+			JSONObject objmain = new JSONObject();
+			List<Employee> employeeList = registerService.getEmployeeList();
+			List<ProductionPlan> productionPlanList = productionService.getLayoutData(productionPlan);
+			objmain.put("result",productionPlanList);
+			objmain.put("employeeList",employeeList);
+			return objmain;
+		}
+
+		@RequestMapping(value = "/editLayoutLineData",method=RequestMethod.POST)
+		public @ResponseBody JSONObject editLayoutLineData(ProductionPlan productionPlan) {
+			System.out.println("Its Execute controller");
+			JSONObject objMain = new JSONObject();
+			objMain.put("result",productionService.editLayoutLineData(productionPlan));
+			return objMain;
+		}
+
+	
 }
+

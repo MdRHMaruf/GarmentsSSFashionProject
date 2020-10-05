@@ -74,4 +74,9 @@ public interface ProductionService {
 	List<ProductionPlan> getSewingLayoutLineProduction(ProductionPlan v);
 
 	boolean saveSewingProductionDetails(ProductionPlan v);
+	
+	//Finishing
+		List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
+		String editLayoutLineData(ProductionPlan productionPlan);
 }
+

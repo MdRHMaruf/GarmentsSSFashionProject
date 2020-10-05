@@ -313,7 +313,7 @@ function saveAction() {
 				url: './saveLineInceptionLayoutDetails/',
 				success: function (data) {
 	
-					alert("Line Inspection Layout Save Successfully...");
+					alert("Finishing Production Save Successfully...");
 					//refreshAction();	        
 				}
 			});
@@ -401,7 +401,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 			} else {
 				drawSearchItemTable(data.result, data.employeeList);
 				$("#btnSubmit").prop('disabled', true);
-				$("#inspectionListModal").modal('hide');
+				$("#finishingListModal").modal('hide');
 			}
 		}
 	});
@@ -415,6 +415,5 @@ function refreshAction() {
 
 var today = new Date();
 document.getElementById("layoutDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
-
 
 

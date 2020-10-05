@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SewingHourlyProudctionReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a23ba6a8-b037-4c55-8d92-32b9e5144a96">
 	<property name="ireport.zoom" value="2.853116706110009"/>
-	<property name="ireport.x" value="1670"/>
-	<property name="ireport.y" value="111"/>
+	<property name="ireport.x" value="619"/>
+	<property name="ireport.y" value="336"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select *,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,(select LineName from TbLineCreate where LineId=a.LineId) as LineName,'Line Inception' as layoutName,(select Name from TbEmployeeInfo where AutoId=a.EmployeeId) as EmployeeName from tbLayoutPlanDetails a where a.BuyerId='3' and a.BuyerOrderId='3014' and a.StyleId='7' and a.ItemId='21' and a.date='1900-01-01' and type='1'"]]></defaultValueExpression>
 	</parameter>
@@ -236,9 +236,10 @@
 	</columnHeader>
 	<detail>
 		<band height="17" splitType="Stretch">
-			<line>
-				<reportElement x="2" y="-1" width="801" height="1" uuid="1141d4c9-ba6e-4bec-95b9-8f8c97dce1f9"/>
-			</line>
+			<textField>
+				<reportElement x="258" y="0" width="148" height="13" uuid="d951c1b4-ee3f-4090-b7a7-5ce8d4e64ca9"/>
+				<textFieldExpression><![CDATA[$F{EmployeeName}]]></textFieldExpression>
+			</textField>
 			<line>
 				<reportElement x="1" y="15" width="801" height="1" uuid="1f39fbee-208d-481f-acd6-6261bb7fc72d"/>
 			</line>
@@ -369,10 +370,6 @@
 				<reportElement x="729" y="1" width="32" height="13" uuid="6057cd58-14c0-4d0c-9ccb-f5d861d50e9d"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{hour10}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="258" y="0" width="148" height="13" uuid="d951c1b4-ee3f-4090-b7a7-5ce8d4e64ca9"/>
-				<textFieldExpression><![CDATA[$F{EmployeeName}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0">
 				<reportElement x="767" y="1" width="32" height="13" uuid="35a2d9b2-148f-479b-b0a3-1ef770378fc2"/>
