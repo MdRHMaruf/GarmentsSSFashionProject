@@ -2815,6 +2815,17 @@ input[type=submit] {
   color: #ffffff; 
 }
 
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+ 	appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  margin: 0;
+}
+
 /*Created By Maruf*/
 .bs-searchbox .form-control{
 	height: 25px;
@@ -2901,5 +2912,5 @@ tr.hide-table-padding td {
 }
 .
 .t-col{
-	width:70px;
+	width:90px;
 }

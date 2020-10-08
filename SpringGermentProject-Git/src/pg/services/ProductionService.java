@@ -66,6 +66,8 @@ public interface ProductionService {
 
 	List<ProductionPlan> getLayoutPlanDetails(String string);
 
+	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
+	
 	//Sewing
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 
@@ -78,5 +80,6 @@ public interface ProductionService {
 	//Finishing
 		List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
 		String editLayoutLineData(ProductionPlan productionPlan);
+
 }
 

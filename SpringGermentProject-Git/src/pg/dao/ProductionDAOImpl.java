@@ -562,9 +562,9 @@ public class ProductionDAOImpl implements ProductionDAO{
 			String sql="";
 			String colorId="",sizeGroupId="";
 			String colorArrElement="";
-			
+
 			System.out.println("colorValue "+colorValue);
-			
+
 			StringTokenizer colortarroken=new StringTokenizer(colorValue,",");
 			while(colortarroken.hasMoreElements()) {
 				colorArrElement=colortarroken.nextToken();
@@ -586,7 +586,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 					String cuttingtotalexcess=colorArrToken.nextToken();
 					String cuttingtotalshort=colorArrToken.nextToken();
 					String cuttingtotalusedfabrics=colorArrToken.nextToken();
-					
+
 					System.out.println("cuttingtotalusedfabrics "+cuttingtotalusedfabrics);
 
 
@@ -1135,7 +1135,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx.begin();
 
 			int temp=0;
-			
+
 			String checksql="select StyleId from tbSewingProductionDetails where PurchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and LineId='"+v.getLineId()+"' and date='"+v.getLayoutDate()+"' and Type='1'";
 
 			List<?> list = session.createSQLQuery(checksql).list();
@@ -1144,7 +1144,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 				temp=1;
 				break;
 			}
-			
+
 			if(temp==0) {
 				String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
 				System.out.println("resultValue "+resultValue);
@@ -1159,84 +1159,84 @@ public class ProductionDAOImpl implements ProductionDAO{
 						String sizeId=thirdToken.nextToken();
 						String totalQty=thirdToken.nextToken();
 						String planvalue=thirdToken.nextToken();
-						
-
-							//Passed
-							StringTokenizer layoutToken=new StringTokenizer(planvalue, ":");
-							while(layoutToken.hasMoreTokens()) {
-								String h1=layoutToken.nextToken();
-								String h2=layoutToken.nextToken();
-								String h3=layoutToken.nextToken();
-								String h4=layoutToken.nextToken();
-								String h5=layoutToken.nextToken();
-								String h6=layoutToken.nextToken();
-								String h7=layoutToken.nextToken();
-								String h8=layoutToken.nextToken();
-								String h9=layoutToken.nextToken();
-								String h10=layoutToken.nextToken();
 
 
+						//Passed
+						StringTokenizer layoutToken=new StringTokenizer(planvalue, ":");
+						while(layoutToken.hasMoreTokens()) {
+							String h1=layoutToken.nextToken();
+							String h2=layoutToken.nextToken();
+							String h3=layoutToken.nextToken();
+							String h4=layoutToken.nextToken();
+							String h5=layoutToken.nextToken();
+							String h6=layoutToken.nextToken();
+							String h7=layoutToken.nextToken();
+							String h8=layoutToken.nextToken();
+							String h9=layoutToken.nextToken();
+							String h10=layoutToken.nextToken();
 
-								String productionSql="insert into tbSewingProductionDetails ("
-										+ "BuyerId,"
-										+ "BuyerOrderId,"
-										+ "PurchaseOrder,"
-										+ "StyleId,"
-										+ "ItemId,"
-										+ "ColorId,"
-										+ "LineId,"
-										+ "MachineId,"
-										+ "EmployeeId,"
-										+ "SizeId,"
-										+ "Type,"
-										+ "DailyTarget,"
-										+ "LineTarget,"
-										+ "HourlyTarget,"
-										+ "Hours,"
-										+ "hour1,"
-										+ "hour2,"
-										+ "hour3,"
-										+ "hour4,"
-										+ "hour5,"
-										+ "hour6,"
-										+ "hour7,"
-										+ "hour8,"
-										+ "hour9,"
-										+ "hour10,"
-										+ "total,"
-										+ "date,"
-										+ "entrytime,"
-										+ "userId) values ("
-										+ "'"+v.getBuyerId()+"',"
-										+ "'"+v.getBuyerorderId()+"',"
-										+ "'"+v.getPurchaseOrder()+"',"
-										+ "'"+v.getStyleId()+"',"
-										+ "'"+v.getItemId()+"',"
-										+ "'"+colorId+"',"
-										+ "'"+v.getLineId()+"',"
-										+ "'"+machineId+"',"
-										+ "'"+employeeId+"',"
-										+ "'"+sizeId+"',"
-										+ "'1',"
-										+ "'"+v.getDailyTarget()+"',"
-										+ "'"+v.getDailyLineTarget()+"',"
-										+ "'"+v.getHourlyTarget()+"',"
-										+ "'10',"
-										+ "'"+h1+"',"
-										+ "'"+h2+"',"
-										+ "'"+h3+"',"
-										+ "'"+h4+"',"
-										+ "'"+h5+"',"				
-										+ "'"+h6+"',"
-										+ "'"+h7+"',"
-										+ "'"+h8+"',"
-										+ "'"+h9+"',"
-										+ "'"+h10+"',"
-										+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
-										+ ")";
-								session.createSQLQuery(productionSql).executeUpdate();
-							}
-			
+
+
+							String productionSql="insert into tbSewingProductionDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "ColorId,"
+									+ "LineId,"
+									+ "MachineId,"
+									+ "EmployeeId,"
+									+ "SizeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+v.getBuyerId()+"',"
+									+ "'"+v.getBuyerorderId()+"',"
+									+ "'"+v.getPurchaseOrder()+"',"
+									+ "'"+v.getStyleId()+"',"
+									+ "'"+v.getItemId()+"',"
+									+ "'"+colorId+"',"
+									+ "'"+v.getLineId()+"',"
+									+ "'"+machineId+"',"
+									+ "'"+employeeId+"',"
+									+ "'"+sizeId+"',"
+									+ "'1',"
+									+ "'"+v.getDailyTarget()+"',"
+									+ "'"+v.getDailyLineTarget()+"',"
+									+ "'"+v.getHourlyTarget()+"',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+									+ ")";
+							session.createSQLQuery(productionSql).executeUpdate();
+						}
+
 
 
 
@@ -1593,15 +1593,20 @@ public class ProductionDAOImpl implements ProductionDAO{
 				String secondToken=firstToken.nextToken();
 				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
 				while(thirdToken.hasMoreTokens()) {
+
 					String employyeId=thirdToken.nextToken();
 					String lineId=thirdToken.nextToken();
 					String totalQty=thirdToken.nextToken();
+					String totalRejectQty=thirdToken.nextToken();
 					String layoutvalue=thirdToken.nextToken();
+					String rejectvalue=thirdToken.nextToken();
 
 
+					System.out.println("layoutvalue"+layoutvalue);
 					//Passed
 					StringTokenizer layoutToken=new StringTokenizer(layoutvalue, ":");
 					while(layoutToken.hasMoreTokens()) {
+						String type=layoutToken.nextToken();
 						String h1=layoutToken.nextToken();
 						String h2=layoutToken.nextToken();
 						String h3=layoutToken.nextToken();
@@ -1649,7 +1654,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 								+ "'"+v.getItemId()+"',"
 								+ "'"+lineId+"',"
 								+ "'"+employyeId+"',"
-								+ "'"+v.getLayoutName()+"',"
+								+ "'"+type+"',"
 								+ "'"+v.getDailyTarget()+"',"
 								+ "'"+v.getDailyLineTarget()+"',"
 								+ "'"+v.getHourlyTarget()+"',"
@@ -1668,6 +1673,82 @@ public class ProductionDAOImpl implements ProductionDAO{
 								+ ")";
 						session.createSQLQuery(productionSql).executeUpdate();
 					}
+
+					System.out.println("rejectvalue "+rejectvalue);
+					if(!rejectvalue.equals("0")) {
+						
+						//Reject
+						StringTokenizer rejectToken=new StringTokenizer(rejectvalue, ":");
+						while(rejectToken.hasMoreTokens()) {
+							String type=rejectToken.nextToken();
+							String h1=rejectToken.nextToken();
+							String h2=rejectToken.nextToken();
+							String h3=rejectToken.nextToken();
+							String h4=rejectToken.nextToken();
+							String h5=rejectToken.nextToken();
+							String h6=rejectToken.nextToken();
+							String h7=rejectToken.nextToken();
+							String h8=rejectToken.nextToken();
+							String h9=rejectToken.nextToken();
+							String h10=rejectToken.nextToken();
+
+
+
+							String productionSql="insert into tbLayoutPlanDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "LineId,"
+									+ "EmployeeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+v.getBuyerId()+"',"
+									+ "'"+v.getBuyerorderId()+"',"
+									+ "'"+v.getPurchaseOrder()+"',"
+									+ "'"+v.getStyleId()+"',"
+									+ "'"+v.getItemId()+"',"
+									+ "'"+lineId+"',"
+									+ "'"+employyeId+"',"
+									+ "'"+type+"',"
+									+ "'"+v.getDailyTarget()+"',"
+									+ "'"+v.getDailyLineTarget()+"',"
+									+ "'"+v.getHourlyTarget()+"',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalRejectQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+									+ ")";
+							session.createSQLQuery(productionSql).executeUpdate();
+						}
+					}
+
 
 				}
 			}
@@ -1702,7 +1783,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select (select name from tbBuyer where id=a.BuyerId) as BuyerName,a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.styleId,(select ItemName from tbItemDescription where itemid=a.itemId) as ItemName,a.ItemId,convert(varchar,a.date,23) as Date from tbLayoutPlanDetails a  where a.Type='"+type+"' group by a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,a.ItemId,a.date";
+			String sql="select (select name from tbBuyer where id=a.BuyerId) as BuyerName,a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.styleId,(select ItemName from tbItemDescription where itemid=a.itemId) as ItemName,a.ItemId,convert(varchar,a.date,23) as Date,(select ISNULL(sum(PlanQty),0) as PlanQty from TbProductTargetPlan where BuyerOrderId=a.BuyerOrderId and StyleId=a.StyleId and ItemId=a.ItemId ) as PlanQty  from tbLayoutPlanDetails a  where a.Type='"+type+"' group by a.BuyerId,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,a.ItemId,a.date";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1710,7 +1791,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 				Object[] element = (Object[]) iter.next();
 
-				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),""));
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString()));
 			}
 			tx.commit();
 		}
@@ -1838,7 +1919,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx.begin();
 
 			int temp=0;
-			
+
 			String checksql="select StyleId from tbSewingProductionDetails where PurchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and LineId='"+v.getLineId()+"' and date='"+v.getLayoutDate()+"' and Type='2'";
 
 			List<?> list = session.createSQLQuery(checksql).list();
@@ -1847,7 +1928,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 				temp=1;
 				break;
 			}
-			
+
 			if(temp==0) {
 				String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
 				System.out.println("resultValue "+resultValue);
@@ -1862,84 +1943,84 @@ public class ProductionDAOImpl implements ProductionDAO{
 						String sizeId=thirdToken.nextToken();
 						String totalQty=thirdToken.nextToken();
 						String planvalue=thirdToken.nextToken();
-						
-
-							//Passed
-							StringTokenizer layoutToken=new StringTokenizer(planvalue, ":");
-							while(layoutToken.hasMoreTokens()) {
-								String h1=layoutToken.nextToken();
-								String h2=layoutToken.nextToken();
-								String h3=layoutToken.nextToken();
-								String h4=layoutToken.nextToken();
-								String h5=layoutToken.nextToken();
-								String h6=layoutToken.nextToken();
-								String h7=layoutToken.nextToken();
-								String h8=layoutToken.nextToken();
-								String h9=layoutToken.nextToken();
-								String h10=layoutToken.nextToken();
 
 
+						//Passed
+						StringTokenizer layoutToken=new StringTokenizer(planvalue, ":");
+						while(layoutToken.hasMoreTokens()) {
+							String h1=layoutToken.nextToken();
+							String h2=layoutToken.nextToken();
+							String h3=layoutToken.nextToken();
+							String h4=layoutToken.nextToken();
+							String h5=layoutToken.nextToken();
+							String h6=layoutToken.nextToken();
+							String h7=layoutToken.nextToken();
+							String h8=layoutToken.nextToken();
+							String h9=layoutToken.nextToken();
+							String h10=layoutToken.nextToken();
 
-								String productionSql="insert into tbSewingProductionDetails ("
-										+ "BuyerId,"
-										+ "BuyerOrderId,"
-										+ "PurchaseOrder,"
-										+ "StyleId,"
-										+ "ItemId,"
-										+ "ColorId,"
-										+ "LineId,"
-										+ "MachineId,"
-										+ "EmployeeId,"
-										+ "SizeId,"
-										+ "Type,"
-										+ "DailyTarget,"
-										+ "LineTarget,"
-										+ "HourlyTarget,"
-										+ "Hours,"
-										+ "hour1,"
-										+ "hour2,"
-										+ "hour3,"
-										+ "hour4,"
-										+ "hour5,"
-										+ "hour6,"
-										+ "hour7,"
-										+ "hour8,"
-										+ "hour9,"
-										+ "hour10,"
-										+ "total,"
-										+ "date,"
-										+ "entrytime,"
-										+ "userId) values ("
-										+ "'"+v.getBuyerId()+"',"
-										+ "'"+v.getBuyerorderId()+"',"
-										+ "'"+v.getPurchaseOrder()+"',"
-										+ "'"+v.getStyleId()+"',"
-										+ "'"+v.getItemId()+"',"
-										+ "'"+colorId+"',"
-										+ "'"+v.getLineId()+"',"
-										+ "'"+machineId+"',"
-										+ "'"+employeeId+"',"
-										+ "'"+sizeId+"',"
-										+ "'2',"
-										+ "'"+v.getDailyTarget()+"',"
-										+ "'"+v.getDailyLineTarget()+"',"
-										+ "'"+v.getHourlyTarget()+"',"
-										+ "'10',"
-										+ "'"+h1+"',"
-										+ "'"+h2+"',"
-										+ "'"+h3+"',"
-										+ "'"+h4+"',"
-										+ "'"+h5+"',"				
-										+ "'"+h6+"',"
-										+ "'"+h7+"',"
-										+ "'"+h8+"',"
-										+ "'"+h9+"',"
-										+ "'"+h10+"',"
-										+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
-										+ ")";
-								session.createSQLQuery(productionSql).executeUpdate();
-							}
-			
+
+
+							String productionSql="insert into tbSewingProductionDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "ColorId,"
+									+ "LineId,"
+									+ "MachineId,"
+									+ "EmployeeId,"
+									+ "SizeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+v.getBuyerId()+"',"
+									+ "'"+v.getBuyerorderId()+"',"
+									+ "'"+v.getPurchaseOrder()+"',"
+									+ "'"+v.getStyleId()+"',"
+									+ "'"+v.getItemId()+"',"
+									+ "'"+colorId+"',"
+									+ "'"+v.getLineId()+"',"
+									+ "'"+machineId+"',"
+									+ "'"+employeeId+"',"
+									+ "'"+sizeId+"',"
+									+ "'2',"
+									+ "'"+v.getDailyTarget()+"',"
+									+ "'"+v.getDailyLineTarget()+"',"
+									+ "'"+v.getHourlyTarget()+"',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+									+ ")";
+							session.createSQLQuery(productionSql).executeUpdate();
+						}
+
 
 
 
@@ -1997,8 +2078,8 @@ public class ProductionDAOImpl implements ProductionDAO{
 					"left join TbEmployeeInfo e \r\n" + 
 					"on a.EmployeeId = e.AutoId \r\n" + 
 					"where a.BuyerId='"+productionPlan.getBuyerId()+"' and a.BuyerOrderId='"+productionPlan.getBuyerorderId()+"' and a.StyleId='"+productionPlan.getStyleId()+"' and a.ItemId='"+productionPlan.getItemId()+"' and a.date='"+productionPlan.getLayoutDate()+"' and type='"+productionPlan.getLayoutName()+"'";
-			
-		
+
+
 			List<?> list = session.createSQLQuery(sql).list();
 			int lineCount=list.size();
 			System.out.println("Size="+lineCount);
@@ -2034,26 +2115,24 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx.begin();
 
 			
-				
+			String productionSql="update tbLayoutPlanDetails set "
+					+ "EmployeeId = '"+productionPlan.getOperatorId()+"',"
+					+ "hour1 = '"+productionPlan.getHour1()+"',"
+					+ "hour2 = '"+productionPlan.getHour2()+"',"
+					+ "hour3 = '"+productionPlan.getHour3()+"',"
+					+ "hour4 = '"+productionPlan.getHour4()+"',"
+					+ "hour5 = '"+productionPlan.getHour5()+"',"
+					+ "hour6 = '"+productionPlan.getHour6()+"',"
+					+ "hour7 = '"+productionPlan.getHour7()+"',"
+					+ "hour8 = '"+productionPlan.getHour8()+"',"
+					+ "hour9 = '"+productionPlan.getHour9()+"',"
+					+ "hour10 = '"+productionPlan.getHour10()+"',"
+					+ "total = '"+productionPlan.getTotal()+"',"
+					+ "userId = '"+productionPlan.getUserId()+"' where autoId= '"+productionPlan.getAutoId()+"';";
 
-						String productionSql="update tbLayoutPlanDetails set "
-								+ "EmployeeId = '"+productionPlan.getOperatorId()+"',"
-								+ "hour1 = '"+productionPlan.getHour1()+"',"
-								+ "hour2 = '"+productionPlan.getHour2()+"',"
-								+ "hour3 = '"+productionPlan.getHour3()+"',"
-								+ "hour4 = '"+productionPlan.getHour4()+"',"
-								+ "hour5 = '"+productionPlan.getHour5()+"',"
-								+ "hour6 = '"+productionPlan.getHour6()+"',"
-								+ "hour7 = '"+productionPlan.getHour7()+"',"
-								+ "hour8 = '"+productionPlan.getHour8()+"',"
-								+ "hour9 = '"+productionPlan.getHour9()+"',"
-								+ "hour10 = '"+productionPlan.getHour10()+"',"
-								+ "total = '"+productionPlan.getTotal()+"',"
-								+ "userId = '"+productionPlan.getUserId()+"' where autoId= '"+productionPlan.getAutoId()+"';";
-								
-						session.createSQLQuery(productionSql).executeUpdate();
+			session.createSQLQuery(productionSql).executeUpdate();
 
-						result = "Successful";
+			result = "Successful";
 			tx.commit();
 			return result;
 		}
@@ -2071,6 +2150,56 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 
 		return result="Something wrong";
+	}
+
+	@Override
+	public List<ProductionPlan> getProductionData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.AutoId,a.BuyerId,b.name buyerName,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.LineId,lc.LineName,a.EmployeeId,isnull(e.name,'') as employeeName,a.Type,isnull(a.proudctionType,'') as productionType,ptp.OrderQty,ptp.PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.hour1,a.hour2,a.hour3,a.hour4,a.hour5,a.hour6,a.hour7,a.hour8,a.hour9,a.hour10,a.total,(select convert(varchar,a.date,103))as date,a.userId\r\n" + 
+					"from tbLayoutPlanDetails a\r\n" + 
+					"left join TbProductTargetPlan ptp\r\n" + 
+					"on a.BuyerId = ptp.BuyerId and a.BuyerOrderId = ptp.BuyerOrderId and a.StyleId = ptp.StyleId and a.ItemId = ptp.ItemId\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on a.BuyerId = b.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on a.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on a.ItemId = id.itemid\r\n" + 
+					"left join TbLineCreate lc\r\n" + 
+					"on a.LineId = lc.LineId\r\n" + 
+					"left join TbEmployeeInfo e \r\n" + 
+					"on a.EmployeeId = e.AutoId \r\n" + 
+					"where a.BuyerId='"+v.getBuyerId()+"' and a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.StyleId='"+v.getStyleId()+"' and a.ItemId='"+v.getItemId()+"' and a.date='"+v.getLayoutDate()+"' and a.type in ("+v.getLayoutName()+") order by a.LineId,a.Type";
+
+
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			System.out.println("Size="+lineCount);
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString(), element[25].toString(), element[26].toString(), element[27].toString(), element[28].toString(), element[29].toString(), element[30].toString(), element[31].toString(),element[32].toString(),element[33].toString(),String.valueOf(lineCount)));
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
 	}
 
 

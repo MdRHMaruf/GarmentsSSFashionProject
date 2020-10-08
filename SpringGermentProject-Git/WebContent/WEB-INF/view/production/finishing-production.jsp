@@ -31,19 +31,21 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="type" value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.FINISHING_LAYOUT.getType()%>">
+		<input type="hidden" id="passType" value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>">
+			<input type="hidden" id="rejectType" value="<%=ProductionType.FINISHING_REJECT.getType()%>">
 	<input type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Finishing Production</h5>
+			<h5 class="text-center" style="display: inline;">Finishing Production & Reject</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
 			</button>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#finishingListModal">
-				<i class="fa fa-search"></i>Finishing List
+				<i class="fa fa-search"></i>Finishing Production & Reject List
 			</button>
 		</header>
 		<hr class="my-1">
@@ -208,7 +210,7 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="searchProduction" type="text" class="form-control"
-						placeholder="Search Production Plan"
+						placeholder="Search Layout Plan"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -232,7 +234,7 @@
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${productionPlanList}" var="list"
+							<c:forEach items="${layoutList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>
@@ -260,7 +262,7 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="searchFinishing" type="text" class="form-control"
-						placeholder="Search Finishing Production"
+						placeholder="Search Line Inspection Production"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -286,7 +288,7 @@
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${layoutList}" var="list"
+							<c:forEach items="${productionList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>
@@ -299,7 +301,7 @@
 										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
 									<td><i class="fa fa-print" style="cursor:pointer;"
-										onclick="printLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+										onclick="printProductionDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
 								</tr>
 							</c:forEach>
@@ -310,6 +312,48 @@
 		</div>
 	</div>
 </div>
+
+//
+<div class="modal fade" id="processListModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<h2>Process List</h2>
+				</div>
+				<button onclick="closeProcessAddEvent()" type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+					<table class="table table-hover table-bordered table-sm mb-0">
+						<thead>
+							<tr>
+								<th style='width:100px;'>SL#</th>
+								<th style='width:300px;'>Process Name</th>
+								<th style='width:120px;'>Process Value</th>
+							</tr>
+						</thead>
+						<tbody id="processList">
+							<c:forEach items="${processlist}" var="list"
+								varStatus="counter">
+								<tr class='procsslistitemrow' data-id='${list.processId}'>
+									<td style='width:100px;'>${counter.count}</td>
+									<td style='width:300px;'>${list.processName}</td>
+									<td style='width:120px;'> <input style='width:120px;'  type="number" class='form-control-sm processId-${list.processId}'/></td>
+									
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+			</div>
+
+		</div>
+	</div>
+</div>
+
 <jsp:include page="../include/footer.jsp" />
 
 

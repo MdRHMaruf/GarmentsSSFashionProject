@@ -271,6 +271,7 @@ function addAction() {
   var width = $("#width").val() == "" ? 0 : $("#width").val();
   var yard = $("#yard").val() == "" ? "0" : $("#yard").val();
   var gsm = $("#gsm").val() == "" ? "0" : $("#gsm").val();
+  
   var consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
   var unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
   var amount = Number(consumption) * Number(unitPrice);

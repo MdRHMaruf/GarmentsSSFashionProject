@@ -34,6 +34,7 @@ import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.Line;
+import pg.registerModel.ProcessInfo;
 import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
@@ -312,7 +313,7 @@ public class ProductionController {
 	
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		ModelAndView view = new ModelAndView("production/inspection_layout_plan");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
@@ -347,7 +348,40 @@ public class ProductionController {
 		return "Success"; //JSP - /WEB-INF/view/index.jsp
 	}
 	
-	@RequestMapping(value = "/printLayoutInfo",method=RequestMethod.GET)
+	@RequestMapping(value = "/printLayoutInfo/{idList}")
+	public @ResponseBody ModelAndView printLayoutInfo(ModelMap map,@PathVariable ("idList") String idList) {
+		
+		ModelAndView view=new ModelAndView("production/printLayoutPlanReport");
+		String id[] = idList.split("@");
+		map.addAttribute("buyerId", id[0]);
+		map.addAttribute("buyerorderId", id[1]);
+		map.addAttribute("styleId", id[2]);
+		map.addAttribute("itemId", id[3]);
+		map.addAttribute("layoutDate", id[4]);
+		map.addAttribute("layoutType", id[5]);
+		map.addAttribute("layoutName", id[6]);
+
+		return view;
+	}
+	
+	@RequestMapping(value = "/printProductionDetails/{idList}")
+	public @ResponseBody ModelAndView printProductionDetails(ModelMap map,@PathVariable ("idList") String idList) {
+		
+		ModelAndView view=new ModelAndView("production/printProductionAndRejectReport");
+		String id[] = idList.split("@");
+		map.addAttribute("buyerId", id[0]);
+		map.addAttribute("buyerorderId", id[1]);
+		map.addAttribute("styleId", id[2]);
+		map.addAttribute("itemId", id[3]);
+		map.addAttribute("layoutDate", id[4]);
+		map.addAttribute("layoutType", id[5]);
+		map.addAttribute("layoutName", id[6]);
+		map.addAttribute("layoutCategory", id[7]);
+
+		return view;
+	}
+	
+/*	@RequestMapping(value = "/printLayoutInfo",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView searchLayoutInfo(ModelMap map) {
 		
 	
@@ -364,7 +398,7 @@ public class ProductionController {
 		
 	
 		return view;
-	}
+	}*/
 	
 	@RequestMapping(value = "/sewing_hourly_layout",method=RequestMethod.GET)
 	public ModelAndView sewing_hourly_production(ModelMap map,HttpSession session) {
@@ -491,16 +525,6 @@ public class ProductionController {
 	
 	//Finishing
 	
-	@RequestMapping(value = "/finishing_hourly_production",method=RequestMethod.GET)
-	public ModelAndView finishing_hourly_production(ModelMap map,HttpSession session) {
-		
-		//List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
-		ModelAndView view = new ModelAndView("production/finishing_hourly_production");
-		//view.addObject("sewingProductionList",sewingProductionList);
-		
-	
-		return view; //JSP - /WEB-INF/view/index.jsp
-	}
 	
 	@RequestMapping(value = "/saveFinishProductionDetails",method=RequestMethod.POST)
 	public @ResponseBody String saveFinishProductionDetails(ProductionPlan v) {
@@ -596,9 +620,10 @@ public class ProductionController {
 		List<ProductionPlan> machineList = productionService.getLineWiseMachineList(v);
 		
 		List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
-		
+		List<ProcessInfo> processList=registerService.getProcessList();
 		objmain.put("result",machineList);
 		objmain.put("sizelistresult",sizelist);
+		objmain.put("processList",processList);
 
 		return objmain;
 	}
@@ -663,21 +688,25 @@ public class ProductionController {
 
 			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPETION_PRODUCTION.getType()));
+			List<ProcessInfo> processlist = registerService.getProcessList();
 			ModelAndView view = new ModelAndView("production/line-inspection-production");
 			view.addObject("productionPlanList",productionPlanList);
 			view.addObject("layoutList",layoutList);
+			view.addObject("processlist",processlist);
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 
 		//Finishing Production
 		@RequestMapping(value = "/finishing_production",method=RequestMethod.GET)
 		public ModelAndView finishing_production(ModelMap map,HttpSession session) {
-
-			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+			
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_LAYOUT.getType()));
+			List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+			List<ProcessInfo> processlist = registerService.getProcessList();
 			ModelAndView view = new ModelAndView("production/finishing-production");
-			view.addObject("productionPlanList",productionPlanList);
 			view.addObject("layoutList",layoutList);
+			view.addObject("productionList",productionList);
+			view.addObject("processlist",processlist);
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 
@@ -694,6 +723,7 @@ public class ProductionController {
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 
+		
 		//Final QC Production
 		@RequestMapping(value = "/final_qc_production",method=RequestMethod.GET)
 		public ModelAndView final_qc_production(ModelMap map,HttpSession session) {
@@ -706,6 +736,33 @@ public class ProductionController {
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 		
+		//Line Inspection Reject
+		@RequestMapping(value = "/line_inspection_reject",method=RequestMethod.GET)
+		public ModelAndView line_inspection_reject(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
+			List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_REJECT.getType()));
+
+			ModelAndView view = new ModelAndView("production/line_inspection_reject");
+			view.addObject("rejectList",rejectList);
+			view.addObject("layoutList",layoutList);
+
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+		
+		@RequestMapping(value = "/saveLineInceptionRejectDetails",method=RequestMethod.POST)
+		public @ResponseBody String saveLineInceptionRejectDetails(ProductionPlan v) {
+			
+			String msg="Create Occure while Saving Inception Reject Details";
+
+			boolean flag= productionService.saveInceptionLayoutDetails(v);
+
+			if(flag) {
+				msg="Saving Sewing Inception Reject Details Sucessfully";
+			}
+		
+			return msg; //JSP - /WEB-INF/view/index.jsp
+		}
 		
 		@RequestMapping(value = "/searchLayoutData",method=RequestMethod.GET)
 		public @ResponseBody JSONObject searchLayoutData(ProductionPlan productionPlan) {
@@ -717,6 +774,18 @@ public class ProductionController {
 			objmain.put("employeeList",employeeList);
 			return objmain;
 		}
+		
+		@RequestMapping(value = "/searchProductionData",method=RequestMethod.GET)
+		public @ResponseBody JSONObject searchProductionData(ProductionPlan productionPlan) {
+			System.out.println("Controller Execute");
+			JSONObject objmain = new JSONObject();
+			List<Employee> employeeList = registerService.getEmployeeList();
+			List<ProductionPlan> productionPlanList = productionService.getProductionData(productionPlan);
+			objmain.put("result",productionPlanList);
+			objmain.put("employeeList",employeeList);
+			return objmain;
+		}
+
 
 		@RequestMapping(value = "/editLayoutLineData",method=RequestMethod.POST)
 		public @ResponseBody JSONObject editLayoutLineData(ProductionPlan productionPlan) {

@@ -237,5 +237,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.editLayoutLineData(productionPlan);
 	}
+
+
+	@Override
+	public List<ProductionPlan> getProductionData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getProductionData(productionPlan);
+	}
 }
 

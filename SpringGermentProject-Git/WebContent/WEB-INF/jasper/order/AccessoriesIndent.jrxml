@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccessoriesIndent" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2b2a924-bedf-466f-811f-a9906dcece05">
-	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.zoom" value="1.2100000000000009"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="Sql" class="java.lang.String">
@@ -26,7 +26,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="91" splitType="Stretch">
+		<band height="83" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="29" width="799" height="11" uuid="5c386ac4-253a-4606-a852-589690a7f7ec"/>
 				<textElement textAlignment="Center">
@@ -56,28 +56,28 @@
 				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="66" width="185" height="16" uuid="86a25717-55c7-461b-80f4-db1096d7c530"/>
+				<reportElement x="0" y="61" width="185" height="16" uuid="86a25717-55c7-461b-80f4-db1096d7c530"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="2" y="67" width="40" height="14" uuid="3333e5cc-977e-4ca6-80b1-88c0e0b53340"/>
+				<reportElement x="2" y="62" width="40" height="14" uuid="3333e5cc-977e-4ca6-80b1-88c0e0b53340"/>
 				<text><![CDATA[Style No]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="45" y="67" width="140" height="14" uuid="131f3523-fcb2-4206-8e15-6e5d075a2c63"/>
+				<reportElement x="45" y="62" width="140" height="14" uuid="131f3523-fcb2-4206-8e15-6e5d075a2c63"/>
 				<textElement>
 					<font isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="43" y="66" width="1" height="15" uuid="9fea73a6-9c33-4ab6-9497-bda6335fe331"/>
+				<reportElement x="43" y="61" width="1" height="15" uuid="9fea73a6-9c33-4ab6-9497-bda6335fe331"/>
 			</line>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="25" splitType="Stretch">
 			<staticText>
-				<reportElement x="2" y="2" width="800" height="16" uuid="a90c2a09-000c-43be-ad8d-91ebc89c96eb"/>
+				<reportElement x="2" y="0" width="800" height="16" uuid="a90c2a09-000c-43be-ad8d-91ebc89c96eb"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
@@ -151,7 +151,7 @@
 				<text><![CDATA[BRAND]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="395" y="1" width="60" height="29" uuid="e2c03bd1-41ae-469f-88cb-ae8a76d76eca"/>
+				<reportElement x="374" y="1" width="81" height="29" uuid="e2c03bd1-41ae-469f-88cb-ae8a76d76eca"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[COLOR]]></text>
@@ -177,10 +177,10 @@
 				<text><![CDATA[MEASUREMENT SIZE]]></text>
 			</staticText>
 			<line>
-				<reportElement x="393" y="1" width="1" height="29" uuid="3e8688e5-352e-41de-898b-ccc60fa2df8a"/>
+				<reportElement x="373" y="1" width="1" height="29" uuid="3e8688e5-352e-41de-898b-ccc60fa2df8a"/>
 			</line>
 			<staticText>
-				<reportElement x="186" y="2" width="207" height="29" uuid="61513bd8-a18d-425d-a824-174da197b535"/>
+				<reportElement x="186" y="2" width="187" height="29" uuid="61513bd8-a18d-425d-a824-174da197b535"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[ACCESSORIES]]></text>
@@ -231,7 +231,7 @@
 				<reportElement x="802" y="-1" width="1" height="14" uuid="7deb3d3c-3a5c-4431-bcfd-bc51d5e38d90"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="186" y="0" width="207" height="13" uuid="27cbe994-1113-4987-91d2-f96258db9a41"/>
+				<reportElement isPrintRepeatedValues="false" x="186" y="0" width="187" height="13" uuid="27cbe994-1113-4987-91d2-f96258db9a41"/>
 				<box leftPadding="2"/>
 				<textElement>
 					<font size="9"/>
@@ -239,7 +239,7 @@
 				<textFieldExpression><![CDATA[$F{AccessoriesName}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="395" y="0" width="60" height="13" uuid="e4e0625d-4093-4003-9535-48b95ce16773"/>
+				<reportElement isPrintRepeatedValues="false" x="374" y="0" width="81" height="13" uuid="e4e0625d-4093-4003-9535-48b95ce16773"/>
 				<box leftPadding="2"/>
 				<textElement>
 					<font size="9"/>
@@ -311,7 +311,7 @@
 				<textFieldExpression><![CDATA[$F{ShippingMarks}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="393" y="-1" width="1" height="14" uuid="c652c4f2-0581-420e-acbd-713d81717eeb"/>
+				<reportElement x="373" y="-1" width="1" height="14" uuid="c652c4f2-0581-420e-acbd-713d81717eeb"/>
 			</line>
 			<line>
 				<reportElement x="115" y="-1" width="1" height="14" uuid="c7694be0-dd7c-4428-8932-95c5e31ba3ab"/>
@@ -329,20 +329,20 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
-		<band height="29" splitType="Stretch">
+		<band height="18" splitType="Stretch">
 			<staticText>
-				<reportElement x="10" y="6" width="178" height="14" uuid="12bfc49f-4ee5-41bf-949a-a6a77de69e3d"/>
+				<reportElement x="23" y="1" width="178" height="14" uuid="12bfc49f-4ee5-41bf-949a-a6a77de69e3d"/>
 				<text><![CDATA[Developed By-www.cursorbd.com]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="688" y="5" width="20" height="13" uuid="a3330423-e36b-4698-830f-c2cd6d23db03"/>
+				<reportElement x="701" y="0" width="20" height="13" uuid="a3330423-e36b-4698-830f-c2cd6d23db03"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
 			<textField pattern="dd/MM/yyyy h.mm a">
-				<reportElement x="705" y="5" width="70" height="13" uuid="ab254cea-812c-4359-a56b-8c345948151e"/>
+				<reportElement x="718" y="0" width="70" height="13" uuid="ab254cea-812c-4359-a56b-8c345948151e"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
@@ -351,7 +351,7 @@
 		</band>
 	</pageFooter>
 	<lastPageFooter>
-		<band height="111">
+		<band height="108">
 			<staticText>
 				<reportElement x="132" y="28" width="113" height="13" uuid="2b6fa176-fae6-4284-82a2-40099770c548"/>
 				<textElement textAlignment="Center"/>

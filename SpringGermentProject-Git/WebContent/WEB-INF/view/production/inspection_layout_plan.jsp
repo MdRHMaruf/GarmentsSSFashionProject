@@ -32,7 +32,7 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="type" value="<%=ProductionType.LINE_INSPECTION.getType()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.LINE_INSPECTION_LAYOUT.getType()%>">
 	<input type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
@@ -65,7 +65,7 @@
 						style="padding-left: 1px; padding-right: 1px;">
 						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase Order:</label>
 						<div class="row">
-							<input type="text" readonly id="purchaseOrder" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerorderId"/>
+							<input type="text" readonly id="purchaseOrder" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerOrderId"/>
 						</div>
 
 					</div>
