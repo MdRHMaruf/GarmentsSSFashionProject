@@ -58,6 +58,7 @@ public interface ProductionDAO {
 	//Inception Layout
 	boolean saveInceptionLayoutDetails(ProductionPlan v);
 	List<ProductionPlan> getLayoutPlanDetails(String string);
+	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
 	
 	//Sewing Production
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);

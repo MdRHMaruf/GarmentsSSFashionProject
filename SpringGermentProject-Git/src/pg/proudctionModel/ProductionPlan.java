@@ -159,7 +159,7 @@ public class ProductionPlan {
 
 	}
 	
-	public ProductionPlan(String BuyerName,String BuyerId,String BuyerOrderId,String PoNo,String StyleNo,String StyleId,String ItemName,String ItemId,String ProductionDate,String s) {
+	public ProductionPlan(String BuyerName,String BuyerId,String BuyerOrderId,String PoNo,String StyleNo,String StyleId,String ItemName,String ItemId,String ProductionDate,String PlantQty) {
 		this.buyerName=BuyerName;
 		this.buyerId=BuyerId;
 		this.buyerorderId=BuyerOrderId;
@@ -169,6 +169,7 @@ public class ProductionPlan {
 		this.itemName=ItemName;
 		this.itemId=ItemId;
 		this.productionDate=ProductionDate;
+		this.planQty=PlantQty;
 
 	}
 	
