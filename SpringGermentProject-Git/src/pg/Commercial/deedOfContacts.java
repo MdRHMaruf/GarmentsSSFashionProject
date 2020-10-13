@@ -31,7 +31,7 @@ public class deedOfContacts {
 	  String unSubmitDate ;
 	  String netWeight;
 	  String blDate ;
-	  String UNReceivedDate ;
+	  String uNReceivedDate ;
 	  String unit ;
 	  String trackingNumber ;
 	  String unHoverDate ;
@@ -63,10 +63,16 @@ public class deedOfContacts {
 	  String contactPerson ;  
 	  String submitDate ;
 	  
+	  String value;
+	  
 	  public deedOfContacts() {
 		  
 	  }
 	  
+	  public deedOfContacts(String contractId) {
+		  this.contractId=contractId;
+		 
+	  }
 	  
 	  
   public deedOfContacts(String contractId, String pono, String styleid, String itemname) {
@@ -75,8 +81,71 @@ public class deedOfContacts {
 		  this.styleNo=styleid;
 		  this.itemName=itemname;
 	  }
+  
+  
+  
+  
 	  
 	  
+	public deedOfContacts(String ContractId, 	String PONumber, 	String StyleNo, 	String ItemDescription, 	String goodsDescription, 	String color, 	String rollQty, 	String ctnQty, 	String grossWeight, 	String netWeight, 	String unit, 	String unitPrice, 	String currency, 	String amount, 	String ETDDate, 	String ETADate, 	String ETCDate, 	String ClearDate, 	String ContractNo, 	String ReadyDate, 	String SubmitDate, 	String ReceivedDate, 	String ExpireyDate, 	String AmmendmentDate, 	String ExtendedDate, 	String ExportDate, 	String InvoiceNumber, 	String InvoiceDate, 	String AWBNumber, 	String BLDate, 	String TrachingNumber, 	String ShipperAddress, 	String consignAddress, 	String CNFHandoverDate, 	String CNFAddress, 	String Telephone, 	String Mobile, 	String FaxNo, 	String ContactPerson, 	String CouirerName, 	String ForwardAddress, 	String UdMakingDate, 	String UdAmmendmentDate, 	String UdSubmitDate, 	String UdReceivedDate, 	String UdHoverDate, 	String BirthingDate, 	String BuyerId, 	String MasterLc, 	String BBLc, 	String VesselName, 	String InvoiceQty, 	String OnBoardDate) {
+	super();
+	this.buyerId = BuyerId;
+	this.contractId = ContractId;
+	this.receivedDate = ReceivedDate;
+	this.purchaseOrder = PONumber;
+	this.expiryDate = ExpireyDate;
+	this.styleNo = StyleNo;
+	this.ammendmentDate = AmmendmentDate;
+	this.courieer = CouirerName;
+	this.itemName = ItemDescription;
+	this.extendedDate = ExtendedDate;
+	this.forwardAddress = ForwardAddress;
+	this.itemColor = color;
+	this.exportDate = ExportDate;
+	this.goodsDescription = goodsDescription;
+	this.rollQty = rollQty;
+	this.invoiceNumber = InvoiceNumber;
+	this.unMakeingDate = UdMakingDate;
+	this.ctnQty = ctnQty;
+	this.invoiceDate = InvoiceDate;
+	this.unAmmendment = UdAmmendmentDate;
+	this.grossWeight = grossWeight;
+	this.awbNumber = AWBNumber;
+	this.unSubmitDate = UdSubmitDate;
+	this.netWeight = netWeight;
+	this.blDate = BLDate;
+	this.uNReceivedDate = UdReceivedDate;
+	this.unit = unit;
+	this.trackingNumber = TrachingNumber;
+	this.unHoverDate = UdHoverDate;
+	this.unitPrice = unitPrice;
+	this.shipperAddress = ShipperAddress;
+	this.birthingDate = BirthingDate;
+	this.currency = currency;
+	this.amount = amount;
+	this.consignAddress = consignAddress;
+	this.etdDate = ETDDate;
+	this.cfHandoverDate = CNFHandoverDate;
+	this.masterLC = MasterLc;
+	this.etaDate = ETADate;
+	this.cfAddress = CNFAddress;
+	this.bblc = BBLc;
+	this.etcDate = ETCDate;
+	this.telephone = Telephone;
+	this.vvsselName = VesselName;
+	this.clearDate = ClearDate;
+	this.mobile = Mobile;
+	this.invoiceQty = InvoiceQty;
+	this.contactNo = ContractNo;
+	this.faxNo = FaxNo;
+	this.onBoardDate = OnBoardDate;
+	this.readyDate = ReadyDate;
+	this.contactPerson = ContactPerson;
+	this.submitDate = SubmitDate;
+}
+
+
+
 	public deedOfContacts(String userid, String buyerId, String contractId, String receivedDate, String purchaseOrder,
 			String expiryDate, String styleNo, String ammendmentDate, String courieer, String itemName,
 			String extendedDate, String forwardAddress, String itemColor, String exportDate, String goodsDescription,
@@ -115,7 +184,7 @@ public class deedOfContacts {
 		this.unSubmitDate = unSubmitDate;
 		this.netWeight = netWeight;
 		this.blDate = blDate;
-		this.UNReceivedDate = uNReceivedDate;
+		this.uNReceivedDate = uNReceivedDate;
 		this.unit = unit;
 		this.trackingNumber = trackingNumber;
 		this.unHoverDate = unHoverDate;
@@ -304,12 +373,17 @@ public class deedOfContacts {
 	public void setBlDate(String blDate) {
 		this.blDate = blDate;
 	}
-	public String getUNReceivedDate() {
-		return UNReceivedDate;
+
+	
+	
+	public String getuNReceivedDate() {
+		return uNReceivedDate;
 	}
-	public void setUNReceivedDate(String uNReceivedDate) {
-		UNReceivedDate = uNReceivedDate;
+
+	public void setuNReceivedDate(String uNReceivedDate) {
+		this.uNReceivedDate = uNReceivedDate;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
@@ -471,6 +545,14 @@ public class deedOfContacts {
 	}
 	public void setSubmitDate(String submitDate) {
 		this.submitDate = submitDate;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
 	}
 	  
 	  

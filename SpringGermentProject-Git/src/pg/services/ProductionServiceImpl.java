@@ -244,5 +244,26 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getProductionData(productionPlan);
 	}
+
+
+	@Override
+	public boolean savePolyPackingDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.savePolyPackingDetails(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getPolyPackingDetails(String string) {
+		// TODO Auto-generated method stub
+		return productionDao.getPolyPackingDetails(string);
+	}
+
+
+	@Override
+	public List<CuttingInformation> getCuttingRequisitionList() {
+		// TODO Auto-generated method stub
+		return productionDao.getCuttingRequisitionList();
+	}
 }
 

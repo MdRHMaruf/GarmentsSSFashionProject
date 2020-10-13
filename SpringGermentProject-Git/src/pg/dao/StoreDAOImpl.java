@@ -3,6 +3,7 @@ package pg.dao;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.apache.catalina.Store;
 import org.hibernate.Session;
@@ -27,6 +28,7 @@ import pg.storeModel.AccessoriesReturn;
 import pg.storeModel.AccessoriesSize;
 import pg.storeModel.AccessoriesTransferIn;
 import pg.storeModel.AccessoriesTransferOut;
+import pg.storeModel.CuttingFabricsUsed;
 import pg.storeModel.FabricsIssue;
 import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
@@ -5061,6 +5063,151 @@ public class StoreDAOImpl implements StoreDAO{
 				Object[] element = (Object[]) iter.next();
 
 				datalist.add(new StoreGeneralReceived(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+
+	@Override
+	public List<CuttingFabricsUsed> getCuttingUsedFabricsList(String cuttingEntryId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CuttingFabricsUsed> datalist=new ArrayList<CuttingFabricsUsed>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select a.CuttingEntryId,a.purchaseOrder,a.StyleId,a.ItemId,s.StyleNo,i.itemname,b.ColorId,b.UsedFabrics,c.Colorname,f.fabricsid,fb.ItemName as FabricsItem,f.fabricscolor,fc.Colorname as FabricsItemColor,f.unitId,u.unitname from TbCuttingInformationSummary a join TbCuttingInformationDetails b on a.CuttingEntryId=b.CuttingEntryId join tbFabricsIndent f on f.PurchaseOrder=a.purchaseOrder and f.styleId=a.StyleId and f.itemid=a.ItemId join TbStyleCreate s on a.StyleId=s.StyleId join tbItemDescription i on a.ItemId=i.itemId join tbColors c on c.ColorId=b.ColorId join TbFabricsItem fb on f.fabricsid=fb.id join tbColors fc on fc.ColorId=f.fabricscolor join tbunits u on u.Unitid=f.unitId where a.CuttingEntryId='"+cuttingEntryId+"' and b.Type='Cutting' group by a.CuttingEntryId,b.ColorId,b.UsedFabrics,c.Colorname,a.purchaseOrder,a.StyleId,a.ItemId,s.StyleNo,i.itemname,f.fabricsid,f.unitId,u.unitname,fb.ItemName,f.fabricscolor,fc.Colorname";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				
+				datalist.add(new CuttingFabricsUsed(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(),element[11].toString(), element[12].toString(),element[13].toString(),element[14].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+
+	@Override
+	public boolean sendCuttingFabricsRequistion(CuttingFabricsUsed v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="";
+			String resultValue=v.getResultList().substring(v.getResultList().indexOf("[")+1, v.getResultList().indexOf("]"));
+			System.out.println("resultValue "+resultValue);
+			
+			StringTokenizer token=new StringTokenizer(resultValue, ",");
+			while(token.hasMoreTokens()) {
+				
+				String secondToken=token.nextToken();
+				StringTokenizer token2=new StringTokenizer(secondToken, "*");
+				while(token2.hasMoreTokens()) {
+					String fabricsId=token2.nextToken();
+					String colorId=token2.nextToken();
+					String unitId=token2.nextToken();
+					String usedFabrics=token2.nextToken();
+					String requistionReq=token2.nextToken();
+					
+					if(!requistionReq.equals("0")){
+						 sql="insert into TbCuttingRequisitionDetailsv1"
+									+ "("
+									+ "CuttingEntryId,"
+									+ "colorId,"
+									+ "fabricsId,"
+									+ "unitId,"
+									+ "requisitionQuantity,"
+									+ "requistionFlag,"
+									+ "entrytime,"
+									+ "UserId"
+									+ ") "
+									+ "values('"+v.getCuttingEntryId()+"',"
+									+ "'"+colorId+"',"
+									+ "'"+fabricsId+"',"
+									+ "'"+unitId+"',"
+									+ "'"+usedFabrics+"',"
+									+ "'"+requistionReq+"',"
+									+"current_timestamp,'"+v.getUserId()+"')";
+							session.createSQLQuery(sql).executeUpdate();
+					}
+
+				}
+				
+
+			}
+			
+			
+			sql="update TbCuttingInformationSummary set RequistionFlag='1' where CuttingEntryId='"+v.getCuttingEntryId()+"' ";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+
+
+	@Override
+	public List<CuttingFabricsUsed> getCuttingUsedFabricsRequisitionList(String cuttingEntryId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CuttingFabricsUsed> datalist=new ArrayList<CuttingFabricsUsed>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "\n" + 
+					"select a.CuttingEntryId,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleName,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,(select ItemName from TbFabricsItem where id=b.fabricsId) as FabricsItem,(select colorName from tbColors where colorId=b.colorId) as ColorName,b.requisitionQuantity,(select unitName from tbunits where unitId=b.unitId) as UnitName,a.CuttingNo,convert(varchar,a.Date,23) as Date from TbCuttingInformationSummary a join TbCuttingRequisitionDetailsv1 b on a.CuttingEntryId=b.CuttingEntryId where a.CuttingEntryId='"+cuttingEntryId+"' and a.RequistionFlag='1'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				
+				datalist.add(new CuttingFabricsUsed(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString()));				
 			}			
 			tx.commit();			
 		}	

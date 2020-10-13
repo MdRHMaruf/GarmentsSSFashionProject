@@ -131,17 +131,19 @@ public class CommercialController {
 	
 	@RequestMapping(value = "/insert", method=RequestMethod.POST)
 	public String insert(deedOfContacts deedcontact) {
-
 		boolean insert=commservice.insertDeedOfContact(deedcontact);
+		if(insert) {
+			return "success" ;
+		}
 		
 
-		return ""; //JSP - /WEB-INF/view/index.jsp
+		return "fail"; //JSP - /WEB-INF/view/index.jsp
 	}
 	
 	
 	@ResponseBody
 	@RequestMapping(value = "/deedofcontract/{contractid}",method=RequestMethod.POST)
-	public String department_medicine_delvierOpen(@PathVariable ("contractid") String contractid) {
+	public String deedofcontractreport(@PathVariable ("contractid") String contractid) {
 		System.out.println(" Open Ooudoor sales report 1");
 		
 		this.contractId=contractid;
@@ -157,7 +159,7 @@ public class CommercialController {
 	@RequestMapping(value = "/deedofcontractview",method=RequestMethod.GET)
 	public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
 		
-			System.out.println(" Open Ooudoor sales report ");	
+			System.out.println(" deed of contacts report ");	
 			ModelAndView view = new ModelAndView("commercial/deedOfContactReport");
 	
 			view.addObject("contractId",contractId);
@@ -168,6 +170,19 @@ public class CommercialController {
 			return view;
 		
 	}
+	
+	
+	@RequestMapping(value = "/deedOfContratDetails/{id}", method=RequestMethod.POST)
+	public List<deedOfContacts> deedOfContratDetails(@PathVariable ("id") String id) {
+
+		List<deedOfContacts> details=commservice.deedOfContractDetails(id);
+		
+		System.out.println(" ud receive date "+details.get(0).getuNReceivedDate());
+		
+
+		return details; //JSP - /WEB-INF/view/index.jsp
+	}
+	
 
 
 

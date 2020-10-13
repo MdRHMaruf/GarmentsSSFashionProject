@@ -232,7 +232,7 @@
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${productionPlanList}" var="list"
+							<c:forEach items="${layoutList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>
@@ -286,7 +286,7 @@
 							</tr>
 						</thead>
 						<tbody id="poList">
-							<c:forEach items="${layoutList}" var="list"
+							<c:forEach items="${productionList}" var="list"
 								varStatus="counter">
 								<tr>
 									<td>${counter.count}</td>

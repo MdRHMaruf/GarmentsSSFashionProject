@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,11 +21,13 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
+import pg.proudctionModel.CuttingInformation;
 import pg.registerModel.Department;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
+import pg.services.ProductionService;
 import pg.services.RegisterService;
 import pg.services.StoreService;
 import pg.storeModel.AccessoriesIssue;
@@ -35,6 +38,7 @@ import pg.storeModel.AccessoriesReturn;
 import pg.storeModel.AccessoriesSize;
 import pg.storeModel.AccessoriesTransferIn;
 import pg.storeModel.AccessoriesTransferOut;
+import pg.storeModel.CuttingFabricsUsed;
 import pg.storeModel.FabricsIssue;
 import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
@@ -50,6 +54,9 @@ import pg.storeModel.StoreGeneralReceived;
 @RestController
 public class StoreController {
 
+	@Autowired
+	private ProductionService productionService;
+	
 	@Autowired
 	private RegisterService registerService;
 	@Autowired
@@ -1232,5 +1239,70 @@ public class StoreController {
 		return view;
 	}
 
+	
+	@RequestMapping(value = "/cutting_fabrics_requistion",method=RequestMethod.GET)
+	public ModelAndView cutting_fabrics_requistion(ModelMap map,HttpSession session) {
+		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();
+		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
+		ModelAndView view = new ModelAndView("store/cutting_fabrics_requistion");
 
+		view.addObject("cuttingInformationList",cuttingInformationList);
+		view.addObject("cuttingReqList",cuttingReqList);
+		return view; 
+	}
+
+	@RequestMapping(value = "/searchCuttingUsedFabrics",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchCuttingUsedFabrics(String cuttingEntryId) {
+		JSONObject objmain = new JSONObject();
+
+		List<CuttingFabricsUsed> List= storeService.getCuttingUsedFabricsList(cuttingEntryId);
+
+		objmain.put("result", List);
+		
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/sendCuttingFabricsRequistion",method=RequestMethod.POST)
+	public @ResponseBody String sendCuttingFabricsRequistion(CuttingFabricsUsed v) {
+		
+		String msg="Create occure while send requistion";
+
+		if(storeService.sendCuttingFabricsRequistion(v)) {
+			msg="Send requistion sucessfully";
+
+		}
+
+		return msg;
+	}
+	
+	@RequestMapping(value = "/printCuttingUsedFabricsInfo/{cuttingEntryId}")
+	public @ResponseBody ModelAndView printLayoutInfo(ModelMap map,@PathVariable ("cuttingEntryId") String cuttingEntryId) {
+		
+		ModelAndView view=new ModelAndView("store/printCuttingFabricsRequisitionReport");
+		map.addAttribute("cuttingEntryId", cuttingEntryId);
+
+
+		return view;
+	}
+	
+	@RequestMapping(value = "/cutting_fabrics_issue",method=RequestMethod.GET)
+	public ModelAndView cutting_fabrics_issue(ModelMap map,HttpSession session) {
+		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
+		ModelAndView view = new ModelAndView("store/cutting_fabrics_issue");
+
+		//view.addObject("cuttingInformationList",cuttingInformationList);
+		view.addObject("cuttingReqList",cuttingReqList);
+		return view; 
+	}
+	
+	@RequestMapping(value = "/searchCuttingUsedFabricsrRequisition",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchCuttingUsedFabricsrRequisition(String cuttingEntryId) {
+		JSONObject objmain = new JSONObject();
+
+		List<CuttingFabricsUsed> List= storeService.getCuttingUsedFabricsRequisitionList(cuttingEntryId);
+
+		objmain.put("result", List);
+		
+		return objmain;
+	}
 }

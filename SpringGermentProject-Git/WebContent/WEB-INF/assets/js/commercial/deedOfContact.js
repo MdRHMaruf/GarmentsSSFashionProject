@@ -1,5 +1,10 @@
 
-
+var pono;
+var stylno;
+var itemaname;
+var color;
+var unit;
+var currency;
 
 function buyerWisePoLoad(){
 	var buyerId=$("#buyerId").val();
@@ -48,7 +53,7 @@ function loadPoNo(data){
 	};
 	document.getElementById("purchaseOrder").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
-	//$('#purchaseOrder').val(poNoValue).change();
+	$('#purchaseOrder').val(pono).change();
 	poNoValue=0;
 }
 
@@ -111,7 +116,7 @@ function loadStyles(data){
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
 	
-	//$('#styleNo').val(styleValue).change();
+	$('#styleNo').val(styleno).change();
 	styleValue=0;
 
 }
@@ -193,8 +198,8 @@ function loatItems(data){
 	};
 	document.getElementById("goodsDescription").innerHTML = options1;
 	$('.selectpicker').selectpicker('refresh');
-	//$('#itemName').val(itemValue).change();
-	//$('#goodsDescription').val(itemValue).change();
+	$('#itemName').val(itemname).change();
+	$('#goodsDescription').val(itemname).change();
 	itemValue=0;
 
 }
@@ -258,14 +263,16 @@ function loadColors(data){
 	document.getElementById("itemColor").innerHTML = options;
 
 	$('.selectpicker').selectpicker('refresh');
-	$('#itemColor').val(itemValue).change();
+	$('#itemColor').val(color).change();
 	
 	itemValue=0;
 
 
 }
 
-function insert() {
+function insert(v) {
+	
+	var value=$(v).val();
 	
   var userid = $("#userId").val();
   var buyerId = $("#buyerId").val();
@@ -397,11 +404,17 @@ function insert() {
     	   readyDate:readyDate,
     	   contactPerson: contactPerson,
     	   submitDate:submitDate,
+    	   value:value
     	  
         
       },
       success: function (data) {
-    	  
+    	  if (data=="success") {
+			alert("Successful")
+			location.reload();
+		}else{
+			alert("Failed")
+		}
       }
     });
  
@@ -429,3 +442,96 @@ function deedOfContractReport(contractid) {
 	    }
 	  });
 	}
+
+
+
+function deedOfContractDetails(contractid) {
+	
+	console.log(" contractid "+contractid)
+		
+	  $.ajax({
+	    type: 'POST',
+	    dataType: 'json',
+	    url: './deedOfContratDetails/'+contractid,
+	    data: {
+	    	
+	    },
+	    success: function (data) {
+	    	
+	    	
+	    	$('.selectpicker').selectpicker('refresh');
+	    	 $("#buyerId").val(data[0].buyerId).change();
+	    	 
+	    	 
+	    	 $("#contractId").val(data[0].contractId);
+	    	 $("#receivedDate").val(data[0].receivedDate);
+	    	// $("#purchaseOrder").val(data[0].purchaseOrder);
+	    	 pono=data[0].purchaseOrder;
+	    	 $("#expiryDate").val(data[0].expiryDate)
+	    	 //$("#styleNo").val(data[0].styleNo);
+	    	 styleno=data[0].styleNo;
+	    	 $("#ammendmentDate").val(data[0].ammendmentDate);
+	    	 $("#courieer").val(data[0].courieer);
+	    	 //$("#itemName").val(data[0].itemName);
+	    	 itemname=data[0].itemName
+	    	 $("#extendedDate").val(data[0].extendedDate) 
+	    	 $("#forwardAddress").val(data[0].forwardAddress);
+	    	// $("#itemColor").val(data[0].itemColor);
+	    	 color=data[0].itemColor;
+	    	 $("#exportDate").val(data[0].exportDate)
+	    	  
+	    	  
+	    	  
+	    // $("#goodsDescription").val(data[0].goodsDescription);
+	    	 $("#rollQty").val(data[0].rollQty);  
+	    	 $("#invoiceNumber").val(data[0].invoiceNumber);
+	    	 $("#unMakeingDate").val(data[0].unMakeingDate)
+	    	 $("#ctnQty").val(data[0].ctnQty);
+	    	 $("#invoiceDate").val(data[0].invoiceDate)
+	    	 $("#unAmmendment").val(data[0].unAmmendment);
+	    	 $("#grossWeight").val(data[0].grossWeight);
+	    	 $("#awbNumber").val(data[0].awbNumber);
+	    	 $("#unSubmitDate").val(data[0].unSubmitDate);
+	    	 $("#netWeight").val(data[0].netWeight);
+	    	 $("#blDate").val(data[0].blDate)
+	    	 
+	    	 console.log(" ud receive date "+data[0].uNReceivedDate)
+	    	 $("#UNReceivedDate").val(data[0].uNReceivedDate)
+	    	 $("#unit").val(data[0].unit);  
+	    	 $("#trackingNumber").val(data[0].trackingNumber);
+	    	 $("#unHoverDate").val(data[0].unHoverDate)
+	    	 $("#unitPrice").val(data[0].unitPrice);
+	        $("#shipperAddress").val(data[0].shipperAddress);
+	        $("#birthingDate").val(data[0].birthingDate)
+	    	  
+	    	  
+	   	  
+	        $("#currency").val(data[0].currency);
+	    	 $("#amount").val(data[0].amount);
+	    	 $("#consignAddress").val(data[0].consignAddress);  
+	    	 $("#etdDate").val(data[0].etdDate)
+	    	 $("#cfHandoverDate").val(data[0].cfHandoverDate)
+	    	 $("#masterLC").val(data[0].masterLC); 
+	    	 $("#etaDate").val(data[0].etaDate)
+	    	 $("#cfAddress").val(data[0].cfAddress);
+	        $("#bblc").val(data[0].bblc);
+	        $("#etcDate").val(data[0].etcDate)
+	    	 $("#telephone").val(data[0].telephone);
+	    	 $("#vvsselName").val(data[0].vvsselName);
+	    	 $("#clearDate").val(data[0].clearDate)
+	    	 $("#mobile").val(data[0].mobile);
+	    	 $("#invoiceQty").val(data[0].invoiceQty);  
+	    	 $("#contactNo").val(data[0].contactNo);
+	    	 $("#faxNo").val(data[0].faxNo);
+	    	 $("#onBoardDate").val(data[0].onBoardDate)
+	    	 $("#readyDate").val(data[0].readyDate)
+	    	 $("#contactPerson").val(data[0].contactPerson);  
+	    	 $("#submitDate").val(data[0].submitDate)
+	    	 
+	    	 $("#exampleModal").modal('hide');
+	    	 $("#save").attr('disabled', true);
+	   	  	 $("#edit").attr('disabled', false);
+	    }
+	  });
+	}
+
