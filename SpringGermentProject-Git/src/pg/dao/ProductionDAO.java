@@ -70,5 +70,10 @@ public interface ProductionDAO {
 	//Finishing
 		List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
 		String editLayoutLineData(ProductionPlan productionPlan);
+		
+		boolean savePolyPackingDetails(ProductionPlan v);
+		List<ProductionPlan> getPolyPackingDetails(String string);
+		
+		List<CuttingInformation> getCuttingRequisitionList();
 }
 

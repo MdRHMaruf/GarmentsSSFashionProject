@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SewingHourlyProudctionReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a23ba6a8-b037-4c55-8d92-32b9e5144a96">
+	<property name="ireport.zoom" value="3.452271214393123"/>
+	<property name="ireport.x" value="568"/>
+	<property name="ireport.y" value="125"/>
+	<parameter name="sql" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["select *,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,(select LineName from TbLineCreate where LineId=a.LineId) as LineName,(select SizeName from tbStyleSize where id=a.SizeId) as SizeName,'Finishing Production & Reject Report ' as layoutName,(select Name from TbEmployeeInfo where AutoId=a.EmployeeId) as EmployeeName,(select TypeName from TbNarration where Category='Ploy' and Type=a.packetType) as PacketTypeName from tbPolyPackingDetails a where a.BuyerId='4' and a.BuyerOrderId='5017' and a.StyleId='1' and a.ItemId='31' and a.date='2020-10-10' and a.Type in(1)"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[$P!{sql}]]>
+	</queryString>
+	<field name="AutoId" class="java.lang.Integer"/>
+	<field name="BuyerId" class="java.lang.Integer"/>
+	<field name="BuyerOrderId" class="java.lang.Integer"/>
+	<field name="PurchaseOrder" class="java.lang.String"/>
+	<field name="StyleId" class="java.lang.Integer"/>
+	<field name="ItemId" class="java.lang.Integer"/>
+	<field name="ColorId" class="java.lang.Integer"/>
+	<field name="LineId" class="java.lang.Integer"/>
+	<field name="EmployeeId" class="java.lang.Integer"/>
+	<field name="SizeId" class="java.lang.Integer"/>
+	<field name="Type" class="java.lang.Integer"/>
+	<field name="DailyTarget" class="java.math.BigDecimal"/>
+	<field name="LineTarget" class="java.math.BigDecimal"/>
+	<field name="HourlyTarget" class="java.math.BigDecimal"/>
+	<field name="Hours" class="java.math.BigDecimal"/>
+	<field name="packetType" class="java.lang.String"/>
+	<field name="pcsQty" class="java.math.BigDecimal"/>
+	<field name="unitQty" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal"/>
+	<field name="totalPoly" class="java.math.BigDecimal"/>
+	<field name="date" class="java.lang.String"/>
+	<field name="entrytime" class="java.sql.Timestamp"/>
+	<field name="userId" class="java.lang.Integer"/>
+	<field name="BuyerName" class="java.lang.String"/>
+	<field name="StyleNo" class="java.lang.String"/>
+	<field name="ItemName" class="java.lang.String"/>
+	<field name="LineName" class="java.lang.String"/>
+	<field name="SizeName" class="java.lang.String"/>
+	<field name="layoutName" class="java.lang.String"/>
+	<field name="EmployeeName" class="java.lang.String"/>
+	<field name="PacketTypeName" class="java.lang.String"/>
+	<variable name="tPoly" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalPoly}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="76" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="7" width="551" height="14" uuid="72bc3957-ad36-4999-b465-85e7d2db4fcb"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quality Fashion Wear LTD.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="31" width="551" height="12" uuid="aa77ba28-e0a0-4295-ad91-e23fbd559731"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Baizid Bostami Road,Chittagong,Bangladesh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="3" y="20" width="551" height="12" uuid="34fbea29-2ccd-49e9-adf6-f5659b8fc34d"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Block-A,Plot No.A/2 (Part),BSCIC Industrial Estate]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="68" width="554" height="1" uuid="c5a9f751-0228-47fc-a796-956bd7924599"/>
+				<graphicElement>
+					<pen lineWidth="3.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="3" y="48" width="551" height="14" uuid="993bb2ad-750a-4dc1-9970-8f9d13aefa20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Poly Details]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="16" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="0" width="554" height="1" uuid="f5f37cde-c889-411a-8f7b-ea64ef5908d3"/>
+			</line>
+			<line>
+				<reportElement x="1" y="15" width="554" height="1" uuid="f59e4714-a1f0-42a1-adc7-cd89f0235cf2"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="16" uuid="44fa5448-6d5c-4cc6-9497-b4c45e03ba28"/>
+			</line>
+			<line>
+				<reportElement x="554" y="1" width="1" height="15" uuid="46821279-b05e-46cd-80fc-ef1d2ff0cf39"/>
+			</line>
+			<line>
+				<reportElement x="435" y="0" width="1" height="15" uuid="16a717ab-1266-4898-a2be-b1d240b7e309"/>
+			</line>
+			<line>
+				<reportElement x="310" y="0" width="1" height="15" uuid="0a3f812d-25e6-48d3-b512-253f43eb2c1e"/>
+			</line>
+			<line>
+				<reportElement x="233" y="0" width="1" height="15" uuid="ae42842a-78c2-4f96-b2a3-12916c510e4e"/>
+			</line>
+			<line>
+				<reportElement x="67" y="0" width="1" height="15" uuid="8e89eeed-2146-4daf-a4bc-e9f4b61dce01"/>
+			</line>
+			<staticText>
+				<reportElement x="2" y="2" width="64" height="13" uuid="c303681a-4565-46da-af87-933c0e4351bc"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Line Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="202" y="1" width="30" height="15" uuid="8371452e-f0bd-40e3-9515-d9024c343c22"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Size]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="234" y="1" width="73" height="14" uuid="307dd060-912e-4ad2-96db-6fed8580921a"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="437" y="2" width="60" height="13" uuid="7087e837-03e4-44da-a5c9-2ed1e11b515d"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="1" width="60" height="15" uuid="44ac389a-7bcf-4aad-a7be-e87130d82dfc"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Pcs]]></text>
+			</staticText>
+			<line>
+				<reportElement x="373" y="0" width="1" height="15" uuid="c984e770-33b1-43f1-8741-4161df0bd384"/>
+			</line>
+			<staticText>
+				<reportElement x="375" y="1" width="60" height="14" uuid="547258d5-b69d-4959-8d55-5c84aafc14fe"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Blister]]></text>
+			</staticText>
+			<line>
+				<reportElement x="200" y="1" width="1" height="15" uuid="99f70fe2-b8b4-49d8-9469-10cef447d21c"/>
+			</line>
+			<staticText>
+				<reportElement x="69" y="1" width="131" height="14" uuid="80c60e3f-e297-485c-a1ad-6024966e9b5d"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Operator Name]]></text>
+			</staticText>
+			<line>
+				<reportElement x="498" y="0" width="1" height="15" uuid="8cae6416-8118-4d8b-bdd5-3477b72d12c6"/>
+			</line>
+			<staticText>
+				<reportElement x="499" y="1" width="55" height="13" uuid="3144bf0b-b9b0-48c5-b453-d6fc75bded8d"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[Poly]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="-1" width="554" height="1" uuid="b1ccdd23-3b53-41a5-9cad-2d0dcb795e24"/>
+			</line>
+			<line>
+				<reportElement x="1" y="14" width="554" height="1" uuid="414fa51b-db7c-4878-8b95-44507dcd8657"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="15" uuid="a9e63dde-02bf-449c-9c98-3950815a7bc7"/>
+			</line>
+			<line>
+				<reportElement x="554" y="0" width="1" height="15" uuid="51a8e1a1-b390-4226-aa8d-4b253dfd1316"/>
+			</line>
+			<line>
+				<reportElement x="435" y="-1" width="1" height="15" uuid="dd521d09-bbb7-42b8-8400-b462d06c9fb6"/>
+			</line>
+			<line>
+				<reportElement x="310" y="-1" width="1" height="15" uuid="2fcdc02e-c325-48ea-ad4a-a59496c309f1"/>
+			</line>
+			<line>
+				<reportElement x="233" y="-1" width="1" height="15" uuid="1954970b-1b28-4415-99fa-ca0e0102daff"/>
+			</line>
+			<line>
+				<reportElement x="67" y="-1" width="1" height="15" uuid="5ffb3d67-82d7-4a34-a933-b794b224a6c6"/>
+			</line>
+			<line>
+				<reportElement x="373" y="-1" width="1" height="15" uuid="398f071c-add9-424d-b034-aaac6b0b8885"/>
+			</line>
+			<line>
+				<reportElement x="200" y="0" width="1" height="15" uuid="070ccede-e1d3-49ce-a363-883b48965bcf"/>
+			</line>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="2" y="0" width="66" height="14" uuid="e687a19f-de6e-42f7-976e-e9a02fab311f"/>
+				<textFieldExpression><![CDATA[$F{LineName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="69" y="0" width="131" height="14" uuid="35ceb52f-18fc-4f9b-9703-fcf66a9d52f7"/>
+				<textFieldExpression><![CDATA[$F{EmployeeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="201" y="0" width="31" height="14" uuid="56dfa539-fc5e-4c38-aaa5-f3e28ec6e2fa"/>
+				<box leftPadding="2"/>
+				<textFieldExpression><![CDATA[$F{SizeName}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="311" y="0" width="60" height="14" uuid="2f97cefa-7a05-4d22-a049-bd80aad9f359"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{pcsQty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="374" y="0" width="61" height="14" uuid="78c52e74-f082-4138-bce1-79cc33524f53"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{unitQty}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="437" y="0" width="60" height="14" uuid="9271175b-3dec-49f3-94dd-4297988f1322"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="234" y="0" width="73" height="14" uuid="c78d420b-f65a-422a-964e-c649c3ce946c"/>
+				<box leftPadding="2"/>
+				<textFieldExpression><![CDATA[$F{PacketTypeName}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="498" y="-1" width="1" height="15" uuid="1a24b6fa-abf0-45b3-b1e2-fdac95f207a4"/>
+			</line>
+			<textField pattern="#,##0">
+				<reportElement x="499" y="0" width="55" height="14" uuid="831bcffd-967b-4d2e-a472-0b3f9dacfac5"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{totalPoly}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="5" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0">
+				<reportElement x="500" y="0" width="54" height="15" uuid="fa331df4-be66-4917-8d69-fe24aa95ce9d"/>
+				<box bottomPadding="2">
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineWidth="5.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{tPoly}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

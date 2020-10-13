@@ -421,12 +421,12 @@ public class ProductionController {
 	public @ResponseBody String saveSewingLayoutDetails(ProductionPlan v) {
 		
 		System.out.println("v swing");
-		String msg="Create Occure while saving sewing layout";
+		String msg="Create Occure while saving information";
 
 		boolean flag= productionService.saveSewingLayoutDetails(v);
 
 		if(flag) {
-			msg="Saving sewing layout success";
+			msg="Saving information successfully";
 		}
 	
 		return msg; //JSP - /WEB-INF/view/index.jsp
@@ -605,12 +605,15 @@ public class ProductionController {
 		
 		List<Employee> employeeList = registerService.getEmployeeList();
 		
+		List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+		
 		objmain.put("result",sewingList);
 		objmain.put("employeeresult",employeeList);
+		objmain.put("sizelist",sizelist);
 
 		return objmain;
 	}
-	
+
 	
 	@RequestMapping(value = "/lineWiseMachineList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject lineWiseMachineList(ProductionPlan v) {
@@ -714,11 +717,12 @@ public class ProductionController {
 		//Iron Production
 		@RequestMapping(value = "/iron_production",method=RequestMethod.GET)
 		public ModelAndView iron_production(ModelMap map,HttpSession session) {
-
-			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PRODUCTION.getType()));
+			
+			
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_LAYOUT.getType()));
+			List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PRODUCTION.getType()));
 			ModelAndView view = new ModelAndView("production/iron-production");
-			view.addObject("productionPlanList",productionPlanList);
+			view.addObject("productionList",productionList);
 			view.addObject("layoutList",layoutList);
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
@@ -730,9 +734,11 @@ public class ProductionController {
 
 			List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_PRODUCTION.getType()));
+			List<ProcessInfo> processlist = registerService.getProcessList();
 			ModelAndView view = new ModelAndView("production/final-qc-production");
 			view.addObject("productionPlanList",productionPlanList);
 			view.addObject("layoutList",layoutList);
+			view.addObject("processlist",processlist);
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 		
@@ -795,6 +801,55 @@ public class ProductionController {
 			return objMain;
 		}
 
-	
+		//Poly Production
+		@RequestMapping(value = "/poly_production",method=RequestMethod.GET)
+		public ModelAndView poly_production(ModelMap map,HttpSession session) {
+
+			List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_PRODUCTION.getType()));
+			List<ProductionPlan> polyList = productionService.getPolyPackingDetails("1");
+
+			ModelAndView view = new ModelAndView("production/poly_production");
+			view.addObject("polyList",polyList);
+			view.addObject("layoutList",layoutList);
+
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+		
+		@RequestMapping(value = "/savePolyPackingDetails",method=RequestMethod.POST)
+		public @ResponseBody String savePolyPackingDetails(ProductionPlan v) {
+			
+			System.out.println("v swing");
+			String msg="Create Occure while saving information";
+
+			boolean flag= productionService.savePolyPackingDetails(v);
+
+			if(flag) {
+				msg="Saving information successfully";
+			}
+		
+			return msg; //JSP - /WEB-INF/view/index.jsp
+		}
+		
+		
+		@RequestMapping(value = "/printPolyDetails/{idList}")
+		public @ResponseBody ModelAndView printPolyDetails(ModelMap map,@PathVariable ("idList") String idList) {
+			
+			ModelAndView view=new ModelAndView("production/printPolyDetailsReport");
+			String id[] = idList.split("@");
+			map.addAttribute("buyerId", id[0]);
+			map.addAttribute("buyerorderId", id[1]);
+			map.addAttribute("styleId", id[2]);
+			map.addAttribute("itemId", id[3]);
+			
+			System.out.println("layoutDate "+id[4]);
+			map.addAttribute("layoutDate", id[4]);
+			map.addAttribute("layoutType", id[5]);
+			map.addAttribute("layoutName", id[6]);
+			map.addAttribute("layoutCategory", id[7]);
+
+			return view;
+		}
+		
+		
 }
 

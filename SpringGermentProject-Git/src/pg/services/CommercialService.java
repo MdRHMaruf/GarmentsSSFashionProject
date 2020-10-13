@@ -13,5 +13,7 @@ public interface CommercialService {
 	public boolean insertDeedOfContact(deedOfContacts deedcontact);
 	
 	public List<deedOfContacts> deedOfContractsList();
+	
+	public List<deedOfContacts> deedOfContractDetails(String id);
 
 }

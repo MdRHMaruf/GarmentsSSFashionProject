@@ -13,6 +13,7 @@ import pg.storeModel.AccessoriesReturn;
 import pg.storeModel.AccessoriesSize;
 import pg.storeModel.AccessoriesTransferIn;
 import pg.storeModel.AccessoriesTransferOut;
+import pg.storeModel.CuttingFabricsUsed;
 import pg.storeModel.FabricsIssue;
 import pg.storeModel.FabricsIssueReturn;
 import pg.storeModel.FabricsQualityControl;
@@ -164,5 +165,10 @@ public interface StoreDAO {
 		String deleteTransferIndSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesTransferIn> getAccessoriesTransferInList();
 		AccessoriesTransferIn getAccessoriesTransferInInfo(String issueTransectionId);
+		
+		//CuttingFabricsUsedRequisition
+		List<CuttingFabricsUsed> getCuttingUsedFabricsList(String cuttingEntryId);
+		boolean sendCuttingFabricsRequistion(CuttingFabricsUsed v);
+		List<CuttingFabricsUsed> getCuttingUsedFabricsRequisitionList(String cuttingEntryId);
 
 }

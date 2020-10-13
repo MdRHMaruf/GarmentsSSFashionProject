@@ -31,19 +31,21 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="type" value="<%=ProductionType.FINAL_QC_PRODUCTION.getType()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.FINAL_QC_LAYOUT.getType()%>">
+		<input type="hidden" id="passType" value="<%=ProductionType.FINAL_QC_PRODUCTION.getType()%>">
+			<input type="hidden" id="rejectType" value="<%=ProductionType.FINAL_QC_REJECT.getType()%>">
 	<input type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Final QC Production</h5>
+			<h5 class="text-center" style="display: inline;">Final QC Production & Reject</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
 			</button>
 			<button type="button" class="btn btn-outline-dark btn-sm"
-				data-toggle="modal" data-target="#finalQCListModal">
-				<i class="fa fa-search"></i>Final QC List
+				data-toggle="modal" data-target="#finishingListModal">
+				<i class="fa fa-search"></i>Final QC Production & Reject List
 			</button>
 		</header>
 		<hr class="my-1">
@@ -150,7 +152,36 @@
 		
 		
 		<div id="tableList">
-	 
+<!--  				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>Line</th>
+							<th>Style No</th>
+							<th>Daily Target</th>
+							<th>Hours Target</th>
+							<th>Hours</th>
+							<th>Sew.Sup Signature</th>
+							<th>Q.C.Sup Signature</th>
+							<th>08-09</th>
+							<th>09-10</th>
+							<th>10-11</th>
+							<th>11-12</th>
+							<th>12-01</th>
+							<th>11-12</th>
+							<th>12-01</th>
+							<th>02-03</th>
+							<th>03-04</th>
+							<th>04-05</th>
+							<th>05-06</th>
+							<th>06-07</th>
+							<th>Total</th>
+						</tr>
+					</thead>
+					<tbody id="production_plan">
+							
+					</tbody>	 -->
+
+				</table>	 
 		
 		</div>
 		
@@ -224,13 +255,13 @@
 	</div>
 </div>
 
-<div class="modal fade" id="finalQCListModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="finishingListModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="searchFinalQC" type="text" class="form-control"
+					<input id="searchFinishing" type="text" class="form-control"
 						placeholder="Search Final QC Production"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -267,11 +298,52 @@
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
 									<td id='layout${list.itemId}'>${list.productionDate}</td>
 									<td><i class="fa fa-search" style="cursor:pointer;"
-										onclick="searchProductionDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
 									<td><i class="fa fa-print" style="cursor:pointer;"
 										onclick="printProductionDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
 									</i></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+//
+<div class="modal fade" id="processListModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<h2>Process List</h2>
+				</div>
+				<button onclick="closeProcessAddEvent()" type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+					<table class="table table-hover table-bordered table-sm mb-0">
+						<thead>
+							<tr>
+								<th style='width:100px;'>SL#</th>
+								<th style='width:300px;'>Process Name</th>
+								<th style='width:120px;'>Process Value</th>
+							</tr>
+						</thead>
+						<tbody id="processList">
+							<c:forEach items="${processlist}" var="list"
+								varStatus="counter">
+								<tr class='procsslistitemrow' data-id='${list.processId}'>
+									<td style='width:100px;'>${counter.count}</td>
+									<td style='width:300px;'>${list.processName}</td>
+									<td style='width:120px;'> <input style='width:120px;'  type="number" class='form-control-sm processId-${list.processId}'/></td>
+									
 								</tr>
 							</c:forEach>
 						</tbody>

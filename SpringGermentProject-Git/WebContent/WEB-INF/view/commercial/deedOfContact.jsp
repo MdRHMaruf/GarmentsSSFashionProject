@@ -33,7 +33,7 @@
 							<input type="text" class="form-control-sm" id="contractId">
 						</div> -->
 						
-						
+						<input type="hidden" id="contractId" class="form-control-sm">
 						<label class="col-sm-1 p-0">Buyer Name</label>
 							<div class="col-sm-3">
 								<select id="buyerId" onchange="buyerWisePoLoad()" class="selectpicker form-control"
@@ -444,8 +444,8 @@
 
 						<div class="row mt-1">
 							<div class="col-sm-12 p-0">
-								<button id="btnSave" onclick="insert()" class="btn btn-sm btn-primary">Save</button>
-								<button id="btnEdit" class="btn btn-sm btn-dark">Edit</button>
+								<button id="save" value="1" onclick="insert(this)" class="btn btn-sm btn-primary">Save</button>
+								<button id="edit" value="2" onclick="insert(this)" class="btn btn-sm btn-dark">Edit</button>
 								<button id="btnRefresh" class="btn btn-sm btn-danger">Refresh</button>
 							</div>
 						</div>
@@ -484,6 +484,7 @@
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -494,6 +495,10 @@
 								<td >${contract.styleNo}</td>
 								<td >${contract.itemName}</td>
 								<td><i class="fa fa-search"
+									onclick="deedOfContractDetails(${contract.contractId})">
+									</i>
+								</td>
+								<td><i class="fa fa-print"
 									onclick="deedOfContractReport(${contract.contractId})">
 									</i>
 								</td>

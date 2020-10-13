@@ -5,8 +5,7 @@ function printLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) 
 	const layoutName = "Final QC Layout";
 	var url = `printLayoutInfo/${buyerId}@${buyerOrderId}@${styleId}@${itemId}@${layoutDate}@${type}@${layoutName}`;
 	window.open(url, '_blank');
-
-
+	
 }
 
 function setProductPlanInfo(buyerId, buyerOrderId, styleId, itemId, planQty) {
@@ -240,6 +239,7 @@ function setTotalQty(id) {
 
 }
 function saveAction() {
+	var type = $('#type').val();
 	var userId = $('#userId').val();
 	var buyerId = $('#buyerId').val();
 	var buyerOrderId = $('#buyerOrderId').val();
@@ -270,6 +270,9 @@ function saveAction() {
 
 			var lineId = $(".line-" + id).val();
 			var employeeId = $("#employee-" + id).val();
+			var rejectvalue=0;
+			var totalRejectQty=0;
+			
 
 			var proQty1 = parseFloat(($("#line-" + id + "-h1").val() == '' ? "0" : $("#line-" + id + "-h1").val()));
 			var proQty2 = parseFloat(($("#line-" + id + "-h2").val() == '' ? "0" : $("#line-" + id + "-h2").val()));
@@ -281,11 +284,11 @@ function saveAction() {
 			var proQty8 = parseFloat(($("#line-" + id + "-h8").val() == '' ? "0" : $("#line-" + id + "-h8").val()));
 			var proQty9 = parseFloat(($("#line-" + id + "-h9").val() == '' ? "0" : $("#line-" + id + "-h9").val()));
 			var proQty10 = parseFloat(($("#line-" + id + "-h10").val() == '' ? "0" : $("#line-" + id + "-h10").val()));
-
+			
 			var totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
-			var layoutValue = proQty1 + ":" + proQty2 + ":" + proQty3 + ":" + proQty4 + ":" + proQty5 + ":" + proQty6 + ":" + proQty7 + ":" + proQty8 + ":" + proQty9 + ":" + proQty10;
+			var layoutValue = type+":"+proQty1 + ":" + proQty2 + ":" + proQty3 + ":" + proQty4 + ":" + proQty5 + ":" + proQty6 + ":" + proQty7 + ":" + proQty8 + ":" + proQty9 + ":" + proQty10;
 
-			resultList[i] = employeeId + "*" + lineId + "*" + totalQty + "*" + layoutValue;
+			resultList[i] = employeeId + "*" + lineId + "*" + totalQty + "*"+totalRejectQty+"*"+ layoutValue+"*"+rejectvalue;
 			i++;
 		});
 		resultList = "[" + resultList + "]"

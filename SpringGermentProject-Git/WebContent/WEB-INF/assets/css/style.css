@@ -2900,11 +2900,11 @@ tr.hide-table-padding td {
   left:.75rem;
   top: 50%;
   transform: translate(0, -50%);
-  content: '-';
+  content: '- Size Entry';
 }
 .accordion-toggle.collapsed .expand-button:after
 {
-  content: '+';
+  content: '+ Size Entry';
 }
 
 .width-120{

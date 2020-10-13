@@ -25,4 +25,10 @@ public class CommercialServiceImpl implements CommercialService{
 		return commDao.deedOfContractsList();
 	}
 
+	@Override
+	public List<deedOfContacts> deedOfContractDetails(String id) {
+		// TODO Auto-generated method stub
+		return commDao.deedOfContractDetails( id);
+	}
+
 }
