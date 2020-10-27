@@ -63,7 +63,7 @@ function searchCuttingUsedFabrics(cuttingEntryId) {
 		data: {
 			cuttingEntryId: cuttingEntryId
 		},
-		url: './searchCuttingUsedFabricsrRequisition',
+		url: './searchCuttingUsedFabricsRequisition',
 		success: function (data) {
 			
 			//alert(data);

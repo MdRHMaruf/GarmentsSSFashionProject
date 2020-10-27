@@ -25,6 +25,7 @@ import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
 import pg.share.HibernateUtil;
 import pg.share.SizeValuesType;
+import pg.storeModel.AccessoriesSize;
 
 @Repository
 public class ProductionDAOImpl implements ProductionDAO{
@@ -2214,7 +2215,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx.begin();
 
 			int temp=0;
-			
+
 			String checksql="select StyleId from tbPolyPackingDetails where PurchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"'  and date='"+v.getLayoutDate()+"' and Type='"+v.getLayoutName()+"'";
 
 			List<?> list = session.createSQLQuery(checksql).list();
@@ -2368,6 +2369,141 @@ public class ProductionDAOImpl implements ProductionDAO{
 			{	
 
 				Object[] element = (Object[]) iter.next();
+				CuttingInformation cutting = new CuttingInformation(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString());
+				dataList.add(cutting);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<ProductionPlan> searchCuttingPlanQuantity(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.cuttingAutoId,c.BuyerId,c.purchaseOrder,c.StyleId,sc.StyleNo,c.ItemId,id.itemname,a.ColorId, color.Colorname,b.SizeGroupId,b.sizeId,ss.sizeName,b.sizeQuantity,isnull(b.status,'') as status\r\n" + 
+					"from TbCuttingInformationDetails a\r\n" + 
+					"join tbSizeValues b \r\n" + 
+					"on a.cuttingAutoId=b.linkedAutoId and b.type = '"+SizeValuesType.CUTTING_QTY.getType()+"'\r\n" + 
+					"join TbCuttingInformationSummary c \r\n" + 
+					"on a.CuttingEntryId=c.CuttingEntryId\r\n" + 
+					"join tbstyleSize ss \r\n" + 
+					"on b.sizeid= ss.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on c.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on c.ItemId = id.itemid\r\n" + 
+					"left join tbColors color\r\n" + 
+					"on a.ColorId = color.ColorId\r\n" + 
+					"where a.CuttingEntryId='"+cuttingEntryId+"' and a.type = 'Cutting' and (a.status is null or a.status = 0 or a.status = 1 or a.status = 2) \r\n" + 
+					"order by a.cuttingAutoId,a.sizeGroupId,ss.sortingNo";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(),element[13].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	
+	
+	@Override
+	public List<ProductionPlan> getSendCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.cuttingAutoId,c.BuyerId,c.purchaseOrder,c.StyleId,sc.StyleNo,c.ItemId,id.itemname,a.ColorId, color.Colorname,b.SizeGroupId,b.sizeId,ss.sizeName,b.sizeQuantity,isnull(b.status,'') as status\r\n" + 
+					"from TbCuttingInformationDetails a\r\n" + 
+					"join tbSizeValues b \r\n" + 
+					"on a.cuttingAutoId=b.linkedAutoId and b.type = '"+SizeValuesType.CUTTING_QTY.getType()+"'\r\n" + 
+					"join TbCuttingInformationSummary c \r\n" + 
+					"on a.CuttingEntryId=c.CuttingEntryId\r\n" + 
+					"join tbstyleSize ss \r\n" + 
+					"on b.sizeid= ss.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on c.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on c.ItemId = id.itemid\r\n" + 
+					"left join tbColors color\r\n" + 
+					"on a.ColorId = color.ColorId\r\n" + 
+					"where a.CuttingEntryId='"+cuttingEntryId+"' and a.type = 'Cutting' and (a.status = 2 or a.status = 1) \r\n" + 
+					"order by a.cuttingAutoId,a.sizeGroupId,ss.sortingNo";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(),element[13].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<CuttingInformation> getSendCuttingBodyInfoList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CuttingInformation> dataList=new ArrayList<CuttingInformation>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.CuttingEntryId,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleName,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,a.CuttingNo,convert(varchar,a.CuttingDate,23) as CuttingDate,count(a.CuttingEntryId) as cnt\r\n" + 
+					"from TbCuttingInformationSummary a\r\n" + 
+					"join TbCuttingInformationDetails cd\r\n" + 
+					"on a.CuttingEntryId = cd.CuttingEntryId and (cd.status = 1 or cd.status = 2)\r\n" + 
+					"group by a.CuttingEntryId,a.buyerId,a.purchaseOrder,a.StyleId,a.ItemId,a.CuttingNo,a.CuttingDate";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
 
 				dataList.add(new CuttingInformation(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 			}
@@ -2383,6 +2519,246 @@ public class ProductionDAOImpl implements ProductionDAO{
 			session.close();
 		}
 		return dataList;
+	}
+	
+	@Override
+	public String sendCuttingPlanBodyQuantity(String sendItemList,String userId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if(sendItemList.trim().length()>0) {
+				String[] sizeLists = sendItemList.split("#");
+				
+				String id,linkAutoId,sizeId,sizeStatus;
+				String prevLinkAutoId="";
+				for (String item : sizeLists) {
+					
+					String[] itemProperty = item.split(",");
+					id = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+					linkAutoId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+					sizeId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+					sizeStatus = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+					String productionSql="update tbSizeValues set status = '"+sizeStatus+"',sendEntryTime=CURRENT_TIMESTAMP,senderUserId = '"+userId+"' where sizeId = '"+sizeId+"' and linkedAutoId = '"+linkAutoId+"' and type='"+SizeValuesType.CUTTING_QTY.getType()+"' and (status is null or status = 0 or status = '1')";
+					session.createSQLQuery(productionSql).executeUpdate();
+					
+					if(!prevLinkAutoId.equals(linkAutoId)) {
+						productionSql= "update TbCuttingInformationDetails  set status = '1' where cuttingAutoId='"+linkAutoId+"' and type = 'Cutting' and (status is null or status = 0 or status = 1)";
+						session.createSQLQuery(productionSql).executeUpdate();
+						prevLinkAutoId = linkAutoId;
+					}
+					
+				}		
+				
+				
+			}	
+			tx.commit();
+			return "Successful";
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return "Something Wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "Something Wrong";
+	}
+	
+	@Override
+	public List<ProductionPlan> searchSendCuttingBodyQuantity(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.cuttingAutoId,c.BuyerId,c.purchaseOrder,c.StyleId,sc.StyleNo,c.ItemId,id.itemname,a.ColorId, color.Colorname,b.SizeGroupId,b.sizeId,ss.sizeName,b.sizeQuantity,isnull(b.status,'') as status\r\n" + 
+					"from TbCuttingInformationDetails a\r\n" + 
+					"join tbSizeValues b \r\n" + 
+					"on a.cuttingAutoId=b.linkedAutoId and b.type = '"+SizeValuesType.CUTTING_QTY.getType()+"'\r\n" + 
+					"join TbCuttingInformationSummary c \r\n" + 
+					"on a.CuttingEntryId=c.CuttingEntryId\r\n" + 
+					"join tbstyleSize ss \r\n" + 
+					"on b.sizeid= ss.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on c.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on c.ItemId = id.itemid\r\n" + 
+					"left join tbColors color\r\n" + 
+					"on a.ColorId = color.ColorId\r\n" + 
+					"where a.CuttingEntryId='"+cuttingEntryId+"' and a.type = 'Cutting' and ( a.status = 2 or a.status = 1) \r\n" + 
+					"order by a.cuttingAutoId,a.sizeGroupId,ss.sortingNo";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(),element[13].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	
+	@Override
+	public List<ProductionPlan> getReceiveCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.cuttingAutoId,c.BuyerId,c.purchaseOrder,c.StyleId,sc.StyleNo,c.ItemId,id.itemname,a.ColorId, color.Colorname,b.SizeGroupId,b.sizeId,ss.sizeName,b.sizeQuantity,isnull(b.status,'') as status\r\n" + 
+					"from TbCuttingInformationDetails a\r\n" + 
+					"join tbSizeValues b \r\n" + 
+					"on a.cuttingAutoId=b.linkedAutoId and b.type = '"+SizeValuesType.CUTTING_QTY.getType()+"'\r\n" + 
+					"join TbCuttingInformationSummary c \r\n" + 
+					"on a.CuttingEntryId=c.CuttingEntryId\r\n" + 
+					"join tbstyleSize ss \r\n" + 
+					"on b.sizeid= ss.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on c.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on c.ItemId = id.itemid\r\n" + 
+					"left join tbColors color\r\n" + 
+					"on a.ColorId = color.ColorId\r\n" + 
+					"where a.CuttingEntryId='"+cuttingEntryId+"' and a.type = 'Cutting' and (a.status = 2 or a.status = 1) \r\n" + 
+					"order by a.cuttingAutoId,a.sizeGroupId,ss.sortingNo";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(),element[13].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<CuttingInformation> getReceiveCuttingBodyInfoList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CuttingInformation> dataList=new ArrayList<CuttingInformation>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.CuttingEntryId,(select Name from tbBuyer where id=a.BuyerId) as BuyerName,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleName,(select ItemName from tbItemDescription where ItemId=a.ItemId) as ItemName,a.CuttingNo,convert(varchar,a.CuttingDate,23) as CuttingDate,count(a.CuttingEntryId) as cnt\r\n" + 
+					"from TbCuttingInformationSummary a\r\n" + 
+					"join TbCuttingInformationDetails cd\r\n" + 
+					"on a.CuttingEntryId = cd.CuttingEntryId and  cd.status = 2\r\n" + 
+					"group by a.CuttingEntryId,a.buyerId,a.purchaseOrder,a.StyleId,a.ItemId,a.CuttingNo,a.CuttingDate";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CuttingInformation(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public String receiveCuttingPlanBodyQuantity(String sendItemList,String userId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if(sendItemList.trim().length()>0) {
+				String[] sizeLists = sendItemList.split("#");
+				
+				String id,linkAutoId,sizeId,sizeStatus;
+				String prevLinkAutoId="";
+				for (String item : sizeLists) {
+					
+					String[] itemProperty = item.split(",");
+					id = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+					linkAutoId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+					sizeId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+					sizeStatus = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+					String productionSql="update tbSizeValues set status = '"+sizeStatus+"',sendEntryTime=CURRENT_TIMESTAMP,senderUserId = '"+userId+"' where sizeId = '"+sizeId+"' and linkedAutoId = '"+linkAutoId+"' and type='"+SizeValuesType.CUTTING_QTY.getType()+"' and ( status = 2 or status = 1)";
+					session.createSQLQuery(productionSql).executeUpdate();
+					
+					if(!prevLinkAutoId.equals(linkAutoId)) {
+						productionSql= "update TbCuttingInformationDetails  set status = '2' where cuttingAutoId='"+linkAutoId+"' and type = 'Cutting' and ( status = 2 or status = 1)";
+						session.createSQLQuery(productionSql).executeUpdate();
+						prevLinkAutoId = linkAutoId;
+					}
+					
+				}		
+				
+				
+			}	
+			tx.commit();
+			return "Successful";
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return "Something Wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "Something Wrong";
 	}
 
 

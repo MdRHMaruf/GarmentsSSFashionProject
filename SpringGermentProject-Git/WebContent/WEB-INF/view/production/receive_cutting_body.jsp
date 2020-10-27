@@ -32,41 +32,39 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="poNo" value="0">
-		<input type="hidden" id="cuttingEntryId" value="0">
-	<input type="hidden"
-		id="indentId" value="0"> 
-		<input type="hidden" id="styleId" value="0">
-		<input type="hidden" id="styleItemId" value="0">
-		<input type="hidden" id="itemColorId" value="0">
-		<input type="hidden" id="fabricsColorId" value="0">
-		<input type="hidden" id="fabricsId" value="0"> 
-		<input type="hidden" id="unitId" value="0"> 
-		
-		<input type="hidden" id="fabricsRate" value="0">
+	<input type="hidden" id="poNo" value="0"> <input type="hidden"
+		id="cuttingEntryId" value="0"> <input type="hidden"
+		id="indentId" value="0"> <input type="hidden" id="styleId"
+		value="0"> <input type="hidden" id="styleItemId" value="0">
+	<input type="hidden" id="itemColorId" value="0"> <input
+		type="hidden" id="fabricsColorId" value="0"> <input
+		type="hidden" id="fabricsId" value="0"> <input type="hidden"
+		id="unitId" value="0"> <input type="hidden" id="fabricsRate"
+		value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Cutting Fabrics Issue</h5>
+			<h5 class="text-center" style="display: inline;">Receive Cutting
+				Body</h5>
 		</header>
 		<hr class="my-1">
 		<div class="row">
-			
+
 			<div class="col-md-5">
 				<div class="row">
 					<div class="col-md-6 px-1">
-						<u><h5>Plan Requisition </h5></u>
+						<u><h5>Cutting Plan</h5></u>
 					</div>
 					<div class="col-md-6">
 						<button id="itemSearchBtn" type="button"
 							class="btn btn-outline-dark btn-sm form-control-sm"
-							data-toggle="modal" data-target="#itemSearchModal">
+							data-toggle="modal" data-target="#exampleCuttingModal">
 							<i class="fa fa-search"></i>
 						</button>
 						<button id="itemSearchBtn" type="button"
 							class="btn btn-outline-dark btn-sm form-control-sm"
-							data-toggle="modal" data-target="#requisitionlist">
-							<i class="fa fa-search">Issue List</i>
+							data-toggle="modal" data-target="#receiveCuttingBodyInfoList">
+							<i class="fa fa-search">Receive Body List</i>
 						</button>
 					</div>
 				</div>
@@ -96,19 +94,31 @@
 						<b><label id="itemName"></label></b>
 					</div>
 				</div>
-	
+
 
 			</div>
 		</div>
 
 		<hr class="my-1">
-			<div id="tableList">
-
+		<div class="row">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>Item Color</th>
+							<th>Size Name</th>
+							<th>Quantity</th>
+							<th>Receive <input type="checkbox" id="allCheck" onclick="setCheck()" /></th>
+						</tr>
+					</thead>
+					<tbody id="itemSizeList">
+						
+					</tbody>
+				</table>
 			</div>
 		<div class="row">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button id="btnSendRequisition" type="button" class="btn btn-primary btn-sm"
-					onclick="submitAction()">
+				<button id="btnReceiveRequisition" type="button"
+					class="btn btn-primary btn-sm" onclick="submitAction()">
 					<i class="fas fa-save"></i> Issue
 				</button>
 				<button id="btnRefresh" type="button"
@@ -160,30 +170,25 @@
 </div>
 
 <!-- Item Search Modal -->
-<div class="modal fade" id="itemSearchModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleCuttingModal" tabindex="-1"
+	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
-			<div class="modal-header py-2">
-				<div class="input-group input-group-sm">
-
-					<input id="searchEverything" type="text" class="form-control"
-						placeholder="Search Every Thing" aria-label="Recipient's username"
-						aria-describedby="basic-addon2">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="cuttingSearch" type="text" class="form-control"
+						placeholder="Search Production Plan"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
-						<button class="form-control-sm" id="searchRefreshBtn">
-							<i class="fa fa-refresh" style="cursor: pointer;"></i>
-						</button>
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
-
-
 				</div>
+
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-		
 			<div class="modal-body">
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
@@ -193,20 +198,24 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
+							<th>Cutting No</th>
+							<th>Cutting Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
-						<c:forEach items="${cuttingReqList}" var="list"
+						<c:forEach items="${sendCuttingBodyInfoList}" var="list"
 							varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
-								<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
+								<td>${list.buyerName}</td>
 								<td>${list.purchaseOrder}</td>
-								<td id='styleId${list.styleId}'>${list.styleNo}</td>
-								<td id='itemId${list.itemId}'>${list.itemName}</td>
-								<td><i class="fa fa-search"
-									onclick="searchCuttingUsedFabrics(${list.cuttingEntryId})">
+								<td>${list.styleNo}</td>
+								<td>${list.itemName}</td>
+								<td>${list.cuttingNo}</td>
+								<td>${list.cuttingDate}</td>
+								<td><i class="fa fa-search" style="cursor:pointer;"
+									onclick="searchCuttingPlan('${list.cuttingEntryId}')">
 								</i></td>
 							</tr>
 						</c:forEach>
@@ -217,17 +226,16 @@
 		</div>
 	</div>
 </div>
-
-<div class="modal fade" id="requisitionlist" tabindex="-1" role="dialog"
+<div class="modal fade" id="receiveCuttingBodyInfoList" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header py-2">
 				<div class="input-group input-group-sm">
 
-					<input id="requisitionSearchEverything" type="text" class="form-control"
-						placeholder="Search Every Thing" aria-label="Recipient's username"
-						aria-describedby="basic-addon2">
+					<input id="requisitionSearchEverything" type="text"
+						class="form-control" placeholder="Search Every Thing"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<button class="form-control-sm" id="requisitionSearchRefreshBtn">
 							<i class="fa fa-refresh" style="cursor: pointer;"></i>
@@ -241,7 +249,7 @@
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
-		
+
 			<div class="modal-body">
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
@@ -251,11 +259,12 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
+							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span>Print</th>
 						</tr>
 					</thead>
-					<tbody id="poList">
-<%-- 						<c:forEach items="${cuttingReqList}" var="list"
+					<tbody id="receiveInfoList">
+						 <c:forEach items="${receiveCuttingBodyInfoList}" var="list"
 							varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
@@ -263,11 +272,14 @@
 								<td>${list.purchaseOrder}</td>
 								<td id='styleId${list.styleId}'>${list.styleNo}</td>
 								<td id='itemId${list.itemId}'>${list.itemName}</td>
-								<td><i class="fa fa-print"
-									onclick="printCuttingUsedFabricsRequisition(${list.cuttingEntryId})">
+								<td><i class="fa fa-search" style="cursor:pointer;"
+									onclick="searchCuttingPlan('${list.cuttingEntryId}')">
+								</i></td>
+								<td><i class="fa fa-print" style="cursor:pointer;"
+									onclick="printReceiveCuttingBody(${list.cuttingEntryId})">
 								</i></td>
 							</tr>
-						</c:forEach> --%>
+						</c:forEach> 
 					</tbody>
 				</table>
 			</div>
@@ -279,4 +291,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/cutting-fabrics-issue.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/production/receive-cutting-body.js"></script>

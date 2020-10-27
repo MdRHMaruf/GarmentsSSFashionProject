@@ -14,7 +14,7 @@ public class AccessoriesQualityControl {
 	String supplierId;
 	String checkBy;
 	String departmentId;
-	String rollList;
+	String sizeList;
 	List<AccessoriesSize> accessoriesSizeList;
 	String userId;
 	public AccessoriesQualityControl() {}
@@ -96,18 +96,18 @@ public class AccessoriesQualityControl {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	public String getRollList() {
-		return rollList;
+	public String getSizeList() {
+		return sizeList;
 	}
-	public void setRollList(String rollList) {
+	public void setSizeList(String sizeList) {
 		try {
-			System.out.println(rollList);
-			if(rollList.trim().length()>0) {
-				String[] rollLists = rollList.split("#");
+			System.out.println(sizeList);
+			if(sizeList.trim().length()>0) {
+				String[] sizeLists = sizeList.split("#");
 				List<AccessoriesSize> list = new ArrayList<AccessoriesSize>();
 				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId,remarks,rackName,binName,userId;
 				double unitQty; int qcPassedType;
-				for (String item : rollLists) {
+				for (String item : sizeLists) {
 					String[] itemProperty = item.split(",");
 
 					autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
@@ -128,11 +128,10 @@ public class AccessoriesQualityControl {
 					userId = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
 					list.add(new AccessoriesSize(autoId, transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsColorId,rollId,unitId ,unitQty,rackName,binName,remarks, qcPassedType, false,userId));
 				}
-
 				this.accessoriesSizeList = list;
 			}
 			
-			this.rollList = rollList;
+			this.sizeList = sizeList;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

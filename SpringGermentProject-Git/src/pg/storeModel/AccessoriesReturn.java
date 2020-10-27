@@ -13,7 +13,7 @@ public class AccessoriesReturn {
 	String supplierName;
 	String remarks;
 	String departmentId;
-	String rollList;
+	String sizeList;
 	List<AccessoriesSize> accessoriesSizeList;
 	String userId;
 	
@@ -74,19 +74,19 @@ public class AccessoriesReturn {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	public String getRollList() {
-		return rollList;
+	public String getSizeList() {
+		return sizeList;
 	}
-	public void setRollList(String rollList) {
+	public void setSizeList(String sizeList) {
 		try {
-			System.out.println(rollList);
-			if(rollList.trim().length()>0) {
-				String[] rollLists = rollList.split("#");
+			System.out.println(sizeList);
+			if(sizeList.trim().length()>0) {
+				String[] sizeLists = sizeList.split("#");
 				List<AccessoriesSize> list = new ArrayList<AccessoriesSize>();
 				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,supplierRollId,unitId,unit,userId,rackName,binName;
 				double qcReturnQty,unitQty,balanceQty; int qcPassedType;
 				boolean isReturn;
-				for (String item : rollLists) {
+				for (String item : sizeLists) {
 					String[] itemProperty = item.split(",");
 					autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 					transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
@@ -113,7 +113,7 @@ public class AccessoriesReturn {
 				this.accessoriesSizeList = list;
 			}
 			
-			this.rollList = rollList;
+			this.sizeList = sizeList;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

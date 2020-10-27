@@ -12,7 +12,7 @@ public class AccessoriesReceive {
 	String grnNo;
 	String grnDate;
 	String location;
-	String rollList;
+	String sizeList;
 	String supplierId;
 	String challanNo;
 	String challanDate;
@@ -25,7 +25,7 @@ public class AccessoriesReceive {
 	public AccessoriesReceive() {}
 
 	public AccessoriesReceive(String autoId, String transectionId, String grnNo, String grnDate, String location,
-			String rollList, String supplierId, String challanNo, String challanDate, String remarks, String preparedBy,
+			String sizeList, String supplierId, String challanNo, String challanDate, String remarks, String preparedBy,
 			String userId) {
 		super();
 		this.autoId = autoId;
@@ -33,7 +33,7 @@ public class AccessoriesReceive {
 		this.grnNo = grnNo;
 		this.grnDate = grnDate;
 		this.location = location;
-		this.rollList = rollList;
+		this.sizeList = sizeList;
 		this.supplierId = supplierId;
 		this.challanNo = challanNo;
 		this.challanDate = challanDate;
@@ -139,20 +139,20 @@ public class AccessoriesReceive {
 		this.accessoriesSizeList = accessoriesSizeList;
 	}
 
-	public String getRollList() {
-		return rollList;
+	public String getSizeList() {
+		return sizeList;
 	}
 
-	public void setRollList(String rollList) {
+	public void setSizeList(String sizeList) {
 		try {
-			System.out.println(rollList);
-			if(rollList.trim().length()>0) {
-				String[] rollLists = rollList.split("#");
+			System.out.println(sizeList);
+			if(sizeList.trim().length()>0) {
+				String[] sizeLists = sizeList.split("#");
 				List<AccessoriesSize> list = new ArrayList<AccessoriesSize>();
-				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,supplierRollId,unitId,unit,rackName,binName;
+				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,accessoriesId,accessoriesName,accessoriesColorId,accessoriesColorName,rollId,supplierRollId,unitId,unit,rackName,binName;
 				double unitQty,qcPassedQty,balanceQty;
 				int qcPassedType=0;
-				for (String item : rollLists) {
+				for (String item : sizeLists) {
 					System.out.println(item);
 					String[] itemProperty = item.split(",");
 					autoId="";
@@ -161,10 +161,10 @@ public class AccessoriesReceive {
 					styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
 					itemId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
 					itemColorId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
-					fabricsId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
-					fabricsName = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();;
-					fabricsColorId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
-					fabricsColorName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();;
+					accessoriesId = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+					accessoriesName = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();;
+					accessoriesColorId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+					accessoriesColorName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();;
 					rollId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
 					supplierRollId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
 					unitId = itemProperty[10].substring(itemProperty[10].indexOf(":")+2).trim();
@@ -175,13 +175,13 @@ public class AccessoriesReceive {
 					binName = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
 					qcPassedType = Integer.valueOf(itemProperty[15].substring(itemProperty[15].indexOf(":")+1).trim());
 
-					list.add(new AccessoriesSize(autoId, transectionId, purchaseOrder, styleId,"Style No", itemId,"item Name" ,itemColorId,"item color", fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId,supplierRollId, unitId,"unitName", balanceQty,unitQty, rackName, binName,qcPassedType));
+					list.add(new AccessoriesSize(autoId, transectionId, purchaseOrder, styleId,"Style No", itemId,"item Name" ,itemColorId,"item color", accessoriesId,accessoriesName, accessoriesColorId,accessoriesColorName, rollId,supplierRollId, unitId,"unitName", balanceQty,unitQty, rackName, binName,qcPassedType));
 				}
 
 				this.accessoriesSizeList = list;
 				
 			}
-			this.rollList = rollList;
+			this.sizeList = sizeList;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

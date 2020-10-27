@@ -66,6 +66,7 @@ public class ProductionPlan {
 	String colorName="";
 	String employeeId="";
 	String proudctionType="";
+	String status="";
 
 	public ProductionPlan() {
 		
@@ -245,6 +246,22 @@ public class ProductionPlan {
 		this.lineName=LineName;
 	}
 
+	public ProductionPlan(String autoId,String buyerId,String purchaseOrder,String styleId,String styleNo,String itemId,String itemName,String colorId,String colorName,String sizeGroupId,String sizeId,String sizeName,String planQty,String status) {
+		this.autoId = autoId;
+		this.buyerId = buyerId;
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleNo = styleNo;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.colorId = colorId;
+		this.colorName = colorName;
+		this.sizeGroupId = sizeGroupId;
+		this.sizeId = sizeId;
+		this.sizeName = sizeName;
+		this.planQty = planQty;
+		this.status = status;
+	}
 
 	public ProductionPlan(String BuyerName, String BuyerId, String BuyerOrderId, String PurchaseOrder, String StyleNo, String StyleId,
 			String ItemName, String ItemId, String PlanQty, String DailyTarget, String LineTarget, String HourlryTarget,String Hours,String LineId,String LineName) {
@@ -616,6 +633,12 @@ public class ProductionPlan {
 		this.total = total;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getDate() {
 		return date;
 	}
