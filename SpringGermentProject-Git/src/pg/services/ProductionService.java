@@ -67,7 +67,7 @@ public interface ProductionService {
 	List<ProductionPlan> getLayoutPlanDetails(String string);
 
 	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
-	
+
 	//Sewing
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 
@@ -76,16 +76,27 @@ public interface ProductionService {
 	List<ProductionPlan> getSewingLayoutLineProduction(ProductionPlan v);
 
 	boolean saveSewingProductionDetails(ProductionPlan v);
-	
+
 	//Finishing
-		List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
-		String editLayoutLineData(ProductionPlan productionPlan);
+	List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
+	String editLayoutLineData(ProductionPlan productionPlan);
 
-		boolean savePolyPackingDetails(ProductionPlan v);
+	boolean savePolyPackingDetails(ProductionPlan v);
 
-		List<ProductionPlan> getPolyPackingDetails(String string);
+	List<ProductionPlan> getPolyPackingDetails(String string);
 
-		List<CuttingInformation> getCuttingRequisitionList();
+	List<CuttingInformation> getCuttingRequisitionList();
 
+	//send cutting body
+	List<ProductionPlan> searchCuttingPlanQuantity(String cuttingEntryId,String sizeGroupId);
+	List<ProductionPlan> getSendCuttingBodyList(String cuttingEntryId,String sizeGroupId);
+	public List<CuttingInformation> getSendCuttingBodyInfoList();
+	String sendCuttingPlanBodyQuantity(String sendItemList,String userId);
+
+	//receive Cutting Body...
+	List<ProductionPlan> searchSendCuttingBodyQuantity(String cuttingEntryId,String sizeGroupId);
+	List<ProductionPlan> getReceiveCuttingBodyList(String cuttingEntryId,String sizeGroupId);
+	public List<CuttingInformation> getReceiveCuttingBodyInfoList();
+	String receiveCuttingPlanBodyQuantity(String sendItemList,String userId);
 }
 

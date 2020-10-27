@@ -113,6 +113,7 @@ public interface StoreDAO {
 		String deleteReceiveSizeFromTransaction(AccessoriesSize accessoriesSize);
 		List<AccessoriesReceive> getAccessoriesReceiveList();
 		AccessoriesReceive getAccessoriesReceiveInfo(String transectionId);
+		List<AccessoriesSize> getAccessoriesSizeListByAccessories(List<AccessoriesIndent> accessorisList);
 
 		//Accessories Quality Control
 		boolean submitAccessoriesQC(AccessoriesQualityControl accessoriesReceive);
@@ -134,6 +135,8 @@ public interface StoreDAO {
 
 		//Accessories Issue
 		List<AccessoriesSize> getAvailableAccessoriesSizeListInDepartment(String departmentId);
+		List<AccessoriesSize> getRequisitionAccessoriesList(String cuttingEntryId,String departmentId);
+		List<AccessoriesSize> getRequisitionAccessoriesSizeList(String cuttingEntryId,String accessoriesIdList,String departmentId);
 		boolean submitAccessoriesIssue(AccessoriesIssue accessoriesIssue);
 		boolean editAccessoriesIssue(AccessoriesIssue accessoriesIssue);
 		String editIssuedSizeInTransaction(AccessoriesSize accessoriesSize);
@@ -169,6 +172,7 @@ public interface StoreDAO {
 		//CuttingFabricsUsedRequisition
 		List<CuttingFabricsUsed> getCuttingUsedFabricsList(String cuttingEntryId);
 		boolean sendCuttingFabricsRequistion(CuttingFabricsUsed v);
-		List<CuttingFabricsUsed> getCuttingUsedFabricsRequisitionList(String cuttingEntryId);
+		List<FabricsRoll> getCuttingUsedFabricsRequisitionList(String cuttingEntryId,String departmentId);
+		boolean updateFabricRequisitionStatus(String requisitionNo,String requisitionStatus);
 
 }

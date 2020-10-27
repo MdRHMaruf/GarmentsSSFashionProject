@@ -1,5 +1,6 @@
 package pg.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,7 @@ import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.proudctionModel.CuttingInformation;
+import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Department;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.SupplierModel;
@@ -291,7 +293,9 @@ public class StoreController {
 	public ModelAndView fabrics_issue(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("store/fabrics-issue");
 		List<Department> departmentList = registerService.getDepartmentList();
+		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
 		map.addAttribute("departmentList",departmentList);
+		view.addObject("cuttingReqList",cuttingReqList);
 		return view; 
 	}
 
@@ -304,10 +308,13 @@ public class StoreController {
 	}
 
 	@RequestMapping(value = "/submitFabricsIssue",method=RequestMethod.POST)
-	public @ResponseBody JSONObject submitFabricsIssue(FabricsIssue	fabricsIssue) {
+	public @ResponseBody JSONObject submitFabricsIssue(FabricsIssue	fabricsIssue,String requisitionNo,String requisitionStatus) {
 		System.out.println("it'Execute");
 		JSONObject objmain = new JSONObject();
 		if(storeService.submitFabricsIssue(fabricsIssue)) {
+			if(!requisitionNo.equals("0")) {
+				storeService.updateFabricRequisitionStatus(requisitionNo,requisitionStatus);
+			}
 			objmain.put("result", "successfull");
 		}else {
 			objmain.put("result", "duplicate");
@@ -595,6 +602,39 @@ public class StoreController {
 		mainObject.put("purchaseOrderList", purchaseOrderList);
 		return mainObject;
 	}
+	
+	@RequestMapping(value = "/getAccessoriesSizeList",method = RequestMethod.GET)
+	public JSONObject getAccessoriesSizeList(String accessoriesList) {
+		JSONObject mainObject = new JSONObject();	
+		
+		List<AccessoriesIndent> list = new ArrayList<>();
+		try {
+				String[] rollLists = accessoriesList.split("#");	
+				String autoId,transectionId,purchaseOrder,styleId,styleName,itemId,itemName,itemColorId,itemColorName,accessoriesId,accessoriesName,accessoriesColorId,accessoriesColorName;
+				double qcReturnQty,unitQty,balanceQty; int qcPassedType;
+				boolean isReturn;
+				for (String item : rollLists) {
+					String[] itemProperty = item.split(",");
+					purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+					styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+					styleName = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+					itemId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+					itemName = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+					itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+					itemColorName = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+					accessoriesId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+					accessoriesName = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+					accessoriesColorId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+					accessoriesColorName = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();;
+					list.add(new AccessoriesIndent(purchaseOrder, styleId, styleName, itemId, itemName, itemColorId, itemColorName, accessoriesId, accessoriesName, accessoriesColorId, accessoriesColorName));
+				}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		List<AccessoriesSize> accessoriesSizeList = storeService.getAccessoriesSizeListByAccessories(list);	
+		mainObject.put("accessoriesSizeList", accessoriesSizeList);
+		return mainObject;
+	}
 
 
 	@RequestMapping(value = "/getAccessoriesIndentInfo", method = RequestMethod.GET)
@@ -720,8 +760,8 @@ public class StoreController {
 		return view; 
 	}
 
-	@RequestMapping(value = "/getAccessoriesSizeList", method = RequestMethod.GET)
-	public JSONObject getAccessoriesSizeList(String supplierId) {
+	@RequestMapping(value = "/getAccessoriesSizeListBySupplierId", method = RequestMethod.GET)
+	public JSONObject getAccessoriesSizeListBySupplier(String supplierId) {
 		JSONObject mainObject = new JSONObject();
 		List<AccessoriesSize> accessoriesSizeList = storeService.getAccessoriesSizeListBySupplier(supplierId);
 		mainObject.put("accessoriesSizeList",accessoriesSizeList);
@@ -800,8 +840,27 @@ public class StoreController {
 	public ModelAndView accessories_issue(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("store/accessories-issue");
 		List<Department> departmentList = registerService.getDepartmentList();
+		List<CuttingInformation> requisitionList =  productionService.getReceiveCuttingBodyInfoList();
 		map.addAttribute("departmentList",departmentList);
+		map.addAttribute("requisitionList",requisitionList);
 		return view; 
+	}
+	
+	
+	@RequestMapping(value = "/getRequisitionAccessoriesList", method = RequestMethod.GET)
+	public JSONObject getRequisitionAccessoriesList(String cuttingEntryId,String departmentId) {
+		JSONObject mainObject = new JSONObject();
+		List<AccessoriesSize> accessoriesList = storeService.getRequisitionAccessoriesList(cuttingEntryId,departmentId);
+		mainObject.put("accessoriesList",accessoriesList);
+		return mainObject;
+	}
+	
+	@RequestMapping(value = "/getRequisitionAccessoriesSizeList", method = RequestMethod.GET)
+	public JSONObject getRequisitionAccessoriesSizeList(String cuttingEntryId,String accessoriesIdList,String departmentId) {
+		JSONObject mainObject = new JSONObject();
+		List<AccessoriesSize> accessoriesSizeList = storeService.getRequisitionAccessoriesSizeList(cuttingEntryId,accessoriesIdList,departmentId);
+		mainObject.put("accessoriesSizeList",accessoriesSizeList);
+		return mainObject;
 	}
 
 	@RequestMapping(value = "/getAvailableAccessoriesSizeList", method = RequestMethod.GET)
@@ -1295,14 +1354,16 @@ public class StoreController {
 		return view; 
 	}
 	
-	@RequestMapping(value = "/searchCuttingUsedFabricsrRequisition",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchCuttingUsedFabricsrRequisition(String cuttingEntryId) {
+	@RequestMapping(value = "/searchCuttingUsedFabricsRequisition",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchCuttingUsedFabricsRequisition(String cuttingEntryId,String departmentId) {
 		JSONObject objmain = new JSONObject();
 
-		List<CuttingFabricsUsed> List= storeService.getCuttingUsedFabricsRequisitionList(cuttingEntryId);
+		List<FabricsRoll> fabricsRollList= storeService.getCuttingUsedFabricsRequisitionList(cuttingEntryId,departmentId);
 
-		objmain.put("result", List);
+		objmain.put("fabricsRollList", fabricsRollList);
 		
 		return objmain;
 	}
+	
+	
 }

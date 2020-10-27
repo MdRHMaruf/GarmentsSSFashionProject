@@ -33,82 +33,84 @@
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 	<input type="hidden" id="poNo" value="0">
-	<input type="hidden" id="requisitionNo" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Issue</h5>
+			<h5 class="text-center" style="display: inline;">Accessories Return</h5>
 		</header>
 		<hr class="my-1">
 		<div class="row">
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="issueId"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Issue ID</label>
+					<label for="returnId"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Return
+						ID</label>
 					<div class="input-group col-md-9 px-0">
 						<div class="input-group-append width-100">
-							<input id="issueTransactionId" type="text"
+							<input id="returnTransactionId" type="text"
 								class=" form-control-sm" readonly>
-							<button id="newFabricsIssueBtn" type="button"
+							<button id="newAccessoriesReturnBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsIssueBtn" type="button"
+							<button id="findAccessoriesReturnBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#issueSearchModal">
+								data-toggle="modal" data-target="#returnSearchModal">
 								<i class="fa fa-search"></i>
 							</button>
 
 						</div>
 					</div>
 				</div>
-				<div class="form-group mb-0  row">
-					<label for="qcDate"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Issue
-						Date:</label> <input id="issueDate" type="date"
-						class="col-md-9 form-control-sm">
-				</div>
 
+				<div class="form-group mb-0  row">
+					<label for="supplier"
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Supplier</label>
+					<div class="input-group col-md-9 px-0">
+						<div class="input-group-append">
+							<select id="supplier" class="selectpicker px-0"
+								data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="supplier" value="0">--- Select ---</option>
+								<c:forEach items="${supplierList}" var="supplier">
+									<option id="supplier" value="${supplier.supplierid}">${supplier.suppliername}</option>
+								</c:forEach>
+							</select>
+							<button id="grnSearchBtn" type="button"
+								class="btn btn-outline-dark btn-sm form-control-sm"
+								data-toggle="modal" placeholder="Search Accessories Size">
+								<i class="fa fa-search"> Accessories</i>
+							</button>
+						</div>
+					</div>
+
+
+				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
-					<label for="department"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Department</label>
-					
-
-						<select id="department" class="selectpicker col-md-9 px-0"
-							data-live-search="true"
-							data-style="btn-light btn-sm border-light-gray">
-							<option id="department" value="0">--- Select ---</option>
-							<c:forEach items="${departmentList}" var="department">
-								<option id="department" value="${department.departmentId}">${department.departmentName} (${department.factoryName})</option>
-							</c:forEach>
-						</select>
+					<label for="qcDate"
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Return
+						Date:</label> <input id="returnDate" type="date"
+						class="col-md-8 form-control-sm">
 				</div>
 				<div class="form-group mb-0  row">
 					<label for="receiveDate"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Receive
-						By</label> <input id="receiveBy" type="text"
-						class="col-md-9 form-control-sm">
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Accessories
+						Rec.Date</label> <input id="receiveDate" type="date"
+						class="col-md-8 form-control-sm">
 				</div>
 
 			</div>
 			<div class="col-md-4">
+
+
 				<div class="form-group mb-0  row">
 					<label for="remarks"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Remarks</label>
 					<textarea id="remarks" class="col-md-9 form-control-sm"></textarea>
 
 				</div>
-				<button id="fabricsSearchBtn" type="button"
-					class="btn btn-info btn-sm "
-					data-toggle="modal" placeholder="Search Fabrics Roll">
-					<i class="fa fa-search"></i> Fabrics Search
-				</button>
-				
-				<button id="requisitionListSearchBtn" type="button" class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#requisitionSearchModal">
-							<i class="fa fa-search"></i> Requisition List 
-						</button>
 			</div>
 		</div>
 
@@ -120,17 +122,17 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font table-expandable">
 					<thead class="no-wrap-text">
 						<tr>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th>UOM</th>
 							<th>Receive Qty</th>
-							<th>Prev.Issue</th>
-							<th>Return Qty</th>
-							<th>Balance Qty</th>
 							<th>Issue Qty</th>
+							<th>Prev.Re. Qty</th>
+							<th>Balance Qty</th>
+							<th>Return Qty</th>
 						</tr>
 					</thead>
-					<tbody id="rollList">
+					<tbody id="sizeList">
 
 					</tbody>
 				</table>
@@ -159,8 +161,8 @@
 		</div>
 	</div>
 </div>
-<!--Issue search modal -->
-<div class="modal fade" id="issueSearchModal" tabindex="-1"
+<!--QC search modal -->
+<div class="modal fade" id="returnSearchModal" tabindex="-1"
 	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -184,11 +186,11 @@
 						<tr>
 							<th>Transaction Id</th>
 							<th>Transaction Date</th>
-							<th>Department Name</th>
+							<th>Supplier Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsIssueList">
+					<tbody id="accessoriesReturnList">
 
 					</tbody>
 				</table>
@@ -199,7 +201,7 @@
 </div>
 
 <!-- Item Search Modal -->
-<div class="modal fade" id="rollSearchModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="sizeSearchModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
@@ -224,6 +226,10 @@
 			</div>
 			<div class="row px-3">
 				<div class="col-md-2 px-1">
+					<input type="text" class="form-control-sm" id="supplierNameSearch"
+						placeholder="Supplier Name">
+				</div>
+				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="purchaseOrderSearch"
 						placeholder="Purchase Order">
 				</div>
@@ -236,156 +242,42 @@
 						placeholder="Item Name">
 				</div>
 				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="fabricsItemSearch"
-						placeholder="Fabrics Item">
+					<input type="text" class="form-control-sm" id="accessoriesItemSearch"
+						placeholder="Accessories Item">
 				</div>
 				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="colorSearch"
 						placeholder="Color">
 				</div>
 				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="rollIdSearch"
-						placeholder="Roll Id">
+					<input type="text" class="form-control-sm" id="sizeIdSearch"
+						placeholder="Size Id">
 				</div>
 			</div>
 			<div class="modal-body table-responsive" style="height: 70vh">
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead class="no-wrap-text bg-light">
 						<tr>
+							<th>Supplier</th>
 							<th>Purchase Order No</th>
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th>RollId</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
+							<th>Size Name</th>
 							<th>Balance Qty</th>
-							<th><span><input type="checkbox" id="checkAll" style="cursor:pointer;"></span></th>
+							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsRollSearchList">
+					<tbody id="accessoriesSizeSearchList">
 
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer py-2">
 				<div class="d-flex justify-content-end">
-					<button id="rollAddBtn" class="btn btn-primary btn-sm">
-						<span><i class="fas fa-plus-circle"></i></span> Add
-					</button>
-				</div>
-			</div>
-
-		</div>
-	</div>
-</div>
-
-
-<!-- requisition Search Modal -->
-<div class="modal fade" id="requisitionSearchModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content">
-			<div class="modal-header py-2">
-				<div class="input-group input-group-sm">
-
-					<input id="requisitionSearchEverything" type="text" class="form-control"
-						placeholder="Search Every Thing" aria-label="Recipient's username"
-						aria-describedby="basic-addon2">
-					<div class="input-group-append">
-						<button class="form-control-sm" id="requisitionSearchRefreshBtn">
-							<i class="fa fa-refresh" style="cursor: pointer;"></i>
-						</button>
-					</div>
-
-
-				</div>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead>
-						<tr>
-							<th>SL#</th>
-							<th>Buyer</th>
-							<th>Purchase Order</th>
-							<th>Style No</th>
-							<th>Item Name</th>
-							<th><span><i class="fa fa-search"></i></span></th>
-						</tr>
-					</thead>
-					<tbody id="poList">
-						<c:forEach items="${cuttingReqList}" var="list"
-							varStatus="counter">
-							<tr>
-								<td>${counter.count}</td>
-								<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
-								<td>${list.purchaseOrder}</td>
-								<td id='styleId${list.styleId}'>${list.styleNo}</td>
-								<td id='itemId${list.itemId}'>${list.itemName}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
-									onclick="searchCuttingUsedFabrics(${list.cuttingEntryId})">
-								</i></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-				</div>
-			</div>
-			
-			<div class="row px-3">
-				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="requisitionPurchaseOrderSearch"
-						placeholder="Purchase Order">
-				</div>
-				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="requisitionStyleNoSearch"
-						placeholder="Style No">
-				</div>
-				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="requisitionItemNameSearch"
-						placeholder="Item Name">
-				</div>
-				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="requisitionFabricsItemSearch"
-						placeholder="Fabrics Item">
-				</div>
-				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="requisitionColorSearch"
-						placeholder="Color">
-				</div>
-				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="requisitionRollIdSearch"
-						placeholder="Roll Id">
-				</div>
-			</div>
-			<div class="modal-body table-responsive" style="height: 70vh">
-				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead class="no-wrap-text bg-light">
-						<tr>
-							<th>Purchase Order No</th>
-							<th>Style No</th>
-							<th>Item Name</th>
-							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th>RollId</th>
-							<th>Balance Qty</th>
-							<th><span><input type="checkbox" id="requisitionCheckAll" style="cursor:pointer;"></span></th>
-						</tr>
-					</thead>
-					<tbody id="requisitionFabricsRollSearchList">
-
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer py-2">
-				<div class="d-flex justify-content-end">
-					<button id="requisitionRollAddBtn" class="btn btn-primary btn-sm">
+					<button id="sizeAddBtn" class="btn btn-primary btn-sm">
 						<span><i class="fas fa-plus-circle"></i></span> Add
 					</button>
 				</div>
@@ -398,4 +290,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-issue.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/accessories-return.js"></script>

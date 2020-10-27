@@ -110,88 +110,6 @@
 						</button>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="purchaseOrder">Purchase Order:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="purchaseOrder"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="styleNo">Style No:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="styleNo"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="itemName">Item Name:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="itemName"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="itemColor">Item Color:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="itemColor"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="accessoriesItem">Accessories Item:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="accessoriesItem"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-3 px-1">
-						<label for="accessoriesColor">Accessories Color:</label>
-					</div>
-					<div class="col-md-9 px-1">
-						<b><label id="accessoriesColor"></label></b>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-1 px-1">
-						<label for="unit">Unit:</label>
-					</div>
-					<div class="col-md-2 px-1">
-						<b><label id="unit"></label></b>
-					</div>
-
-					<div class="col-md-2 px-1">
-						<label for="totalPoQty">T. PO Qty:</label>
-					</div>
-					<div class="col-md-2 px-1">
-						<b><label id="totalPoQty"></label></b>
-					</div>
-
-					<div class="col-md-2 px-1">
-						<label for="previousReceive">Prev. Rec.:</label>
-					</div>
-					<div class="col-md-2 px-1">
-						<b><label id="previousReceive"></label></b>
-					</div>
-				</div>
-
-
-
-
-
-
 			</div>
 			<div class="col-md-3">
 				<div class="form-group mb-0  row">
@@ -249,7 +167,7 @@
 							<th>Receive Qty</th>
 						</tr>
 					</thead>
-					<tbody id="rollList">
+					<tbody id="accessoriesSizeList">
 
 					</tbody>
 				</table>

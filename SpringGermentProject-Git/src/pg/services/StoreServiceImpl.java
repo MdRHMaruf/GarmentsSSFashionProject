@@ -440,6 +440,19 @@ public class StoreServiceImpl implements StoreService{
 		return storeDao.getAvailableAccessoriesSizeListInDepartment(departmentId);
 	}
 
+
+	@Override
+	public List<AccessoriesSize> getRequisitionAccessoriesList(String cuttingEntryId, String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getRequisitionAccessoriesList(cuttingEntryId, departmentId);
+	}
+
+	@Override
+	public List<AccessoriesSize> getRequisitionAccessoriesSizeList(String cuttingEntryId,String accessoriesIdList,String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getRequisitionAccessoriesSizeList(cuttingEntryId,accessoriesIdList,departmentId);
+	}
+	
 	@Override
 	public boolean submitAccessoriesIssue(AccessoriesIssue accessoriesIssue) {
 		// TODO Auto-generated method stub
@@ -657,9 +670,21 @@ public class StoreServiceImpl implements StoreService{
 	}
 
 	@Override
-	public List<CuttingFabricsUsed> getCuttingUsedFabricsRequisitionList(String cuttingEntryId) {
+	public List<FabricsRoll> getCuttingUsedFabricsRequisitionList(String cuttingEntryId,String departmentId) {
 		// TODO Auto-generated method stub
-		return storeDao.getCuttingUsedFabricsRequisitionList(cuttingEntryId);
+		return storeDao.getCuttingUsedFabricsRequisitionList(cuttingEntryId,departmentId);
+	}
+
+	@Override
+	public boolean updateFabricRequisitionStatus(String requisitionNo, String requisitionStatus) {
+		// TODO Auto-generated method stub
+		return storeDao.updateFabricRequisitionStatus(requisitionNo, requisitionStatus);
+	}
+
+	@Override
+	public List<AccessoriesSize> getAccessoriesSizeListByAccessories(List<AccessoriesIndent> accessorisList) {
+		// TODO Auto-generated method stub
+		return storeDao.getAccessoriesSizeListByAccessories(accessorisList);
 	}
 
 

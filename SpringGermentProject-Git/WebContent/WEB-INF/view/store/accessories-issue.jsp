@@ -34,10 +34,11 @@
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 	<input type="hidden" id="poNo" value="0">
 	<input type="hidden" id="requisitionNo" value="0">
+	<input type="hidden" id="cuttingEntryId" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Issue</h5>
+			<h5 class="text-center" style="display: inline;">Accessories Issue</h5>
 		</header>
 		<hr class="my-1">
 		<div class="row">
@@ -49,11 +50,11 @@
 						<div class="input-group-append width-100">
 							<input id="issueTransactionId" type="text"
 								class=" form-control-sm" readonly>
-							<button id="newFabricsIssueBtn" type="button"
+							<button id="newAccessoriesIssueBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsIssueBtn" type="button"
+							<button id="findAccessoriesIssueBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
 								data-toggle="modal" data-target="#issueSearchModal">
 								<i class="fa fa-search"></i>
@@ -100,10 +101,10 @@
 					<textarea id="remarks" class="col-md-9 form-control-sm"></textarea>
 
 				</div>
-				<button id="fabricsSearchBtn" type="button"
+				<button id="accessoriesSearchBtn" type="button"
 					class="btn btn-info btn-sm "
-					data-toggle="modal" placeholder="Search Fabrics Roll">
-					<i class="fa fa-search"></i> Fabrics Search
+					data-toggle="modal" placeholder="Search Accessories Size">
+					<i class="fa fa-search"></i> Accessories Search
 				</button>
 				
 				<button id="requisitionListSearchBtn" type="button" class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#requisitionSearchModal">
@@ -120,8 +121,8 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font table-expandable">
 					<thead class="no-wrap-text">
 						<tr>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th>UOM</th>
 							<th>Receive Qty</th>
 							<th>Prev.Issue</th>
@@ -130,7 +131,7 @@
 							<th>Issue Qty</th>
 						</tr>
 					</thead>
-					<tbody id="rollList">
+					<tbody id="sizeList">
 
 					</tbody>
 				</table>
@@ -188,7 +189,7 @@
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsIssueList">
+					<tbody id="accessoriesIssueList">
 
 					</tbody>
 				</table>
@@ -199,7 +200,7 @@
 </div>
 
 <!-- Item Search Modal -->
-<div class="modal fade" id="rollSearchModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="sizeSearchModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
@@ -236,16 +237,16 @@
 						placeholder="Item Name">
 				</div>
 				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="fabricsItemSearch"
-						placeholder="Fabrics Item">
+					<input type="text" class="form-control-sm" id="accessoriesItemSearch"
+						placeholder="Accessories Item">
 				</div>
 				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="colorSearch"
 						placeholder="Color">
 				</div>
 				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="rollIdSearch"
-						placeholder="Roll Id">
+					<input type="text" class="form-control-sm" id="sizeNameSearch"
+						placeholder="Size Name">
 				</div>
 			</div>
 			<div class="modal-body table-responsive" style="height: 70vh">
@@ -256,21 +257,21 @@
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th>RollId</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
+							<th>SizeId</th>
 							<th>Balance Qty</th>
 							<th><span><input type="checkbox" id="checkAll" style="cursor:pointer;"></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsRollSearchList">
+					<tbody id="accessoriesSizeSearchList">
 
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer py-2">
 				<div class="d-flex justify-content-end">
-					<button id="rollAddBtn" class="btn btn-primary btn-sm">
+					<button id="sizeAddBtn" class="btn btn-primary btn-sm">
 						<span><i class="fas fa-plus-circle"></i></span> Add
 					</button>
 				</div>
@@ -319,7 +320,7 @@
 						</tr>
 					</thead>
 					<tbody id="poList">
-						<c:forEach items="${cuttingReqList}" var="list"
+						<c:forEach items="${requisitionList}" var="list"
 							varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
@@ -328,7 +329,7 @@
 								<td id='styleId${list.styleId}'>${list.styleNo}</td>
 								<td id='itemId${list.itemId}'>${list.itemName}</td>
 								<td><i class="fa fa-search" style="cursor:pointer;"
-									onclick="searchCuttingUsedFabrics(${list.cuttingEntryId})">
+									onclick="searchAccessoriesRequisition(${list.cuttingEntryId})">
 								</i></td>
 							</tr>
 						</c:forEach>
@@ -351,17 +352,14 @@
 						placeholder="Item Name">
 				</div>
 				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="requisitionFabricsItemSearch"
-						placeholder="Fabrics Item">
+					<input type="text" class="form-control-sm" id="requisitionAccessoriesItemSearch"
+						placeholder="Accessories Item">
 				</div>
 				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="requisitionColorSearch"
 						placeholder="Color">
 				</div>
-				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="requisitionRollIdSearch"
-						placeholder="Roll Id">
-				</div>
+				
 			</div>
 			<div class="modal-body table-responsive" style="height: 70vh">
 				<table class="table table-hover table-bordered table-sm mb-0">
@@ -371,21 +369,19 @@
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th>RollId</th>
-							<th>Balance Qty</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th><span><input type="checkbox" id="requisitionCheckAll" style="cursor:pointer;"></span></th>
 						</tr>
 					</thead>
-					<tbody id="requisitionFabricsRollSearchList">
+					<tbody id="requisitionAccessoriesSearchList">
 
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer py-2">
 				<div class="d-flex justify-content-end">
-					<button id="requisitionRollAddBtn" class="btn btn-primary btn-sm">
+					<button id="requisitionSizeAddBtn" class="btn btn-primary btn-sm">
 						<span><i class="fas fa-plus-circle"></i></span> Add
 					</button>
 				</div>
@@ -398,4 +394,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-issue.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/accessories-issue.js"></script>

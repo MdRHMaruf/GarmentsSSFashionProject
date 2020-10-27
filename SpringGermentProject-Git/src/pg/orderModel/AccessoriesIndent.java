@@ -58,6 +58,8 @@ public class AccessoriesIndent {
 		this.accessoriesColorId = accessoriesColorId;
 		this.accessoriescolor = accessoriesColorName;
 		
+		//Extra..
+		this.purchaseOrder = purchaseOrder;
 	}
 	
 	public AccessoriesIndent(String AccIndentId,String PurchaseOrder,String StyleNo,String ItemName,String ColorName,String ShippingMarks,String AccessoriesName,String SizeName,String accessoriesSize,String PerUnit,String TotalBox,String OrderQty,String QtyInDozen,String ReqPerPices,String ReqPerDoz,String DividedBy,String PercentageExtra,String PercentageExtraQty,String TotalQty,String UnitName,String RequireUnitQty,String IndentBrandId,String IndentColorId) {

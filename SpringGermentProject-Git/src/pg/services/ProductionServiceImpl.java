@@ -265,5 +265,64 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getCuttingRequisitionList();
 	}
+
+
+	@Override
+	public List<ProductionPlan> searchCuttingPlanQuantity(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		return productionDao.searchCuttingPlanQuantity(cuttingEntryId, sizeGroupId);
+	}
+	
+	@Override
+	public List<ProductionPlan> getSendCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		return productionDao.getSendCuttingBodyList(cuttingEntryId, sizeGroupId);
+	}
+	
+	@Override
+	public List<CuttingInformation> getSendCuttingBodyInfoList() {
+		// TODO Auto-generated method stub
+		return productionDao.getSendCuttingBodyInfoList();
+	}
+
+	@Override
+	public String sendCuttingPlanBodyQuantity(String sendItemList,String userId) {
+		// TODO Auto-generated method stub
+		return productionDao.sendCuttingPlanBodyQuantity(sendItemList,userId);
+	}
+
+	@Override
+	public List<ProductionPlan> searchSendCuttingBodyQuantity(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		return productionDao.searchSendCuttingBodyQuantity(cuttingEntryId, sizeGroupId);
+	}
+
+	@Override
+	public List<ProductionPlan> getReceiveCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
+		// TODO Auto-generated method stub
+		return productionDao.getReceiveCuttingBodyList(cuttingEntryId, sizeGroupId);
+	}
+
+
+	@Override
+	public List<CuttingInformation> getReceiveCuttingBodyInfoList() {
+		// TODO Auto-generated method stub
+		return productionDao.getReceiveCuttingBodyInfoList();
+	}
+
+
+	@Override
+	public String receiveCuttingPlanBodyQuantity(String sendItemList, String userId) {
+		// TODO Auto-generated method stub
+		return productionDao.receiveCuttingPlanBodyQuantity(sendItemList, userId);
+	}
+
+
+	
+
+
+	
+
+
 }
 
