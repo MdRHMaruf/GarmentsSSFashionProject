@@ -24,11 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.exception.UserBlockedException;
 import pg.model.ware;
 import pg.model.wareinfo;
+import pg.registerModel.FactoryModel;
 import pg.model.login;
 import pg.model.menu;
 import pg.model.module;
 import pg.services.PasswordService;
 import pg.services.PasswordServiceImpl;
+import pg.services.RegisterService;
 
 
 
@@ -42,6 +44,9 @@ public class PasswordController {
 
 	@Autowired
 	private PasswordService passService;
+	@Autowired
+	private RegisterService registerService;
+
 	
 	@RequestMapping(value = {"/","/login"},method=RequestMethod.GET)
 	public String login(Model m,HttpSession session) {
@@ -168,11 +173,14 @@ public class PasswordController {
 		modelmap.put("modulelist", modulelist);
 		
 		List<menu> menulist=(List<menu>)session.getAttribute("menulist");
+		List<FactoryModel> factoryList = registerService.getAllFactories();
+		
 		modelmap.put("menulist", menulist);
 		
 		ModelAndView view = new ModelAndView("setting/create_user");
 		view.addObject("modulelist",modulelist);
 		view.addObject("menulist",menulist);
+		view.addObject("factoryList",factoryList);
 		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}

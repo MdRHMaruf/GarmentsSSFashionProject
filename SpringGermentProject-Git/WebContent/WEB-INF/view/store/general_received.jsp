@@ -33,6 +33,7 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="departmentId" value="<%=lg.get(0).getDepartmentId()%>">
 
 
 	<div class="card-box">

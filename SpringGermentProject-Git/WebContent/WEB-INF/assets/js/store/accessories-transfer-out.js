@@ -9,70 +9,61 @@ const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '9', rackName: 'EA' },
 { rackId: '10', rackName: 'EB' }];
 
-$("#newFabricsTransferInBtn").click(function () {
+$("#newAccessoriesTransferOutBtn").click(function () {
 
-  $("#transferInTransactionId").val("-- New Transaction --");
+  $("#transferOutTransactionId").val("-- New Transaction --");
   $("#btnSubmit").prop("disabled", false);
   $("#btnEdit").prop("disabled", true);
 });
 
-$("#findFabricsTransferInBtn").click(function () {
+$("#findAccessoriesTransferOutBtn").click(function () {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsTransferInList',
+    url: './getAccessoriesTransferOutList',
     data: {},
     success: function (data) {
-      drawFabricsTransferInListTable(data.fabricsTransferInList);
+      drawAccessoriesTransferOutListTable(data.accessoriesTransferOutList);
     }
   });
 });
 
 
-$("#fabricsSearchBtn").click(function () {
-  const transferDepartmentId = $("#department").val();
+$("#accessoriesSearchBtn").click(function () {
   const departmentId = $("#departmentId").val();
-
   
-  if(transferDepartmentId != '0'){
-    $.ajax({
-      type: 'GET',
-      dataType: 'json',
-      url: './getTransferInFabricsRollList',
-      data: {
-        departmentId : departmentId,
-        transferDepartmentId : transferDepartmentId
-      },
-      success: function (data) {
-        drawFabricsRollListSearchTable(data.fabricsRollList)
-        $("#rollSearchModal").modal('show');
-      }
-    });
-  }else{
-    warningAlert("Please Select Department Name");
-    $("#department").focus();
-  }
-  
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './getAvailableAccessoriesSizeList',
+    data: {
+      departmentId : departmentId
+    },
+    success: function (data) {
+      drawAccessoriesSizeListSearchTable(data.accessoriesSizeList)
+      $("#sizeSearchModal").modal('show');
+    }
+  });
   
 });
 
 
 function editItemInDatabase(autoId) {
-  const transferInQty = $("#rollTransferInQty-" + autoId).val();
+  const transferOutQty = $("#sizeTransferOutQty-" + autoId).val();
 
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './editTransferInRollInTransaction',
+    url: './editTransferOutSizeInTransaction',
     data: {
       autoId: autoId,
-      unitQty: transferInQty
+      unitQty: transferOutQty
     },
     success: function (data) {
       if (data.result == "Successful") {
         alert("Edit Successfully...");
-      } else if (data.result == "TransferIn Qty Exist") {
-        alert("TransferIn Qty Exist...");
+      } else if (data.result == "TransferOut Qty Exist") {
+        alert("TransferOut Qty Exist...");
       }
     }
   });
@@ -82,7 +73,7 @@ function deleteItemFromDatabase(autoId) {
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url: './deleteTransferInRollFromTransaction',
+      url: './deleteTransferOutSizeFromTransaction',
       data: {
         autoId: autoId
       },
@@ -112,16 +103,16 @@ function deleteItemFromList(rowId) {
   }
 }
 
-function totalTransferInQtyCount(id) {
-  const elements = $(".rollTransferInGroup-" + id);
+function totalTransferOutQtyCount(id) {
+  const elements = $(".sizeTransferOutGroup-" + id);
   const length = elements.length;
   let total = 0;
   for (let i = 0; i < length; i++) {
 
     total += Number(elements[i].value);
   };
-  $("#transferInQty-" + id).text(total);
-  $("#bottomTotalTransferIn-" + id).text(total);
+  $("#transferOutQty-" + id).text(total);
+  $("#bottomTotalTransferOut-" + id).text(total);
 }
 
 document.getElementById("checkAll").addEventListener("click", function () {
@@ -132,21 +123,21 @@ document.getElementById("checkAll").addEventListener("click", function () {
   }
 });
 
-$("#rollAddBtn").click(function(){
+$("#sizeAddBtn").click(function(){
   const rackOptions = fakeRackList.map(rack => `<option value=${rack.rackId}>${rack.rackName}</option>`);
-  let rows = "",tempPurchaseOrder = "", tempStyleId, tempItemId, tempItemColorId, tempFabricsId, tempFabricsColorId;
+  let rows = "",tempPurchaseOrder = "", tempStyleId, tempItemId, tempItemColorId, tempAccessoriesId, tempAccessoriesColorId;
   let parentRowId = 0,tempTotalBalance=0;
   let balanceQtyList = [];
   let rackIdList = [];
   let binIdList = [];
-  $("#fabricsRollSearchList tr").filter(function () {
+  $("#accessoriesSizeSearchList tr").filter(function () {
     const id = this.id.slice(4);
     
     if($("#check-"+id).prop('checked')){
-      const fabricsName = $("#fabricsName-"+id).text();
-      const fabricsColorName = $("#fabricsColor-"+id).text();
-      const rollId = this.getAttribute("data-roll-id");
-      const supplierRollId = $("#rollId-"+id).text();
+      const accessoriesName = $("#accessoriesName-"+id).text();
+      const accessoriesColorName = $("#accessoriesColor-"+id).text();
+      const sizeId = this.getAttribute("data-size-id");
+      const sizeName = $("#sizeName-"+id).text();
       const balanceQty = Number($("#balanceQty-"+id).text());
     
 
@@ -157,8 +148,8 @@ $("#rollAddBtn").click(function(){
       const itemName = $("#itemName-"+id).text();
       const itemColorId = this.getAttribute("data-item-color-id");
       const itemColor = $("#itemColor-"+id).text();
-      const fabricsId = this.getAttribute("data-fabrics-id");
-      const fabricsColorId = this.getAttribute("data-fabrics-color-id");
+      const accessoriesId = this.getAttribute("data-accessories-id");
+      const accessoriesColorId = this.getAttribute("data-accessories-color-id");
       const unitId = this.getAttribute("data-unit-id");
       const unit = this.getAttribute("data-unit");
       const rackName = this.getAttribute("data-rack-name");
@@ -167,12 +158,12 @@ $("#rollAddBtn").click(function(){
       const issueQty = this.getAttribute("data-issue-qty");
       const returnQty = this.getAttribute("data-return-qty");
 
-      if (!(fabricsColorId == tempFabricsColorId && fabricsId == tempFabricsId && itemColorId == tempItemColorId && itemId == tempItemId && styleId == tempStyleId && purchaseOrder == tempPurchaseOrder)) {
+      if (!(accessoriesColorId == tempAccessoriesColorId && accessoriesId == tempAccessoriesId && itemColorId == tempItemColorId && itemId == tempItemId && styleId == tempStyleId && purchaseOrder == tempPurchaseOrder)) {
         if (!(tempPurchaseOrder === "")) {
           rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-                    <td id='bottomTotalTransferIn-${parentRowId}'>${tempTotalBalance}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalBalance}</td>         
                 </tr>
               </tbody>
             </table>
@@ -182,21 +173,21 @@ $("#rollAddBtn").click(function(){
           parentRowId++;
           tempTotalBalance = 0;
         }
-        tempFabricsColorId = fabricsColorId;
-        tempFabricsId = fabricsId;
+        tempAccessoriesColorId = accessoriesColorId;
+        tempAccessoriesId = accessoriesId;
         tempItemColorId = itemColorId;
         tempItemId = itemId;
         tempStyleId = styleId;
         tempPurchaseOrder = purchaseOrder;
         rows += `<tr class='odd parentRowGroup-${parentRowId}'>
-                  <td id='fabricsName-${parentRowId}'>${fabricsName}</td>
-                  <td id='fabricsColor-${parentRowId}'>${fabricsColorName}</td>
+                  <td id='accessoriesName-${parentRowId}'>${accessoriesName}</td>
+                  <td id='accessoriesColor-${parentRowId}'>${accessoriesColorName}</td>
                   <td>${unit}</td>
                   <td>${receiveQty}</td>
                   <td>${issueQty}</td>
                   <td id='returnQty-${parentRowId}'>${returnQty}</td>
                   <td id='balanceQty-${parentRowId}'>0</td>
-                  <td id='transferInQty-${parentRowId}'>0</td>
+                  <td id='transferOutQty-${parentRowId}'>0</td>
                   <td><div class="table-expandable-arrow"></div></td>
               </tr>
               <tr class='even parentRowGroup-${parentRowId}' style='display:none'>
@@ -234,10 +225,10 @@ $("#rollAddBtn").click(function(){
                   <table class='table table-hover table-bordered table-sm mb-0 small-font pl-5'>
                     <thead>
                       <tr>
-                        <th>Roll Id</th>
+                        <th>Size Id</th>
                         <th>Unit</th>
                         <th>Balance Qty</th>
-                        <th>TransferIn Qty</th>
+                        <th>TransferOut Qty</th>
                         <th>Rack Name</th>
                         <th>Bin Name</th>
                       </tr>
@@ -252,11 +243,11 @@ $("#rollAddBtn").click(function(){
                                         ${rackOptions}
                                   </select>`;
 
-      rows += "<tr id='rowId-" + id + "'  class='newRollRow rollRowList rowGroup-" + parentRowId + "' data-parent-row='" + parentRowId + "' data-purchase-order='" + purchaseOrder + "' data-style-id='" + styleId + "' data-item-id='" + itemId + "' data-item-color-id='" + itemColorId + "' data-fabrics-id='" + fabricsId + "' data-fabrics-color-id='" + fabricsColorId + "' data-roll-id='" + rollId + "' data-unit-id='" + unitId + "' data-unit='"+unit+"' data-rack-name='"+rackName+"' data-bin-name='"+binName+"'>"
-                +"<td id='listRollId-"+id+"'>" + supplierRollId + "</td>"
-                +"<td id='rollUnit-"+id+"'>" + unit + "</td>"
-                +"<td id='rollBalanceQty-"+id+"'>" + balanceQty + "</td>"
-                +"<td><input type='number' class='rollTransferInGroup-" + parentRowId + " form-control-sm max-width-100' id='rollTransferInQty-"+id+"' onblur='totalTransferInQtyCount(" + parentRowId + ")' value='"+balanceQty+"'></td>"
+      rows += "<tr id='rowId-" + id + "'  class='newSizeRow sizeRowList rowGroup-" + parentRowId + "' data-parent-row='" + parentRowId + "' data-purchase-order='" + purchaseOrder + "' data-style-id='" + styleId + "' data-item-id='" + itemId + "' data-item-color-id='" + itemColorId + "' data-accessories-id='" + accessoriesId + "' data-accessories-color-id='" + accessoriesColorId + "' data-size-id='" + sizeId + "' data-unit-id='" + unitId + "' data-unit='"+unit+"' data-rack-name='"+rackName+"' data-bin-name='"+binName+"'>"
+                +"<td id='listSizeName-"+id+"'>" + sizeName + "</td>"
+                +"<td id='sizeUnit-"+id+"'>" + unit + "</td>"
+                +"<td id='sizeBalanceQty-"+id+"'>" + balanceQty + "</td>"
+                +"<td><input type='number' class='sizeTransferOutGroup-" + parentRowId + " form-control-sm max-width-100' id='sizeTransferOutQty-"+id+"' onblur='totalTransferOutQtyCount(" + parentRowId + ")' value='"+balanceQty+"'></td>"
                 +"<td>" + rackSelect+"</td>"
                 +"<td>" + binSelect+"</td>"
                 + "<td><i class='fa fa-trash' onclick='deleteItemFromList(" + id + ")' style='cursor:pointer;'> </i></td>"
@@ -277,7 +268,7 @@ $("#rollAddBtn").click(function(){
     rows += `<tr>
                 <td colspan='2'>Total</td>
                 <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-                <td id='bottomTotalTransferIn-${parentRowId}'>${tempTotalBalance}</td>
+                <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalBalance}</td>
 
             </tr>
           </tbody>
@@ -288,11 +279,11 @@ $("#rollAddBtn").click(function(){
   }
   
   
-  $("#rollList").html(rows);
+  $("#sizeList").html(rows);
 
   balanceQtyList.forEach((qty, index) => {
     $("#balanceQty-" + index).text(qty);
-    $("#transferInQty-" + index).text(qty);
+    $("#transferOutQty-" + index).text(qty);
   });
   
   rackIdList.forEach((rack,index)=>{
@@ -301,52 +292,52 @@ $("#rollAddBtn").click(function(){
   binIdList.forEach((bin,index)=>{
     $("#binId-"+bin.id).val(bin.binId);
   })
-  $('#rollSearchModal').modal('hide');
+  $('#sizeSearchModal').modal('hide');
 
 });
 
 
-function setFabricsTransferInInfo(transactionId) {
+function setAccessoriesTransferOutInfo(transactionId) {
   $.ajax({
     type: 'GET',
     dataType: 'json',
-    url: './getFabricsTransferInInfo',
+    url: './getAccessoriesTransferOutInfo',
     data: {
       transactionId: transactionId
     },
     success: function (data) {
 
-      const fabricsTransferIn = data.fabricsTransferIn;
-      console.log(fabricsTransferIn)
-      $("#transferInTransactionId").val(fabricsTransferIn.transactionId);
+      const accessoriesTransferOut = data.accessoriesTransferOut;
+      console.log(accessoriesTransferOut)
+      $("#transferOutTransactionId").val(accessoriesTransferOut.transactionId);
       
-      let date = fabricsTransferIn.transferDate.split("/");
-      $("#transferInDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+      let date = accessoriesTransferOut.transferDate.split("/");
+      $("#transferOutDate").val(date[2] + "-" + date[1] + "-" + date[0]);
       
-      $("#remarks").val(fabricsTransferIn.remarks);
-      $("#department").val(fabricsTransferIn.transferFrom).change();
-      $("#receiveFrom").val(fabricsTransferIn.receiveFrom).change();
-      drawFabricsRollListTable(fabricsTransferIn.fabricsRollList);
+      $("#remarks").val(accessoriesTransferOut.remarks);
+      $("#department").val(accessoriesTransferOut.transferTo).change();
+      $("#receiveBy").val(accessoriesTransferOut.receiveBy).change();
+      drawAccessoriesSizeListTable(accessoriesTransferOut.accessoriesSizeList);
       $("#btnSubmit").prop("disabled", true);
       $("#btnEdit").prop("disabled", false);
-      $('#transferInSearchModal').modal('hide');
+      $('#transferOutSearchModal').modal('hide');
 
     }
   });
 }
 
 function submitAction() {
-  const rowList = $("tr .newRollRow");
+  const rowList = $("tr .newSizeRow");
   const length = rowList.length;
-  const transferInTransactionId = $("#transferInTransactionId").val();
-  const transferInDate = $("#transferInDate").val();
-  const transferInDepartmentId = $("#department").val();
-  const receiveFrom = $("#receiveFrom").val();
+  const transferOutTransactionId = $("#transferOutTransactionId").val();
+  const transferOutDate = $("#transferOutDate").val();
+  const transferOutDepartmentId = $("#department").val();
+  const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
   const departmentId = $("#departmentId").val();
   const userId = $("#userId").val();
 
-  let rollList = ""
+  let sizeList = ""
   for(let i = 0 ;i<length;i++){
     const row = rowList[i];
     const id = row.id.slice(6);
@@ -355,43 +346,43 @@ function submitAction() {
     const styleId = row.getAttribute("data-style-id");
     const itemId = row.getAttribute("data-item-id");
     const itemColorId = row.getAttribute("data-item-color-id");
-    const fabricsId = row.getAttribute("data-fabrics-id");
-    const fabricsName = $("#fabricsName-"+parentRowId).text();
-    const fabricsColorId = row.getAttribute("data-fabrics-color-id");
-    const fabricsColorName = $("#fabricsColor-"+parentRowId).text();
+    const accessoriesId = row.getAttribute("data-accessories-id");
+    const accessoriesName = $("#accessoriesName-"+parentRowId).text();
+    const accessoriesColorId = row.getAttribute("data-accessories-color-id");
+    const accessoriesColorName = $("#accessoriesColor-"+parentRowId).text();
     const unitId = row.getAttribute("data-unit-id");
-    const unit = $("#rollUnit-"+id).text();
-    const rollId = row.getAttribute("data-roll-id");
-    const supplierRollId = $("#listRollId-"+id).text();
-    const transferInQty = $("#rollTransferInQty-"+id).val();
+    const unit = $("#sizeUnit-"+id).text();
+    const sizeId = row.getAttribute("data-size-id");
+    const sizeName = $("#listSizeName-"+id).text();
+    const transferOutQty = $("#sizeTransferOutQty-"+id).val();
     const rackName = $("#rackId-" + id).val();
     const binName = $("#binId-" + id).val();
     
     const qcPassedType= 1;
     
-    rollList += `autoId : ${id},transferInTransactionId : ${transferInTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},transferInQty : ${transferInQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    sizeList += `autoId : ${id},transferOutTransactionId : ${transferOutTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},accessoriesId : ${accessoriesId},accessoriesName : ${accessoriesName},accessoriesColorId : ${accessoriesColorId},accessoriesColorName : ${accessoriesColorName},sizeId : ${sizeId},sizeName : ${sizeName},unitId : ${unitId},unit : ${unit},transferOutQty : ${transferOutQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
   
   };
     
 
-  rollList = rollList.slice(0, -1);
+  sizeList = sizeList.slice(0, -1);
   
   if (length > 0) {
-    if (transferInTransactionId != '') {   
-      if(transferInDepartmentId != '0'){
-        if (confirm("Are you sure to submit this Fabrics TransferIn...")) {
+    if (transferOutTransactionId != '') {   
+      if(transferOutDepartmentId != '0'){
+        if (confirm("Are you sure to submit this Accessories TransferOut...")) {
           $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: './submitFabricsTransferIn',
+            url: './submitAccessoriesTransferOut',
             data: {
-              transactionId: transferInTransactionId,
-              transferDate : transferInDate,
-              transferFrom : transferInDepartmentId,
-              receiveFrom : receiveFrom,
+              transactionId: transferOutTransactionId,
+              transferDate : transferOutDate,
+              transferTo : transferOutDepartmentId,
+              receiveBy : receiveBy,
               remarks : remarks,
               departmentId : departmentId,
-              rollList : rollList,
+              sizeList : sizeList,
               userId: userId
             },
             success: function (data) {
@@ -407,7 +398,7 @@ function submitAction() {
           });
         }
       }else{
-        warningAlert("Please Select a TransferIn To Department.")
+        warningAlert("Please Select a TransferOut To Department.")
         $("#department").focus();
       }       
     } else {
@@ -415,7 +406,7 @@ function submitAction() {
       $("#transactionId").focus();
     }
   } else {
-    warningAlert("Please Enter Fabrics Roll");
+    warningAlert("Please Enter Accessories Size");
   }
 }
 
@@ -423,16 +414,16 @@ function submitAction() {
 
 function editAction() {
 
-  const rowList = $("tr .newRollRow");
+  const rowList = $("tr .newSizeRow");
   const length = rowList.length;
-  const transferInTransactionId = $("#transferInTransactionId").val();
-  const transferInDate = $("#transferInDate").val();
-  const transferInDepartmentId = $("#department").val();
-  const receiveFrom = $("#receiveFrom").val();
+  const transferOutTransactionId = $("#transferOutTransactionId").val();
+  const transferOutDate = $("#transferOutDate").val();
+  const transferOutDepartmentId = $("#department").val();
+  const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
   const userId = $("#userId").val();
 
-  let rollList = ""
+  let sizeList = ""
   for(let i = 0 ;i<length;i++){
     const row = rowList[i];
     const id = row.id.slice(6);
@@ -441,42 +432,42 @@ function editAction() {
     const styleId = row.getAttribute("data-style-id");
     const itemId = row.getAttribute("data-item-id");
     const itemColorId = row.getAttribute("data-item-color-id");
-    const fabricsId = row.getAttribute("data-fabrics-id");
-    const fabricsName = $("#fabricsName-"+parentRowId).text();
-    const fabricsColorId = row.getAttribute("data-fabrics-color-id");
-    const fabricsColorName = $("#fabricsColor-"+parentRowId).text();
+    const accessoriesId = row.getAttribute("data-accessories-id");
+    const accessoriesName = $("#accessoriesName-"+parentRowId).text();
+    const accessoriesColorId = row.getAttribute("data-accessories-color-id");
+    const accessoriesColorName = $("#accessoriesColor-"+parentRowId).text();
     const unitId = row.getAttribute("data-unit-id");
-    const unit = $("#rollUnit-"+id).text();
-    const rollId = row.getAttribute("data-roll-id");
-    const supplierRollId = $("#listRollId-"+id).text();
-    const transferInQty = $("#rollTransferInQty-"+id).val();
+    const unit = $("#sizeUnit-"+id).text();
+    const sizeId = row.getAttribute("data-size-id");
+    const sizeName = $("#listSizeName-"+id).text();
+    const transferOutQty = $("#sizeTransferOutQty-"+id).val();
     const rackName = $("#rackId-" + id).val();
     const binName = $("#binId-" + id).val();
     
     const qcPassedType= 1;
     
-    rollList += `autoId : ${id},transferInTransactionId : ${transferInTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},fabricsId : ${fabricsId},fabricsName : ${fabricsName},fabricsColorId : ${fabricsColorId},fabricsColorName : ${fabricsColorName},rollId : ${rollId},supplierRollId : ${supplierRollId},unitId : ${unitId},unit : ${unit},transferInQty : ${transferInQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
+    sizeList += `autoId : ${id},transferOutTransactionId : ${transferOutTransactionId},purchaseOrder : ${purchaseOrder},styleId : ${styleId},itemId : ${itemId},itemColorId : ${itemColorId},accessoriesId : ${accessoriesId},accessoriesName : ${accessoriesName},accessoriesColorId : ${accessoriesColorId},accessoriesColorName : ${accessoriesColorName},sizeId : ${sizeId},sizeName : ${sizeName},unitId : ${unitId},unit : ${unit},transferOutQty : ${transferOutQty},rackName : ${rackName},binName : ${binName},qcPassedType : ${qcPassedType},userId : ${userId} #`;
   
   };
     
 
-  rollList = rollList.slice(0, -1);
+  sizeList = sizeList.slice(0, -1);
   
   
-    if (transferInTransactionId != '') {   
-      if(transferInDepartmentId != '0'){
-        if (confirm("Are you sure to Edit this Fabrics TransferIn...")) {
+    if (transferOutTransactionId != '') {   
+      if(transferOutDepartmentId != '0'){
+        if (confirm("Are you sure to Edit this Accessories TransferOut...")) {
           $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: './editFabricsTransferIn',
+            url: './editAccessoriesTransferOut',
             data: {
-              transactionId : transferInTransactionId,
-              transferDate : transferInDate,
-              transferFrom : transferInDepartmentId,
-              receiveFrom : receiveFrom,
+              transactionId : transferOutTransactionId,
+              transferDate : transferOutDate,
+              transferTo : transferOutDepartmentId,
+              receiveBy : receiveBy,
               remarks : remarks,
-              rollList: rollList,
+              sizeList: sizeList,
               userId: userId
             },
             success: function (data) {
@@ -509,76 +500,76 @@ function refreshAction() {
 }
 
 
-function drawFabricsRollListSearchTable(data) {
+function drawAccessoriesSizeListSearchTable(data) {
   const length = data.length;
   var tr_list="";
-  $("#fabricsRollSearchList").empty();
+  $("#accessoriesSizeSearchList").empty();
   
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
-    const id = i;
-    tr_list=tr_list+"<tr id='row-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-fabrics-id='" + rowData.fabricsId + "' data-fabrics-color-id='" + rowData.fabricsColorId + "' data-roll-id='" + rowData.rollId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"' data-receive-qty='"+rowData.previousReceiveQty+"' data-issue-qty='"+rowData.issueQty+"' data-return-qty='"+rowData.returnQty+"'>"
+    const id = rowData.autoId;
+    tr_list=tr_list+"<tr id='row-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='" + rowData.sizeId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"' data-receive-qty='"+rowData.previousReceiveQty+"' data-issue-qty='"+rowData.issueQty+"' data-return-qty='"+rowData.returnQty+"'>"
               +"<td id='purchaseOrder-"+id+"'>" + rowData.purchaseOrder + "</td>"
               +"<td id='styleNo-"+id+"'>" + rowData.styleNo + "</td>"
               +"<td id='itemName-"+id+"'>" + rowData.itemName + "</td>"
               +"<td id='itemColor-"+id+"'>" + rowData.itemColor + "</td>"
-              +"<td id='fabricsName-"+id+"'>" + rowData.fabricsName + "</td>"
-              +"<td id='fabricsColor-"+id+"'>" + rowData.fabricsColorName + "</td>"
-              +"<td id='rollId-"+id+"'>" + rowData.supplierRollId + "</td>"
-              +"<td id='balanceQty-"+id+"'>" + rowData.issueQty + "</td>"
-              +"<td ><input class='check' type='checkbox' id='check-"+id+"'></td>"
+              +"<td id='accessoriesName-"+id+"'>" + rowData.accessoriesName + "</td>"
+              +"<td id='accessoriesColor-"+id+"'>" + rowData.accessoriesColorName + "</td>"
+              +"<td id='sizeName-"+id+"'>" + rowData.sizeName + "</td>"
+              +"<td id='balanceQty-"+id+"'>" + rowData.balanceQty + "</td>"
+              +"<td ><input class='check' type='checkbox' id='check-"+rowData.autoId+"'></td>"
             +"</tr>";
   }
-  $("#fabricsRollSearchList").html(tr_list);
+  $("#accessoriesSizeSearchList").html(tr_list);
 }
 
-function drawFabricsRollListTable(data){
+function drawAccessoriesSizeListTable(data){
   const rackOptions = fakeRackList.map(rack => `<option value=${rack.rackId}>${rack.rackName}</option>`);
-  let rows = "", tempPurchaseOrder = "", tempStyleId, tempItemId, tempItemColorId, tempFabricsId, tempFabricsColorId;
+  let rows = "", tempPurchaseOrder = "", tempStyleId, tempItemId, tempItemColorId, tempAccessoriesId, tempAccessoriesColorId;
   
     const length = data.length;
 
-    let parentRowId = 0,tempTotalBalanceQty=0,tempTotalTransferInQty=0;
-    let transferInQtyList = [];
+    let parentRowId = 0,tempTotalBalanceQty=0,tempTotalTransferOutQty=0;
+    let transferOutQtyList = [];
     let balanceQtyList = [];
-    $("#rollList").empty();
+    $("#sizeList").empty();
     
     for (var i = 0; i < length; i++) {   
       const rowData = data[i];
       const id = rowData.autoId;
 
-      if (!(rowData.fabricsColorId == tempFabricsColorId && rowData.fabricsId == tempFabricsId && rowData.itemColorId == tempItemColorId && rowData.itemId == tempItemId && rowData.styleId == tempStyleId && rowData.purchaseOrder == tempPurchaseOrder)) {
+      if (!(rowData.accessoriesColorId == tempAccessoriesColorId && rowData.accessoriesId == tempAccessoriesId && rowData.itemColorId == tempItemColorId && rowData.itemId == tempItemId && rowData.styleId == tempStyleId && rowData.purchaseOrder == tempPurchaseOrder)) {
         if (!(tempPurchaseOrder === "")) {
           rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalanceQty}</td>
-                    <td id='bottomTotalTransferIn-${parentRowId}'>${tempTotalTransferInQty}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalTransferOutQty}</td>         
                 </tr>
               </tbody>
             </table>
           </td> 
           </tr>`;
-          transferInQtyList.push(tempTotalTransferInQty);
+          transferOutQtyList.push(tempTotalTransferOutQty);
           balanceQtyList.push(tempTotalBalanceQty);
           parentRowId++;
-          tempTotalTransferInQty = 0;
+          tempTotalTransferOutQty = 0;
           tempTotalBalanceQty = 0;
         }
-        tempFabricsColorId = rowData.fabricsColorId;
-        tempFabricsId = rowData.fabricsId;
+        tempAccessoriesColorId = rowData.accessoriesColorId;
+        tempAccessoriesId = rowData.accessoriesId;
         tempItemColorId = rowData.itemColorId;
         tempItemId = rowData.itemId;
         tempStyleId = rowData.styleId;
         tempPurchaseOrder = rowData.purchaseOrder;
         rows += `<tr class='odd parentRowGroup-${parentRowId}'>
-                  <td id='fabricsName-${parentRowId}'>${rowData.fabricsName}</td>
-                  <td id='fabricsColor-${parentRowId}'>${rowData.fabricsColorName}</td>
+                  <td id='accessoriesName-${parentRowId}'>${rowData.accessoriesName}</td>
+                  <td id='accessoriesColor-${parentRowId}'>${rowData.accessoriesColorName}</td>
                   <td>${rowData.unit}</td>
                   <td>${rowData.previousReceiveQty}</td>
                   <td>${rowData.issueQty}</td>
                   <td id='returnQty-${parentRowId}'>${rowData.returnQty}</td>
                   <td id='balanceQty-${parentRowId}'>0</td>
-                  <td id='transferInQty-${parentRowId}'>0</td>
+                  <td id='transferOutQty-${parentRowId}'>0</td>
                   <td><div class="table-expandable-arrow"></div></td>
               </tr>
               <tr class='even parentRowGroup-${parentRowId}' style='display:none'>
@@ -616,10 +607,10 @@ function drawFabricsRollListTable(data){
                   <table class='table table-hover table-bordered table-sm mb-0 small-font pl-5'>
                     <thead>
                       <tr>
-                        <th>Roll Id</th>
+                        <th>Size Id</th>
                         <th>Unit</th>
                         <th>Balance Qty</th>
-                        <th>TransferIn Qty</th>
+                        <th>TransferOut Qty</th>
                         <th>Rack Name</th>
                         <th>Bin Name</th>
                       </tr>
@@ -634,60 +625,60 @@ function drawFabricsRollListTable(data){
                                         ${rackOptions}
                                   </select>`;
 
-                                  rows += "<tr id='rowId-" + id + "'  class='rollRowList rowGroup-" + parentRowId + "' data-parent-row='" + parentRowId + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-fabrics-id='" + rowData.fabricsId + "' data-fabrics-color-id='" + rowData.fabricsColorId + "' data-roll-id='" + rowData.rollId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"'>"
-                                  +"<td id='listRollId-"+id+"'>" + rowData.supplierRollId + "</td>"
-                                  +"<td id='rollUnit-"+id+"'>" + rowData.unit + "</td>"
-                                  +"<td id='rollBalanceQty-"+id+"'>" + rowData.balanceQty + "</td>"
-                                  +"<td><input type='number' class='rollTransferInGroup-" + parentRowId + " form-control-sm max-width-100' id='rollTransferInQty-"+id+"' onblur='totalTransferInQtyCount(" + parentRowId + ")' value='"+rowData.unitQty+"'></td>"
+                                  rows += "<tr id='rowId-" + id + "'  class='sizeRowList rowGroup-" + parentRowId + "' data-parent-row='" + parentRowId + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='" + rowData.sizeId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"'>"
+                                  +"<td id='listSizeName-"+id+"'>" + rowData.sizeName + "</td>"
+                                  +"<td id='sizeUnit-"+id+"'>" + rowData.unit + "</td>"
+                                  +"<td id='sizeBalanceQty-"+id+"'>" + rowData.balanceQty + "</td>"
+                                  +"<td><input type='number' class='sizeTransferOutGroup-" + parentRowId + " form-control-sm max-width-100' id='sizeTransferOutQty-"+id+"' onblur='totalTransferOutQtyCount(" + parentRowId + ")' value='"+rowData.unitQty+"'></td>"
                                   +"<td>" + rackSelect+"</td>"
                                   +"<td>" + binSelect+"</td>"
                                   + "<td><i class='fa fa-edit' onclick='editItemInDatabase(" + id + ")' style='cursor:pointer;'> </i></td>"
                                   + "<td><i class='fa fa-trash' onclick='deleteItemFromDatabase(" + id + ")' style='cursor:pointer;'> </i></td>" 
                                 +"</tr>";
                         tempTotalBalanceQty += rowData.balanceQty;
-                        tempTotalTransferInQty += rowData.unitQty;
+                        tempTotalTransferOutQty += rowData.unitQty;
       
     }
     if(rows){
       rows += `<tr>
                     <td colspan='2'>Total</td>
                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalanceQty}</td>
-                    <td id='bottomTotalTransferIn-${parentRowId}'>${tempTotalTransferInQty}</td>         
+                    <td id='bottomTotalTransferOut-${parentRowId}'>${tempTotalTransferOutQty}</td>         
                 </tr>
               </tbody>
             </table>
           </td> 
           </tr>`;
-          transferInQtyList.push(tempTotalTransferInQty);
+          transferOutQtyList.push(tempTotalTransferOutQty);
           balanceQtyList.push(tempTotalBalanceQty);
     }
 
-    $("#rollList").html(rows);
-    transferInQtyList.forEach((qty, index) => {
-      $("#transferInQty-" + index).text(qty);
+    $("#sizeList").html(rows);
+    transferOutQtyList.forEach((qty, index) => {
+      $("#transferOutQty-" + index).text(qty);
       $("#balanceQty-"+index).text(balanceQtyList[index]);
     });
-    data.forEach((roll,index)=>{
-      $("#rackId-"+roll.autoId).val(roll.rackName);
-      $("#binId-"+roll.autoId).val(roll.binName);
+    data.forEach((size,index)=>{
+      $("#rackId-"+size.autoId).val(size.rackName);
+      $("#binId-"+size.autoId).val(size.binName);
     })
 
 }
 
-function drawFabricsTransferInListTable(data){
+function drawAccessoriesTransferOutListTable(data){
   const length = data.length;
   var tr_list="";
-  $("#fabricsTransferInList").empty();
+  $("#accessoriesTransferOutList").empty();
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list=tr_list+"<tr id='row-" + rowData.transactionId + "'>"
               +"<td>" + rowData.transactionId + "</td>"
               +"<td>" + rowData.transferDate + "</td>"
               +"<td>" + rowData.transferDepartmentName + "</td>"
-              +"<td ><i class='fa fa-search' onclick=\"setFabricsTransferInInfo('" + rowData.transactionId + "')\" style='cursor:pointer;'> </i></td>"
+              +"<td ><i class='fa fa-search' onclick=\"setAccessoriesTransferOutInfo('" + rowData.transactionId + "')\" style='cursor:pointer;'> </i></td>"
             +"</tr>";
   }
-  $("#fabricsTransferInList").html(tr_list);
+  $("#accessoriesTransferOutList").html(tr_list);
 }
 
 $(document).ready(function () {
@@ -748,23 +739,23 @@ $(document).ready(function () {
   $("input").focus(function () { $(this).select(); });
 });
 $(document).ready(function () {
-  $("#purchaseOrderSearch , #styleNoSearch, #itemNameSearch,#fabricsItemSearch,#colorSearch,#rollIdSearch").on("keyup", function () {
+  $("#purchaseOrderSearch , #styleNoSearch, #itemNameSearch,#accessoriesItemSearch,#colorSearch,#sizeIdSearch").on("keyup", function () {
     const po = $("#purchaseOrderSearch").val().toLowerCase();
     const style = $("#styleNoSearch").val().toLowerCase();
     const item = $("#itemNameSearch").val().toLowerCase();
-    const fabrics = $("#fabricsItemSearch").val().toLowerCase();
+    const accessories = $("#accessoriesItemSearch").val().toLowerCase();
     const color = $("#colorSearch").val().toLowerCase();
-    const rollId = $("#rollIdSearch").val().toLowerCase();
+    const sizeId = $("#sizeIdSearch").val().toLowerCase();
 
-    $("#fabricsRollSearchList tr").filter(function () {
+    $("#accessoriesSizeSearchList tr").filter(function () {
       const id = this.id.slice(4);
       
       if($("#check-"+id).prop('checked') || ( ( !po.length || $("#purchaseOrder-"+id).text().toLowerCase().indexOf(po) > -1 ) && 
         ( !style.length || $("#styleNo-"+id).text().toLowerCase().indexOf(style) > -1 ) &&
         ( !item.length || $("#itemName-"+id).text().toLowerCase().indexOf(item) > -1 ) &&
-        ( !fabrics.length || $("#fabricsName-"+id).text().toLowerCase().indexOf(fabrics) > -1 ) &&
-        ( !color.length || $("#itemColor-"+id).text().toLowerCase().indexOf(color) > -1 || $("#fabricsColor-"+id).text().toLowerCase().indexOf(color) > -1 )  &&
-        ( !rollId.length || $("#rollId-"+id).text().toLowerCase().indexOf(rollId) > -1 ) ) ){      
+        ( !accessories.length || $("#accessoriesName-"+id).text().toLowerCase().indexOf(accessories) > -1 ) &&
+        ( !color.length || $("#itemColor-"+id).text().toLowerCase().indexOf(color) > -1 || $("#accessoriesColor-"+id).text().toLowerCase().indexOf(color) > -1 )  &&
+        ( !sizeId.length || $("#sizeId-"+id).text().toLowerCase().indexOf(sizeId) > -1 ) ) ){      
         $(this).show();
        }else{      
         $(this).hide();
@@ -775,6 +766,6 @@ $(document).ready(function () {
 
 
 var today = new Date();
-document.getElementById("transferInDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+document.getElementById("transferOutDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 

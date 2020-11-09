@@ -41,6 +41,7 @@ public class AccessoriesSize {
 	String userId;
 	int qcPassedType;
 	boolean isReturn;
+	String type;
 
 	public AccessoriesSize() {}
 
@@ -202,8 +203,36 @@ public class AccessoriesSize {
 		this.previousReturnQty = previousReturnQty;
 	}
 	
+	public AccessoriesSize( String purchaseOrder, String styleId,
+			String styleNo, String itemId, String itemName, String itemColorId, String itemColor, String accessoriesId,
+			String accessoriesName, String accessoriesColorId, String accessoriesColorName, String sizeId,String sizeName,String unitId,String unit,double balanceQty,String type) {
+		super();
+		this.purchaseOrder = purchaseOrder;
+		this.styleId = styleId;
+		this.styleNo = styleNo;
+		this.itemId = itemId;
+		this.itemName = itemName;
+		this.itemColorId = itemColorId;
+		this.itemColor = itemColor;
+		this.accessoriesId = accessoriesId;
+		this.accessoriesName = accessoriesName;
+		this.accessoriesColorId = accessoriesColorId;
+		this.accessoriesColorName = accessoriesColorName;
+		this.sizeId = sizeId;
+		this.sizeName = sizeName;
+		this.unitId = unitId;
+		this.unit = unit;
+		this.balanceQty = balanceQty;
+		this.type = type;
+	}
 	
-	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
 
 	public String getSizeName() {
 		return sizeName;

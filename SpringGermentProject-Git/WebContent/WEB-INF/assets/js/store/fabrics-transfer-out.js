@@ -30,7 +30,7 @@ $("#findFabricsTransferOutBtn").click(function () {
 
 
 $("#fabricsSearchBtn").click(function () {
-  const departmentId = "1";
+  const departmentId = $("#departmentId").val();
   
   $.ajax({
     type: 'GET',
@@ -334,7 +334,7 @@ function submitAction() {
   const transferOutDepartmentId = $("#department").val();
   const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();
   const userId = $("#userId").val();
 
   let rollList = ""

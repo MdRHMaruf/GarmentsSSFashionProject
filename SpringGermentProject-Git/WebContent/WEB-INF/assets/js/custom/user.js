@@ -1,17 +1,34 @@
+var departmentsByFactoryId = JSON;
+let departmentIdForSet = 0;
+function loadData() {
 
-$("#sp").click(function(){
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './departmentLoadByFactory',
+		data: {},
+		success: function (obj) {
+			departmentsByFactoryId = [];
+			departmentsByFactoryId = obj.departmentList;
+		}
+	});
+}
+
+window.onload = loadData;
+
+$("#sp").click(function () {
 
 
-	if($(this).is(":checked")){
-		$("#password").attr('type','text');
+	if ($(this).is(":checked")) {
+		$("#password").attr('type', 'text');
 	}
-	else{
-		$("#password").attr('type','password');
+	else {
+		$("#password").attr('type', 'password');
 	}
 
 });
 
-$(document).on("click",".permissionmoduleg",function(){
+$(document).on("click", ".permissionmoduleg", function () {
 
 	type_per();
 
@@ -20,14 +37,14 @@ $(document).on("click",".permissionmoduleg",function(){
 
 
 
-$(document).on("click",".menu_checked",function(){
+$(document).on("click", ".menu_checked", function () {
 
-	var mid=$(this).attr("data-id");
-	if($(this).is(":checked")){
-		$(".sub_menu_checked-"+mid).prop("checked",true);
+	var mid = $(this).attr("data-id");
+	if ($(this).is(":checked")) {
+		$(".sub_menu_checked-" + mid).prop("checked", true);
 	}
-	else{
-		$(".sub_menu_checked-"+mid).prop("checked",false);
+	else {
+		$(".sub_menu_checked-" + mid).prop("checked", false);
 
 	}
 
@@ -35,6 +52,21 @@ $(document).on("click",".menu_checked",function(){
 
 
 
+function loadDepartmentByFactory() {
+	var factoryId = $("#factoryName").val().trim();
+
+	var length = departmentsByFactoryId['factId' + factoryId].length;
+	var options = "<option value='0'>Select Department</option>";
+
+	for (var i = 0; i < length; i++) {
+		options += "<option value='" + departmentsByFactoryId['factId' + factoryId][i].departmentId + "'>" + departmentsByFactoryId['factId' + factoryId][i].departmentName + "</option>"
+	}
+
+	document.getElementById("departmentName").innerHTML = options;
+	document.getElementById("departmentName").value = departmentIdForSet;
+	departmentIdForSet = 0;
+
+}
 function type_per() {
 
 
@@ -50,7 +82,7 @@ function type_per() {
 		$(".permissionmoduleg").each(function () {
 			if ($(this).is(":checked")) {
 				var m = $(this).val();
-				var moduleid=m.substring(m.indexOf(":")+1,m.length);
+				var moduleid = m.substring(m.indexOf(":") + 1, m.length);
 				list[i++] = [moduleid];
 			}
 		});
@@ -64,10 +96,10 @@ function type_per() {
 		}
 		else {
 			$(".img").show();
-			var mydada= {
-					user:1,
-					id: id,
-					combineModuleList: combineModuleList,
+			var mydada = {
+				user: 1,
+				id: id,
+				combineModuleList: combineModuleList,
 			};
 
 			$.ajax({
@@ -76,7 +108,7 @@ function type_per() {
 				data: mydada,
 				success: function (data) {
 					$("#per").empty();
-					var count=0;
+					var count = 0;
 					$.each(data.result, function (key, val) {
 
 
@@ -96,23 +128,23 @@ function type_per() {
 						editChecked = "checked";
 						deleteChecked = "checked";
 
-						var firstrow="";
-						if(count==0){
-							firstrow="<tr>" +
-							"<th style='width:20%'>Menu</th>" +
-							"<th style='width:40%;'>Access Sub Menu</th>" +
-							"<th style='width:10%;'>Add</th>" +
-							"<th style='width:10%;'>Edit</th>" +
-							"<th style='width:10%;'>Delete</th>" +
-							"</tr>";
+						var firstrow = "";
+						if (count == 0) {
+							firstrow = "<tr>" +
+								"<th style='width:20%'>Menu</th>" +
+								"<th style='width:40%;'>Access Sub Menu</th>" +
+								"<th style='width:10%;'>Add</th>" +
+								"<th style='width:10%;'>Edit</th>" +
+								"<th style='width:10%;'>Delete</th>" +
+								"</tr>";
 						}
-						else{
-							firstrow="";
+						else {
+							firstrow = "";
 						}
 
 
-						var before_stuff="<div class='row'>" +
-						"<table class='table'>"+firstrow 
+						var before_stuff = "<div class='row'>" +
+							"<table class='table'>" + firstrow
 						/*								"<tr>" +
 								"<th >Checked</th>" +
 								"<th width='200px'>Access Sub Menu</th>" +
@@ -121,35 +153,35 @@ function type_per() {
 								"<th>Delete</th>" +
 								"</tr>" */
 
-						var stuff="<tr>" +
-						"<td style='width:20%' id='" + val.id + "p_menu_checked'></td>" +
-						"<td style='width:40%;' id='" + val.id + "p'></td>" +
-						"<td style='width:10%;' id='" + val.id + "p_add'></td>" +
-						"<td style='width:10%;' id='" + val.id + "p_edit'></td>" +
-						"<td style='width:10%;' id='" + val.id + "p_delete'></td>" +
-						"</tr>" +
-						"</table>"
+						var stuff = "<tr>" +
+							"<td style='width:20%' id='" + val.id + "p_menu_checked'></td>" +
+							"<td style='width:40%;' id='" + val.id + "p'></td>" +
+							"<td style='width:10%;' id='" + val.id + "p_add'></td>" +
+							"<td style='width:10%;' id='" + val.id + "p_edit'></td>" +
+							"<td style='width:10%;' id='" + val.id + "p_delete'></td>" +
+							"</tr>" +
+							"</table>"
 
-						+ "</div>";
+							+ "</div>";
 
 
-						$("#per").append(before_stuff+stuff);
+						$("#per").append(before_stuff + stuff);
 						count++;
 
 
-						s_stuff="";
-						add_stuff="";
-						edit_stuff="";
-						menu_stuff="";
-						delete_stuff="";
-						menu_checked_stuff="";
+						s_stuff = "";
+						add_stuff = "";
+						edit_stuff = "";
+						menu_stuff = "";
+						delete_stuff = "";
+						menu_checked_stuff = "";
 						$.each(val.sub, function (key, sv) {
 							// alert(sv.id);
-							s_stuff = s_stuff + "<input  onclick=t2() class='sub_menu_checked-"+val.id+"' sub-data-id='"+sv.id+"' name='active' id='" + sv.id + "' value='"+ val.moduleid + ":" + val.id + ":" + sv.id+ "' type='checkbox' " + unChecked + " />" + sv.sub + ""+"</br>";
-							add_stuff=add_stuff+"<input  onclick=t2() class='sub_menu_checked-add' sub-data-add-id='"+sv.id+"' name='active' id='" + sv.id + "' value='1' type='checkbox' " + addChecked + " />"+"</br>";
-							edit_stuff=edit_stuff+"<input onclick=t2() class='sub_menu_checked-edit' sub-data-edit-id='"+sv.id+"' name='active' id='" + sv.id + "' value='" + val.id + ":" + sv.id + "' type='checkbox' " + editChecked + " />"+"</br>";
-							delete_stuff=delete_stuff+"<input  onclick=t2() class='sub_menu_checked-delete' sub-data-delete-id='"+sv.id+"' name='active' id='" + sv.id + "' value='" + val.id + ":" + sv.id + "' type='checkbox' " + deleteChecked + " />"+"</br>";
-							menu_checked_stuff="<input class='menu_checked' data-id='"+val.id+"'  value='" + val.id + ":0' name='active' id='" + val.id + "c' type='checkbox' " + unChecked + ">" + val.head ;
+							s_stuff = s_stuff + "<input  onclick=t2() class='sub_menu_checked-" + val.id + "' sub-data-id='" + sv.id + "' name='active' id='" + sv.id + "' value='" + val.moduleid + ":" + val.id + ":" + sv.id + "' type='checkbox' " + unChecked + " />" + sv.sub + "" + "</br>";
+							add_stuff = add_stuff + "<input  onclick=t2() class='sub_menu_checked-add' sub-data-add-id='" + sv.id + "' name='active' id='" + sv.id + "' value='1' type='checkbox' " + addChecked + " />" + "</br>";
+							edit_stuff = edit_stuff + "<input onclick=t2() class='sub_menu_checked-edit' sub-data-edit-id='" + sv.id + "' name='active' id='" + sv.id + "' value='" + val.id + ":" + sv.id + "' type='checkbox' " + editChecked + " />" + "</br>";
+							delete_stuff = delete_stuff + "<input  onclick=t2() class='sub_menu_checked-delete' sub-data-delete-id='" + sv.id + "' name='active' id='" + sv.id + "' value='" + val.id + ":" + sv.id + "' type='checkbox' " + deleteChecked + " />" + "</br>";
+							menu_checked_stuff = "<input class='menu_checked' data-id='" + val.id + "'  value='" + val.id + ":0' name='active' id='" + val.id + "c' type='checkbox' " + unChecked + ">" + val.head;
 
 						});
 
@@ -230,7 +262,6 @@ function t2() {
 //this functionn use for the usualy create and update the user in the function
 function create_user() {
 
-
 	var active = $('input[name=active]:checked').val();
 	var user = $("#user").val();
 	var userId = $("#userId").val();
@@ -238,7 +269,8 @@ function create_user() {
 	var type = $("#type").val();
 	var shop = $("#shop").val();
 	var user_title = $("#user_title").val();
-
+	var factoryId = $("#factoryName").val();
+	var departmentId = $("#departmentName").val();
 
 
 	//var module=$("#module").val();
@@ -252,7 +284,7 @@ function create_user() {
 			selectedItemsModule.push(permissionmoduleg[i].value);
 		}
 	}
-	
+
 
 	var selectedItemsWare = [];
 	for (var i = 0; i < permissionware.length; i++) {
@@ -260,10 +292,10 @@ function create_user() {
 			selectedItemsWare.push(permissionware[i].value);
 		}
 	}
-	
 
 
-	if (user == '' || pass == '' || shop == '') {
+
+	if (user == '' || pass == '' || shop == '' || departmentId == '0' || factoryId == '0') {
 
 		alert('information not complete');
 
@@ -271,174 +303,128 @@ function create_user() {
 	}
 	else {
 
-		if (parseInt(type)==3) {
 
-			var accesslist = [];
-			var i = 0;
 
-			$(".menu_checked").each(function () {
-				if ($(this).is(":checked")) {
+		var accesslist = [];
+		var i = 0;
 
-					var id=$(this).attr("data-id");
+		$(".menu_checked").each(function () {
+			if ($(this).is(":checked")) {
 
-					$(".sub_menu_checked-"+id).each(function(){
+				var id = $(this).attr("data-id");
 
-						if($(this).is(":checked")){
+				$(".sub_menu_checked-" + id).each(function () {
 
-							var headsub = $(this).val();
+					if ($(this).is(":checked")) {
 
-							var add=0;
-							var edit=0;
-							var del=0;
-							var k=0;
-							$(".sub_menu_checked-add").each(function(){
+						var headsub = $(this).val();
 
-								if(k==i){
-									add=":"+getAccess(this);
-								}
+						var add = 0;
+						var edit = 0;
+						var del = 0;
+						var k = 0;
+						$(".sub_menu_checked-add").each(function () {
 
-								k++;
-							});
+							if (k == i) {
+								add = ":" + getAccess(this);
+							}
 
-							k=0;
-							$(".sub_menu_checked-edit").each(function(){
+							k++;
+						});
 
-								if(k==i){
-									edit=":"+getAccess(this);
-								}
+						k = 0;
+						$(".sub_menu_checked-edit").each(function () {
 
-								k++;
-							});
+							if (k == i) {
+								edit = ":" + getAccess(this);
+							}
 
-							k=0;
-							$(".sub_menu_checked-delete").each(function(){
+							k++;
+						});
 
-								if(k==i){
-									del=":"+getAccess(this);
-								}
+						k = 0;
+						$(".sub_menu_checked-delete").each(function () {
 
-								k++;
-							});
+							if (k == i) {
+								del = ":" + getAccess(this);
+							}
 
-							var value=headsub+add+edit+del;
-							accesslist[i++] = [value];
-						}
+							k++;
+						});
 
-					});
+						var value = headsub + add + edit + del;
+						accesslist[i++] = [value];
+					}
+
+				});
+			}
+		});
+
+
+		var valuelist = "[" + accesslist + "]";
+		var modulelist = "[" + selectedItemsModule + "]";
+		var warelist = "[" + selectedItemsWare + "]";
+
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: './addUser',
+			data: {
+				accesslist: valuelist,
+				active: active,
+				user: user,
+				userId: userId,
+				password: pass,
+				type: type,
+				factoryId: factoryId,
+				departmentId: departmentId,
+				shop: shop,
+				selectedItemsModule: modulelist,
+				selectedItemsWare: warelist,
+				user_title: user_title,
+			},
+			success: function (data) {
+				alert(data);
+				window.location = "user_create";
+
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				//alert("Server Error");
+				if (jqXHR.status === 0) {
+					alert('Not connect.\n Verify Network.');
+				} else if (jqXHR.status == 404) {
+					alert('Requested page not found.');
+				} else if (jqXHR.status == 500) {
+					alert('Internal Server Error.');
+				} else if (errorThrown === 'parsererror') {
+					alert('Requested JSON parse failed');
+				} else if (errorThrown === 'timeout') {
+					alert('Time out error');
+				} else if (errorThrown === 'abort') {
+					alert('Ajax request aborted ');
+				} else {
+					alert('Uncaught Error.\n' + jqXHR.responseText);
 				}
-			});
 
-
-			var valuelist="["+accesslist+"]";
-			var modulelist="["+selectedItemsModule+"]";
-			var warelist="["+selectedItemsWare+"]";
-
-
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: './addUser',
-				data: {
-					accesslist:valuelist,active: active, user: user,userId:userId, password: pass, type: type,
-					shop: shop, selectedItemsModule: modulelist,selectedItemsWare:warelist,
-					user_title: user_title,
-				},
-				success: function (data) {
-					alert(data);
-					window.location =  "user_create";
-
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					//alert("Server Error");
-					if (jqXHR.status === 0) {
-						alert('Not connect.\n Verify Network.');
-					} else if (jqXHR.status == 404) {
-						alert('Requested page not found.');
-					} else if (jqXHR.status == 500) {
-						alert('Internal Server Error.');
-					} else if (errorThrown === 'parsererror') {
-						alert('Requested JSON parse failed');
-					} else if (errorThrown === 'timeout') {
-						alert('Time out error');
-					} else if (errorThrown === 'abort') {
-						alert('Ajax request aborted ');
-					} else {
-						alert('Uncaught Error.\n' + jqXHR.responseText);
-					}
-
-				}
-			});
-
-		}
-
-		else {
-
-
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: li + 'user_access/addUser',
-				data: {
-					active: active, user: user, pass: pass, type: type,
-					shop: shop, selectedItemsModule: selectedItemsModule,
-					user_title: user_title,
-				},
-				success: function (data) {
-					if (data.id == 1) {
-
-						alert('user name already created');
-
-					}
-					else {
-
-						alert('inserted');
-
-						window.location = li + "admin/create_user";
-
-					}
-
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					//alert("Server Error");
-					if (jqXHR.status === 0) {
-						alert('Not connect.\n Verify Network.');
-					} else if (jqXHR.status == 404) {
-						alert('Requested page not found.');
-					} else if (jqXHR.status == 500) {
-						alert('Internal Server Error.');
-					} else if (errorThrown === 'parsererror') {
-						alert('Requested JSON parse failed');
-					} else if (errorThrown === 'timeout') {
-						alert('Time out error');
-					} else if (errorThrown === 'abort') {
-						alert('Ajax request aborted ');
-					} else {
-						alert('Uncaught Error.\n' + jqXHR.responseText);
-					}
-
-				}
-			});
-
-
-		}
-
+			}
+		});
 
 	}
-
 
 
 }
 
 
-function getAccess(v){
-	var a=0;
-	if($(v).is(":checked")){
+function getAccess(v) {
+	var a = 0;
+	if ($(v).is(":checked")) {
 
-		a= 1;
+		a = 1;
 
 	}
-	else{
-		a=0;
+	else {
+		a = 0;
 	}
 	return a;
 }
@@ -479,7 +465,7 @@ function getParent(id) {
 		type: 'POST',
 		dataType: 'json',
 		url: k,
-		data: {id: id, user_id: user_id, combineModuleList: combineModuleList},
+		data: { id: id, user_id: user_id, combineModuleList: combineModuleList },
 		success: function (data) {
 
 

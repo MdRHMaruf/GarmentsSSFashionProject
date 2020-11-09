@@ -37,7 +37,7 @@
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Transfer In</h5>
+			<h5 class="text-center" style="display: inline;">Accessories Transfer In</h5>
 		</header>
 		<hr class="my-1">
 		<div class="row">
@@ -49,11 +49,11 @@
 						<div class="input-group-append width-100">
 							<input id="transferInTransactionId" type="text"
 								class=" form-control-sm" readonly>
-							<button id="newFabricsTransferInBtn" type="button"
+							<button id="newAccessoriesTransferInBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm">
 								<i class="fa fa-file-text-o"></i>
 							</button>
-							<button id="findFabricsTransferInBtn" type="button"
+							<button id="findAccessoriesTransferInBtn" type="button"
 								class="btn btn-outline-dark btn-sm form-control-sm"
 								data-toggle="modal" data-target="#transferInSearchModal">
 								<i class="fa fa-search"></i>
@@ -100,10 +100,10 @@
 					<textarea id="remarks" class="col-md-9 form-control-sm"></textarea>
 
 				</div>
-				<button id="fabricsSearchBtn" type="button"
+				<button id="accessoriesSearchBtn" type="button"
 					class="btn btn-info btn-sm "
-					data-toggle="modal" placeholder="Search Fabrics Roll">
-					<i class="fa fa-search"></i> Fabrics Search
+					data-toggle="modal" placeholder="Search Accessories Size">
+					<i class="fa fa-search"></i> Accessories Search
 				</button>
 			</div>
 		</div>
@@ -116,8 +116,8 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font table-expandable">
 					<thead class="no-wrap-text">
 						<tr>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th>UOM</th>
 							<th>Receive Qty</th>
 							<th>Issue Qty</th>
@@ -126,7 +126,7 @@
 							<th>Transfer Qty</th>
 						</tr>
 					</thead>
-					<tbody id="rollList">
+					<tbody id="sizeList">
 
 					</tbody>
 				</table>
@@ -184,7 +184,7 @@
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsTransferInList">
+					<tbody id="accessoriesTransferInList">
 
 					</tbody>
 				</table>
@@ -195,7 +195,7 @@
 </div>
 
 <!-- Item Search Modal -->
-<div class="modal fade" id="rollSearchModal" tabindex="-1" role="dialog"
+<div class="modal fade" id="sizeSearchModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
@@ -232,16 +232,16 @@
 						placeholder="Item Name">
 				</div>
 				<div class="col-md-3 px-1">
-					<input type="text" class="form-control-sm" id="fabricsItemSearch"
-						placeholder="Fabrics Item">
+					<input type="text" class="form-control-sm" id="accessoriesItemSearch"
+						placeholder="Accessories Item">
 				</div>
 				<div class="col-md-2 px-1">
 					<input type="text" class="form-control-sm" id="colorSearch"
 						placeholder="Color">
 				</div>
 				<div class="col-md-2 px-1">
-					<input type="text" class="form-control-sm" id="rollIdSearch"
-						placeholder="Roll Id">
+					<input type="text" class="form-control-sm" id="sizeIdSearch"
+						placeholder="Size Id">
 				</div>
 			</div>
 			<div class="modal-body table-responsive" style="height: 70vh">
@@ -252,21 +252,21 @@
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
-							<th>Fabrics Name</th>
-							<th>Fabrics Color</th>
-							<th>RollId</th>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
+							<th>Size Name</th>
 							<th>Balance Qty</th>
 							<th><span><input type="checkbox" id="checkAll"></span></th>
 						</tr>
 					</thead>
-					<tbody id="fabricsRollSearchList">
+					<tbody id="accessoriesSizeSearchList">
 
 					</tbody>
 				</table>
 			</div>
 			<div class="modal-footer py-2">
 				<div class="d-flex justify-content-end">
-					<button id="rollAddBtn" class="btn btn-primary btn-sm">
+					<button id="sizeAddBtn" class="btn btn-primary btn-sm">
 						<span><i class="fas fa-plus-circle"></i></span> Add
 					</button>
 				</div>
@@ -278,4 +278,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/store/fabrics-transfer-in.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/store/accessories-transfer-in.js"></script>
