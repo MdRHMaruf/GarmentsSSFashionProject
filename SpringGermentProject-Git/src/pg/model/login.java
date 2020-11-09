@@ -7,14 +7,18 @@ public class login implements Serializable{
 	int id;
 	int type;
 	int ware;
+	String factoryId;
+	String departmentId;
 	String pass;
 	
 	
 	
-	public login(int id,int type,String user,String pass) {
+	public login(int id,int type,String factoryId,String departmentId,String user,String pass) {
 		this.user = user;
 		this.id = id;
 		this.type = type;
+		this.factoryId = factoryId;
+		this.departmentId = departmentId;
 		this.pass = pass;
 	}
 	public String getUser() {
@@ -46,6 +50,18 @@ public class login implements Serializable{
 	}
 	public void setWare(int ware) {
 		this.ware = ware;
+	}
+	public String getFactoryId() {
+		return factoryId;
+	}
+	public void setFactoryId(String factoryId) {
+		this.factoryId = factoryId;
+	}
+	public String getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
 	}
 
 	

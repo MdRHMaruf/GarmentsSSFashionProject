@@ -74,7 +74,7 @@ function submitAction() {
   const challanDate = $("#challanDate").val();
   const remarks = $("#remarks").val();
   const preparedBy = $("#preparedBy").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();
   const userId = $("#userId").val();
 
   let rollList = ""

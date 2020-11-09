@@ -325,7 +325,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 
 			String sql="select module,root,id,(select name from Tbmodule where id=TbSubMenu.module) as ModuleName,(select name from Tbmenu where id=root) as head,name,links from TbSubMenu order by root,module";
 			List<?> list = session.createSQLQuery(sql).list();
@@ -369,17 +369,19 @@ public class SettingDAOImpl implements SettingDAO {
 			accesslit=accesslit.replace("[", "");
 			accesslit=accesslit.replace("]", "");
 			System.out.println("list "+accesslit);
-			
+
 			String warelist=v.getSelectedItemsWare();
 			warelist=warelist.replace("[", "");
 			warelist=warelist.replace("]", "");
 			System.out.println("warelist "+warelist);
-			
+
 			String sql="insert into Tblogin ("
 					+ "id,"
 					+ "password,"
 					+ "username,"
 					+ "type,"
+					+ "factoryId,"
+					+ "departmentId,"
 					+ "active,"
 					+ "createby,"
 					+ "entrytime"
@@ -388,13 +390,14 @@ public class SettingDAOImpl implements SettingDAO {
 					+ "'"+v.getPassword()+"',"
 					+ "'"+v.getUser()+"',"
 					+ "'"+v.getType()+"',"
+					+ "'"+v.getFactoryId()+"',"
+					+ "'"+v.getDepartmentId()+"',"
 					+ "'"+v.getActive()+"',"
 					+ "'"+v.getUserId()+"',"
 					+ "CURRENT_TIMESTAMP"
 					+ ")";
 
 			session.createSQLQuery(sql).executeUpdate();
-
 
 
 			StringTokenizer s=new StringTokenizer(accesslit,",");
@@ -408,7 +411,6 @@ public class SettingDAOImpl implements SettingDAO {
 					String add=s2.nextToken();
 					String edit=s2.nextToken();
 					String delete=s2.nextToken();
-
 					String sqlpass="insert into Tbuseraccess ("
 							+ "userId,"
 							+ "head,"
@@ -437,11 +439,10 @@ public class SettingDAOImpl implements SettingDAO {
 				}
 			}
 
-
 			StringTokenizer s2=new StringTokenizer(modulelist,",");
 			while(s2.hasMoreElements()) {
 				String moduletoken=s2.nextToken();
-				
+
 				StringTokenizer s3=new StringTokenizer(moduletoken,":");
 				while(s3.hasMoreElements()) {
 					String wareId=s3.nextToken();
@@ -460,9 +461,9 @@ public class SettingDAOImpl implements SettingDAO {
 						+ "CURRENT_TIMESTAMP"
 						+ ")";
 
-				session.createSQLQuery(sqlpass).executeUpdate();
+					session.createSQLQuery(sqlpass).executeUpdate();
 				}
-				
+
 
 			}
 

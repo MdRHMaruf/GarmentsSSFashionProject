@@ -79,19 +79,19 @@ public class AccessoriesTransferIn {
 	public void setReceiveFrom(String receiveFrom) {
 		this.receiveFrom = receiveFrom;
 	}
-	public String getRollList() {
+	public String getSizeList() {
 		return sizeList;
 	}
-	public void setRollList(String rollList) {
+	public void setSizeList(String sizeList) {
 		try {
-			System.out.println(rollList);
-			if(rollList.trim().length()>0) {
-				String[] rollLists = rollList.split("#");
+			System.out.println(sizeList);
+			if(sizeList.trim().length()>0) {
+				String[] sizeLists = sizeList.split("#");
 				List<AccessoriesSize> list = new ArrayList<AccessoriesSize>();
-				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,rollId,supplierRollId,unitId,unit,userId,rackName,binName;
+				String autoId,transectionId,purchaseOrder,styleId,itemId,itemColorId,fabricsId,fabricsName,fabricsColorId,fabricsColorName,sizeId,supplierSizeId,unitId,unit,userId,rackName,binName;
 				double qcReturnQty,unitQty,balanceQty; int qcPassedType;
 				boolean isReturn;
-				for (String item : rollLists) {
+				for (String item : sizeLists) {
 					String[] itemProperty = item.split(",");
 					autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 					transectionId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
@@ -104,21 +104,21 @@ public class AccessoriesTransferIn {
 					fabricsColorId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
 					fabricsColorName = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();;
 					balanceQty = 0;
-					rollId = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
-					supplierRollId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+					sizeId = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
+					supplierSizeId = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
 					unitId = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
 					unit = itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim();
 					unitQty = Double.valueOf(itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim());
 					rackName = itemProperty[15].substring(itemProperty[15].indexOf(":")+1).trim();
 					binName = itemProperty[16].substring(itemProperty[16].indexOf(":")+1).trim();
 					qcPassedType = 1;
-					list.add(new AccessoriesSize(autoId, transectionId, purchaseOrder, styleId,"Style No", itemId,"item Name" ,itemColorId,"item color", fabricsId,fabricsName, fabricsColorId,fabricsColorName, rollId ,supplierRollId, unitId,"unitName", balanceQty,unitQty, rackName, binName,qcPassedType));
+					list.add(new AccessoriesSize(autoId, transectionId, purchaseOrder, styleId,"Style No", itemId,"item Name" ,itemColorId,"item color", fabricsId,fabricsName, fabricsColorId,fabricsColorName, sizeId ,supplierSizeId, unitId,"unitName", balanceQty,unitQty, rackName, binName,qcPassedType));
 				}
 
 				this.accessoriesSizeList = list;
 				
 			}
-			this.sizeList = rollList;
+			this.sizeList = sizeList;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

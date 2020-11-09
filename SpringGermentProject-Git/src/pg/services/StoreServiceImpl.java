@@ -26,6 +26,8 @@ import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+import pg.storeModel.PendingTransaction;
+import pg.storeModel.StockItem;
 import pg.storeModel.StoreGeneralCategory;
 import pg.storeModel.StoreGeneralReceived;
 
@@ -272,6 +274,11 @@ public class StoreServiceImpl implements StoreService{
 	public FabricsTransferOut getFabricsTransferOutInfo(String issueTransectionId) {
 		// TODO Auto-generated method stub
 		return storeDao.getFabricsTransferOutInfo(issueTransectionId);
+	}
+	@Override
+	public List<FabricsRoll> getTransferInFabricsRollList(String departmentId, String transferDepartmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getTransferInFabricsRollList(departmentId, transferDepartmentId);
 	}
 
 	@Override
@@ -566,6 +573,13 @@ public class StoreServiceImpl implements StoreService{
 		// TODO Auto-generated method stub
 		return storeDao.getAccessoriesTransferOutInfo(issueTransectionId);
 	}
+	
+
+	@Override
+	public List<AccessoriesSize> getTransferInAccessoriesSizeList(String departmentId, String transferDepartmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getTransferInAccessoriesSizeList(departmentId, transferDepartmentId);
+	}
 
 	@Override
 	public boolean submitAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn) {
@@ -687,5 +701,37 @@ public class StoreServiceImpl implements StoreService{
 		return storeDao.getAccessoriesSizeListByAccessories(accessorisList);
 	}
 
+	@Override
+	public List<PendingTransaction> getPendingTransactionList(String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getPendingTransactionList(departmentId);
+	}
+
+	@Override
+	public boolean fabricsIssueReceive(String transactionId, String transactionType,String departmentId,String userId) {
+		// TODO Auto-generated method stub
+		return storeDao.fabricsIssueReceive(transactionId, transactionType,departmentId,userId);
+	}
+
+	@Override
+	public List<PendingTransaction> getPendingFabricsIssueList(String departmentId,String fromDate, String toDate, String itemType,
+			String approveType) {
+		// TODO Auto-generated method stub
+		return storeDao.getPendingFabricsIssueList(departmentId,fromDate, toDate, itemType, approveType);
+	}
+
+	@Override
+	public List<StockItem> getStockItemSummeryList(String fromDate,String toDate,String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getStockItemSummeryList(fromDate,toDate,departmentId);
+	}
+
+	@Override
+	public List<StockItem> getStockItemDetailsList(String fromDate, String toDate, String departmentId) {
+		// TODO Auto-generated method stub
+		return storeDao.getStockItemDetailsList(fromDate,toDate,departmentId);
+	}
+
+	
 
 }

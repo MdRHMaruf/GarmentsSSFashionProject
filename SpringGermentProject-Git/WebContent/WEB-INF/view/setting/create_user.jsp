@@ -9,7 +9,6 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
-
 <script type="text/javascript"> var contexPath = "<%=request.getContextPath()%>";
 </script>
 
@@ -24,9 +23,9 @@
 				<h2 class="page-header">Users Panel</h2>
 			</div>
 		</div>
-		
+
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		
+
 		<div class="row">
 			<div class="col-md-12">
 				<button type="button" id="Popup" class="btn btn-sm btn-primary"
@@ -114,8 +113,40 @@
 										</div>
 									</div>
 
+									<div class="row mt-1">
+										<label for="factoryName" class="col-sm-4 p-0">Factory
+											Name:</label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-sm" id="factoryName"
+												onchange="loadDepartmentByFactory()">
+												<option value="0">Select Factory</option>
+												<c:forEach items="${factoryList}" var="factory"
+													varStatus="counter">
+													<option value="${factory.factoryid}">${factory.factoryname}</option>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
 
-<%-- 									<label class="col-sm-12" style="color: red; font-weight: bold">Warehouse</label>
+									<div class="row mt-1">
+										<label class="col-sm-4 p-0" for="departmentName">Department
+											Name:</label>
+										<div class="col-sm-8">
+											<select class="form-control form-control-sm"
+												id="departmentName">
+												<option value="0">Select Department</option>
+												<c:forEach items="${departmentLis}" var="department"
+													varStatus="counter">
+													<option value="${department.departmentId}">${department.departmentName}</option>
+												</c:forEach>
+											</select>
+
+										</div>
+									</div>
+
+
+
+									<%-- 									<label class="col-sm-12" style="color: red; font-weight: bold">Warehouse</label>
 									<div class="row mt-1">
 										<div class="col-sm-12">
 

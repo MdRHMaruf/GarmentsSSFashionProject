@@ -32,6 +32,7 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="departmentId" value="<%=lg.get(0).getDepartmentId()%>">
 	<input type="hidden" id="poNo" value="0"> <input type="hidden"
 		id="indentId" value="0"> <input type="hidden" id="styleId"
 		value="0"> <input type="hidden" id="styleItemId" value="0">

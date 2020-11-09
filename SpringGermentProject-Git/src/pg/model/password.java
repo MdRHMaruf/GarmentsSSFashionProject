@@ -25,6 +25,8 @@ public class password {
     String by;
     int status;
     String session;
+    String factoryId;
+    String departmentId;
     
     String accesslist;
     
@@ -110,6 +112,18 @@ public class password {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	public String getFactoryId() {
+		return factoryId;
+	}
+	public void setFactoryId(String factoryId) {
+		this.factoryId = factoryId;
+	}
+	public String getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(String departmentId) {
+		this.departmentId = departmentId;
 	}
     
 	

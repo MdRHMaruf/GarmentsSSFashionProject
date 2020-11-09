@@ -25,6 +25,7 @@
 			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+		<input type="hidden" id="departmentId" value="<%=lg.get(0).getDepartmentId()%>">
 		<input type="hidden" id="itemId" value="0">
 
 		<div class="row">

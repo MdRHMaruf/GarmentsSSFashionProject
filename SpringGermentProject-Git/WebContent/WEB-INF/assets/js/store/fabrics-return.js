@@ -363,7 +363,7 @@ function submitAction() {
   const returnDate = $("#returnDate").val();
   const supplierId = $("#supplier").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();
   const userId = $("#userId").val();
 
   let rollList = ""

@@ -25,7 +25,8 @@ import pg.storeModel.StoreGeneralReceived;
 
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
-
+import pg.storeModel.PendingTransaction;
+import pg.storeModel.StockItem;
 import pg.storeModel.StoreGeneralCategory;
 import pg.storeModel.StoreGeneralReceived;
 
@@ -86,6 +87,7 @@ public interface StoreService {
 	FabricsTransferOut getFabricsTransferOutInfo(String issueTransectionId);
 
 	//Fabrics TransferIn
+	List<FabricsRoll> getTransferInFabricsRollList(String departmentId,String transferDepartmentId);
 	boolean submitFabricsTransferIn(FabricsTransferIn fabricsTransferIn);
 	boolean editFabricsTransferIn(FabricsTransferIn fabricsTransferIn);
 	String editTransferIndRollInTransaction(FabricsRoll fabricsRoll);
@@ -152,7 +154,8 @@ public interface StoreService {
 	List<AccessoriesTransferOut> getAccessoriesTransferOutList();
 	AccessoriesTransferOut getAccessoriesTransferOutInfo(String issueTransectionId);
 
-	//Accessories TransferIn
+	//Accessories Transfer In
+	List<AccessoriesSize> getTransferInAccessoriesSizeList(String departmentId,String transferDepartmentId);
 	boolean submitAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn);
 	boolean editAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn);
 	String editTransferIndSizeInTransaction(AccessoriesSize accessoriesSize);
@@ -180,4 +183,12 @@ public interface StoreService {
 	List<FabricsRoll> getCuttingUsedFabricsRequisitionList(String cuttingEntryId,String departmentId);
 	boolean updateFabricRequisitionStatus(String requisitionNo,String requisitionStatus);
 
+	// Pending Fabrics Issue Receive
+	List<PendingTransaction> getPendingTransactionList(String departmentId);
+	boolean fabricsIssueReceive(String transactionId,String transactionType,String departmentId,String userId);
+	List<PendingTransaction> getPendingFabricsIssueList(String departmentId,String fromDate,String toDate,String itemType,String approveType);
+	
+	//Stock Summery
+	List<StockItem> getStockItemSummeryList(String fromDate,String toDate,String departmentId);
+	List<StockItem> getStockItemDetailsList(String fromDate,String toDate,String departmentId);
 }

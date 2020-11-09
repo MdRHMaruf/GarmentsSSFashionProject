@@ -30,7 +30,7 @@ $("#findFabricsIssueBtn").click(function () {
 
 
 $("#fabricsSearchBtn").click(function () {
-  const departmentId = "1";
+  const departmentId = $("#departmentId").val();;
   
   $.ajax({
     type: 'GET',
@@ -49,7 +49,7 @@ $("#fabricsSearchBtn").click(function () {
 
 
 function searchCuttingUsedFabrics(cuttingEntryId){
-  const departmentId = "1";
+  const departmentId = $("#departmentId").val();;
   
   $.ajax({
     type: 'GET',
@@ -535,7 +535,7 @@ function submitAction() {
   const issuedDepartmentId = $("#department").val();
   const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();;
   const userId = $("#userId").val();
 
   const requisitionNo = $("#requisitionNo").val();

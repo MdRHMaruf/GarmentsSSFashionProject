@@ -1,6 +1,8 @@
 package pg.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.model.login;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.proudctionModel.CuttingInformation;
@@ -49,6 +52,8 @@ import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+import pg.storeModel.PendingTransaction;
+import pg.storeModel.StockItem;
 import pg.storeModel.StoreGeneralCategory;
 import pg.storeModel.StoreGeneralReceived;
 
@@ -58,7 +63,7 @@ public class StoreController {
 
 	@Autowired
 	private ProductionService productionService;
-	
+
 	@Autowired
 	private RegisterService registerService;
 	@Autowired
@@ -522,6 +527,14 @@ public class StoreController {
 		map.addAttribute("departmentList",departmentList);
 		return view; 
 	}
+	
+	@RequestMapping(value = "/getTransferInFabricsRollList", method = RequestMethod.GET)
+	public JSONObject getTransferInFabricsRollList(String departmentId,String transferDepartmentId) {
+		JSONObject mainObject = new JSONObject();
+		List<FabricsRoll> fabricsRollList = storeService.getTransferInFabricsRollList(departmentId,transferDepartmentId);
+		mainObject.put("fabricsRollList",fabricsRollList);
+		return mainObject;
+	}
 
 	@RequestMapping(value = "/submitFabricsTransferIn",method=RequestMethod.POST)
 	public @ResponseBody JSONObject submitFabricsTransferIn(FabricsTransferIn	fabricsTransferIn) {
@@ -602,32 +615,32 @@ public class StoreController {
 		mainObject.put("purchaseOrderList", purchaseOrderList);
 		return mainObject;
 	}
-	
+
 	@RequestMapping(value = "/getAccessoriesSizeList",method = RequestMethod.GET)
 	public JSONObject getAccessoriesSizeList(String accessoriesList) {
 		JSONObject mainObject = new JSONObject();	
-		
+
 		List<AccessoriesIndent> list = new ArrayList<>();
 		try {
-				String[] rollLists = accessoriesList.split("#");	
-				String autoId,transectionId,purchaseOrder,styleId,styleName,itemId,itemName,itemColorId,itemColorName,accessoriesId,accessoriesName,accessoriesColorId,accessoriesColorName;
-				double qcReturnQty,unitQty,balanceQty; int qcPassedType;
-				boolean isReturn;
-				for (String item : rollLists) {
-					String[] itemProperty = item.split(",");
-					purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
-					styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
-					styleName = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
-					itemId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
-					itemName = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
-					itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
-					itemColorName = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
-					accessoriesId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
-					accessoriesName = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
-					accessoriesColorId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
-					accessoriesColorName = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();;
-					list.add(new AccessoriesIndent(purchaseOrder, styleId, styleName, itemId, itemName, itemColorId, itemColorName, accessoriesId, accessoriesName, accessoriesColorId, accessoriesColorName));
-				}
+			String[] rollLists = accessoriesList.split("#");	
+			String autoId,transectionId,purchaseOrder,styleId,styleName,itemId,itemName,itemColorId,itemColorName,accessoriesId,accessoriesName,accessoriesColorId,accessoriesColorName;
+			double qcReturnQty,unitQty,balanceQty; int qcPassedType;
+			boolean isReturn;
+			for (String item : rollLists) {
+				String[] itemProperty = item.split(",");
+				purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+				styleName = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				itemId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				itemName = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				itemColorId = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+				itemColorName = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+				accessoriesId = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+				accessoriesName = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				accessoriesColorId = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+				accessoriesColorName = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();;
+				list.add(new AccessoriesIndent(purchaseOrder, styleId, styleName, itemId, itemName, itemColorId, itemColorName, accessoriesId, accessoriesName, accessoriesColorId, accessoriesColorName));
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -845,8 +858,8 @@ public class StoreController {
 		map.addAttribute("requisitionList",requisitionList);
 		return view; 
 	}
-	
-	
+
+
 	@RequestMapping(value = "/getRequisitionAccessoriesList", method = RequestMethod.GET)
 	public JSONObject getRequisitionAccessoriesList(String cuttingEntryId,String departmentId) {
 		JSONObject mainObject = new JSONObject();
@@ -854,7 +867,7 @@ public class StoreController {
 		mainObject.put("accessoriesList",accessoriesList);
 		return mainObject;
 	}
-	
+
 	@RequestMapping(value = "/getRequisitionAccessoriesSizeList", method = RequestMethod.GET)
 	public JSONObject getRequisitionAccessoriesSizeList(String cuttingEntryId,String accessoriesIdList,String departmentId) {
 		JSONObject mainObject = new JSONObject();
@@ -1083,6 +1096,15 @@ public class StoreController {
 		map.addAttribute("departmentList",departmentList);
 		return view; 
 	}
+	
+	
+	@RequestMapping(value = "/getTransferInAccessoriesSizeList", method = RequestMethod.GET)
+	public JSONObject getTransferInAccessoriesSizeList(String departmentId,String transferDepartmentId) {
+		JSONObject mainObject = new JSONObject();
+		List<AccessoriesSize> accessoriesSizeList = storeService.getTransferInAccessoriesSizeList(departmentId,transferDepartmentId);
+		mainObject.put("accessoriesSizeList",accessoriesSizeList);
+		return mainObject;
+	}
 
 	@RequestMapping(value = "/submitAccessoriesTransferIn",method=RequestMethod.POST)
 	public @ResponseBody JSONObject submitAccessoriesTransferIn(AccessoriesTransferIn	accessoriesTransferIn) {
@@ -1141,9 +1163,9 @@ public class StoreController {
 		mainObject.put("accessoriesTransferIn",accessoriesTransferIn);
 		return mainObject;
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(value = "/general_item_create",method=RequestMethod.GET)
 	public ModelAndView general_item_create(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("store/general_item_create");
@@ -1157,7 +1179,7 @@ public class StoreController {
 		return view; 
 	}
 
-	
+
 
 
 	@RequestMapping(value = "/saveGeneralItem",method=RequestMethod.POST)
@@ -1298,7 +1320,7 @@ public class StoreController {
 		return view;
 	}
 
-	
+
 	@RequestMapping(value = "/cutting_fabrics_requistion",method=RequestMethod.GET)
 	public ModelAndView cutting_fabrics_requistion(ModelMap map,HttpSession session) {
 		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();
@@ -1317,13 +1339,13 @@ public class StoreController {
 		List<CuttingFabricsUsed> List= storeService.getCuttingUsedFabricsList(cuttingEntryId);
 
 		objmain.put("result", List);
-		
+
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/sendCuttingFabricsRequistion",method=RequestMethod.POST)
 	public @ResponseBody String sendCuttingFabricsRequistion(CuttingFabricsUsed v) {
-		
+
 		String msg="Create occure while send requistion";
 
 		if(storeService.sendCuttingFabricsRequistion(v)) {
@@ -1333,17 +1355,17 @@ public class StoreController {
 
 		return msg;
 	}
-	
+
 	@RequestMapping(value = "/printCuttingUsedFabricsInfo/{cuttingEntryId}")
 	public @ResponseBody ModelAndView printLayoutInfo(ModelMap map,@PathVariable ("cuttingEntryId") String cuttingEntryId) {
-		
+
 		ModelAndView view=new ModelAndView("store/printCuttingFabricsRequisitionReport");
 		map.addAttribute("cuttingEntryId", cuttingEntryId);
 
 
 		return view;
 	}
-	
+
 	@RequestMapping(value = "/cutting_fabrics_issue",method=RequestMethod.GET)
 	public ModelAndView cutting_fabrics_issue(ModelMap map,HttpSession session) {
 		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
@@ -1353,7 +1375,7 @@ public class StoreController {
 		view.addObject("cuttingReqList",cuttingReqList);
 		return view; 
 	}
-	
+
 	@RequestMapping(value = "/searchCuttingUsedFabricsRequisition",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchCuttingUsedFabricsRequisition(String cuttingEntryId,String departmentId) {
 		JSONObject objmain = new JSONObject();
@@ -1361,9 +1383,105 @@ public class StoreController {
 		List<FabricsRoll> fabricsRollList= storeService.getCuttingUsedFabricsRequisitionList(cuttingEntryId,departmentId);
 
 		objmain.put("fabricsRollList", fabricsRollList);
+
+		return objmain;
+	}
+
+
+	//fabrics pending transaction
+	@RequestMapping(value = "/fabrics_pending_transaction",method=RequestMethod.GET)
+	public ModelAndView fabrics_pending_transaction(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("store/fabrics-pending-transaction");
+		List<login> lg = (List<login>)session.getAttribute("pg_admin");
+		
+		List<PendingTransaction> pendingList = storeService.getPendingTransactionList(lg.get(0).getDepartmentId());
+		view.addObject("pendingList",pendingList);
+		return view; 
+	}
+
+	
+	@RequestMapping(value = "/printFabricsIssue/{transactionId}/{transactionType}")
+	public @ResponseBody ModelAndView printFabricsIssue(ModelMap map,@PathVariable ("transactionId") String transactionId,@PathVariable ("transactionType") String transactionType) {
+
+		ModelAndView view=new ModelAndView("store/printFabricsIssue");
+		map.addAttribute("transactionId", transactionId);
+		map.addAttribute("transactionType", transactionType);
+		return view;
+	}
+	
+	@RequestMapping(value = "/fabricsIssueReceive",method=RequestMethod.POST)
+	public @ResponseBody String fabricsIssueReceive(String transactionId,String transactionType,String departmentId,String userId) {
+
+		if(storeService.fabricsIssueReceive(transactionId,transactionType,departmentId,userId))
+			return "true";
+		return "false";
+	}
+	
+	@RequestMapping(value = "/getPendingFabricsIssueList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getPendingFabricsIssueList(String departmentId,String fromDate,String toDate,String itemType,String approveType) {
+		JSONObject objmain = new JSONObject();
+		objmain.put("pendingList", storeService.getPendingFabricsIssueList(departmentId,fromDate,toDate,itemType,approveType));
 		
 		return objmain;
 	}
 	
+	//accessories pending transaction
+	@RequestMapping(value = "/accessories_pending_transaction",method=RequestMethod.GET)
+	public ModelAndView accessories_pending_transaction(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("store/fabrics-pending-transaction");
+		List<Department> departmentList = registerService.getDepartmentList();
+		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
+		map.addAttribute("departmentList",departmentList);
+		view.addObject("cuttingReqList",cuttingReqList);
+		return view; 
+	}
 	
+	
+	// Stock Position
+	@RequestMapping(value = "/stock_position",method=RequestMethod.GET)
+	public ModelAndView stock_position(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("store/stock-position");
+		List<login> lg = (List<login>)session.getAttribute("pg_admin");
+		
+		String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+		List<StockItem> stockItemList = storeService.getStockItemSummeryList(currentDate,currentDate,lg.get(0).getDepartmentId());
+		view.addObject("stockItemList",stockItemList);
+		return view; 
+	}
+	
+	@RequestMapping(value = "/getStockItemPositionSummery",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getStockItemPositionSummery(String fromDate,String toDate,String departmentId) {
+		JSONObject objmain = new JSONObject();
+
+		List<StockItem> stockItemList = storeService.getStockItemSummeryList(fromDate,toDate,departmentId);
+
+		objmain.put("itemList", stockItemList);
+
+		return objmain;
+	}
+	
+	// Stock Position Details
+		@RequestMapping(value = "/stock_position_details",method=RequestMethod.GET)
+		public ModelAndView stock_position_details(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("store/stock-position-details");
+			List<login> lg = (List<login>)session.getAttribute("pg_admin");
+			
+			String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+			List<StockItem> stockItemList = storeService.getStockItemDetailsList(currentDate,currentDate,lg.get(0).getDepartmentId());
+			
+			System.out.println("list size-"+stockItemList.size());
+			view.addObject("stockItemList",stockItemList);
+			return view; 
+		}
+		
+		@RequestMapping(value = "/getStockItemPositionDetails",method=RequestMethod.GET)
+		public @ResponseBody JSONObject getStockItemPositionDetails(String fromDate,String toDate,String departmentId) {
+			JSONObject objmain = new JSONObject();
+
+			List<StockItem> stockItemList = storeService.getStockItemDetailsList(fromDate,toDate,departmentId);
+
+			objmain.put("itemList", stockItemList);
+
+			return objmain;
+		}
 }

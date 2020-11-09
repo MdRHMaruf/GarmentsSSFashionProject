@@ -30,7 +30,7 @@ $("#findAccessoriesIssueReturnBtn").click(function () {
 
 
 $("#accessoriesSearchBtn").click(function () {
-  const departmentId = "1";
+  const departmentId = $("#departmentId").val();;
   const returnDepartmentId = $("#department").val();
   
   if(returnDepartmentId > 0 ){
@@ -337,7 +337,7 @@ function submitAction() {
   const issueReturnDepartmentId = $("#department").val();
   const receiveFrom = $("#receiveFrom").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();;
   const userId = $("#userId").val();
 
   let sizeList = ""
@@ -424,7 +424,7 @@ function editAction() {
   const issueReturnDepartmentId = $("#department").val();
   const receiveFrom = $("#receiveFrom").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();;
   const userId = $("#userId").val();
 
   let sizeList = ""

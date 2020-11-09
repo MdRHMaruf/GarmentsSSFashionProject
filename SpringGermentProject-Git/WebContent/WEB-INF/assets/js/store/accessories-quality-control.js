@@ -103,7 +103,7 @@ function submitAction() {
   const grnNo = $("#grnNo").val();
   const remarks = $("#remarks").val();
   const checkBy = $("#checkBy").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();
   const userId = $("#userId").val();
 
   let sizeList = ""

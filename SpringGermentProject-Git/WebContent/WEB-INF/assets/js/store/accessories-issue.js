@@ -30,8 +30,8 @@ $("#findAccessoriesIssueBtn").click(function () {
 
 
 $("#accessoriesSearchBtn").click(function () {
-  const departmentId = "1";
-  
+  const departmentId = $("#departmentId").val();
+ 
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -49,7 +49,7 @@ $("#accessoriesSearchBtn").click(function () {
 
 
 function searchAccessoriesRequisition(cuttingEntryId){
-  const departmentId = "1";
+  const departmentId = $("#departmentId").val();;
   $("#cuttingEntryId").val(cuttingEntryId);
   $.ajax({
     type: 'GET',
@@ -331,7 +331,7 @@ $("#requisitionSizeAddBtn").click(function(){
   let rackIdList = [];
   let binIdList = [];
 
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();;
   const cuttingEntryId = $("#cuttingEntryId").val();
   $("#requisitionAccessoriesSearchList tr").filter(function () {
     const id = this.id.slice(15);
@@ -572,7 +572,7 @@ function submitAction() {
   const issuedDepartmentId = $("#department").val();
   const receiveBy = $("#receiveBy").val();
   const remarks = $("#remarks").val();
-  const departmentId = 1;
+  const departmentId = $("#departmentId").val();;
   const userId = $("#userId").val();
 
   const requisitionNo = $("#requisitionNo").val();

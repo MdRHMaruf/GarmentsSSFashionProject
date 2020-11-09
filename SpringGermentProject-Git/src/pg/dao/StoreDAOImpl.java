@@ -1,6 +1,8 @@
 package pg.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -38,6 +40,8 @@ import pg.storeModel.FabricsReturn;
 import pg.storeModel.FabricsRoll;
 import pg.storeModel.FabricsTransferIn;
 import pg.storeModel.FabricsTransferOut;
+import pg.storeModel.PendingTransaction;
+import pg.storeModel.StockItem;
 import pg.storeModel.StoreGeneralCategory;
 import pg.storeModel.StoreGeneralReceived;
 import pg.storeModel.StoreGeneralCategory;
@@ -188,7 +192,7 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,"
 					+ "'"+fabricsReceive.getUserId()+"') ;";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			sql = "select isnull(max(autoId),0) as id from  tbFabricsRollInfo";		
 			int rollId = 0;
 			list = session.createSQLQuery(sql).list();
@@ -202,7 +206,7 @@ public class StoreDAOImpl implements StoreDAO{
 				session.createSQLQuery(sql).executeUpdate();
 
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+rollId+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+rollId+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsReceive.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -254,7 +258,7 @@ public class StoreDAOImpl implements StoreDAO{
 			{	
 				rollId = Integer.valueOf(list.get(0).toString());				
 			}	
-			int departmentId = 1;
+
 			if(fabricsReceive.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsReceive.getFabricsRollList()) {
 					rollId++;
@@ -262,7 +266,7 @@ public class StoreDAOImpl implements StoreDAO{
 					session.createSQLQuery(sql).executeUpdate();
 
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsReceive.getTransactionId()+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsReceive.getTransactionId()+"','"+StoreTransaction.FABRICS_RECEIVE.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsReceive.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReceive.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 
@@ -422,10 +426,10 @@ public class StoreDAOImpl implements StoreDAO{
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,dItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId,\r\n" + 
-					"findent.RequireUnitQty as orderQty,(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = '1' and far.transactionId != t.transactionId) as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.rollId = t.rollId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = '1') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.rollId = t.rollId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '1') as issueQty,\r\n"
-					+ "(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction qc where far.purchaseOrder=qc.purchaseOrder and far.styleId =qc.styleId and far.styleItemId= qc.styleItemId and far.colorId = qc.colorId and far.dItemId = qc.dItemId and far.itemColorId = qc.itemColorId and far.rollId = qc.rollId and qc.transactionType = '"+StoreTransaction.FABRICS_QC.getType()+"' and qc.departmentId = '1') as qcPassedQty \r\n" + 
+					"findent.RequireUnitQty as orderQty,(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = far.departmentId and far.transactionId != t.transactionId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.rollId = t.rollId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.rollId = t.rollId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty,\r\n"
+					+ "(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction qc where far.purchaseOrder=qc.purchaseOrder and far.styleId =qc.styleId and far.styleItemId= qc.styleItemId and far.colorId = qc.colorId and far.dItemId = qc.dItemId and far.itemColorId = qc.itemColorId and far.rollId = qc.rollId and qc.transactionType = '"+StoreTransaction.FABRICS_QC.getType()+"' and qc.departmentId = far.departmentId) as qcPassedQty \r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join tbFabricsIndent findent\r\n" + 
 					"on far.PurchaseOrder = findent.purchaseOrder and far.styleId = findent.styleId and far.styleItemId= findent.itemId and far.colorId = findent.itemcolor and far.dItemId = findent.fabricsid and far.itemColorId = findent.fabricscolor\r\n" + 
@@ -523,10 +527,10 @@ public class StoreDAOImpl implements StoreDAO{
 			session.createSQLQuery(sql).executeUpdate();
 
 
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsQC.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsQC.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsQC.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -783,10 +787,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,'"+fabricsReturn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsReturn.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReturn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReturn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -829,11 +833,11 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(fabricsReturn.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsReturn.getFabricsRollList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsReturn.getReturnTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReturn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsReturn.getReturnTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsReturn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
@@ -980,15 +984,15 @@ public class StoreDAOImpl implements StoreDAO{
 		FabricsReturn fabricsReturn = null;
 		FabricsRoll tempRoll;
 		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.fabricsBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.rollId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -1182,6 +1186,7 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",receiveBy"
 					+ ",remarks"
 					+ ",departmentId"
+					+ ",status"
 					+ ",entryTime"
 					+ ",createBy) values("
 					+ "'"+transactionId+"'"
@@ -1189,13 +1194,14 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+fabricsIssue.getIssuedTo()+"'"
 					+ ",'"+fabricsIssue.getReceiveBy()+"'"
 					+ ",'"+fabricsIssue.getRemarks()+"'"
-					+ ",'"+fabricsIssue.getDepartmentId()+"',"
+					+ ",'"+fabricsIssue.getDepartmentId()+"'"
+					+ ",'1',"
 					+ "CURRENT_TIMESTAMP,'"+fabricsIssue.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsIssue.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssue.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsIssue.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssue.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -1239,11 +1245,11 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(fabricsIssue.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsIssue.getFabricsRollList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsIssue.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssue.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsIssue.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsIssue.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssue.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
@@ -1353,7 +1359,7 @@ public class StoreDAOImpl implements StoreDAO{
 			String sql = "select sil.*,\r\n" + 
 					"isnull(dbo.fabricsIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.rollId),0) as previousIssueReturnQty\r\n" + 
 					"from dbo.issuedItemList('"+departmentId+"','"+returnDepartmentId+"') as sil\r\n"
-							+ "where (sil.issuedQty - isnull(dbo.fabricsIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.rollId),0))>0";		
+					+ "where (sil.issuedQty - isnull(dbo.fabricsIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.rollId),0))>0";		
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1422,15 +1428,15 @@ public class StoreDAOImpl implements StoreDAO{
 		FabricsIssue fabricsIssue = null;
 		FabricsRoll tempRoll;
 		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.fabricsBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.rollId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -1526,10 +1532,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+fabricsIssueReturn.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+fabricsIssueReturn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsIssueReturn.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssueReturn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsIssueReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssueReturn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -1573,15 +1579,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(fabricsIssueReturn.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsIssueReturn.getFabricsRollList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsIssueReturn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssueReturn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsIssueReturn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsIssueReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsIssueReturn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -1723,7 +1729,7 @@ public class StoreDAOImpl implements StoreDAO{
 		FabricsIssueReturn fabricsIssueReturn = null;
 		FabricsRoll tempRoll;
 		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
@@ -1821,10 +1827,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+fabricsTransferOut.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+fabricsTransferOut.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsTransferOut.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferOut.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsTransferOut.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferOut.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -1868,15 +1874,14 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
 			if(fabricsTransferOut.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsTransferOut.getFabricsRollList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsTransferOut.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferOut.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsTransferOut.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getFabricsId()+"','"+fabricsTransferOut.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferOut.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -2016,15 +2021,15 @@ public class StoreDAOImpl implements StoreDAO{
 		FabricsTransferOut fabricsTransfer = null;
 		FabricsRoll tempRoll;
 		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.fabricsBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.rollId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -2050,7 +2055,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempRoll.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempRoll.setReturnQty(Double.valueOf(element[23].toString()));
 				tempRoll.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				fabricsRollList.add(tempRoll);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.transferTo,fii.receiveBy,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -2083,8 +2088,61 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return fabricsTransfer;
 	}
-	
-	
+
+	@Override
+	public List<FabricsRoll> getTransferInFabricsRollList(String departmentId, String transferDepartemntId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FabricsRoll tempRoll;
+		List<FabricsRoll> datalist=new ArrayList<FabricsRoll>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select ftoi.transferTo,di.DepartmentName,fat.purchaseOrder,fat.styleId,sc.styleNo,fat.styleItemId,id.itemname,fat.colorId as itemColorId ,ic.Colorname as itemColorName,fat.cItemId as fabricsId,fi.ItemName as fabricsName,fat.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,fat.rollId,fri.supplierRollId,fat.unitId,u.unitname,fat.unitQty,fat.rackName,fat.BinName,fat.userId\r\n" + 
+					"from tbFabricsTransferOutInfo ftoi\r\n" + 
+					"left join tbFabricsAccessoriesTransaction fat\r\n" + 
+					"on ftoi.transactionId = fat.transactionId and fat.transactionType = '"+StoreTransaction.FABRICS_TRANSFER_OUT.getType()+"'\r\n" + 
+					"left join TbDepartmentInfo di\r\n" + 
+					"on ftoi.transferTo = di.DepartmentId\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on fat.styleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on fat.styleItemId = id.itemid\r\n" + 
+					"left join tbfabricsRollInfo fri\r\n" + 
+					"on fat.rollId = fri.rollId \r\n" + 
+					"left join tbunits u\r\n" + 
+					"on fat.unitId = u.Unitid\r\n" + 
+					"left join TbFabricsItem fi\r\n" + 
+					"on fat.cItemId = fi.id\r\n" + 
+					"left join tbColors ic\r\n" + 
+					"on fat.colorId = ic.ColorId\r\n" + 
+					"left join tbColors fc\r\n" + 
+					"on fat.itemColorId = fc.ColorId\r\n" + 
+					" where ftoi.transferTo = '"+departmentId+"' and ftoi.departmentId = '"+transferDepartemntId+"'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempRoll = new FabricsRoll(element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), 0, Double.valueOf(element[18].toString()));			
+				tempRoll.setRackName("1");
+				tempRoll.setBinName("1");
+				datalist.add(tempRoll);				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
 	@Override
 	public boolean submitFabricsTransferIn(FabricsTransferIn fabricsTransferIn) {
 		// TODO Auto-generated method stub
@@ -2119,10 +2177,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+fabricsTransferIn.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+fabricsTransferIn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (FabricsRoll roll : fabricsTransferIn.getFabricsRollList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferIn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsTransferIn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferIn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -2166,15 +2224,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(fabricsTransferIn.getFabricsRollList() != null) {
 				for (FabricsRoll roll : fabricsTransferIn.getFabricsRollList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsTransferIn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferIn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+fabricsTransferIn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+fabricsTransferIn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+fabricsTransferIn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -2209,16 +2267,13 @@ public class StoreDAOImpl implements StoreDAO{
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) {
 				Object[] element = (Object[]) list.get(0);
-				if(Double.valueOf(element[1].toString())>=fabricsRoll.getUnitQty()) {
-					sql = "update tbFabricsAccessoriesTransaction set unitQty = '"+fabricsRoll.getUnitQty()+"',qty = '"+fabricsRoll.getUnitQty()+"' where autoId = '"+fabricsRoll.getAutoId()+"'";
-					if(session.createSQLQuery(sql).executeUpdate()==1) {
-						tx.commit();
-						return "Successful";
-					}
-				}else {
+
+				sql = "update tbFabricsAccessoriesTransaction set unitQty = '"+fabricsRoll.getUnitQty()+"',qty = '"+fabricsRoll.getUnitQty()+"' where autoId = '"+fabricsRoll.getAutoId()+"'";
+				if(session.createSQLQuery(sql).executeUpdate()==1) {
 					tx.commit();
-					return "Return Qty Exist";
+					return "Successful";
 				}
+
 			}			
 
 		}
@@ -2314,15 +2369,15 @@ public class StoreDAOImpl implements StoreDAO{
 		FabricsTransferIn fabricsTransfer = null;
 		FabricsRoll tempRoll;
 		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,dItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.fabricsBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.rollId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -2348,7 +2403,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempRoll.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempRoll.setReturnQty(Double.valueOf(element[23].toString()));
 				tempRoll.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				fabricsRollList.add(tempRoll);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.transferFrom,fii.receiveFrom,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -2381,21 +2436,21 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return fabricsTransfer;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	@Override
 	public List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList() {
 		// TODO Auto-generated method stub
@@ -2536,13 +2591,12 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,"
 					+ "'"+accessoriesReceive.getUserId()+"') ;";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
-				
+
 			for (AccessoriesSize accessoriesSize : accessoriesReceive.getAccessoriesSizeList()) {
-				
-				
+
+
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+accessoriesSize.getPurchaseOrder()+"','"+accessoriesSize.getStyleId()+"','"+accessoriesSize.getItemId()+"','"+accessoriesSize.getItemColorId()+"','"+accessoriesSize.getAccessoriesColorId()+"','"+transactionId+"','"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"','"+ItemType.ACCESSORIES.getType()+"','"+accessoriesSize.getSizeId()+"','"+accessoriesSize.getUnitId()+"','"+accessoriesSize.getUnitQty()+"','"+accessoriesSize.getUnitQty()+"','"+accessoriesSize.getAccessoriesId()+"','0','"+departmentId+"','"+accessoriesSize.getRackName()+"','"+accessoriesSize.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReceive.getUserId()+"');";		
+						"values('"+accessoriesSize.getPurchaseOrder()+"','"+accessoriesSize.getStyleId()+"','"+accessoriesSize.getItemId()+"','"+accessoriesSize.getItemColorId()+"','"+accessoriesSize.getAccessoriesColorId()+"','"+transactionId+"','"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"','"+ItemType.ACCESSORIES.getType()+"','"+accessoriesSize.getSizeId()+"','"+accessoriesSize.getUnitId()+"','"+accessoriesSize.getUnitQty()+"','"+accessoriesSize.getUnitQty()+"','"+accessoriesSize.getAccessoriesId()+"','0','"+accessoriesReceive.getDepartmentId()+"','"+accessoriesSize.getRackName()+"','"+accessoriesSize.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReceive.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -2587,18 +2641,17 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-				
-			int departmentId = 1;
+
 			if(accessoriesReceive.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize size : accessoriesReceive.getAccessoriesSizeList()) {
-					
+
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+size.getPurchaseOrder()+"','"+size.getStyleId()+"','"+size.getItemId()+"','"+size.getItemColorId()+"','"+size.getAccessoriesColorId()+"','"+accessoriesReceive.getTransactionId()+"','"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"','"+ItemType.ACCESSORIES.getType()+"','"+size.getSizeId()+"','"+size.getUnitId()+"','"+size.getUnitQty()+"','"+size.getUnitQty()+"','"+size.getAccessoriesId()+"','0','"+departmentId+"','"+size.getRackName()+"','"+size.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReceive.getUserId()+"');";		
+							"values('"+size.getPurchaseOrder()+"','"+size.getStyleId()+"','"+size.getItemId()+"','"+size.getItemColorId()+"','"+size.getAccessoriesColorId()+"','"+accessoriesReceive.getTransactionId()+"','"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"','"+ItemType.ACCESSORIES.getType()+"','"+size.getSizeId()+"','"+size.getUnitId()+"','"+size.getUnitQty()+"','"+size.getUnitQty()+"','"+size.getAccessoriesId()+"','0','"+accessoriesReceive.getDepartmentId()+"','"+size.getRackName()+"','"+size.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReceive.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 
 			}
-			
+
 			tx.commit();
 
 			return true;
@@ -2681,7 +2734,7 @@ public class StoreDAOImpl implements StoreDAO{
 				session.createSQLQuery(sql).executeUpdate();
 				tx.commit();
 				return "Successful";
-				
+
 			}			
 			tx.commit();
 
@@ -2748,10 +2801,10 @@ public class StoreDAOImpl implements StoreDAO{
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,dItemId as accessoriesId,acceItem.itemname as accessoriesName,far.itemColorId as accessoriesColorId,isnull(fc.Colorname,'') as accessoriesColorName,far.sizeId,isnull(sSize.sizeName,'') as sizeName,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId,\r\n" + 
-					"findent.RequireUnitQty as orderQty,(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = '1' and far.transactionId != t.transactionId) as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.sizeId = t.sizeId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = '1') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.sizeId = t.sizeId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = '1') as issueQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction qc where far.purchaseOrder=qc.purchaseOrder and far.styleId =qc.styleId and far.styleItemId= qc.styleItemId and far.colorId = qc.colorId and far.dItemId = qc.dItemId and far.itemColorId = qc.itemColorId and far.sizeId = qc.sizeId and qc.transactionType = '"+StoreTransaction.ACCESSORIES_QC.getType()+"' and qc.departmentId = '1') as qcPassedQty \r\n" + 
+					"findent.RequireUnitQty as orderQty,(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = far.departmentId and far.transactionId != t.transactionId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.sizeId = t.sizeId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.dItemId = t.cItemId and far.itemColorId = t.itemColorId and far.sizeId = t.sizeId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction qc where far.purchaseOrder=qc.purchaseOrder and far.styleId =qc.styleId and far.styleItemId= qc.styleItemId and far.colorId = qc.colorId and far.dItemId = qc.dItemId and far.itemColorId = qc.itemColorId and far.sizeId = qc.sizeId and qc.transactionType = '"+StoreTransaction.ACCESSORIES_QC.getType()+"' and qc.departmentId = far.departmentId) as qcPassedQty \r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join tbAccessoriesIndent findent\r\n" + 
 					"on far.PurchaseOrder = findent.purchaseOrder and far.styleId = findent.styleId and far.styleItemId= findent.itemId and far.colorId = findent.colorId and far.dItemId = findent.accessoriesItemId and far.itemColorId = findent.IndentColorId and far.sizeId = findent.size\r\n" + 
@@ -2808,8 +2861,8 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return accessoriesReceive;
 	}
-	
-	
+
+
 	@Override
 	public List<AccessoriesSize> getAccessoriesSizeListByAccessories(List<AccessoriesIndent> accessorisList) {
 		// TODO Auto-generated method stub
@@ -2847,7 +2900,7 @@ public class StoreDAOImpl implements StoreDAO{
 					datalist.add(accessoriesSize);				
 				}	
 			}
-					
+
 			tx.commit();			
 		}	
 		catch(Exception e){
@@ -2902,11 +2955,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,'"+accessoriesQC.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
-			
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesQC.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesQC.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+accessoriesQC.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesQC.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -3112,7 +3164,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempSize.setPreviousReceiveQty(Double.valueOf(element[21].toString()));
 				tempSize.setIssueQty(Double.valueOf(element[22].toString()));
 				tempSize.setReturnQty(Double.valueOf(element[23].toString()));
-				
+
 				datalist.add(tempSize);				
 			}			
 			tx.commit();			
@@ -3162,10 +3214,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "CURRENT_TIMESTAMP,'"+accessoriesReturn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesReturn.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReturn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReturn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -3208,15 +3260,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(accessoriesReturn.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize roll : accessoriesReturn.getAccessoriesSizeList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesReturn.getReturnTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReturn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesReturn.getReturnTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesReturn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -3359,15 +3411,15 @@ public class StoreDAOImpl implements StoreDAO{
 		AccessoriesReturn accessoriesReturn = null;
 		AccessoriesSize tempSize;
 		List<AccessoriesSize> accessoriesSizeList = new ArrayList<AccessoriesSize>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as accessoriesId,ai.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,isnull(fc.Colorname,'') as accessoriesColorName,far.sizeId,isnull(ss.sizeName,'') as sizeName,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.accessoriesBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.sizeId,far.departmentId) as balanceQty \r\n" + 
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = '1') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = '1') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = '1') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.FABRICS_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -3393,7 +3445,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempSize.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempSize.setReturnQty(Double.valueOf(element[23].toString()));
 				tempSize.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				accessoriesSizeList.add(tempSize);				
 			}
 			sql = "select fri.autoId,fri.transactionId,(select convert(varchar,fri.date,103))as date,fri.supplierId,s.name as supplierName,fri.remarks,fri.createBy \r\n" + 
@@ -3480,7 +3532,7 @@ public class StoreDAOImpl implements StoreDAO{
 		return accessoriesReceive;
 
 	}
-	
+
 	@Override
 	public List<AccessoriesSize> getAvailableAccessoriesSizeListInDepartment(String departmentId) {
 		Session session=HibernateUtil.openSession();
@@ -3536,7 +3588,7 @@ public class StoreDAOImpl implements StoreDAO{
 		return datalist;
 	}
 
-	
+
 
 	@Override
 	public List<AccessoriesSize> getRequisitionAccessoriesList(String cuttingEntryId, String departmentId) {
@@ -3571,7 +3623,7 @@ public class StoreDAOImpl implements StoreDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 				tempSize = new AccessoriesSize(element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), "", "", "", "", 0.0, 0.0, 0.0);
-				
+
 				datalist.add(tempSize);				
 			}			
 			tx.commit();			
@@ -3587,7 +3639,7 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return datalist;
 	}
-	
+
 	@Override
 	public List<AccessoriesSize> getRequisitionAccessoriesSizeList(String cuttingEntryId,String accessoriesIdList,String departmentId) {
 		// TODO Auto-generated method stub
@@ -3649,8 +3701,8 @@ public class StoreDAOImpl implements StoreDAO{
 		return datalist;
 	}
 
-	
-	
+
+
 	@Override
 	public boolean submitAccessoriesIssue(AccessoriesIssue accessoriesIssue) {
 		// TODO Auto-generated method stub
@@ -3686,10 +3738,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'1',"
 					+ "CURRENT_TIMESTAMP,'"+accessoriesIssue.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesIssue.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssue.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesIssue.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssue.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -3732,15 +3784,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(accessoriesIssue.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize roll : accessoriesIssue.getAccessoriesSizeList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesIssue.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssue.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesIssue.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesIssue.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssue.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -3846,7 +3898,7 @@ public class StoreDAOImpl implements StoreDAO{
 			String sql = "select sil.*,\r\n" + 
 					"isnull(dbo.accessoriesIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.sizeId),0) as previousIssueReturnQty\r\n" + 
 					"from dbo.issuedAccessoriesItemList('"+departmentId+"','"+returnDepartmentId+"','"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"') as sil\r\n"
-							+ "where (sil.issuedQty - isnull(dbo.accessoriesIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.sizeId),0))>0";		
+					+ "where (sil.issuedQty - isnull(dbo.accessoriesIssueReturnedQty('"+departmentId+"','"+returnDepartmentId+"',sil.sizeId),0))>0";		
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -3915,15 +3967,15 @@ public class StoreDAOImpl implements StoreDAO{
 		AccessoriesIssue accessoriesIssue = null;
 		AccessoriesSize tempSize;
 		List<AccessoriesSize> accessoriesSizeList = new ArrayList<AccessoriesSize>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as accessoriesId,ai.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,isnull(fc.Colorname,'') as accessoriesColorName,far.sizeId,ss.sizeName,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.accessoriesBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.sizeId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
@@ -3949,7 +4001,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempSize.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempSize.setReturnQty(Double.valueOf(element[23].toString()));
 				tempSize.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				accessoriesSizeList.add(tempSize);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.issuedTo,fii.receiveBy,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -3983,8 +4035,8 @@ public class StoreDAOImpl implements StoreDAO{
 		return accessoriesIssue;
 	}
 
-	
-	
+
+
 	@Override
 	public boolean submitAccessoriesIssueReturn(AccessoriesIssueReturn accessoriesIssueReturn) {
 		// TODO Auto-generated method stub
@@ -4019,10 +4071,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+accessoriesIssueReturn.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+accessoriesIssueReturn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesIssueReturn.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssueReturn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+accessoriesIssueReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssueReturn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -4066,15 +4118,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(accessoriesIssueReturn.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize roll : accessoriesIssueReturn.getAccessoriesSizeList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesIssueReturn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssueReturn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesIssueReturn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+accessoriesIssueReturn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesIssueReturn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -4216,7 +4268,7 @@ public class StoreDAOImpl implements StoreDAO{
 		AccessoriesIssueReturn accessoriesIssueReturn = null;
 		AccessoriesSize tempSize;
 		List<AccessoriesSize> accessoriesSizeList = new ArrayList<AccessoriesSize>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
@@ -4280,7 +4332,7 @@ public class StoreDAOImpl implements StoreDAO{
 		return accessoriesIssueReturn;
 	}
 
-	
+
 	@Override
 	public boolean submitAccessoriesTransferOut(AccessoriesTransferOut accessoriesTransferOut) {
 		// TODO Auto-generated method stub
@@ -4315,10 +4367,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+accessoriesTransferOut.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+accessoriesTransferOut.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesTransferOut.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferOut.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesTransferOut.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferOut.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -4362,15 +4414,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(accessoriesTransferOut.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize roll : accessoriesTransferOut.getAccessoriesSizeList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesTransferOut.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferOut.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesTransferOut.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','0','"+roll.getAccessoriesId()+"','"+accessoriesTransferOut.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferOut.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -4510,26 +4562,26 @@ public class StoreDAOImpl implements StoreDAO{
 		AccessoriesTransferOut accessoriesTransfer = null;
 		AccessoriesSize tempSize;
 		List<AccessoriesSize> accessoriesSizeList = new ArrayList<AccessoriesSize>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as accessoriesId,fi.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,fc.Colorname as accessoriesColorName,far.sizeId,fri.supplierSizeId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
+			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as accessoriesId,fi.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,fc.Colorname as accessoriesColorName,far.sizeId,ss.sizeName,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.accessoriesBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.sizeId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
-					"on far.styleItemId = id.itemid\r\n"
-					+ "left join tbaccessoriesSizeInfo fri\r\n" + 
-					"on far.sizeId = fri.sizeId \r\n" + 
+					"on far.styleItemId = id.itemid\r\n" + 
+					"left join tbStyleSize ss\r\n" + 
+					"on far.sizeId = ss.id\r\n" + 
 					"left join tbunits u\r\n" + 
 					"on far.unitId = u.Unitid\r\n" + 
 					"left join TbAccessoriesItem fi\r\n" + 
-					"on far.cItemId = fi.id\r\n" + 
+					"on far.cItemId = fi.itemid\r\n" + 
 					"left join tbColors ic\r\n" + 
 					"on far.colorId = ic.ColorId\r\n" + 
 					"left join tbColors fc\r\n" + 
@@ -4544,7 +4596,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempSize.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempSize.setReturnQty(Double.valueOf(element[23].toString()));
 				tempSize.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				accessoriesSizeList.add(tempSize);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.transferTo,fii.receiveBy,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -4577,8 +4629,63 @@ public class StoreDAOImpl implements StoreDAO{
 		}
 		return accessoriesTransfer;
 	}
-	
-	
+
+	@Override
+	public List<AccessoriesSize> getTransferInAccessoriesSizeList(String departmentId, String transferDepartmentId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		AccessoriesSize tempSize;
+		List<AccessoriesSize> datalist=new ArrayList<AccessoriesSize>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select ftoi.transferTo,di.DepartmentName,fat.purchaseOrder,fat.styleId,sc.styleNo,fat.styleItemId,id.itemname,fat.colorId as itemColorId ,ic.Colorname as itemColorName,fat.cItemId as fabricsId,ai.ItemName as fabricsName,fat.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,fat.sizeId,ss.sizeName,fat.unitId,u.unitname,fat.unitQty,fat.rackName,fat.BinName,fat.userId\r\n" + 
+					"from tbAccessoriesTransferOutInfo ftoi\r\n" + 
+					"left join tbFabricsAccessoriesTransaction fat\r\n" + 
+					"on ftoi.transactionId = fat.transactionId and fat.transactionType = '"+StoreTransaction.ACCESSORIES_TRANSFER_OUT.getType()+"'\r\n" + 
+					"left join TbDepartmentInfo di\r\n" + 
+					"on ftoi.transferTo = di.DepartmentId\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on fat.styleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on fat.styleItemId = id.itemid\r\n" + 
+					"left join tbStyleSize ss\r\n" + 
+					"on fat.sizeId = ss.id \r\n" + 
+					"left join tbunits u\r\n" + 
+					"on fat.unitId = u.Unitid\r\n" + 
+					"left join TbAccessoriesItem ai\r\n" + 
+					"on fat.cItemId = ai.itemid\r\n" + 
+					"left join tbColors ic\r\n" + 
+					"on fat.colorId = ic.ColorId\r\n" + 
+					"left join tbColors fc\r\n" + 
+					"on fat.itemColorId = fc.ColorId\r\n" + 
+					" where ftoi.transferTo = '"+departmentId+"' and ftoi.departmentId = '"+transferDepartmentId+"'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempSize = new AccessoriesSize(element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), 0, Double.valueOf(element[18].toString()));			
+				tempSize.setRackName("1");
+				tempSize.setBinName("1");
+				datalist.add(tempSize);				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+
 	@Override
 	public boolean submitAccessoriesTransferIn(AccessoriesTransferIn accessoriesTransferIn) {
 		// TODO Auto-generated method stub
@@ -4613,10 +4720,10 @@ public class StoreDAOImpl implements StoreDAO{
 					+ ",'"+accessoriesTransferIn.getDepartmentId()+"',"
 					+ "CURRENT_TIMESTAMP,'"+accessoriesTransferIn.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
-			int departmentId = 1;
+
 			for (AccessoriesSize roll : accessoriesTransferIn.getAccessoriesSizeList()) {
 				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferIn.getUserId()+"');";		
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+transactionId+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+accessoriesTransferIn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferIn.getUserId()+"');";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -4660,15 +4767,15 @@ public class StoreDAOImpl implements StoreDAO{
 
 			session.createSQLQuery(sql).executeUpdate();
 
-			int departmentId = 1;
+
 			if(accessoriesTransferIn.getAccessoriesSizeList() != null) {
 				for (AccessoriesSize roll : accessoriesTransferIn.getAccessoriesSizeList()) {
 					sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,sizeId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
-							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesTransferIn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferIn.getUserId()+"');";		
+							"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getAccessoriesColorId()+"','"+accessoriesTransferIn.getTransactionId()+"','"+transaction.getType()+"','"+itemType.getType()+"','"+roll.getSizeId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getAccessoriesId()+"','0','"+accessoriesTransferIn.getDepartmentId()+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+accessoriesTransferIn.getUserId()+"');";		
 					session.createSQLQuery(sql).executeUpdate();
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -4703,16 +4810,13 @@ public class StoreDAOImpl implements StoreDAO{
 			List<?> list = session.createSQLQuery(sql).list();
 			if(list.size()>0) {
 				Object[] element = (Object[]) list.get(0);
-				if(Double.valueOf(element[1].toString())>=accessoriesSize.getUnitQty()) {
-					sql = "update tbFabricsAccessoriesTransaction set unitQty = '"+accessoriesSize.getUnitQty()+"',qty = '"+accessoriesSize.getUnitQty()+"' where autoId = '"+accessoriesSize.getAutoId()+"'";
-					if(session.createSQLQuery(sql).executeUpdate()==1) {
-						tx.commit();
-						return "Successful";
-					}
-				}else {
+
+				sql = "update tbFabricsAccessoriesTransaction set unitQty = '"+accessoriesSize.getUnitQty()+"',qty = '"+accessoriesSize.getUnitQty()+"' where autoId = '"+accessoriesSize.getAutoId()+"'";
+				if(session.createSQLQuery(sql).executeUpdate()==1) {
 					tx.commit();
-					return "Return Qty Exist";
+					return "Successful";
 				}
+
 			}			
 
 		}
@@ -4808,26 +4912,26 @@ public class StoreDAOImpl implements StoreDAO{
 		AccessoriesTransferIn accessoriesTransfer = null;
 		AccessoriesSize tempSize;
 		List<AccessoriesSize> accessoriesSizeList = new ArrayList<AccessoriesSize>();	
-		String departmentId = "1";
+
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,dItemId as accessoriesId,fi.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,fc.Colorname as accessoriesColorName,far.sizeId,fri.supplierSizeId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
+			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,dItemId as accessoriesId,fi.ItemName as accessoriesName,far.itemColorId as accessoriesColorId,fc.Colorname as accessoriesColorName,far.sizeId,ss.sizeName,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
 					",dbo.accessoriesBalanceQty(far.purchaseOrder,far.styleId,far.styleItemId,far.colorId,far.cItemId,far.itemColorId,far.sizeId,far.departmentId) as balanceQty \r\n" +
-					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = '"+departmentId+"') as previousReceiveQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = '"+departmentId+"') as returnQty,\r\n" + 
-					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = '"+departmentId+"') as issueQty\r\n" + 
+					",(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.dItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RECEIVE.getType()+"' and t.departmentId = far.departmentId) as previousReceiveQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_RETURN.getType()+"' and t.departmentId = far.departmentId) as returnQty,\r\n" + 
+					"(select isnull(sum(qty),0) from tbFabricsAccessoriesTransaction t where far.purchaseOrder=t.purchaseOrder and far.styleId = t.styleId and far.styleItemId= t.styleItemId and far.colorId = t.colorId and far.cItemId = t.cItemId and far.itemColorId = t.itemColorId and t.transactionType = '"+StoreTransaction.ACCESSORIES_ISSUE.getType()+"' and t.departmentId = far.departmentId) as issueQty\r\n" + 
 					"from tbFabricsAccessoriesTransaction far\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on far.styleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
-					"on far.styleItemId = id.itemid\r\n"
-					+ "left join tbaccessoriesSizeInfo fri\r\n" + 
-					"on far.sizeId = fri.sizeId \r\n" + 
+					"on far.styleItemId = id.itemid\r\n" + 
+					"left join tbStyleSize ss\r\n" + 
+					"on far.sizeId = ss.id \r\n" + 
 					"left join tbunits u\r\n" + 
 					"on far.unitId = u.Unitid\r\n" + 
 					"left join TbAccessoriesItem fi\r\n" + 
-					"on far.dItemId = fi.id\r\n" + 
+					"on far.dItemId = fi.itemid\r\n" + 
 					"left join tbColors ic\r\n" + 
 					"on far.colorId = ic.ColorId\r\n" + 
 					"left join tbColors fc\r\n" + 
@@ -4842,7 +4946,7 @@ public class StoreDAOImpl implements StoreDAO{
 				tempSize.setPreviousReceiveQty(Double.valueOf(element[22].toString()));
 				tempSize.setReturnQty(Double.valueOf(element[23].toString()));
 				tempSize.setIssueQty(Double.valueOf(element[24].toString()));
-				
+
 				accessoriesSizeList.add(tempSize);				
 			}
 			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.transferFrom,fii.receiveFrom,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName\r\n" + 
@@ -5162,8 +5266,8 @@ public class StoreDAOImpl implements StoreDAO{
 					+ "'',"
 					+"current_timestamp,current_timestamp,'"+v.getUserId()+"')";
 			session.createSQLQuery(sql).executeUpdate();
-			
-			
+
+
 			sql="update TbStoreTransectionDetails set status='1' where invoiceNo='"+v.getInvoiceNo()+"' ";
 			session.createSQLQuery(sql).executeUpdate();
 
@@ -5235,7 +5339,7 @@ public class StoreDAOImpl implements StoreDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				
+
 				datalist.add(new CuttingFabricsUsed(element[0].toString(),element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(),element[11].toString(), element[12].toString(),element[13].toString(),element[14].toString()));				
 			}			
 			tx.commit();			
@@ -5266,10 +5370,10 @@ public class StoreDAOImpl implements StoreDAO{
 			String sql="";
 			String resultValue=v.getResultList().substring(v.getResultList().indexOf("[")+1, v.getResultList().indexOf("]"));
 			System.out.println("resultValue "+resultValue);
-			
+
 			StringTokenizer token=new StringTokenizer(resultValue, ",");
 			while(token.hasMoreTokens()) {
-				
+
 				String secondToken=token.nextToken();
 				StringTokenizer token2=new StringTokenizer(secondToken, "*");
 				while(token2.hasMoreTokens()) {
@@ -5278,35 +5382,35 @@ public class StoreDAOImpl implements StoreDAO{
 					String unitId=token2.nextToken();
 					String usedFabrics=token2.nextToken();
 					String requistionReq=token2.nextToken();
-					
+
 					if(!requistionReq.equals("0")){
-						 sql="insert into TbCuttingRequisitionDetailsv1"
-									+ "("
-									+ "CuttingEntryId,"
-									+ "colorId,"
-									+ "fabricsId,"
-									+ "unitId,"
-									+ "requisitionQuantity,"
-									+ "requistionFlag,"
-									+ "entrytime,"
-									+ "UserId"
-									+ ") "
-									+ "values('"+v.getCuttingEntryId()+"',"
-									+ "'"+colorId+"',"
-									+ "'"+fabricsId+"',"
-									+ "'"+unitId+"',"
-									+ "'"+usedFabrics+"',"
-									+ "'"+requistionReq+"',"
-									+"current_timestamp,'"+v.getUserId()+"')";
-							session.createSQLQuery(sql).executeUpdate();
+						sql="insert into TbCuttingRequisitionDetailsv1"
+								+ "("
+								+ "CuttingEntryId,"
+								+ "colorId,"
+								+ "fabricsId,"
+								+ "unitId,"
+								+ "requisitionQuantity,"
+								+ "requistionFlag,"
+								+ "entrytime,"
+								+ "UserId"
+								+ ") "
+								+ "values('"+v.getCuttingEntryId()+"',"
+								+ "'"+colorId+"',"
+								+ "'"+fabricsId+"',"
+								+ "'"+unitId+"',"
+								+ "'"+usedFabrics+"',"
+								+ "'"+requistionReq+"',"
+								+"current_timestamp,'"+v.getUserId()+"')";
+						session.createSQLQuery(sql).executeUpdate();
 					}
 
 				}
-				
+
 
 			}
-			
-			
+
+
 			sql="update TbCuttingInformationSummary set RequistionFlag='1' where CuttingEntryId='"+v.getCuttingEntryId()+"' ";
 			session.createSQLQuery(sql).executeUpdate();
 
@@ -5423,7 +5527,263 @@ public class StoreDAOImpl implements StoreDAO{
 
 
 
+	@Override
+	public List<PendingTransaction> getPendingTransactionList(String departmentId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<PendingTransaction> datalist=new ArrayList<PendingTransaction>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select fii.transactionId,fii.departmentId,isnull(di.DepartmentName,'') as departmentName,'Fabrics' as type,(select convert(varchar,fii.date,103))as date\r\n" + 
+					"from tbFabricsIssueInfo fii\r\n" + 
+					"left join TbDepartmentInfo di\r\n" + 
+					"on fii.departmentId = di.DepartmentId \r\n" + 
+					"where fii.status = 1 and fii.issuedTo = '"+departmentId+"'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				datalist.add(new PendingTransaction(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
 
 
-	
+
+	@Override
+	public boolean fabricsIssueReceive(String transactionId, String transactionType,String departmentId,String userId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FabricsIssue fabricsIssue = null ;
+		List<FabricsRoll> fabricsRollList = new ArrayList<FabricsRoll>();	
+
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select far.autoId,far.transactionId,far.purchaseOrder,far.styleId,sc.styleNo,far.styleItemId,id.itemname,far.colorId as itemColorId ,ic.Colorname as itemColorName,cItemId as fabricsId,fi.ItemName as fabricsName,far.itemColorId as fabricsColorId,fc.Colorname as fabricsColorName,far.rollId,fri.supplierRollId,far.unitId,u.unitname,unitQty,rackName,BinName,far.userId\r\n" + 
+					"from tbFabricsAccessoriesTransaction far\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on far.styleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on far.styleItemId = id.itemid\r\n" + 
+					"left join tbfabricsRollInfo fri\r\n" + 
+					"on far.rollId = fri.rollId \r\n" + 
+					"left join tbunits u\r\n" + 
+					"on far.unitId = u.Unitid\r\n" + 
+					"left join TbFabricsItem fi\r\n" + 
+					"on far.cItemId = fi.id\r\n" + 
+					"left join tbColors ic\r\n" + 
+					"on far.colorId = ic.ColorId\r\n" + 
+					"left join tbColors fc\r\n" + 
+					"on far.itemColorId = fc.ColorId\r\n" + 
+					"where transactionId = '"+transactionId+"' and transactionType='"+StoreTransaction.FABRICS_ISSUE.getType()+"'";	
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				fabricsRollList.add(new FabricsRoll(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(),element[7].toString(), element[8].toString(),element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(),element[16].toString(),0.0, Double.valueOf(element[17].toString()), element[18].toString(), element[19].toString(),1));					
+			}
+
+			sql = "select fii.AutoId,fii.transactionId,(select convert(varchar,fii.date,103))as issuedDate,fii.issuedTo,fii.receiveBy,fii.remarks,fii.createBy,di.DepartmentName,fi.FactoryName,fii.departmentid\r\n" + 
+					"from tbFabricsIssueInfo fii\r\n" + 
+					"left join TbDepartmentInfo di\r\n" + 
+					"on fii.issuedTo = di.DepartmentId\r\n" + 
+					"left join TbFactoryInfo fi\r\n" + 
+					"on di.FactoryId = fi.FactoryId\r\n" + 
+					"where fii.transactionId = '"+transactionId+"'\r\n" + 
+					"";		
+			list = session.createSQLQuery(sql).list();
+			if(list.size()>0)
+			{	
+				Object[] element = (Object[]) list.get(0);
+
+				fabricsIssue = new FabricsIssue(element[0].toString(), element[1].toString(), element[2].toString(),  element[3].toString(),  element[4].toString(),  element[5].toString(), element[6].toString());
+				fabricsIssue.setDepartmentId(element[9].toString());
+			}
+			sql="select (isnull(max(transactionid),0)+1) as maxId from tbFabricsTransferInInfo";
+			list = session.createSQLQuery(sql).list();
+			transactionId="0";
+			if(list.size()>0) {
+				transactionId = list.get(0).toString();
+			}
+
+			sql="insert into tbFabricsTransferInInfo (transactionid,"
+					+ "date,"	
+					+ "transferFrom,"
+					+ "receiveFrom,"
+					+ "remarks,"
+					+ "departmentId,"
+					+ "entryTime,"
+					+ "createBy) \r\n" + 
+					"values('"+transactionId+"',"
+					+ "'"+new SimpleDateFormat("yyyy-MM-dd").format(new Date())+"',"
+					+ "'"+fabricsIssue.getDepartmentId()+"',"
+					+ "'"+fabricsIssue.getReceiveBy()+"',"
+					+ "'"+fabricsIssue.getRemarks()+"',"
+					+ "'"+fabricsIssue.getIssuedTo()+"',"
+					+ "CURRENT_TIMESTAMP,"
+					+ "'"+fabricsIssue.getUserId()+"') ;";
+			session.createSQLQuery(sql).executeUpdate();
+
+
+			for (FabricsRoll roll : fabricsRollList) {
+
+				sql="insert into tbFabricsAccessoriesTransaction (purchaseOrder,styleId,styleItemId,colorId,itemColorId,transactionId,transactionType,itemType,rollId,unitId,unitQty,qty,dItemId,cItemId,departmentId,rackName,binName,entryTime,userId) \r\n" + 
+						"values('"+roll.getPurchaseOrder()+"','"+roll.getStyleId()+"','"+roll.getItemId()+"','"+roll.getItemColorId()+"','"+roll.getFabricsColorId()+"','"+transactionId+"','"+StoreTransaction.FABRICS_TRANSFER_IN.getType()+"','"+ItemType.FABRICS.getType()+"','"+roll.getRollId()+"','"+roll.getUnitId()+"','"+roll.getUnitQty()+"','"+roll.getUnitQty()+"','"+roll.getFabricsId()+"','0','"+departmentId+"','"+roll.getRackName()+"','"+roll.getBinName()+"',CURRENT_TIMESTAMP,'"+userId+"');";		
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			sql = "update tbFabricsIssueInfo set status = '2' where transactionId = '"+transactionId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+
+
+			return true;
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public List<PendingTransaction> getPendingFabricsIssueList(String departmentId,String fromDate, String toDate, String itemType,
+			String approveType) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<PendingTransaction> datalist=new ArrayList<PendingTransaction>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select fii.transactionId,fii.departmentId,isnull(di.DepartmentName,'') as departmentName,'Fabrics' as type,(select convert(varchar,fii.date,103))as date\r\n" + 
+					"from tbFabricsIssueInfo fii\r\n" + 
+					"left join TbDepartmentInfo di\r\n" + 
+					"on fii.departmentId = di.DepartmentId \r\n" + 
+					"where fii.status = '"+approveType+"' and fii.issuedTo = '"+departmentId+"' and fii.date between '"+fromDate+"' and'"+toDate+"'";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				datalist.add(new PendingTransaction(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+
+	@Override
+	public List<StockItem> getStockItemSummeryList(String fromDate,String toDate,String departmentId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<StockItem> accessoriesSizeList = new ArrayList<StockItem>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select * from dbo.stockItemSummery('"+fromDate+"','"+toDate+"','"+departmentId+"')";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				if(element[20].toString().equals("1")) {
+					accessoriesSizeList.add(new StockItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), element[20].toString()));
+				}else if(element[20].toString().equals("2")) {
+					accessoriesSizeList.add(new StockItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), element[20].toString()));
+				}				
+			}
+
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return accessoriesSizeList;
+	}
+
+
+	@Override
+	public List<StockItem> getStockItemDetailsList(String fromDate,String toDate,String departmentId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<StockItem> accessoriesSizeList = new ArrayList<StockItem>();	
+		try{	
+			tx=session.getTransaction();
+			tx.begin();		
+			String sql = "select * from dbo.stockItemDetails('"+fromDate+"','"+toDate+"','"+departmentId+"')";		
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				if(element[28].toString().equals("1")) {
+					accessoriesSizeList.add(new StockItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), Double.valueOf(element[18].toString()), Double.valueOf(element[19].toString()), Double.valueOf(element[20].toString()), Double.valueOf(element[21].toString()), Double.valueOf(element[22].toString()), Double.valueOf(element[23].toString()), Double.valueOf(element[24].toString()), Double.valueOf(element[25].toString()), element[28].toString()));
+				}else if(element[28].toString().equals("2")) {
+					accessoriesSizeList.add(new StockItem(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[15].toString(), element[16].toString(), Double.valueOf(element[17].toString()), Double.valueOf(element[18].toString()), Double.valueOf(element[19].toString()), Double.valueOf(element[20].toString()), Double.valueOf(element[21].toString()), Double.valueOf(element[22].toString()), Double.valueOf(element[23].toString()), Double.valueOf(element[24].toString()), Double.valueOf(element[25].toString()), element[28].toString()));
+				}				
+			}
+
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return accessoriesSizeList;
+	}
+
+
+
+
+
+
 }
