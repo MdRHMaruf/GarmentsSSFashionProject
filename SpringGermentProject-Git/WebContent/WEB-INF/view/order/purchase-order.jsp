@@ -120,7 +120,7 @@
 					<label for="manualPO"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Manual
 						PO</label> <input id="manualPO" type="text"
-						class="col-md-8 form-control-sm">
+						class="col-md-8 form-control-sm" disabled>
 
 				</div>
 				<div class="form-group mb-0  row">
@@ -279,7 +279,7 @@
 			<div class="col-md-6">
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
-						<span class="input-group-text" id="note">Note</span>
+						<span class="input-group-text" for="note">Note</span>
 					</div>
 					<input id="note" type="text" class="form-control"
 						aria-label="Sizing example input"
@@ -289,7 +289,7 @@
 			<div class="col-md-6">
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
-						<span class="input-group-text" id="subject">Subject</span>
+						<span class="input-group-text" for="subject">Subject</span>
 					</div>
 					<input id="subject" type="text" class="form-control"
 						aria-label="Sizing example input"

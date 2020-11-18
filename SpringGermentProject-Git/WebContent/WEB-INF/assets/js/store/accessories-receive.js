@@ -30,15 +30,25 @@ $("#searchRefreshBtn").click(function () {
 })
 
 $("#itemSearchBtn").click(function () {
-  $.ajax({
+  const supplierId = $("#supplier").val();
+  if(supplierId != '0'){
+    $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './getAccessoriesPurchaseOrderIndentList',
-    data: {},
+    data: {
+      supplierId: supplierId
+    },
     success: function (data) {
       drawPurchaseOrderListTable(data.purchaseOrderList);
+      $("#itemSearchModal").modal('show');
     }
   });
+  }else{
+    warningAlert("Please Select a Supplier....")
+    $("supplier").focus();
+  }
+  
 });
 
 $("#newTransactionBtn").click(function () {

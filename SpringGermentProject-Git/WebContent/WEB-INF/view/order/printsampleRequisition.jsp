@@ -25,7 +25,21 @@
 	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select a.sampleReqId,s.Name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a join tbSampleRequisition b on a.sampleReqId=b.sampleReqId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id join TbSampleTypeInfo s on s.AutoId=a.SampleTypeId where a.sampleReqId='"+SampleReqId+"' group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId";
+		String Sql="select a.sampleReqId,isnull(s.Name,'') as Name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId \n"+ 
+				"from TbSampleRequisitionDetails a  \n"+
+				"left join tbSampleRequisition b  \n"+
+				"on a.sampleReqId=b.sampleReqId  \n"+
+				"left join TbStyleCreate d  \n"+
+				"on a.StyleId=d.StyleId  \n"+
+				"left join tbItemDescription e  \n"+
+				"on a.ItemId=e.itemid  \n"+
+				"left join tbBuyer g  \n"+
+				"on a.buyerId=g.id  \n"+
+				"left join TbSampleTypeInfo s  \n"+
+				"on s.AutoId=a.SampleTypeId  \n"+
+				"where a.sampleReqId='"+SampleReqId+"'  \n"+
+				"group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId \n"+ 
+				"order by a.sampleReqId,a.sizeGroupId";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SampleRequistionReport.jrxml");

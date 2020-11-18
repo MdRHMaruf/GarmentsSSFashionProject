@@ -10,7 +10,21 @@
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[$P!{sql}]]>
+		<![CDATA[select a.sampleReqId,isnull(s.Name,'') as Name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId
+from TbSampleRequisitionDetails a
+left join tbSampleRequisition b
+on a.sampleReqId=b.sampleReqId
+left join TbStyleCreate d
+on a.StyleId=d.StyleId
+left join tbItemDescription e
+on a.ItemId=e.itemid
+left join tbBuyer g
+on a.buyerId=g.id
+left join TbSampleTypeInfo s
+on s.AutoId=a.SampleTypeId
+where a.sampleReqId='1'
+group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId
+order by a.sampleReqId,a.sizeGroupId]]>
 	</queryString>
 	<field name="sampleReqId" class="java.lang.String"/>
 	<field name="Name" class="java.lang.String"/>
@@ -119,7 +133,7 @@
 	<detail>
 		<band height="26" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="0" width="200" height="20" uuid="f50c8112-9f95-4085-af58-4fdbb1dde554"/>
+				<reportElement x="0" y="0" width="799" height="20" uuid="f50c8112-9f95-4085-af58-4fdbb1dde554"/>
 				<subreportParameter name="sampleReqId">
 					<subreportParameterExpression><![CDATA[$F{sampleReqId}]]></subreportParameterExpression>
 				</subreportParameter>

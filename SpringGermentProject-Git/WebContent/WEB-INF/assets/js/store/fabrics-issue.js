@@ -949,7 +949,6 @@ function warningAlert(message) {
     element.toggle('fade');
   }, 2500);
 }
-
 function dangerAlert(message) {
   var element = $(".alert");
   element.hide();

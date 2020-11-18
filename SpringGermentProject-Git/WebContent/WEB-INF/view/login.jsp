@@ -37,11 +37,11 @@
  							<table>
 	 							<div class="form-group form-focus">
 	                                <label class="control-label">Username or Email</label>
-	                                <input name="name" class="form-control floating"/>
+	                                <input name="name" class="form-control floating" value="admin"/>
 	                            </div>
 	                            <div class="form-group form-focus">
 	                                <label class="control-label">Password</label>
-	                                <input type="password" name="password" class="form-control floating" />
+	                                <input type="password" name="password" class="form-control floating" value="123"/>
 	                            </div>
 	                            <div class="form-group text-center">
 	                                <button class="btn btn-primary btn-block account-btn" >Login</button>

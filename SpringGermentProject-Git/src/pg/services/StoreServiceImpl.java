@@ -37,9 +37,9 @@ public class StoreServiceImpl implements StoreService{
 	@Autowired
 	StoreDAO storeDao;
 	@Override
-	public List<FabricsIndent> getFabricsPurchaseOrdeIndentrList() {
+	public List<FabricsIndent> getFabricsPurchaseOrdeIndentrList(String supplierId) {
 		// TODO Auto-generated method stub
-		return storeDao.getFabricsPurchaseOrdeIndentrList();
+		return storeDao.getFabricsPurchaseOrdeIndentrList(supplierId);
 	}
 
 	@Override
@@ -322,9 +322,9 @@ public class StoreServiceImpl implements StoreService{
 	
 	
 	@Override
-	public List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList() {
+	public List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList(String supplierId) {
 		// TODO Auto-generated method stub
-		return storeDao.getAccessoriesPurchaseOrdeIndentrList();
+		return storeDao.getAccessoriesPurchaseOrdeIndentrList(supplierId);
 	}
 
 	@Override

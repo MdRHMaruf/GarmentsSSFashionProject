@@ -126,11 +126,11 @@ function drawItemTable(dataList,isChecked = "") {
 	// tables += "</tbody></table> </div></div>";
 	document.getElementById("tableList").innerHTML = tables;
 	
-	$('#purchaseOrder').html(dataList[0].purchaseOrder);
+/*	//$('#purchaseOrder').html(dataList[0].purchaseOrder);
 	$('#styleNo').html(dataList[0].styleNo);
 	$('#itemName').html(dataList[0].itemName);
 
-	$('#cuttingEntryId').val(dataList[0].cuttingEntryId);
+	$('#cuttingEntryId').val(dataList[0].cuttingEntryId);*/
 }
 
 function setCheck(){

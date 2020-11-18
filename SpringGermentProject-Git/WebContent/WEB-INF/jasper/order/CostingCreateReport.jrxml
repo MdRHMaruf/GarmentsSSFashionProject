@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CostingCreateReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9318d7bd-180d-40bf-964b-74bf5bbf4acb">
-	<property name="ireport.zoom" value="1.2100000000000128"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.7715610000000195"/>
+	<property name="ireport.x" value="694"/>
+	<property name="ireport.y" value="437"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select *,(select frontpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName) )as frontpic,(select backpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName)) as backpic from funCostingForStyle('38') a order by a.ItemName desc"]]></defaultValueExpression>
 	</parameter>
@@ -29,6 +29,9 @@
 	</variable>
 	<variable name="gGTotal" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$V{GTotal}+$V{GComission}]]></variableExpression>
+	</variable>
+	<variable name="gUnitPrice" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{gGTotal}/12]]></variableExpression>
 	</variable>
 	<group name="ItemGp">
 		<groupExpression><![CDATA[$F{ItemName}]]></groupExpression>
@@ -223,6 +226,11 @@
 					<reportElement x="620" y="28" width="68" height="13" uuid="3bb5491a-0e4b-4a65-b5c6-9675c6b481be"/>
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{gGTotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="619" y="42" width="69" height="14" uuid="b5614f1a-6904-407b-9235-1dc0d414ce11"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{gUnitPrice}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>

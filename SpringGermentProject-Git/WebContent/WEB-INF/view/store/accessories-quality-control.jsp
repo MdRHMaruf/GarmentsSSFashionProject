@@ -151,6 +151,8 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
+							<th>Accessories Name</th>
+							<th>Accessories Color</th>
 							<th>Size Name</th>
 							<th>Unit Qty</th>
 							<th>QC Passed Qty</th>
