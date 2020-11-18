@@ -80,7 +80,7 @@
 					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, "+
 					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, "+
 					"(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature, "+
-					"(select Signature from TbMerchendiserInfo where MUserId='1') as MdSignature,b.mdapproval "+ 
+					"(select Signature from TbMerchendiserInfo where MUserId='1') as MdSignature,b.mdapproval,a.poNo "+ 
 					"from tbPurchaseOrderSummary a  "+
 					"join tbAccessoriesIndent b  "+
 					"on a.pono=b.pono   "+
@@ -96,7 +96,7 @@
 					"(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, "+
 					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, "+
 					"(select Signature from TbMerchendiserInfo where MUserId=b.entryby) as Signature, "+
-					"(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval "+ 
+					"(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval,a.poNo "+ 
 					"from tbPurchaseOrderSummary a  "+
 					"join tbFabricsIndent b on a.pono=b.pono "+  
 					"where a.pono='"+poNo+"' and b.supplierid='"+supplierId+"' "+

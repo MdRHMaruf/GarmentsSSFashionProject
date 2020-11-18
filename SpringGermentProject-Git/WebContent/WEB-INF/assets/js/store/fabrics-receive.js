@@ -30,15 +30,25 @@ $("#searchRefreshBtn").click(function () {
 })
 
 $("#itemSearchBtn").click(function () {
-  $.ajax({
-    type: 'GET',
-    dataType: 'json',
-    url: './getFabricsPurchaseOrderIndentList',
-    data: {},
-    success: function (data) {
-      drawPurchaseOrderListTable(data.purchaseOrderList);
-    }
-  });
+  const supplierId = $("#supplier").val();
+    if(supplierId != '0'){
+      $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      url: './getFabricsPurchaseOrderIndentList',
+      data: {
+        supplierId: supplierId
+      },
+      success: function (data) {
+        drawPurchaseOrderListTable(data.purchaseOrderList);
+        $("#itemSearchModal").modal('show');
+      }
+    });
+  }else{
+    warningAlert("Please Select a Supplier....")
+    $("supplier").focus();
+  }
+  
 });
 
 $("#newTransactionBtn").click(function () {
@@ -170,6 +180,7 @@ function editAction() {
   const challanNo = $("#challanNo").val();
   const challanDate = $("#challanDate").val();
   const remarks = $("#remarks").val();
+  const departmentId = $("#departmentId").val();
   const preparedBy = $("#preparedBy").val();
   const userId = $("#userId").val();
 
@@ -222,6 +233,7 @@ function editAction() {
                 challanNo: challanNo,
                 challanDate: challanDate,
                 remarks: remarks,
+                departmentId : departmentId,
                 preparedBy: preparedBy,
                 userId: userId
               },

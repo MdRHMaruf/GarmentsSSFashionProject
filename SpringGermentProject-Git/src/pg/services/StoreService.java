@@ -33,7 +33,7 @@ import pg.storeModel.StoreGeneralReceived;
 
 public interface StoreService {
 	//Fabrics Receive
-	List<FabricsIndent> getFabricsPurchaseOrdeIndentrList();
+	List<FabricsIndent> getFabricsPurchaseOrdeIndentrList(String supplierId);
 	FabricsIndent getFabricsIndentInfo(String autoId);
 	boolean submitFabricsReceive(FabricsReceive fabricsReceive);
 	boolean editFabricsReceive(FabricsReceive fabricsReceive);
@@ -99,7 +99,7 @@ public interface StoreService {
 
 
 	//Accessories Receive
-	List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList();
+	List<AccessoriesIndent> getAccessoriesPurchaseOrdeIndentrList(String supplierId);
 	AccessoriesIndent getAccessoriesIndentInfo(String autoId);
 	boolean submitAccessoriesReceive(AccessoriesReceive accessoriesReceive);
 	boolean editAccessoriesReceive(AccessoriesReceive accessoriesReceive);

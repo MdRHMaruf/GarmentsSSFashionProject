@@ -89,7 +89,7 @@
 
 
 					<div class="row">
-						<div style="overflow: auto; max-height: 400px;" class="col-sm-12">
+						<div style="overflow: auto; max-height: 500px;" class="col-sm-12">
 							<table class="table table-hover table-bordered table-sm mb-0">
 								<thead>
 									<tr>
@@ -124,19 +124,7 @@
 							</table>
 						</div>
 					</div>
-					<div class="row mt-1">
-						<div class="col-md-12 d-flex justify-content-end">
-							<button id="btnConfirm" type="button"
-								class="btn btn-primary btn-sm ml-1">
-								<i class="fa fa-check"></i> Confirm
-							</button>
-							<button id="btnRefresh" type="button"
-								class="btn btn-primary btn-sm ml-1">
-								<i class="fa fa-refresh"></i> Refresh
-							</button>
-
-						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>

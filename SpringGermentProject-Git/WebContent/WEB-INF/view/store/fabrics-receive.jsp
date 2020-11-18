@@ -127,8 +127,7 @@
 					</div>
 					<div class="col-md-2">
 						<button id="itemSearchBtn" type="button"
-							class="btn btn-outline-dark btn-sm form-control-sm"
-							data-toggle="modal" data-target="#itemSearchModal">
+							class="btn btn-outline-dark btn-sm form-control-sm">
 							<i class="fa fa-search"></i>
 						</button>
 					</div>

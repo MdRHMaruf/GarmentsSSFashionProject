@@ -284,6 +284,7 @@ function drawAccessoriesReceiveListTable(data) {
 function drawAccessoriesSizeListTable(data,isSearch) {
   const length = data.length;
   let rows = "";
+  console.log(data)
   $("#sizeList").empty();
   let options = "<option  id='qcPassed-1' value='1'>QC Passed</option><option  id='qcPassed-1' value='2'>QC Failed</option>";
   for (var i = 0; i < length; i++) {
@@ -291,6 +292,8 @@ function drawAccessoriesSizeListTable(data,isSearch) {
     const rowData = data[i];
     const id = rowData.autoId;
     rows += "<tr id='rowId-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='"+rowData.sizeId+"' data-unit-id='" + rowData.unitId + "'>"
+      + "<td id='accessoriesName-" + id + "'>" + rowData.accessoriesName + "</td>"
+      + "<td id='accessoriesColor-" + id + "'>" + rowData.accessoriesColorName + "</td>"
       + "<td id='sizeName-" + id + "'>" + rowData.sizeName + "</td>"
       + "<td id='unitQty-" + id + "'>" + rowData.unitQty + "</td>"
       + "<td id='qcPassedQty-" + rowData.autoId + "'>"+rowData.qcPassedQty+"</td>"

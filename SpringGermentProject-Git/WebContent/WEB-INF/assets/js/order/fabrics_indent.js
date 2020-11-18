@@ -191,49 +191,54 @@ function saveAction() {
           if (quantity != 0) {
             if (dozen != 0) {
               if (consumption != 0) {
-                if(confirm("Are you Sure to Save this Fabrics Indent")){
-                  $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: './saveFabricsIndent',
-                    data: {
-                      autoId  : autoId,
-                      purchaseOrder : purchaseOrder,
-                      buyerOrderId:buyerOrderId,
-                      styleId : styleId,
-                      itemId  : itemId,
-                      itemColorId : itemColorId,
-                      fabricsId : fabricsId,
-                      qty: quantity,
-                      dozenQty : dozenQuantity,
-                      consumption: consumption,
-                      inPercent : inPercent,
-                      percentQty : percentQuantity,
-                      totalQty : totalQuantity,
-                      unitId : unitId,
-                      width : width,
-                      yard  : yard,
-                      gsm : gsm,
-                      grandQty  : grandQuantity,
-                      fabricsColorId  : fabricsColorId,
-                      brandId: brandId,
-                      userId: userId
-                    },
-                    success: function (data) {
-                      if (data.result == "Something Wrong") {
-                        dangerAlert("Something went wrong");
-                      } else if (data.result == "duplicate") {
-                        dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                      } else {
-                        
-                        $("#dataList").empty();
-                        $("#dataList").append(drawDataTable(data.result));
-                        successAlert("Fabrics Indent Item Save Successfully");
+                if(fabricsColorId != 0){
+                  if(confirm("Are you Sure to Save this Fabrics Indent")){
+                    $.ajax({
+                      type: 'POST',
+                      dataType: 'json',
+                      url: './saveFabricsIndent',
+                      data: {
+                        autoId  : autoId,
+                        purchaseOrder : purchaseOrder,
+                        buyerOrderId:buyerOrderId,
+                        styleId : styleId,
+                        itemId  : itemId,
+                        itemColorId : itemColorId,
+                        fabricsId : fabricsId,
+                        qty: quantity,
+                        dozenQty : dozenQuantity,
+                        consumption: consumption,
+                        inPercent : inPercent,
+                        percentQty : percentQuantity,
+                        totalQty : totalQuantity,
+                        unitId : unitId,
+                        width : width,
+                        yard  : yard,
+                        gsm : gsm,
+                        grandQty  : grandQuantity,
+                        fabricsColorId  : fabricsColorId,
+                        brandId: brandId,
+                        userId: userId
+                      },
+                      success: function (data) {
+                        if (data.result == "Something Wrong") {
+                          dangerAlert("Something went wrong");
+                        } else if (data.result == "duplicate") {
+                          dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                        } else {
+                          
+                          $("#dataList").empty();
+                          $("#dataList").append(drawDataTable(data.result));
+                          successAlert("Fabrics Indent Item Save Successfully");
+                        }
                       }
-                    }
-                  });
-  
-                }
+                    });
+    
+                  }
+                }else{
+                  alert("Please Select Fabrics Color....");
+                  $("#fabricsColor").focus();
+                }               
               } else {
             	  alert("Consumption is empty ... Please Enter Consumption");
                 $("#consumption").focus();
@@ -390,15 +395,17 @@ function unitChangeAction() {
       $("#yard").val("0");
       $("#width").val("0");
       $("#yard").prop("disabled", false);
-      $("#gsm").prop("disabled", false);
-      $("#width").prop("disabled", false);
+      $("#yard").val($("#consumption").val());
+      //$("#gsm").prop("disabled", false);
+      //$("#width").prop("disabled", false);
     } else {
       $("#gsm").val("0");
       $("#yard").val("0");
       $("#width").val("0");
       $("#yard").prop("disabled", true);
-      $("#gsm").prop("disabled", true);
-      $("#width").prop("disabled", true);
+      $("#yard").val("0");
+      //$("#gsm").prop("disabled", true);
+      //$("#width").prop("disabled", true);
     }
   
     if (unitId != "0") {

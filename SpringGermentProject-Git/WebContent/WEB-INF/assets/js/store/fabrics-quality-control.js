@@ -176,8 +176,6 @@ function submitAction() {
   }
 }
 
-
-
 function editAction() {
   const rowList = $("#rollList tr");
   const length = rowList.length;
@@ -285,12 +283,15 @@ function drawFabricsRollListTable(data,isSearch) {
   const length = data.length;
   let rows = "";
   $("#rollList").empty();
+  
   let options = "<option  id='qcPassed-1' value='1'>QC Passed</option><option  id='qcPassed-1' value='2'>QC Failed</option>";
   for (var i = 0; i < length; i++) {
 
     const rowData = data[i];
     const id = rowData.autoId;
     rows += "<tr id='rowId-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-fabrics-id='" + rowData.fabricsId + "' data-fabrics-color-id='" + rowData.fabricsColorId + "' data-roll-id='"+rowData.rollId+"' data-unit-id='" + rowData.unitId + "'>"
+      + "<td id='fabricsName-" + id + "'>" + rowData.fabricsName + "</td>"
+      + "<td id='fabricsColor-" + id + "'>" + rowData.fabricsColorName + "</td>"
       + "<td id='rollId-" + id + "'>" + rowData.supplierRollId + "</td>"
       + "<td id='unitQty-" + id + "'>" + rowData.unitQty + "</td>"
       + "<td id='qcPassedQty-" + rowData.autoId + "'>"+rowData.qcPassedQty+"</td>"

@@ -32,8 +32,9 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="departmentId" value="<%=lg.get(0).getDepartmentId()%>">
-	<input type="hidden" id="poNo" value="0">
+	<input type="hidden" id="departmentId"
+		value="<%=lg.get(0).getDepartmentId()%>"> <input type="hidden"
+		id="poNo" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -43,70 +44,94 @@
 		<div class="row">
 			<div class="col-md-8">
 				<div class="row">
-				<div class="col-md-6">
-				<div class="form-group mb-0  row">
-					<label for="qcTransactionId"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Tran
-						ID</label>
-					<div class="input-group col-md-9 px-0">
-						<div class="input-group-append width-100">
-							<input id="qcTransactionId" type="text" class=" form-control-sm" readonly>
-							<button id="newFabricsQCBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm">
-								<i class="fa fa-file-text-o"></i>
-							</button>
-							<button id="findFabricsQCBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#qcSearchModal">
-								<i class="fa fa-search"></i>
-							</button>
+					<div class="col-md-6">
+						<div class="form-group mb-0  row">
+							<label for="qcTransactionId"
+								class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC
+								Tran ID</label>
+							<div class="input-group col-md-9 px-0">
+								<div class="input-group-append width-100">
+									<input id="qcTransactionId" type="text"
+										class=" form-control-sm" readonly>
+									<button id="newFabricsQCBtn" type="button"
+										class="btn btn-outline-dark btn-sm form-control-sm">
+										<i class="fa fa-file-text-o"></i>
+									</button>
+									<button id="findFabricsQCBtn" type="button"
+										class="btn btn-outline-dark btn-sm form-control-sm"
+										data-toggle="modal" data-target="#qcSearchModal">
+										<i class="fa fa-search"></i>
+									</button>
 
+								</div>
+							</div>
 						</div>
+						<div class="form-group mb-0  row">
+							<label for="qcDate"
+								class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC
+								Date:</label> <input id="qcDate" type="date"
+								class="col-md-9 form-control-sm">
+						</div>
+
+					</div>
+					<div class="col-md-6">
+
+						<div class="form-group mb-0  row">
+							<label for="grnNo"
+								class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">GRN
+								No:</label>
+							<div class="input-group col-md-9 px-0">
+								<div class="input-group-append width-100">
+									<input id="grnNo" type="text" class=" form-control-sm" readonly>
+									<button id="grnSearchBtn" type="button"
+										class="btn btn-outline-dark btn-sm form-control-sm"
+										data-toggle="modal" data-target="#grnSearchModal">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group mb-0  row">
+							<label for="receiveDate"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Fabrics
+								Rec.Date</label> <input id="receiveDate" type="date"
+								class="col-md-8 form-control-sm">
+						</div>
+
 					</div>
 				</div>
-				<div class="form-group mb-0  row">
-					<label for="qcDate"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">QC Date:</label>
-					<input id="qcDate" type="date" class="col-md-9 form-control-sm">
-				</div>
 
+				<!-- <div class="form-group mb-0 row">
+					<label for="purchaseOrder"
+						class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">P.O.</label>
+					<input id="purchaseOrder" type="text" class="col-md-5 form-control-sm"
+						readonly>
+						
+						<label for="itemName"
+						class="col-md-2 col-form-label-sm pr-0 mb-1 pb-1">Item Name</label>
+					<input id="itemName" type="text" class="col-md-4 form-control-sm"
+						readonly>
+
+				</div>
+				
+				<div class="form-group mb-0 row">
+					<label for="styleNo"
+						class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">Style No</label>
+					<input id="styleNo" type="text" class="col-md-5 form-control-sm"
+						readonly>
+						
+						<label for="itemColor"
+						class="col-md-2 col-form-label-sm pr-0 mb-1 pb-1">Item Color</label>
+					<input id="itemColor" type="text" class="col-md-4 form-control-sm"
+						readonly>
+
+				</div> -->
 			</div>
-			<div class="col-md-6">
 
-				<div class="form-group mb-0  row">
-					<label for="grnNo"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">GRN No:</label>
-					<div class="input-group col-md-9 px-0">
-						<div class="input-group-append width-100">
-							<input id="grnNo" type="text" class=" form-control-sm" readonly>
-							<button id="grnSearchBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm" data-toggle="modal" data-target="#grnSearchModal">
-								<i class="fa fa-search"></i>
-							</button>
-						</div>
-					</div>
-				</div>
 
-				<div class="form-group mb-0  row">
-					<label for="receiveDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Fabrics
-						Rec.Date</label> <input id="receiveDate" type="date"
-						class="col-md-8 form-control-sm">
-				</div>
 
-			</div>
-				</div>
-			
-			<div class="form-group mb-0 row">
-			<label for="fabrics"
-				class="col-md-1 col-form-label-sm pr-0 mb-1 pb-1">Fabrics</label> <input
-				id="fabrics" type="text" class="col-md-11 form-control-sm" readonly>
 
-		</div>
-			</div>
-			
-			
-			
-			
 			<div class="col-md-4">
 				<div class="form-group mb-0  row">
 					<label for="supplier"
@@ -128,7 +153,7 @@
 					<input id="remarks" type="text" class="col-md-9 form-control-sm">
 
 				</div>
-				
+
 				<div class="form-group mb-0  row">
 					<label for="checkBy"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Check By</label>
@@ -136,14 +161,14 @@
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
 						<option value="0">--- Select ---</option>
-						
+
 					</select>
 
 
 				</div>
 			</div>
 		</div>
-		
+
 
 		<hr class="my-1">
 		<div class="row mt-1">
@@ -153,6 +178,8 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
+							<th>Fabrics Name</th>
+							<th>Fabrics Color</th>
 							<th>Roll Id</th>
 							<th>Unit Qty</th>
 							<th>QC Passed Qty</th>
@@ -166,8 +193,9 @@
 							<th>Rack Name</th>
 							<th>Bin name</th>
 							<th>QC Passed</th>
-							<th><label class="form-check-label" for="allCheck">Check <input id="allCheck" type="checkbox"></label>
-							</th>
+							<th><label class="form-check-label" for="allCheck">Check
+									<input id="allCheck" type="checkbox">
+							</label></th>
 						</tr>
 					</thead>
 					<tbody id="rollList">
@@ -179,13 +207,12 @@
 
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button id="btnSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="submitAction()">
+				<button id="btnSubmit" type="button" class="btn btn-primary btn-sm"
+					onclick="submitAction()">
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-					disabled>
+					class="btn btn-primary btn-sm ml-1" onclick="editAction()" disabled>
 					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
