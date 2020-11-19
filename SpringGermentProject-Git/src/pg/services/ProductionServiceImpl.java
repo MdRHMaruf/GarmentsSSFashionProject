@@ -15,6 +15,7 @@ import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.SizeGroup;
 
 @Service
@@ -67,6 +68,12 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getProductionPlanForCutting() {
 		// TODO Auto-generated method stub
 		return productionDao.getProductionPlanForCutting();
+	}
+	
+	@Override
+	public List<ProductionPlan> getProductionPlanFromCutting() {
+		// TODO Auto-generated method stub
+		return productionDao.getProductionPlanFromCutting();
 	}
 
 
@@ -190,6 +197,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.saveInceptionLayoutDetails(v);
 	}
+	
+	@Override
+	public boolean saveInceptionLayoutLineDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveInceptionLayoutLineDetails(v);
+	}
 
 
 	@Override
@@ -203,6 +216,12 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getLineWiseMachineList(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.getLineWiseMachineList(v);
+	}
+	
+	@Override
+	public List<Machine> getLineWiseMachineListByLineId(String lineId) {
+		// TODO Auto-generated method stub
+		return productionDao.getLineWiseMachineListByLineId(lineId);
 	}
 
 
@@ -229,6 +248,12 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getLayoutData(ProductionPlan productionPlan) {
 		// TODO Auto-generated method stub
 		return productionDao.getLayoutData(productionPlan);
+	}
+	
+	@Override
+	public List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getLayoutLineData(productionPlan);
 	}
 
 
@@ -316,13 +341,6 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.receiveCuttingPlanBodyQuantity(sendItemList, userId);
 	}
-
-
-	
-
-
-	
-
 
 }
 

@@ -21,6 +21,7 @@ import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
 import pg.share.HibernateUtil;
@@ -385,6 +386,49 @@ public class ProductionDAOImpl implements ProductionDAO{
 			tx.begin();
 
 			String sql="select (select name from tbBuyer where id=a.BuyerId) as BuyerName,a.BuyerId,a.BuyerOrderId,a.PoNo,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.styleId,(select ItemName from tbItemDescription where itemid=a.itemId) as ItemName,a.ItemId,a.PlanQty from TbProductTargetPlan a group by a.BuyerId,a.BuyerOrderId,a.PoNo,a.StyleId,a.ItemId,a.PlanQty";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<ProductionPlan> getProductionPlanFromCutting() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select b.name as buyerName,cis.buyerId,boed.buyerOrderId,cis.purchaseOrder,sc.StyleNo,cis.StyleId,id.itemname,cis.itemId,(select ISNULL(sum(PlanQty),0) as PlanQty from TbProductTargetPlan where BuyerOrderId=boed.BuyerOrderId and StyleId=cis.StyleId and ItemId=cis.ItemId ) as PlanQty \n" + 
+					"from TbCuttingInformationSummary cis\n" + 
+					"left join TbBuyerOrderEstimateDetails boed\n" + 
+					"on cis.BuyerId = boed.buyerId and cis.purchaseOrder = boed.PurchaseOrder and cis.StyleId = boed.StyleId and cis.ItemId = boed.ItemId\n" + 
+					"left join tbBuyer b\n" + 
+					"on cis.BuyerId = b.id\n" + 
+					"left join TbStyleCreate sc \n" + 
+					"on cis.StyleId = sc.StyleId\n" + 
+					"left join tbItemDescription id\n" + 
+					"on cis.ItemId = id.itemid\n" + 
+					"group by b.name,cis.buyerId,boed.buyerOrderId,cis.purchaseOrder,sc.StyleNo,cis.StyleId,id.itemname,cis.itemId";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1778,6 +1822,131 @@ public class ProductionDAOImpl implements ProductionDAO{
 	}
 
 	@Override
+	public boolean saveInceptionLayoutLineDetails(ProductionPlan v) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
+			System.out.println("resultValue "+resultValue);
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+				String secondToken=firstToken.nextToken();
+				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
+				while(thirdToken.hasMoreTokens()) {
+					String machineId=thirdToken.nextToken();
+					String processId=thirdToken.nextToken();
+					String totalQty=thirdToken.nextToken();
+					String totalRejectQty=thirdToken.nextToken();
+					String layoutvalue=thirdToken.nextToken();
+					String rejectvalue=thirdToken.nextToken();
+
+
+					System.out.println("layoutvalue"+layoutvalue);
+					//Passed
+					StringTokenizer layoutToken=new StringTokenizer(layoutvalue, ":");
+					while(layoutToken.hasMoreTokens()) {
+						String type=layoutToken.nextToken();
+						String h1=layoutToken.nextToken();
+						String h2=layoutToken.nextToken();
+						String h3=layoutToken.nextToken();
+						String h4=layoutToken.nextToken();
+						String h5=layoutToken.nextToken();
+						String h6=layoutToken.nextToken();
+						String h7=layoutToken.nextToken();
+						String h8=layoutToken.nextToken();
+						String h9=layoutToken.nextToken();
+						String h10=layoutToken.nextToken();
+
+
+
+						String productionSql="insert into tbLayoutPlanDetails ("
+								+ "BuyerId,"
+								+ "BuyerOrderId,"
+								+ "PurchaseOrder,"
+								+ "StyleId,"
+								+ "ItemId,"
+								+ "LineId,"
+								+ "EmployeeId,"
+								+ "Type,"
+								+ "DailyTarget,"
+								+ "LineTarget,"
+								+ "HourlyTarget,"
+								+ "machineId,"
+								+ "processId,"
+								+ "Hours,"
+								+ "hour1,"
+								+ "hour2,"
+								+ "hour3,"
+								+ "hour4,"
+								+ "hour5,"
+								+ "hour6,"
+								+ "hour7,"
+								+ "hour8,"
+								+ "hour9,"
+								+ "hour10,"
+								+ "total,"
+								+ "date,"
+								+ "entrytime,"
+								+ "userId) values ("
+								+ "'"+v.getBuyerId()+"',"
+								+ "'"+v.getBuyerorderId()+"',"
+								+ "'"+v.getPurchaseOrder()+"',"
+								+ "'"+v.getStyleId()+"',"
+								+ "'"+v.getItemId()+"',"
+								+ "'"+v.getLineId()+"',"
+								+ "'"+v.getEmployeeId()+"',"
+								+ "'"+type+"',"
+								+ "'"+v.getDailyTarget()+"',"
+								+ "'"+v.getDailyLineTarget()+"',"
+								+ "'"+v.getHourlyTarget()+"',"
+								+ "'"+machineId+"',"
+								+ "'"+processId+"',"
+								+ "'10',"
+								+ "'"+h1+"',"
+								+ "'"+h2+"',"
+								+ "'"+h3+"',"
+								+ "'"+h4+"',"
+								+ "'"+h5+"',"				
+								+ "'"+h6+"',"
+								+ "'"+h7+"',"
+								+ "'"+h8+"',"
+								+ "'"+h9+"',"
+								+ "'"+h10+"',"
+								+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+								+ ")";
+						session.createSQLQuery(productionSql).executeUpdate();
+					}
+
+
+
+				}
+			}
+
+
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
 	public List<ProductionPlan> getLayoutPlanDetails(String type) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1828,6 +1997,39 @@ public class ProductionDAOImpl implements ProductionDAO{
 				Object[] element = (Object[]) iter.next();
 
 				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<Machine> getLineWiseMachineListByLineId(String  lineId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Machine> dataList=new ArrayList<Machine>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select MachineId,MachineName,OperatorId,(select Name from TbEmployeeInfo where AutoId=TbMachineInfo.OperatorId) as OperatorName from TbMachineInfo where LineId='"+lineId+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Machine(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}
 			tx.commit();
 		}
@@ -2108,6 +2310,79 @@ public class ProductionDAOImpl implements ProductionDAO{
 	}
 
 	@Override
+	public List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		ProductionPlan tempProduction= null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.AutoId,a.BuyerId,b.name buyerName,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.LineId,lc.LineName,a.EmployeeId,isnull(e.name,'') as employeeName,a.Type,isnull(a.proudctionType,'') as productionType,ptp.OrderQty,ptp.PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.hour1,a.hour2,a.hour3,a.hour4,a.hour5,a.hour6,a.hour7,a.hour8,a.hour9,a.hour10,a.total,(select convert(varchar,a.date,103))as date,a.userId,a.machineId,mi.MachineName,mi.OperatorId,ei.Name as operatorName,a.processId\r\n" + 
+					"from tbLayoutPlanDetails a\r\n" + 
+					"left join TbProductTargetPlan ptp\r\n" + 
+					"on a.BuyerId = ptp.BuyerId and a.BuyerOrderId = ptp.BuyerOrderId and a.StyleId = ptp.StyleId and a.ItemId = ptp.ItemId\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on a.BuyerId = b.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on a.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on a.ItemId = id.itemid\r\n" + 
+					"left join TbLineCreate lc\r\n" + 
+					"on a.LineId = lc.LineId\r\n" + 
+					"left join TbEmployeeInfo e \r\n" + 
+					"on a.EmployeeId = e.AutoId \r\n"+
+					"left join TbMachineInfo mi\n" + 
+					"on a.machineId = mi.MachineId\n" + 
+					"left join TbEmployeeInfo ei\n" + 
+					"on mi.OperatorId = ei.AutoId \r\n" + 
+					"where a.BuyerId='"+productionPlan.getBuyerId()+"' and a.BuyerOrderId='"+productionPlan.getBuyerorderId()+"' and a.StyleId='"+productionPlan.getStyleId()+"' and a.ItemId='"+productionPlan.getItemId()+"' and a.date='"+productionPlan.getLayoutDate()+"' and type='"+productionPlan.getLayoutName()+"'";
+
+
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			if(lineCount>0) {
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					tempProduction = new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString(), element[25].toString(), element[26].toString(), element[27].toString(), element[28].toString(), element[29].toString(), element[30].toString(), element[31].toString(),element[32].toString(),element[33].toString(),String.valueOf(lineCount));
+					tempProduction.setMachineId(element[34].toString());
+					tempProduction.setMachineName(element[35].toString());
+					tempProduction.setOperatorId(element[36].toString());
+					tempProduction.setOperatorName(element[37].toString());
+					tempProduction.setProcessId(element[38].toString());
+					dataList.add(tempProduction);
+				}
+			}else {
+				sql = "select MachineId,MachineName,OperatorId,isnull(ei.Name,'')as operatorName \n" + 
+						"from TbMachineInfo mi\n" + 
+						"left join TbEmployeeInfo ei\n" + 
+						"on mi.OperatorId = ei.AutoId where mi.LineId = '"+productionPlan.getLineId()+"'" ;
+				list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();) {
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				}
+			}
+
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
 	public String editLayoutLineData(ProductionPlan productionPlan) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
@@ -2119,7 +2394,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 
 			String productionSql="update tbLayoutPlanDetails set "
-					+ "EmployeeId = '"+productionPlan.getOperatorId()+"',"
+					+ "processId = '"+productionPlan.getProcessId()+"',"
 					+ "hour1 = '"+productionPlan.getHour1()+"',"
 					+ "hour2 = '"+productionPlan.getHour2()+"',"
 					+ "hour3 = '"+productionPlan.getHour3()+"',"
@@ -2434,8 +2709,8 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return dataList;
 	}
 
-	
-	
+
+
 	@Override
 	public List<ProductionPlan> getSendCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
 		// TODO Auto-generated method stub
@@ -2483,7 +2758,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<CuttingInformation> getSendCuttingBodyInfoList() {
 		Session session=HibernateUtil.openSession();
@@ -2520,7 +2795,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public String sendCuttingPlanBodyQuantity(String sendItemList,String userId) {
 		// TODO Auto-generated method stub
@@ -2532,11 +2807,11 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 			if(sendItemList.trim().length()>0) {
 				String[] sizeLists = sendItemList.split("#");
-				
+
 				String id,linkAutoId,sizeId,sizeStatus;
 				String prevLinkAutoId="";
 				for (String item : sizeLists) {
-					
+
 					String[] itemProperty = item.split(",");
 					id = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 					linkAutoId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
@@ -2544,16 +2819,16 @@ public class ProductionDAOImpl implements ProductionDAO{
 					sizeStatus = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
 					String productionSql="update tbSizeValues set status = '"+sizeStatus+"',sendEntryTime=CURRENT_TIMESTAMP,senderUserId = '"+userId+"' where sizeId = '"+sizeId+"' and linkedAutoId = '"+linkAutoId+"' and type='"+SizeValuesType.CUTTING_QTY.getType()+"' and (status is null or status = 0 or status = '1')";
 					session.createSQLQuery(productionSql).executeUpdate();
-					
+
 					if(!prevLinkAutoId.equals(linkAutoId)) {
 						productionSql= "update TbCuttingInformationDetails  set status = '1' where cuttingAutoId='"+linkAutoId+"' and type = 'Cutting' and (status is null or status = 0 or status = 1)";
 						session.createSQLQuery(productionSql).executeUpdate();
 						prevLinkAutoId = linkAutoId;
 					}
-					
+
 				}		
-				
-				
+
+
 			}	
 			tx.commit();
 			return "Successful";
@@ -2573,7 +2848,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 		return "Something Wrong";
 	}
-	
+
 	@Override
 	public List<ProductionPlan> searchSendCuttingBodyQuantity(String cuttingEntryId, String sizeGroupId) {
 		// TODO Auto-generated method stub
@@ -2622,7 +2897,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return dataList;
 	}
 
-	
+
 	@Override
 	public List<ProductionPlan> getReceiveCuttingBodyList(String cuttingEntryId, String sizeGroupId) {
 		// TODO Auto-generated method stub
@@ -2670,7 +2945,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<CuttingInformation> getReceiveCuttingBodyInfoList() {
 		Session session=HibernateUtil.openSession();
@@ -2707,7 +2982,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public String receiveCuttingPlanBodyQuantity(String sendItemList,String userId) {
 		// TODO Auto-generated method stub
@@ -2719,11 +2994,11 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 			if(sendItemList.trim().length()>0) {
 				String[] sizeLists = sendItemList.split("#");
-				
+
 				String id,linkAutoId,sizeId,sizeStatus;
 				String prevLinkAutoId="";
 				for (String item : sizeLists) {
-					
+
 					String[] itemProperty = item.split(",");
 					id = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 					linkAutoId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
@@ -2731,16 +3006,16 @@ public class ProductionDAOImpl implements ProductionDAO{
 					sizeStatus = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
 					String productionSql="update tbSizeValues set status = '"+sizeStatus+"',sendEntryTime=CURRENT_TIMESTAMP,senderUserId = '"+userId+"' where sizeId = '"+sizeId+"' and linkedAutoId = '"+linkAutoId+"' and type='"+SizeValuesType.CUTTING_QTY.getType()+"' and ( status = 2 or status = 1)";
 					session.createSQLQuery(productionSql).executeUpdate();
-					
+
 					if(!prevLinkAutoId.equals(linkAutoId)) {
 						productionSql= "update TbCuttingInformationDetails  set status = '2' where cuttingAutoId='"+linkAutoId+"' and type = 'Cutting' and ( status = 2 or status = 1)";
 						session.createSQLQuery(productionSql).executeUpdate();
 						prevLinkAutoId = linkAutoId;
 					}
-					
+
 				}		
-				
-				
+
+
 			}	
 			tx.commit();
 			return "Successful";

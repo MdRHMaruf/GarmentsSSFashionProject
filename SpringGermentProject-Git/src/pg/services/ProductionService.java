@@ -10,6 +10,7 @@ import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.SizeGroup;
 
 public interface ProductionService {
@@ -29,6 +30,7 @@ public interface ProductionService {
 	List<ProductionPlan> getProductionPlan(String buyerId, String buyerorderId, String styleId);
 
 	List<ProductionPlan> getProductionPlanForCutting();
+	List<ProductionPlan> getProductionPlanFromCutting();
 
 	List<Department> getFactoryWiseDepartmentLoad(String factoryId);
 
@@ -63,6 +65,7 @@ public interface ProductionService {
 
 	//Inception Layout
 	boolean saveInceptionLayoutDetails(ProductionPlan v);
+	boolean saveInceptionLayoutLineDetails(ProductionPlan v);
 
 	List<ProductionPlan> getLayoutPlanDetails(String string);
 
@@ -70,6 +73,7 @@ public interface ProductionService {
 
 	//Sewing
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
+	List<Machine> getLineWiseMachineListByLineId(String lineId);
 
 	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
 
@@ -79,6 +83,7 @@ public interface ProductionService {
 
 	//Finishing
 	List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
+	List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan);
 	String editLayoutLineData(ProductionPlan productionPlan);
 
 	boolean savePolyPackingDetails(ProductionPlan v);

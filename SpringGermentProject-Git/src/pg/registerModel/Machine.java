@@ -27,6 +27,13 @@ public class Machine {
 		this.employeeId=employeeId;
 		this.employeeName=employeeName;
 	}
+	
+	public Machine(String machineId,String machineName,String employeeId,String employeeName) {
+		this.machineId = machineId;
+		this.name = machineName;
+		this.employeeId = employeeId;
+		this.employeeName = employeeName;
+	}
 
 	public String getMachineId() {
 		return machineId;

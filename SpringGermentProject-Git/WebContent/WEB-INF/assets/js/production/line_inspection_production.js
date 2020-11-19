@@ -70,7 +70,7 @@ function getOptions(dataList) {
 
 function drawItemTable(dataList, employeeResult) {
 
-	const employeeList = getOptions(employeeResult);
+	const employeeList = "<option>Select</option>";//getOptions(employeeResult);
 
 	var length = dataList.length;
 	sizeGroupId = "";
@@ -373,7 +373,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 
 function drawSearchItemTable(dataList, employeeResult) {
 
-	const employeeList = getOptions(employeeResult);
+	const employeeList = "<option>Select</option>"//getOptions(employeeResult);
 
 	var length = dataList.length;
 	sizeGroupId = "";
