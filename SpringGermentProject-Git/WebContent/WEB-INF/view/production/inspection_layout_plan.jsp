@@ -284,6 +284,7 @@
 								<th>Purchase Order</th>
 								<th>Style No</th>
 								<th>Item Name</th>
+								<th>Line Name</th>
 								<th>Date</th>
 								<th>Search</th>
 								<th>Print</th>
@@ -298,9 +299,10 @@
 									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
 									<td id='styleId${list.styleId}'>${list.styleNo}</td>
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
+									<td id='lineId${list.lineId}'>${list.lineName}</td>
 									<td id='layout${list.itemId}'>${list.productionDate}</td>
 									<td><i class="fa fa-search" style="cursor:pointer;" 
-										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}','${list.lineId}')">
 									</i></td>
 									<td><i class="fa fa-print" style="cursor:pointer;" 
 										onclick="printLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">

@@ -70,7 +70,7 @@ function getOptions(dataList) {
 
 function drawItemTable(dataList, employeeResult) {
 
-	const employeeList = "<option>Select</option>";//getOptions(employeeResult);
+	const employeeList = getOptions(employeeResult);
 
 	var length = dataList.length;
 	sizeGroupId = "";
@@ -114,20 +114,20 @@ function drawItemTable(dataList, employeeResult) {
 		tables += "<tr class='itemRow' data-id='" + item.lineId + "'>" +
 			"<th >" + item.lineName + "</br><input  type='hidden' class='form-control-sm line-" + item.lineId + "'  value='" + parseFloat(item.lineId).toFixed() + "' /></th>" +
 			"<th><select id='employee-" + item.lineId + "'  class='selectpicker employee-width tableSelect employee-" + item.lineId + " col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>" + employeeList + "</select></th>" +
-			"<td><p style='color:green;font-weight:bold;'>Pass</p><p style='color:red;font-weight:bold;'>Reject</p></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h1'  value=''/><input  type='number'  onfocus='openProcessModel("+item.lineId+",1)'  class='form-control-sm' id='reject-" + item.lineId + "-h1'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h2'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",2)' class='form-control-sm' id='reject-" + item.lineId + "-h2'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h3'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",3)' class='form-control-sm' id='reject-" + item.lineId + "-h3'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h4'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",4)' class='form-control-sm' id='reject-" + item.lineId + "-h4'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h5'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",5)' class='form-control-sm' id='reject-" + item.lineId + "-h5'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h6'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",6)' class='form-control-sm' id='reject-" + item.lineId + "-h6'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h7'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",7)' class='form-control-sm' id='reject-" + item.lineId + "-h7'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h8'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",8)' class='form-control-sm' id='reject-" + item.lineId + "-h8'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",9)' class='form-control-sm' id='reject-" + item.lineId + "-h9'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h11'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",11)' class='form-control-sm' id='reject-" + item.lineId + "-h11'  value='' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h12'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",12)' class='form-control-sm' id='reject-" + item.lineId + "-h12'  value='' /></td>" +
-			"<td><input  type='number' id='line-" + item.lineId + "-total' readonly class='form-control-sm'/><input  type='number'  class='form-control-sm' id='reject-" + item.lineId + "-total'  value='' /></td>" +
+			"<td><p style='color:black;font-weight:bold;'>Target</p><p style='color:black;font-weight:bold;'>Production</p><p style='color:green;font-weight:bold;'>Pass</p><p style='color:red;font-weight:bold;'>Reject</p></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h1'  value='"+ Math.round(item.hour1) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h1' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h1'  value=''/><input  type='number'  onfocus='openProcessModel("+item.lineId+",1)'  class='form-control-sm' id='reject-" + item.lineId + "-h1'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h2'  value='"+ Math.round(item.hour2) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h2' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h2'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",2)' class='form-control-sm' id='reject-" + item.lineId + "-h2'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h3'  value='"+ Math.round(item.hour3) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h3' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h3'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",3)' class='form-control-sm' id='reject-" + item.lineId + "-h3'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h4'  value='"+ Math.round(item.hour4) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h4' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h4'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",4)' class='form-control-sm' id='reject-" + item.lineId + "-h4'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h5'  value='"+ Math.round(item.hour5) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h5' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h5'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",5)' class='form-control-sm' id='reject-" + item.lineId + "-h5'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h6'  value='"+ Math.round(item.hour6) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h6' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h6'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",6)' class='form-control-sm' id='reject-" + item.lineId + "-h6'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h7'  value='"+ Math.round(item.hour7) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h7' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h7'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",7)' class='form-control-sm' id='reject-" + item.lineId + "-h7'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h8'  value='"+ Math.round(item.hour8) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h8' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h8'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",8)' class='form-control-sm' id='reject-" + item.lineId + "-h8'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h9'  value='"+ Math.round(item.hour9) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h9' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",9)' class='form-control-sm' id='reject-" + item.lineId + "-h9'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h10'  value='"+ Math.round(item.hour10) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h10' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h11'  value='"+ Math.round(0) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h11' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h11'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",11)' class='form-control-sm' id='reject-" + item.lineId + "-h11'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-h12'  value='"+ Math.round(0) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-h12' onkeyup='setProductionTotal(" + item.lineId + ")' value=''/><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h12'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",12)' class='form-control-sm' id='reject-" + item.lineId + "-h12'  value='' /></td>" +
+			"<td><input  type='number' class='form-control-sm' id='target-" + item.lineId + "-total'  value='"+ Math.round(item.hour1 + item.hour2 + item.hour3 + item.hour4 + item.hour5 + item.hour6 + item.hour7 + item.hour8 + item.hour9 + item.hour10) +"' readonly/><input  type='number' class='form-control-sm' id='production-" + item.lineId + "-total'  value='' readonly/><input  type='number' id='line-" + item.lineId + "-total' readonly class='form-control-sm'/><input  type='number'  class='form-control-sm' id='reject-" + item.lineId + "-total'  value='' /></td>" +
 			"</tr>"
 		//"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm'><i class='fa fa-edit'></i></button></td>
 		$('#dailyTargetQty').val(parseFloat(item.dailyTarget).toFixed(2));
@@ -143,16 +143,13 @@ function drawItemTable(dataList, employeeResult) {
 	$('.tableSelect').selectpicker('refresh');
 }
 
-function openProcessModel(v,h){
-	
-	lineValue=v;
-	
-	var id="reject-"+v+"-h"+h;
+function openProcessModel(v,h){	
+	lineValue=v;	
+	var id = "reject-"+v+"-h"+h;
 	processQty=id;
 	$('#processListModal').modal('toggle');
 	$('#processListModal').modal('show');
-	//$('#processListModal').
-	
+	//$('#processListModal').	
 }
 
 function closeProcessAddEvent(){
@@ -225,8 +222,63 @@ function setTotalQty(id) {
 	var Qty8 = parseFloat(($("#pass-" + id + "-h8").val() == '' ? "0" : $("#pass-" + id + "-h8").val()));
 	var Qty9 = parseFloat(($("#pass-" + id + "-h9").val() == '' ? "0" : $("#pass-" + id + "-h9").val()));
 	var Qty10 = parseFloat(($("#pass-" + id + "-h10").val() == '' ? "0" : $("#pass-" + id + "-h10").val()));
+	var Qty11 = parseFloat(($("#pass-" + id + "-h11").val() == '' ? "0" : $("#pass-" + id + "-h11").val()));
+	var Qty12 = parseFloat(($("#pass-" + id + "-h12").val() == '' ? "0" : $("#pass-" + id + "-h12").val()));
 
-	var totalQty = Qty1 + Qty2 + Qty3 + Qty4 + Qty5 + Qty6 + Qty7 + Qty8 + Qty9 + Qty10;
+	var totalQty = Qty1 + Qty2 + Qty3 + Qty4 + Qty5 + Qty6 + Qty7 + Qty8 + Qty9 + Qty10 + Qty11 + Qty12;
+
+	$(totalQtyLineId).val(totalQty);
+
+	let reject=[];
+	let rejectTotal = 0;
+	reject.push( parseFloat(($("#production-" + id + "-h1").val() == '' ? "0" : $("#production-" + id + "-h1").val())) - parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h2").val() == '' ? "0" : $("#production-" + id + "-h2").val())) - parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h3").val() == '' ? "0" : $("#production-" + id + "-h3").val())) - parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h4").val() == '' ? "0" : $("#production-" + id + "-h4").val())) - parseFloat(($("#pass-" + id + "-h4").val() == '' ? "0" : $("#pass-" + id + "-h4").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h5").val() == '' ? "0" : $("#production-" + id + "-h5").val())) - parseFloat(($("#pass-" + id + "-h5").val() == '' ? "0" : $("#pass-" + id + "-h5").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h6").val() == '' ? "0" : $("#production-" + id + "-h6").val())) - parseFloat(($("#pass-" + id + "-h6").val() == '' ? "0" : $("#pass-" + id + "-h6").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h7").val() == '' ? "0" : $("#production-" + id + "-h7").val())) - parseFloat(($("#pass-" + id + "-h7").val() == '' ? "0" : $("#pass-" + id + "-h7").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h8").val() == '' ? "0" : $("#production-" + id + "-h8").val())) - parseFloat(($("#pass-" + id + "-h8").val() == '' ? "0" : $("#pass-" + id + "-h8").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h9").val() == '' ? "0" : $("#production-" + id + "-h9").val())) - parseFloat(($("#pass-" + id + "-h9").val() == '' ? "0" : $("#pass-" + id + "-h9").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h10").val() == '' ? "0" : $("#production-" + id + "-h10").val())) - parseFloat(($("#pass-" + id + "-h10").val() == '' ? "0" : $("#pass-" + id + "-h10").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h11").val() == '' ? "0" : $("#production-" + id + "-h11").val())) - parseFloat(($("#pass-" + id + "-h11").val() == '' ? "0" : $("#pass-" + id + "-h11").val())));
+	reject.push( parseFloat(($("#production-" + id + "-h12").val() == '' ? "0" : $("#production-" + id + "-h12").val())) - parseFloat(($("#pass-" + id + "-h12").val() == '' ? "0" : $("#pass-" + id + "-h12").val())));
+
+	let length = reject.length;
+	
+	for(let i = 0 ; i < length ; i++){
+		if(reject[i]<0){
+			$("#reject-"+id+"-h"+(i+1)).val(0);
+			rejectTotal += 0;
+		}else{
+			$("#reject-"+id+"-h"+(i+1)).val(reject[i]);
+			rejectTotal += reject[i];
+		}
+	}
+	$("#reject-"+id+"-total").val(rejectTotal);
+
+}
+
+function setProductionTotal(id) {
+
+	var totalQtyLineId = "#production-" + id + '-total';
+
+	//alert("totalQtyLineId "+totalQtyLineId);
+
+	var Qty1 = parseFloat(($("#production-" + id + "-h1").val() == '' ? "0" : $("#production-" + id + "-h1").val()));
+	var Qty2 = parseFloat(($("#production-" + id + "-h2").val() == '' ? "0" : $("#production-" + id + "-h2").val()));
+	var Qty3 = parseFloat(($("#production-" + id + "-h3").val() == '' ? "0" : $("#production-" + id + "-h3").val()));
+	var Qty4 = parseFloat(($("#production-" + id + "-h4").val() == '' ? "0" : $("#production-" + id + "-h4").val()));
+	var Qty5 = parseFloat(($("#production-" + id + "-h5").val() == '' ? "0" : $("#production-" + id + "-h5").val()));
+	var Qty6 = parseFloat(($("#production-" + id + "-h6").val() == '' ? "0" : $("#production-" + id + "-h6").val()));
+	var Qty7 = parseFloat(($("#production-" + id + "-h7").val() == '' ? "0" : $("#production-" + id + "-h7").val()));
+	var Qty8 = parseFloat(($("#production-" + id + "-h8").val() == '' ? "0" : $("#production-" + id + "-h8").val()));
+	var Qty9 = parseFloat(($("#production-" + id + "-h9").val() == '' ? "0" : $("#production-" + id + "-h9").val()));
+	var Qty10 = parseFloat(($("#production-" + id + "-h10").val() == '' ? "0" : $("#production-" + id + "-h10").val()));
+	var Qty11 = parseFloat(($("#production-" + id + "-h11").val() == '' ? "0" : $("#production-" + id + "-h11").val()));
+	var Qty12 = parseFloat(($("#production-" + id + "-h12").val() == '' ? "0" : $("#production-" + id + "-h12").val()));
+
+	var totalQty = Qty1 + Qty2 + Qty3 + Qty4 + Qty5 + Qty6 + Qty7 + Qty8 + Qty9 + Qty10 + Qty11 + Qty12;
 
 	$(totalQtyLineId).val(totalQty);
 
@@ -235,6 +287,7 @@ function setTotalQty(id) {
 
 
 function saveAction() {
+	var productionType = $('#productionType').val();
 	var passType = $('#passType').val();
 	var rejectType = $('#rejectType').val();
 	var userId = $('#userId').val();
@@ -268,18 +321,32 @@ function saveAction() {
 			var lineId = $(".line-" + id).val();
 			var employeeId = $("#employee-" + id).val();
 
-			var proQty1 = parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val()));
-			var proQty2 = parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val()));
-			var proQty3 = parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val()));
-			var proQty4 = parseFloat(($("#pass-" + id + "-h4").val() == '' ? "0" : $("#pass-" + id + "-h4").val()));
-			var proQty5 = parseFloat(($("#pass-" + id + "-h5").val() == '' ? "0" : $("#pass-" + id + "-h5").val()));
-			var proQty6 = parseFloat(($("#pass-" + id + "-h6").val() == '' ? "0" : $("#pass-" + id + "-h6").val()));
-			var proQty7 = parseFloat(($("#pass-" + id + "-h7").val() == '' ? "0" : $("#pass-" + id + "-h7").val()));
-			var proQty8 = parseFloat(($("#pass-" + id + "-h8").val() == '' ? "0" : $("#pass-" + id + "-h8").val()));
-			var proQty9 = parseFloat(($("#pass-" + id + "-h9").val() == '' ? "0" : $("#pass-" + id + "-h9").val()));
-			var proQty10 = parseFloat(($("#pass-" + id + "-h10").val() == '' ? "0" : $("#pass-" + id + "-h10").val()));
+			const productionQty1 = parseFloat(($("#production-" + id + "-h1").val() == '' ? "0" : $("#production-" + id + "-h1").val()));
+			const productionQty2 = parseFloat(($("#production-" + id + "-h2").val() == '' ? "0" : $("#production-" + id + "-h2").val()));
+			const productionQty3 = parseFloat(($("#production-" + id + "-h3").val() == '' ? "0" : $("#production-" + id + "-h3").val()));
+			const productionQty4 = parseFloat(($("#production-" + id + "-h4").val() == '' ? "0" : $("#production-" + id + "-h4").val()));
+			const productionQty5 = parseFloat(($("#production-" + id + "-h5").val() == '' ? "0" : $("#production-" + id + "-h5").val()));
+			const productionQty6 = parseFloat(($("#production-" + id + "-h6").val() == '' ? "0" : $("#production-" + id + "-h6").val()));
+			const productionQty7 = parseFloat(($("#production-" + id + "-h7").val() == '' ? "0" : $("#production-" + id + "-h7").val()));
+			const productionQty8 = parseFloat(($("#production-" + id + "-h8").val() == '' ? "0" : $("#production-" + id + "-h8").val()));
+			const productionQty9 = parseFloat(($("#production-" + id + "-h9").val() == '' ? "0" : $("#production-" + id + "-h9").val()));
+			const productionQty10 = parseFloat(($("#production-" + id + "-h10").val() == '' ? "0" : $("#production-" + id + "-h10").val()));
 
-			var totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
+			var totalProductionQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10;
+			
+
+			var passQty1 = parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val()));
+			var passQty2 = parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val()));
+			var passQty3 = parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val()));
+			var passQty4 = parseFloat(($("#pass-" + id + "-h4").val() == '' ? "0" : $("#pass-" + id + "-h4").val()));
+			var passQty5 = parseFloat(($("#pass-" + id + "-h5").val() == '' ? "0" : $("#pass-" + id + "-h5").val()));
+			var passQty6 = parseFloat(($("#pass-" + id + "-h6").val() == '' ? "0" : $("#pass-" + id + "-h6").val()));
+			var passQty7 = parseFloat(($("#pass-" + id + "-h7").val() == '' ? "0" : $("#pass-" + id + "-h7").val()));
+			var passQty8 = parseFloat(($("#pass-" + id + "-h8").val() == '' ? "0" : $("#pass-" + id + "-h8").val()));
+			var passQty9 = parseFloat(($("#pass-" + id + "-h9").val() == '' ? "0" : $("#pass-" + id + "-h9").val()));
+			var passQty10 = parseFloat(($("#pass-" + id + "-h10").val() == '' ? "0" : $("#pass-" + id + "-h10").val()));
+
+			var totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10;
 			
 			
 			
@@ -297,11 +364,11 @@ function saveAction() {
 
 			var totalRejectQty = rejectQty1 + rejectQty2 + rejectQty3 + rejectQty4 + rejectQty5 + rejectQty6 + rejectQty7 + rejectQty8 + rejectQty9 + rejectQty10;
 			
-			
-			var passValue = passType+":"+proQty1 + ":" + proQty2 + ":" + proQty3 + ":" + proQty4 + ":" + proQty5 + ":" + proQty6 + ":" + proQty7 + ":" + proQty8 + ":" + proQty9 + ":" + proQty10;
+			var productionValue = productionType+":"+productionQty1 + ":" + productionQty2 + ":" + productionQty3 + ":" + productionQty4 + ":" + productionQty5 + ":" + productionQty6 + ":" + productionQty7 + ":" + productionQty8 + ":" + productionQty9 + ":" + productionQty10;
+			var passValue = passType+":"+passQty1 + ":" + passQty2 + ":" + passQty3 + ":" + passQty4 + ":" + passQty5 + ":" + passQty6 + ":" + passQty7 + ":" + passQty8 + ":" + passQty9 + ":" + passQty10;
 			var rejectValue = rejectType+":"+rejectQty1 + ":" + rejectQty2 + ":" + rejectQty3 + ":" + rejectQty4 + ":" + rejectQty5 + ":" + rejectQty6 + ":" + rejectQty7 + ":" + rejectQty8 + ":" + rejectQty9 + ":" + rejectQty10;
 
-			resultList[i] =employeeId + "*" + lineId + "*" + totalQty+" * "+totalRejectQty+ "*" + passValue+"*"+rejectValue;
+			resultList[i] =employeeId + "*" + lineId + "*" + totalProductionQty + "*" + totalQty+" * "+totalRejectQty+ "*" + productionValue + "*" + passValue+"*"+rejectValue;
 			i++;
 		});
 		resultList = "[" + resultList + "]"
@@ -373,7 +440,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 
 function drawSearchItemTable(dataList, employeeResult) {
 
-	const employeeList = "<option>Select</option>"//getOptions(employeeResult);
+	const employeeList = getOptions(employeeResult);
 
 	var length = dataList.length;
 	sizeGroupId = "";
@@ -424,10 +491,28 @@ function drawSearchItemTable(dataList, employeeResult) {
 		
 	
 		
-		if(item.layoutName=='2'){
+		if(item.layoutName=='5'){
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 			"<th >" + item.lineName + "</br><input  type='hidden' class='form-control-sm line-" + item.lineId + "'  value='" + parseFloat(item.lineId).toFixed() + "' /></th>" +
 			"<th><select id='employee-" + item.lineId + "'  class='selectpicker employee-width tableSelect employee-" + item.lineId + " col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>" + employeeList + "</select></th>" +
+			"<td>Production</td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h1'  value='" + Number(item.hour1).toFixed(0) + "' /></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h2'  value='" + Number(item.hour2).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h3'  value='" + Number(item.hour3).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h4'  value='" + Number(item.hour4).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h5'  value='" + Number(item.hour5).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h6'  value='" + Number(item.hour6).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h7'  value='" + Number(item.hour7).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h8'  value='" + Number(item.hour8).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setProductionTotal(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' id='production-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
+			"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + ","+item.lineId+","+item.layoutName+")'><i class='fa fa-edit'></i></button></td></tr>"
+
+		}else if(item.layoutName=='4'){
+			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
+			"<th></th>" +
+			"<th></th>" +
 			"<td>Pass</td>" +
 			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h1'  value='" + Number(item.hour1).toFixed(0) + "' /></td>" +
 			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h2'  value='" + Number(item.hour2).toFixed(0) + "'/></td>" +
@@ -443,7 +528,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 			"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + ","+item.lineId+","+item.layoutName+")'><i class='fa fa-edit'></i></button></td></tr>"
 
 		}
-		else if(item.layoutName=='3'){
+		else if(item.layoutName=='6'){
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 			"<th></th>" +
 			"<th></th>" +
@@ -484,7 +569,21 @@ function editLineData(autoId,lineId,type) {
 	
 	var proQty1=0,proQty2=0,proQty3=0,proQty4=0,proQty5=0,proQty6=0,proQty7=0,proQty8=0,proQty9=0,proQty10=0,totalQty=0;
 	
-	if(type=='2'){
+	if(type=='5'){
+		proQty1 = parseFloat(($("#production-" + id + "-h1").val() == '' ? "0" : $("#production-" + id + "-h1").val()));
+		proQty2 = parseFloat(($("#production-" + id + "-h2").val() == '' ? "0" : $("#production-" + id + "-h2").val()));
+		proQty3 = parseFloat(($("#production-" + id + "-h3").val() == '' ? "0" : $("#production-" + id + "-h3").val()));
+		proQty4 = parseFloat(($("#production-" + id + "-h4").val() == '' ? "0" : $("#production-" + id + "-h4").val()));
+		proQty5 = parseFloat(($("#production-" + id + "-h5").val() == '' ? "0" : $("#production-" + id + "-h5").val()));
+		proQty6 = parseFloat(($("#production-" + id + "-h6").val() == '' ? "0" : $("#production-" + id + "-h6").val()));
+		proQty7 = parseFloat(($("#production-" + id + "-h7").val() == '' ? "0" : $("#production-" + id + "-h7").val()));
+		proQty8 = parseFloat(($("#production-" + id + "-h8").val() == '' ? "0" : $("#production-" + id + "-h8").val()));
+		proQty9 = parseFloat(($("#production-" + id + "-h9").val() == '' ? "0" : $("#production-" + id + "-h9").val()));
+		proQty10 = parseFloat(($("#production-" + id + "-h10").val() == '' ? "0" : $("#production-" + id + "-h10").val()));
+
+		totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
+	}
+	else if(type=='4'){
 		proQty1 = parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val()));
@@ -498,7 +597,7 @@ function editLineData(autoId,lineId,type) {
 
 		totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
 	}
-	else if(type=='3'){
+	else if(type=='6'){
 		proQty1 = parseFloat(($("#reject-" + id + "-h1").val() == '' ? "0" : $("#reject-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#reject-" + id + "-h2").val() == '' ? "0" : $("#reject-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#reject-" + id + "-h3").val() == '' ? "0" : $("#reject-" + id + "-h3").val()));

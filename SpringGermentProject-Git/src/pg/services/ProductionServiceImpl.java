@@ -210,6 +210,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getLayoutPlanDetails(string);
 	}
+	
+	@Override
+	public List<ProductionPlan> getInspectionLayoutList(String type) {
+		// TODO Auto-generated method stub
+		return productionDao.getInspectionLayoutList(type);
+	}
 
 
 	@Override

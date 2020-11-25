@@ -327,75 +327,80 @@ function saveAction() {
 	var employeeId = $("#employeeName").val();
 
 	var resultList = [];
-
-	if (buyerId == '' || buyerOrderId == '' || styleId == '' || itemId == '' || layoutDate == '') {
-		alert("information Incomplete");
-	}
-	else {
-
-		var i = 0;
-		var value = 0;
-		var j = 0;
-		$('.itemRow').each(function () {
-
-			var id = $(this).attr("data-id");
-
-			var machineId = $(this).attr("data-machine-id");
-			var processId = $("#process-" + id).val();
-			var rejectvalue = 0;
-			var totalRejectQty = 0;
-
-			var proQty1 = parseFloat(($("#line-" + id + "-h1").val() == '' ? "0" : $("#line-" + id + "-h1").val()));
-			var proQty2 = parseFloat(($("#line-" + id + "-h2").val() == '' ? "0" : $("#line-" + id + "-h2").val()));
-			var proQty3 = parseFloat(($("#line-" + id + "-h3").val() == '' ? "0" : $("#line-" + id + "-h3").val()));
-			var proQty4 = parseFloat(($("#line-" + id + "-h4").val() == '' ? "0" : $("#line-" + id + "-h4").val()));
-			var proQty5 = parseFloat(($("#line-" + id + "-h5").val() == '' ? "0" : $("#line-" + id + "-h5").val()));
-			var proQty6 = parseFloat(($("#line-" + id + "-h6").val() == '' ? "0" : $("#line-" + id + "-h6").val()));
-			var proQty7 = parseFloat(($("#line-" + id + "-h7").val() == '' ? "0" : $("#line-" + id + "-h7").val()));
-			var proQty8 = parseFloat(($("#line-" + id + "-h8").val() == '' ? "0" : $("#line-" + id + "-h8").val()));
-			var proQty9 = parseFloat(($("#line-" + id + "-h9").val() == '' ? "0" : $("#line-" + id + "-h9").val()));
-			var proQty10 = parseFloat(($("#line-" + id + "-h10").val() == '' ? "0" : $("#line-" + id + "-h10").val()));
-
-			var totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
-			var layoutValue = type + ":" + proQty1 + ":" + proQty2 + ":" + proQty3 + ":" + proQty4 + ":" + proQty5 + ":" + proQty6 + ":" + proQty7 + ":" + proQty8 + ":" + proQty9 + ":" + proQty10;
-
-			resultList[i] = machineId + "*" + processId + "*" + totalQty + "*" + totalRejectQty + "*" + layoutValue + "*" + rejectvalue;
-			i++;
-		});
-		resultList = "[" + resultList + "]"
-
-		if (confirm("Are you sure to Submit?")) {
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					buyerId: buyerId,
-					buyerorderId: buyerOrderId,
-					purchaseOrder: purchaseOrder,
-					styleId: styleId,
-					itemId: itemId,
-					platQty: platQty,
-					dailyTarget: dailyTarget,
-					dailyLineTarget: dailyLineTarget,
-					hours: hours,
-					hourlyTarget: hourlyTarget,
-					resultlist: resultList,
-					layoutDate: layoutDate,
-					layoutName: layoutName,
-					lineId : lineId,
-					employeeId : employeeId,
-					userId: userId
-				},
-				url: './saveLineInceptionLayoutLineDetails/',
-				success: function (data) {
-
-					alert("Line Inspection Layout Save Successfully...");
-					//refreshAction();	        
-				}
-			});
+	if(employeeId != '0'){
+		if (buyerId == '' || buyerOrderId == '' || styleId == '' || itemId == '' || layoutDate == '') {
+			alert("information Incomplete");	
 		}
-
+		else {
+	
+			var i = 0;
+			var value = 0;
+			var j = 0;
+			$('.itemRow').each(function () {
+	
+				var id = $(this).attr("data-id");
+	
+				var machineId = $(this).attr("data-machine-id");
+				var processId = $("#process-" + id).val();
+				var rejectvalue = 0;
+				var totalRejectQty = 0;
+	
+				var proQty1 = parseFloat(($("#line-" + id + "-h1").val() == '' ? "0" : $("#line-" + id + "-h1").val()));
+				var proQty2 = parseFloat(($("#line-" + id + "-h2").val() == '' ? "0" : $("#line-" + id + "-h2").val()));
+				var proQty3 = parseFloat(($("#line-" + id + "-h3").val() == '' ? "0" : $("#line-" + id + "-h3").val()));
+				var proQty4 = parseFloat(($("#line-" + id + "-h4").val() == '' ? "0" : $("#line-" + id + "-h4").val()));
+				var proQty5 = parseFloat(($("#line-" + id + "-h5").val() == '' ? "0" : $("#line-" + id + "-h5").val()));
+				var proQty6 = parseFloat(($("#line-" + id + "-h6").val() == '' ? "0" : $("#line-" + id + "-h6").val()));
+				var proQty7 = parseFloat(($("#line-" + id + "-h7").val() == '' ? "0" : $("#line-" + id + "-h7").val()));
+				var proQty8 = parseFloat(($("#line-" + id + "-h8").val() == '' ? "0" : $("#line-" + id + "-h8").val()));
+				var proQty9 = parseFloat(($("#line-" + id + "-h9").val() == '' ? "0" : $("#line-" + id + "-h9").val()));
+				var proQty10 = parseFloat(($("#line-" + id + "-h10").val() == '' ? "0" : $("#line-" + id + "-h10").val()));
+	
+				var totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
+				var layoutValue = type + ":" + proQty1 + ":" + proQty2 + ":" + proQty3 + ":" + proQty4 + ":" + proQty5 + ":" + proQty6 + ":" + proQty7 + ":" + proQty8 + ":" + proQty9 + ":" + proQty10;
+	
+				resultList[i] = machineId + "*" + processId + "*" + totalQty + "*" + totalRejectQty + "*" + layoutValue + "*" + rejectvalue;
+				i++;
+			});
+			resultList = "[" + resultList + "]"
+	
+			if (confirm("Are you sure to Submit?")) {
+				$.ajax({
+					type: 'POST',
+					dataType: 'json',
+					data: {
+						buyerId: buyerId,
+						buyerorderId: buyerOrderId,
+						purchaseOrder: purchaseOrder,
+						styleId: styleId,
+						itemId: itemId,
+						platQty: platQty,
+						dailyTarget: dailyTarget,
+						dailyLineTarget: dailyLineTarget,
+						hours: hours,
+						hourlyTarget: hourlyTarget,
+						resultlist: resultList,
+						layoutDate: layoutDate,
+						layoutName: layoutName,
+						lineId : lineId,
+						employeeId : employeeId,
+						userId: userId
+					},
+					url: './saveLineInceptionLayoutLineDetails/',
+					success: function (data) {
+	
+						alert("Line Inspection Layout Save Successfully...");
+						//refreshAction();	        
+					}
+				});
+			}
+	
+		}
+	}else{
+		alert("Please Select Employee/Supervisor Name...");
+		$("#employeeName").focus();
 	}
+	
 }
 
 
@@ -453,7 +458,7 @@ function editLineData(lineId) {
 
 }
 
-function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
+function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate,lineId) {
 
 	const type = $("#type").val();
 	$.ajax({
@@ -466,7 +471,8 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 			styleId: styleId,
 			itemId: itemId,
 			layoutDate: layoutDate,
-			layoutName: type
+			layoutName: type,
+			lineId: lineId
 		},
 		success: function (data) {
 

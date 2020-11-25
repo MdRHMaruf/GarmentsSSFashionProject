@@ -67,7 +67,8 @@ public interface ProductionService {
 	boolean saveInceptionLayoutDetails(ProductionPlan v);
 	boolean saveInceptionLayoutLineDetails(ProductionPlan v);
 
-	List<ProductionPlan> getLayoutPlanDetails(String string);
+	List<ProductionPlan> getLayoutPlanDetails(String type);
+	List<ProductionPlan> getInspectionLayoutList(String type);
 
 	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
 

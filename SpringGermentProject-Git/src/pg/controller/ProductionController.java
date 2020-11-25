@@ -314,7 +314,7 @@ public class ProductionController {
 
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanFromCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
+		List<ProductionPlan> layoutList = productionService.getInspectionLayoutList(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<Employee> employeeList = registerService.getEmployeeList();
 		ModelAndView view = new ModelAndView("production/inspection_layout_plan");
 		view.addObject("productionPlanList",productionPlanList);
@@ -620,12 +620,12 @@ public class ProductionController {
 		JSONArray mainArray = new JSONArray();
 		List<ProductionPlan> sewingList = productionService.getSewingLineSetupinfo(v);
 
-		//List<Employee> employeeList = registerService.getEmployeeList();
+		List<Employee> employeeList = registerService.getEmployeeList();
 
 		//List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
 
 		objmain.put("result",sewingList);
-		//objmain.put("employeeresult",employeeList);
+		objmain.put("employeeresult",employeeList);
 		//objmain.put("sizelist",sizelist);
 
 		return objmain;
@@ -719,9 +719,8 @@ public class ProductionController {
 	//Line Inspection Production
 	@RequestMapping(value = "/line_inspection_production",method=RequestMethod.GET)
 	public ModelAndView line_inspection_production(ModelMap map,HttpSession session) {
-
 		//List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPETION_PRODUCTION.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
 		List<ProductionPlan> productionPlanList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/line-inspection-production");

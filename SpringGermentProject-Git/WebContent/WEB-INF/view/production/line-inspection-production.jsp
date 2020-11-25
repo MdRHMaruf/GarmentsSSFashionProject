@@ -31,14 +31,20 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="type" value="<%=ProductionType.LINE_INSPECTION_LAYOUT.getType()%>">
-		<input type="hidden" id="passType" value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>">
-			<input type="hidden" id="rejectType" value="<%=ProductionType.FINISHING_REJECT.getType()%>">
-	<input type="hidden" id="itemAutoId" value="0">
+	<input type="hidden" id="type"
+		value="<%=ProductionType.LINE_INSPECTION_LAYOUT.getType()%>">
+	<input type="hidden" id="productionType"
+		value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>">
+	<input type="hidden" id="passType"
+		value="<%=ProductionType.LINE_INSPECTION_PASS.getType()%>"> <input
+		type="hidden" id="rejectType"
+		value="<%=ProductionType.FINISHING_REJECT.getType()%>"> <input
+		type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Line Inspection Production & Reject</h5>
+			<h5 class="text-center" style="display: inline;">Line 
+				Production & Reject</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
@@ -52,21 +58,27 @@
 		<div class="row">
 			<div class="col-md-10 mb-1 pr-1">
 				<div class="row">
-					<div class="form-group col-md-4 mb-1" style="padding-left: 30px;padding-right: 35px;">
+					<div class="form-group col-md-4 mb-1"
+						style="padding-left: 30px; padding-right: 35px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0">Buyer
 							Name:</label>
 						<div class="row">
-							
-							<input type="text" readonly id="buyerName" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerId"/>
+
+							<input type="text" readonly id="buyerName"
+								class="col-md-12 form-control-sm" /><input type="hidden"
+								id="buyerId" />
 						</div>
 
 
 					</div>
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 1px; padding-right: 1px;">
-						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase Order:</label>
+						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
+							Order:</label>
 						<div class="row">
-							<input type="text" readonly id="purchaseOrder" class="col-md-12 form-control-sm" /><input type="hidden" id="buyerOrderId"/>
+							<input type="text" readonly id="purchaseOrder"
+								class="col-md-12 form-control-sm" /><input type="hidden"
+								id="buyerOrderId" />
 						</div>
 
 					</div>
@@ -75,7 +87,9 @@
 						<label for="styleNo" class="col-form-label-sm mb-0 pb-0">Style
 							No:</label>
 						<div class="row">
-							<input type="text" readonly id="styleNo" class="col-md-12 form-control-sm" /><input type="hidden" id="styleId"/>
+							<input type="text" readonly id="styleNo"
+								class="col-md-12 form-control-sm" /><input type="hidden"
+								id="styleId" />
 						</div>
 
 					</div>
@@ -83,76 +97,87 @@
 						<label for="itemType" class="col-form-label-sm mb-0 pb-0">Item
 							Description:</label>
 						<div class="row">
-							<input type="text" readonly id="itemName" class="col-md-12 form-control-sm" /><input type="hidden" id="itemId"/>
+							<input type="text" readonly id="itemName"
+								class="col-md-12 form-control-sm" /><input type="hidden"
+								id="itemId" />
 						</div>
 
 					</div>
 				</div>
-				
+
 				<div class="row">
-					
+
 					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 15px; padding-right: 16px;padding-left: 35px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0">Plan Qty</label>
+						style="padding-left: 15px; padding-right: 16px; padding-left: 35px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0">Plan
+							Qty</label>
 						<div class="row">
-								<input type="text" readonly id="planQty" class="col-md-12 form-control-sm" />
-						</div>
-					</div>					
-					
-					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 15px; padding-right: 36px;padding-left: 20px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0">Daily Target</label>
-						<div class="row">
-								<input type="text" readonly id="dailyTargetQty" class="col-md-12 form-control-sm" />
-						</div>
-					</div>		
-					
-					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 15px; padding-right: 0px;padding-left: 3px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0">Line Target</label>
-						<div class="row">
-								<input type="text" readonly id="dailyLineTargetQty" class="col-md-12 form-control-sm" />
-						</div>
-					</div>
-										
-					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 15px; padding-right: 0px;padding-left: 35px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0">Hours</label>
-						<div class="row">
-								<input type="text" readonly id="hours" class="col-md-12 form-control-sm" />
-						</div>
-					</div>	
-					
-					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 15px; padding-right: 16px;padding-left: 35px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0">Hourly Target</label>
-						<div class="row">
-								<input type="text" readonly id="hourlyTarget" class="col-md-12 form-control-sm" />
-						</div>
-					</div>
-										
-					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
-						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Date</label>
-						<div class="row">
-							<input type="date" id="layoutDate"
+							<input type="text" readonly id="planQty"
 								class="col-md-12 form-control-sm" />
 						</div>
 					</div>
 
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 36px; padding-left: 20px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Daily
+							Target</label>
+						<div class="row">
+							<input type="text" readonly id="dailyTargetQty"
+								class="col-md-12 form-control-sm" hidden="true"/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 0px; padding-left: 3px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Line
+							Target</label>
+						<div class="row">
+							<input type="text" readonly id="dailyLineTargetQty"
+								class="col-md-12 form-control-sm" hidden="true"/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 0px; padding-left: 35px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Hours</label>
+						<div class="row">
+							<input type="text" readonly id="hours"
+								class="col-md-12 form-control-sm" hidden="true"/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 16px; padding-left: 35px;">
+						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Hourly
+							Target</label>
+						<div class="row">
+							<input type="text" readonly id="hourlyTarget"
+								class="col-md-12 form-control-sm" hidden="true"/>
+						</div>
+					</div>
+
+					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
+						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 " hidden="true">Date</label>
+						<div class="row">
+							<input type="date" id="layoutDate"
+								class="col-md-12 form-control-sm" hidden="true"/>
+						</div>
+					</div>
+
 
 				</div>
-	
+
 
 
 			</div>
 
 		</div>
-		
-		
-		
-		
+
+
+
+
 		<div id="tableList">
-<!--  				<table class="table table-hover table-bordered table-sm mb-0">
+			<!--  				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
 							<th>Line</th>
@@ -181,26 +206,26 @@
 							
 					</tbody>	 -->
 
-				</table>	 
-		
+			</table>
+
 		</div>
-		
-			<div class="row" style="margin-top: 15px;">
+
+		<div class="row" style="margin-top: 15px;">
 			<div class="col-md-12">
-				<button id="btnSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="saveAction()">
+				<button id="btnSubmit" type="button" class="btn btn-primary btn-sm"
+					onclick="saveAction()">
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
-	
-			</div>
-		</div>	
-		</div>
 
+			</div>
+		</div>
 	</div>
+
+</div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -222,41 +247,41 @@
 				</button>
 			</div>
 			<div class="modal-body">
-					<table class="table table-hover table-bordered table-sm mb-0">
-						<thead>
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Buyer</th>
+							<th>Purchase Order</th>
+							<th>Style No</th>
+							<th>Item Name</th>
+							<th><span><i class="fa fa-search"></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${productionPlanList}" var="list"
+							varStatus="counter">
 							<tr>
-								<th>SL#</th>
-								<th>Buyer</th>
-								<th>Purchase Order</th>
-								<th>Style No</th>
-								<th>Item Name</th>
-								<th><span><i class="fa fa-search"></i></span></th>
+								<td>${counter.count}</td>
+								<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
+								<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
+								<td id='styleId${list.styleId}'>${list.styleNo}</td>
+								<td id='itemId${list.itemId}'>${list.itemName}</td>
+								<td><i class="fa fa-search" style="cursor: pointer;"
+									onclick="setProductPlanInfo(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.planQty})">
+								</i></td>
 							</tr>
-						</thead>
-						<tbody id="poList">
-							<c:forEach items="${productionPlanList}" var="list"
-								varStatus="counter">
-								<tr>
-									<td>${counter.count}</td>
-									<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
-									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
-									<td id='styleId${list.styleId}'>${list.styleNo}</td>
-									<td id='itemId${list.itemId}'>${list.itemName}</td>
-									<td><i class="fa fa-search" style="cursor:pointer;"
-										onclick="setProductPlanInfo(${list.buyerId},${list.buyerorderId},${list.styleId},${list.itemId},${list.planQty})">
-									</i></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 
 		</div>
 	</div>
 </div>
 
-<div class="modal fade" id="finishingListModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="finishingListModal" tabindex="-1"
+	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -274,39 +299,39 @@
 				</button>
 			</div>
 			<div class="modal-body">
-					<table class="table table-hover table-bordered table-sm mb-0">
-						<thead>
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Buyer</th>
+							<th>Purchase Order</th>
+							<th>Style No</th>
+							<th>Item Name</th>
+							<th>lineName</th>
+							<th>Date</th>
+							<th>Search</th>
+							<th>Print</th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${layoutList}" var="list" varStatus="counter">
 							<tr>
-								<th>SL#</th>
-								<th>Buyer</th>
-								<th>Purchase Order</th>
-								<th>Style No</th>
-								<th>Item Name</th>
-								<th>Date</th>
-								<th>Search</th>
-								<th>Print</th>
+								<td>${counter.count}</td>
+								<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
+								<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
+								<td id='styleId${list.styleId}'>${list.styleNo}</td>
+								<td id='itemId${list.itemId}'>${list.itemName}</td>					
+								<td id='layout${list.itemId}'>${list.productionDate}</td>
+								<td><i class="fa fa-search" style="cursor: pointer;"
+									onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+								</i></td>
+								<td><i class="fa fa-print" style="cursor: pointer;"
+									onclick="printProductionDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+								</i></td>
 							</tr>
-						</thead>
-						<tbody id="poList">
-							<c:forEach items="${layoutList}" var="list"
-								varStatus="counter">
-								<tr>
-									<td>${counter.count}</td>
-									<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
-									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
-									<td id='styleId${list.styleId}'>${list.styleNo}</td>
-									<td id='itemId${list.itemId}'>${list.itemName}</td>
-									<td id='layout${list.itemId}'>${list.productionDate}</td>
-									<td><i class="fa fa-search" style="cursor:pointer;"
-										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
-									</i></td>
-									<td><i class="fa fa-print" style="cursor:pointer;"
-										onclick="printProductionDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
-									</i></td>
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 
 		</div>
@@ -314,40 +339,46 @@
 </div>
 
 //
-<div class="modal fade" id="processListModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="processListModal" tabindex="-1"
+	role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<h2>Process List</h2>
+					<h4 class="mb-0">Process List </h4>
+					<input class="form-control-sm ml-3 mt-1" type="text" placeholder="Search Process Name">
 				</div>
-				<button onclick="closeProcessAddEvent()" type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
+				<button onclick="closeProcessAddEvent()" type="button" class="close"
+					data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body">
-					<table class="table table-hover table-bordered table-sm mb-0">
-						<thead>
-							<tr>
-								<th style='width:100px;'>SL#</th>
-								<th style='width:300px;'>Process Name</th>
-								<th style='width:120px;'>Process Value</th>
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th style='width: 100px;'>SL#</th>
+							<th style='width: 300px;'>Process Name</th>
+							<th>Qty</th>
+							<th>Remarks</th>
+							<th>Re-issue Pass</th>
+						</tr>
+					</thead>
+					<tbody id="processList">
+						<c:forEach items="${processlist}" var="list" varStatus="counter">
+							<tr class='procsslistitemrow' data-id='${list.processId}'>
+								<td style='width: 100px;'>${counter.count}</td>
+								<td style='width: 300px;'>${list.processName}</td>
+								<td ><input style='width: 80px;'
+									type="number"
+									class='form-control-sm processId-${list.processId}' /></td>
+								<td><input class="form-control-sm" type="text"></td>
+								<td><input class="form-control-sm" type="checkbox"></td>
+
 							</tr>
-						</thead>
-						<tbody id="processList">
-							<c:forEach items="${processlist}" var="list"
-								varStatus="counter">
-								<tr class='procsslistitemrow' data-id='${list.processId}'>
-									<td style='width:100px;'>${counter.count}</td>
-									<td style='width:300px;'>${list.processName}</td>
-									<td style='width:120px;'> <input style='width:120px;'  type="number" class='form-control-sm processId-${list.processId}'/></td>
-									
-								</tr>
-							</c:forEach>
-						</tbody>
-					</table>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 
 		</div>

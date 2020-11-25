@@ -10,8 +10,8 @@
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
         
         <property name="hibernate.connection.password">Cursor777</property>
-     	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://localhost</property> -->
-      	<property name="hibernate.connection.url">jdbc:sqlserver://DESKTOP-RE1OI7L:1433</property> 
+     	<property name="hibernate.connection.url">jdbc:sqlserver://localhost</property>
+      	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://DESKTOP-RE1OI7L:1433</property> --> 
         <property name="hibernate.connection.databaseName">SSFashionSpringProject</property>
         <property name="hibernate.connection.username">sa</property>
         
