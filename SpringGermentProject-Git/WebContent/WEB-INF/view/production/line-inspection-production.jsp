@@ -34,8 +34,8 @@
 	<input type="hidden" id="type"
 		value="<%=ProductionType.LINE_INSPECTION_LAYOUT.getType()%>">
 	<input type="hidden" id="productionType"
-		value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>">
-	<input type="hidden" id="passType"
+		value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>"> <input
+		type="hidden" id="passType"
 		value="<%=ProductionType.LINE_INSPECTION_PASS.getType()%>"> <input
 		type="hidden" id="rejectType"
 		value="<%=ProductionType.FINISHING_REJECT.getType()%>"> <input
@@ -43,8 +43,8 @@
 
 	<div class="card-box">
 		<header class="">
-			<h5 class="text-center" style="display: inline;">Line 
-				Production & Reject</h5>
+			<h5 class="text-center" style="display: inline;">Line Production
+				& Reject</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
@@ -119,48 +119,50 @@
 
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 15px; padding-right: 36px; padding-left: 20px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Daily
-							Target</label>
+						<label for="sample" class="col-form-label-sm mb-0 pb-0"
+							hidden="true">Daily Target</label>
 						<div class="row">
 							<input type="text" readonly id="dailyTargetQty"
-								class="col-md-12 form-control-sm" hidden="true"/>
+								class="col-md-12 form-control-sm" hidden="true" />
 						</div>
 					</div>
 
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 15px; padding-right: 0px; padding-left: 3px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Line
-							Target</label>
+						<label for="sample" class="col-form-label-sm mb-0 pb-0"
+							hidden="true">Line Target</label>
 						<div class="row">
 							<input type="text" readonly id="dailyLineTargetQty"
-								class="col-md-12 form-control-sm" hidden="true"/>
+								class="col-md-12 form-control-sm" hidden="true" />
 						</div>
 					</div>
 
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 15px; padding-right: 0px; padding-left: 35px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Hours</label>
+						<label for="sample" class="col-form-label-sm mb-0 pb-0"
+							hidden="true">Hours</label>
 						<div class="row">
 							<input type="text" readonly id="hours"
-								class="col-md-12 form-control-sm" hidden="true"/>
+								class="col-md-12 form-control-sm" hidden="true" />
 						</div>
 					</div>
 
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 15px; padding-right: 16px; padding-left: 35px;">
-						<label for="sample" class="col-form-label-sm mb-0 pb-0" hidden="true">Hourly
-							Target</label>
+						<label for="sample" class="col-form-label-sm mb-0 pb-0"
+							hidden="true">Hourly Target</label>
 						<div class="row">
 							<input type="text" readonly id="hourlyTarget"
-								class="col-md-12 form-control-sm" hidden="true"/>
+								class="col-md-12 form-control-sm" hidden="true" />
 						</div>
 					</div>
 
 					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
-						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 " hidden="true">Date</label>
+						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 "
+							hidden="true">Date</label>
 						<div class="row">
 							<input type="date" id="layoutDate"
-								class="col-md-12 form-control-sm" hidden="true"/>
+								class="col-md-12 form-control-sm" hidden="true" />
 						</div>
 					</div>
 
@@ -177,37 +179,7 @@
 
 
 		<div id="tableList">
-			<!--  				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead>
-						<tr>
-							<th>Line</th>
-							<th>Style No</th>
-							<th>Daily Target</th>
-							<th>Hours Target</th>
-							<th>Hours</th>
-							<th>Sew.Sup Signature</th>
-							<th>Q.C.Sup Signature</th>
-							<th>08-09</th>
-							<th>09-10</th>
-							<th>10-11</th>
-							<th>11-12</th>
-							<th>12-01</th>
-							<th>11-12</th>
-							<th>12-01</th>
-							<th>02-03</th>
-							<th>03-04</th>
-							<th>04-05</th>
-							<th>05-06</th>
-							<th>06-07</th>
-							<th>Total</th>
-						</tr>
-					</thead>
-					<tbody id="production_plan">
-							
-					</tbody>	 -->
-
-			</table>
-
+			
 		</div>
 
 		<div class="row" style="margin-top: 15px;">
@@ -320,7 +292,7 @@
 								<td id='buyerId${list.buyerId}'>${list.buyerName}</td>
 								<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
 								<td id='styleId${list.styleId}'>${list.styleNo}</td>
-								<td id='itemId${list.itemId}'>${list.itemName}</td>					
+								<td id='itemId${list.itemId}'>${list.itemName}</td>
 								<td id='layout${list.itemId}'>${list.productionDate}</td>
 								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
@@ -345,8 +317,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<h4 class="mb-0">Process List </h4>
-					<input class="form-control-sm ml-3 mt-1" type="text" placeholder="Search Process Name">
+					<h4 class="mb-0">Process List</h4>
+					<h5 class="mb-0 ml-3">Production : <span id="productionQty"></span></h5>
+					<h5 class="mb-0 ml-3">Pass : <span id="passQty"></span></h5>
+					<h5 class="mb-0 ml-3">Reject : <span id="rejectQty"></span></h5>
+					<input class="form-control-sm ml-3 mt-1" type="text"
+						placeholder="Search Process Name"> <input type="hidden"
+						id="hourId" value="0"> <input type="hidden" id="lineId"
+						value="0">
 				</div>
 				<button onclick="closeProcessAddEvent()" type="button" class="close"
 					data-dismiss="modal" aria-label="Close">
@@ -366,19 +344,33 @@
 					</thead>
 					<tbody id="processList">
 						<c:forEach items="${processlist}" var="list" varStatus="counter">
-							<tr class='procsslistitemrow' data-id='${list.processId}'>
+							<tr class='processListItemRow' data-id='${list.processId}'>
 								<td style='width: 100px;'>${counter.count}</td>
 								<td style='width: 300px;'>${list.processName}</td>
-								<td ><input style='width: 80px;'
-									type="number"
-									class='form-control-sm processId-${list.processId}' /></td>
-								<td><input class="form-control-sm" type="text"></td>
-								<td><input class="form-control-sm" type="checkbox"></td>
+								<td><input style='width: 80px;' type="number"
+									class='form-control-sm'
+									id='processValue-${list.processId}' onkeyup="processValueCalculate(this)" onchange="processValueCalculate(this)"/></td>
+								<td><input class="form-control-sm"
+									id='processRemarks-${list.processId}' type="text"></td>
+								<td><input class="form-control-sm"
+									id='processReIssueCheck-${list.processId}' type="checkbox"></td>
 
 							</tr>
 						</c:forEach>
+						<tr class='processListItemRow' data-id='reject'>
+								<td style='width: 100px;'></td>
+								<td style='width: 300px;'>Reject</td>
+								<td><input style='width: 80px;' type="number"
+									class='form-control-sm'
+									id='processValue-reject' readonly/></td>
+								<td><input class="form-control-sm"
+									id='processRemarks-reject' type="text"></td>
+							</tr>
 					</tbody>
 				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary btn-sm" id="btnProcessOk">Ok</button>
 			</div>
 
 		</div>
