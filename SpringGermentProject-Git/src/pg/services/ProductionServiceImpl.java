@@ -244,7 +244,12 @@ public class ProductionServiceImpl implements ProductionService {
 		return productionDao.getSewingLayoutLineProduction(v);
 	}
 
-
+	@Override
+	public boolean saveLineProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveLineProductionDetails(v);
+	}
+	
 	@Override
 	public boolean saveSewingProductionDetails(ProductionPlan v) {
 		// TODO Auto-generated method stub

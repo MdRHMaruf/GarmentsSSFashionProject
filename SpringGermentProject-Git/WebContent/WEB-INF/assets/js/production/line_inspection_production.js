@@ -1,14 +1,12 @@
 let processQty = 0;
 let lineValue = 0;
 
-let rejectValueList = {};
+let projectRejectValueList = {};
 
-$("#btnProcessOk").click(()=>{
-	
-	const lineId = '1025';
-	const hourId = 'h1'
-	const processId = 3;
-	
+$("#btnProcessOk").click(() => {
+
+	closeProcessAddEvent();
+	$("#processListModal").modal('hide');
 })
 
 function printProductionDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
@@ -152,15 +150,19 @@ function drawItemTable(dataList, employeeResult) {
 	// tables += "</tbody></table> </div></div>";
 	document.getElementById("tableList").innerHTML = tables;
 	$('.tableSelect').selectpicker('refresh');
+	dataList.forEach((data) => {
+		$("#employee-" + data.lineId).val(data.employeeId).change();
+	})
+
 }
 
 function openProcessModel(lineId, hourId) {
 	lineValue = lineId;
 	let id = "reject-" + lineId + "-h" + hourId;
 	processQty = id;
-	const productionValue = $("#production-"+lineId+"-h"+hourId).val()?$("#production-"+lineId+"-h"+hourId).val():0;
-	const passValue = $("#pass-"+lineId+"-h"+hourId).val()?$("#pass-"+lineId+"-h"+hourId).val():0;
-	const rejectValue = $("#reject-"+lineId+"-h"+hourId).val()?$("#reject-"+lineId+"-h"+hourId).val():0;
+	const productionValue = $("#production-" + lineId + "-h" + hourId).val() ? $("#production-" + lineId + "-h" + hourId).val() : 0;
+	const passValue = $("#pass-" + lineId + "-h" + hourId).val() ? $("#pass-" + lineId + "-h" + hourId).val() : 0;
+	const rejectValue = $("#reject-" + lineId + "-h" + hourId).val() ? $("#reject-" + lineId + "-h" + hourId).val() : 0;
 	$("#productionQty").text(productionValue);
 	$("#passQty").text(passValue);
 	$("#rejectQty").text(rejectValue);
@@ -169,14 +171,14 @@ function openProcessModel(lineId, hourId) {
 
 	$('.processListItemRow').each(function () {
 		let processId = $(this).attr("data-id");
-		if(rejectValueList[lineId] && rejectValueList[lineId]['h'+hourId] && rejectValueList[lineId]['h'+hourId]['process-'+processId]){
-			$("#processValue-"+processId).val(rejectValueList[lineId]['h'+hourId]['process-'+processId].qty);
-			$("#processRemarks-"+processId).val(rejectValueList[lineId]['h'+hourId]['process-'+processId].remarks);
-			$("#processReIssueCheck-"+processId).prop('checked',rejectValueList[lineId]['h'+hourId]['process-'+processId].isReIssuePass);
-		}else{
-			$("#processValue-"+processId).val('0');
-			$("#processRemarks-"+processId).val('');
-			$("#processReIssueCheck-"+processId).prop('checked',false);
+		if (projectRejectValueList[lineId] && projectRejectValueList[lineId]['h' + hourId] && projectRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
+			$("#processValue-" + processId).val(projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty);
+			$("#processRemarks-" + processId).val(projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks);
+			$("#processReIssueCheck-" + processId).prop('checked', projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass);
+		} else {
+			$("#processValue-" + processId).val('0');
+			$("#processRemarks-" + processId).val('');
+			$("#processReIssueCheck-" + processId).prop('checked', false);
 		}
 	});
 	//$('#processListModal').modal('toggle');
@@ -193,65 +195,32 @@ function closeProcessAddEvent() {
 
 	$('.processListItemRow').each(function () {
 		let processId = $(this).attr("data-id");
-		if(!rejectValueList[lineId]) rejectValueList[lineId] = {};
-		if(!rejectValueList[lineId]['h'+hourId]) rejectValueList[lineId]['h'+hourId] = {};
-		
-		processValue = $('#processValue-' + id).val() == '' ? 0 : $('#processValue-' + id).val();
+		if (!projectRejectValueList[lineId]) projectRejectValueList[lineId] = {};
+		if (!projectRejectValueList[lineId]['h' + hourId]) projectRejectValueList[lineId]['h' + hourId] = {};
 
-		if(rejectValueList[lineId]['h'+hourId]['process-'+processId]){
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].qty = processValue;
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].remarks = $("#processRemarks-"+processId).val();
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].isReIssuePass = $("#processReIssueCheck-"+processId).prop('checked');
-		}else{
-			
-			rejectValueList[lineId]['h'+hourId]['process-'+processId] = {};
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].processId = processId;
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].qty = processValue;
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].remarks = $("#processRemarks-"+processId).val();
-			rejectValueList[lineId]['h'+hourId]['process-'+processId].isReIssuePass = $("#processReIssueCheck-"+processId).prop('checked');
-			
+		processValue = $('#processValue-' + processId).val() == '' ? 0 : $('#processValue-' + processId).val();
+
+		if (projectRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
+		} else {
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId] = {};
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].processId = processId;
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
 		}
-		if(processId != 'reject')
+
+
+		if (processId != 'reject')
 			reIssueValue += processValue;
 	});
 
-	let value = 0;
-	$('.processListItemRow').each(function () {
-		let id = $(this).attr("data-id");
-		value = value + parseFloat();
-	});
-
-	let totalQtyLineId = "#reject-" + lineValue + '-total';
-
-	//alert("totalQtyLineId "+totalQtyLineId);
-
-	let Qty1 = parseFloat(($("#reject-" + lineValue + "-h1").val() == '' ? "0" : $("#reject-" + lineValue + "-h1").val()));
-	let Qty2 = parseFloat(($("#reject-" + lineValue + "-h2").val() == '' ? "0" : $("#reject-" + lineValue + "-h2").val()));
-	let Qty3 = parseFloat(($("#reject-" + lineValue + "-h3").val() == '' ? "0" : $("#reject-" + lineValue + "-h3").val()));
-	let Qty4 = parseFloat(($("#reject-" + lineValue + "-h4").val() == '' ? "0" : $("#reject-" + lineValue + "-h4").val()));
-	let Qty5 = parseFloat(($("#reject-" + lineValue + "-h5").val() == '' ? "0" : $("#reject-" + lineValue + "-h5").val()));
-	let Qty6 = parseFloat(($("#reject-" + lineValue + "-h6").val() == '' ? "0" : $("#reject-" + lineValue + "-h6").val()));
-	let Qty7 = parseFloat(($("#reject-" + lineValue + "-h7").val() == '' ? "0" : $("#reject-" + lineValue + "-h7").val()));
-	let Qty8 = parseFloat(($("#reject-" + lineValue + "-h8").val() == '' ? "0" : $("#reject-" + lineValue + "-h8").val()));
-	let Qty9 = parseFloat(($("#reject-" + lineValue + "-h9").val() == '' ? "0" : $("#reject-" + lineValue + "-h9").val()));
-	let Qty10 = parseFloat(($("#reject-" + lineValue + "-h10").val() == '' ? "0" : $("#reject-" + lineValue + "-h10").val()));
-
-	let totalQty = (Qty1 + Qty2 + Qty3 + Qty4 + Qty5 + Qty6 + Qty7 + Qty8 + Qty9 + Qty10) + value;
-
-	$(totalQtyLineId).val(totalQty);
-
-	$('#' + processQty).val(value)
-
-	value = 0;
-	$('.processListItemRow').each(function () {
-		let id = $(this).attr("data-id");
-
-		$('.processId-' + id).val('');
-	});
 }
 
 
-function processValueCalculate(inputField){
+function processValueCalculate(inputField) {
 
 	let otherProcessValue = 0;
 	let inputValue = Number(inputField.value);
@@ -260,18 +229,18 @@ function processValueCalculate(inputField){
 
 	$('.processListItemRow').each(function () {
 		let id = $(this).attr("data-id");
-		if(id != 'reject' && 'processValue-'+id != inputFieldId){
-			otherProcessValue += Number($("#processValue-"+id).val());
+		if (id != 'reject' && 'processValue-' + id != inputFieldId) {
+			otherProcessValue += Number($("#processValue-" + id).val());
 		}
 	});
 
-	
+
 	let rejectQty = Number($("#rejectQty").text());
-	
-	if((otherProcessValue + inputValue) > rejectQty){
+
+	if ((otherProcessValue + inputValue) > rejectQty) {
 		inputValue = rejectQty - otherProcessValue;
 	}
-	
+
 	inputField.value = inputValue;
 }
 
@@ -309,18 +278,18 @@ function setTotalQty(id) {
 	let passQty11 = parseFloat(($("#pass-" + id + "-h11").val() == '' ? "0" : $("#pass-" + id + "-h11").val()));
 	let passQty12 = parseFloat(($("#pass-" + id + "-h12").val() == '' ? "0" : $("#pass-" + id + "-h12").val()));
 
-	if(productionQty1-passQty1 < 0) passQty1 = productionQty1;
-	if(productionQty2-passQty2 < 0) passQty2 = productionQty2;
-	if(productionQty3-passQty3 < 0) passQty3 = productionQty3;
-	if(productionQty4-passQty4 < 0) passQty4 = productionQty4;
-	if(productionQty5-passQty5 < 0) passQty5 = productionQty5;
-	if(productionQty6-passQty6 < 0) passQty6 = productionQty6;
-	if(productionQty7-passQty7 < 0) passQty7 = productionQty7;
-	if(productionQty8-passQty8 < 0) passQty8 = productionQty8;
-	if(productionQty9-passQty9 < 0) passQty9 = productionQty9;
-	if(productionQty10-passQty10 < 0) passQty10 = productionQty10;
-	if(productionQty11-passQty11 < 0) passQty11 = productionQty11;
-	if(productionQty12-passQty12 < 0) passQty12 = productionQty12;
+	if (productionQty1 - passQty1 < 0) passQty1 = productionQty1;
+	if (productionQty2 - passQty2 < 0) passQty2 = productionQty2;
+	if (productionQty3 - passQty3 < 0) passQty3 = productionQty3;
+	if (productionQty4 - passQty4 < 0) passQty4 = productionQty4;
+	if (productionQty5 - passQty5 < 0) passQty5 = productionQty5;
+	if (productionQty6 - passQty6 < 0) passQty6 = productionQty6;
+	if (productionQty7 - passQty7 < 0) passQty7 = productionQty7;
+	if (productionQty8 - passQty8 < 0) passQty8 = productionQty8;
+	if (productionQty9 - passQty9 < 0) passQty9 = productionQty9;
+	if (productionQty10 - passQty10 < 0) passQty10 = productionQty10;
+	if (productionQty11 - passQty11 < 0) passQty11 = productionQty11;
+	if (productionQty12 - passQty12 < 0) passQty12 = productionQty12;
 
 	totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
 
@@ -450,6 +419,7 @@ function saveAction() {
 			let passValue = passType + ":" + passQty1 + ":" + passQty2 + ":" + passQty3 + ":" + passQty4 + ":" + passQty5 + ":" + passQty6 + ":" + passQty7 + ":" + passQty8 + ":" + passQty9 + ":" + passQty10;
 			let rejectValue = rejectType + ":" + rejectQty1 + ":" + rejectQty2 + ":" + rejectQty3 + ":" + rejectQty4 + ":" + rejectQty5 + ":" + rejectQty6 + ":" + rejectQty7 + ":" + rejectQty8 + ":" + rejectQty9 + ":" + rejectQty10;
 
+
 			resultList[i] = employeeId + "*" + lineId + "*" + totalProductionQty + "*" + totalQty + " * " + totalRejectQty + "*" + productionValue + "*" + passValue + "*" + rejectValue;
 			i++;
 		});
@@ -471,11 +441,12 @@ function saveAction() {
 					hours: hours,
 					hourlyTarget: hourlyTarget,
 					resultlist: resultList,
+					processValues: JSON.stringify(projectRejectValueList),
 					layoutDate: layoutDate,
 					layoutName: layoutName,
 					userId: userId
 				},
-				url: './saveLineInceptionLayoutDetails/',
+				url: './saveLineProductionDetails/',
 				success: function (data) {
 
 					alert("Line Inspection Production Save Successfully...");
@@ -571,7 +542,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 
 		}
 
-		if (item.layoutName == '5') {
+		if (item.layoutName == '2') {
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 				"<th >" + item.lineName + "</br><input  type='hidden' class='form-control-sm line-" + item.lineId + "'  value='" + parseFloat(item.lineId).toFixed() + "' /></th>" +
 				"<th><select id='employee-" + item.lineId + "'  class='selectpicker employee-width tableSelect employee-" + item.lineId + " col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>" + employeeList + "</select></th>" +
@@ -589,7 +560,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><input  type='number' id='production-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
 				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
 
-		} else if (item.layoutName == '4') {
+		} else if (item.layoutName == '3') {
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 				"<th></th>" +
 				"<th></th>" +
@@ -608,7 +579,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
 
 		}
-		else if (item.layoutName == '6') {
+		else if (item.layoutName == '4') {
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 				"<th></th>" +
 				"<th></th>" +

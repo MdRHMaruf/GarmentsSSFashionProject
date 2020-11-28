@@ -34,11 +34,11 @@
 	<input type="hidden" id="type"
 		value="<%=ProductionType.LINE_INSPECTION_LAYOUT.getType()%>">
 	<input type="hidden" id="productionType"
-		value="<%=ProductionType.FINISHING_PRODUCTION.getType()%>"> <input
+		value="<%=ProductionType.LINE_PRODUCTION.getType()%>"> <input
 		type="hidden" id="passType"
-		value="<%=ProductionType.LINE_INSPECTION_PASS.getType()%>"> <input
+		value="<%=ProductionType.LINE_PASS.getType()%>"> <input
 		type="hidden" id="rejectType"
-		value="<%=ProductionType.FINISHING_REJECT.getType()%>"> <input
+		value="<%=ProductionType.LINE_REJECT.getType()%>"> <input
 		type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">

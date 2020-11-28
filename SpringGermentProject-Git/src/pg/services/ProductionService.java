@@ -73,6 +73,7 @@ public interface ProductionService {
 	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
 
 	//Sewing
+	boolean saveLineProductionDetails(ProductionPlan v);
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
 	List<Machine> getLineWiseMachineListByLineId(String lineId);
 

@@ -32,7 +32,7 @@
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 	<input type="hidden" id="itemAutoId" value="0">
-	<input type="hidden" id="type" value="<%=ProductionType.LINE_INSPECTION_REJECT.getType()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.LINE_REJECT.getType()%>">
 
 	<div class="card-box">
 		<header class="">

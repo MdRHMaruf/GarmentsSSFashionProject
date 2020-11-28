@@ -58,12 +58,8 @@ public class ProductionPlan {
 	String machineId="";
 	String machineName="";
 	String processId;
-	public String getProcessId() {
-		return processId;
-	}
-	public void setProcessId(String processId) {
-		this.processId = processId;
-	}
+	String processValues;
+	
 	String operatorId="";
 	String operatorName="";
 	String sizeGroupId="";
@@ -447,7 +443,20 @@ public class ProductionPlan {
 	public void setStyleNo(String styleNo) {
 		this.styleNo = styleNo;
 	}
+	public String getProcessId() {
+		return processId;
+	}
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+	
 
+	public String getProcessValues() {
+		return processValues;
+	}
+	public void setProcessValues(String processValues) {
+		this.processValues = processValues;
+	}
 	public String getItemName() {
 		return itemName;
 	}

@@ -325,12 +325,11 @@ public class ProductionController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-	@RequestMapping(value = "/saveLineInceptionLayoutDetails",method=RequestMethod.POST)
-	public @ResponseBody String saveLineInceptionLayoutDetails(ProductionPlan v) {
+	@RequestMapping(value = "/saveLineProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveLineProductionDetails(ProductionPlan v) {
 
 		String msg="Create Occure while Saving Inception Layout Details";
-
-		boolean flag= productionService.saveInceptionLayoutDetails(v);
+		boolean flag= productionService.saveLineProductionDetails(v);
 
 		if(flag) {
 			msg="Saving Sewing Inception Layout Details Sucessfully";
@@ -338,6 +337,7 @@ public class ProductionController {
 
 		return msg; //JSP - /WEB-INF/view/index.jsp
 	}
+	
 	
 	@RequestMapping(value = "/saveLineInceptionLayoutLineDetails",method=RequestMethod.POST)
 	public @ResponseBody String saveLineInceptionLayoutLineDetails(ProductionPlan v) {
@@ -720,7 +720,7 @@ public class ProductionController {
 	@RequestMapping(value = "/line_inspection_production",method=RequestMethod.GET)
 	public ModelAndView line_inspection_production(ModelMap map,HttpSession session) {
 		//List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PRODUCTION.getType()));
 		List<ProductionPlan> productionPlanList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/line-inspection-production");
@@ -778,7 +778,7 @@ public class ProductionController {
 	public ModelAndView line_inspection_reject(ModelMap map,HttpSession session) {
 
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
-		List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_REJECT.getType()));
+		List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_REJECT.getType()));
 
 		ModelAndView view = new ModelAndView("production/line_inspection_reject");
 		view.addObject("rejectList",rejectList);
