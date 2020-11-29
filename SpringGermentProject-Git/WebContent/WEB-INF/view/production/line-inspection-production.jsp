@@ -106,13 +106,20 @@
 				</div>
 
 				<div class="row">
-
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 15px; padding-right: 16px; padding-left: 35px;">
 						<label for="sample" class="col-form-label-sm mb-0 pb-0">Plan
 							Qty</label>
 						<div class="row">
 							<input type="text" readonly id="planQty"
+								class="col-md-12 form-control-sm" />
+						</div>
+					</div>
+					
+					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
+						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Date</label>
+						<div class="row">
+							<input type="date" id="layoutDate"
 								class="col-md-12 form-control-sm" />
 						</div>
 					</div>
@@ -157,14 +164,7 @@
 						</div>
 					</div>
 
-					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
-						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 "
-							hidden="true">Date</label>
-						<div class="row">
-							<input type="date" id="layoutDate"
-								class="col-md-12 form-control-sm" hidden="true" />
-						</div>
-					</div>
+					
 
 
 				</div>
@@ -279,7 +279,6 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
-							<th>lineName</th>
 							<th>Date</th>
 							<th>Search</th>
 							<th>Print</th>

@@ -1,7 +1,7 @@
 let processQty = 0;
 let lineValue = 0;
 
-let projectRejectValueList = {};
+let processRejectValueList = {};
 
 $("#btnProcessOk").click(() => {
 
@@ -58,6 +58,7 @@ function setProductPlanInfo(buyerId, buyerOrderId, styleId, itemId, planQty) {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawItemTable(data.result, data.employeeresult);
+				$("#btnSubmit").prop('disabled', false);
 			}
 		}
 	});
@@ -171,10 +172,10 @@ function openProcessModel(lineId, hourId) {
 
 	$('.processListItemRow').each(function () {
 		let processId = $(this).attr("data-id");
-		if (projectRejectValueList[lineId] && projectRejectValueList[lineId]['h' + hourId] && projectRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
-			$("#processValue-" + processId).val(projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty);
-			$("#processRemarks-" + processId).val(projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks);
-			$("#processReIssueCheck-" + processId).prop('checked', projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass);
+		if (processRejectValueList[lineId] && processRejectValueList[lineId]['h' + hourId] && processRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
+			$("#processValue-" + processId).val(processRejectValueList[lineId]['h' + hourId]['process-' + processId].qty);
+			$("#processRemarks-" + processId).val(processRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks);
+			$("#processReIssueCheck-" + processId).prop('checked', processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass);
 		} else {
 			$("#processValue-" + processId).val('0');
 			$("#processRemarks-" + processId).val('');
@@ -195,21 +196,21 @@ function closeProcessAddEvent() {
 
 	$('.processListItemRow').each(function () {
 		let processId = $(this).attr("data-id");
-		if (!projectRejectValueList[lineId]) projectRejectValueList[lineId] = {};
-		if (!projectRejectValueList[lineId]['h' + hourId]) projectRejectValueList[lineId]['h' + hourId] = {};
+		if (!processRejectValueList[lineId]) processRejectValueList[lineId] = {};
+		if (!processRejectValueList[lineId]['h' + hourId]) processRejectValueList[lineId]['h' + hourId] = {};
 
 		processValue = $('#processValue-' + processId).val() == '' ? 0 : $('#processValue-' + processId).val();
 
-		if (projectRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
+		if (processRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
 		} else {
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId] = {};
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].processId = processId;
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
-			projectRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId] = {};
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].processId = processId;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
 		}
 
 
@@ -441,7 +442,7 @@ function saveAction() {
 					hours: hours,
 					hourlyTarget: hourlyTarget,
 					resultlist: resultList,
-					processValues: JSON.stringify(projectRejectValueList),
+					processValues: JSON.stringify(processRejectValueList),
 					layoutDate: layoutDate,
 					layoutName: layoutName,
 					userId: userId
@@ -450,6 +451,7 @@ function saveAction() {
 				success: function (data) {
 
 					alert("Line Inspection Production Save Successfully...");
+					
 					//refreshAction();	        
 				}
 			});

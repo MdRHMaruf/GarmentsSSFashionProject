@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
 import org.springframework.stereotype.Repository;
 
 import pg.orderModel.PurchaseOrder;
@@ -1101,7 +1101,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 					"isnull(sum(lpd.hour1),0) as hour1,isnull(sum(lpd.hour2),0) as hour2,isnull(sum(lpd.hour3),0) as hour3,isnull(sum(lpd.hour4),0) as hour4,isnull(sum(lpd.hour5),0) as hour5,isnull(sum(lpd.hour6),0) as hour6,isnull(sum(lpd.hour7),0) as hour7,isnull(sum(lpd.hour8),0) as hour8,isnull(sum(lpd.hour9),0) as hour9,isnull(sum(lpd.hour10),0) as hour10,isnull(lpd.EmployeeId,'') as employeeId \n" + 
 					"from tbSewingLineSetup a \n" + 
 					"left join tbLayoutPlanDetails lpd\n" + 
-					"on a.BuyerOrderId = lpd.BuyerOrderId and a.StyleId = lpd.StyleId and a.ItemId = lpd.ItemId and a.lineId = lpd.LineId  \n"
+					"on a.BuyerOrderId = lpd.BuyerOrderId and a.StyleId = lpd.StyleId and a.ItemId = lpd.ItemId and a.lineId = lpd.LineId  and lpd.type='"+ProductionType.LINE_INSPECTION_LAYOUT.getType()+"' \n"
 					+ "where a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.PoNo='"+v.getPurchaseOrder()+"' and a.styleid='"+v.getStyleId()+"' and a.itemId='"+v.getItemId()+"' \n"
 					+ "group by a.styleid,a.itemId,a.id,a.duration,a.lineId,a.BuyerOrderId,a.PoNo,lpd.EmployeeId";
 
@@ -1918,7 +1918,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 						String h10=productionToken.nextToken();
 
 
-						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'";
+						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
 
 						List<?> list = session.createSQLQuery(sql).list();
 
@@ -1934,7 +1934,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 									+ "hour8='"+h8+"',"
 									+ "hour9='"+h9+"',"
 									+ "hour10='"+h10+"',"
-									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+v.getLineId()+"' and type='"+type+"'"; 
+									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
 
 						}else {
 							sql="insert into tbLayoutPlanDetails ("
@@ -2008,8 +2008,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 						String h9=layoutToken.nextToken();
 						String h10=layoutToken.nextToken();
 
-
-						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'";
+						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
 
 						List<?> list = session.createSQLQuery(sql).list();
 
@@ -2025,7 +2024,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 									+ "hour8='"+h8+"',"
 									+ "hour9='"+h9+"',"
 									+ "hour10='"+h10+"',"
-									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+v.getLineId()+"' and type='"+type+"'"; 
+									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
 
 						}else {
 							sql = "insert into tbLayoutPlanDetails ("
@@ -2079,8 +2078,9 @@ public class ProductionDAOImpl implements ProductionDAO{
 									+ "'"+h10+"',"
 									+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
 									+ ")";
-							session.createSQLQuery(sql).executeUpdate();
+							
 						}
+						session.createSQLQuery(sql).executeUpdate();
 					}
 					
 					if(!rejectValue.equals("0")) {
@@ -2100,7 +2100,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 							String h9=rejectToken.nextToken();
 							String h10=rejectToken.nextToken();
 
-							String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'";
+							String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
 
 							List<?> list = session.createSQLQuery(sql).list();
 
@@ -2116,7 +2116,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 										+ "hour8='"+h8+"',"
 										+ "hour9='"+h9+"',"
 										+ "hour10='"+h10+"',"
-										+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+v.getLineId()+"' and type='"+type+"'"; 
+										+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
 							}else {
 								sql="insert into tbLayoutPlanDetails ("
 										+ "BuyerId,"
@@ -2169,8 +2169,9 @@ public class ProductionDAOImpl implements ProductionDAO{
 										+ "'"+h10+"',"
 										+ "'"+totalRejectQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
 										+ ")";
-								session.createSQLQuery(sql).executeUpdate();
+								
 							}
+							session.createSQLQuery(sql).executeUpdate();
 						}
 					}
 				}
