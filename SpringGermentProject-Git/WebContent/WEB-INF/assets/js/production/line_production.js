@@ -465,6 +465,10 @@ function saveAction() {
 
 function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
 
+	$('#buyerId').val(buyerId);
+	$('#buyerOrderId').val(buyerOrderId);
+	$('#styleId').val(styleId);
+	$('#itemId').val(itemId);
 	const type = '2,3';
 	$.ajax({
 		type: 'GET',
@@ -486,7 +490,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawSearchItemTable(data.result, data.employeeList);
-				$("#btnSubmit").prop('disabled', true);
+				//$("#btnSubmit").prop('disabled', true);
 				$("#finishingListModal").modal('hide');
 			}
 		}
@@ -598,7 +602,6 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' onfocus='openProcessModel(" + item.lineId + ",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' id='reject-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
 				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
-
 		}
 
 
@@ -622,7 +625,7 @@ function editLineData(autoId, lineId, type) {
 
 	let proQty1 = 0, proQty2 = 0, proQty3 = 0, proQty4 = 0, proQty5 = 0, proQty6 = 0, proQty7 = 0, proQty8 = 0, proQty9 = 0, proQty10 = 0, totalQty = 0;
 
-	if (type == '5') {
+	if (type == '2') {
 		proQty1 = parseFloat(($("#production-" + id + "-h1").val() == '' ? "0" : $("#production-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#production-" + id + "-h2").val() == '' ? "0" : $("#production-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#production-" + id + "-h3").val() == '' ? "0" : $("#production-" + id + "-h3").val()));
@@ -636,7 +639,7 @@ function editLineData(autoId, lineId, type) {
 
 		totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
 	}
-	else if (type == '4') {
+	else if (type == '3') {
 		proQty1 = parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val()));
@@ -650,7 +653,7 @@ function editLineData(autoId, lineId, type) {
 
 		totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
 	}
-	else if (type == '6') {
+	else if (type == '4') {
 		proQty1 = parseFloat(($("#reject-" + id + "-h1").val() == '' ? "0" : $("#reject-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#reject-" + id + "-h2").val() == '' ? "0" : $("#reject-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#reject-" + id + "-h3").val() == '' ? "0" : $("#reject-" + id + "-h3").val()));

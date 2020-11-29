@@ -734,7 +734,7 @@ public class ProductionController {
 	@RequestMapping(value = "/finishing_production",method=RequestMethod.GET)
 	public ModelAndView finishing_production(ModelMap map,HttpSession session) {
 
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_LAYOUT.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PASS.getType()));
 		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/finishing-production");

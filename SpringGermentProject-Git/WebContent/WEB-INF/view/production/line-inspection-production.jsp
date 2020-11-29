@@ -379,4 +379,4 @@
 
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/production/line_inspection_production.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/production/line_production.js"></script>
