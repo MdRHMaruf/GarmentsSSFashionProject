@@ -630,6 +630,24 @@ public class ProductionController {
 
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/searchSewingPassProduction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSewingPassProduction(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.getSewingPassProduction(v);
+
+		List<Employee> employeeList = registerService.getEmployeeList();
+
+		//List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+
+		objmain.put("result",sewingList);
+		objmain.put("employeeresult",employeeList);
+		//objmain.put("sizelist",sizelist);
+
+		return objmain;
+	}
 
 
 	@RequestMapping(value = "/lineWiseMachineList",method=RequestMethod.GET)
@@ -735,7 +753,7 @@ public class ProductionController {
 	public ModelAndView finishing_production(ModelMap map,HttpSession session) {
 
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PASS.getType()));
-		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PASS.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/finishing-production");
 		view.addObject("layoutList",layoutList);

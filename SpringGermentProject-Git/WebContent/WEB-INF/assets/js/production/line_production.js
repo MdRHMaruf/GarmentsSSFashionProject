@@ -11,7 +11,7 @@ $("#btnProcessOk").click(() => {
 
 function printProductionDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
 	//let layoutDate = $('#layout' + itemId).html();
-	const type = '2,3';
+	const type = '2,3,4';
 	const layoutCategory = "Production & Reject";
 	const layoutName = "Line Inspection Production & Reject Report ";
 	let url = `printProductionDetails/${buyerId}@${buyerOrderId}@${styleId}@${itemId}@${layoutDate}@${type}@${layoutName}@${layoutCategory}`;
@@ -27,6 +27,7 @@ function setProductPlanInfo(buyerId, buyerOrderId, styleId, itemId, planQty) {
 	let styleNo = $('#styleId' + styleId).html();
 	let itemName = $('#itemId' + itemId).html();
 	let type = $('#type').val();
+	
 
 	$('#buyerName').val(buyerName);
 	$('#purchaseOrder').val(purchaseOrder);
@@ -531,7 +532,6 @@ function drawSearchItemTable(dataList, employeeResult) {
 				<th scope="col">05-06</th>
 				<th scope="col">06-07</th>
 				<th scope="col">Total</th>
-				<th scope="col">Edit</th>
 				</tr>
 				</thead>
 				<tbody id="dataList">`
@@ -564,8 +564,8 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='production-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' id='production-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
-				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
-
+				"</tr>"
+			//<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td>
 		} else if (item.layoutName == '3') {
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 				"<th></th>" +
@@ -582,7 +582,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' id='pass-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
-				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
+				"</tr>"
 
 		}
 		else if (item.layoutName == '4') {
@@ -601,7 +601,7 @@ function drawSearchItemTable(dataList, employeeResult) {
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' onfocus='openProcessModel(" + item.lineId + ",9)' class='form-control-sm' id='reject-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' onchange='setTotalQty(" + item.lineId + ")' onfocus='openProcessModel(" + item.lineId + ",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
 				"<td><input  type='number' id='reject-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
-				"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + "," + item.lineId + "," + item.layoutName + ")'><i class='fa fa-edit'></i></button></td></tr>"
+				"</tr>"
 		}
 
 

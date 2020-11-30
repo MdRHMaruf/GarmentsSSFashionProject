@@ -153,6 +153,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getSewingLineSetupinfo(v);
 	}
+	
+	@Override
+	public List<ProductionPlan> getSewingPassProduction(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingPassProduction(v);
+	}
 
 
 	@Override

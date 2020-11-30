@@ -50,7 +50,8 @@ public interface ProductionService {
 	List<SewingLinesModel> getSewingProductionLines();
 
 	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
-
+	List<ProductionPlan> getSewingPassProduction(ProductionPlan v);
+	
 	boolean saveSewingLayoutDetails(ProductionPlan v);
 
 	List<ProductionPlan> getSewingProductionReport(String Type);
