@@ -9,6 +9,7 @@ import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.Process;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
 import pg.registerModel.Machine;
@@ -45,6 +46,7 @@ public interface ProductionDAO {
 	List<SewingLinesModel> getSewingProductionLines();
 	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
 	List<ProductionPlan> getSewingPassProduction(ProductionPlan v);
+	List<ProductionPlan> getFinishingPassData(ProductionPlan v);
 	
 	boolean saveSewingLayoutDetails(ProductionPlan v);
 	List<ProductionPlan> getSewingProductionReport(String Type);
@@ -53,7 +55,7 @@ public interface ProductionDAO {
 	List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
 			String productionDate);
 
-	boolean saveFinishProductionDetails(ProductionPlan v);
+	//boolean saveFinishProductionDetails(ProductionPlan v);
 
 	List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
 			String itemId, String productionDate);
@@ -64,6 +66,7 @@ public interface ProductionDAO {
 	List<ProductionPlan> getLayoutPlanDetails(String string);
 	List<ProductionPlan> getInspectionLayoutList(String string);
 	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
+	List<Process> getProcessValues(ProductionPlan productionPlan);
 
 	//Sewing Production
 	boolean saveLineProductionDetails(ProductionPlan v);
@@ -75,15 +78,19 @@ public interface ProductionDAO {
 	boolean saveSewingProductionDetails(ProductionPlan v);
 
 	//Finishing
+	boolean saveFinishingProductionDetails(ProductionPlan v);
 	List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
 	List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan);
+	List<ProductionPlan> getFinishingData(ProductionPlan productionPlan);
 	String editLayoutLineData(ProductionPlan productionPlan);
+	
+	boolean saveIronProductionDetails(ProductionPlan v);
 
 	boolean savePolyPackingDetails(ProductionPlan v);
 	List<ProductionPlan> getPolyPackingDetails(String string);
 
 	List<CuttingInformation> getCuttingRequisitionList();
-
+	List<ProductionPlan> getIronData(ProductionPlan productionPlan);
 
 	//send Cutting Body...
 	List<ProductionPlan> searchCuttingPlanQuantity(String cuttingEntryId,String sizeGroupId);

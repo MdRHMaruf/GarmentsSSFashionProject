@@ -31,6 +31,7 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="type" value="<%=ProductionType.FINISHING_PASS.getType()%>">
 	<input type="hidden" id="sqpType" value="<%=ProductionType.LINE_PASS.getType()%>">
 		<input type="hidden" id="passType" value="<%=ProductionType.FINISHING_PASS.getType()%>">
 			<input type="hidden" id="rejectType" value="<%=ProductionType.FINISHING_REJECT.getType()%>">

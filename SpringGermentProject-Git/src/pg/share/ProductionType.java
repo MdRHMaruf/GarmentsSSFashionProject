@@ -18,12 +18,12 @@ public enum ProductionType {
 	FINISHING_REJECT(7),
 	
 	IRON_LAYOUT(8),
-	IRON_PRODUCTION(9),
+	IRON_PASS(9),
+	IRON_REJECT(10),
 	
-	
-	FINAL_QC_LAYOUT(10),
-	FINAL_QC_PRODUCTION(11),
-	FINAL_QC_REJECT(12);
+	FINAL_QC_LAYOUT(11),
+	FINAL_QC_PRODUCTION(12),
+	FINAL_QC_REJECT(13);
 	
 	private int type;
 	private ProductionType(int type) {

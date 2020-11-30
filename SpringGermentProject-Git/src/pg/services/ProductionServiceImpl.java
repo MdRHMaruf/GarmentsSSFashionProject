@@ -10,6 +10,7 @@ import pg.dao.ProductionDAO;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
@@ -183,11 +184,11 @@ public class ProductionServiceImpl implements ProductionService {
 	}
 
 
-	@Override
+	/*@Override
 	public boolean saveFinishProductionDetails(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.saveFinishProductionDetails(v);
-	}
+	}*/
 
 
 	@Override
@@ -257,6 +258,20 @@ public class ProductionServiceImpl implements ProductionService {
 	}
 	
 	@Override
+	public boolean saveFinishingProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveFinishingProductionDetails(v);
+	}
+
+
+	@Override
+	public boolean saveIronProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveIronProductionDetails(v);
+	}
+
+
+	@Override
 	public boolean saveSewingProductionDetails(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.saveSewingProductionDetails(v);
@@ -285,6 +300,26 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getProductionData(ProductionPlan productionPlan) {
 		// TODO Auto-generated method stub
 		return productionDao.getProductionData(productionPlan);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getFinishingPassData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getFinishingPassData(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getFinishingData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getFinishingData(productionPlan);
+	}
+
+	@Override
+	public List<ProductionPlan> getIronData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getIronData(v);
 	}
 
 
@@ -358,6 +393,14 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.receiveCuttingPlanBodyQuantity(sendItemList, userId);
 	}
+
+
+	@Override
+	public List<Process> getProcessValues(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getProcessValues(productionPlan);
+	}
+
 
 }
 

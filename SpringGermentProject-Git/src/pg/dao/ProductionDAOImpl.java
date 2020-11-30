@@ -20,6 +20,7 @@ import pg.orderModel.PurchaseOrder;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
@@ -1215,6 +1216,70 @@ public class ProductionDAOImpl implements ProductionDAO{
 
 		return ListData;
 	}
+	
+	@Override
+	public List<ProductionPlan> getFinishingPassData(ProductionPlan v) {
+		List<ProductionPlan> ListData=new ArrayList<ProductionPlan>();
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		ProductionPlan tempPlan = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+
+
+			String sql="select a.styleid,(select StyleNo from TbStyleCreate where styleId=a.styleid) as StyleNo,a.itemId,\n" + 
+					"(select ItemName from tbItemDescription where ItemId=a.itemId) as ItemName,a.id,a.duration,a.lineId,\n" + 
+					"(select LineName from TbLineCreate where LineId=a.lineId) as LineName,\n" + 
+					"(select isnull(sum(PlanQty),0)from TbProductTargetPlan b where b.BuyerOrderId=a.BuyerOrderId and b.PoNo=a.PoNo and b.styleid=a.styleid and b.itemId=a.itemId) as PlanQty,\n" + 
+					"isnull(sum(lpd.hour1),0) as hour1,isnull(sum(lpd.hour2),0) as hour2,isnull(sum(lpd.hour3),0) as hour3,isnull(sum(lpd.hour4),0) as hour4,isnull(sum(lpd.hour5),0) as hour5,isnull(sum(lpd.hour6),0) as hour6,isnull(sum(lpd.hour7),0) as hour7,isnull(sum(lpd.hour8),0) as hour8,isnull(sum(lpd.hour9),0) as hour9,isnull(sum(lpd.hour10),0) as hour10,isnull(lpd.EmployeeId,'') as employeeId \n" + 
+					"from tbSewingLineSetup a \n" + 
+					"left join tbLayoutPlanDetails lpd\n" + 
+					"on a.BuyerOrderId = lpd.BuyerOrderId and a.StyleId = lpd.StyleId and a.ItemId = lpd.ItemId and a.lineId = lpd.LineId  and lpd.type='"+ProductionType.FINISHING_PASS.getType()+"' \n"
+					+ "where a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.PoNo='"+v.getPurchaseOrder()+"' and a.styleid='"+v.getStyleId()+"' and a.itemId='"+v.getItemId()+"' and lpd.date='"+v.getProductionDate()+"' \n"
+					+ "group by a.styleid,a.itemId,a.id,a.duration,a.lineId,a.BuyerOrderId,a.PoNo,lpd.EmployeeId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			
+			int lineCount=list.size();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				tempPlan = new ProductionPlan(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),lineCount);
+				tempPlan.setHour1(element[9].toString());
+				tempPlan.setHour2(element[10].toString());
+				tempPlan.setHour3(element[11].toString());
+				tempPlan.setHour4(element[12].toString());
+				tempPlan.setHour5(element[13].toString());
+				tempPlan.setHour6(element[14].toString());
+				tempPlan.setHour7(element[15].toString());
+				tempPlan.setHour8(element[16].toString());
+				tempPlan.setHour9(element[17].toString());
+				tempPlan.setHour10(element[18].toString());
+				tempPlan.setEmployeeId(element[19].toString());
+
+				ListData.add(tempPlan);
+
+			}
+			tx.commit();
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				ee.printStackTrace();
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return ListData;
+	}
 
 	@Override
 	public boolean saveSewingLayoutDetails(ProductionPlan v) {
@@ -1461,7 +1526,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return dataList;
 	}
 
-	@Override
+	/*@Override
 	public boolean saveFinishProductionDetails(ProductionPlan v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1636,7 +1701,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 
 		return false;
-	}
+	}*/
 
 	@Override
 	public List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
@@ -1998,7 +2063,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 									+ "hour8='"+h8+"',"
 									+ "hour9='"+h9+"',"
 									+ "hour10='"+h10+"',"
-									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
+									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
 
 						}else {
 							sql="insert into tbLayoutPlanDetails ("
@@ -2088,7 +2153,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 									+ "hour8='"+h8+"',"
 									+ "hour9='"+h9+"',"
 									+ "hour10='"+h10+"',"
-									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
+									+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
 
 						}else {
 							sql = "insert into tbLayoutPlanDetails ("
@@ -2180,7 +2245,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 										+ "hour8='"+h8+"',"
 										+ "hour9='"+h9+"',"
 										+ "hour10='"+h10+"',"
-										+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"'"; 
+										+ "total='"+totalProdcutionQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
 							}else {
 								sql="insert into tbLayoutPlanDetails ("
 										+ "BuyerId,"
@@ -2294,6 +2359,530 @@ public class ProductionDAOImpl implements ProductionDAO{
 		return false;
 	}
 
+	
+	@Override
+	public boolean saveFinishingProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
+
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+				String secondToken=firstToken.nextToken();
+				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
+				while(thirdToken.hasMoreTokens()) {
+
+					String employyeId = thirdToken.nextToken();
+					String lineId = thirdToken.nextToken();
+					String totalQty = thirdToken.nextToken();
+					String totalRejectQty = thirdToken.nextToken();	
+					String passValue = thirdToken.nextToken();
+					String rejectValue = thirdToken.nextToken();
+
+					
+					//Passed
+					StringTokenizer layoutToken=new StringTokenizer(passValue, ":");
+					while(layoutToken.hasMoreTokens()) {
+						String type=layoutToken.nextToken();
+						String h1=layoutToken.nextToken();
+						String h2=layoutToken.nextToken();
+						String h3=layoutToken.nextToken();
+						String h4=layoutToken.nextToken();
+						String h5=layoutToken.nextToken();
+						String h6=layoutToken.nextToken();
+						String h7=layoutToken.nextToken();
+						String h8=layoutToken.nextToken();
+						String h9=layoutToken.nextToken();
+						String h10=layoutToken.nextToken();
+
+						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
+
+						List<?> list = session.createSQLQuery(sql).list();
+
+						if(list.size()>0) {
+							sql ="update tbLayoutPlanDetails set "
+									+ "hour1='"+h1+"',"
+									+ "hour2='"+h2+"',"
+									+ "hour3='"+h3+"',"
+									+ "hour4='"+h4+"',"
+									+ "hour5='"+h5+"',"
+									+ "hour6='"+h6+"',"
+									+ "hour7='"+h7+"',"
+									+ "hour8='"+h8+"',"
+									+ "hour9='"+h9+"',"
+									+ "hour10='"+h10+"',"
+									+ "total='"+totalQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
+
+						}else {
+							sql = "insert into tbLayoutPlanDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "LineId,"
+									+ "EmployeeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+v.getBuyerId()+"',"
+									+ "'"+v.getBuyerorderId()+"',"
+									+ "'"+v.getPurchaseOrder()+"',"
+									+ "'"+v.getStyleId()+"',"
+									+ "'"+v.getItemId()+"',"
+									+ "'"+lineId+"',"
+									+ "'"+employyeId+"',"
+									+ "'"+type+"',"
+									+ "'"+v.getDailyTarget()+"',"
+									+ "'"+v.getDailyLineTarget()+"',"
+									+ "'"+v.getHourlyTarget()+"',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+									+ ")";
+							
+						}
+						session.createSQLQuery(sql).executeUpdate();
+					}
+					
+					if(!rejectValue.equals("0")) {
+
+						//Reject
+						StringTokenizer rejectToken=new StringTokenizer(rejectValue, ":");
+						while(rejectToken.hasMoreTokens()) {
+							String type=rejectToken.nextToken();
+							String h1=rejectToken.nextToken();
+							String h2=rejectToken.nextToken();
+							String h3=rejectToken.nextToken();
+							String h4=rejectToken.nextToken();
+							String h5=rejectToken.nextToken();
+							String h6=rejectToken.nextToken();
+							String h7=rejectToken.nextToken();
+							String h8=rejectToken.nextToken();
+							String h9=rejectToken.nextToken();
+							String h10=rejectToken.nextToken();
+
+							String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
+
+							List<?> list = session.createSQLQuery(sql).list();
+
+							if(list.size()>0) {
+								sql ="update tbLayoutPlanDetails set "
+										+ "hour1='"+h1+"',"
+										+ "hour2='"+h2+"',"
+										+ "hour3='"+h3+"',"
+										+ "hour4='"+h4+"',"
+										+ "hour5='"+h5+"',"
+										+ "hour6='"+h6+"',"
+										+ "hour7='"+h7+"',"
+										+ "hour8='"+h8+"',"
+										+ "hour9='"+h9+"',"
+										+ "hour10='"+h10+"',"
+										+ "total='"+totalRejectQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
+							}else {
+								sql="insert into tbLayoutPlanDetails ("
+										+ "BuyerId,"
+										+ "BuyerOrderId,"
+										+ "PurchaseOrder,"
+										+ "StyleId,"
+										+ "ItemId,"
+										+ "LineId,"
+										+ "EmployeeId,"
+										+ "Type,"
+										+ "DailyTarget,"
+										+ "LineTarget,"
+										+ "HourlyTarget,"
+										+ "Hours,"
+										+ "hour1,"
+										+ "hour2,"
+										+ "hour3,"
+										+ "hour4,"
+										+ "hour5,"
+										+ "hour6,"
+										+ "hour7,"
+										+ "hour8,"
+										+ "hour9,"
+										+ "hour10,"
+										+ "total,"
+										+ "date,"
+										+ "entrytime,"
+										+ "userId) values ("
+										+ "'"+v.getBuyerId()+"',"
+										+ "'"+v.getBuyerorderId()+"',"
+										+ "'"+v.getPurchaseOrder()+"',"
+										+ "'"+v.getStyleId()+"',"
+										+ "'"+v.getItemId()+"',"
+										+ "'"+lineId+"',"
+										+ "'"+employyeId+"',"
+										+ "'"+type+"',"
+										+ "'"+v.getDailyTarget()+"',"
+										+ "'"+v.getDailyLineTarget()+"',"
+										+ "'"+v.getHourlyTarget()+"',"
+										+ "'10',"
+										+ "'"+h1+"',"
+										+ "'"+h2+"',"
+										+ "'"+h3+"',"
+										+ "'"+h4+"',"
+										+ "'"+h5+"',"				
+										+ "'"+h6+"',"
+										+ "'"+h7+"',"
+										+ "'"+h8+"',"
+										+ "'"+h9+"',"
+										+ "'"+h10+"',"
+										+ "'"+totalRejectQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+										+ ")";
+								
+							}
+							session.createSQLQuery(sql).executeUpdate();
+						}
+					}
+				}
+			}
+
+			JSONParser jsonParser = new JSONParser();
+			JSONObject processValues = (JSONObject)jsonParser.parse(v.getProcessValues());
+			Object lineIdList[] =  processValues.keySet().toArray();
+			int type = ProductionType.FINISHING_REJECT.getType();
+			for(int i=0;i<lineIdList.length;i++) {
+				String lineId = lineIdList[i].toString();
+				JSONObject lineObject = (JSONObject) processValues.get(lineIdList[i]);
+				Object hourIdList[] = lineObject.keySet().toArray();
+
+				for(int j=0;j<hourIdList.length;j++) {
+					String hourId = hourIdList[j].toString();
+					JSONObject hourObject = (JSONObject) lineObject.get(hourIdList[j]);
+					Object processIdList[] = hourObject.keySet().toArray();
+					for(int k=0; k < processIdList.length ; k++) {
+						String processId = processIdList[k].toString();
+						processId = processId.substring(processId.indexOf('-')+1);
+						JSONObject process = (JSONObject) hourObject.get(processIdList[k]);
+
+						String sql="select buyerId,buyerOrderId from tbProcessValues where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"'and hourId='"+hourId+"' and processId='"+processId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"' ;";
+
+						List<?> list = session.createSQLQuery(sql).list();
+						if(list.size()>0) {
+							sql = "update tbProcessValues set processValue='"+process.get("qty")+"',remarks='"+process.get("remarks")+"',isPass='"+(Boolean.valueOf(process.get("isReIssuePass").toString())?1:0)+"',entryTime=CURRENT_TIMESTAMP,userId='"+v.getUserId()+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and hourId='"+hourId+"' and processId='"+processId+"' and date='"+v.getLayoutDate()+"'; " ;
+							session.createSQLQuery(sql).executeUpdate();
+						}else {
+							
+							sql = "insert into tbProcessValues (buyerId,buyerOrderId,purchaseOrder,styleId,itemId,lineId,hourId,processId,processValue,remarks,isPass,date,type,entryTime,userId) \n" + 
+									"values('"+v.getBuyerId()+"','"+v.getBuyerorderId()+"','"+v.getPurchaseOrder()+"','"+v.getStyleId()+"','"+v.getItemId()+"','"+lineId+"','"+hourId+"','"+processId+"','"+process.get("qty")+"','"+process.get("remarks")+"','"+(Boolean.valueOf(process.get("isReIssuePass").toString())?1:0)+"','"+v.getLayoutDate()+"','"+type+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+
+							session.createSQLQuery(sql).executeUpdate();
+						}
+					}
+				}
+			}
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+
+		}
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public boolean saveIronProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String resultValue=v.getResultlist().substring(v.getResultlist().indexOf("[")+1, v.getResultlist().indexOf("]"));
+
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+				String secondToken=firstToken.nextToken();
+				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
+				while(thirdToken.hasMoreTokens()) {
+
+					String employyeId = thirdToken.nextToken();
+					String lineId = thirdToken.nextToken();
+					String totalQty = thirdToken.nextToken();
+					String totalRejectQty = thirdToken.nextToken();	
+					String passValue = thirdToken.nextToken();
+					String rejectValue = thirdToken.nextToken();
+
+					
+					//Passed
+					StringTokenizer layoutToken=new StringTokenizer(passValue, ":");
+					while(layoutToken.hasMoreTokens()) {
+						String type=layoutToken.nextToken();
+						String h1=layoutToken.nextToken();
+						String h2=layoutToken.nextToken();
+						String h3=layoutToken.nextToken();
+						String h4=layoutToken.nextToken();
+						String h5=layoutToken.nextToken();
+						String h6=layoutToken.nextToken();
+						String h7=layoutToken.nextToken();
+						String h8=layoutToken.nextToken();
+						String h9=layoutToken.nextToken();
+						String h10=layoutToken.nextToken();
+
+						String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
+
+						List<?> list = session.createSQLQuery(sql).list();
+
+						if(list.size()>0) {
+							sql ="update tbLayoutPlanDetails set "
+									+ "hour1='"+h1+"',"
+									+ "hour2='"+h2+"',"
+									+ "hour3='"+h3+"',"
+									+ "hour4='"+h4+"',"
+									+ "hour5='"+h5+"',"
+									+ "hour6='"+h6+"',"
+									+ "hour7='"+h7+"',"
+									+ "hour8='"+h8+"',"
+									+ "hour9='"+h9+"',"
+									+ "hour10='"+h10+"',"
+									+ "total='"+totalQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
+
+						}else {
+							sql = "insert into tbLayoutPlanDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "LineId,"
+									+ "EmployeeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+v.getBuyerId()+"',"
+									+ "'"+v.getBuyerorderId()+"',"
+									+ "'"+v.getPurchaseOrder()+"',"
+									+ "'"+v.getStyleId()+"',"
+									+ "'"+v.getItemId()+"',"
+									+ "'"+lineId+"',"
+									+ "'"+employyeId+"',"
+									+ "'"+type+"',"
+									+ "'"+v.getDailyTarget()+"',"
+									+ "'"+v.getDailyLineTarget()+"',"
+									+ "'"+v.getHourlyTarget()+"',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+									+ ")";
+							
+						}
+						session.createSQLQuery(sql).executeUpdate();
+					}
+					
+					if(!rejectValue.equals("0")) {
+
+						//Reject
+						StringTokenizer rejectToken=new StringTokenizer(rejectValue, ":");
+						while(rejectToken.hasMoreTokens()) {
+							String type=rejectToken.nextToken();
+							String h1=rejectToken.nextToken();
+							String h2=rejectToken.nextToken();
+							String h3=rejectToken.nextToken();
+							String h4=rejectToken.nextToken();
+							String h5=rejectToken.nextToken();
+							String h6=rejectToken.nextToken();
+							String h7=rejectToken.nextToken();
+							String h8=rejectToken.nextToken();
+							String h9=rejectToken.nextToken();
+							String h10=rejectToken.nextToken();
+
+							String sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'";
+
+							List<?> list = session.createSQLQuery(sql).list();
+
+							if(list.size()>0) {
+								sql ="update tbLayoutPlanDetails set "
+										+ "hour1='"+h1+"',"
+										+ "hour2='"+h2+"',"
+										+ "hour3='"+h3+"',"
+										+ "hour4='"+h4+"',"
+										+ "hour5='"+h5+"',"
+										+ "hour6='"+h6+"',"
+										+ "hour7='"+h7+"',"
+										+ "hour8='"+h8+"',"
+										+ "hour9='"+h9+"',"
+										+ "hour10='"+h10+"',"
+										+ "total='"+totalRejectQty+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"'"; 
+							}else {
+								sql="insert into tbLayoutPlanDetails ("
+										+ "BuyerId,"
+										+ "BuyerOrderId,"
+										+ "PurchaseOrder,"
+										+ "StyleId,"
+										+ "ItemId,"
+										+ "LineId,"
+										+ "EmployeeId,"
+										+ "Type,"
+										+ "DailyTarget,"
+										+ "LineTarget,"
+										+ "HourlyTarget,"
+										+ "Hours,"
+										+ "hour1,"
+										+ "hour2,"
+										+ "hour3,"
+										+ "hour4,"
+										+ "hour5,"
+										+ "hour6,"
+										+ "hour7,"
+										+ "hour8,"
+										+ "hour9,"
+										+ "hour10,"
+										+ "total,"
+										+ "date,"
+										+ "entrytime,"
+										+ "userId) values ("
+										+ "'"+v.getBuyerId()+"',"
+										+ "'"+v.getBuyerorderId()+"',"
+										+ "'"+v.getPurchaseOrder()+"',"
+										+ "'"+v.getStyleId()+"',"
+										+ "'"+v.getItemId()+"',"
+										+ "'"+lineId+"',"
+										+ "'"+employyeId+"',"
+										+ "'"+type+"',"
+										+ "'"+v.getDailyTarget()+"',"
+										+ "'"+v.getDailyLineTarget()+"',"
+										+ "'"+v.getHourlyTarget()+"',"
+										+ "'10',"
+										+ "'"+h1+"',"
+										+ "'"+h2+"',"
+										+ "'"+h3+"',"
+										+ "'"+h4+"',"
+										+ "'"+h5+"',"				
+										+ "'"+h6+"',"
+										+ "'"+h7+"',"
+										+ "'"+h8+"',"
+										+ "'"+h9+"',"
+										+ "'"+h10+"',"
+										+ "'"+totalRejectQty+"','"+v.getLayoutDate()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"'"
+										+ ")";
+								
+							}
+							session.createSQLQuery(sql).executeUpdate();
+						}
+					}
+				}
+			}
+
+			JSONParser jsonParser = new JSONParser();
+			JSONObject processValues = (JSONObject)jsonParser.parse(v.getProcessValues());
+			Object lineIdList[] =  processValues.keySet().toArray();
+			int type = ProductionType.IRON_REJECT.getType();
+			for(int i=0;i<lineIdList.length;i++) {
+				String lineId = lineIdList[i].toString();
+				JSONObject lineObject = (JSONObject) processValues.get(lineIdList[i]);
+				Object hourIdList[] = lineObject.keySet().toArray();
+
+				for(int j=0;j<hourIdList.length;j++) {
+					String hourId = hourIdList[j].toString();
+					JSONObject hourObject = (JSONObject) lineObject.get(hourIdList[j]);
+					Object processIdList[] = hourObject.keySet().toArray();
+					for(int k=0; k < processIdList.length ; k++) {
+						String processId = processIdList[k].toString();
+						processId = processId.substring(processId.indexOf('-')+1);
+						JSONObject process = (JSONObject) hourObject.get(processIdList[k]);
+
+						String sql="select buyerId,buyerOrderId from tbProcessValues where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerorderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"'and hourId='"+hourId+"' and processId='"+processId+"' and type='"+type+"' and date='"+v.getLayoutDate()+"' ;";
+
+						List<?> list = session.createSQLQuery(sql).list();
+						if(list.size()>0) {
+							sql = "update tbProcessValues set processValue='"+process.get("qty")+"',remarks='"+process.get("remarks")+"',isPass='"+(Boolean.valueOf(process.get("isReIssuePass").toString())?1:0)+"',entryTime=CURRENT_TIMESTAMP,userId='"+v.getUserId()+"' where buyerId='"+v.getBuyerId()+"' and buyerOrderId='"+v.getBuyerId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and styleId='"+v.getStyleId()+"' and itemId='"+v.getItemId()+"' and lineId='"+lineId+"' and hourId='"+hourId+"' and processId='"+processId+"' and date='"+v.getLayoutDate()+"'; " ;
+							session.createSQLQuery(sql).executeUpdate();
+						}else {
+							
+							sql = "insert into tbProcessValues (buyerId,buyerOrderId,purchaseOrder,styleId,itemId,lineId,hourId,processId,processValue,remarks,isPass,date,type,entryTime,userId) \n" + 
+									"values('"+v.getBuyerId()+"','"+v.getBuyerorderId()+"','"+v.getPurchaseOrder()+"','"+v.getStyleId()+"','"+v.getItemId()+"','"+lineId+"','"+hourId+"','"+processId+"','"+process.get("qty")+"','"+process.get("remarks")+"','"+(Boolean.valueOf(process.get("isReIssuePass").toString())?1:0)+"','"+v.getLayoutDate()+"','"+type+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+
+							session.createSQLQuery(sql).executeUpdate();
+						}
+					}
+				}
+			}
+
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+
+		}
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
 
 	@Override
 	public boolean saveInceptionLayoutLineDetails(ProductionPlan v) {
@@ -2990,7 +3579,142 @@ public class ProductionDAOImpl implements ProductionDAO{
 		}
 		return dataList;
 	}
+	
+	@Override
+	public List<Process> getProcessValues(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Process> dataList=new ArrayList<Process>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.autoId,a.lineId,a.hourId,a.processId,a.processValue,a.remarks,a.isPass,a.userId from tbProcessValues a \r\n" + 
+					"where a.BuyerId='"+v.getBuyerId()+"' and a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.StyleId='"+v.getStyleId()+"' and a.ItemId='"+v.getItemId()+"' and a.date='"+v.getLayoutDate()+"' and a.type in ("+ProductionType.LINE_REJECT.getType()+") order by a.LineId,a.autoId";
 
+
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new Process(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString()));
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<ProductionPlan> getFinishingData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.AutoId,a.BuyerId,b.name buyerName,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.LineId,lc.LineName,a.EmployeeId,isnull(e.name,'') as employeeName,a.Type,isnull(a.proudctionType,'') as productionType,ptp.OrderQty,ptp.PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.hour1,a.hour2,a.hour3,a.hour4,a.hour5,a.hour6,a.hour7,a.hour8,a.hour9,a.hour10,a.total,(select convert(varchar,a.date,103))as date,a.userId\r\n" + 
+					"from tbLayoutPlanDetails a\r\n" + 
+					"left join TbProductTargetPlan ptp\r\n" + 
+					"on a.BuyerId = ptp.BuyerId and a.BuyerOrderId = ptp.BuyerOrderId and a.StyleId = ptp.StyleId and a.ItemId = ptp.ItemId\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on a.BuyerId = b.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on a.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on a.ItemId = id.itemid\r\n" + 
+					"left join TbLineCreate lc\r\n" + 
+					"on a.LineId = lc.LineId\r\n" + 
+					"left join TbEmployeeInfo e \r\n" + 
+					"on a.EmployeeId = e.AutoId \r\n" + 
+					"where a.BuyerId='"+v.getBuyerId()+"' and a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.StyleId='"+v.getStyleId()+"' and a.ItemId='"+v.getItemId()+"' and a.date='"+v.getLayoutDate()+"' and a.type in ("+ProductionType.LINE_PASS.getType()+","+ProductionType.FINISHING_PASS.getType()+","+ProductionType.FINISHING_REJECT.getType()+") order by a.LineId,a.autoId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString(), element[25].toString(), element[26].toString(), element[27].toString(), element[28].toString(), element[29].toString(), element[30].toString(), element[31].toString(),element[32].toString(),element[33].toString(),String.valueOf(lineCount)));
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<ProductionPlan> getIronData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ProductionPlan> dataList=new ArrayList<ProductionPlan>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select a.AutoId,a.BuyerId,b.name buyerName,a.BuyerOrderId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.LineId,lc.LineName,a.EmployeeId,isnull(e.name,'') as employeeName,a.Type,isnull(a.proudctionType,'') as productionType,ptp.OrderQty,ptp.PlanQty,a.DailyTarget,a.LineTarget,a.HourlyTarget,a.Hours,a.hour1,a.hour2,a.hour3,a.hour4,a.hour5,a.hour6,a.hour7,a.hour8,a.hour9,a.hour10,a.total,(select convert(varchar,a.date,103))as date,a.userId\r\n" + 
+					"from tbLayoutPlanDetails a\r\n" + 
+					"left join TbProductTargetPlan ptp\r\n" + 
+					"on a.BuyerId = ptp.BuyerId and a.BuyerOrderId = ptp.BuyerOrderId and a.StyleId = ptp.StyleId and a.ItemId = ptp.ItemId\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on a.BuyerId = b.id\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on a.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on a.ItemId = id.itemid\r\n" + 
+					"left join TbLineCreate lc\r\n" + 
+					"on a.LineId = lc.LineId\r\n" + 
+					"left join TbEmployeeInfo e \r\n" + 
+					"on a.EmployeeId = e.AutoId \r\n" + 
+					"where a.BuyerId='"+v.getBuyerId()+"' and a.BuyerOrderId='"+v.getBuyerorderId()+"' and a.StyleId='"+v.getStyleId()+"' and a.ItemId='"+v.getItemId()+"' and a.date='"+v.getLayoutDate()+"' and a.type in ("+ProductionType.FINISHING_PASS.getType()+","+ProductionType.IRON_PASS.getType()+","+ProductionType.IRON_REJECT.getType()+") order by a.LineId,a.autoId";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			int lineCount=list.size();
+			
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new ProductionPlan(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString(), element[25].toString(), element[26].toString(), element[27].toString(), element[28].toString(), element[29].toString(), element[30].toString(), element[31].toString(),element[32].toString(),element[33].toString(),String.valueOf(lineCount)));
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
 	@Override
 	public boolean savePolyPackingDetails(ProductionPlan v) {
 

@@ -127,18 +127,18 @@ function drawItemTable(dataList, employeeResult) {
 			"<th >" + item.lineName + "</br><input  type='hidden' class='form-control-sm line-" + item.lineId + "'  value='" + parseFloat(item.lineId).toFixed() + "' /></th>" +
 			"<th><select id='employee-" + item.lineId + "'  class='selectpicker employee-width tableSelect employee-" + item.lineId + " col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>" + employeeList + "</select></th>" +
 			"<td><p style='color:black;font-weight:bold;'>S.Q.P.</p><p style='color:green;font-weight:bold;'>Pass</p><p style='color:red;font-weight:bold;'>Reject</p></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour1) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h1'  value=''/><input  type='number'  onfocus='openProcessModel("+item.lineId+",1)'  class='form-control-sm' id='reject-" + item.lineId + "-h1'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour2) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h2'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",2)' class='form-control-sm' id='reject-" + item.lineId + "-h2'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour3) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h3'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",3)' class='form-control-sm' id='reject-" + item.lineId + "-h3'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour4) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h4'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",4)' class='form-control-sm' id='reject-" + item.lineId + "-h4'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour5) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h5'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",5)' class='form-control-sm' id='reject-" + item.lineId + "-h5'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour6) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h6'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",6)' class='form-control-sm' id='reject-" + item.lineId + "-h6'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour7) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h7'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",7)' class='form-control-sm' id='reject-" + item.lineId + "-h7'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour8) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h8'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",8)' class='form-control-sm' id='reject-" + item.lineId + "-h8'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour9) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",9)' class='form-control-sm' id='reject-" + item.lineId + "-h9'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour10) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(0) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h11'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",11)' class='form-control-sm' id='reject-" + item.lineId + "-h11'  value='' /></td>" +
-			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(0) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h12'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",12)' class='form-control-sm' id='reject-" + item.lineId + "-h12'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Math.round(item.hour1) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h1'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",1)'  class='form-control-sm' id='reject-" + item.lineId + "-h1'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h2'  value='" + Math.round(item.hour2) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h2'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",2)' class='form-control-sm' id='reject-" + item.lineId + "-h2'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h3'  value='" + Math.round(item.hour3) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h3'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",3)' class='form-control-sm' id='reject-" + item.lineId + "-h3'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h4'  value='" + Math.round(item.hour4) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h4'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",4)' class='form-control-sm' id='reject-" + item.lineId + "-h4'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h5'  value='" + Math.round(item.hour5) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h5'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",5)' class='form-control-sm' id='reject-" + item.lineId + "-h5'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h6'  value='" + Math.round(item.hour6) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h6'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",6)' class='form-control-sm' id='reject-" + item.lineId + "-h6'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h7'  value='" + Math.round(item.hour7) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h7'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",7)' class='form-control-sm' id='reject-" + item.lineId + "-h7'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h8'  value='" + Math.round(item.hour8) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h8'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",8)' class='form-control-sm' id='reject-" + item.lineId + "-h8'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h9'  value='" + Math.round(item.hour9) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",9)' class='form-control-sm' id='reject-" + item.lineId + "-h9'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h10'  value='" + Math.round(item.hour10) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",10)' class='form-control-sm' id='reject-" + item.lineId + "-h10'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h11'  value='" + Math.round(0) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h11'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",11)' class='form-control-sm' id='reject-" + item.lineId + "-h11'  value='' /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h12'  value='" + Math.round(0) + "' readonly/><input  type='number' onchange='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h12'  value=''/><input  type='number' onfocus='openProcessModel("+item.lineId+",12)' class='form-control-sm' id='reject-" + item.lineId + "-h12'  value='' /></td>" +
 			"<td><input  type='number' id='sqp-" + item.lineId + "-total' readonly class='form-control-sm'/><input  type='number' id='pass-" + item.lineId + "-total' readonly class='form-control-sm'/><input  type='number'  class='form-control-sm' id='reject-" + item.lineId + "-total'  value='' /></td>" +
 			"</tr>"
 		//"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm'><i class='fa fa-edit'></i></button></td>
@@ -189,58 +189,38 @@ function openProcessModel(lineId, hourId) {
 	//$('#processListModal').	
 }
 
-function closeProcessAddEvent(){
-	
-	
+function closeProcessAddEvent() {
+
+	let hourId = $("#hourId").val();
+	let lineId = $("#lineId").val();
+	let reIssueValue = 0;
+	let processValue = 0;
+
+	$('.processListItemRow').each(function () {
+		let processId = $(this).attr("data-id");
+		if (!processRejectValueList[lineId]) processRejectValueList[lineId] = {};
+		if (!processRejectValueList[lineId]['h' + hourId]) processRejectValueList[lineId]['h' + hourId] = {};
+
+		processValue = $('#processValue-' + processId).val() == '' ? 0 : $('#processValue-' + processId).val();
+
+		if (processRejectValueList[lineId]['h' + hourId]['process-' + processId]) {
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
+		} else {
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId] = {};
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].processId = processId;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].qty = processValue;
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].remarks = $("#processRemarks-" + processId).val();
+			processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
+		}
 
 
-	
-	
-	let value=0;
-	$('.procsslistitemrow').each(function () {
-		let id = $(this).attr("data-id");
-	
-		value=value+parseFloat(($('.processId-'+id).val()==''?"0":$('.processId-'+id).val()));
-
-		
+		if (processId != 'reject')
+			reIssueValue += processValue;
 	});
-	
-	
-	console.log("lineValue "+lineValue);
-	
-	
-	
-		let totalQtyLineId = "#reject-" + lineValue + '-total';
 
-	//alert("totalQtyLineId "+totalQtyLineId);
-
-	let Qty1 = parseFloat(($("#reject-" + lineValue + "-h1").val() == '' ? "0" : $("#reject-" + lineValue + "-h1").val()));
-	let Qty2 = parseFloat(($("#reject-" + lineValue + "-h2").val() == '' ? "0" : $("#reject-" + lineValue + "-h2").val()));
-	let Qty3 = parseFloat(($("#reject-" + lineValue + "-h3").val() == '' ? "0" : $("#reject-" + lineValue + "-h3").val()));
-	let Qty4 = parseFloat(($("#reject-" + lineValue + "-h4").val() == '' ? "0" : $("#reject-" + lineValue + "-h4").val()));
-	let Qty5 = parseFloat(($("#reject-" + lineValue + "-h5").val() == '' ? "0" : $("#reject-" + lineValue + "-h5").val()));
-	let Qty6 = parseFloat(($("#reject-" + lineValue + "-h6").val() == '' ? "0" : $("#reject-" + lineValue + "-h6").val()));
-	let Qty7 = parseFloat(($("#reject-" + lineValue + "-h7").val() == '' ? "0" : $("#reject-" + lineValue + "-h7").val()));
-	let Qty8 = parseFloat(($("#reject-" + lineValue + "-h8").val() == '' ? "0" : $("#reject-" + lineValue + "-h8").val()));
-	let Qty9 = parseFloat(($("#reject-" + lineValue + "-h9").val() == '' ? "0" : $("#reject-" + lineValue + "-h9").val()));
-	let Qty10 = parseFloat(($("#reject-" + lineValue + "-h10").val() == '' ? "0" : $("#reject-" + lineValue + "-h10").val()));
-
-	let totalQty = (Qty1 + Qty2 + Qty3 + Qty4 + Qty5 + Qty6 + Qty7 + Qty8 + Qty9 + Qty10)+value;
-
-	$(totalQtyLineId).val(totalQty);
-	
-	$('#'+processQty).val(value)
-	
-	value=0;
-	$('.procsslistitemrow').each(function () {
-		let id = $(this).attr("data-id");
-	
-		$('.processId-'+id).val('');
-
-		
-	});
 }
-
 
 
 function setTotalQty(id) {
@@ -336,6 +316,30 @@ function setTotalQty(id) {
 }
 
 
+function processValueCalculate(inputField) {
+
+	let otherProcessValue = 0;
+	let inputValue = Number(inputField.value);
+
+	const inputFieldId = inputField.id;
+
+	$('.processListItemRow').each(function () {
+		let id = $(this).attr("data-id");
+		if (id != 'reject' && 'processValue-' + id != inputFieldId) {
+			otherProcessValue += Number($("#processValue-" + id).val());
+		}
+	});
+
+
+	let rejectQty = Number($("#rejectQty").text());
+
+	if ((otherProcessValue + inputValue) > rejectQty) {
+		inputValue = rejectQty - otherProcessValue;
+	}
+
+	inputField.value = inputValue;
+}
+
 
 function saveAction() {
 	let passType = $('#passType').val();
@@ -430,7 +434,7 @@ function saveAction() {
 					layoutName: layoutName,
 					userId: userId
 				},
-				url: './saveLineInceptionLayoutDetails/',
+				url: './saveFinishingProductionDetails/',
 				success: function (data) {
 	
 					alert("Finishing Production Save Successfully...");
@@ -446,12 +450,15 @@ function saveAction() {
 
 
 function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
-
-	const type = '5,6';
+	$('#buyerId').val(buyerId);
+	$('#buyerOrderId').val(buyerOrderId);
+	$('#styleId').val(styleId);
+	$('#itemId').val(itemId);
+	const type = '6,7';
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './searchProductionData',
+		url: './searchFinishingData',
 		data: {
 			buyerId: buyerId,
 			buyerorderId: buyerOrderId,
@@ -468,7 +475,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawSearchItemTable(data.result, data.employeeList);
-				$("#btnSubmit").prop('disabled', true);
+				
 				$("#finishingListModal").modal('hide');
 			}
 		}
@@ -527,27 +534,45 @@ function drawSearchItemTable(dataList, employeeResult) {
 		}
 		
 	
-		
-		if(item.layoutName=='5'){
+		if(item.layoutName=='3'){
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 			"<th >" + item.lineName + "</br><input  type='hidden' class='form-control-sm line-" + item.lineId + "'  value='" + parseFloat(item.lineId).toFixed() + "' /></th>" +
 			"<th><select id='employee-" + item.lineId + "'  class='selectpicker employee-width tableSelect employee-" + item.lineId + " col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'>" + employeeList + "</select></th>" +
-			"<td>Pass</td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h1'  value='" + Number(item.hour1).toFixed(0) + "' /></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h2'  value='" + Number(item.hour2).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h3'  value='" + Number(item.hour3).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h4'  value='" + Number(item.hour4).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h5'  value='" + Number(item.hour5).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h6'  value='" + Number(item.hour6).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h7'  value='" + Number(item.hour7).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h8'  value='" + Number(item.hour8).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
-			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='line-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
+			"<td>S.Q.P.</td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h1'  value='" + Number(item.hour1).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h2'  value='" + Number(item.hour2).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h3'  value='" + Number(item.hour3).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h4'  value='" + Number(item.hour4).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h5'  value='" + Number(item.hour5).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h6'  value='" + Number(item.hour6).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h7'  value='" + Number(item.hour7).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h8'  value='" + Number(item.hour8).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "' readonly /></td>" +
+			"<td><input  type='number'  class='form-control-sm' id='sqp-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "' readonly /></td>" +
 			"<td><input  type='number' id='line-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
 			"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + ","+item.lineId+","+item.layoutName+")'><i class='fa fa-edit'></i></button></td></tr>"
 
 		}
-		else if(item.layoutName=='6'){
+		if(item.layoutName=='6'){
+			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
+			"<th></th>" +
+			"<th></th>" +
+			"<td>Pass</td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h1'  value='" + Number(item.hour1).toFixed(0) + "' /></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h2'  value='" + Number(item.hour2).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h3'  value='" + Number(item.hour3).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h4'  value='" + Number(item.hour4).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h5'  value='" + Number(item.hour5).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h6'  value='" + Number(item.hour6).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h7'  value='" + Number(item.hour7).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h8'  value='" + Number(item.hour8).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h9'  value='" + Number(item.hour9).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' onkeyup='setTotalQty(" + item.lineId + ")' class='form-control-sm' id='pass-" + item.lineId + "-h10'  value='" + Number(item.hour10).toFixed(0) + "'/></td>" +
+			"<td><input  type='number' id='line-" + item.lineId + "-total' readonly class='form-control-sm' value='" + (Number(item.hour1) + Number(item.hour2) + Number(item.hour3) + Number(item.hour4) + Number(item.hour5) + Number(item.hour6) + Number(item.hour7) + Number(item.hour8) + Number(item.hour9) + Number(item.hour10)).toFixed(0) + "'/></td>" +
+			"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm' onclick='editLineData(" + item.autoId + ","+item.lineId+","+item.layoutName+")'><i class='fa fa-edit'></i></button></td></tr>"
+
+		}
+		else if(item.layoutName=='7'){
 			tables += "<tr class='itemRow' id='row-" + item.lineId + "' data-id='" + item.lineId + "' data-auto-id='" + item.autoId + "'>" +
 			"<th></th>" +
 			"<th></th>" +
@@ -588,7 +613,7 @@ function editLineData(autoId,lineId,type) {
 	
 	let proQty1=0,proQty2=0,proQty3=0,proQty4=0,proQty5=0,proQty6=0,proQty7=0,proQty8=0,proQty9=0,proQty10=0,totalQty=0;
 	
-	if(type=='5'){
+	if(type=='6'){
 		proQty1 = parseFloat(($("#pass-" + id + "-h1").val() == '' ? "0" : $("#pass-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#pass-" + id + "-h2").val() == '' ? "0" : $("#pass-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#pass-" + id + "-h3").val() == '' ? "0" : $("#pass-" + id + "-h3").val()));
@@ -602,7 +627,7 @@ function editLineData(autoId,lineId,type) {
 
 		totalQty = proQty1 + proQty2 + proQty3 + proQty4 + proQty5 + proQty6 + proQty7 + proQty8 + proQty9 + proQty10;
 	}
-	else if(type=='6'){
+	else if(type=='7'){
 		proQty1 = parseFloat(($("#reject-" + id + "-h1").val() == '' ? "0" : $("#reject-" + id + "-h1").val()));
 		proQty2 = parseFloat(($("#reject-" + id + "-h2").val() == '' ? "0" : $("#reject-" + id + "-h2").val()));
 		proQty3 = parseFloat(($("#reject-" + id + "-h3").val() == '' ? "0" : $("#reject-" + id + "-h3").val()));

@@ -214,7 +214,6 @@ function closeProcessAddEvent() {
 			processRejectValueList[lineId]['h' + hourId]['process-' + processId].isReIssuePass = $("#processReIssueCheck-" + processId).prop('checked') || 'true';
 		}
 
-
 		if (processId != 'reject')
 			reIssueValue += processValue;
 	});
@@ -470,7 +469,7 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 	$('#buyerOrderId').val(buyerOrderId);
 	$('#styleId').val(styleId);
 	$('#itemId').val(itemId);
-	const type = '2,3';
+	const type = '2,3,4';
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -490,12 +489,44 @@ function searchLayoutDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate)
 			} else if (data.result == "duplicate") {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
+				
 				drawSearchItemTable(data.result, data.employeeList);
 				//$("#btnSubmit").prop('disabled', true);
+				processValuesSet(data.processValues);
 				$("#finishingListModal").modal('hide');
 			}
 		}
 	});
+}
+
+function processValuesSet(data){
+	processRejectValueList = {};
+	
+	data.forEach((process)=>{
+		
+			let processId = process.processId;
+			let lineId = process.lineId;
+			let hourId = process.hourId;
+			let processValue = process.qty;
+			let remarks = process.remarks;
+			let isPass = process.isPass;
+
+			if (!processRejectValueList[lineId]) processRejectValueList[lineId] = {};
+			if (!processRejectValueList[lineId][hourId]) processRejectValueList[lineId][hourId] = {};
+	
+			if (processRejectValueList[lineId][hourId]['process-' + processId]) {
+				processRejectValueList[lineId][hourId]['process-' + processId].qty = processValue;
+				processRejectValueList[lineId][hourId]['process-' + processId].remarks = remarks;
+				processRejectValueList[lineId][hourId]['process-' + processId].isReIssuePass = isPass;
+			} else {
+				processRejectValueList[lineId][hourId]['process-' + processId] = {};
+				processRejectValueList[lineId][hourId]['process-' + processId].processId = processId;
+				processRejectValueList[lineId][hourId]['process-' + processId].qty = processValue;
+				processRejectValueList[lineId][hourId]['process-' + processId].remarks = remarks;
+				processRejectValueList[lineId][hourId]['process-' + processId].isReIssuePass = isPass;
+			}
+	});
+	
 }
 
 function drawSearchItemTable(dataList, employeeResult) {
