@@ -23,7 +23,8 @@ public class SpringRootConfig {
     //TODO Serice,Dao,datasource ,Email Sendar or some other busniess layer beans.
 	
 	
-		String database_url   = "jdbc:sqlserver://DESKTOP-RE1OI7L:1433;databaseName=SSFashionSpringProject";
+		//String database_url   = "jdbc:sqlserver://DESKTOP-RE1OI7L:1433;databaseName=SSFashionSpringProject";
+		String database_url   = "jdbc:sqlserver://localhost;databaseName=SSFashionSpringProject";
 	
 	    String username       = "sa";
 	

@@ -7,12 +7,7 @@
 <%@page import="pg.model.login"%>
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
-
-<body onload="allEmployee()">
-
-	<%
-		List<login> lg = (List<login>) session.getAttribute("pg_admin");
-	%>
+<% List<login> lg = (List<login>) session.getAttribute("pg_admin"); %>
 	<div class="page-wrapper">
 		<div class="content container-fluid">
 			<div class="alert alert-success alert-dismissible fade show"

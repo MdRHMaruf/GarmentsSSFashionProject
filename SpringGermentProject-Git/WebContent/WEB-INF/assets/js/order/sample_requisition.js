@@ -41,6 +41,8 @@ function loadData() {
 		}
 	});
 
+	document.title = "Sample Requisition";
+
 }
 
 window.onload = loadData;
@@ -86,7 +88,7 @@ function searchSampleReuisition(v) {
 	});
 }
 
-function confrimAction() {
+function confirmAction() {
 
 	var buyerId = $("#buyerId").val();
 	var styleId = $("#styleNo").val();
@@ -115,12 +117,10 @@ function confrimAction() {
 								var id = $("#sizeId" + i).val().trim();
 								sizeList += "id=" + id + ",quantity=" + quantity + " ";
 							}
-
-
 							$.ajax({
 								type: 'POST',
 								dataType: 'json',
-								url: './confrimItemToSampleRequisition',
+								url: './confirmItemToSampleRequisition',
 								data: {
 									buyerId: buyerId,
 									styleId: styleId,
@@ -370,11 +370,8 @@ function buyerWisePoLoad() {
 			type: 'POST',
 			dataType: 'json',
 			url: './buyerWisePoLoad/' + buyerId,
-			success: function (data) {
-				console.log("dt " + data.result)
+			success: function (data) {			
 				loadPoNo(data.result);
-
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -419,24 +416,15 @@ function poWiseStyles() {
 
 	var po = $("#purchaseOrder").val();
 
-	console.log("po " + po)
 	if (po != 0) {
 
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
 			url: './poWiseStyles/' + po,
-			data: {
-
-
-
-
-			},
+			data: {},
 			success: function (data) {
-				console.log("dt " + data.result)
 				loadStyles(data.result);
-
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -471,7 +459,6 @@ function loadStyles(data) {
 	};
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
-	console.log("style " + styleValue);
 	$('#styleNo').val(styleValue).change();
 	styleValue = 0;
 

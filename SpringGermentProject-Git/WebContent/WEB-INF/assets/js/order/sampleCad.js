@@ -176,10 +176,10 @@ function insertSample(){
 	var size=$('#size').val();
 	var sampletype=$('#sampletype').val();
 
-	var patternmakingdate=dateFormatting($('#patternmakingdate').val());
-	var makeingDespatch=$('#makeingDespatch').val();
-	var patternmakingreceivedby=$('#patternmakingreceivedby').val();
-	console.log(" pattern making recevied by "+patternmakingreceivedby)
+	var patternMakingDate=dateFormatting($('#patternmakingdate').val());
+	var makingDespatch=$('#makeingDespatch').val();
+	var patternMakingReceivedBy=$('#patternmakingreceivedby').val();
+	console.log(" pattern making recevied by "+patternMakingReceivedBy)
 
 	var feedback=$('#feedback').val();
 
@@ -195,39 +195,40 @@ function insertSample(){
 	var markingdispatch=$('#markingDespatch').val();
 	var markingReceviedBy=$('#markingReceviedBy').val();
 
+	
 	if (withPO==true) {
 
 
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
-			url: './insertSamplCad',
+			url: './insertSampleCad',
 			data: {
-				user:user,
-				purchaseOrder:purchaseOrder,
-				styleId:styleNo,
-				itemId:itemName,	
-				colorId:itemColor,		 
-				sizeid:size,
-				sampleTypeId:sampletype,
-				sampleComment:sampleCommentsNo,
+				user : user,
+				purchaseOrder : purchaseOrder,
+				styleId : styleNo,
+				itemId : itemName,	
+				colorId : itemColor,		 
+				sizeId : size,
+				sampleTypeId : sampletype,
+				sampleComment : sampleCommentsNo,
 
-				patternMakingDate:patternmakingdate,
-				patternMakingDespatch:makeingDespatch,
-				patternMadingReceived:patternmakingreceivedby,
+				patternMakingDate : patternMakingDate,
+				patternMakingDespatch : makingDespatch,
+				patternMadingReceived : patternMakingReceivedBy,
 
-				patternCorrectionDate:patterncorrectiondate,
-				patternCorrectionDespatch:patterncorrectiondispatch,
-				PatternCorrectionReceived:correctionReceviedBy,
+				patternCorrectionDate : patterncorrectiondate,
+				patternCorrectionDespatch : patterncorrectiondispatch,
+				PatternCorrectionReceived : correctionReceviedBy,
 
-				patternGradingDate:gradingDate,
-				patternGradingDespatch:gradingDespatch,
-				patternGradingReceived:gradingdispatchreceivedby,
+				patternGradingDate : gradingDate,
+				patternGradingDespatch : gradingDespatch,
+				patternGradingReceived : gradingdispatchreceivedby,
 
 
-				patternMarkingDate:markingDate,
-				patternMarkingDespatch:markingdispatch,
-				patternMarkingReceived:markingReceviedBy,
+				patternMarkingDate : markingDate,
+				patternMarkingDespatch : markingdispatch,
+				patternMarkingReceived : markingReceviedBy,
 
 				feedbackComments:feedback,
 				POStatus:'1',
@@ -258,8 +259,6 @@ function getSampleDetails(id) {
 	
 	sampleCommentId=id;
 	  
-
-	  
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -274,6 +273,8 @@ function getSampleDetails(id) {
     });
  
 }
+
+
 
 function setData(data){
 	

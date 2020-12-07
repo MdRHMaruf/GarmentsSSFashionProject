@@ -1,11 +1,11 @@
-
-
-
+window.onload = ()=>{
+	document.title = "Brand Create";
+} 
 
 function saveAction() {
-  var brandName = $("#brandName").val().trim();
-  var brandCode = $("#brandCode").val().trim();
-  var userId = $("#userId").val();
+  let brandName = $("#brandName").val().trim();
+  let brandCode = $("#brandCode").val().trim();
+  let userId = $("#userId").val();
 
   if (brandName != '') {
     $.ajax({
@@ -39,10 +39,10 @@ function saveAction() {
 
 
 function editAction() {
-  var brandId = $("#brandId").val();
-  var brandName = $("#brandName").val().trim();
-  var brandCode = $("#brandCode").val().trim();
-  var userId = $("#userId").val();
+  let brandId = $("#brandId").val();
+  let brandName = $("#brandName").val().trim();
+  let brandCode = $("#brandCode").val().trim();
+  let userId = $("#userId").val();
 
   if (brandName != '') {
     $.ajax({
@@ -77,19 +77,10 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
-  element.hide();
-  document.getElementById("brandId").value = "0";
-  document.getElementById("brandName").value = "";
-  document.getElementById("brandCode").value = "";
-  document.getElementById("btnSave").disabled = false;
-  document.getElementById("btnEdit").disabled = true;*/
 }
 
 
 function setData(brandId) {
-
-
   document.getElementById("brandId").value = brandId;
   document.getElementById("brandName").value = document.getElementById("brandName" + brandId).innerHTML;
   document.getElementById("brandCode").value = document.getElementById("brandCode" + brandId).innerHTML;
@@ -99,10 +90,10 @@ function setData(brandId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -111,7 +102,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.brandId + "</td>"));
   row.append($("<td id='brandName" + rowData.brandId + "'>" + rowData.brandName + "</td>"));
   row.append($("<td id='brandCode" + rowData.brandId + "'>" + rowData.brandCode + "</td>"));
@@ -121,7 +112,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -132,7 +123,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -143,7 +134,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -159,7 +150,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

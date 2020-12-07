@@ -11,7 +11,7 @@ $("#btnProcessOk").click(() => {
 
 function printProductionDetails(buyerId, buyerOrderId, styleId, itemId, layoutDate) {
 	
-	const type ='5,6,7';
+	const type ='3,6,7';
 	const layoutCategory="Production & Reject";
 	const layoutName = "Finishing Production & Reject Report ";
 	let url = `printProductionDetails/${buyerId}@${buyerOrderId}@${styleId}@${itemId}@${layoutDate}@${type}@${layoutName}@${layoutCategory}`;

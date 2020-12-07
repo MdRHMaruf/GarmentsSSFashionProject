@@ -1,9 +1,15 @@
-var machineId;
-var lineId=0;
-var departmentId=0;
+let machineId;
+let lineId=0;
+let departmentId=0;
+
+
+window.onload = ()=>{
+	document.title = "Machine Create";
+	allMachine();
+} 
 
 function factoryWiseLine(){
-	  var factoryId = $("#factoryId").val();
+	  let factoryId = $("#factoryId").val();
 	  if(factoryId!=0){
 		    $.ajax({
 		        type: 'GET',
@@ -18,10 +24,10 @@ function factoryWiseLine(){
 
 function loadDepartment(data){
 
-	var itemList = data;
-	var options = "<option id='departmentId' value='0' selected>Select Department</option>";
-	var length = itemList.length;
-	for(var i=0;i<length;i++) {
+	let itemList = data;
+	let options = "<option id='departmentId' value='0' selected>Select Department</option>";
+	let length = itemList.length;
+	for(let i=0;i<length;i++) {
 		options += "<option id='departmentId' value='"+itemList[i].departmentId+"'>"+itemList[i].departmentName+"</option>";
 	};
 	document.getElementById("departmentId").innerHTML = options;
@@ -33,7 +39,7 @@ function loadDepartment(data){
 
 function departmentWiseLine(){
 	
-	  var departmentId = $("#departmentId").val();
+	  let departmentId = $("#departmentId").val();
 	  
 	  if(departmentId!=0){
 		    $.ajax({
@@ -49,10 +55,10 @@ function departmentWiseLine(){
 
 function loadLine(data){
 
-	var itemList = data;
-	var options = "<option id='lineId' value='0' selected>Select Line</option>";
-	var length = itemList.length;
-	for(var i=0;i<length;i++) {
+	let itemList = data;
+	let options = "<option id='lineId' value='0' selected>Select Line</option>";
+	let length = itemList.length;
+	for(let i=0;i<length;i++) {
 		options += "<option id='lineId' value='"+itemList[i].lineId+"'>"+itemList[i].lineName+"</option>";
 	};
 	document.getElementById("lineId").innerHTML = options;
@@ -64,15 +70,15 @@ function loadLine(data){
 
 function saveAction() {
  
-	var factoryId = $("#factoryId").val();
-	var departmentId = $("#departmentId").val();
-	var lineId = $("#lineId").val();
-	var name = $("#name").val();
-	var brand = $("#brand").val();
-	var modelNo = $("#modelNo").val();
-	var motor = $("#motor").val();
-	var empId = $("#employee").val();
-	var userId = $("#userId").val();
+	let factoryId = $("#factoryId").val();
+	let departmentId = $("#departmentId").val();
+	let lineId = $("#lineId").val();
+	let name = $("#name").val();
+	let brand = $("#brand").val();
+	let modelNo = $("#modelNo").val();
+	let motor = $("#motor").val();
+	let empId = $("#employee").val();
+	let userId = $("#userId").val();
 
 if(name != ''){
     $.ajax({
@@ -112,12 +118,12 @@ if(name != ''){
 
 function editAction() {
  
-	var name = $("#name").val();
-	var brand = $("#brand").val();
-	var modelNo = $("#modelNo").val();
-	var motor = $("#motor").val();
-	var empId = $("#employee").val();
-	var userId = $("#userId").val();
+	let name = $("#name").val();
+	let brand = $("#brand").val();
+	let modelNo = $("#modelNo").val();
+	let motor = $("#motor").val();
+	let empId = $("#employee").val();
+	let userId = $("#userId").val();
 
 if(name != ''){
     $.ajax({
@@ -168,9 +174,9 @@ function allMachine(){
 }
 
 function patchdata(data){
-	var rows = [];
+	let rows = [];
 	
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		rows.push(drawRow(data[i],i+1));
 
 	}
@@ -179,8 +185,8 @@ function patchdata(data){
 }
 
 function drawRow(rowData,c) {
-	console.log("name : "+rowData.Name)
-	var row = $("<tr />");
+	
+	let row = $("<tr />");
 	row.append($("<td>" + c + "</td>"));
 	row.append($("<td>" + rowData.Name+ "</td>"));
 	row.append($("<td>" + rowData.ModelNo+ "</td>"));
@@ -194,13 +200,13 @@ function drawRow(rowData,c) {
 function setData(MachineId,Name,Brand,ModelNo,Motor,EmployeeId,EmployeeName){
 	
 	machineId=decodeURIComponent(MachineId);
-	var Name=decodeURIComponent(Name);
-	console.log("name : "+Name);
-	var Brand=decodeURIComponent(Brand);
-	var ModelNo=decodeURIComponent(ModelNo);
-	var Motor=decodeURIComponent(Motor);
-	var EmployeeId=decodeURIComponent(EmployeeId);
-	var EmployeeName=decodeURIComponent(EmployeeName);
+	Name=decodeURIComponent(Name);
+	
+	let Brand=decodeURIComponent(Brand);
+	let ModelNo=decodeURIComponent(ModelNo);
+	let Motor=decodeURIComponent(Motor);
+	let EmployeeId=decodeURIComponent(EmployeeId);
+	let EmployeeName=decodeURIComponent(EmployeeName);
 	
 	$("#name").val(Name);
 	$("#brand").val(Brand);
@@ -223,7 +229,7 @@ function refreshAction() {
 
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -234,7 +240,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -245,7 +251,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -261,7 +267,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#machineList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

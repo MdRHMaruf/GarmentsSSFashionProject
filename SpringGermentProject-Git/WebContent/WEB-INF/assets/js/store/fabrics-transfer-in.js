@@ -1,3 +1,6 @@
+window.onload = ()=>{
+  document.title = "Fabrics Transfer In";
+} 
 const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '2', rackName: 'AB' },
 { rackId: '3', rackName: 'BA' },

@@ -1520,11 +1520,11 @@ public class OrderController {
 	}
 
 
-	@RequestMapping(value = "/confrimItemToSampleRequisition",method=RequestMethod.POST)
-	public @ResponseBody String confrimItemToSampleRequisition(SampleRequisitionItem v) {
+	@RequestMapping(value = "/confirmItemToSampleRequisition",method=RequestMethod.POST)
+	public @ResponseBody String confirmItemToSampleRequisition(SampleRequisitionItem v) {
 		String msg="Create Occue while confrim sample requisition";
 
-		if(orderService.confrimItemToSampleRequisition(v)) {
+		if(orderService.confirmItemToSampleRequisition(v)) {
 			msg="Sample Requisition Confrim Successfully";
 		}
 
@@ -1648,8 +1648,8 @@ public class OrderController {
 	public ModelAndView sample_production(ModelMap map,HttpSession session) {
 
 		ModelAndView view = new ModelAndView("order/sample_production");
-		//List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
-		//view.addObject("sampleCommentsList",sampleCommentsList);
+		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
+		view.addObject("sampleCommentsList",sampleCommentsList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1916,8 +1916,8 @@ public class OrderController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/insertSamplCad",method=RequestMethod.GET)
-	public String insertSamplCad(SampleCadAndProduction sample) {
+	@RequestMapping(value = "/insertSampleCad",method=RequestMethod.GET)
+	public String insertSampleCad(SampleCadAndProduction sample) {
 		boolean insert=orderService.sampleCadInsert(sample);
 
 		if (insert) {

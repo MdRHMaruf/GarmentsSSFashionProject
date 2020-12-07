@@ -1,3 +1,6 @@
+window.onload = ()=>{
+  document.title = "Accessories Issue";
+} 
 const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '2', rackName: 'AB' },
 { rackId: '3', rackName: 'BA' },
@@ -362,178 +365,6 @@ $("#requisitionSizeAddBtn").click(function(){
   }
 });
 
-// $("#requisitionSizeAddBtn").click(function(){
-//   const rackOptions = fakeRackList.map(rack => `<option value=${rack.rackId}>${rack.rackName}</option>`);
-//   let rows = "",tempPurchaseOrder = "", tempStyleId, tempItemId, tempItemColorId, tempAccessoriesId, tempAccessoriesColorId;
-//   let parentRowId = 0,tempTotalBalance=0;
-//   let balanceQtyList = [];
-//   let rackIdList = [];
-//   let binIdList = [];
-//   $("#requisitionAccessoriesSearchList tr").filter(function () {
-//     const id = this.id.slice(15);
-    
-//     if($("#requisitionCheck-"+id).prop('checked')){
-//       const accessoriesName = $("#requisitionAccessoriesName-"+id).text();
-//       const accessoriesColorName = $("#requisitionAccessoriesColor-"+id).text();
-//       const sizeId = this.getAttribute("data-size-id");
-//       const sizeName = $("#requisitionSizeName-"+id).text();
-//       const balanceQty = Number($("#requisitionBalanceQty-"+id).text());
-    
-
-//       const purchaseOrder = this.getAttribute("data-purchase-order");
-//       const styleId = this.getAttribute("data-style-id");
-//       const styleNo = $("#requisitionStyleNo-"+id).text();
-//       const itemId = this.getAttribute("data-item-id");
-//       const itemName = $("#requisitionItemName-"+id).text();
-//       const itemColorId = this.getAttribute("data-item-color-id");
-//       const itemColor = $("#requisitionItemColor-"+id).text();
-//       const accessoriesId = this.getAttribute("data-accessories-id");
-//       const accessoriesColorId = this.getAttribute("data-accessories-color-id");
-//       const unitId = this.getAttribute("data-unit-id");
-//       const unit = this.getAttribute("data-unit");
-//       const rackName = this.getAttribute("data-rack-name");
-//       const binName = this.getAttribute("data-bin-name");
-//       const receiveQty = this.getAttribute("data-receive-qty");
-//       const issueQty = this.getAttribute("data-issue-qty");
-//       const returnQty = this.getAttribute("data-return-qty");
-
-//       if (!(accessoriesColorId == tempAccessoriesColorId && accessoriesId == tempAccessoriesId && itemColorId == tempItemColorId && itemId == tempItemId && styleId == tempStyleId && purchaseOrder == tempPurchaseOrder)) {
-//         if (!(tempPurchaseOrder === "")) {
-//           rows += `<tr>
-//                     <td colspan='2'>Total</td>
-//                     <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-//                     <td id='bottomTotalIssue-${parentRowId}'>${tempTotalBalance}</td>         
-//                 </tr>
-//               </tbody>
-//             </table>
-//           </td> 
-//           </tr>`;
-//           balanceQtyList.push(tempTotalBalance);
-//           parentRowId++;
-//           tempTotalBalance = 0;
-//         }
-//         tempAccessoriesColorId = accessoriesColorId;
-//         tempAccessoriesId = accessoriesId;
-//         tempItemColorId = itemColorId;
-//         tempItemId = itemId;
-//         tempStyleId = styleId;
-//         tempPurchaseOrder = purchaseOrder;
-//         rows += `<tr class='odd parentRowGroup-${parentRowId}'>
-//                   <td id='accessoriesName-${parentRowId}'>${accessoriesName}</td>
-//                   <td id='accessoriesColor-${parentRowId}'>${accessoriesColorName}</td>
-//                   <td>${unit}</td>
-//                   <td>${receiveQty}</td>
-//                   <td>${issueQty}</td>
-//                   <td id='returnQty-${parentRowId}'>${returnQty}</td>
-//                   <td id='balanceQty-${parentRowId}'>0</td>
-//                   <td id='issueQty-${parentRowId}'>0</td>
-//                   <td><div class="table-expandable-arrow"></div></td>
-//               </tr>
-//               <tr class='even parentRowGroup-${parentRowId}' style='display:none'>
-//                 <td colspan="9">
-//                   <div class="row px-5">
-                    
-//                     <div class="col-md-2 px-1">
-//                         <label>Purchase Order:</label>
-//                     </div>
-//                     <div class="col-md-4 px-1">
-//                       <b><label>${purchaseOrder}</label></b>
-//                     </div>
-
-//                     <div class="col-md-1 px-1">
-//                         <label>Item Name:</label>
-//                     </div>
-//                     <div class="col-md-5 px-1">
-//                       <b><label>${itemName}</label></b>
-//                     </div>
-
-//                     <div class="col-md-2 px-1">
-//                         <label>Style No:</label>
-//                     </div>
-//                     <div class="col-md-4 px-1">
-//                       <b><label>${styleNo}</label></b>
-//                     </div>
-
-//                     <div class="col-md-1 px-1">
-//                         <label>Item Color:</label>
-//                     </div>
-//                     <div class="col-md-5 px-1">
-//                       <b><label>${itemColor}</label></b>
-//                     </div>
-//                   </div>
-//                   <table class='table table-hover table-bordered table-sm mb-0 small-font pl-5'>
-//                     <thead>
-//                       <tr>
-//                         <th>Size Name</th>
-//                         <th>Unit</th>
-//                         <th>Balance Qty</th>
-//                         <th>Issue Qty</th>
-//                         <th>Rack Name</th>
-//                         <th>Bin Name</th>
-//                       </tr>
-//                     </thead>
-//                     <tbody>`;
-//       }
-
-//       const rackSelect = `<select id='rackId-${id}' class='selectRackGroup-${parentRowId} form-control-sm'>
-//                                      ${rackOptions}
-//                                    </select>`;
-//       const binSelect = `<select id='binId-${id}' class='selectBinGroup-${parentRowId} form-control-sm'>
-//                                         ${rackOptions}
-//                                   </select>`;
-
-//       rows += "<tr id='rowId-" + id + "'  class='newSizeRow sizeRowList rowGroup-" + parentRowId + "' data-parent-row='" + parentRowId + "' data-purchase-order='" + purchaseOrder + "' data-style-id='" + styleId + "' data-item-id='" + itemId + "' data-item-color-id='" + itemColorId + "' data-accessories-id='" + accessoriesId + "' data-accessories-color-id='" + accessoriesColorId + "' data-size-id='" + sizeId + "' data-unit-id='" + unitId + "' data-unit='"+unit+"' data-rack-name='"+rackName+"' data-bin-name='"+binName+"'>"
-//                 +"<td id='listSizeName-"+id+"'>" + sizeName + "</td>"
-//                 +"<td id='sizeUnit-"+id+"'>" + unit + "</td>"
-//                 +"<td id='sizeBalanceQty-"+id+"'>" + balanceQty + "</td>"
-//                 +"<td><input type='number' class='sizeIssueGroup-" + parentRowId + " form-control-sm max-width-100' id='sizeIssueQty-"+id+"' onblur='totalIssueQtyCount(" + parentRowId + ")' value='"+balanceQty+"'></td>"
-//                 +"<td>" + rackSelect+"</td>"
-//                 +"<td>" + binSelect+"</td>"
-//                 + "<td><i class='fa fa-trash' onclick='deleteItemFromList(" + id + ")' style='cursor:pointer;'> </i></td>"
-//               +"</tr>";
-//       tempTotalBalance += balanceQty;
-//       rackIdList.push({
-//         "id": id,
-//          "rackId" : rackName
-//       });
-//       binIdList.push({
-//         "id": id,
-//          "binId" : binName
-//       });
-//     }
-//   });
-
-//   if(rows){
-//     rows += `<tr>
-//                 <td colspan='2'>Total</td>
-//                 <td id='bottomTotalBalance-${parentRowId}'>${tempTotalBalance}</td>
-//                 <td id='bottomTotalIssue-${parentRowId}'>${tempTotalBalance}</td>
-
-//             </tr>
-//           </tbody>
-//         </table>
-//         </td>
-//     </tr>`;
-//     balanceQtyList.push(tempTotalBalance);
-//   }
-  
-  
-//   $("#sizeList").html(rows);
-
-//   balanceQtyList.forEach((qty, index) => {
-//     $("#balanceQty-" + index).text(qty);
-//     $("#issueQty-" + index).text(qty);
-//   });
-  
-//   rackIdList.forEach((rack,index)=>{
-//     $("#rackId-"+rack.id).val(rack.rackId);
-//   })
-//   binIdList.forEach((bin,index)=>{
-//     $("#binId-"+bin.id).val(bin.binId);
-//   })
-//   $('#requisitionSearchModal').modal('hide');
-
-// });
 
 function setAccessoriesIssueInfo(transactionId) {
   $.ajax({
@@ -745,10 +576,10 @@ function refreshAction() {
 
 function drawAccessoriesSizeListSearchTable(data) {
   const length = data.length;
-  var tr_list="";
+  let tr_list="";
   $("#accessoriesSizeSearchList").empty();
   
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
     tr_list=tr_list+"<tr id='row-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='" + rowData.sizeId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"' data-receive-qty='"+rowData.previousReceiveQty+"' data-issue-qty='"+rowData.issueQty+"' data-return-qty='"+rowData.returnQty+"'>"
@@ -768,10 +599,10 @@ function drawAccessoriesSizeListSearchTable(data) {
 
 function drawRequisitionAccessoriesListSearchTable(data) {
   const length = data.length;
-  var tr_list="";
+  let tr_list="";
   $("#requisitionAccessoriesSearchList").empty();
   
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.accessoriesId;
     tr_list=tr_list+"<tr id='requisitionRow-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='" + rowData.sizeId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"' data-rack-name='"+rowData.rackName+"' data-bin-name='"+rowData.binName+"' data-receive-qty='"+rowData.previousReceiveQty+"' data-issue-qty='"+rowData.issueQty+"' data-return-qty='"+rowData.returnQty+"'>"
@@ -798,7 +629,7 @@ function drawAccessoriesSizeListTable(data,rowType = ''){
     let balanceQtyList = [];
     $("#sizeList").empty();
     
-    for (var i = 0; i < length; i++) {   
+    for (let i = 0; i < length; i++) {   
       const rowData = data[i];
       const id = rowData.autoId;
 
@@ -931,9 +762,9 @@ function drawAccessoriesSizeListTable(data,rowType = ''){
 
 function drawAccessoriesIssueListTable(data){
   const length = data.length;
-  var tr_list="";
+  let tr_list="";
   $("#accessoriesIssueList").empty();
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list=tr_list+"<tr id='row-" + rowData.transactionId + "'>"
               +"<td>" + rowData.transactionId + "</td>"
@@ -947,7 +778,7 @@ function drawAccessoriesIssueListTable(data){
 
 $(document).ready(function () {
   $('.table-expandable tbody').on("click", ".odd", function () {
-    var element = $(this);
+    let element = $(this);
     element.next('tr').toggle(0);
     element.find(".table-expandable-arrow").toggleClass("up");
   })
@@ -964,7 +795,7 @@ function qcPassedChangeBackground(element){
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -975,7 +806,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -986,7 +817,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -1055,7 +886,7 @@ $(document).ready(function () {
 });
 
 
-var today = new Date();
+let today = new Date();
 document.getElementById("issueDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 

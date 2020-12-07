@@ -1,3 +1,8 @@
+window.onload = ()=>{
+	document.title = "Supplier Create";
+	maxsupplierId();
+} 
+
 $("#save").attr('disabled', false);
 $("#edit").attr('disabled', true);
 $("#suppier_id").attr('disabled', true);
@@ -45,7 +50,7 @@ function maxsupplierId(){
 
 function CountriesSearch(v){
 
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -72,40 +77,40 @@ function CountriesSearch(v){
 
 
 function insertSupplier(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var suppier_id=$("#suppier_id").val();
-	var supplier_name=$("#suppier_name").val();
-	var supplier_code=$("#suppier_code").val();
-	var contact_person=$("#contact_person").val();
+	let suppier_id=$("#suppier_id").val();
+	let supplier_name=$("#suppier_name").val();
+	let supplier_code=$("#suppier_code").val();
+	let contact_person=$("#contact_person").val();
 	
-	var supplier_address=$("#suppier_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
+	let supplier_address=$("#suppier_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();
 	
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
+	let country=$("#countries1").val();
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
 	
-	var telephone=$("#telphone").val();
+	let telephone=$("#telphone").val();
 		
 	
-	var mobile=$("#mobile").val();
+	let mobile=$("#mobile").val();
 	
-	var fax=$("#fax").val();
+	let fax=$("#fax").val();
 	
-	var email=$("#e_mail").val();
+	let email=$("#e_mail").val();
 	
-	var skypeid=$("#skype_id").val();
+	let skypeid=$("#skype_id").val();
 	
-	var bankname=$("#bank_name").val();
-	var aaccounts_no=$("#accounts_no").val();
+	let bankname=$("#bank_name").val();
+	let aaccounts_no=$("#accounts_no").val();
 	
-	var accounts_name=$("#accounts_name").val();
-	var bankaddress=$("#bank_address").val();
+	let accounts_name=$("#accounts_name").val();
+	let bankaddress=$("#bank_address").val();
 	
-	var swiftcode=$("#swift_code").val();
+	let swiftcode=$("#swift_code").val();
 	
-	var bankcountry=$("#bankCOuntry").val();
+	let bankcountry=$("#bankCOuntry").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 	
 	console.log("user "+user);
@@ -188,7 +193,7 @@ function insertSupplier(){
 
 function SupplierList(v){
 
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -214,7 +219,7 @@ function SupplierList(v){
 
 function SupplierDetails(value){
 
-	//var value=$("#suppierSearch").val();
+	//let value=$("#suppierSearch").val();
 	//console.log(value);
 
 	if (value=='') {
@@ -272,40 +277,40 @@ function setData(data){
 
 
 function editSupplier(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var suppier_id=$("#suppier_id").val();
-	var supplier_name=$("#suppier_name").val();
-	var supplier_code=$("#suppier_code").val();
-	var contact_person=$("#contact_person").val();
+	let suppier_id=$("#suppier_id").val();
+	let supplier_name=$("#suppier_name").val();
+	let supplier_code=$("#suppier_code").val();
+	let contact_person=$("#contact_person").val();
 	
-	var supplier_address=$("#suppier_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
+	let supplier_address=$("#suppier_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();
 	
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
+	let country=$("#countries1").val();
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
 	
-	var telephone=$("#telphone").val();
+	let telephone=$("#telphone").val();
 		
 	
-	var mobile=$("#mobile").val();
+	let mobile=$("#mobile").val();
 	
-	var fax=$("#fax").val();
+	let fax=$("#fax").val();
 	
-	var email=$("#e_mail").val();
+	let email=$("#e_mail").val();
 	
-	var skypeid=$("#skype_id").val();
+	let skypeid=$("#skype_id").val();
 	
-	var bankname=$("#bank_name").val();
-	var aaccounts_no=$("#accounts_no").val();
+	let bankname=$("#bank_name").val();
+	let aaccounts_no=$("#accounts_no").val();
 	
-	var accounts_name=$("#accounts_name").val();
-	var bankaddress=$("#bank_address").val();
+	let accounts_name=$("#accounts_name").val();
+	let bankaddress=$("#bank_address").val();
 	
-	var swiftcode=$("#swift_code").val();
+	let swiftcode=$("#swift_code").val();
 	
-	var bankcountry=$("#bankCOuntry").val();
+	let bankcountry=$("#bankCOuntry").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 	
 	console.log("user "+user);
@@ -412,10 +417,10 @@ function getAllsuppliers(){
 
 
 function patchdata(data){
-	var rows = [];
+	let rows = [];
 
 
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		//ert("ad "+data[i].aquisitionValue);
 		rows.push(drawRow(data[i],i+1));
 
@@ -428,7 +433,7 @@ function drawRow(rowData,c) {
 
 	//alert(rowData.aquisitionValue);
 
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
@@ -442,7 +447,7 @@ function drawRow(rowData,c) {
 
 $(document).ready(function () {
 	  $("#search").on("keyup", function () {
-	    var value = $(this).val().toLowerCase();
+	    let value = $(this).val().toLowerCase();
 	    $("#supplierTable tr").filter(function () {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });

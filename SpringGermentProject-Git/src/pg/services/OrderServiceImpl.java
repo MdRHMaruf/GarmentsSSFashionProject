@@ -437,9 +437,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean confrimItemToSampleRequisition(SampleRequisitionItem v) {
+	public boolean confirmItemToSampleRequisition(SampleRequisitionItem v) {
 		// TODO Auto-generated method stub
-		return orderDAO.confrimItemToSampleRequisition(v);
+		return orderDAO.confirmItemToSampleRequisition(v);
 	}
 
 	@Override

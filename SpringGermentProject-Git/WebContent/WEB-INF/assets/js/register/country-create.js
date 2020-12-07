@@ -1,10 +1,13 @@
 
 
+window.onload = ()=>{
+	document.title = "Country Create";
+} 
 
 
 function saveAction() {
-  var countryName = $("#countryName").val().trim();
-  var userId = $("#userId").val();
+  let countryName = $("#countryName").val().trim();
+  let userId = $("#userId").val();
 
   if (countryName != '') {
     $.ajax({
@@ -37,9 +40,9 @@ function saveAction() {
 
 
 function editAction() {
-  var countryId = $("#countryId").val();
-  var countryName = $("#countryName").val().trim();
-  var userId = $("#userId").val();
+  let countryId = $("#countryId").val();
+  let countryName = $("#countryName").val().trim();
+  let userId = $("#userId").val();
 
   if (countryName != '') {
     $.ajax({
@@ -73,7 +76,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("countryId").value = "0";
   document.getElementById("countryName").value = "";
@@ -93,10 +96,10 @@ function setData(countryId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -105,7 +108,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.countryId + "</td>"));
   row.append($("<td id='countryName" + rowData.countryId + "'>" + rowData.countryName + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.countryId + ")\"> </i></td>"));
@@ -114,7 +117,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -125,7 +128,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -136,7 +139,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -152,7 +155,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

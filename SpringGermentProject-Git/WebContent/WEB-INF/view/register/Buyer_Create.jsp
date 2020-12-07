@@ -8,12 +8,10 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
-
 <%
 	List<login> lg = (List<login>) session.getAttribute("pg_admin");
 %>
 
-<body onload="maxbuyerId()"></body>
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="row">

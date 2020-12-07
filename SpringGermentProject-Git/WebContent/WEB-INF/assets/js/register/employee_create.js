@@ -1,4 +1,9 @@
 
+window.onload = ()=>{
+  document.title = "Employee Create";
+  allEmployee();
+  
+} 
 function saveAction() {
 	
   var employeeCode = $("#employeeCode").val();

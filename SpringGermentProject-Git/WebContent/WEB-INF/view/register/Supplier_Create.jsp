@@ -8,12 +8,8 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
-<%List<login> lg = (List<login>) session.getAttribute("pg_admin"); 
+<%List<login> lg = (List<login>) session.getAttribute("pg_admin"); %>
 
-%>
-
-
-<body onload="maxsupplierId()"></body>
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="row">
@@ -253,12 +249,6 @@
 	</div>
 </div>
 
-
-<script>
-				$('.bsdatepicker').datepicker({
-
-				});
-			</script>
 <jsp:include page="../include/footer.jsp" />
 
 <script

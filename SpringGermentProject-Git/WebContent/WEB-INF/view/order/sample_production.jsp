@@ -79,7 +79,8 @@
 								<div class="col-sm-6 ml-1 p-0">
 									<label for="sampleCommentsNo" class="mb-0">Sample
 										Comment No</label> <input style="background: black; color: white;"
-										class="form-control-sm" type="text" id="sampleCommentsNo" readonly>
+										class="form-control-sm" type="text" id="sampleCommentsNo"
+										readonly>
 
 								</div>
 							</div>
@@ -140,8 +141,9 @@
 							<header class="d-flex justify-content-between">
 								<h5 class="text-center" style="display: inline;">Search
 									Sample Production</h5>
-								<button id="sampleSearch" type="button" class="btn btn-outline-dark btn-sm"
-									data-toggle="modal" data-target="#searchModal">
+								<button id="sampleSearch" type="button"
+									class="btn btn-outline-dark btn-sm" data-toggle="modal"
+									data-target="#searchModal">
 									<i class="fa fa-search"></i>
 								</button>
 							</header>
@@ -177,7 +179,7 @@
 												id="printReceivedQty">
 										</div>
 									</div>
-									
+
 
 								</div>
 
@@ -262,7 +264,7 @@
 
 
 									<div class="row d-flex justify-content-end mt-1">
-
+										<input type="checkbox" id="productionCheck" onchange="checkProductionChange()">
 										<button class="btn btn-sm btn-warning mr-3" id="btnUpload">Upload</button>
 
 									</div>
@@ -274,7 +276,9 @@
 						</div>
 
 					</div>
-
+					<div id="tableList" class="my-2">
+					
+					</div>
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">
 							<button type="button" id="btnPost" class="btn btn-warning btn-sm"
@@ -284,7 +288,7 @@
 								onclick="refreshAction()">Refresh</button>
 							<button type="button" id="btnPreview" class="btn btn-info btn-sm"
 								onclick="showPreview()">Preview</button>
-							
+
 						</div>
 					</div>
 
@@ -339,4 +343,5 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-<script src="${pageContext.request.contextPath}/assets/js/order/sample-production.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/order/sample-production.js"></script>

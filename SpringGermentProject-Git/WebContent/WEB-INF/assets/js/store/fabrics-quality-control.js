@@ -1,4 +1,6 @@
-
+window.onload = ()=>{
+  document.title = "Fabrics Quality Control";
+} 
 $("#newFabricsQCBtn").click(function () {
 
   $("#qcTransactionId").val("-- New Transaction --");
@@ -265,7 +267,7 @@ function drawFabricsReceiveListTable(data) {
   let rows = [];
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     let row = $("<tr/>")
     row.append($("<td>" + rowData.transactionId + "</td>"));
@@ -285,7 +287,7 @@ function drawFabricsRollListTable(data,isSearch) {
   $("#rollList").empty();
   
   let options = "<option  id='qcPassed-1' value='1'>QC Passed</option><option  id='qcPassed-1' value='2'>QC Failed</option>";
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
 
     const rowData = data[i];
     const id = rowData.autoId;
@@ -309,9 +311,9 @@ function drawFabricsRollListTable(data,isSearch) {
       + "</tr>";
   }
   $("#rollList").html(rows);
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
-    var element = document.getElementById("qcPassed-" + rowData.autoId);
+    let element = document.getElementById("qcPassed-" + rowData.autoId);
     if (rowData.qcPassedType == 1) {
 
       element.classList.remove('bg-danger');
@@ -328,10 +330,10 @@ function drawFabricsRollListTable(data,isSearch) {
 
 function drawFabricsQCListTable(data) {
   const length = data.length;
-  var tr_list = "";
+  let tr_list = "";
   $("#fabricsQCList").empty();
-  var options = "<option value='1'>QC Passed</option><option value='2'>QC Failed</option>";
-  for (var i = 0; i < length; i++) {
+  let options = "<option value='1'>QC Passed</option><option value='2'>QC Failed</option>";
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list = tr_list + "<tr id='row-" + rowData.autoId + "'>"
       + "<td>" + rowData.qcTransactionId + "</td>"
@@ -362,7 +364,7 @@ document.getElementById("allCheck").addEventListener("click", function () {
 });
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -373,7 +375,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -384,7 +386,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -402,7 +404,7 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#poList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
@@ -410,5 +412,5 @@ $(document).ready(function () {
 });
 
 
-var today = new Date();
+let today = new Date();
 document.getElementById("qcDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);

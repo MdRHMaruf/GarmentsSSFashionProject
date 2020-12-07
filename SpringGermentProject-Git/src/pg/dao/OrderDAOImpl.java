@@ -3269,7 +3269,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean confrimItemToSampleRequisition(SampleRequisitionItem v) {
+	public boolean confirmItemToSampleRequisition(SampleRequisitionItem v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -4125,7 +4125,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sampleCommentId,PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,ss.sizeName,SampleTypeId,sti.name \r\n" + 
+			String sql="select sampleCommentId,PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,isnull(ss.sizeName,'') as sizeName,SampleTypeId,isnull(sti.name ,'') as name \r\n" + 
 					"from TbSampleCadInfo sci\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on sci.StyleId = sc.StyleId\r\n" + 
@@ -4170,7 +4170,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,ss.sizeName,sci.SampleTypeId,sti.name as sampleTypeName,isnull(sci.CuttingDate,'') cuttingDate,isnull(sci.CuttingQty,'') cuttingQty, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
+			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,isnull(ss.sizeName,'')as sizeName,sci.SampleTypeId,sti.name as sampleTypeName,isnull(sci.CuttingQty,'') cuttingQty,isnull(sci.CuttingDate,'') cuttingDate, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
 					"from TbSampleCadInfo sci\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on sci.StyleId = sc.StyleId\r\n" + 
@@ -4226,10 +4226,11 @@ public class OrderDAOImpl implements OrderDAO{
 					+ " CuttingDate='"+sampleCadAndProduction.getCuttingDate()+"',"
 					+ "PrintSendDate='"+sampleCadAndProduction.getPrintSendDate()+"',"
 					+ "PrintReceivedDate='"+sampleCadAndProduction.getPrintReceivedDate()+"',"
+					+ "PrintReceivedQty='"+sampleCadAndProduction.getPrintReceivedQty()+"',"
 					+ "EmbroiderySendDate='"+sampleCadAndProduction.getEmbroiderySendDate()+"',"
 					+ "EmbroideryReceivedDate='"+sampleCadAndProduction.getEmbroideryReceivedDate()+"',"
+					+ "EmbroideryReceivedQty='"+sampleCadAndProduction.getEmbroideryReceivedQty()+"',"
 					+ "SewingSendDate='"+sampleCadAndProduction.getSewingSendDate()+"',"
-					//+ "SewingReceivedDate='"+SewingReceivedDate+"',"
 					+ "SewingFinishedDate='"+sampleCadAndProduction.getSewingFinishDate()+"',"
 					+ "SampleProductionUserId='"+sampleCadAndProduction.getSampleProductionUserId()+"',"
 					+ "SampleProductionUserIp='"+sampleCadAndProduction.getSampleProductionUserIp()+"',"
@@ -4578,7 +4579,6 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-				
 			
 				String sql="insert into TbSampleCadInfo  (StyleId, "
 						+ "PurchaseOrder, "
@@ -4658,7 +4658,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.samplecommentid, (select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid) as buyername,(select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder) as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,(select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId) from TbSampleCadInfo a";
+			String sql="select a.samplecommentid, (select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid) as buyername,(select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder) as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,isnull((select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId),'') as sampleType from TbSampleCadInfo a";
 			System.out.println(" check duplicate buyer query ");
 
 			List<?> list = session.createSQLQuery(sql).list();

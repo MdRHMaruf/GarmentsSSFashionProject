@@ -1,5 +1,7 @@
 
-
+window.onload = ()=>{
+	document.title = "Accessories Create";
+} 
 
 
 function saveAction() {
@@ -95,7 +97,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("accessoriesItemId").value = "0";
   document.getElementById("accessoriesItemName").value = "";
@@ -198,10 +200,10 @@ function drawUnitTable(unitList) {
 
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -210,7 +212,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.accessoriesItemId + "</td>"));
   row.append($("<td id='accessoriesItemName" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemName + "</td>"));
   row.append($("<td id='accessoriesItemCode" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemCode + "</td>"));
@@ -220,7 +222,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -231,7 +233,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -242,7 +244,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -258,7 +260,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

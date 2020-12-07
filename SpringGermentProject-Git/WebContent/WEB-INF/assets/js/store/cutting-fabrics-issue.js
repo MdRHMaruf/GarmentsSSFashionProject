@@ -1,27 +1,27 @@
+window.onload = ()=>{
+	document.title = "Cutting Fabrics Issue";
+  } 
 function printCuttingUsedFabricsRequisition(cuttingEntryId){
-
-
-	var url = `printCuttingUsedFabricsInfo/${cuttingEntryId}`;
+	let url = `printCuttingUsedFabricsInfo/${cuttingEntryId}`;
 	window.open(url, '_blank');
-
 }
 
 function submitAction(){
 	
-	var userId = $('#userId').val();
-	var cuttingEntryId = $('#cuttingEntryId').val();
-	var i = 0;
-	var resultList = [];
+	let userId = $('#userId').val();
+	let cuttingEntryId = $('#cuttingEntryId').val();
+	let i = 0;
+	let resultList = [];
 	$('.itemRow').each(function () {
 
-		var id = $(this).attr("data-id");
+		let id = $(this).attr("data-id");
 
 	
-		var fabricsId = $("#fabricsId-"+id).val();
-		var colorId = $("#colorId-"+id).val();
-		var unitId = $("#unitId-"+id).val();
-		var usedFabrics = parseFloat(($("#usedFabrics-"+id).val() == '' ? "0" : $("#usedFabrics-" + id).val()));
-		var requistionReq = $("#req-"+id).is(':checked') ? '1' : '0';
+		let fabricsId = $("#fabricsId-"+id).val();
+		let colorId = $("#colorId-"+id).val();
+		let unitId = $("#unitId-"+id).val();
+		let usedFabrics = parseFloat(($("#usedFabrics-"+id).val() == '' ? "0" : $("#usedFabrics-" + id).val()));
+		let requistionReq = $("#req-"+id).is(':checked') ? '1' : '0';
 		
 		resultList[i] =  fabricsId + "*" + colorId+"*"+unitId+"*"+ usedFabrics+"*"+requistionReq;
 		i++;
@@ -81,12 +81,12 @@ function searchCuttingUsedFabrics(cuttingEntryId) {
 function drawItemTable(dataList,isChecked = "") {
 
 
-	var length = dataList.length;
+	let length = dataList.length;
 	sizeGroupId = "";
-	var tables = "";
-	var isClosingNeed = false;
-	for (var i = 0; i < length; i++) {
-		var item = dataList[i];
+	let tables = "";
+	let isClosingNeed = false;
+	for (let i = 0; i < length; i++) {
+		let item = dataList[i];
 		if (i == 0) {
 			tables += `<div class="row">
 				<div class="col-md-12 table-responsive" >
@@ -134,7 +134,7 @@ function drawItemTable(dataList,isChecked = "") {
 }
 
 function setCheck(){
-	var checkvalue = $("#allCheck").is(':checked') ? 'checked' : 'unchecked';
+	let checkvalue = $("#allCheck").is(':checked') ? 'checked' : 'unchecked';
 	
 	  if (checkvalue=='checked') {
 		    $(".check").prop('checked', true);

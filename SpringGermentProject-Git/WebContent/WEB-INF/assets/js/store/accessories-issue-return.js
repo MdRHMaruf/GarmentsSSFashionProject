@@ -1,3 +1,6 @@
+window.onload = ()=>{
+  document.title = "Accessories Issue Return";
+} 
 const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '2', rackName: 'AB' },
 { rackId: '3', rackName: 'BA' },
@@ -507,10 +510,10 @@ function refreshAction() {
 
 function drawAccessoriesSizeListSearchTable(data) {
   const length = data.length;
-  var tr_list="";
+  let tr_list="";
   $("#accessoriesSizeSearchList").empty();
   
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = i;
     tr_list=tr_list+"<tr id='row-" + id + "' data-purchase-order='" + rowData.purchaseOrder + "' data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-item-color-id='" + rowData.itemColorId + "' data-accessories-id='" + rowData.accessoriesId + "' data-accessories-color-id='" + rowData.accessoriesColorId + "' data-size-id='" + rowData.sizeId + "' data-unit-id='" + rowData.unitId + "' data-unit='"+rowData.unit+"'  data-previous-return-qty='"+rowData.previousReturnQty+"' >"
@@ -536,7 +539,7 @@ function drawAccessoriesSizeListTable(data){
   let length = data.length;
     $("#sizeList").empty();
     
-    for (var i = 0; i < length; i++) {   
+    for (let i = 0; i < length; i++) {   
       const rowData = data[i];
       const id = rowData.autoId;
 
@@ -682,9 +685,9 @@ function drawAccessoriesSizeListTable(data){
 
 function drawAccessoriesIssueReturnListTable(data){
   const length = data.length;
-  var tr_list="";
+  let tr_list="";
   $("#accessoriesIssueReturnList").empty();
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     tr_list=tr_list+"<tr id='row-" + rowData.transactionId + "'>"
               +"<td>" + rowData.transactionId + "</td>"
@@ -698,7 +701,7 @@ function drawAccessoriesIssueReturnListTable(data){
 
 $(document).ready(function () {
   $('.table-expandable tbody').on("click", ".odd", function () {
-    var element = $(this);
+    let element = $(this);
     element.next('tr').toggle(0);
     element.find(".table-expandable-arrow").toggleClass("up");
   })
@@ -715,7 +718,7 @@ function qcPassedChangeBackground(element){
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -726,7 +729,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -737,7 +740,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -780,7 +783,7 @@ $(document).ready(function () {
 });
 
 
-var today = new Date();
+let today = new Date();
 document.getElementById("issueReturnDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 
 
