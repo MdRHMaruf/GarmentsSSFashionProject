@@ -117,7 +117,8 @@ public interface OrderService {
 	List<SampleRequisitionItem> getSampleRequisitionList();
 	List<SampleRequisitionItem> getSampleRequisitionDetails(String sampleReqId);
 	List<SampleRequisitionItem> getIncomepleteSampleRequisitionItemList(String userId);
-
+	List<ProductionPlan> getSampleProduction(String sampleCommentId,String operatorId,String date);
+	
 	//Purchase Order
 	List<pg.registerModel.AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder,String styleId,String type);
 	boolean submitPurchaseOrder(PurchaseOrder purchaseOrder);

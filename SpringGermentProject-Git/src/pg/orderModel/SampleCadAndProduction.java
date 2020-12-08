@@ -4,6 +4,8 @@ public class SampleCadAndProduction {
 	String user;
 	String autoId;
 	String sampleCommentId;
+	String buyerId;
+	String buyerOrderId;
 	String styleId;
 	String styleNo;
 	String purchaseOrder;
@@ -59,6 +61,7 @@ public class SampleCadAndProduction {
 	String sampleComment;
 	String POStatus;
 	String buyername;
+	String resultList;
 	
 	
 	
@@ -566,12 +569,27 @@ public class SampleCadAndProduction {
 	public String getBuyername() {
 		return buyername;
 	}
-
-
 	public void setBuyername(String buyername) {
 		this.buyername = buyername;
 	}
-	
+	public String getResultList() {
+		return resultList;
+	}
+	public void setResultList(String resultList) {
+		this.resultList = resultList;
+	}
+	public String getBuyerId() {
+		return buyerId;
+	}
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+	}
+	public String getBuyerOrderId() {
+		return buyerOrderId;
+	}
+	public void setBuyerOrderId(String buyerOrderId) {
+		this.buyerOrderId = buyerOrderId;
+	}
 	
 	
 }

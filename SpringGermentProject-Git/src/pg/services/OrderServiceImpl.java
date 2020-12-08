@@ -21,6 +21,7 @@ import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.orderModel.parcelModel;
+import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
@@ -618,6 +619,11 @@ public class OrderServiceImpl implements OrderService{
 	public boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList) {
 		// TODO Auto-generated method stub
 		return orderDAO.purchaseOrderApproveConfirm(purchaseOrderList);
+	}
+
+	public List<ProductionPlan> getSampleProduction(String arg0, String arg1, String arg2) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
 
 }

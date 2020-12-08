@@ -1,3 +1,8 @@
+window.onload = ()=>{
+	document.title = "Sample Production";
+} 
+
+
 $("#sampleSearch").click(() => {
     $.ajax({
         type: 'GET',
@@ -62,35 +67,56 @@ function setSampleProductionInfo(sampleCommentId) {
     });
 }
 
-$("#btnUpload").click(() => {
-    const id = "54600600212020000789";
+function setTotalQty() {
 
-    const length = id.length;
-    let indexList = [];
-    let nextChar = "";
-    let currentChar = "";
-    let prevChar = "";
-    let index = 0;
-    console.log(id);
-    for (let i = 1; i < length; i++) {
-        if (i < (length - 1)) {
-            prevChar = id[i - 1];
-            currentChar = id[i];
-            nextChar = id[i + 1];
+	let productionQty1 = parseFloat(($("#production-h1").val() == '' ? "0" : $("#production-h1").val()));
+	let productionQty2 = parseFloat(($("#production-h2").val() == '' ? "0" : $("#production-h2").val()));
+	let productionQty3 = parseFloat(($("#production-h3").val() == '' ? "0" : $("#production-h3").val()));
+	let productionQty4 = parseFloat(($("#production-h4").val() == '' ? "0" : $("#production-h4").val()));
+	let productionQty5 = parseFloat(($("#production-h5").val() == '' ? "0" : $("#production-h5").val()));
+	let productionQty6 = parseFloat(($("#production-h6").val() == '' ? "0" : $("#production-h6").val()));
+	let productionQty7 = parseFloat(($("#production-h7").val() == '' ? "0" : $("#production-h7").val()));
+	let productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
+	let productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
+	let productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
+	let productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
+	let productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
 
-            if (prevChar == "0" && currentChar == "0" && nextChar != "0") {
-                indexList.push(i);
-            }
-        }
-    }
+	let totalQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
 
-    console.log(id.slice(0, indexList[0] - 1));
-    console.log(id.slice(indexList[0] + 1, indexList[1] - 1));
-    console.log(id.slice(indexList[1] + 1));
-})
+	$("#production-total").val(totalQty);
+
+
+	let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
+	let passQty2 = parseFloat(($("#pass-h2").val() == '' ? "0" : $("#pass-h2").val()));
+	let passQty3 = parseFloat(($("#pass-h3").val() == '' ? "0" : $("#pass-h3").val()));
+	let passQty4 = parseFloat(($("#pass-h4").val() == '' ? "0" : $("#pass-h4").val()));
+	let passQty5 = parseFloat(($("#pass-h5").val() == '' ? "0" : $("#pass-h5").val()));
+	let passQty6 = parseFloat(($("#pass-h6").val() == '' ? "0" : $("#pass-h6").val()));
+	let passQty7 = parseFloat(($("#pass-h7").val() == '' ? "0" : $("#pass-h7").val()));
+	let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
+	let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
+	let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
+	let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
+	let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
+
+	
+
+	totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
+
+    $("#pass-total").val(totalQty);
+
+}
 
 $("#btnPost").click(() => {
-
+    let productionType = $('#productionType').val();
+    let passType = $('#passType').val();
+    
+    let buyerId = '';
+    let buyerOrderId = '';
+    let styleId = '';
+    let itemId = '';
+    let purchaseOrder = '';
     const sampleCommentsId = $("#sampleCommentsId").val();
 
     const cuttingDate = $("#cuttingDate").val();
@@ -117,8 +143,10 @@ $("#btnPost").click(() => {
     const productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
     const productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
     const productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
+    const productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
+    const productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
 
-    let totalProductionQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10;
+    let totalProductionQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
 
 
     let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
@@ -131,27 +159,19 @@ $("#btnPost").click(() => {
     let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
     let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
     let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
+    let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
+    let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
 
-    let totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10;
+    let totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
 
-
-
-    //reject
-    let rejectQty1 = parseFloat(($("#reject-h1").val() == '' ? "0" : $("#reject-h1").val()));
-    let rejectQty2 = parseFloat(($("#reject-h2").val() == '' ? "0" : $("#reject-h2").val()));
-    let rejectQty3 = parseFloat(($("#reject-h3").val() == '' ? "0" : $("#reject-h3").val()));
-    let rejectQty4 = parseFloat(($("#reject-h4").val() == '' ? "0" : $("#reject-h4").val()));
-    let rejectQty5 = parseFloat(($("#reject-h5").val() == '' ? "0" : $("#reject-h5").val()));
-    let rejectQty6 = parseFloat(($("#reject-h6").val() == '' ? "0" : $("#reject-h6").val()));
-    let rejectQty7 = parseFloat(($("#reject-h7").val() == '' ? "0" : $("#reject-h7").val()));
-    let rejectQty8 = parseFloat(($("#reject-h8").val() == '' ? "0" : $("#reject-h8").val()));
-    let rejectQty9 = parseFloat(($("#reject-h9").val() == '' ? "0" : $("#reject-h9").val()));
-    let rejectQty10 = parseFloat(($("#reject-h10").val() == '' ? "0" : $("#reject-h10").val()));
-
-    let totalRejectQty = rejectQty1 + rejectQty2 + rejectQty3 + rejectQty4 + rejectQty5 + rejectQty6 + rejectQty7 + rejectQty8 + rejectQty9 + rejectQty10;
-
-
+    let productionValue = productionType + ":" + productionQty1 + ":" + productionQty2 + ":" + productionQty3 + ":" + productionQty4 + ":" + productionQty5 + ":" + productionQty6 + ":" + productionQty7 + ":" + productionQty8 + ":" + productionQty9 + ":" + productionQty10 + ":" + productionQty11+ ":" + productionQty12;
+	let passValue = passType + ":" + passQty1 + ":" + passQty2 + ":" + passQty3 + ":" + passQty4 + ":" + passQty5 + ":" + passQty6 + ":" + passQty7 + ":" + passQty8 + ":" + passQty9 + ":" + passQty10 + ":" + passQty11 + ":" + passQty12;
+			
+    let resultList = operatorName + "*" + sampleCommentsId + "*" + totalProductionQty + "*" + totalQty  + "*" + productionValue + "*" + passValue ;
     
+
+    console.log(resultList)
+
     if (sampleCommentsId != "") {
         if (confirm("Are you sure to update this Sample Production...")) {
             $.ajax({
@@ -160,6 +180,11 @@ $("#btnPost").click(() => {
                 url: './postSampleProduction',
                 data: {
                     sampleCommentId: sampleCommentsId,
+                    buyerId : buyerId,
+                    buyerOrderId : buyerOrderId,
+                    purchaseOrder : purchaseOrder,
+                    styleId : styleId,
+                    itemId : itemId,
                     cuttingDate: cuttingDate,
                     cuttingQty: cuttingQty,
                     printSendDate: printSendDate,
@@ -174,6 +199,7 @@ $("#btnPost").click(() => {
                     SampleProductionUserIp: '',
                     SampleCommentFlag: '',
                     operatorName: operatorName,
+                    resultList: resultList,
                     quality: quality,
                     userId: userId
                 },
@@ -215,53 +241,13 @@ function checkProductionChange() {
 
 
     
-        tables += `<div class="row">
-				<div class="col-md-12 table-responsive" >
-				<table class="table table-hover table-bordered table-sm mb-0 small-font">
-				<thead class="no-wrap-text bg-light">
-
-				<tr>
-
-				
-				<th scope="col">Type</th>
-				<th scope="col">08-09</th>
-				<th scope="col">09-10</th>
-				<th scope="col">10-11</th>
-				<th scope="col">11-12</th>
-				<th scope="col">12-01</th>
-				<th scope="col">02-03</th>
-				<th scope="col">03-04</th>
-				<th scope="col">04-05</th>
-				<th scope="col">05-06</th>
-				<th scope="col">06-07</th>
-				<th scope="col">07-08</th>
-				<th scope="col">08-09</th>
-				<th scope="col">Total</th>
-				
-				</tr>
-				</thead>
-				<tbody id="dataList">`;
+        tables += ``;
 
         //<th scope="col">Edit</th>
 
    
 
-    tables += "<tr class='itemRow' data-id=''>" +
-        "<td><p style='color:black;font-weight:bold;'>Production</p><p style='color:green;font-weight:bold;'>Pass</p><p style='color:red;font-weight:bold;'>Reject</p></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production-h1' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h1'  value=''/><input  type='number'  class='form-control-sm' id='reject-h1'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h2' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h2'  value=''/><input  type='number' class='form-control-sm' id='reject-h2'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h3' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h3'  value=''/><input  type='number' class='form-control-sm' id='reject-h3'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h4' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h4'  value=''/><input  type='number' class='form-control-sm' id='reject-h4'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h5' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h5'  value=''/><input  type='number' class='form-control-sm' id='reject-h5'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h6' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h6'  value=''/><input  type='number' class='form-control-sm' id='reject-h6'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h7' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h7'  value=''/><input  type='number' class='form-control-sm' id='reject-h7'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h8' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h8'  value=''/><input  type='number' class='form-control-sm' id='reject-h8'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h9' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h9'  value=''/><input  type='number' class='form-control-sm' id='reject-h9'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h10' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h10'  value=''/><input  type='number' class='form-control-sm' id='reject-h10'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h11' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h11'  value=''/><input  type='number' class='form-control-sm' id='reject-h11'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production--h12' onchange='setTotalQty()' value=''/><input  type='number' onchange='setTotalQty()' class='form-control-sm' id='pass-h12'  value=''/><input  type='number' class='form-control-sm' id='reject-h12'  value='' /></td>" +
-        "<td><input  type='number' class='form-control-sm' id='production-total'  value='' readonly/><input  type='number' id='pass-total' readonly class='form-control-sm'/><input  type='number'  class='form-control-sm' id='reject-total'  value='' /></td>" +
-        "</tr>"
+    tables += 
     //"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm'><i class='fa fa-edit'></i></button></td>
 
 

@@ -59,6 +59,7 @@ import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.orderModel.parcelModel;
+import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
@@ -77,6 +78,7 @@ import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
+import pg.services.ProductionService;
 import pg.services.RegisterService;
 
 @Controller
@@ -94,6 +96,8 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private ProductionService productionService;
 	@Autowired
 	private RegisterService registerService;
 
@@ -1665,6 +1669,7 @@ public class OrderController {
 	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
 		JSONObject objmain = new JSONObject();
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
+		List<ProductionPlan> sewingList = orderService.getSampleProduction(sampleCommentId,sampleProduction.getOperatorName(),sampleProduction.getCuttingDate());
 		objmain.put("sampleProduction", sampleProduction);
 		return objmain;
 	}

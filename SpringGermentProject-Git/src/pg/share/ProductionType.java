@@ -23,7 +23,10 @@ public enum ProductionType {
 	
 	FINAL_QC_LAYOUT(11),
 	FINAL_QC_PRODUCTION(12),
-	FINAL_QC_REJECT(13);
+	FINAL_QC_REJECT(13),
+	
+	SAMPLE_PRODUCTION(14),
+	SAMPLE_PASS(15),;
 	
 	private int type;
 	private ProductionType(int type) {

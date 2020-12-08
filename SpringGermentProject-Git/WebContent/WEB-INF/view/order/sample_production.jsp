@@ -1,3 +1,4 @@
+<%@page import="pg.share.ProductionType"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
@@ -31,8 +32,11 @@
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		<input type="hidden" id="sampleCommentsId" value="">
-
+		<input type="hidden" id="sampleCommentsId" value=""> <input
+			type="hidden" id="productionType"
+			value="<%=ProductionType.SAMPLE_PRODUCTION.getType()%>"> <input
+			type="hidden" id="passType"
+			value="<%=ProductionType.SAMPLE_PASS.getType()%>">
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<div class="card-box">
@@ -48,12 +52,12 @@
 								</div>
 
 								<div class="form-check form-check-inline">
-									<input class="form-check-input ml-1" type="radio" name="withPO"
+									<input class="form-check-input ml-1" type="radio" name="po"
 										id="withPO" value="" checked> <label
 										class="form-check-label" for="withPO">With PO</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="withOutPO"
+									<input class="form-check-input" type="radio" name="po"
 										id="withOutPO" value=""> <label
 										class="form-check-label" for="withOutPO">With Out PO</label>
 								</div>
@@ -264,7 +268,7 @@
 
 
 									<div class="row d-flex justify-content-end mt-1">
-										<input type="checkbox" id="productionCheck" onchange="checkProductionChange()">
+
 										<button class="btn btn-sm btn-warning mr-3" id="btnUpload">Upload</button>
 
 									</div>
@@ -277,7 +281,93 @@
 
 					</div>
 					<div id="tableList" class="my-2">
-					
+						<div class="row">
+							<div class="col-md-12 table-responsive">
+								<table
+									class="table table-hover table-bordered table-sm mb-0 small-font">
+									<thead class="no-wrap-text bg-light">
+
+										<tr>
+
+
+											<th scope="col">Type</th>
+											<th scope="col">08-09</th>
+											<th scope="col">09-10</th>
+											<th scope="col">10-11</th>
+											<th scope="col">11-12</th>
+											<th scope="col">12-01</th>
+											<th scope="col">02-03</th>
+											<th scope="col">03-04</th>
+											<th scope="col">04-05</th>
+											<th scope="col">05-06</th>
+											<th scope="col">06-07</th>
+											<th scope="col">07-08</th>
+											<th scope="col">08-09</th>
+											<th scope="col">Total</th>
+
+										</tr>
+									</thead>
+									<tbody id="dataList">
+										<tr class='itemRow' data-id=''>
+											<td><p style='color: black; font-weight: bold;'>Production</p>
+												<p style='color: green; font-weight: bold;'>Pass</p></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h1' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h1' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h2' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h2' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h3' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h3' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h4' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h4' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h5' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h5' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h6' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h6' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h7' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h7' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h8' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h8' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h9' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h9' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h10' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h10' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h11' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h11' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-h12' onchange='setTotalQty()' value='' /><input
+												type='number' onchange='setTotalQty()'
+												class='form-control-sm' id='pass-h12' value='' /></td>
+											<td><input type='number' class='form-control-sm'
+												id='production-total' value='' readonly /><input
+												type='number' id='pass-total' readonly
+												class='form-control-sm' /></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">

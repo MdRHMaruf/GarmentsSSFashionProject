@@ -36,6 +36,7 @@ import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.fileUpload;
 import pg.orderModel.parcelModel;
+import pg.proudctionModel.ProductionPlan;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.registerModel.Color;
@@ -47,6 +48,7 @@ import pg.registerModel.SizeGroup;
 import pg.registerModel.StyleItem;
 import pg.share.HibernateUtil;
 import pg.share.ItemType;
+import pg.share.ProductionType;
 import pg.share.SizeValuesType;
 import pg.registerModel.AccessoriesItem;
 @Repository
@@ -4241,6 +4243,221 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "quality='"+sampleCadAndProduction.getQuality()+"'"
 					+ " where SampleCommentId='"+sampleCadAndProduction.getSampleCommentId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
+			
+			String resultValue = sampleCadAndProduction.getResultList();
+
+			StringTokenizer firstToken=new StringTokenizer(resultValue,",");
+			while(firstToken.hasMoreTokens()) {
+				String secondToken=firstToken.nextToken();
+				StringTokenizer thirdToken=new StringTokenizer(secondToken,"*");
+				while(thirdToken.hasMoreTokens()) {
+
+					String employyeId = thirdToken.nextToken();
+					String lineId = thirdToken.nextToken();
+					String totalProdcutionQty = thirdToken.nextToken();
+					String totalQty = thirdToken.nextToken();
+					String prodcutionValue = thirdToken.nextToken();
+					String passValue = thirdToken.nextToken();
+
+					System.out.println("production value="+prodcutionValue);
+					System.out.println("pass value="+passValue);
+					//Production
+					StringTokenizer productionToken=new StringTokenizer(prodcutionValue, ":");
+					while(productionToken.hasMoreTokens()) {
+						String type=productionToken.nextToken();
+						String h1=productionToken.nextToken();
+						String h2=productionToken.nextToken();
+						String h3=productionToken.nextToken();
+						String h4=productionToken.nextToken();
+						String h5=productionToken.nextToken();
+						String h6=productionToken.nextToken();
+						String h7=productionToken.nextToken();
+						String h8=productionToken.nextToken();
+						String h9=productionToken.nextToken();
+						String h10=productionToken.nextToken();
+						String h11=productionToken.nextToken();
+						String h12=productionToken.nextToken();
+
+
+						sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+sampleCadAndProduction.getBuyerId()+"' and buyerOrderId='"+sampleCadAndProduction.getBuyerOrderId()+"' and purchaseOrder='"+sampleCadAndProduction.getPurchaseOrder()+"' and styleId='"+sampleCadAndProduction.getStyleId()+"' and itemId='"+sampleCadAndProduction.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+sampleCadAndProduction.getCuttingDate()+"'";
+
+						List<?> list = session.createSQLQuery(sql).list();
+
+						if(list.size()>0) {
+							sql ="update tbLayoutPlanDetails set "
+									+ "hour1='"+h1+"',"
+									+ "hour2='"+h2+"',"
+									+ "hour3='"+h3+"',"
+									+ "hour4='"+h4+"',"
+									+ "hour5='"+h5+"',"
+									+ "hour6='"+h6+"',"
+									+ "hour7='"+h7+"',"
+									+ "hour8='"+h8+"',"
+									+ "hour9='"+h9+"',"
+									+ "hour10='"+h10+"',"
+									+ "hour11='"+h11+"',"
+									+ "hour12='"+h12+"',"
+									+ "total='"+totalProdcutionQty+"' where buyerId='"+sampleCadAndProduction.getBuyerId()+"' and buyerOrderId='"+sampleCadAndProduction.getBuyerOrderId()+"' and purchaseOrder='"+sampleCadAndProduction.getPurchaseOrder()+"' and styleId='"+sampleCadAndProduction.getStyleId()+"' and itemId='"+sampleCadAndProduction.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+sampleCadAndProduction.getCuttingDate()+"'"; 
+
+						}else {
+							sql="insert into tbLayoutPlanDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "LineId,"
+									+ "EmployeeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "hour11,"
+									+ "hour12,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+sampleCadAndProduction.getBuyerId()+"',"
+									+ "'"+sampleCadAndProduction.getBuyerOrderId()+"',"
+									+ "'"+sampleCadAndProduction.getPurchaseOrder()+"',"
+									+ "'"+sampleCadAndProduction.getStyleId()+"',"
+									+ "'"+sampleCadAndProduction.getItemId()+"',"
+									+ "'"+lineId+"',"
+									+ "'"+employyeId+"',"
+									+ "'"+type+"',"
+									+ "'',"
+									+ "'',"
+									+ "'',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+totalProdcutionQty+"','"+sampleCadAndProduction.getCuttingDate()+"',CURRENT_TIMESTAMP,'"+sampleCadAndProduction.getUserId()+"'"
+									+ ")";
+						}
+						session.createSQLQuery(sql).executeUpdate();
+					}
+
+					
+					//Passed
+					StringTokenizer layoutToken=new StringTokenizer(passValue, ":");
+					while(layoutToken.hasMoreTokens()) {
+						String type=layoutToken.nextToken();
+						String h1=layoutToken.nextToken();
+						String h2=layoutToken.nextToken();
+						String h3=layoutToken.nextToken();
+						String h4=layoutToken.nextToken();
+						String h5=layoutToken.nextToken();
+						String h6=layoutToken.nextToken();
+						String h7=layoutToken.nextToken();
+						String h8=layoutToken.nextToken();
+						String h9=layoutToken.nextToken();
+						String h10=layoutToken.nextToken();
+						String h11=layoutToken.nextToken();
+						String h12=layoutToken.nextToken();
+
+						sql="select buyerId,buyerOrderId from tbLayoutPlanDetails where buyerId='"+sampleCadAndProduction.getBuyerId()+"' and buyerOrderId='"+sampleCadAndProduction.getBuyerOrderId()+"' and purchaseOrder='"+sampleCadAndProduction.getPurchaseOrder()+"' and styleId='"+sampleCadAndProduction.getStyleId()+"' and itemId='"+sampleCadAndProduction.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+sampleCadAndProduction.getCuttingDate()+"'";
+
+						List<?> list = session.createSQLQuery(sql).list();
+
+						if(list.size()>0) {
+							sql ="update tbLayoutPlanDetails set "
+									+ "hour1='"+h1+"',"
+									+ "hour2='"+h2+"',"
+									+ "hour3='"+h3+"',"
+									+ "hour4='"+h4+"',"
+									+ "hour5='"+h5+"',"
+									+ "hour6='"+h6+"',"
+									+ "hour7='"+h7+"',"
+									+ "hour8='"+h8+"',"
+									+ "hour9='"+h9+"',"
+									+ "hour10='"+h10+"',"
+									+ "hour11='"+h11+"',"
+									+ "hour12='"+h12+"',"
+									+ "total='"+totalQty+"' where buyerId='"+sampleCadAndProduction.getBuyerId()+"' and buyerOrderId='"+sampleCadAndProduction.getBuyerOrderId()+"' and purchaseOrder='"+sampleCadAndProduction.getPurchaseOrder()+"' and styleId='"+sampleCadAndProduction.getStyleId()+"' and itemId='"+sampleCadAndProduction.getItemId()+"' and lineId='"+lineId+"' and type='"+type+"' and date='"+sampleCadAndProduction.getCuttingDate()+"'"; 
+
+						}else {
+							sql = "insert into tbLayoutPlanDetails ("
+									+ "BuyerId,"
+									+ "BuyerOrderId,"
+									+ "PurchaseOrder,"
+									+ "StyleId,"
+									+ "ItemId,"
+									+ "LineId,"
+									+ "EmployeeId,"
+									+ "Type,"
+									+ "DailyTarget,"
+									+ "LineTarget,"
+									+ "HourlyTarget,"
+									+ "Hours,"
+									+ "hour1,"
+									+ "hour2,"
+									+ "hour3,"
+									+ "hour4,"
+									+ "hour5,"
+									+ "hour6,"
+									+ "hour7,"
+									+ "hour8,"
+									+ "hour9,"
+									+ "hour10,"
+									+ "hour11,"
+									+ "hour12,"
+									+ "total,"
+									+ "date,"
+									+ "entrytime,"
+									+ "userId) values ("
+									+ "'"+sampleCadAndProduction.getBuyerId()+"',"
+									+ "'"+sampleCadAndProduction.getBuyerOrderId()+"',"
+									+ "'"+sampleCadAndProduction.getPurchaseOrder()+"',"
+									+ "'"+sampleCadAndProduction.getStyleId()+"',"
+									+ "'"+sampleCadAndProduction.getItemId()+"',"
+									+ "'"+lineId+"',"
+									+ "'"+employyeId+"',"
+									+ "'"+type+"',"
+									+ "'',"
+									+ "'',"
+									+ "'',"
+									+ "'10',"
+									+ "'"+h1+"',"
+									+ "'"+h2+"',"
+									+ "'"+h3+"',"
+									+ "'"+h4+"',"
+									+ "'"+h5+"',"				
+									+ "'"+h6+"',"
+									+ "'"+h7+"',"
+									+ "'"+h8+"',"
+									+ "'"+h9+"',"
+									+ "'"+h10+"',"
+									+ "'"+h11+"',"
+									+ "'"+h12+"',"
+									+ "'"+totalQty+"','"+sampleCadAndProduction.getCuttingDate()+"',CURRENT_TIMESTAMP,'"+sampleCadAndProduction.getUserId()+"'"
+									+ ")";
+							
+						}
+						session.createSQLQuery(sql).executeUpdate();
+					}
+					
+				}
+			}
 
 			tx.commit();
 
@@ -4919,5 +5136,70 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 
 		return false;
+	}
+
+	
+	@Override
+	public List<ProductionPlan> getSampleProduction(String sampleCommentId, String operatorId,String date) {
+		List<ProductionPlan> ListData=new ArrayList<ProductionPlan>();
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		ProductionPlan tempPlan = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+
+
+			String sql="select AutoId,BuyerId,BuyerOrderId,PurchaseOrder,StyleId,ItemId,LineId,EmployeeId,Type,Hours,hour1,hour2,hour3,hour4,hour5,hour6,hour7,hour8,hour9,hour10,hour11,hour12 "
+					+ "from tbLayoutPlanDetails lpd "
+					+ "where lpd.lineId='"+sampleCommentId+"' and lpd.date = '"+date+"'  and (lpd.Type = '"+ProductionType.SAMPLE_PRODUCTION.getType()+"' or lpd.Type = '"+ProductionType.SAMPLE_PASS.getType()+"') ";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			
+			int lineCount=list.size();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				tempPlan = new ProductionPlan(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),lineCount);
+				tempPlan.setHour1(element[9].toString());
+				tempPlan.setHour2(element[10].toString());
+				tempPlan.setHour3(element[11].toString());
+				tempPlan.setHour4(element[12].toString());
+				tempPlan.setHour5(element[13].toString());
+				tempPlan.setHour6(element[14].toString());
+				tempPlan.setHour7(element[15].toString());
+				tempPlan.setHour8(element[16].toString());
+				tempPlan.setHour9(element[17].toString());
+				tempPlan.setHour10(element[18].toString());
+				tempPlan.setEmployeeId(element[19].toString());
+
+				ListData.add(tempPlan);
+
+			}
+
+
+
+
+
+
+
+			tx.commit();
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				ee.printStackTrace();
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return ListData;
 	}
 }
