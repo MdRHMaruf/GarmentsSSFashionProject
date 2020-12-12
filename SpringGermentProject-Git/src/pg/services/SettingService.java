@@ -2,6 +2,7 @@ package pg.services;
 
 import java.util.List;
 
+import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.menu;
 import pg.model.menuinfo;
@@ -31,5 +32,9 @@ public interface SettingService{
 	public boolean addModule(moduleinfo m) throws UserBlockedException;
 	public boolean addMenu(menuinfo m) throws UserBlockedException;
 	public boolean addSubMenu(submenuinfo m) throws UserBlockedException;
+	
+	public List<OrganizationInfo> getOrganization();
+	public boolean editOrganization(OrganizationInfo v);
+
 
 }
