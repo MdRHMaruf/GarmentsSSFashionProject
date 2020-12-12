@@ -342,38 +342,3 @@ function SubMenuClear(){
 function seatlist(){
 	alert("list");
 }
-
-function change_password(){
-	var userId = $("#userId").val();
-	var userName = $("#userName").val();
-	var password = $("#password").val();
-	
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-	    url: './changePassword',
-		data: {userId:userId, userName: userName, password: password},
-		success: function (data) {
-			alert(data);
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			//alert("Server Error");
-			if (jqXHR.status === 0) {
-				alert('Not connect.\n Verify Network.');
-			} else if (jqXHR.status == 404) {
-				alert('Requested page not found.');
-			} else if (jqXHR.status == 500) {
-				alert('Internal Server Error.');
-			} else if (errorThrown === 'parsererror') {
-				alert('Requested JSON parse failed');
-			} else if (errorThrown === 'timeout') {
-				alert('Time out error');
-			} else if (errorThrown === 'abort') {
-				alert('Ajax request aborted ');
-			} else {
-				alert('Uncaught Error.\n' + jqXHR.responseText);
-			}
-
-		}
-	});
-}

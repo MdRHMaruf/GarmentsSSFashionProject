@@ -2,7 +2,10 @@ var styleIdForSet = 0;
 var itemIdForSet = 0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
-function loadData() {
+
+window.onload = () =>{
+
+  document.title = "Buyer Purchase Order";
 
   $.ajax({
     type: 'GET',
@@ -32,10 +35,7 @@ function loadData() {
       }
     }
   });
-
-}
-
-window.onload = loadData;
+};
 
 
 function printBuyerPO(buyerPoId) {

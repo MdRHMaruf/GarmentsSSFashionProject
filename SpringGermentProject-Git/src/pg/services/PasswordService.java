@@ -7,7 +7,6 @@ package pg.services;
 
 import java.util.List;
 
-import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.login;
 import pg.model.menu;
@@ -25,7 +24,4 @@ public interface PasswordService {
 	public List<module> getUserModule(int i);
 	public List<menu> getUserMenu(int i,int moduleId);
 	public List<menu> getAdminUserMenu(int i,int moduleId);
-	
-	public List<OrganizationInfo> getOrganizationInfo();
-	public boolean changePassword(String userId, String userName, String password);
 }

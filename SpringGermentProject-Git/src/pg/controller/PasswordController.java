@@ -21,19 +21,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-
-import pg.services.PasswordService;
-import pg.services.PasswordServiceImpl;
-import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
+import pg.model.ware;
+import pg.model.wareinfo;
+import pg.registerModel.FactoryModel;
 import pg.model.login;
 import pg.model.menu;
 import pg.model.module;
+import pg.services.PasswordService;
+import pg.services.PasswordServiceImpl;
+import pg.services.RegisterService;
 
 
 
 @Controller
-@SessionAttributes({"pg_admin","organization_info","storelist","warelist","modulelist","menulist"})
+@SessionAttributes({"pg_admin","storelist","warelist","modulelist","menulist"})
 
 public class PasswordController {
 
@@ -42,6 +44,9 @@ public class PasswordController {
 
 	@Autowired
 	private PasswordService passService;
+	@Autowired
+	private RegisterService registerService;
+
 	
 	@RequestMapping(value = {"/","/login"},method=RequestMethod.GET)
 	public String login(Model m,HttpSession session) {
@@ -69,8 +74,6 @@ public class PasswordController {
 		System.out.println("Log In execute");
 		List<login> lg=passService.login(name, password);
 		
-		List<OrganizationInfo> organizationInfo=passService.getOrganizationInfo();
-		
 		this.userName=name;
 		this.passWord=password;
 		
@@ -88,7 +91,6 @@ public class PasswordController {
 					List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
 					modelmap.put("menulist", menulist);
 					modelmap.put("pg_admin", lg);
-					modelmap.put("organization_info", organizationInfo);
 					
 					Cookie ck=new Cookie("username", lg.get(0).getUser());
 					ck.setMaxAge(3600);
@@ -106,7 +108,7 @@ public class PasswordController {
 					List<menu> menulist=passService.getUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
 					modelmap.put("menulist", menulist);
 					modelmap.put("pg_admin", lg);
-					modelmap.put("organization_info", organizationInfo);
+					
 					Cookie ck=new Cookie("username", lg.get(0).getUser());
 					ck.setMaxAge(3600);
 					response.addCookie(ck);
@@ -133,22 +135,16 @@ public class PasswordController {
 	public String adminDashboard(ModelMap modelmap,HttpServletResponse response) {
 		try {
 			List<login> lg=passService.login(userName, passWord);
-			List<OrganizationInfo> organizationInfo=passService.getOrganizationInfo();
-		
-				List<module> modulelist=passService.getUserModule(lg.get(0).getId());
-				modelmap.put("modulelist", modulelist);
-				
-				//List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
-				//modelmap.put("menulist", menulist);
-				modelmap.put("pg_admin", lg);
-				modelmap.put("organization_info", organizationInfo);
-				
-				Cookie ck=new Cookie("username", lg.get(0).getUser());
-				ck.setMaxAge(3600);
-				response.addCookie(ck);
+			List<module> modulelist=passService.getUserModule(lg.get(0).getId());
+			modelmap.put("modulelist", modulelist);
 			
-				//return "redirect:dashboard";
-
+			//List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
+			//modelmap.put("menulist", menulist);
+			modelmap.put("pg_admin", lg);
+			
+			Cookie ck=new Cookie("username", lg.get(0).getUser());
+			ck.setMaxAge(3600);
+			response.addCookie(ck);
 		} catch (UserBlockedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,36 +173,17 @@ public class PasswordController {
 		modelmap.put("modulelist", modulelist);
 		
 		List<menu> menulist=(List<menu>)session.getAttribute("menulist");
+		List<FactoryModel> factoryList = registerService.getAllFactories();
+		
 		modelmap.put("menulist", menulist);
 		
 		ModelAndView view = new ModelAndView("setting/create_user");
 		view.addObject("modulelist",modulelist);
 		view.addObject("menulist",menulist);
+		view.addObject("factoryList",factoryList);
 		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 	
-	@RequestMapping(value = "change_password",method=RequestMethod.GET)
-	public ModelAndView change_password(ModelMap modelmap,HttpSession session) {
-		
-		
-		ModelAndView view = new ModelAndView("setting/change_password");
-		
-		
-		return view; //JSP - /WEB-INF/view/index.jsp
-	}
-	
-	@RequestMapping(value = "changePassword",method=RequestMethod.POST)
-	public @ResponseBody String changePassword(String userId,String userName,String password) {
-		
-		String msg="Create Occure while change password";	
-		
-		boolean flag=passService.changePassword(userId,userName,password);
-		if(flag) {
-			msg="Password Change Successfully";
-		}
-		
-		return msg; //JSP - /WEB-INF/view/index.jsp
-	}
 
 }

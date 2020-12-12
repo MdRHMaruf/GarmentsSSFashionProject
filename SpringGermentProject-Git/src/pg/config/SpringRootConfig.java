@@ -31,7 +31,6 @@ public class SpringRootConfig {
 	    String password       = "Cursor777";
 	
 	    Connection connection = null;
-
        
        @Bean
        public BasicDataSource getDataSource(){

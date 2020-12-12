@@ -2,6 +2,8 @@ var itemIdForSet = 0;
 var particularItemIdForSet = 0;
 
 window.onload = ()=>{
+    document.title = "Costing Create";
+
     let sessionObject = JSON.parse(sessionStorage.getItem("pendingCosting") ? sessionStorage.getItem("pendingCosting") : false);
     let itemList = sessionObject.itemList ? sessionObject.itemList : [];
     if(sessionObject){

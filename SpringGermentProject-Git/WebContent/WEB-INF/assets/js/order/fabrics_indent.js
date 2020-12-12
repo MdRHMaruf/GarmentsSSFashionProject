@@ -4,6 +4,11 @@ var itemIdForSet = 0;
 var itemColorIdForSet = 0;
 var isFind = false;
 
+
+window.onload = ()=>{
+  document.title = "Fabrics Indent";
+}
+
 function poWiseStyleLoad() {
   var purchaseOrder = $("#purchaseOrder option:selected").text();
 

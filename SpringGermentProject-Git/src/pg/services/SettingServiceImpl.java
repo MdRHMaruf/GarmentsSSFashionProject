@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import pg.OrganizationModel.OrganizationInfo;
 import pg.dao.SettingDAO;
 import pg.dao.SettingDAOImpl;
 import pg.exception.UserBlockedException;
@@ -96,20 +95,6 @@ public class SettingServiceImpl implements SettingService{
 	public List<wareinfo> getAllWareName() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-
-	@Override
-	public List<OrganizationInfo> getOrganization() {
-		// TODO Auto-generated method stub
-		return settDAO.getOrganization();
-	}
-
-
-	@Override
-	public boolean editOrganization(OrganizationInfo v) {
-		// TODO Auto-generated method stub
-		return settDAO.editOrganization(v);
 	}
 	
 
