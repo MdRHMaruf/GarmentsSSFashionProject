@@ -1,11 +1,14 @@
 
 
 
+window.onload = ()=>{
+	document.title = "Local Item Create";
+}
 
 function saveAction() {
-  var localItemName = $("#localItemName").val().trim();
-  var localItemCode = $("#localItemCode").val().trim();
-  var userId = $("#userId").val();
+  let localItemName = $("#localItemName").val().trim();
+  let localItemCode = $("#localItemCode").val().trim();
+  let userId = $("#userId").val();
 
   if (localItemName != '') {
     $.ajax({
@@ -39,10 +42,10 @@ function saveAction() {
 
 
 function editAction() {
-  var localItemId = $("#localItemId").val();
-  var localItemName = $("#localItemName").val().trim();
-  var localItemCode = $("#localItemCode").val().trim();
-  var userId = $("#userId").val();
+  let localItemId = $("#localItemId").val();
+  let localItemName = $("#localItemName").val().trim();
+  let localItemCode = $("#localItemCode").val().trim();
+  let userId = $("#userId").val();
 
   if (localItemName != '') {
     $.ajax({
@@ -77,7 +80,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("localItemId").value = "0";
   document.getElementById("localItemName").value = "";
@@ -99,10 +102,10 @@ function setData(localItemId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -111,7 +114,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.localItemId + "</td>"));
   row.append($("<td id='localItemName" + rowData.localItemId + "'>" + rowData.localItemName + "</td>"));
   row.append($("<td id='localItemCode" + rowData.localItemId + "'>" + rowData.localItemCode + "</td>"));
@@ -121,7 +124,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -132,7 +135,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -143,7 +146,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -159,7 +162,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

@@ -140,6 +140,34 @@
 
 
 				</div>
+				
+				<div class="row">
+					
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 16px;padding-left: 35px;">
+						<label for="line" class="col-form-label-sm mb-0 pb-0">Line</label>
+						<div class="row">
+								<select id="line" onchange="lineChangeAction()" class='form-control-sm col-md-12 '>
+									<option> Select Line</option>
+								</select>
+						</div>
+					</div>					
+					
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 15px; padding-right: 36px;padding-left: 20px;">
+						<label for="employeeName" class="col-form-label-sm mb-0 pb-0">Employee Name</label>
+						<div class="row">
+								<select id="employeeName" class="selectpicker col-md-12"
+								data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option  value="0">Select Employee</option>
+								<c:forEach items="${employeeList}" var="employee">
+									<option value="${employee.employeeId}">${employee.employeeName}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>	
+					</div>
 	
 
 
@@ -256,6 +284,7 @@
 								<th>Purchase Order</th>
 								<th>Style No</th>
 								<th>Item Name</th>
+								<th>Line Name</th>
 								<th>Date</th>
 								<th>Search</th>
 								<th>Print</th>
@@ -270,9 +299,10 @@
 									<td id='purchaseOrder${list.buyerorderId}'>${list.purchaseOrder}</td>
 									<td id='styleId${list.styleId}'>${list.styleNo}</td>
 									<td id='itemId${list.itemId}'>${list.itemName}</td>
+									<td id='lineId${list.lineId}'>${list.lineName}</td>
 									<td id='layout${list.itemId}'>${list.productionDate}</td>
 									<td><i class="fa fa-search" style="cursor:pointer;" 
-										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">
+										onclick="searchLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}','${list.lineId}')">
 									</i></td>
 									<td><i class="fa fa-print" style="cursor:pointer;" 
 										onclick="printLayoutDetails('${list.buyerId}','${list.buyerorderId}','${list.styleId}','${list.itemId}','${list.productionDate}')">

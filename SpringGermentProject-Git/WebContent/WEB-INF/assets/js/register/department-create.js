@@ -1,11 +1,14 @@
 
 
+window.onload = ()=>{
+	document.title = "Department Create";
+} 
 
 
 function saveAction() {
-  var factoryId = $("#factoryName").val().trim();
-  var departmentName = $("#departmentName").val().trim();
-  var userId = $("#userId").val();
+  let factoryId = $("#factoryName").val().trim();
+  let departmentName = $("#departmentName").val().trim();
+  let userId = $("#userId").val();
 
   if (factoryId != '0') {
     if (departmentName != '') {
@@ -43,10 +46,10 @@ function saveAction() {
 
 
 function editAction() {
-  var departmentId = $("#departmentId").val();
-  var factoryId = $("#factoryName").val().trim();
-  var departmentName = $("#departmentName").val().trim();
-  var userId = $("#userId").val();
+  let departmentId = $("#departmentId").val();
+  let factoryId = $("#factoryName").val().trim();
+  let departmentName = $("#departmentName").val().trim();
+  let userId = $("#userId").val();
 
   if (factoryId != '0') {
     if (departmentName != '') {
@@ -86,7 +89,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("departmentId").value = "0";
   document.getElementById("factoryName").value = "";
@@ -108,10 +111,10 @@ function setData(departmentId,factoryId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -120,7 +123,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.departmentId + "</td>"));
   row.append($("<td id='factoryName" + rowData.departmentId + "'>" + rowData.factoryName + "</td>"));
   row.append($("<td id='departmentName" + rowData.departmentId + "'>" + rowData.departmentName + "</td>"));
@@ -130,7 +133,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -141,7 +144,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -152,7 +155,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -168,7 +171,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

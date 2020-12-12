@@ -113,11 +113,12 @@ public interface OrderService {
 	List<commonModel> getMerchendizerList();
 	boolean addItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleRequisitionItem> getSampleRequisitionItemList(String userId);
-	boolean confrimItemToSampleRequisition(SampleRequisitionItem v);
+	boolean confirmItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleRequisitionItem> getSampleRequisitionList();
 	List<SampleRequisitionItem> getSampleRequisitionDetails(String sampleReqId);
 	List<SampleRequisitionItem> getIncomepleteSampleRequisitionItemList(String userId);
-
+	List<ProductionPlan> getSampleProduction(String sampleCommentId,String operatorId,String date);
+	
 	//Purchase Order
 	List<pg.registerModel.AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder,String styleId,String type);
 	boolean submitPurchaseOrder(PurchaseOrder purchaseOrder);

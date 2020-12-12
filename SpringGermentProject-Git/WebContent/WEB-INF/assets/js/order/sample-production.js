@@ -1,3 +1,8 @@
+window.onload = ()=>{
+	document.title = "Sample Production";
+} 
+
+
 $("#sampleSearch").click(() => {
     $.ajax({
         type: 'GET',
@@ -32,7 +37,7 @@ function setSampleProductionInfo(sampleCommentId) {
             } else {
                 //drawSampleCommentsListSearchTable(data.sampleCommentsList);
                 const sample = data.sampleProduction;
-                console.log(data.sampleProduction);
+                
                 $("#sampleCommentsNo").val(sample.sampleCommentId);
                 $("#sampleCommentsId").val(sample.sampleCommentId);
                 $("#purchaseOrder").val(sample.purchaseOrder);
@@ -40,6 +45,9 @@ function setSampleProductionInfo(sampleCommentId) {
                 $("#itemName").val(sample.itemName);
                 $("#color").val(sample.colorName);
                 $("#size").val(sample.size);
+                let date = sample.cuttingDate.split("/");
+                // console.log(date)
+                // $("#cuttingDate").val(date[2] + "-" + date[1] + "-" + date[0]);
                 $("#cuttingDate").val(sample.cuttingDate);
                 $("#cuttingQty").val(sample.cuttingQty);
                 $("#reqQty").val(sample.requisitionQty);
@@ -54,13 +62,98 @@ function setSampleProductionInfo(sampleCommentId) {
                 $("#operatorName").val(sample.operatorName);
                 $("#quality").val(sample.quality);
                 $('#searchModal').modal('hide');
+
+                for(let i=0;i<data.productionList.length;i++){
+                    const production = data.productionList[i];
+                    console.log(production);
+                    console.log(production.productionType );
+                    if(production.proudctionType == '14'){
+
+                        $("#production-h1").val(production.hour1);
+                        $("#production-h2").val(production.hour2);
+                        $("#production-h3").val(production.hour3);
+                        $("#production-h4").val(production.hour4);
+                        $("#production-h5").val(production.hour5);
+                        $("#production-h6").val(production.hour6);
+                        $("#production-h7").val(production.hour7);
+                        $("#production-h8").val(production.hour8);
+                        $("#production-h9").val(production.hour9);
+                        $("#production-h10").val(production.hour10);
+                        $("#production-h11").val(production.hour11);
+                        $("#production-h12").val(production.hour12);
+                        $("#production-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
+                    }else if(production.proudctionType == '15'){
+                        $("#pass-h1").val(production.hour1);
+                        $("#pass-h2").val(production.hour2);
+                        $("#pass-h3").val(production.hour3);
+                        $("#pass-h4").val(production.hour4);
+                        $("#pass-h5").val(production.hour5);
+                        $("#pass-h6").val(production.hour6);
+                        $("#pass-h7").val(production.hour7);
+                        $("#pass-h8").val(production.hour8);
+                        $("#pass-h9").val(production.hour9);
+                        $("#pass-h10").val(production.hour10);
+                        $("#pass-h11").val(production.hour11);
+                        $("#pass-h12").val(production.hour12);
+                        $("#pass-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
+                    }
+                    
+                }
             }
         }
     });
 }
 
-$("#btnPost").click(() => {
+function setTotalQty() {
 
+	let productionQty1 = parseFloat(($("#production-h1").val() == '' ? "0" : $("#production-h1").val()));
+	let productionQty2 = parseFloat(($("#production-h2").val() == '' ? "0" : $("#production-h2").val()));
+	let productionQty3 = parseFloat(($("#production-h3").val() == '' ? "0" : $("#production-h3").val()));
+	let productionQty4 = parseFloat(($("#production-h4").val() == '' ? "0" : $("#production-h4").val()));
+	let productionQty5 = parseFloat(($("#production-h5").val() == '' ? "0" : $("#production-h5").val()));
+	let productionQty6 = parseFloat(($("#production-h6").val() == '' ? "0" : $("#production-h6").val()));
+	let productionQty7 = parseFloat(($("#production-h7").val() == '' ? "0" : $("#production-h7").val()));
+	let productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
+	let productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
+	let productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
+	let productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
+	let productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
+
+	let totalQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
+
+	$("#production-total").val(totalQty);
+
+
+	let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
+	let passQty2 = parseFloat(($("#pass-h2").val() == '' ? "0" : $("#pass-h2").val()));
+	let passQty3 = parseFloat(($("#pass-h3").val() == '' ? "0" : $("#pass-h3").val()));
+	let passQty4 = parseFloat(($("#pass-h4").val() == '' ? "0" : $("#pass-h4").val()));
+	let passQty5 = parseFloat(($("#pass-h5").val() == '' ? "0" : $("#pass-h5").val()));
+	let passQty6 = parseFloat(($("#pass-h6").val() == '' ? "0" : $("#pass-h6").val()));
+	let passQty7 = parseFloat(($("#pass-h7").val() == '' ? "0" : $("#pass-h7").val()));
+	let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
+	let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
+	let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
+	let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
+	let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
+
+	
+
+	totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
+
+    $("#pass-total").val(totalQty);
+
+}
+
+$("#btnPost").click(() => {
+    let productionType = $('#productionType').val();
+    let passType = $('#passType').val();
+    
+    let buyerId = '';
+    let buyerOrderId = '';
+    let styleId = '';
+    let itemId = '';
+    let purchaseOrder = '';
     const sampleCommentsId = $("#sampleCommentsId").val();
 
     const cuttingDate = $("#cuttingDate").val();
@@ -77,6 +170,45 @@ $("#btnPost").click(() => {
     const quality = $("#quality").val();
     const userId = $("#userId").val();
 
+    const productionQty1 = parseFloat(($("#production-h1").val() == '' ? "0" : $("#production-h1").val()));
+    const productionQty2 = parseFloat(($("#production-h2").val() == '' ? "0" : $("#production-h2").val()));
+    const productionQty3 = parseFloat(($("#production-h3").val() == '' ? "0" : $("#production-h3").val()));
+    const productionQty4 = parseFloat(($("#production-h4").val() == '' ? "0" : $("#production-h4").val()));
+    const productionQty5 = parseFloat(($("#production-h5").val() == '' ? "0" : $("#production-h5").val()));
+    const productionQty6 = parseFloat(($("#production-h6").val() == '' ? "0" : $("#production-h6").val()));
+    const productionQty7 = parseFloat(($("#production-h7").val() == '' ? "0" : $("#production-h7").val()));
+    const productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
+    const productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
+    const productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
+    const productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
+    const productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
+
+    let totalProductionQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
+
+
+    let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
+    let passQty2 = parseFloat(($("#pass-h2").val() == '' ? "0" : $("#pass-h2").val()));
+    let passQty3 = parseFloat(($("#pass-h3").val() == '' ? "0" : $("#pass-h3").val()));
+    let passQty4 = parseFloat(($("#pass-h4").val() == '' ? "0" : $("#pass-h4").val()));
+    let passQty5 = parseFloat(($("#pass-h5").val() == '' ? "0" : $("#pass-h5").val()));
+    let passQty6 = parseFloat(($("#pass-h6").val() == '' ? "0" : $("#pass-h6").val()));
+    let passQty7 = parseFloat(($("#pass-h7").val() == '' ? "0" : $("#pass-h7").val()));
+    let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
+    let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
+    let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
+    let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
+    let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
+
+    let totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
+
+    let productionValue = productionType + ":" + productionQty1 + ":" + productionQty2 + ":" + productionQty3 + ":" + productionQty4 + ":" + productionQty5 + ":" + productionQty6 + ":" + productionQty7 + ":" + productionQty8 + ":" + productionQty9 + ":" + productionQty10 + ":" + productionQty11+ ":" + productionQty12;
+	let passValue = passType + ":" + passQty1 + ":" + passQty2 + ":" + passQty3 + ":" + passQty4 + ":" + passQty5 + ":" + passQty6 + ":" + passQty7 + ":" + passQty8 + ":" + passQty9 + ":" + passQty10 + ":" + passQty11 + ":" + passQty12;
+			
+    let resultList = operatorName + "*" + sampleCommentsId + "*" + totalProductionQty + "*" + totalQty  + "*" + productionValue + "*" + passValue ;
+    
+
+    console.log(resultList)
+
     if (sampleCommentsId != "") {
         if (confirm("Are you sure to update this Sample Production...")) {
             $.ajax({
@@ -85,6 +217,11 @@ $("#btnPost").click(() => {
                 url: './postSampleProduction',
                 data: {
                     sampleCommentId: sampleCommentsId,
+                    buyerId : buyerId,
+                    buyerOrderId : buyerOrderId,
+                    purchaseOrder : purchaseOrder,
+                    styleId : styleId,
+                    itemId : itemId,
                     cuttingDate: cuttingDate,
                     cuttingQty: cuttingQty,
                     printSendDate: printSendDate,
@@ -99,6 +236,7 @@ $("#btnPost").click(() => {
                     SampleProductionUserIp: '',
                     SampleCommentFlag: '',
                     operatorName: operatorName,
+                    resultList: resultList,
                     quality: quality,
                     userId: userId
                 },
@@ -126,26 +264,57 @@ function refreshAction() {
 function showPreview() {
     const commentsId = $("#sampleCommentsId").val();
     const printType = "sizeWise";
-    var url = "getSampleProductionReport/" + commentsId + "/" + printType;
+    let url = "getSampleProductionReport/" + commentsId + "/" + printType;
     window.open(url, '_blank');
 };
 
+
+function checkProductionChange() {
+
+
+
+
+    let tables = "";
+
+
+    
+        tables += ``;
+
+        //<th scope="col">Edit</th>
+
+   
+
+    tables += 
+    //"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm'><i class='fa fa-edit'></i></button></td>
+
+
+
+    tables += "</tbody></table> </div></div>";
+    // tables += "</tbody></table> </div></div>";
+    document.getElementById("tableList").innerHTML = tables;
+    // $('.tableSelect').selectpicker('refresh');
+    // dataList.forEach((data) => {
+    // 	$("#employee-" + data.lineId).val(data.employeeId).change();
+    // })
+
+}
+
 function drawSampleCommentsListSearchTable(data) {
     const length = data.length;
-    var tr_list = "";
+    let tr_list = "";
     $("#sampleCommentsList").empty();
 
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         const rowData = data[i];
         const id = rowData.sampleCommentId;
-        tr_list = tr_list + "<tr id='row-" + id + "'  data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-size-id='" + rowData.sizeId + "' data-sample-type-id='" + rowData.sampleTypeId + "' >"
-            + "<td id='id-" + id + "'>" + id + "</td>"
-            + "<td id='purchaseOrder-" + id + "'>" + rowData.purchaseOrder + "</td>"
-            + "<td id='styleNo-" + id + "'>" + rowData.styleNo + "</td>"
-            + "<td id='itemName-" + id + "'>" + rowData.itemName + "</td>"
-            + "<td id='colorName-" + id + "'>" + rowData.colorName + "</td>"
-            + "<td id='size-" + id + "'>" + rowData.size + "</td>"
-            + "<td id='sampleTypeName-" + id + "'>" + rowData.sampleTypeName + "</td>"
+        tr_list = tr_list + "<tr id='row'  data-style-id='" + rowData.styleId + "' data-item-id='" + rowData.itemId + "' data-size-id='" + rowData.sizeId + "' data-sample-type-id='" + rowData.sampleTypeId + "' >"
+            + "<td id='id'>" + id + "</td>"
+            + "<td id='purchaseOrder'>" + rowData.purchaseOrder + "</td>"
+            + "<td id='styleNo'>" + rowData.styleNo + "</td>"
+            + "<td id='itemName'>" + rowData.itemName + "</td>"
+            + "<td id='colorName'>" + rowData.colorName + "</td>"
+            + "<td id='size'>" + rowData.size + "</td>"
+            + "<td id='sampleTypeName'>" + rowData.sampleTypeName + "</td>"
             + "<td ><i class='fa fa-search' style='cursor:pointer' onclick='setSampleProductionInfo(" + id + ")'></td>"
             + "</tr>";
     }
@@ -154,7 +323,7 @@ function drawSampleCommentsListSearchTable(data) {
 
 
 function successAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-success");
     document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -165,7 +334,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-warning");
     document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -176,7 +345,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-danger");
     document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";

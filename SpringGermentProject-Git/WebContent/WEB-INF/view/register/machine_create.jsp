@@ -8,8 +8,6 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
-<body onload="allMachine()">
-
 <%
 	List<login> lg = (List<login>) session.getAttribute("pg_admin");
 %>

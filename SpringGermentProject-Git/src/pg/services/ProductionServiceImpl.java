@@ -10,11 +10,13 @@ import pg.dao.ProductionDAO;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.SizeGroup;
 
 @Service
@@ -67,6 +69,12 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getProductionPlanForCutting() {
 		// TODO Auto-generated method stub
 		return productionDao.getProductionPlanForCutting();
+	}
+	
+	@Override
+	public List<ProductionPlan> getProductionPlanFromCutting() {
+		// TODO Auto-generated method stub
+		return productionDao.getProductionPlanFromCutting();
 	}
 
 
@@ -146,6 +154,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getSewingLineSetupinfo(v);
 	}
+	
+	@Override
+	public List<ProductionPlan> getSewingPassProduction(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getSewingPassProduction(v);
+	}
 
 
 	@Override
@@ -170,11 +184,11 @@ public class ProductionServiceImpl implements ProductionService {
 	}
 
 
-	@Override
+	/*@Override
 	public boolean saveFinishProductionDetails(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.saveFinishProductionDetails(v);
-	}
+	}*/
 
 
 	@Override
@@ -190,6 +204,12 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.saveInceptionLayoutDetails(v);
 	}
+	
+	@Override
+	public boolean saveInceptionLayoutLineDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveInceptionLayoutLineDetails(v);
+	}
 
 
 	@Override
@@ -197,12 +217,24 @@ public class ProductionServiceImpl implements ProductionService {
 		// TODO Auto-generated method stub
 		return productionDao.getLayoutPlanDetails(string);
 	}
+	
+	@Override
+	public List<ProductionPlan> getInspectionLayoutList(String type) {
+		// TODO Auto-generated method stub
+		return productionDao.getInspectionLayoutList(type);
+	}
 
 
 	@Override
 	public List<ProductionPlan> getLineWiseMachineList(ProductionPlan v) {
 		// TODO Auto-generated method stub
 		return productionDao.getLineWiseMachineList(v);
+	}
+	
+	@Override
+	public List<Machine> getLineWiseMachineListByLineId(String lineId) {
+		// TODO Auto-generated method stub
+		return productionDao.getLineWiseMachineListByLineId(lineId);
 	}
 
 
@@ -219,6 +251,25 @@ public class ProductionServiceImpl implements ProductionService {
 		return productionDao.getSewingLayoutLineProduction(v);
 	}
 
+	@Override
+	public boolean saveLineProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveLineProductionDetails(v);
+	}
+	
+	@Override
+	public boolean saveFinishingProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveFinishingProductionDetails(v);
+	}
+
+
+	@Override
+	public boolean saveIronProductionDetails(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.saveIronProductionDetails(v);
+	}
+
 
 	@Override
 	public boolean saveSewingProductionDetails(ProductionPlan v) {
@@ -229,6 +280,12 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getLayoutData(ProductionPlan productionPlan) {
 		// TODO Auto-generated method stub
 		return productionDao.getLayoutData(productionPlan);
+	}
+	
+	@Override
+	public List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getLayoutLineData(productionPlan);
 	}
 
 
@@ -243,6 +300,26 @@ public class ProductionServiceImpl implements ProductionService {
 	public List<ProductionPlan> getProductionData(ProductionPlan productionPlan) {
 		// TODO Auto-generated method stub
 		return productionDao.getProductionData(productionPlan);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getFinishingPassData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getFinishingPassData(v);
+	}
+
+
+	@Override
+	public List<ProductionPlan> getFinishingData(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getFinishingData(productionPlan);
+	}
+
+	@Override
+	public List<ProductionPlan> getIronData(ProductionPlan v) {
+		// TODO Auto-generated method stub
+		return productionDao.getIronData(v);
 	}
 
 
@@ -318,10 +395,11 @@ public class ProductionServiceImpl implements ProductionService {
 	}
 
 
-	
-
-
-	
+	@Override
+	public List<Process> getProcessValues(ProductionPlan productionPlan) {
+		// TODO Auto-generated method stub
+		return productionDao.getProcessValues(productionPlan);
+	}
 
 
 }

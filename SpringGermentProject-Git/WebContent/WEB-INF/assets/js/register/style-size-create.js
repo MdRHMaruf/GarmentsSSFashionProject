@@ -1,7 +1,7 @@
 
-var sizeGroup = [];
-function loadData() {
-
+window.onload = ()=>{
+  document.title = "Style Size Create";
+  
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -23,16 +23,15 @@ function loadData() {
       });
     }
   });
+} 
+let sizeGroup = [];
 
-}
-
-window.onload = loadData;
 function saveAction() {
-  var sizeGroupId = $("#sizeGroupId").val().trim();
-  var sizeGrouName = $("#sizeGroupName").val().trim();
-  var sizeName = $("#sizeName").val().trim();
-  var sorting = $("#sorting").val().trim() == "" ? "0" : $("#sorting").val().trim();
-  var userId = $("#userId").val();
+  let sizeGroupId = $("#sizeGroupId").val().trim();
+  let sizeGrouName = $("#sizeGroupName").val().trim();
+  let sizeName = $("#sizeName").val().trim();
+  let sorting = $("#sorting").val().trim() == "" ? "0" : $("#sorting").val().trim();
+  let userId = $("#userId").val();
 
   if (sizeGroupId != '0') {
     if (sizeName != '') {
@@ -71,12 +70,12 @@ function saveAction() {
 }
 
 function editAction() {
-  var sizeId = $("#sizeId").val().trim();
-  var sizeGroupId = $("#sizeGroupId").val().trim();
-  var sizeGrouName = $("#sizeGroupName").val().trim();
-  var sizeName = $("#sizeName").val().trim();
-  var sorting = $("#sorting").val().trim() == "" ? "0" : $("#sorting").val().trim();
-  var userId = $("#userId").val();
+  let sizeId = $("#sizeId").val().trim();
+  let sizeGroupId = $("#sizeGroupId").val().trim();
+  let sizeGrouName = $("#sizeGroupName").val().trim();
+  let sizeName = $("#sizeName").val().trim();
+  let sorting = $("#sorting").val().trim() == "" ? "0" : $("#sorting").val().trim();
+  let userId = $("#userId").val();
 
   if (sizeGroupId != '0') {
     if (sizeName != '') {
@@ -117,8 +116,8 @@ function editAction() {
 
 function groupSaveAction() {
 
-  var groupName = $("#groupName").val().trim();
-  var userId = $("#userId").val();
+  let groupName = $("#groupName").val().trim();
+  let userId = $("#userId").val();
 
   if (groupName != '') {
     $.ajax({
@@ -155,9 +154,9 @@ function groupSaveAction() {
 
 
 function groupEditAction() {
-  var groupId = $("#groupId").val().trim();
-  var groupName = $("#groupName").val().trim();
-  var userId = $("#userId").val();
+  let groupId = $("#groupId").val().trim();
+  let groupName = $("#groupName").val().trim();
+  let userId = $("#userId").val();
 
   if (groupId != '0') {
     if (groupName != '0') {
@@ -200,30 +199,21 @@ function groupEditAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
-  element.hide();
-  document.getElementById("lineId").value = "0";
-  document.getElementById("factoryName").value = "";
-  document.getElementById("lineName").value = "";
-  document.getElementById("btnSave").disabled = false;
-  document.getElementById("btnEdit").disabled = true;*/
 }
 
 function loadDepartmentByFactory() {
-  var factoryId = $("#factoryName").val().trim();
+  let factoryId = $("#factoryName").val().trim();
 
-  var length = departmentsByFactoryId['factId' + factoryId].length;
-  var options = "<option value='0'>Select Department</option>";
+  let length = departmentsByFactoryId['factId' + factoryId].length;
+  let options = "<option value='0'>Select Department</option>";
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     options += "<option value='" + departmentsByFactoryId['factId' + factoryId][i].departmentId + "'>" + departmentsByFactoryId['factId' + factoryId][i].departmentName + "</option>"
   }
-
   document.getElementById("departmentName").innerHTML = options;
 }
 
 function setData(sizeId, groupId) {
-
 
   document.getElementById("sizeId").value = sizeId;
   document.getElementById("sizeGroupId").value = groupId;
@@ -242,10 +232,10 @@ function setGroupData(groupId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -254,7 +244,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + c + "</td>"));
   row.append($("<td id='sizeGroup" + rowData.sizeId + "'>" + rowData.groupName + "</td>"));
   row.append($("<td id='sizeName" + rowData.sizeId + "'>" + rowData.sizeName + "</td>"));
@@ -265,10 +255,10 @@ function drawRowDataTable(rowData, c) {
 }
 
 function drawGroupTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowGroupTable(data[i], i));
   }
 
@@ -277,14 +267,14 @@ function drawGroupTable(data) {
 
 function drawRowGroupTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td id='groupName" + rowData.groupId + "'>" + rowData.groupName + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setGroupData(" + rowData.groupId + ")\"> </i></td>"));
   return row;
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -295,7 +285,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -306,7 +296,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -322,7 +312,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
@@ -331,7 +321,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#groupName").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#groupTableList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

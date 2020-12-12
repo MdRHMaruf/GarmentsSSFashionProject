@@ -1,19 +1,20 @@
-
 $("#save").attr('disabled', false);
 $("#edit").attr('disabled', true);
 $("#buyer_id").attr('disabled', true);
+
+
+
+window.onload = ()=>{
+	document.title = "Buyer Create";
+	maxbuyerId();
+} 
 
 function maxbuyerId(){
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: './max_buyerId',
-		data: {
-
-
-
-
-		},
+		data: {},
 		success: function (data) {
 			$("#buyer_id").val(data);
 			GetAllBuyers();
@@ -41,14 +42,9 @@ function maxbuyerId(){
 	});
 }
 
-
-
-
-
 function CountriesSearch(v){
 
-	var value=$(v).val();
-	console.log(value);
+	let value=$(v).val();
 	$(v).autocomplete({
 		source: function (request, response) {
 			$.ajax({
@@ -59,7 +55,6 @@ function CountriesSearch(v){
 					key:value
 				},
 				success: function (data) {
-					console.log("abc="+data)
 					response(data);
 				}
 			});
@@ -74,43 +69,36 @@ function CountriesSearch(v){
 
 
 function insertBuyer(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var buyerid=$("#buyer_id").val();
-	var buyername=$("#buyer_name").val();
-	var buyercode=$("#buyer_code").val();
+	let buyerid=$("#buyer_id").val();
+	let buyername=$("#buyer_name").val();
+	let buyercode=$("#buyer_code").val();
 	buyercode==''?buyercode='':buyercode=$("#buyer_code").val();
 	
 	
-	var buyeraddress=$("#buyer_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
+	let buyeraddress=$("#buyer_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();
 	
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
+	let country=$("#countries1").val();
+
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
 	
-	var telephone=$("#telphone").val();
+	let telephone=$("#telphone").val();
 		
 	
-	var mobile=$("#mobile").val();
-	
-	var fax=$("#fax").val();
-	
-	var email=$("#e_mail").val();
-	
-	var skypeid=$("#skype_id").val();
-	
-	var bankname=$("#bank_name").val();
-	
-	var bankaddress=$("#bank_address").val();
-	
-	var swiftcode=$("#swift_code").val();
-	
-	var bankcountry=$("#bank_country").val();
+	let mobile=$("#mobile").val();
+	let fax=$("#fax").val();
+	let email=$("#e_mail").val();
+	let skypeid=$("#skype_id").val();	
+	let bankname=$("#bank_name").val();
+	let bankaddress=$("#bank_address").val();
+	let swiftcode=$("#swift_code").val();
+	let bankcountry=$("#bank_country").val();
+
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
-	
-	console.log("user "+user);
-	console.log("bcountry "+bankcountry);
+
 
 	if (buyername=='') {
 		alert("Buyer Name Cannot be Empty");
@@ -147,11 +135,9 @@ function insertBuyer(){
 				bankaddress:bankaddress,
 				swiftcode:swiftcode,
 				bankcountry:bankcountry
-
-
 			},
 			success: function (data) {
-				console.log(data);
+				
 				if(data==true){
 					alert("Buyer Created Successfully");
 					reloadPage();
@@ -181,15 +167,13 @@ function insertBuyer(){
 			}
 		});
 	}
-
-
 }
 
 
 function BuyerList(v){
 
-	var value=$(v).val();
-	console.log(value);
+	let value=$(v).val();
+	
 	$(v).autocomplete({
 		source: function (request, response) {
 			$.ajax({
@@ -200,7 +184,6 @@ function BuyerList(v){
 
 				},
 				success: function (data) {
-					console.log("abc="+data)
 					response(data);
 				}
 			});
@@ -214,9 +197,6 @@ function BuyerList(v){
 
 function BuyerDetails(value){
 
-	//var value=$("#buyer_search").val();
-	//console.log(value);
-
 	if (value=='') {
 		alert("Select Buyer")
 	}else{
@@ -229,8 +209,6 @@ function BuyerDetails(value){
 
 			},
 			success: function (data) {
-
-				console.log(data);
 				setData(data);
 				$("#save").attr('disabled', true);
 				$("#edit").attr('disabled', false);
@@ -270,30 +248,27 @@ function setData(data){
 
 function editBuyer(){
 	
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var buyerid=$("#buyer_id").val();
-	var buyername=$("#buyer_name").val();
-	var buyercode=$("#buyer_code").val();
-	var buyeraddress=$("#buyer_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
-	var telephone=$("#telphone").val();
-	var mobile=$("#mobile").val();
-	var fax=$("#fax").val();
-	var email=$("#e_mail").val();
-	var skypeid=$("#skype_id").val();
+	let buyerid=$("#buyer_id").val();
+	let buyername=$("#buyer_name").val();
+	let buyercode=$("#buyer_code").val();
+	let buyeraddress=$("#buyer_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();
+	let country=$("#countries1").val();
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
+	let telephone=$("#telphone").val();
+	let mobile=$("#mobile").val();
+	let fax=$("#fax").val();
+	let email=$("#e_mail").val();
+	let skypeid=$("#skype_id").val();
 
-	var bankname=$("#bank_name").val();
-	var bankaddress=$("#bank_address").val();
-	var swiftcode=$("#swift_code").val();
-	var bankcountry=$("#bank_country").val();
+	let bankname=$("#bank_name").val();
+	let bankaddress=$("#bank_address").val();
+	let swiftcode=$("#swift_code").val();
+	let bankcountry=$("#bank_country").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
-
-	console.log("user "+user);
-	console.log("bcountry "+bankcountry);
 
 	if (buyername=='') {
 		alert("Buyer Name Cannot be Empty");
@@ -330,20 +305,14 @@ function editBuyer(){
 				bankaddress:bankaddress,
 				swiftcode:swiftcode,
 				bankcountry:bankcountry
-
-
 			},
-			success: function (data) {
-				console.log(data);
+			success: function (data) {	
 				if(data==true){
-					alert("Buyer Edited Successfully");
-					
-					reloadPage();
-					
+					alert("Buyer Edited Successfully");		
+					reloadPage();		
 				}else{
 					alert("Buyer Edition Failed. Could be Duplicate Buyer Name Problem");
 				}
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -362,7 +331,6 @@ function editBuyer(){
 				} else {
 					alert('Uncaught Error.\n' + jqXHR.responseText);
 				}
-
 			}
 		});
 	}
@@ -397,10 +365,10 @@ function GetAllBuyers(){
 
 
 function patchdata(data){
-	var rows = [];
+	let rows = [];
 
 
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		//ert("ad "+data[i].aquisitionValue);
 		rows.push(drawRow(data[i],i+1));
 
@@ -413,7 +381,7 @@ function drawRow(rowData,c) {
 
 	//alert(rowData.aquisitionValue);
 
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
@@ -426,7 +394,7 @@ function drawRow(rowData,c) {
 
 $(document).ready(function () {
 	  $("#search").on("keyup", function () {
-	    var value = $(this).val().toLowerCase();
+	    let value = $(this).val().toLowerCase();
 	    $("#buyerstable tr").filter(function () {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });

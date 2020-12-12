@@ -1,5 +1,10 @@
 let departmentIdForSet = 0;
 
+
+window.onload = ()=>{
+	document.title = "Incharge Create";
+} 
+
 function factoryWiseDepartmentLoad() {
   const factoryId = $("#factoryName").val();
   if (factoryId != 0) {
@@ -28,16 +33,16 @@ function factoryWiseDepartmentLoad() {
 function saveAction() {
 
 
-  var name = $("#name").val();
-  var factoryId = $("#factoryName").val();
-  var depId = $("#departmentName").val();
-  var telephone = $("#telephone").val();
-  var mobile = $("#mobile").val();
-  var fax = $("#fax").val();
-  var email = $("#email").val();
-  var skype = $("#skype").val();
-  var address = $("#address").val();
-  var userId = $("#userId").val();
+  let name = $("#name").val();
+  let factoryId = $("#factoryName").val();
+  let depId = $("#departmentName").val();
+  let telephone = $("#telephone").val();
+  let mobile = $("#mobile").val();
+  let fax = $("#fax").val();
+  let email = $("#email").val();
+  let skype = $("#skype").val();
+  let address = $("#address").val();
+  let userId = $("#userId").val();
 
 
   if (name != '') {
@@ -90,17 +95,17 @@ function saveAction() {
 
 
 function editAction() {
-  var inchargeId = $("#inchargeId").val();
-  var name = $("#name").val();
-  var factoryId = $("#factoryName").val();
-  var depId = $("#departmentName").val();
-  var telephone = $("#telephone").val();
-  var mobile = $("#mobile").val();
-  var fax = $("#fax").val();
-  var email = $("#email").val();
-  var skype = $("#skype").val();
-  var address = $("#address").val();
-  var userId = $("#userId").val();
+  let inchargeId = $("#inchargeId").val();
+  let name = $("#name").val();
+  let factoryId = $("#factoryName").val();
+  let depId = $("#departmentName").val();
+  let telephone = $("#telephone").val();
+  let mobile = $("#mobile").val();
+  let fax = $("#fax").val();
+  let email = $("#email").val();
+  let skype = $("#skype").val();
+  let address = $("#address").val();
+  let userId = $("#userId").val();
 
   if (name != '') {
     if(factoryId != 0){
@@ -153,7 +158,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("fabricsItemId").value = "0";
   document.getElementById("fabricsItemName").value = "";
@@ -185,10 +190,10 @@ function setData(inchargeId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i + 1));
   }
 
@@ -197,7 +202,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + c + "</td>"));
   row.append($("<td id='name" + rowData.inchargeId + "'>" + rowData.name + "</td>"));
   row.append($("<td id='telephone" + rowData.inchargeId + "'>" + rowData.telephone + "</td>"));
@@ -221,7 +226,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -232,7 +237,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -243,7 +248,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -259,7 +264,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

@@ -5,11 +5,13 @@ import java.util.List;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
+import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.SizeGroup;
 
 public interface ProductionService {
@@ -29,6 +31,7 @@ public interface ProductionService {
 	List<ProductionPlan> getProductionPlan(String buyerId, String buyerorderId, String styleId);
 
 	List<ProductionPlan> getProductionPlanForCutting();
+	List<ProductionPlan> getProductionPlanFromCutting();
 
 	List<Department> getFactoryWiseDepartmentLoad(String factoryId);
 
@@ -48,7 +51,8 @@ public interface ProductionService {
 	List<SewingLinesModel> getSewingProductionLines();
 
 	List<ProductionPlan> getSewingLineSetupinfo(ProductionPlan v);
-
+	List<ProductionPlan> getSewingPassProduction(ProductionPlan v);
+	
 	boolean saveSewingLayoutDetails(ProductionPlan v);
 
 	List<ProductionPlan> getSewingProductionReport(String Type);
@@ -56,20 +60,24 @@ public interface ProductionService {
 	List<ProductionPlan> viewSewingProduction(String buyerId, String buyerorderId, String styleId, String itemId,
 			String productionDate);
 
-	boolean saveFinishProductionDetails(ProductionPlan v);
+	//boolean saveFinishProductionDetails(ProductionPlan v);
 
 	List<ProductionPlan> viewSewingFinishingProduction(String buyerId, String buyerorderId, String styleId,
 			String itemId, String productionDate);
 
 	//Inception Layout
 	boolean saveInceptionLayoutDetails(ProductionPlan v);
+	boolean saveInceptionLayoutLineDetails(ProductionPlan v);
 
-	List<ProductionPlan> getLayoutPlanDetails(String string);
+	List<ProductionPlan> getLayoutPlanDetails(String type);
+	List<ProductionPlan> getInspectionLayoutList(String type);
 
 	List<ProductionPlan> getProductionData(ProductionPlan productionPlan);
 
 	//Sewing
+	boolean saveLineProductionDetails(ProductionPlan v);
 	List<ProductionPlan> getLineWiseMachineList(ProductionPlan v);
+	List<Machine> getLineWiseMachineListByLineId(String lineId);
 
 	List<ProductionPlan> getSizeListForProduction(ProductionPlan v);
 
@@ -78,12 +86,19 @@ public interface ProductionService {
 	boolean saveSewingProductionDetails(ProductionPlan v);
 
 	//Finishing
+	boolean saveFinishingProductionDetails(ProductionPlan v);
 	List<ProductionPlan> getLayoutData(ProductionPlan productionPlan);
+	List<ProductionPlan> getLayoutLineData(ProductionPlan productionPlan);
 	String editLayoutLineData(ProductionPlan productionPlan);
-
+	List<ProductionPlan> getFinishingData(ProductionPlan productionPlan);
+	List<ProductionPlan> getFinishingPassData(ProductionPlan v);
+	List<ProductionPlan> getIronData(ProductionPlan v);
 	boolean savePolyPackingDetails(ProductionPlan v);
+	List<Process> getProcessValues(ProductionPlan productionPlan);
 
 	List<ProductionPlan> getPolyPackingDetails(String string);
+	
+	boolean saveIronProductionDetails(ProductionPlan v);
 
 	List<CuttingInformation> getCuttingRequisitionList();
 

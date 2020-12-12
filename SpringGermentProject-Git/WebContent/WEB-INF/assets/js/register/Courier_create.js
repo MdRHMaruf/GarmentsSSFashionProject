@@ -1,26 +1,22 @@
+
+window.onload = ()=>{
+	document.title = "Courier Create";
+	maxCourierId();
+} 
+
 $("#save").attr('disabled', false);
 $("#edit").attr('disabled', true);
 $("#courier_id").attr('disabled', true);
 
-
 function maxCourierId(){
-	
-	
-
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: './max_courierId',
-		data: {
-
-
-
-
-		},
+		data: {},
 		success: function (data) {
 			$("#courier_id").val(data);
 			getAllCouriers();
-
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			//alert("Server Error");
@@ -45,11 +41,8 @@ function maxCourierId(){
 
 }
 
-
-
 function CountriesSearch(v){
-
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -65,7 +58,6 @@ function CountriesSearch(v){
 					response(data);
 				}
 			});
-			//   $("#tag").removeClass('ac_loading');
 		},
 		select: function (e, ui) {
 		}
@@ -75,37 +67,26 @@ function CountriesSearch(v){
 
 
 function insertCourier(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var courierid=$("#courier_id").val();
-	var couriername=$("#courier_name").val();
-	var courier_code=$("#courier_code").val();
+	let courierid=$("#courier_id").val();
+	let couriername=$("#courier_name").val();
+	let courier_code=$("#courier_code").val();
+	let courieraddress=$("#courier_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();	
+	let country=$("#countries1").val();
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
 	
-	var courieraddress=$("#courier_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
-	
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
-	
-	var telephone=$("#telphone").val();
-		
-	
-	var mobile=$("#mobile").val();
-	
-	var fax=$("#fax").val();
-	
-	var email=$("#e_mail").val();
-	
-	var skypeid=$("#skype_id").val();
-	
-	var bankname=$("#bank_name").val();
-	
-	var bankaddress=$("#bank_address").val();
-	
-	var swiftcode=$("#swift_code").val();
-	
-	var bankcountry=$("#bank_country").val();
+	let telephone=$("#telphone").val();
+	let mobile=$("#mobile").val();
+	let fax=$("#fax").val();
+	let email=$("#e_mail").val();
+	let skypeid=$("#skype_id").val();
+	let bankname=$("#bank_name").val();
+	let bankaddress=$("#bank_address").val();
+	let swiftcode=$("#swift_code").val();
+	let bankcountry=$("#bank_country").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 	
 	console.log("user "+user);
@@ -184,7 +165,7 @@ function insertCourier(){
 
 function CourierList(v){
 
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -192,9 +173,7 @@ function CourierList(v){
 				url: "./courierList/"+value,
 				type: 'GET',
 				dataType: "json",
-				data: {
-
-				},
+				data: {},
 				success: function (data) {
 					console.log("abc="+data)
 					response(data);
@@ -211,8 +190,6 @@ function CourierList(v){
 
 function courieriDetails(value){
 
-	//var value=$("#courier_search").val();
-	//console.log(value);
 
 	if (value=='') {
 		alert("Select Buyer")
@@ -222,9 +199,7 @@ function courieriDetails(value){
 			url: "./courierdetails/"+value,
 			type: 'POST',
 			dataType: "json",
-			data: {
-
-			},
+			data: {},
 			success: function (data) {
 
 				console.log(data);
@@ -266,37 +241,30 @@ function setData(data){
 
 
 function editCourier(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var courierid=$("#courier_id").val();
-	var couriername=$("#courier_name").val();
-	var courier_code=$("#courier_code").val();
+	let courierid=$("#courier_id").val();
+	let couriername=$("#courier_name").val();
+	let courier_code=$("#courier_code").val();
 	
-	var courieraddress=$("#courier_address").val();
-	var consigneeaddress=$("#consignee_address").val();
-	var notifyaddress=$("#notify_address").val();
+	let courieraddress=$("#courier_address").val();
+	let consigneeaddress=$("#consignee_address").val();
+	let notifyaddress=$("#notify_address").val();
 	
-	var country=$("#countries1").val();
-	var country=country.substring(country.lastIndexOf("*")+1,country.length);
+	let country=$("#countries1").val();
+	country=country.substring(country.lastIndexOf("*")+1,country.length);
 	
-	var telephone=$("#telphone").val();
+	let telephone=$("#telphone").val();
 		
 	
-	var mobile=$("#mobile").val();
-	
-	var fax=$("#fax").val();
-	
-	var email=$("#e_mail").val();
-	
-	var skypeid=$("#skype_id").val();
-	
-	var bankname=$("#bank_name").val();
-	
-	var bankaddress=$("#bank_address").val();
-	
-	var swiftcode=$("#swift_code").val();
-	
-	var bankcountry=$("#bank_country").val();
+	let mobile=$("#mobile").val();	
+	let fax=$("#fax").val();	
+	let email=$("#e_mail").val();
+	let skypeid=$("#skype_id").val();
+	let bankname=$("#bank_name").val();
+	let bankaddress=$("#bank_address").val();
+	let swiftcode=$("#swift_code").val();
+	let bankcountry=$("#bank_country").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 	
 	console.log("user "+user);
@@ -373,24 +341,16 @@ function editCourier(){
 }
 
 function getAllCouriers(){
-	//$("#itemtable").addClass('ac_loading');
-
-
-
-
+	
 	$.ajax({
-
 		type:'POST',
 		dataType:'json',
 		url:'./getCouriers',
 		success:function(data)
-		{
-			
+		{	
 			$("#couriertable").empty();
 			patchdata(data.result);
 		}
-
-
 	});
 
 
@@ -398,36 +358,27 @@ function getAllCouriers(){
 
 
 function patchdata(data){
-	var rows = [];
-
-
-	for (var i = 0; i < data.length; i++) {
+	let rows = [];
+	for (let i = 0; i < data.length; i++) {
 		//ert("ad "+data[i].aquisitionValue);
 		rows.push(drawRow(data[i],i+1));
-
 	}
-
 	$("#couriertable").append(rows);
 }
 
 function drawRow(rowData,c) {
-
 	//alert(rowData.aquisitionValue);
-
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
 	row.append($("<td ><i class='fa fa-edit' onclick='courieriDetails(" + rowData.id + ")' class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModalCenter\"> </i></td>"));
-
-	
-
 	return row;
 }
 
 $(document).ready(function () {
 	  $("#search").on("keyup", function () {
-	    var value = $(this).val().toLowerCase();
+	    let value = $(this).val().toLowerCase();
 	    $("#couriertable tr").filter(function () {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });

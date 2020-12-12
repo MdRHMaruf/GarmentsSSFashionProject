@@ -59,6 +59,7 @@ import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.orderModel.parcelModel;
+import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
@@ -77,6 +78,7 @@ import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
+import pg.services.ProductionService;
 import pg.services.RegisterService;
 
 @Controller
@@ -94,6 +96,8 @@ public class OrderController {
 
 	@Autowired
 	private OrderService orderService;
+	@Autowired
+	private ProductionService productionService;
 	@Autowired
 	private RegisterService registerService;
 
@@ -1520,11 +1524,11 @@ public class OrderController {
 	}
 
 
-	@RequestMapping(value = "/confrimItemToSampleRequisition",method=RequestMethod.POST)
-	public @ResponseBody String confrimItemToSampleRequisition(SampleRequisitionItem v) {
+	@RequestMapping(value = "/confirmItemToSampleRequisition",method=RequestMethod.POST)
+	public @ResponseBody String confirmItemToSampleRequisition(SampleRequisitionItem v) {
 		String msg="Create Occue while confrim sample requisition";
 
-		if(orderService.confrimItemToSampleRequisition(v)) {
+		if(orderService.confirmItemToSampleRequisition(v)) {
 			msg="Sample Requisition Confrim Successfully";
 		}
 
@@ -1648,8 +1652,8 @@ public class OrderController {
 	public ModelAndView sample_production(ModelMap map,HttpSession session) {
 
 		ModelAndView view = new ModelAndView("order/sample_production");
-		//List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
-		//view.addObject("sampleCommentsList",sampleCommentsList);
+		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
+		view.addObject("sampleCommentsList",sampleCommentsList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1665,7 +1669,11 @@ public class OrderController {
 	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
 		JSONObject objmain = new JSONObject();
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
+		System.out.println("it's ok controller");
+		List<ProductionPlan> productionList = orderService.getSampleProduction(sampleCommentId,sampleProduction.getOperatorName(),sampleProduction.getCuttingDate());
+
 		objmain.put("sampleProduction", sampleProduction);
+		objmain.put("productionList", productionList);
 		return objmain;
 	}
 
@@ -1916,8 +1924,8 @@ public class OrderController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/insertSamplCad",method=RequestMethod.GET)
-	public String insertSamplCad(SampleCadAndProduction sample) {
+	@RequestMapping(value = "/insertSampleCad",method=RequestMethod.GET)
+	public String insertSampleCad(SampleCadAndProduction sample) {
 		boolean insert=orderService.sampleCadInsert(sample);
 
 		if (insert) {

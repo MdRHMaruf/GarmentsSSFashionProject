@@ -51,12 +51,17 @@ public class ProductionPlan {
 	String hour8="";
 	String hour9="";
 	String hour10="";
+	String hour11="";
+	String hour12="";
 	String hours="";
 	String total="";
 	String date="";
 	
 	String machineId="";
 	String machineName="";
+	String processId;
+	String processValues;
+	
 	String operatorId="";
 	String operatorName="";
 	String sizeGroupId="";
@@ -440,7 +445,20 @@ public class ProductionPlan {
 	public void setStyleNo(String styleNo) {
 		this.styleNo = styleNo;
 	}
+	public String getProcessId() {
+		return processId;
+	}
+	public void setProcessId(String processId) {
+		this.processId = processId;
+	}
+	
 
+	public String getProcessValues() {
+		return processValues;
+	}
+	public void setProcessValues(String processValues) {
+		this.processValues = processValues;
+	}
 	public String getItemName() {
 		return itemName;
 	}
@@ -755,6 +773,18 @@ public class ProductionPlan {
 	}
 	public void setAutoId(String autoId) {
 		this.autoId = autoId;
+	}
+	public String getHour11() {
+		return hour11;
+	}
+	public void setHour11(String hour11) {
+		this.hour11 = hour11;
+	}
+	public String getHour12() {
+		return hour12;
+	}
+	public void setHour12(String hour12) {
+		this.hour12 = hour12;
 	}
 	
 	

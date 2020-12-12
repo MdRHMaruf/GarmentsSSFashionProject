@@ -1,4 +1,6 @@
-
+window.onload = ()=>{
+    document.title = "Fabrics Pending Transaction";
+  } 
 $("#btnSearch").click(() => {
 
     const departmentId = $("#departmentId").val();
@@ -46,7 +48,7 @@ $("#btnSearch").click(() => {
 
 
 function printFabricsIssue(transactionId, transactionType) {
-    var url = "printFabricsIssue/" + transactionId + "/" + transactionType;
+    let url = "printFabricsIssue/" + transactionId + "/" + transactionType;
     window.open(url, '_blank');
 }
 
@@ -140,10 +142,10 @@ $("#btnRefresh").click(() => {
 
 function drawPendingList(data) {
     const length = data.length;
-    var tr_list = "";
+    let tr_list = "";
     $("#pendingInvoiceList").empty();
 
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
         const rowData = data[i];
         const id = i;
         tr_list += `<tr>
@@ -159,7 +161,7 @@ function drawPendingList(data) {
 }
 
 function successAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-success");
     document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -170,7 +172,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-warning");
     document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -181,7 +183,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-    var element = $(".alert");
+    let element = $(".alert");
     element.hide();
     element = $(".alert-danger");
     document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -199,6 +201,6 @@ $(document).ready(function () {
     $("input").focus(function () { $(this).select(); });
 });
 
-var today = new Date();
+let today = new Date();
 document.getElementById("fromDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 document.getElementById("toDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);

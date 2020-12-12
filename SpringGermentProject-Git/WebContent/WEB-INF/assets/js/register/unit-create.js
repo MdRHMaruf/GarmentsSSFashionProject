@@ -1,11 +1,14 @@
 
 
+window.onload = ()=>{
+	document.title = "Unit Create";
+} 
 
 
 function saveAction() {
-  var unitName = $("#unitName").val().trim();
-  var unitValue = $("#unitValue").val().trim();
-  var userId = $("#userId").val();
+  let unitName = $("#unitName").val().trim();
+  let unitValue = $("#unitValue").val().trim();
+  let userId = $("#userId").val();
 
   if (unitName != '') {
     $.ajax({
@@ -39,10 +42,10 @@ function saveAction() {
 
 
 function editAction() {
-  var unitId = $("#unitId").val();
-  var unitName = $("#unitName").val().trim();
-  var unitValue = $("#unitValue").val().trim();
-  var userId = $("#userId").val();
+  let unitId = $("#unitId").val();
+  let unitName = $("#unitName").val().trim();
+  let unitValue = $("#unitValue").val().trim();
+  let userId = $("#userId").val();
 
   if (unitName != '') {
     $.ajax({
@@ -77,7 +80,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("unitId").value = "0";
   document.getElementById("unitName").value = "";
@@ -99,10 +102,10 @@ function setData(unitId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -111,7 +114,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.unitId + "</td>"));
   row.append($("<td id='unitName" + rowData.unitId + "'>" + rowData.unitName + "</td>"));
   row.append($("<td id='unitValue" + rowData.unitId + "'>" + rowData.unitValue + "</td>"));
@@ -121,7 +124,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -132,7 +135,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -143,7 +146,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -159,7 +162,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

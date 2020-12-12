@@ -1,11 +1,15 @@
-var id;
+
+window.onload = ()=>{
+  document.title = "Designation Create";
+  allDesignation();
+} 
+
+let id;
 function saveAction() {
 	
-  var departmentId = $("#departmentName").val();
-  var designation = $("#designation").val();
-  var userId = $("#userId").val();
-  
-	console.log("designation : "+designation)
+  let departmentId = $("#departmentName").val();
+  let designation = $("#designation").val();
+  let userId = $("#userId").val();
 
   if (departmentName != '' & designation != '') {
     $.ajax({
@@ -41,9 +45,9 @@ function saveAction() {
 
 function editAction() {
 	
-  var departmentId = $("#departmentName").val();
-  var designation = $("#designation").val();
-  var userId = $("#userId").val();
+  let departmentId = $("#departmentName").val();
+  let designation = $("#designation").val();
+  let userId = $("#userId").val();
 
   if (departmentName != '' & designation != '') {
     $.ajax({
@@ -96,9 +100,9 @@ function allDesignation(){
 }
 
 function patchdata(data){
-	var rows = [];
+	let rows = [];
 	
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		rows.push(drawRow(data[i],i+1));
 
 	}
@@ -108,7 +112,7 @@ function patchdata(data){
 
 function drawRow(rowData,c) {
 	
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + c + "</td>"));
 	row.append($("<td id='rowData.departmentId'>" + rowData.departmentName+ "</td>"));
 	row.append($("<td>" + rowData.designationId+ "</td>"));
@@ -122,9 +126,9 @@ function drawRow(rowData,c) {
 function setData(departmentId,designationId,designationName){
 	
 	id = decodeURIComponent(designationId);
-	var departmentId = decodeURIComponent(departmentId);
-	var designation = decodeURIComponent(designationName);
-	var departmentName = decodeURIComponent(departmentName);
+	departmentId = decodeURIComponent(departmentId);
+	let designation = decodeURIComponent(designationName);
+	let departmentName = decodeURIComponent(departmentName);
 	$("#departmentName").val(departmentId).change();
 	$("#designation").val(designation);
 	
@@ -134,7 +138,7 @@ function setData(departmentId,designationId,designationName){
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -145,7 +149,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -156,7 +160,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
@@ -172,7 +176,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#designationList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

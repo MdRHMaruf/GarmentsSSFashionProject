@@ -27,6 +27,7 @@ import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.Process;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Department;
 import pg.registerModel.Employee;
@@ -34,6 +35,7 @@ import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.Line;
+import pg.registerModel.Machine;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
@@ -312,22 +314,64 @@ public class ProductionController {
 
 
 
-		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
+		List<ProductionPlan> productionPlanList = productionService.getProductionPlanFromCutting();
+		List<ProductionPlan> layoutList = productionService.getInspectionLayoutList(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
+		List<Employee> employeeList = registerService.getEmployeeList();
 		ModelAndView view = new ModelAndView("production/inspection_layout_plan");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
+		view.addObject("employeeList",employeeList);
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-	@RequestMapping(value = "/saveLineInceptionLayoutDetails",method=RequestMethod.POST)
-	public @ResponseBody String saveLineInceptionLayoutDetails(ProductionPlan v) {
+	@RequestMapping(value = "/saveLineProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveLineProductionDetails(ProductionPlan v) {
+
+		String msg="Create Occure while Saving Inception Layout Details";
+		boolean flag= productionService.saveLineProductionDetails(v);
+
+		if(flag) {
+			msg="Saving Sewing Inception Layout Details Sucessfully";
+		}
+
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/saveFinishingProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveFinishingProductionDetails(ProductionPlan v) {
+
+		String msg="Create Occure while Saving Inception Layout Details";
+		boolean flag= productionService.saveFinishingProductionDetails(v);
+
+		if(flag) {
+			msg="Saving Sewing Inception Layout Details Sucessfully";
+		}
+
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/saveIronProductionDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveIronProductionDetails(ProductionPlan v) {
+
+		String msg="Create Occure while Saving Inception Layout Details";
+		boolean flag= productionService.saveIronProductionDetails(v);
+
+		if(flag) {
+			msg="Saving Sewing Inception Layout Details Sucessfully";
+		}
+
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@RequestMapping(value = "/saveLineInceptionLayoutLineDetails",method=RequestMethod.POST)
+	public @ResponseBody String saveLineInceptionLayoutLineDetails(ProductionPlan v) {
 
 		String msg="Create Occure while Saving Inception Layout Details";
 
-		boolean flag= productionService.saveInceptionLayoutDetails(v);
+		boolean flag= productionService.saveInceptionLayoutLineDetails(v);
 
 		if(flag) {
 			msg="Saving Sewing Inception Layout Details Sucessfully";
@@ -526,7 +570,7 @@ public class ProductionController {
 	//Finishing
 
 
-	@RequestMapping(value = "/saveFinishProductionDetails",method=RequestMethod.POST)
+	/*@RequestMapping(value = "/saveFinishProductionDetails",method=RequestMethod.POST)
 	public @ResponseBody String saveFinishProductionDetails(ProductionPlan v) {
 
 		String msg="Create Occure while saving finishing proudction";
@@ -538,7 +582,7 @@ public class ProductionController {
 		}
 
 		return msg; //JSP - /WEB-INF/view/index.jsp
-	}
+	}*/
 
 
 	@RequestMapping(value = "/viewSewingProduction",method=RequestMethod.GET)
@@ -605,11 +649,47 @@ public class ProductionController {
 
 		List<Employee> employeeList = registerService.getEmployeeList();
 
-		List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+		//List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
 
 		objmain.put("result",sewingList);
 		objmain.put("employeeresult",employeeList);
-		objmain.put("sizelist",sizelist);
+		//objmain.put("sizelist",sizelist);
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchSewingPassProduction",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSewingPassProduction(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.getSewingPassProduction(v);
+
+		List<Employee> employeeList = registerService.getEmployeeList();
+
+		//List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+
+		objmain.put("result",sewingList);
+		objmain.put("employeeresult",employeeList);
+		//objmain.put("sizelist",sizelist);
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchFinishingPassData",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchFinishingPassData(ProductionPlan v) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<ProductionPlan> sewingList = productionService.getFinishingPassData(v);
+
+		List<Employee> employeeList = registerService.getEmployeeList();
+
+		//List<ProductionPlan> sizelist = productionService.getSizeListForProduction(v);
+
+		objmain.put("result",sewingList);
+		objmain.put("employeeresult",employeeList);
+		//objmain.put("sizelist",sizelist);
 
 		return objmain;
 	}
@@ -626,6 +706,20 @@ public class ProductionController {
 		List<ProcessInfo> processList=registerService.getProcessList();
 		objmain.put("result",machineList);
 		objmain.put("sizelistresult",sizelist);
+		objmain.put("processList",processList);
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/lineWiseMachineListByLineId",method=RequestMethod.GET)
+	public @ResponseBody JSONObject lineWiseMachineListByLineId(String lineId) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<Machine> machineList = productionService.getLineWiseMachineListByLineId(lineId);	
+		List<ProcessInfo> processList=registerService.getProcessList();
+		objmain.put("result",machineList);
+		
 		objmain.put("processList",processList);
 
 		return objmain;
@@ -688,9 +782,9 @@ public class ProductionController {
 	//Line Inspection Production
 	@RequestMapping(value = "/line_inspection_production",method=RequestMethod.GET)
 	public ModelAndView line_inspection_production(ModelMap map,HttpSession session) {
-
-		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPETION_PRODUCTION.getType()));
+		//List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PRODUCTION.getType()));
+		List<ProductionPlan> productionPlanList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/line-inspection-production");
 		view.addObject("productionPlanList",productionPlanList);
@@ -703,8 +797,8 @@ public class ProductionController {
 	@RequestMapping(value = "/finishing_production",method=RequestMethod.GET)
 	public ModelAndView finishing_production(ModelMap map,HttpSession session) {
 
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_LAYOUT.getType()));
-		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PRODUCTION.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PASS.getType()));
+		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PASS.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/finishing-production");
 		view.addObject("layoutList",layoutList);
@@ -718,12 +812,13 @@ public class ProductionController {
 	@RequestMapping(value = "/iron_production",method=RequestMethod.GET)
 	public ModelAndView iron_production(ModelMap map,HttpSession session) {
 
-
-		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_LAYOUT.getType()));
-		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PRODUCTION.getType()));
+		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PASS.getType()));
+		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PASS.getType()));
+		List<ProcessInfo> processlist = registerService.getProcessList();
 		ModelAndView view = new ModelAndView("production/iron-production");
 		view.addObject("productionList",productionList);
 		view.addObject("layoutList",layoutList);
+		view.addObject("processlist",processlist);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -747,7 +842,7 @@ public class ProductionController {
 	public ModelAndView line_inspection_reject(ModelMap map,HttpSession session) {
 
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
-		List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_REJECT.getType()));
+		List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_REJECT.getType()));
 
 		ModelAndView view = new ModelAndView("production/line_inspection_reject");
 		view.addObject("rejectList",rejectList);
@@ -780,6 +875,17 @@ public class ProductionController {
 		objmain.put("employeeList",employeeList);
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/searchLayoutLineData",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchLayoutLineData(ProductionPlan productionPlan) {
+		System.out.println("Controller Execute");
+		JSONObject objmain = new JSONObject();
+		List<ProcessInfo> processList = registerService.getProcessList();
+		List<ProductionPlan> productionPlanList = productionService.getLayoutLineData(productionPlan);
+		objmain.put("result",productionPlanList);
+		objmain.put("processList",processList);
+		return objmain;
+	}
 
 	@RequestMapping(value = "/searchProductionData",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchProductionData(ProductionPlan productionPlan) {
@@ -787,6 +893,30 @@ public class ProductionController {
 		JSONObject objmain = new JSONObject();
 		List<Employee> employeeList = registerService.getEmployeeList();
 		List<ProductionPlan> productionPlanList = productionService.getProductionData(productionPlan);
+		List<Process> processValues = productionService.getProcessValues(productionPlan);
+		objmain.put("result",productionPlanList);
+		objmain.put("employeeList",employeeList);
+		objmain.put("processValues", processValues);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchFinishingData",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchFinishingData(ProductionPlan productionPlan) {
+		System.out.println("Controller Execute");
+		JSONObject objmain = new JSONObject();
+		List<Employee> employeeList = registerService.getEmployeeList();
+		List<ProductionPlan> productionPlanList = productionService.getFinishingData(productionPlan);
+		objmain.put("result",productionPlanList);
+		objmain.put("employeeList",employeeList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchIronData",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchIronData(ProductionPlan productionPlan) {
+		System.out.println("Controller Execute");
+		JSONObject objmain = new JSONObject();
+		List<Employee> employeeList = registerService.getEmployeeList();
+		List<ProductionPlan> productionPlanList = productionService.getIronData(productionPlan);
 		objmain.put("result",productionPlanList);
 		objmain.put("employeeList",employeeList);
 		return objmain;

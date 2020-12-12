@@ -1,3 +1,9 @@
+
+window.onload = ()=>{
+	document.title = "Factory Create";
+	maxFactoryId();
+} 
+
 $("#save").attr('disabled', false);
 $("#edit").attr('disabled', true);
 $("#id").attr('disabled', true);
@@ -5,18 +11,11 @@ $("#id").attr('disabled', true);
 
 function maxFactoryId(){
 	
-	
-
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: './max_factoryId',
-		data: {
-
-
-
-
-		},
+		data: {},
 		success: function (data) {
 			$("#id").val(data);
 			getAllFactories();
@@ -48,7 +47,7 @@ function maxFactoryId(){
 
 function CountriesSearch(v){
 
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -74,25 +73,25 @@ function CountriesSearch(v){
 
 
 function FactoryCreate(){
-	var user=$("#user_hidden").val();
+	let user=$("#user_hidden").val();
 
-	var factoryid=$("#id").val();
-	var factoryname=$("#factory_name").val();
-	var telephone=$("#telphone").val();
-	var mobile=$("#mobile").val();
-	var fax=$("#fax").val();	
-	var email=$("#e_mail").val();		
-	var bondlicense=$("#bond_license").val();
-	var skypeid=$("#skype_id").val();
-	var address=$("#address").val();	
+	let factoryid=$("#id").val();
+	let factoryname=$("#factory_name").val();
+	let telephone=$("#telphone").val();
+	let mobile=$("#mobile").val();
+	let fax=$("#fax").val();	
+	let email=$("#e_mail").val();		
+	let bondlicense=$("#bond_license").val();
+	let skypeid=$("#skype_id").val();
+	let address=$("#address").val();	
 	
 	
-	var bankname=$("#bank_name").val();
-	var bankaddress=$("#bank_address").val();
-	var aaccounts_no=$("#account_no").val();
-	var swiftcode=$("#swift_code").val();
-	var accounts_name=$("#account_name").val();	
-	var bankcountry=$("#bankcountry").val();
+	let bankname=$("#bank_name").val();
+	let bankaddress=$("#bank_address").val();
+	let aaccounts_no=$("#account_no").val();
+	let swiftcode=$("#swift_code").val();
+	let accounts_name=$("#account_name").val();	
+	let bankcountry=$("#bankcountry").val();
 	bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 	
 	console.log("user "+user);
@@ -126,8 +125,6 @@ function FactoryCreate(){
 				 swiftcode:swiftcode,
 				 accountname:accounts_name,
 				 bankcountry:bankcountry
-
-
 			},
 			success: function (data) {
 				console.log(data);
@@ -167,7 +164,7 @@ function FactoryCreate(){
 
 function factorylist(v){
 
-	var value=$(v).val();
+	let value=$(v).val();
 	console.log(value);
 	$(v).autocomplete({
 		source: function (request, response) {
@@ -194,7 +191,7 @@ function factorylist(v){
 
 function factoryDetails(value){
 
-	//var value=$("#search").val();
+	//let value=$("#search").val();
 	//console.log(value);
 
 	if (value=='') {
@@ -250,25 +247,25 @@ function setData(data){
 }
 
 
-function editFactory(){var user=$("#user_hidden").val();
+function editFactory(){let user=$("#user_hidden").val();
 
-var factoryid=$("#id").val();
-var factoryname=$("#factory_name").val();
-var telephone=$("#telphone").val();
-var mobile=$("#mobile").val();
-var fax=$("#fax").val();	
-var email=$("#e_mail").val();		
-var bondlicense=$("#bond_license").val();
-var skypeid=$("#skype_id").val();
-var address=$("#address").val();	
+let factoryid=$("#id").val();
+let factoryname=$("#factory_name").val();
+let telephone=$("#telphone").val();
+let mobile=$("#mobile").val();
+let fax=$("#fax").val();	
+let email=$("#e_mail").val();		
+let bondlicense=$("#bond_license").val();
+let skypeid=$("#skype_id").val();
+let address=$("#address").val();	
 
 
-var bankname=$("#bank_name").val();
-var bankaddress=$("#bank_address").val();
-var aaccounts_no=$("#account_no").val();
-var swiftcode=$("#swift_code").val();
-var accounts_name=$("#account_name").val();	
-var bankcountry=$("#bankcountry").val();
+let bankname=$("#bank_name").val();
+let bankaddress=$("#bank_address").val();
+let aaccounts_no=$("#account_no").val();
+let swiftcode=$("#swift_code").val();
+let accounts_name=$("#account_name").val();	
+let bankcountry=$("#bankcountry").val();
 bankcountry=bankcountry.substring(bankcountry.lastIndexOf("*")+1,bankcountry.length);
 
 console.log("user "+user);
@@ -364,10 +361,10 @@ function getAllFactories(){
 
 
 function patchdata(data){
-	var rows = [];
+	let rows = [];
 
 
-	for (var i = 0; i < data.length; i++) {
+	for (let i = 0; i < data.length; i++) {
 		//ert("ad "+data[i].aquisitionValue);
 		rows.push(drawRow(data[i],i+1));
 
@@ -380,7 +377,7 @@ function drawRow(rowData,c) {
 
 	//alert(rowData.aquisitionValue);
 
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
@@ -393,7 +390,7 @@ function drawRow(rowData,c) {
 
 $(document).ready(function () {
 	  $("#search").on("keyup", function () {
-	    var value = $(this).val().toLowerCase();
+	    let value = $(this).val().toLowerCase();
 	    $("#factorytable tr").filter(function () {
 	      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 	    });

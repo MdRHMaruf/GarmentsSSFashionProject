@@ -120,10 +120,7 @@
 									<option id="color" value="${color.colorId}">${color.colorName}</option>
 								</c:forEach>
 							</select>
-
 						</div>
-
-
 					</div>
 				</div>
 				<div class="row">

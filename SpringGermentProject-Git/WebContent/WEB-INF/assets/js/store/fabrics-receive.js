@@ -1,4 +1,6 @@
-
+window.onload = ()=>{
+  document.title = "Fabrics Receive";
+} 
 const fakeRackList = [{ rackId: '1', rackName: 'AA' },
 { rackId: '2', rackName: 'AB' },
 { rackId: '3', rackName: 'BA' },
@@ -574,7 +576,7 @@ function drawFabricsRollListTable(data) {
   let receiveQtyList = [];
   let parentRowId = 0;
   let tempTotalReceive = 0;
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
     if (!(rowData.fabricsColorId == tempFabricsColorId && rowData.fabricsId == tempFabricsId && rowData.itemColorId == tempItemColorId && rowData.itemId == tempItemId && rowData.styleId == tempStyleId && rowData.purchaseOrder == tempPurchaseOrder)) {
@@ -697,7 +699,7 @@ function drawFabricsReceiveListTable(data) {
   let rows = [];
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     let row = $("<tr/>")
     row.append($("<td>" + rowData.transactionId + "</td>"));
@@ -716,7 +718,7 @@ function drawFabricsListTable(data) {
   let rows = [];
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     let row = $("<tr/>")
     row.append($("<td>" + rowData.itemName + "</td>"));
@@ -733,7 +735,7 @@ function drawPurchaseOrderListTable(data) {
   let rows = "";
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
 
     rows += "<tr id='" + rowData.autoId + "'>"
@@ -753,14 +755,14 @@ function drawPurchaseOrderListTable(data) {
 
 $(document).ready(function () {
   $('.table-expandable tbody').on("click", ".odd", function () {
-    var element = $(this);
+    let element = $(this);
     element.next('tr').toggle(0);
     element.find(".table-expandable-arrow").toggleClass("up");
   })
 });
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -771,7 +773,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -782,7 +784,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -824,7 +826,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#searchEverything").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#purchaseOrderList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
@@ -832,6 +834,6 @@ $(document).ready(function () {
 });
 
 
-var today = new Date();
+let today = new Date();
 document.getElementById("grnDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 

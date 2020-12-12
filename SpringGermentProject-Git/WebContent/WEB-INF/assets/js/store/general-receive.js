@@ -1,3 +1,6 @@
+window.onload = ()=>{
+	document.title = "General Item Receive";
+  } 
 function setGeneralReceivedInvoice(invoiceNo,type){
     $.ajax({
         type: 'POST',
@@ -9,7 +12,7 @@ function setGeneralReceivedInvoice(invoiceNo,type){
         },
         success: function (data) {
             if (data== "Success") {
-          		var url = "printGeneralReceivedInvoiceReportt";
+          		let url = "printGeneralReceivedInvoiceReportt";
         		window.open(url, '_blank');
 
               }
@@ -17,12 +20,12 @@ function setGeneralReceivedInvoice(invoiceNo,type){
       });
 }
 function confrimAction(){
-	var userId = $("#userId").val();
-	var invoiceNo = $("#invoiceNo").val();
-	var date = $("#date").val();
-	var challanNo = $("#challanNo").val();
-	var supplierId = $("#supplierId").val();
-	var type = "1";
+	let userId = $("#userId").val();
+	let invoiceNo = $("#invoiceNo").val();
+	let date = $("#date").val();
+	let challanNo = $("#challanNo").val();
+	let supplierId = $("#supplierId").val();
+	let type = "1";
 	
 	if (supplierId != '0') {
 		if (date != '0') {
@@ -66,13 +69,13 @@ function refreshAction() {
 	}
 
 function submitAction(){
-	var userId = $("#userId").val();
-	var type = "1";
-	var invoiceNo = $("#invoiceNo").val();
-	var ItemId = $("#ItemId").val();
-	var unitId = $("#unitId").val();
-	var qty = $("#qty").val()==''?"0":$("#qty").val();
-	var pirce = $("#pirce").val()==''?"0":$("#pirce").val();
+	let userId = $("#userId").val();
+	let type = "1";
+	let invoiceNo = $("#invoiceNo").val();
+	let ItemId = $("#ItemId").val();
+	let unitId = $("#unitId").val();
+	let qty = $("#qty").val()==''?"0":$("#qty").val();
+	let pirce = $("#pirce").val()==''?"0":$("#pirce").val();
 
 	if (ItemId != '0') {
 		if (qty != '0') {
@@ -113,10 +116,10 @@ function submitAction(){
 }
 
 function drawDataTable(data) {
-	  var rows = [];
-	  var length = data.length;
+	  let rows = [];
+	  let length = data.length;
 
-	  for (var i = 0; i < length; i++) {
+	  for (let i = 0; i < length; i++) {
 	    rows.push(drawRowDataTable(data[i], i+1));
 	  }
 
@@ -125,7 +128,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-	  var row = $("<tr />")
+	  let row = $("<tr />")
 	  row.append($("<td>" + c + "</td>"));
 	  row.append($("<td id='itemName" + rowData.autoId + "'>" + rowData.itemName + "</td>"));
 	  row.append($("<td id='Category" + rowData.autoId + "'>" + parseFloat(rowData.qty).toFixed() + "</td>"));
@@ -138,7 +141,7 @@ function drawRowDataTable(rowData, c) {
 	}
 
 function successAlert(message) {
-	  var element = $(".alert");
+	  let element = $(".alert");
 	  element.hide();
 	  element = $(".alert-success");
 	  document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -149,7 +152,7 @@ function successAlert(message) {
 	}
 
 	function warningAlert(message) {
-	  var element = $(".alert");
+	  let element = $(".alert");
 	  element.hide();
 	  element = $(".alert-warning");
 	  document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
@@ -160,7 +163,7 @@ function successAlert(message) {
 	}
 
 	function dangerAlert(message) {
-	  var element = $(".alert");
+	  let element = $(".alert");
 	  element.hide();
 	  element = $(".alert-danger");
 	  document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";

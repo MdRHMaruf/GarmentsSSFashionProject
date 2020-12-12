@@ -21,6 +21,7 @@ import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
 import pg.orderModel.parcelModel;
+import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
@@ -437,9 +438,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean confrimItemToSampleRequisition(SampleRequisitionItem v) {
+	public boolean confirmItemToSampleRequisition(SampleRequisitionItem v) {
 		// TODO Auto-generated method stub
-		return orderDAO.confrimItemToSampleRequisition(v);
+		return orderDAO.confirmItemToSampleRequisition(v);
 	}
 
 	@Override
@@ -618,6 +619,12 @@ public class OrderServiceImpl implements OrderService{
 	public boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList) {
 		// TODO Auto-generated method stub
 		return orderDAO.purchaseOrderApproveConfirm(purchaseOrderList);
+	}
+	@Override
+	public List<ProductionPlan> getSampleProduction(String arg0, String arg1, String arg2) {
+		// TODO Auto-generated method stub
+		System.out.println("it's ok Service");
+		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
 
 }

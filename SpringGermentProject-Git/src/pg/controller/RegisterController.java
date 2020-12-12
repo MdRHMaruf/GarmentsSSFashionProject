@@ -118,11 +118,8 @@ public class RegisterController {
 	@RequestMapping(value = "/buerySearch/{value}",method=RequestMethod.GET)
 	public JSONArray buerySearch(@PathVariable ("value") String value) {
 		System.out.println(" Buyer list ");
-
 		JSONArray array=new JSONArray();
-
 		List<String> buyers=registerService.BuyersList(value);
-
 		for (int i = 0; i < buyers.size(); i++) {
 			array.add(buyers.get(i));
 		}
@@ -160,9 +157,6 @@ public class RegisterController {
 			array.add(buyerdetails.get(i).getBankaddress());
 			array.add(buyerdetails.get(i).getSwiftcode());
 			array.add(buyerdetails.get(i).getBankcountry());
-
-
-
 		}
 
 		return array;
@@ -1027,7 +1021,6 @@ public class RegisterController {
 		System.out.println("list size="+styleItemList.size());
 
 		map.addAttribute("styleItemList",styleItemList);
-
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 

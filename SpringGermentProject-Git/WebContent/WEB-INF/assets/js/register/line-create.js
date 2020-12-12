@@ -1,5 +1,10 @@
 
-var departmentsByFactoryId  = JSON;
+
+window.onload = ()=>{
+	document.title = "Line Create";
+} 
+
+let departmentsByFactoryId  = JSON;
 let departmentIdForSet = 0;
 function loadData(){
   
@@ -17,10 +22,10 @@ function loadData(){
 
 window.onload = loadData;
 function saveAction() {
-  var factoryId = $("#factoryName").val().trim();
-  var departmentId = $("#departmentName").val().trim();
-  var lineName = $("#lineName").val().trim();
-  var userId = $("#userId").val();
+  let factoryId = $("#factoryName").val().trim();
+  let departmentId = $("#departmentName").val().trim();
+  let lineName = $("#lineName").val().trim();
+  let userId = $("#userId").val();
 
   if (factoryId != '0') {
     if (departmentId != '0') {
@@ -63,11 +68,11 @@ function saveAction() {
 
 
 function editAction() {
-  var lineId = $("#lineId").val().trim();
-  var factoryId = $("#factoryName").val().trim();
-  var departmentId = $("#departmentName").val().trim();
-  var lineName = $("#lineName").val().trim();
-  var userId = $("#userId").val();
+  let lineId = $("#lineId").val().trim();
+  let factoryId = $("#factoryName").val().trim();
+  let departmentId = $("#departmentName").val().trim();
+  let lineName = $("#lineName").val().trim();
+  let userId = $("#userId").val();
 
   if (factoryId != '0') {
     if (departmentId != '0') {
@@ -112,7 +117,7 @@ function editAction() {
 
 function refreshAction() {
   location.reload();
-  /*var element = $(".alert");
+  /*let element = $(".alert");
   element.hide();
   document.getElementById("lineId").value = "0";
   document.getElementById("factoryName").value = "";
@@ -122,12 +127,12 @@ function refreshAction() {
 }
 
 function loadDepartmentByFactory() {
-  var factoryId = $("#factoryName").val().trim();
+  let factoryId = $("#factoryName").val().trim();
   
-  var length= departmentsByFactoryId['factId'+factoryId].length;
-  var options = "<option value='0'>Select Department</option>";
+  let length= departmentsByFactoryId['factId'+factoryId].length;
+  let options = "<option value='0'>Select Department</option>";
   
-  for(var i=0;i<length;i++){
+  for(let i=0;i<length;i++){
     options += "<option value='"+departmentsByFactoryId['factId'+factoryId][i].departmentId+"'>"+departmentsByFactoryId['factId'+factoryId][i].departmentName+"</option>"
   }
   
@@ -151,10 +156,10 @@ function setData(factoryId, departmentId, lineId) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -163,7 +168,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.lineId + "</td>"));
   row.append($("<td id='factoryName" + rowData.lineId + "'>" + rowData.factoryName + "</td>"));
   row.append($("<td id='departmentName" + rowData.lineId + "'>" + rowData.departmentName + "</td>"));
@@ -174,7 +179,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -185,7 +190,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -196,7 +201,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -212,7 +217,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#dataList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
