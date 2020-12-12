@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-
+import pg.OrganizationModel.OrganizationInfo;
 import pg.model.menu;
 import pg.model.menuinfo;
 import pg.model.module;
@@ -291,6 +291,29 @@ public class SettingController {
 			e.printStackTrace();
 		}
 		return msg;
+	}
+	
+	@RequestMapping(value = "organization_create",method=RequestMethod.GET)
+	public ModelAndView organization_create(ModelMap map) {
+		
+		ModelAndView view = new ModelAndView("setting/organization-create");
+		
+		return view; //JSP - /WEB-INF/view/index.jsp
+		
+	}
+	@RequestMapping(value = "/getOrganizationName", method = RequestMethod.POST)
+	public @ResponseBody List<OrganizationInfo> getOrganizationName(OrganizationInfo v) {
+		
+		List<OrganizationInfo> OrganizationCreate = settingService.getOrganization();
+		return OrganizationCreate;
+
+	}
+	@RequestMapping(value = "/saveOrganizationName", method = RequestMethod.POST)
+	public @ResponseBody String saveOrganizationName(OrganizationInfo v) {
+
+			boolean saveOrganizationName = settingService.editOrganization(v);
+			return "success";
+
 	}
 
 }

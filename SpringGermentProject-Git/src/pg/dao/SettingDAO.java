@@ -2,7 +2,7 @@ package pg.dao;
 
 import java.util.List;
 
-
+import pg.OrganizationModel.OrganizationInfo;
 import pg.model.menu;
 import pg.model.menuinfo;
 import pg.model.module;
@@ -32,5 +32,8 @@ public interface SettingDAO {
 	public List<modulewisemenusubmenu> getAllModuleWiseSubmenu();
 	public List<modulewisemenusubmenu> getAllModuleWiseMenuSubMenuName(int i,String menulist);
 	public List<wareinfo> getAllWareName();
+	
+	public List<OrganizationInfo> getOrganization();
+	public boolean editOrganization(OrganizationInfo v);
 	
 }

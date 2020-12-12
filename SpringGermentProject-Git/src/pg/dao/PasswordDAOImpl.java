@@ -18,6 +18,7 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import pg.OrganizationModel.OrganizationInfo;
 import pg.model.login;
 import pg.model.menu;
 import pg.model.module;
@@ -299,5 +300,76 @@ public class PasswordDAOImpl implements PasswordDAO{
 
 		return query;
 
+	}
+
+	@Override
+	public boolean changePassword(String userId, String userName, String password) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="update Tblogin set password='"+password+"'  where id='"+userId+"' and username='"+userName+"'";
+			System.out.println(sql);
+			session.createSQLQuery(sql).executeUpdate();
+
+
+			tx.commit();
+
+
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<OrganizationInfo> getOrganizationInfo() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<OrganizationInfo> query=new ArrayList<OrganizationInfo>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+
+			String sql="select organizationName,organizationContact,organizationAddress,organizationLogo from tbOrganizationInfo";
+			List<?> list = session.createSQLQuery(sql).list();
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				System.out.println("orgacon"+element[1].toString());
+				System.out.println("orgadd"+element[2].toString());
+				query.add(new OrganizationInfo(element[0].toString(),element[1].toString(), element[2].toString()));
+			}
+			
+			tx.commit();
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+
+		return query;
 	}
 }

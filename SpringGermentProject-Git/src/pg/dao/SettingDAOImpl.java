@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import pg.model.ware;
 import pg.model.wareinfo;
+import pg.OrganizationModel.OrganizationInfo;
 import pg.model.menu;
 import pg.model.menuinfo;
 import pg.model.module;
@@ -612,6 +613,71 @@ public class SettingDAOImpl implements SettingDAO {
 		return query;
 	}
 
+
+
+
+	@Override
+	public List<OrganizationInfo> getOrganization() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<OrganizationInfo> dataList=new ArrayList<OrganizationInfo>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select organizationId, organizationName, organizationContact, organizationAddress from tbOrganizationInfo";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new OrganizationInfo(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+
+
+	@Override
+	public boolean editOrganization(OrganizationInfo v) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			
+			String sql = "update tbOrganizationInfo set organizationName='"+v.getOrganizationName()+"', organizationContact='"+v.getOrganizationContact()+"', organizationAddress='"+v.getOrganizationAddress()+"' where organizationId='"+v.getOrganizationId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
 
 
 }
