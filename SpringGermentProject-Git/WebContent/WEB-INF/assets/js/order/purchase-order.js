@@ -1,6 +1,11 @@
 let styleIdForSet = 0;
 let itemIdForSet = 0;
 let indentIdForSet = 0;
+
+
+window.onload = ()=>{
+  document.title = "Purchase Order";
+}
 function poWiseStyleLoad() {
   const purchaseOrder = $("#purchaseOrder").val();
 
