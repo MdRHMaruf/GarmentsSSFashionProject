@@ -5149,10 +5149,9 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
+			System.out.println("it's ok DAO");
 
-
-
-			String sql="select AutoId,BuyerId,BuyerOrderId,PurchaseOrder,StyleId,ItemId,LineId,EmployeeId,Type,Hours,hour1,hour2,hour3,hour4,hour5,hour6,hour7,hour8,hour9,hour10,hour11,hour12 "
+			String sql="select AutoId,BuyerId,BuyerOrderId,PurchaseOrder,StyleId,LineId,EmployeeId,Type,Hours,hour1,hour2,hour3,hour4,hour5,hour6,hour7,hour8,hour9,hour10,hour11,hour12 "
 					+ "from tbLayoutPlanDetails lpd "
 					+ "where lpd.lineId='"+sampleCommentId+"' and lpd.date = '"+date+"'  and (lpd.Type = '"+ProductionType.SAMPLE_PRODUCTION.getType()+"' or lpd.Type = '"+ProductionType.SAMPLE_PASS.getType()+"') ";
 
@@ -5162,8 +5161,8 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-
-				tempPlan = new ProductionPlan(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),lineCount);
+				tempPlan = new ProductionPlan();
+				tempPlan.setProudctionType(element[7].toString());
 				tempPlan.setHour1(element[9].toString());
 				tempPlan.setHour2(element[10].toString());
 				tempPlan.setHour3(element[11].toString());
@@ -5174,7 +5173,9 @@ public class OrderDAOImpl implements OrderDAO{
 				tempPlan.setHour8(element[16].toString());
 				tempPlan.setHour9(element[17].toString());
 				tempPlan.setHour10(element[18].toString());
-				tempPlan.setEmployeeId(element[19].toString());
+				tempPlan.setHour11(element[19].toString());
+				tempPlan.setHour12(element[20].toString());
+				
 
 				ListData.add(tempPlan);
 
@@ -5189,11 +5190,11 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 		}
 		catch(Exception ee){
-
+			ee.printStackTrace();
 			if (tx != null) {
 				ee.printStackTrace();
 			}
-			ee.printStackTrace();
+			
 		}
 
 		finally {

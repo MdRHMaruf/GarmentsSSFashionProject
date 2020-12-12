@@ -37,7 +37,7 @@ function setSampleProductionInfo(sampleCommentId) {
             } else {
                 //drawSampleCommentsListSearchTable(data.sampleCommentsList);
                 const sample = data.sampleProduction;
-
+                
                 $("#sampleCommentsNo").val(sample.sampleCommentId);
                 $("#sampleCommentsId").val(sample.sampleCommentId);
                 $("#purchaseOrder").val(sample.purchaseOrder);
@@ -62,6 +62,43 @@ function setSampleProductionInfo(sampleCommentId) {
                 $("#operatorName").val(sample.operatorName);
                 $("#quality").val(sample.quality);
                 $('#searchModal').modal('hide');
+
+                for(let i=0;i<data.productionList.length;i++){
+                    const production = data.productionList[i];
+                    console.log(production);
+                    console.log(production.productionType );
+                    if(production.proudctionType == '14'){
+
+                        $("#production-h1").val(production.hour1);
+                        $("#production-h2").val(production.hour2);
+                        $("#production-h3").val(production.hour3);
+                        $("#production-h4").val(production.hour4);
+                        $("#production-h5").val(production.hour5);
+                        $("#production-h6").val(production.hour6);
+                        $("#production-h7").val(production.hour7);
+                        $("#production-h8").val(production.hour8);
+                        $("#production-h9").val(production.hour9);
+                        $("#production-h10").val(production.hour10);
+                        $("#production-h11").val(production.hour11);
+                        $("#production-h12").val(production.hour12);
+                        $("#production-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
+                    }else if(production.proudctionType == '15'){
+                        $("#pass-h1").val(production.hour1);
+                        $("#pass-h2").val(production.hour2);
+                        $("#pass-h3").val(production.hour3);
+                        $("#pass-h4").val(production.hour4);
+                        $("#pass-h5").val(production.hour5);
+                        $("#pass-h6").val(production.hour6);
+                        $("#pass-h7").val(production.hour7);
+                        $("#pass-h8").val(production.hour8);
+                        $("#pass-h9").val(production.hour9);
+                        $("#pass-h10").val(production.hour10);
+                        $("#pass-h11").val(production.hour11);
+                        $("#pass-h12").val(production.hour12);
+                        $("#pass-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
+                    }
+                    
+                }
             }
         }
     });

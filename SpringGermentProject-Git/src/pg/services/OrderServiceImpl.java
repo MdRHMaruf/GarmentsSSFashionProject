@@ -620,9 +620,10 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.purchaseOrderApproveConfirm(purchaseOrderList);
 	}
-
+	@Override
 	public List<ProductionPlan> getSampleProduction(String arg0, String arg1, String arg2) {
 		// TODO Auto-generated method stub
+		System.out.println("it's ok Service");
 		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
 

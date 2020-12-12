@@ -1669,8 +1669,11 @@ public class OrderController {
 	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
 		JSONObject objmain = new JSONObject();
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
-		List<ProductionPlan> sewingList = orderService.getSampleProduction(sampleCommentId,sampleProduction.getOperatorName(),sampleProduction.getCuttingDate());
+		System.out.println("it's ok controller");
+		List<ProductionPlan> productionList = orderService.getSampleProduction(sampleCommentId,sampleProduction.getOperatorName(),sampleProduction.getCuttingDate());
+
 		objmain.put("sampleProduction", sampleProduction);
+		objmain.put("productionList", productionList);
 		return objmain;
 	}
 

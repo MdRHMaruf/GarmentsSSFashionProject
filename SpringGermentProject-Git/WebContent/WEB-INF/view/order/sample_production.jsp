@@ -229,7 +229,7 @@
 									<h5>Sewing</h5>
 
 									<div class="row">
-										<label for="sewingSendDate" class="col-sm-5">Send Date</label>
+										<label for="sewingSendDate" class="col-sm-5">Start Date</label>
 										<div class="col-sm-7">
 											<input class="form-control-sm col-sm-12" type="date"
 												id="sewingSendDate">
