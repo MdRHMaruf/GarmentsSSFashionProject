@@ -1,4 +1,3 @@
-
 $("#add_submenu_module").change(function(){
 	$("#add_submenu_main_menu").empty();
     $('#add_submenu_main_menu')

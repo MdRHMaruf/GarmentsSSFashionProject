@@ -8,7 +8,6 @@
 <%@page import="pg.model.login"%>
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
-
 <script type="text/javascript"> var contexPath = "<%=request.getContextPath()%>
 	";
 </script>
@@ -86,4 +85,5 @@
 	<script
 		src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>
 	<script
+
 		src="${pageContext.request.contextPath}/assets/js/custom/organization-create.js"></script>
