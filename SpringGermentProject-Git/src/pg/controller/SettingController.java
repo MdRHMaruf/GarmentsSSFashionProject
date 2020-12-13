@@ -293,6 +293,7 @@ public class SettingController {
 		return msg;
 	}
 	
+	
 	@RequestMapping(value = "organization_create",method=RequestMethod.GET)
 	public ModelAndView organization_create(ModelMap map) {
 		
