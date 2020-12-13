@@ -29,7 +29,6 @@ public class SettingServiceImpl implements SettingService{
 	@Autowired
 	private SettingDAOImpl settingDAO=new SettingDAOImpl();
 	
-	
 	@Transactional
 	public List<module> getAllModuleName() {
 		// TODO Auto-generated method stub

@@ -16,7 +16,6 @@ import pg.model.password;
 import pg.model.wareinfo;
 
 public interface PasswordService {
-
 	public List<login> login(String loginName,String password) throws UserBlockedException;
 	public List<wareinfo> getAllStoreName();
 	public List<module> getAllModuleName();

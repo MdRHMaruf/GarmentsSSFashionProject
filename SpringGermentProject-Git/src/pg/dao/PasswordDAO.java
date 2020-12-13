@@ -30,7 +30,6 @@ public interface PasswordDAO {
 	public List<menu> getAdminUserMenu(int i,int moduleId);
 	
 	public List<OrganizationInfo> getOrganizationInfo();
-	
 	public boolean changePassword(String userId, String userName, String password);
 }
     

@@ -16,7 +16,6 @@ import pg.model.ware;
 import pg.model.wareinfo;
 
 public interface SettingService{
-
 	public boolean addWare(ware ware) throws UserBlockedException;
 	
 	public List<modulewisemenusubmenu> getAllModuleWiseMenuSubMenuName(int i,String menulist);
