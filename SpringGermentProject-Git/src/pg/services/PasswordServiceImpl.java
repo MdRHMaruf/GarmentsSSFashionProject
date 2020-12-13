@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import pg.OrganizationModel.OrganizationInfo;
 import pg.dao.PasswordDAO;
 import pg.exception.UserBlockedException;
 import pg.model.login;
@@ -31,7 +32,6 @@ public class PasswordServiceImpl implements PasswordService {
 
 	}
 
-
 	@Transactional
 	public List<wareinfo> getAllStoreName() {
 		// TODO Auto-generated method stub
@@ -49,25 +49,34 @@ public class PasswordServiceImpl implements PasswordService {
 		// TODO Auto-generated method stub
 		return passDAO.getAllMenuName();
 	}
-
-
 	
 	@Transactional
 	public List<module> getUserModule(int i) {
 		// TODO Auto-generated method stub
 		return passDAO.getUserModule(i);
-	}
-	
+	}	
 	@Transactional
 	public List<menu> getUserMenu(int i,int moduleId) {
 
 		return passDAO.getUserMenu(i,moduleId);
 	}
-
-
 	@Override
 	public List<menu> getAdminUserMenu(int i, int moduleId) {
 		// TODO Auto-generated method stub
 		return passDAO.getAdminUserMenu(i, moduleId);
+	}
+
+
+	@Override
+	public boolean changePassword(String userId, String userName, String password) {
+		// TODO Auto-generated method stub
+		return passDAO.changePassword(userId, userName, password);
+	}
+
+
+	@Override
+	public List<OrganizationInfo> getOrganizationInfo() {
+		// TODO Auto-generated method stub
+		return passDAO.getOrganizationInfo();
 	}
 }

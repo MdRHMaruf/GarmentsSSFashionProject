@@ -185,5 +185,27 @@ public class PasswordController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 	
+	@RequestMapping(value = "change_password",method=RequestMethod.GET)
+	public ModelAndView change_password(ModelMap modelmap,HttpSession session) {
+		
+		
+		ModelAndView view = new ModelAndView("setting/change_password");
+		
+		
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "changePassword",method=RequestMethod.POST)
+	public @ResponseBody String changePassword(String userId,String userName,String password) {
+		
+		String msg="Create Occure while change password";	
+		
+		boolean flag=passService.changePassword(userId,userName,password);
+		if(flag) {
+			msg="Password Change Successfully";
+		}
+		
+		return msg; //JSP - /WEB-INF/view/index.jsp
+	}
 
 }
