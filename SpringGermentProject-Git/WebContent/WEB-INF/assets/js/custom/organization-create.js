@@ -1,4 +1,6 @@
 
+
+
 function getOrganizationName(){
 	$.ajax({
 		type: 'POST',
@@ -85,4 +87,5 @@ function dangerAlert(message) {
 	setTimeout(() => {
 		element.toggle('fade');
 	}, 2500);
+
 }

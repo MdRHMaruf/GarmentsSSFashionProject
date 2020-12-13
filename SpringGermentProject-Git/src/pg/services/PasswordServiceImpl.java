@@ -19,8 +19,6 @@ import pg.model.module;
 import pg.model.password;
 import pg.model.wareinfo;
 
-
-
 @Service
 public class PasswordServiceImpl implements PasswordService {
 	@Autowired

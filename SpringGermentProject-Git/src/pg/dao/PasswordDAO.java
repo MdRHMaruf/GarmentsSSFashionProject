@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -30,7 +31,6 @@ public interface PasswordDAO {
 	public List<menu> getAdminUserMenu(int i,int moduleId);
 	
 	public List<OrganizationInfo> getOrganizationInfo();
-	
 	public boolean changePassword(String userId, String userName, String password);
 }
     
