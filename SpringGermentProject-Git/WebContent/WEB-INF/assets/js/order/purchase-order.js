@@ -50,7 +50,6 @@ function typeWiseIndentItemLoad() {
       document.getElementById("indentItem").innerHTML = options;
       $('#indentItem').selectpicker('refresh');
       $('#indentItem').val(0).change();
-
     } else {
       $.ajax({
         type: 'GET',

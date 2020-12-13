@@ -1673,7 +1673,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select cast(unitvalue as Integer) as unitValue,unitName from tbunits";
+			String sql="select Unitid,unitName,cast(unitvalue as Integer) as unitValue from tbunits";
 			System.out.println(" max ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -1682,9 +1682,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
-
+				query.add(new commonModel(element[0].toString(),element[1].toString(),element[3].toString()));
 			}
 
 

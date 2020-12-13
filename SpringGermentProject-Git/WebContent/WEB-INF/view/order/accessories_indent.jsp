@@ -426,7 +426,7 @@
 										data-style="btn-light border-secondary form-control-sm">
 										
 										<c:forEach items="${unit}" var="acc" varStatus="counter">
-											<option id='unit' value="${acc.id}">${acc.name}</option>
+											<option value="${acc.id}">${acc.name}</option>
 										</c:forEach>
 									</select>
 								</div>

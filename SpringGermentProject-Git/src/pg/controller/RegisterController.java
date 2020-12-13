@@ -1166,6 +1166,14 @@ public class RegisterController {
 
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/getUnitList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getUnitList() {
+		JSONObject objmain = new JSONObject();
+		List<Unit> unitList= registerService.getUnitList();
+		objmain.put("unitList", unitList);
+		return objmain;
+	}
 
 	//Color Create 
 	@RequestMapping(value = "/color_create",method=RequestMethod.GET)

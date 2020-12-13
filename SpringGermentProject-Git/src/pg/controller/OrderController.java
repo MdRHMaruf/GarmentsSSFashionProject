@@ -791,13 +791,13 @@ public class OrderController {
 
 		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
 
-		List<commonModel>unit=orderService.Unit();
+		//List<commonModel>unit=orderService.Unit();
 		List<commonModel>brand=orderService.Brands();
 		List<commonModel>color=orderService.AllColors();
 		ModelAndView view = new ModelAndView("order/accessories_indent");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("accessories",accessoriesitem);
-		view.addObject("unit",unit);
+		//view.addObject("unit",unit);
 		view.addObject("brand",brand);
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
@@ -806,7 +806,7 @@ public class OrderController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-
+	
 
 
 
