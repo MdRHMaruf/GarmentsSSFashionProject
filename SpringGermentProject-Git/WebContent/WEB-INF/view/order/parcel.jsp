@@ -34,207 +34,203 @@
 	<div class="card-box">
 		<!-- <div class="row">
 			<div class="col-md-12"> -->
-			<header class="d-flex justify-content-between">
+		<header class="d-flex justify-content-between">
 			<h5 class="text-center" style="display: inline;">Parcel</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
-				<i class="fa fa-search"></i> Parcel List</button>
-			</header>
+				<i class="fa fa-search"></i> Parcel List
+			</button>
+		</header>
 		<hr class="my-1">
 		<div class="row">
-			<!-- <div class="col-sm-4">
-
-				<label for="id" class="form-label mb-0">ID</label>
+			<div class="col-md-6">
 				<div class="row">
-					<input class="form-control-sm" type="text" id="id">
-				</div>
-
-			</div> -->
-
-			<div class="col-sm-4">
-				<label for="styleNo" class="form-label mb-0">Style No</label>
-				<div class="row">
-				
-					<select id="styleNo" onchange="styleWiseItemLoad()"
-					class="selectpicker col-md-12 px-0" data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray">
-					<option id="styleNo" value="0">Select Style</option>
-						<c:forEach items="${StyleList}" var="po">
-						<option id="styleNo" value="${po.styleId}">${po.styleNo}</option>
+					<label for="buyerName" class="col-form-label-sm mb-0 pr-0 col-md-2">Buyer
+						Name:</label> <select id="buyerName" class="selectpicker col-md-9"
+						onchange="buyerWisePoLoad()" data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option  value="0">Select Buyer</option>
+						<c:forEach items="${buyerList}" var="buyer">
+							<option value="${buyer.buyerid}">${buyer.buyername}</option>
 						</c:forEach>
 					</select>
-				
-					
+
 				</div>
-
-			</div>
-
-			<div class="col-sm-4">
-				<label for="item" class="form-label-sm mb-0">Item</label>
 				<div class="row">
-					<select id="itemName" class="selectpicker col-md-12" onchange=""
-						data-live-search="true"
+					<label for="purchaseOrder"
+						class="col-form-label-sm mb-0 pr-0 col-md-2">Purchase
+						Order:</label> <select id="purchaseOrder" class="selectpicker col-md-9"
+						onchange="poWiseStyles()" data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="itemName" value="0">Select Item</option>
+						<option id="purchaseOrder" value="0">Select Purchase
+							Order</option>
+					</select>
+
+				</div>
+				<div class="row">
+					<label for="styleNo" class="col-form-label-sm mb-0 pr-0 col-md-2">Style
+						No:</label> <select id="styleNo" class="selectpicker col-md-9"
+						onchange="styleWiseItemLoad()" data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option id="styleNo" value="0">Select Style</option>
+					</select>
+
+				</div>
+				<div class="row">
+					<label for="itemName" class="col-form-label-sm mb-0 pr-0 col-md-2">Item
+						Desc.:</label> <select id="itemName" class="selectpicker col-md-9"
+						data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray"
+						onchange="styleItemsWiseColor()">
+						<option id="itemName" value="0">Select Item Description</option>
+					</select>
+				</div>
+				<div class="row">
+					<label for="colorName" class="col-form-label-sm mb-0 pr-0 col-md-2">Color
+						Name:</label> <select id="colorName" class="selectpicker col-md-4"
+						onchange="styleItemWiseColorSizeLoad()" data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+					</select> <label for="size" class="col-form-label-sm mb-0 pr-0 col-md-2">Size
+						Name:</label> <select id="size" class="selectpicker col-md-4 px-0"
+						data-live-search="true" onchange=""
+						data-style="btn-light btn-sm border-light-gray">
+						<option value="0">Select Size</option>
 					</select>
 				</div>
 
-			</div>
-		</div>
-
-		<div class="row">
-
-			<div class="col-sm-4">
-				<label for="sample" class="form-label-sm mb-0">Sample</label>
 				<div class="row">
-					<select id="sampletype" onchange=""
-					class="selectpicker col-md-12 px-0" data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray">
-					<option id="sampletype" value="0">Select Sample</option>
+					<label for="sampletype"
+						class="col-form-label-sm mb-0 pr-0 col-md-2">Sample Type:</label>
+					<select id="sampleType" onchange="" class="selectpicker col-md-4"
+						data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option id="sampletype" value="0">Select Sample</option>
 						<c:forEach items="${sampletype}" var="po">
-						<option id="sampletype" value="${po.id}">${po.name}</option>
+							<option id="sampletype" value="${po.id}">${po.name}</option>
 						</c:forEach>
-					</select>
+					</select> <label for="quantity" class="col-form-label-sm mb-0 pr-0 col-md-2">Quantity:</label>
+					<input type="number" class="form-control-sm col-md-4"
+						id="quantity">
 				</div>
 
-
-			</div>
-
-			<div class="col-sm-4 pr-4 pl-4">
-				<label for="dispatchedDate" class="form-label-sm mb-0">Dispatched
-					Date</label>
-				<div class="row">
-					<input class="form-control-sm col-md-12" type="date"
-						id="dispatchedDate">
+				<div class="row my-1 d-flex flex-row-reverse">
+					<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
+						onclick="itemAddAction()">
+						<i class="fa fa-plus-circle"></i> Add
+					</button>
 				</div>
-
-
 			</div>
-
-			<div class="col-md-4">
-				<label for="courierName" class="form-label-sm mb-0">Courier
-					Name</label>
+			<div class="col-md-6">
 				<div class="row">
-					<select id="courierName" class="selectpicker col-md-12" onchange=""
-						data-live-search="true"
+					<label for="courierName"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Courier name:</label>
+
+					<select id="courierName" class="selectpicker col-md-9 px-0"
+						onchange="" data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="courierName" value="0">Select Courier</option>
+						<option value="0">Select Courier</option>
 						<c:forEach items="${courierList}" var="po">
-						<option id="courierName" value="${po.courierid}">${po.couriername}</option>
+							<option value="${po.courierid}">${po.couriername}</option>
 						</c:forEach>
 					</select>
+
 				</div>
+				<div class="row">
+					<label for="trackingNo"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Tracking No:</label>
+					<input type="text" class="form-control-sm col-md-9" id="trackingNo">
+				</div>
+				<div class="row">
+					<label for="dispatchedDate"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Dispatched
+						Date:</label> <input type="dateTime-local"
+						class="form-control-sm col-md-9" id="dispatchedDate">
 
+				</div>
+				<div class="row">
+					<label for="deliveryBy"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Delivered By:</label>
+					<input type="text" class="form-control-sm col-md-9" id="deliveryBy">
+				</div>
+				<div class="row">
+					<label for="deliveryTo"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Delivery To:</label>
+					<input type="text" class="form-control-sm col-md-9" id="deliveryTo">
+				</div>
+				<div class="row">
+					<label for="mobileNo" class="col-form-label-sm mb-0 pr-0 col-md-3">Mobile
+						No:</label> <input type="text" class="form-control-sm col-md-9"
+						id="mobileNo">
+				</div>
 			</div>
-
 		</div>
 
 		<div class="row mt-1">
+			<div style="overflow: auto; max-height: 300px;"
+				class="col-sm-12 px-1 table-responsive">
+				<table
+					class="table table-hover table-bordered table-sm mb-0 small-font">
+					<thead class="no-wrap-text">
+						<tr>
+							<th>Style</th>
+							<th>Buyer PO</th>
+							<th>Color</th>
+							<th>Size</th>
+							<th>Sample Type</th>
+							<th>Quantity</th>
+							<th>Edit</th>
+							<th>Delete</th>
+						</tr>
+					</thead>
+					<tbody id="dataList">
 
-			<div class="col-sm-4">
-				<label for="trackingNo" class="form-label-sm mb-0 pb-0">Tracking
-					No</label>
-				<div class="row">
-
-					<input type="text" class="form-control-sm" id="trackingNo">
-				</div>
+					</tbody>
+				</table>
 			</div>
-
-			<div class="col-sm-4">
-				<label for="grossWeight" class="form-label-sm mb-0 pb-0">Gross
-					Weight</label>
-
+		</div>
+		<div class="row mt-1">
+			<div class="col-md-6">
 				<div class="row">
-					<input type="text" value="0" class="form-control-sm ml-2" id="grossWeight" onkeyup="amountCalculate()">
-				</div>
-
-			</div>
-
-
-			<div class="col-sm-4">
-				<label for="unit" class="form-label mb-0">Unit</label>
-				<div class="row">
-					<select id="unit" class="selectpicker col-md-12" onchange=""
+					<label for="unit" class="col-form-label-sm mb-0 pr-0 col-md-3">Unit:</label>
+					<select id="unit" class="selectpicker col-md-9 px-0"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="unit" value="0">Select Unit</option>
+						<option value="0">Select Unit</option>
 						<c:forEach items="${unitList}" var="po">
-						<option id="unit" value="${po.unitId}">${po.unitName}</option>
+							<option value="${po.unitId}">${po.unitName}</option>
 						</c:forEach>
 					</select>
 				</div>
 
-			</div>
-
-		</div>
-
-		<div class="row">
-
-
-
-
-
-			<div class="col-sm-4 mb-0 pb-0">
-				<label for="totalQty" class="form-label-sm pr-0 pb-0">Total
-					QTY</label>
 				<div class="row">
-					<input type="text" class="form-control-sm" id="totalQty">
-				</div>
-			</div>
-
-			<div class="col-sm-4 mb-0 pb-0">
-				<label for="parcel" class="form-label-sm pr-0 pb-0">Parcel</label>
-				<div class="row">
-					<input type="text" class="form-control-sm ml-2" id="parcel">
-				</div>
-			</div>
-
-			<div class="col-sm-4 mb-0 pb-0">
-				<label for="grossWeight" class="form-label-sm pr-0 pb-0">Rate</label>
-				<div class="row">
-					<input type="text" value="0" class="form-control-sm  ml-2" id="rate" onkeyup="amountCalculate()">
-				</div>
-			</div>
-
-		</div>
-
-		<div class="row">
-
-			<div class="col-sm-4 mb-0 pb-0">
-				<label for="amount" class="form-label-sm pr-0 pb-0">Amount</label>
-				<div class="row">
-					<input type="text" class="form-control-sm" id="amount">
+					<label for="grossWeight"
+						class="col-form-label-sm mb-0 pr-0 col-md-3">Gross Weight:</label>
+					<input type="number" class="form-control-sm col-md-9"
+						id="grossWeight" onkeyup="amountCalculate()">
 				</div>
 
-			</div>
-
-			<div class="col-sm-2 mb-0 pb-0">
-				<label for="deiveryDate" class="form-label-sm pr-0 pb-0">Delivery
-					Date</label>
 				<div class="row">
-					<input type="date" class="form-control-sm col-sm-12 ml-2"
-						id="deiveryDate">
-				</div>
-			</div>
-			
-			<div class="col-sm-2 mb-0 pb-0 mr-2">
-				<label for="delieryTime" class="form-label-sm pr-0 pb-0">Delivery
-					Time</label>
-				<div class="row">
-					<input type="time" class="form-control-sm col-sm-12 ml-3"
-						id="delieryTime">
-				</div>
-			</div>
-			
-			<div class="col-sm-3 mb-0 pb-0">
-				<label for="deliveryTo" class="form-label-sm pr-0 pb-0">Delivery
-					To</label>
-				<div class="row">
-					<input type="text" class="form-control-sm ml-3" id="deliveryTo">
+					<label for="rate" class="col-form-label-sm mb-0 pr-0 col-md-3">Rate:</label>
+					<input type="number" class="form-control-sm col-md-9" id="rate"
+						onkeyup="amountCalculate()">
 				</div>
 
+				<div class="row">
+					<label for="amount" class="col-form-label-sm mb-0 pr-0 col-md-3">Amount:</label>
+					<input type="number" class="form-control-sm col-md-9" id="amount" readonly="true">
+				</div>
 			</div>
-			
+			<div class="col-md-6">
+
+				<div class="row">
+					<div class="col-md-12">
+					<label for="remarks" class="col-form-label-sm mb-0 pr-0 py-0">Remarks:</label>
+					<br>
+					<textarea class="form-control-sm w-100" id="remarks"></textarea>
+					</div>
+					
+				</div>
+			</div>
 		</div>
 
 		<div class="row mt-1">
@@ -243,8 +239,8 @@
 					onclick="insertParcel()">
 					<i class="fa fa-plus-circle"></i> Save
 				</button>
-				<button  type="button"
-					class="btn btn-primary btn-sm ml-1" id="edit" onclick="editParcel()" disabled>
+				<button type="button" class="btn btn-primary btn-sm ml-1" id="edit"
+					onclick="editParcel()" disabled>
 					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
@@ -266,8 +262,8 @@
 			<div class="modal-header">
 				<div class="input-group">
 					<input id="search" type="text" class="form-control"
-						placeholder="Search ParcelF"
-						aria-label="Recipient's username" aria-describedby="basic-addon2">
+						placeholder="Search ParcelF" aria-label="Recipient's username"
+						aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
@@ -294,16 +290,12 @@
 							<tr>
 								<td>${counter.count}</td>
 								<td id='buyerName${po.styleNo}'>${po.styleNo}</td>
-								<td >${po.itemName}</td>
-								<td >${po.trackingNo}</td>
-								 <td><i class="fa fa-search"
-									onclick="getParcelDetails(${po.id})">
-								</i>
-								</td> 
-								<td><i class="fa fa-print"
-									onclick="parcelReport(${po.id})">
-								</i>
-								</td>
+								<td>${po.itemName}</td>
+								<td>${po.trackingNo}</td>
+								<td><i class="fa fa-search"
+									onclick="getParcelDetails(${po.id})"> </i></td>
+								<td><i class="fa fa-print" onclick="parcelReport(${po.id})">
+								</i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -315,4 +307,5 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-<script src="${pageContext.request.contextPath}/assets/js/order/parcel.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/order/parcel.js"></script>

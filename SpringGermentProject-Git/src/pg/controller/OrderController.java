@@ -1535,8 +1535,8 @@ public class OrderController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/searchSampleReuisition/{sampleReqId}",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchSampleReuisition(@PathVariable ("sampleReqId") String sampleReqId) {
+	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
@@ -1819,12 +1819,14 @@ public class OrderController {
 	public ModelAndView parcel(ModelMap map,HttpSession session) {
 
 		ModelAndView view = new ModelAndView("order/parcel");
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<commonModel> sampleList = orderService.getSampleList();
 		List<Style> styleList= orderService.getStyleList();
 		List<CourierModel> courierList=orderService.getcourierList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<parcelModel> parcelList= orderService.parcelList();	
 
+		view.addObject("buyerList",buyerList);
 		view.addObject("StyleList",styleList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("courierList",courierList);
@@ -1832,8 +1834,6 @@ public class OrderController {
 		view.addObject("parcelList",parcelList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-
-
 
 
 	@ResponseBody

@@ -333,10 +333,10 @@
 								<td >${po.styleNo}</td>
 								<td >${po.sampleDeadline}</td>
 								<td><i class="fa fa-search"
-									onclick="searchSampleReuisition(${po.autoId})">
+									onclick="searchSampleRequisition(${po.autoId})">
 								</i></td>
 								<td><i class="fa fa-print"
-									onclick="printSampleReuisition(${po.autoId})">
+									onclick="printSampleRequisition(${po.autoId})">
 								</i></td>
 							</tr>
 						</c:forEach>

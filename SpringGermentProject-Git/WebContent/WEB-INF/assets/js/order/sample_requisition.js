@@ -10,7 +10,7 @@ var find = 0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
-function printSampleReuisition(sampleReqId) {
+function printSampleRequisition(sampleReqId) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -28,7 +28,8 @@ function printSampleReuisition(sampleReqId) {
 	});
 }
 
-function loadData() {
+window.onload = ()=>{
+	document.title = "Sample Requisition";
 
 	$.ajax({
 		type: 'GET',
@@ -40,12 +41,7 @@ function loadData() {
 			sizesListByGroup = obj.sizeList;
 		}
 	});
-
-	document.title = "Sample Requisition";
-
-}
-
-window.onload = loadData;
+};
 
 function sizeLoadByGroup() {
 
@@ -70,12 +66,12 @@ function sizeLoadByGroup() {
 
 }
 
-function searchSampleReuisition(v) {
+function searchSampleRequisition(v) {
 
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './searchSampleReuisition/' + v,
+		url: './searchSampleRequisition/' + v,
 		success: function (data) {
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
@@ -551,7 +547,7 @@ function styleItemsWiseColor() {
 				item: item
 			},
 			success: function (data) {
-				loatItemsWiseColor(data.result);
+				loadItemsWiseColor(data.result);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -579,7 +575,7 @@ function styleItemsWiseColor() {
 
 
 
-function loatItemsWiseColor(data) {
+function loadItemsWiseColor(data) {
 
 	var itemList = data;
 	var options = "<option id='colorName' value='0' selected>Select Color Type</option>";
