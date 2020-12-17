@@ -58,7 +58,7 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
-import pg.orderModel.parcelModel;
+import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
@@ -1824,7 +1824,7 @@ public class OrderController {
 		List<Style> styleList= orderService.getStyleList();
 		List<CourierModel> courierList=orderService.getcourierList();
 		List<Unit> unitList= registerService.getUnitList();	
-		List<parcelModel> parcelList= orderService.parcelList();	
+		List<ParcelModel> parcelList= orderService.parcelList();	
 
 		view.addObject("buyerList",buyerList);
 		view.addObject("StyleList",styleList);
@@ -1835,25 +1835,23 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-
 	@ResponseBody
-	@RequestMapping(value = "/insertParcel",method=RequestMethod.GET)
-	public String insertParcel(parcelModel parcel) {
-		boolean insert=orderService.insertParcel(parcel);
+	@RequestMapping(value = "/confirmParcel",method=RequestMethod.POST)
+	public String ConfirmParcel(ParcelModel parcel) {
+		boolean insert=orderService.ConfirmParcel(parcel);
 
 		if (insert) {
 			return "success";
 		}
 		return "fail";
-
 	}
 
 
 
 	@ResponseBody
 	@RequestMapping(value = "/getParcelDetails/{id}",method=RequestMethod.GET)
-	public List<parcelModel> insertParcel(@PathVariable ("id") String id) {
-		List<parcelModel> List=orderService.getParcelDetails(id);
+	public List<ParcelModel> getParcelDetails(@PathVariable ("id") String id) {
+		List<ParcelModel> List=orderService.getParcelDetails(id);
 
 		return List;
 
@@ -1863,7 +1861,7 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/editParcel",method=RequestMethod.GET)
-	public String editParcel(parcelModel parcel) {
+	public String editParcel(ParcelModel parcel) {
 
 
 		boolean insert=orderService.editParecel(parcel);

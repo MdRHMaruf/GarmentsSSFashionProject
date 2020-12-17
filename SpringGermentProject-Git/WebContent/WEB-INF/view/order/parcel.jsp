@@ -235,8 +235,7 @@
 
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button type="button" id="save" class="btn btn-primary btn-sm"
-					onclick="insertParcel()">
+				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm">
 					<i class="fa fa-plus-circle"></i> Save
 				</button>
 				<button type="button" class="btn btn-primary btn-sm ml-1" id="edit"
@@ -277,10 +276,10 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>SL#</th>
-							<th>Style No</th>
-							<th>Item Name</th>
+							<th>Buyer Name</th>
+							<th>Courier Name</th>
 							<th>Tracking No</th>
+							<th>Dispatched Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
@@ -288,13 +287,13 @@
 					<tbody id="poList">
 						<c:forEach items="${parcelList}" var="po" varStatus="counter">
 							<tr>
-								<td>${counter.count}</td>
-								<td id='buyerName${po.styleNo}'>${po.styleNo}</td>
-								<td>${po.itemName}</td>
+								<td >${po.buyerName}</td>
+								<td>${po.courierName}</td>
 								<td>${po.trackingNo}</td>
+								<td>${po.dispatchedDate}</td>
 								<td><i class="fa fa-search"
-									onclick="getParcelDetails(${po.id})"> </i></td>
-								<td><i class="fa fa-print" onclick="parcelReport(${po.id})">
+									onclick="getParcelDetails(${po.autoId})"> </i></td>
+								<td><i class="fa fa-print" onclick="parcelReport(${po.autoId})">
 								</i></td>
 							</tr>
 						</c:forEach>

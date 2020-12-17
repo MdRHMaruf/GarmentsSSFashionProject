@@ -20,7 +20,7 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
-import pg.orderModel.parcelModel;
+import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
@@ -562,25 +562,25 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean insertParcel(parcelModel parcel) {
+	public boolean ConfirmParcel(ParcelModel parcel) {
 		// TODO Auto-generated method stub
-		return orderDAO.insertParcel(parcel);
+		return orderDAO.ConfirmParcel(parcel);
 	}
 
 	@Override
-	public List<parcelModel> parcelList( ) {
+	public List<ParcelModel> parcelList( ) {
 		// TODO Auto-generated method stub
 		return orderDAO.parcelList();
 	}
 
 	@Override
-	public List<parcelModel> getParcelDetails(String id) {
+	public List<ParcelModel> getParcelDetails(String id) {
 		// TODO Auto-generated method stub
 		return orderDAO.getParcelDetails(id);
 	}
 
 	@Override
-	public boolean editParecel(parcelModel parcel) {
+	public boolean editParecel(ParcelModel parcel) {
 		// TODO Auto-generated method stub
 		return orderDAO.editParecel(parcel);
 	}

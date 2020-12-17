@@ -7,6 +7,52 @@ let colorValue = 0;
 
 window.onload = () => {
 	document.title = "Parcel";
+
+	let sessionObject = JSON.parse(sessionStorage.getItem("pendingParcelItem") ? sessionStorage.getItem("pendingParcelItem") : false);
+	let itemList = sessionObject.itemList ? sessionObject.itemList : [];
+	if (sessionObject) {
+
+		$("#buyerName").val(sessionObject.buyerId).change();
+		console.log("itemList =", sessionObject.itemList);
+		$("#dataList").append(drawSessionDataTable(sessionObject.itemList));
+		const tempList = $("#dataList tr");
+		let totalQuantity = 0;
+		$.each(tempList, (i, tr) => {
+			let id = tr.id.slice(4);
+			totalQuantity += parseFloat($("#quantity-" + id).text());
+		});
+
+		row = `<tr>
+					<td colspan='5' class="text-right">Grand Total=</td>
+					<td>${totalQuantity}</td>
+					<td colspan='2'></td>
+				</tr>`;
+		$("#dataList").append(row);
+	}
+}
+
+
+function drawSessionDataTable(data) {
+	let rows = "";
+	const length = data.length;
+
+	for (var i = 0; i < length; i++) {
+		const rowData = data[i];
+		const id = rowData.autoId;
+		rows += `<tr id='row-${id}' class='newParcelItem' data-type='newParcelItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}'>
+					<td id='styleNo-${id}'>${rowData.styleNo}</td>
+					<td id='purchaseOrder-${id}'>${rowData.purchaseOrder}</td>
+					<td id='color-${id}'>${rowData.colorName}</td>
+					<td id='size-${id}'>${rowData.sizeName}</td>
+					<td id='sampleType-${id}'>${rowData.sampleType}</td>
+					<td id='quantity-${id}'>${rowData.quantity}</td>
+					<td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
+					<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${rowData.styleId}','${rowData.itemId}')"></i></td>
+				</tr>`;
+		//rows.push(drawRowDataTable(data[i], i));
+	}
+
+	return rows;
 }
 function buyerWisePoLoad() {
 	let buyerId = $("#buyerName").val();
@@ -309,7 +355,7 @@ function itemAddAction() {
 
 
 
-									let row = `<tr id='row-${id}' class='newCosting' data-type='newCosting' data-buyer-id='${buyerId}' data-purchase-order-id='${purchaseOrderId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' data-sample-id='${sampleId}'>
+									let row = `<tr id='row-${id}' class='newParcelItem' data-type='newParcelItem' data-buyer-id='${buyerId}' data-purchase-order-id='${purchaseOrderId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' data-sample-id='${sampleId}'>
 													<td id='styleNo-${id}'>${styleNo}</td>
 													<td id='purchaseOrder-${id}'>${purchaseOrder}</td>
 													<td id='color-${id}'>${colorName}</td>
@@ -425,7 +471,7 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 		$('#dataList tr:last').remove();
 		const tempList = $("#dataList tr");
 		let totalQuantity = 0;
-		
+
 		$.each(tempList, (i, tr) => {
 			let id = tr.id.slice(4);
 			totalQuantity += parseFloat($("#quantity-" + id).text());
@@ -446,63 +492,64 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 
 function parcelItemSet(autoId, itemType) {
 	if (itemType == 'new') {
-	  $("#itemAutoId").val(autoId);
-	  $("#itemType").val("new");
-	  const row = $("#row-" + autoId);
-	  console.log(row);
-	  particularItemIdForSet = row.attr('data-particular-id');
-	  $("#particularType").val(row.attr('data-particular-type')).change();
-	  $("#particularName").val(row.attr('data-particular-id')).change();
-	  $("#unit").val(row.attr('data-unit-id')).change();
-	  $("#commission").val(row.attr('data-commission'));
-	  $("#width").val($("#width-" + autoId).text());
-	  $("#yard").val($("#yard-" + autoId).text());
-	  $("#gsm").val($("#gsm-" + autoId).text());
-	  $("#consumption").val($("#consumption-" + autoId).text());
-	  $("#unitPrice").val($("#unitPrice-" + autoId).text());
+		$("#itemAutoId").val(autoId);
+		$("#itemType").val("new");
+		const row = $("#row-" + autoId);
+		console.log(row);
+		particularItemIdForSet = row.attr('data-particular-id');
+		$("#particularType").val(row.attr('data-particular-type')).change();
+		$("#particularName").val(row.attr('data-particular-id')).change();
+		$("#unit").val(row.attr('data-unit-id')).change();
+		$("#commission").val(row.attr('data-commission'));
+		$("#width").val($("#width-" + autoId).text());
+		$("#yard").val($("#yard-" + autoId).text());
+		$("#gsm").val($("#gsm-" + autoId).text());
+		$("#consumption").val($("#consumption-" + autoId).text());
+		$("#unitPrice").val($("#unitPrice-" + autoId).text());
 	} else {
-	  $("#itemType").val("old");
-	  $.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: './searchCostingItem',
-		data: {
-		  autoId: autoId,
-		},
-		success: function (data) {
-		  if (data.result == "Something Wrong") {
-			dangerAlert("Something went wrong");
-		  } else if (data.result == "duplicate") {
-			dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-		  } else {
-  
-			var costing = data.result;
-			$("#itemAutoId").val(costing.autoId);
-			$("#itemType").val("old");
-			itemIdForSet = costing.itemId;
-			//$("#styleName").val(costing.styleId).change();
-			particularItemIdForSet = costing.particularId;
-			$("#particularType").val(costing.particularType).change();
-			$("#particularName").val(costing.particularId).change();
-			$("#unit").val(costing.unitId).change();
-			$("#commission").val(costing.commission);
-			var date = costing.date.split("/");
-			$("#submissionDate").val(date[2] + "-" + date[1] + "-" + date[0]);
-			$("#width").val(costing.width);
-			$("#yard").val(costing.yard);
-			$("#gsm").val(costing.gsm);
-			$("#consumption").val(costing.consumption);
-			$("#unitPrice").val(costing.unitPrice);
-  
-		  }
-		}
-	  });
+		$("#itemType").val("old");
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './searchCostingItem',
+			data: {
+				autoId: autoId,
+			},
+			success: function (data) {
+				if (data.result == "Something Wrong") {
+					dangerAlert("Something went wrong");
+				} else if (data.result == "duplicate") {
+					dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+				} else {
+
+					var costing = data.result;
+					$("#itemAutoId").val(costing.autoId);
+					$("#itemType").val("old");
+					itemIdForSet = costing.itemId;
+					//$("#styleName").val(costing.styleId).change();
+					particularItemIdForSet = costing.particularId;
+					$("#particularType").val(costing.particularType).change();
+					$("#particularName").val(costing.particularId).change();
+					$("#unit").val(costing.unitId).change();
+					$("#commission").val(costing.commission);
+					var date = costing.date.split("/");
+					$("#submissionDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+					$("#width").val(costing.width);
+					$("#yard").val(costing.yard);
+					$("#gsm").val(costing.gsm);
+					$("#consumption").val(costing.consumption);
+					$("#unitPrice").val(costing.unitPrice);
+
+				}
+			}
+		});
 	}
 	$("#btnAdd").prop("disabled", true);
 	$("#btnEdit").prop("disabled", false);
-  }
+}
 
 function refreshAction() {
+	sessionStorage.setItem("pendingParcelItem","{}");
 	location.reload();
 }
 
@@ -571,6 +618,118 @@ function insertParcel() {
 
 }
 
+
+$("#btnConfirm").click(() => {
+	let rowList = $("#dataList tr");
+	let length = rowList.length;
+
+	if (length > 0) {
+		rowList = $("tr.newParcelItem");
+		length = rowList.length;
+
+		let parcelItemList = '';
+
+		let buyerId = $("#buyerName").val();
+		let courierId = $("#courierName").val();
+		let trackingNo = $("#trackingNo").val();
+		let dispatchedDate = $("#dispatchedDate").val();
+		dispatchedDate = dispatchedDate.slice(0,dispatchedDate.indexOf('T'))+" "+dispatchedDate.slice(dispatchedDate.indexOf('T')+1)+":00";
+		console.log("date =",dispatchedDate);
+		
+		let deliveryBy = $("#deliveryBy").val();
+		let deliveryTo = $("#deliveryTo").val();
+		let mobileNo = $("#mobileNo").val();
+		let unitId = $("#unit").val();
+		//let deiveryDate = new Date($("#deiveryDate").val()).toLocaleDateString('fr-CA');;
+		let grossWeight = $("#grossWeight").val() == '' ? '0' : $("#grossWeight").val();
+		let rate = $("#rate").val() == '' ? '0' : $("#rate").val();
+		let amount = $("#amount").val() == '' ? '0' : $("#amount").val();
+		let remarks = $("#remarks").val();
+		let userId = $("#userId").val();
+		let parcelItems = {};
+		parcelItems['list'] = [];
+
+		if (buyerId != '0') {
+			if (courierId != '0') {
+				if (trackingNo != '') {
+					if (dispatchedDate) {
+						if (unitId != '0') {
+							for (let i = 0; i < length; i++) {
+								const newRow = rowList[i];
+								const id = newRow.id.slice(4);
+
+								const item = {
+									styleId: newRow.getAttribute('data-style-id'),
+									purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+									purchaseOrder: $("#purchaseOrder-" + id).val(),
+									colorId: newRow.getAttribute('data-color-id'),
+									sizeId: newRow.getAttribute('data-size-id'),
+									sampleId: newRow.getAttribute('data-sample-id'),
+									quantity: $("#quantity-" + id).val(),
+									userId: userId
+								}
+
+								parcelItems.list.push(item);
+							}
+							//parcelItemList = parcelItemList.slice(0, -1);
+							if (confirm("Are you sure to confirm..")) {
+								$.ajax({
+									type: 'POST',
+									dataType: 'json',
+									url: './confirmParcel',
+									data: {
+										buyerId: buyerId,
+										courierId: courierId,
+										trackingNo: trackingNo,
+										dispatchedDate: dispatchedDate,
+										deliveryBy: deliveryBy,
+										deliveryTo: deliveryTo,
+										mobileNo: mobileNo,
+										parcelItems: JSON.stringify(parcelItems),
+										unitId: unitId,
+										grossWeight: grossWeight,
+										rate: rate,
+										amount: amount,
+										remarks: remarks,
+										userId: userId
+									},
+									success: function (data) {
+										if (data == 'success') {
+											alert("Successfully Inserted")
+											refreshAction();
+											
+										} else {
+											alert("Parcel Insertion Failed")
+										}
+									}
+								});
+
+							}
+						} else {
+							warningAlert("Unit not selected... Please Select Unit");
+							$("#unit").focus();
+						}
+					} else {
+						warningAlert("Dispatched Date not selected... Please Select Dispatched Date");
+						$("#dispatchedDate").focus();
+					}
+				} else {
+					warningAlert("Tracking No is Empty... Please Enter Tracking No");
+					$("#trackingNo").focus();
+				}
+			} else {
+				warningAlert("Courier not selected... Please Select Courier Name");
+				$("#courierName").focus();
+			}
+		} else {
+			warningAlert("Buyer not selected... Please Select Buyer Name");
+			$("#buyerName").focus();
+		}
+
+	} else {
+		warningAlert("Please Enter Any Parcel Item Name...");
+	}
+});
 
 
 function getParcelDetails(id) {

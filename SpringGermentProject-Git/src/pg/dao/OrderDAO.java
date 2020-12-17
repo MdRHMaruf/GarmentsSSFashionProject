@@ -15,7 +15,7 @@ import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.accessoriesindentcarton;
-import pg.orderModel.parcelModel;
+import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
@@ -149,10 +149,10 @@ public interface OrderDAO {
 	public List<CourierModel> getcourierList();
 	
 	
-	public boolean insertParcel(parcelModel parcel);
-	public List<parcelModel> parcelList();
-	public List<parcelModel> getParcelDetails(String id);
-	public boolean editParecel(parcelModel parcel);
+	public boolean ConfirmParcel(ParcelModel parcel);
+	public List<ParcelModel> parcelList();
+	public List<ParcelModel> getParcelDetails(String id);
+	public boolean editParecel(ParcelModel parcel);
 	
 	
 	public boolean sampleCadInsert(SampleCadAndProduction sample);

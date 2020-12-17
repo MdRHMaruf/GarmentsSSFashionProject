@@ -1,4 +1,4 @@
-<%@page import="pg.orderModel.parcelModel"%>
+<%@page import="pg.orderModel.ParcelModel"%>
 <%@ page contentType="application/pdf" %>
 
 <%@ page trimDirectiveWhitespaces="true"%>
@@ -37,12 +37,8 @@
 
 
 <%
-
-	
-	
-	
-	ArrayList<parcelModel> list=new ArrayList<parcelModel>();
-	list = (ArrayList<parcelModel>) request.getAttribute("list");
+	ArrayList<ParcelModel> list=new ArrayList<ParcelModel>();
+	list = (ArrayList<ParcelModel>) request.getAttribute("list");
 	
 	String id=(String) request.getAttribute("id");
 		
@@ -95,8 +91,5 @@
         e.printStackTrace();
     } catch (JRException e) {
         e.printStackTrace();
-    } 
-    
-
-
+    }
 %>
