@@ -1849,30 +1849,43 @@ public class OrderController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/getParcelDetails/{id}",method=RequestMethod.GET)
-	public List<ParcelModel> getParcelDetails(@PathVariable ("id") String id) {
-		List<ParcelModel> List=orderService.getParcelDetails(id);
-
-		return List;
+	@RequestMapping(value = "/getParcelDetails",method=RequestMethod.GET)
+	public JSONObject getParcelDetails(String autoId) {
+		JSONObject objectMain = new JSONObject();
+		ParcelModel parcelInfo = orderService.getParcelInfo(autoId);
+		List<ParcelModel> parcelItems = orderService.getParcelItems(autoId);
+		objectMain.put("parcelInfo", parcelInfo);
+		objectMain.put("parcelItems", parcelItems);
+		return objectMain;
 
 	}
 
 
 
 	@ResponseBody
-	@RequestMapping(value = "/editParcel",method=RequestMethod.GET)
+	@RequestMapping(value = "/editParcel",method=RequestMethod.POST)
 	public String editParcel(ParcelModel parcel) {
-
-
 		boolean insert=orderService.editParecel(parcel);
-
 		if (insert) {
 			return "success";
 		}			
 		return "fail";
 
 	}
-
+	
+	@ResponseBody
+	@RequestMapping(value = "/editParcelItem",method=RequestMethod.GET)
+	public JSONObject editParcelItem(ParcelModel parcelItem) {
+		JSONObject objectMain = new JSONObject();
+		boolean insert=orderService.editParecelItem(parcelItem);
+		if (insert) {
+			List<ParcelModel> parcelItems = orderService.getParcelItems(parcelItem.getParcelId());
+			objectMain.put("result", parcelItems);
+		}else {
+			objectMain.put("result","Something Wrong");
+		}
+		return objectMain;
+	}
 
 
 	@ResponseBody

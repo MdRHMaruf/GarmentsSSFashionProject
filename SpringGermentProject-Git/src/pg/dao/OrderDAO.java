@@ -151,8 +151,10 @@ public interface OrderDAO {
 	
 	public boolean ConfirmParcel(ParcelModel parcel);
 	public List<ParcelModel> parcelList();
-	public List<ParcelModel> getParcelDetails(String id);
+	public ParcelModel getParcelInfo(String autoId);
+	public List<ParcelModel> getParcelItems(String autoId);
 	public boolean editParecel(ParcelModel parcel);
+	public boolean editParecelItem(ParcelModel parcel);
 	
 	
 	public boolean sampleCadInsert(SampleCadAndProduction sample);

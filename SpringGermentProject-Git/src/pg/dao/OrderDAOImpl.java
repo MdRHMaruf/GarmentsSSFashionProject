@@ -4606,7 +4606,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(int i=0;i<itemList.size();i++) {
 				JSONObject item = (JSONObject) itemList.get(i);
 				sql="insert into tbParcelDetails(parcelId,buyerId,styleId,purchaseOrderId,purchaseOrder,sizeId,colorId,sampleId,quantity,entryTime,userId) \n" + 
-						"values('"+parcelId+"','"+item.get("buyerId")+"','"+item.get("styleId")+"','"+item.get("purchaseOrderId")+"','"+item.get("purchaseOrder")+"','"+item.get("sizeId")+"','"+item.get("colorId")+"','"+item.get("sizeId")+"','"+item.get("quantity")+"',CURRENT_TIMESTAMP,'"+item.get("userId")+"');";
+						"values('"+parcelId+"','"+item.get("buyerId")+"','"+item.get("styleId")+"','"+item.get("purchaseOrderId")+"','"+item.get("purchaseOrder")+"','"+item.get("sizeId")+"','"+item.get("colorId")+"','"+item.get("sampleId")+"','"+item.get("quantity")+"',CURRENT_TIMESTAMP,'"+item.get("userId")+"');";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			
@@ -4645,15 +4645,19 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select trackingNo,convert(varchar,a.dispatchedDate,10)as dispachedDate  from tbparcel a";
+			String sql="select autoId,buyerId,b.name as buyerName,a.courierId,c.name as courierName,a.trackingNo,convert(varchar,a.dispatchedDate,25)as dispachedDate \n" + 
+					"from tbparcel a \n" + 
+					"left join tbBuyer b \n" + 
+					"on a.buyerId = b.id \n" + 
+					"left join tbCourier c \n" + 
+					"on a.courierId = c.id";
 			List<?> list = session.createSQLQuery(sql).list();
-
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				Buyers.add(new ParcelModel());
+				Buyers.add(new ParcelModel(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString()));
 
 			}
 
@@ -4678,20 +4682,71 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<ParcelModel> getParcelDetails(String id) {
+	public ParcelModel getParcelInfo(String autoId) {
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
+		ParcelModel parcel = null;
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
 
-		List<ParcelModel> Buyers=new ArrayList<>();
+			String sql="select p.autoId,p.buyerId,p.courierId,p.trackingNo,convert(varchar,p.dispatchedDate,25)as dispachedDate,p.deliveryBy,p.deliveryTo,p.mobileNo,p.unitId,p.grossWeight,p.rate,p.amount,p.remarks,p.userId from tbparcel p where p.autoId = '"+autoId+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				parcel = new ParcelModel(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), "", element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString());
+			}
+
+
+
+			tx.commit();
+
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return parcel;
+	}
+	
+	@Override
+	public List<ParcelModel> getParcelItems(String autoId) {
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		ParcelModel parcel = null;
+		List<ParcelModel> itemList=new ArrayList<>();
 
 		try{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.autoid,a.styleid ,a.itemid, a.sampletype,convert(varchar, a.dispatchedDate) as dispatch,a.courierId, a.trackingNo,a.GrossWeight,a.unit,a.qty,a.percelQty,a.rate,a.totalAmount,convert(varchar, a.deliverydate) as deliverydate,convert(varchar,a.deliverytime,8) as deliverytime,a.deliveredto, a.entryby from tbparcel a where a.autoId='"+id+"'";
-			System.out.println(" check duplicate buyer query ");
-
+			String sql="select pd.autoId,pd.buyerId,b.name as buyerName,pd.styleId,sc.StyleNo,pd.purchaseOrderId,pd.purchaseOrder,pd.colorId,c.Colorname,pd.sizeId,ss.sizeName,pd.sampleId,sti.Name as sampleType,pd.quantity \n" + 
+					"from tbParcelDetails pd \n" + 
+					"left join tbBuyer b \n" + 
+					"on pd.buyerId = b.id \n" + 
+					"left join TbStyleCreate sc \n" + 
+					"on pd.styleId = sc.StyleId \n" + 
+					"left join tbColors c \n" + 
+					"on pd.colorId = c.ColorId \n" + 
+					"left join tbStyleSize ss \n" + 
+					"on pd.sizeId = ss.id \n" + 
+					"left join TbSampleTypeInfo sti \n" + 
+					"on pd.sampleId = sti.AutoId \n" + 
+					"where pd.parcelId = '"+autoId+"'";
+		
 			List<?> list = session.createSQLQuery(sql).list();
 
 
@@ -4699,7 +4754,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				Buyers.add(new ParcelModel());
+				itemList.add(new ParcelModel(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString()));
 
 			}
 
@@ -4720,34 +4775,69 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
-		return Buyers;
+		return itemList;
 	}
 
 	@Override
-	public boolean editParecel(ParcelModel p) {
+	public boolean editParecel(ParcelModel parcel) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-
-
-			//String sql="update  tbparcel set styleid='"+p.getStyleNo()+"', itemid='"+p.getItemName()+"', sampletype='"+p.getSampletype()+"', dispatchedDate='"+p.getDispatchedDate()+"', courierId='"+p.getCourierName()+"', trackingNo='"+p.getTrackingNo()+"', GrossWeight='"+p.getGrossWeight()+"', unit='"+p.getUnit()+"', qty='"+p.getTotalQty()+"', percelQty='"+p.getParcel()+"', rate='"+p.getRate()+"', totalAmount='"+p.getAmount()+"', deliverydate='"+p.getDeiveryDate()+"', deliverytime='"+p.getDelieryTime()+"', deliveredto='"+p.getDeliveryTo()+"' where autoid='"+p.getAutoId()+"'";
-			String sql = "";	
+			String sql = "update tbparcel set buyerId = '"+parcel.getBuyerId()+"' ,courierId='"+parcel.getCourierId()+"',trackingNo='"+parcel.getTrackingNo()+"',dispatchedDate='"+parcel.getDispatchedDate()+"',deliveryBy='"+parcel.getDeliveryBy()+"',deliveryTo='"+parcel.getDeliveryTo()+"',mobileNo='"+parcel.getMobileNo()+"',unitId='"+parcel.getUnitId()+"',grossWeight='"+parcel.getGrossWeight()+"',rate='"+parcel.getRate()+"',amount='"+parcel.getAmount()+"',remarks='"+parcel.getRemarks()+"',entrytime=CURRENT_TIMESTAMP,userId='"+parcel.getUserId()+"' where autoId ='"+parcel.getParcelId()+"'";	
 			session.createSQLQuery(sql).executeUpdate();
 
-
+			JSONParser jsonParser = new JSONParser();
+			JSONObject itemsObject = (JSONObject)jsonParser.parse(parcel.getParcelItems());
+			JSONArray itemList = (JSONArray) itemsObject.get("list");
+			
+			for(int i=0;i<itemList.size();i++) {
+				JSONObject item = (JSONObject) itemList.get(i);
+				sql="insert into tbParcelDetails(parcelId,buyerId,styleId,purchaseOrderId,purchaseOrder,sizeId,colorId,sampleId,quantity,entryTime,userId) \n" + 
+						"values('"+parcel.getParcelId()+"','"+item.get("buyerId")+"','"+item.get("styleId")+"','"+item.get("purchaseOrderId")+"','"+item.get("purchaseOrder")+"','"+item.get("sizeId")+"','"+item.get("colorId")+"','"+item.get("sampleId")+"','"+item.get("quantity")+"',CURRENT_TIMESTAMP,'"+item.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
 			tx.commit();
 			return true;
 
 		}
 		catch(Exception ee){
-
+			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 				return false;
 			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public boolean editParecelItem(ParcelModel parcelItem) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql = "update tbParcelDetails set styleId = '"+parcelItem.getStyleId()+"',purchaseOrderId= '"+parcelItem.getPurchaseOrderId()+"',purchaseOrder='"+parcelItem.getPurchaseOrder()+"',colorId='"+parcelItem.getColorId()+"',sizeId='"+parcelItem.getSizeId()+"',sampleId='"+parcelItem.getSampleId()+"',quantity='"+parcelItem.getQuantity()+"',entryTime=CURRENT_TIMESTAMP,userId='"+parcelItem.getUserId()+"' where autoId= '"+parcelItem.getAutoId()+"'";	
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
 			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			
 		}
 
 		finally {

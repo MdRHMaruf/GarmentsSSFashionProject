@@ -435,7 +435,7 @@ $("#btnConfirm").click(() => {
               // $("#dataList").empty();
               // $("#dataList").append(drawDataTable(data.result));
               successAlert("Costing Item Save Successfully");
-              sessionStorage.setItem("pendingCosting","{}");
+              sessionStorage.setItem("pendingCosting",false);
             }
           }
         });
@@ -610,7 +610,7 @@ function editAction() {
 }
 
 function refreshAction() {
-  sessionStorage.setItem("pendingCosting","{}");
+  sessionStorage.setItem("pendingCosting",false);
   location.reload();
 }
 

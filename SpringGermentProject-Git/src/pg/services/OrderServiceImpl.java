@@ -574,15 +574,27 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<ParcelModel> getParcelDetails(String id) {
+	public ParcelModel getParcelInfo(String id) {
 		// TODO Auto-generated method stub
-		return orderDAO.getParcelDetails(id);
+		return orderDAO.getParcelInfo(id);
+	}
+	
+	@Override
+	public List<ParcelModel> getParcelItems(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getParcelItems(autoId);
 	}
 
 	@Override
 	public boolean editParecel(ParcelModel parcel) {
 		// TODO Auto-generated method stub
 		return orderDAO.editParecel(parcel);
+	}
+	
+	@Override
+	public boolean editParecelItem(ParcelModel parcel) {
+		// TODO Auto-generated method stub
+		return orderDAO.editParecelItem(parcel);
 	}
 
 	@Override
@@ -626,5 +638,7 @@ public class OrderServiceImpl implements OrderService{
 		System.out.println("it's ok Service");
 		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
+
+	
 
 }

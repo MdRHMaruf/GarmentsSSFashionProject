@@ -30,6 +30,9 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="parcelId" value=""> <input
+		type="hidden" id="parcelItemAutoId" value="">
+		<input type="hidden" id="itemType" value="">
 
 	<div class="card-box">
 		<!-- <div class="row">
@@ -49,7 +52,7 @@
 						Name:</label> <select id="buyerName" class="selectpicker col-md-9"
 						onchange="buyerWisePoLoad()" data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option  value="0">Select Buyer</option>
+						<option value="0">Select Buyer</option>
 						<c:forEach items="${buyerList}" var="buyer">
 							<option value="${buyer.buyerid}">${buyer.buyername}</option>
 						</c:forEach>
@@ -109,14 +112,21 @@
 							<option id="sampletype" value="${po.id}">${po.name}</option>
 						</c:forEach>
 					</select> <label for="quantity" class="col-form-label-sm mb-0 pr-0 col-md-2">Quantity:</label>
-					<input type="number" class="form-control-sm col-md-4"
-						id="quantity">
+					<input type="number" class="form-control-sm col-md-4" id="quantity">
 				</div>
 
-				<div class="row my-1 d-flex flex-row-reverse">
+				<div class="row my-1 d-flex justify-content-end">
 					<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
 						onclick="itemAddAction()">
 						<i class="fa fa-plus-circle"></i> Add
+					</button>
+					<button type="button" class="btn btn-primary btn-sm ml-1"
+						id="btnEdit" onclick="itemEditAction()" disabled>
+						<i class="fa fa-pencil-square"></i> Edit
+					</button>
+					<button id="btnItemRefresh" type="button"
+						class="btn btn-primary btn-sm ml-1" onclick="itemRefreshAction()">
+						<i class="fa fa-refresh"></i> Refresh
 					</button>
 				</div>
 			</div>
@@ -217,18 +227,19 @@
 
 				<div class="row">
 					<label for="amount" class="col-form-label-sm mb-0 pr-0 col-md-3">Amount:</label>
-					<input type="number" class="form-control-sm col-md-9" id="amount" readonly="true">
+					<input type="number" class="form-control-sm col-md-9" id="amount"
+						readonly="true">
 				</div>
 			</div>
 			<div class="col-md-6">
 
 				<div class="row">
 					<div class="col-md-12">
-					<label for="remarks" class="col-form-label-sm mb-0 pr-0 py-0">Remarks:</label>
-					<br>
-					<textarea class="form-control-sm w-100" id="remarks"></textarea>
+						<label for="remarks" class="col-form-label-sm mb-0 pr-0 py-0">Remarks:</label>
+						<br>
+						<textarea class="form-control-sm w-100" id="remarks"></textarea>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>
@@ -236,14 +247,11 @@
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
 				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm">
-					<i class="fa fa-plus-circle"></i> Save
+					<i class="fas fa-save"></i> Confirm
 				</button>
-				<button type="button" class="btn btn-primary btn-sm ml-1" id="edit"
-					onclick="editParcel()" disabled>
-					<i class="fa fa-pencil-square"></i> Edit
-				</button>
+
 				<button id="btnRefresh" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="">
+					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
 
@@ -287,14 +295,14 @@
 					<tbody id="poList">
 						<c:forEach items="${parcelList}" var="po" varStatus="counter">
 							<tr>
-								<td >${po.buyerName}</td>
+								<td>${po.buyerName}</td>
 								<td>${po.courierName}</td>
 								<td>${po.trackingNo}</td>
 								<td>${po.dispatchedDate}</td>
 								<td><i class="fa fa-search"
 									onclick="getParcelDetails(${po.autoId})"> </i></td>
-								<td><i class="fa fa-print" onclick="parcelReport(${po.autoId})">
-								</i></td>
+								<td><i class="fa fa-print"
+									onclick="parcelReport(${po.autoId})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
