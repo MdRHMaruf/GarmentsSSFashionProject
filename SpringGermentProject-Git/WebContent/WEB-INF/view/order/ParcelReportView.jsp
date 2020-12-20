@@ -58,7 +58,25 @@
 		Transaction tx=null;
         
 	
-		String Sql="select *,(select styleno from TbStyleCreate b where b.StyleId=a.styleid) as StyleNo,(select b.itemname from tbItemDescription b where b.itemid=a.itemid)  as ItemName,(select name from tbCourier where id= a.courierId) as CourierName,(select CourierAddress from tbCourier where id= a.courierId) as CourierAddress,(select Telephone from tbCourier where id= a.courierId) as Telephone,(select MobileNo from tbCourier where id= a.courierId) as MobileNo,(select Fax from tbCourier where id= a.courierId) as Fax,(select Email from tbCourier where id= a.courierId) as Email,(select SkypeId from tbCourier where id= a.courierId) as SkypeId from tbparcel a where a.autoId='"+id+"'";
+		String Sql="select p.autoId,b.name as buyerName,c.name as courierName,c.Telephone,c.MobileNo,c.Fax,c.Email,c.SkypeId,c.CourierAddress,p.trackingNo,p.dispatchedDate,p.deliveryBy,p.deliveryTo,p.mobileNo,u.unitname,p.grossWeight,p.rate,p.amount,sc.StyleNo,pd.purchaseOrder,color.Colorname,ss.sizeName,sti.Name as sampleType,pd.quantity "+
+				"from tbparcel p "+
+				"left join tbParcelDetails pd "+
+				"on p.autoId = pd.parcelId "+
+				"left join tbBuyer b "+
+				"on p.buyerId = b.id "+
+				"left join tbCourier c "+
+				"on p.courierId = c.id "+
+				"left join tbunits u "+
+				"on p.unitId = u.Unitid "+ 
+				"left join TbStyleCreate sc "+
+				"on pd.styleId = sc.StyleId "+
+				"left join tbColors color "+
+				"on pd.colorId = color.ColorId "+
+				"left join tbStyleSize ss "+
+				"on pd.sizeId = ss.id "+
+				"left join TbSampleTypeInfo sti "+
+				"on pd.sampleId = sti.AutoId "+
+				"where p.autoId = '"+id+"'";
     	System.out.println("Query "+Sql);
     	
         

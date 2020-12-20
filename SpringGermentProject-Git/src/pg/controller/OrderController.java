@@ -806,7 +806,7 @@ public class OrderController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
+
 
 
 
@@ -1872,7 +1872,7 @@ public class OrderController {
 		return "fail";
 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/editParcelItem",method=RequestMethod.GET)
 	public JSONObject editParcelItem(ParcelModel parcelItem) {
@@ -2048,6 +2048,23 @@ public class OrderController {
 
 
 		return objmain;
+	}
+
+
+	//Parcel
+	@RequestMapping(value = "/accessories_check_list",method=RequestMethod.GET)
+	public ModelAndView accessories_check_list(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("order/accessories-check-list");
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<commonModel> sampleList = orderService.getSampleList();
+		List<Unit> unitList= registerService.getUnitList();	
+		List<ParcelModel> parcelList= orderService.parcelList();	
+		view.addObject("buyerList",buyerList);
+		view.addObject("sampletype",sampleList);
+		view.addObject("unitList",unitList);
+		view.addObject("parcelList",parcelList);
+		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
 }
