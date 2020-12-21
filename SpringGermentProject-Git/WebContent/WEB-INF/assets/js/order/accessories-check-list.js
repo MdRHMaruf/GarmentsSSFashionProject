@@ -113,10 +113,10 @@ function poWiseStyles() {
 function loadStyles(data) {
 
 	let itemList = data;
-	let options = "<option id='itemType' value='0'>Select Style</option>";
+	let options = "<option value='0'>Select Style</option>";
 	let length = itemList.length;
 	for (let i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -267,12 +267,15 @@ function styleItemWiseColorSizeLoad() {
 }
 
 function typeWiseIndentItemLoad() {
-	const type = $("#type").val();
+	const type = $("#itemType").val();
 	const purchaseOrder = $("#purchaseOrder").val();
 	const styleId = $("#styleNo").val();
-
-	if(purchaseOrder != 0){
-		if(styleId != 0){
+	console.log("item Type=",type);
+	console.log("purchase order id=",purchaseOrder);
+	console.log("Style id=",styleId);
+	
+	if (purchaseOrder != 0) {
+		if (styleId != 0) {
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -283,7 +286,7 @@ function typeWiseIndentItemLoad() {
 					type: type
 				},
 				success: function (data) {
-		
+					console.log("Data",data);
 					const itemList = data.itemList;
 					let options = "<option value='0' selected>--Select Indent Item--</option>";
 					const length = itemList.length;
@@ -298,7 +301,7 @@ function typeWiseIndentItemLoad() {
 			});
 		}
 	}
-	
+
 
 }
 
@@ -324,7 +327,7 @@ function itemAddAction() {
 	let colorId = $("#colorName").val();
 	let sizeId = $("#size").val();
 	let sizeName = $("#size option:selected").text();
-	
+
 	let quantity = $("#quantity").val() == "" ? 0 : $("#quantity").val();
 	let status = $("#status").val();
 
@@ -363,38 +366,22 @@ function itemAddAction() {
 										"accItemName": accItemName,
 										"itemType": itemType,
 										"status": status
-								
+
 									});
 
-
-
-
-									let row = `<tr id='row-${id}' class='newParcelItem' data-type='newParcelItem' data-buyer-id='${buyerId}' data-purchase-order-id='${purchaseOrderId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' data-sample-id='${sampleId}'>
-													<td id='styleNo-${id}'>${styleNo}</td>
-													<td id='purchaseOrder-${id}'>${purchaseOrder}</td>
+									let row = `<tr id='row-${id}' class='newCheckListItem' data-type='newCheckListItem' data-buyer-id='${buyerId}' data-purchase-order-id='${purchaseOrderId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' data-sample-id='${sampleId}' data-item-type='${itemType}' data-acc-item-id='${accItemId}'>
+													<td id='accItemName-${id}'>${accItemName}</td>
 													<td id='color-${id}'>${colorName}</td>
 													<td id='size-${id}'>${sizeName}</td>
-													<td id='sampleType-${id}'>${sampleType}</td>
 													<td id='quantity-${id}'>${quantity}</td>
+													<td><input id='checkStatus-${id}' type='checkbox' ${status == 1 ? "checked" : ""}/></td>
 													<td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
 													<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${styleId}','${itemId}')"></i></td>
 												</tr>`;
-									if (length > 1) $('#dataList tr:last').remove();
+
 									$("#dataList").append(row);
 
-									const tempList = $("#dataList tr");
-									let totalQuantity = 0;
-									$.each(tempList, (i, tr) => {
-										let id = tr.id.slice(4);
-										totalQuantity += parseFloat($("#quantity-" + id).text());
-									});
 
-									row = `<tr>
-												<td colspan='5' class="text-right">Grand Total=</td>
-												<td>${totalQuantity}</td>
-												<td colspan='2'></td>
-											</tr>`;
-									$("#dataList").append(row);
 									sessionObject = {
 										"buyerId": buyerId,
 										"itemList": itemList
@@ -638,22 +625,7 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 				}
 			});
 		}
-		$('#dataList tr:last').remove();
-		const tempList = $("#dataList tr");
-		let totalQuantity = 0;
 
-		$.each(tempList, (i, tr) => {
-			let id = tr.id.slice(4);
-			totalQuantity += parseFloat($("#quantity-" + id).text());
-		});
-		if (tempList.length > 0) {
-			row = `<tr>
-					<td colspan='5' class="text-right">Grand Total=</td>
-					<td>${totalQuantity}</td>
-					<td colspan='2'></td>
-				</tr>`;
-			$("#dataList").append(row);
-		}
 
 
 	}
@@ -662,8 +634,8 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 
 function parcelItemSet(autoId, itemType) {
 
-	$("#parcelItemAutoId").val(autoId);
-	$("#itemType").val(itemType);
+	$("#checkListItemAutoId").val(autoId);
+	$("#checkItemType").val(itemType);
 	const row = $("#row-" + autoId);
 	console.log(row);
 	poId = row.attr('data-purchase-order-id');
@@ -765,141 +737,94 @@ function insertParcel() {
 $("#btnConfirm").click(() => {
 	let rowList = $("#dataList tr");
 	let length = rowList.length;
-	let parcelId = $("#parcelId").val();
+	let checkListId = $("#checkListId").val();
 
 	if (length > 0) {
-		rowList = $("tr.newParcelItem");
+		rowList = $("tr.newCheckListItem");
 		length = rowList.length;
 
 		let parcelItemList = '';
 
 		let buyerId = $("#buyerName").val();
-		let courierId = $("#courierName").val();
-		let trackingNo = $("#trackingNo").val();
-		let dispatchedDate = $("#dispatchedDate").val();
-		dispatchedDate = dispatchedDate.slice(0, dispatchedDate.indexOf('T')) + " " + dispatchedDate.slice(dispatchedDate.indexOf('T') + 1) + ":00";
-		console.log("date =", dispatchedDate);
-
-		let deliveryBy = $("#deliveryBy").val();
-		let deliveryTo = $("#deliveryTo").val();
-		let mobileNo = $("#mobileNo").val();
-		let unitId = $("#unit").val();
+		let sampleTypeId = $("#sampleType").val();
 		//let deiveryDate = new Date($("#deiveryDate").val()).toLocaleDateString('fr-CA');;
-		let grossWeight = $("#grossWeight").val() == '' ? '0' : $("#grossWeight").val();
-		let rate = $("#rate").val() == '' ? '0' : $("#rate").val();
-		let amount = $("#amount").val() == '' ? '0' : $("#amount").val();
+
 		let remarks = $("#remarks").val();
 		let userId = $("#userId").val();
-		let parcelItems = {};
-		parcelItems['list'] = [];
+		let checkListItems = {};
+		checkListItems['list'] = [];
 
 		if (buyerId != '0') {
-			if (courierId != '0') {
-				if (trackingNo != '') {
-					if (dispatchedDate) {
-						if (unitId != '0') {
-							for (let i = 0; i < length; i++) {
-								const newRow = rowList[i];
-								const id = newRow.id.slice(4);
 
-								const item = {
-									buyerId: newRow.getAttribute('data-buyer-id'),
-									styleId: newRow.getAttribute('data-style-id'),
-									purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
-									purchaseOrder: $("#purchaseOrder-" + id).text(),
-									colorId: newRow.getAttribute('data-color-id'),
-									sizeId: newRow.getAttribute('data-size-id'),
-									sampleId: newRow.getAttribute('data-sample-id'),
-									quantity: $("#quantity-" + id).text(),
-									userId: userId
-								}
+			for (let i = 0; i < length; i++) {
+				const newRow = rowList[i];
+				const id = newRow.id.slice(4);
 
-								parcelItems.list.push(item);
-							}
-							//parcelItemList = parcelItemList.slice(0, -1);
-							if (confirm("Are you sure to confirm..")) {
-								if (parcelId == "") {
-									$.ajax({
-										type: 'POST',
-										dataType: 'json',
-										url: './confirmParcel',
-										data: {
-											buyerId: buyerId,
-											courierId: courierId,
-											trackingNo: trackingNo,
-											dispatchedDate: dispatchedDate,
-											deliveryBy: deliveryBy,
-											deliveryTo: deliveryTo,
-											mobileNo: mobileNo,
-											parcelItems: JSON.stringify(parcelItems),
-											unitId: unitId,
-											grossWeight: grossWeight,
-											rate: rate,
-											amount: amount,
-											remarks: remarks,
-											userId: userId
-										},
-										success: function (data) {
-											if (data == 'success') {
-												alert("Successfully Inserted")
-												refreshAction();
-
-											} else {
-												alert("Parcel Insertion Failed")
-											}
-										}
-									});
-								} else {
-									$.ajax({
-										type: 'POST',
-										dataType: 'json',
-										url: './editParcel',
-										data: {
-											parcelId: parcelId,
-											buyerId: buyerId,
-											courierId: courierId,
-											trackingNo: trackingNo,
-											dispatchedDate: dispatchedDate,
-											deliveryBy: deliveryBy,
-											deliveryTo: deliveryTo,
-											mobileNo: mobileNo,
-											parcelItems: JSON.stringify(parcelItems),
-											unitId: unitId,
-											grossWeight: grossWeight,
-											rate: rate,
-											amount: amount,
-											remarks: remarks,
-											userId: userId
-										},
-										success: function (data) {
-											if (data == 'success') {
-												alert("Successfully Inserted")
-												refreshAction();
-
-											} else {
-												alert("Parcel Insertion Failed")
-											}
-										}
-									});
-								}
-
-
-							}
-						} else {
-							warningAlert("Unit not selected... Please Select Unit");
-							$("#unit").focus();
-						}
-					} else {
-						warningAlert("Dispatched Date not selected... Please Select Dispatched Date");
-						$("#dispatchedDate").focus();
-					}
-				} else {
-					warningAlert("Tracking No is Empty... Please Enter Tracking No");
-					$("#trackingNo").focus();
+				const item = {
+					buyerId: newRow.getAttribute('data-buyer-id'),
+					styleId: newRow.getAttribute('data-style-id'),
+					purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+					purchaseOrder: $("#purchaseOrder-" + id).text(),
+					colorId: newRow.getAttribute('data-color-id'),
+					sizeId: newRow.getAttribute('data-size-id'),
+					sampleId: newRow.getAttribute('data-sample-id'),
+					itemType: newRow.getAttribute('data-item-type'),
+					accItemId: newRow.getAttribute('data-acc-item-id'),
+					quantity: $("#quantity-" + id).text(),
+					status: $("#checkStatus-"+id).prop('checked')?'1':'0',
+					userId: userId
 				}
-			} else {
-				warningAlert("Courier not selected... Please Select Courier Name");
-				$("#courierName").focus();
+				
+				checkListItems.list.push(item);
+			}
+			//parcelItemList = parcelItemList.slice(0, -1);
+			console.log("item List="+JSON.stringify(checkListItems));
+			if (confirm("Are you sure to confirm..")) {
+				if (checkListId == "") {
+					$.ajax({
+						type: 'POST',
+						dataType: 'json',
+						url: './confirmCheckList',
+						data: {
+							buyerId: buyerId,
+							sampleId: sampleTypeId,
+							checkListItems: JSON.stringify(checkListItems),
+							remarks: remarks,
+							userId: userId
+						},
+						success: function (data) {
+							if (data == 'success') {
+								alert("Successfully Inserted")
+								refreshAction();
+
+							} else {
+								alert("Parcel Insertion Failed")
+							}
+						}
+					});
+				} else {
+					$.ajax({
+						type: 'POST',
+						dataType: 'json',
+						url: './editCheckList',
+						data: {
+							buyerId: buyerId,
+							sampleId: sampleTypeId,
+							checkListItems: JSON.stringify(checkListItems),
+							remarks: remarks,
+							userId: userId
+						},
+						success: function (data) {
+							if (data == 'success') {
+								alert("Successfully Inserted")
+								refreshAction();
+
+							} else {
+								alert("Parcel Insertion Failed")
+							}
+						}
+					});
+				}
 			}
 		} else {
 			warningAlert("Buyer not selected... Please Select Buyer Name");
@@ -912,11 +837,11 @@ $("#btnConfirm").click(() => {
 });
 
 
-function getParcelDetails(autoId) {
+function getCheckListDetails(autoId) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './getParcelDetails',
+		url: './getCheckListDetails',
 		data: {
 			autoId: autoId
 		},
@@ -924,7 +849,7 @@ function getParcelDetails(autoId) {
 			setData(data.parcelInfo)
 			$("#parcelId").val(autoId);
 			$("#dataList").empty();
-			drawItemDataTable(data.parcelItems, false);
+			drawItemDataTable(data.parcelItems);
 			if (sessionStorage.getItem("pendingCheckListItem")) {
 				const pendingCheckListItem = JSON.parse(sessionStorage.getItem("pendingCheckListItem"));
 				if ($("#buyerName").val() == pendingCheckListItem.buyerId) {
@@ -1062,13 +987,12 @@ function drawSessionDataTable(data) {
 	for (var i = 0; i < length; i++) {
 		const rowData = data[i];
 		const id = rowData.autoId;
-		rows += `<tr id='row-${id}' class='newParcelItem' data-type='newParcelItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}'>
-					<td id='styleNo-${id}'>${rowData.styleNo}</td>
-					<td id='purchaseOrder-${id}'>${rowData.purchaseOrder}</td>
+		rows += `<tr id='row-${id}' class='newCheckListItem' data-type='newCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}' data-item-type='${rowData.itemType} data-acc-item-id='${rowData.accItemId}'>
+					<td id='accItemName-${id}'>${rowData.accItemName}</td>
 					<td id='color-${id}'>${rowData.colorName}</td>
 					<td id='size-${id}'>${rowData.sizeName}</td>
-					<td id='sampleType-${id}'>${rowData.sampleType}</td>
 					<td id='quantity-${id}'>${rowData.quantity}</td>
+					<td><input id='checkStatus-${id}' type="checkbox" ${rowData.status == 1 ? "checked" : ""}/></td>
 					<td ><i class='fa fa-edit' onclick="parcelItemSet('${id}','new')"></i></td>
 					<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${rowData.styleId}','${rowData.itemId}')"></i></td>
 				</tr>`;
@@ -1076,31 +1000,18 @@ function drawSessionDataTable(data) {
 	}
 
 	$("#dataList").append(rows);
-	const tempList = $("#dataList tr");
-	let totalQuantity = 0;
-	$.each(tempList, (i, tr) => {
-		let id = tr.id.slice(4);
-		totalQuantity += parseFloat($("#quantity-" + id).text());
-	});
 
-	row = `<tr>
-						<td colspan='5' class="text-right">Grand Total=</td>
-						<td>${totalQuantity}</td>
-						<td colspan='2'></td>
-					</tr>`;
-	if (tempList.length > 0)
-		$("#dataList").append(row);
 }
 
-function drawItemDataTable(data, isTotalShow = true) {
+function drawItemDataTable(data) {
 	let rows = "";
 	const length = data.length;
 
 	for (var i = 0; i < length; i++) {
 		const rowData = data[i];
 		const id = rowData.autoId;
-		rows += `<tr id='row-${id}' class='oldParcelItem' data-type='oldParcelItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}'>
-					<td id='styleNo-${id}'>${rowData.styleNo}</td>
+		rows += `<tr id='row-${id}' class='oldCheckListItem' data-type='oldCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId} data-item-type='${rowData.itemType} data-acc-item-id='${rowData.accItemId}''>
+					<td id='accItemName-${id}'>${rowData.styleNo}</td>
 					<td id='purchaseOrder-${id}'>${rowData.purchaseOrder}</td>
 					<td id='color-${id}'>${rowData.colorName}</td>
 					<td id='size-${id}'>${rowData.sizeName}</td>
@@ -1113,20 +1024,7 @@ function drawItemDataTable(data, isTotalShow = true) {
 	}
 
 	$("#dataList").append(rows);
-	const tempList = $("#dataList tr");
-	let totalQuantity = 0;
-	$.each(tempList, (i, tr) => {
-		let id = tr.id.slice(4);
-		totalQuantity += parseFloat($("#quantity-" + id).text());
-	});
 
-	row = `<tr>
-						<td colspan='5' class="text-right">Grand Total=</td>
-						<td>${totalQuantity}</td>
-						<td colspan='2'></td>
-					</tr>`;
-	if (tempList.length > 0 && isTotalShow)
-		$("#dataList").append(row);
 }
 function successAlert(message) {
 	var element = $(".alert");

@@ -29,6 +29,7 @@ import pg.config.SpringRootConfig;
 import pg.model.commonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -3472,10 +3473,11 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 		finally {
 			session.close();
@@ -4873,19 +4875,16 @@ public class OrderDAOImpl implements OrderDAO{
 				break;
 
 			}
-
-
-
 			tx.commit();
 			return POID;
 
 		}
 		catch(Exception e){
-
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 
 		finally {
@@ -4954,12 +4953,12 @@ public class OrderDAOImpl implements OrderDAO{
 
 		}
 		catch(Exception ee){
-
+			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 				return false;
 			}
-			ee.printStackTrace();
+			
 		}
 
 		finally {
@@ -5002,11 +5001,11 @@ public class OrderDAOImpl implements OrderDAO{
 
 		}
 		catch(Exception e){
-
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 
 		finally {
@@ -5048,11 +5047,11 @@ public class OrderDAOImpl implements OrderDAO{
 
 		}
 		catch(Exception e){
-
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 
 		finally {
@@ -5098,12 +5097,12 @@ public class OrderDAOImpl implements OrderDAO{
 
 		}
 		catch(Exception ee){
-
+			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 				return false;
 			}
-			ee.printStackTrace();
+			
 		}
 
 		finally {
@@ -5191,10 +5190,11 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 		finally {
 			session.close();
@@ -5230,11 +5230,11 @@ public class OrderDAOImpl implements OrderDAO{
 			return true;
 		}
 		catch(Exception e){
-
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 
 		finally {
@@ -5308,5 +5308,255 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 
 		return ListData;
+	}
+
+	@Override
+	public boolean ConfirmCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="insert into tbAccCheck (buyerid,sampleType,remarks,entrytime,userId) \n" + 
+					"values ('"+checkList.getBuyerId()+"',"
+					+ "'"+checkList.getSampleId()+"',"
+					+ "'"+checkList.getRemarks()+"',"
+					+ "CURRENT_TIMESTAMP,"
+					+ "'"+checkList.getUserId()+"');";
+			session.createSQLQuery(sql).executeUpdate();
+
+			sql = "select isnull(max(autoid),0) as maxId from tbAccCheck";
+			List<?> list = session.createSQLQuery(sql).list();
+			String checkId="0";
+			if(list.size()>0) {
+				checkId = list.get(0).toString();
+			}
+			JSONParser jsonParser = new JSONParser();
+			JSONObject itemsObject = (JSONObject)jsonParser.parse(checkList.getCheckListItems());
+			JSONArray itemList = (JSONArray) itemsObject.get("list");
+			
+			for(int i=0;i<itemList.size();i++) {
+				JSONObject item = (JSONObject) itemList.get(i);
+				sql="insert into tbAccCheckDetails(checkListId,buyerId,styleId,purchaseOrderId,sizeId,colorId,sampleId,itemType,itemId,quantity,status,entryTime,userId) \n" + 
+						"values('"+checkId+"','"+item.get("buyerId")+"','"+item.get("styleId")+"','"+item.get("purchaseOrderId")+"','"+item.get("sizeId")+"','"+item.get("colorId")+"','"+item.get("sampleId")+"','"+item.get("itemType")+"','"+item.get("accItemId")+"','"+item.get("quantity")+"','"+item.get("status")+"',CURRENT_TIMESTAMP,'"+item.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public List<CheckListModel> getChekList() {
+		// TODO Auto-generated method stub
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CheckListModel> checkList=new ArrayList<>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ac.autoId,ac.buyerId,b.name,ac.sampleType,ac.userid \n" + 
+					"from tbAccCheck ac \n" + 
+					"left join tbBuyer b \n" + 
+					"on ac.buyerId = b.id"; 
+					
+			List<?> list = session.createSQLQuery(sql).list();
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+
+				checkList.add(new CheckListModel(element[0].toString(), element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), "", "", element[4].toString()));
+
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+		return checkList;
+	}
+
+	@Override
+	public CheckListModel getCheckListInfo(String autoId) {
+		// TODO Auto-generated method stub
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		CheckListModel checkList = null;
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ac.autoId,ac.buyerId,acd.purchaseOrderId,acd.styleId,acd.itemType,acd.itemId,acd.sizeId,acd.colorid,acd.quantity,ac.sampleType,acd.status,ac.remarks\n" + 
+					"from tbAccCheck ac\n" + 
+					"left join tbAccCheckDetails acd\n" + 
+					"on ac.autoid = acd.checkListId\n" + 
+					"where ac.autoId='"+autoId+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				checkList = new CheckListModel();
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+		return checkList;
+	}
+
+	@Override
+	public List<CheckListModel> getCheckListItems(String autoId) {
+		// TODO Auto-generated method stub
+		String countryname="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		ParcelModel parcel = null;
+		List<CheckListModel> itemList=new ArrayList<>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ac.autoId,ac.buyerId,acd.styleId,acd.purchaseOrderId,acd.colorId,acd.sizeId,acd.sampleId,acd.itemType,acd.itemId,fi.ItemName,acd.quantity,acd.status,ac.remarks \n" + 
+					"from tbAccCheck ac\n" + 
+					"left join tbAccCheckDetails acd\n" + 
+					"on ac.autoId = acd.checkListId\n" + 
+					"left join tbBuyer b\n" + 
+					"on ac.buyerId = b.id\n" + 
+					"left join TbFabricsItem fi\n" + 
+					"on acd.itemId = fi.id\n" + 
+					"where acd.itemType='2' and ac.autoId= '"+autoId+"'";
+		
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				itemList.add(new CheckListModel());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}		
+		}
+
+		finally {
+			session.close();
+		}
+		return itemList;
+	}
+
+	@Override
+	public boolean editCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql = "update tbAccCheck set buyerId='"+checkList.getBuyerId()+"',sampleType='"+checkList.getSampleId()+"',remarks='"+checkList.getRemarks()+"',entryTime=CURRENT_TIMESTAMP,userId='"+checkList.getUserId()+"' where autoId='"+checkList.getCheckListId()+"';";	
+			session.createSQLQuery(sql).executeUpdate();
+
+			JSONParser jsonParser = new JSONParser();
+			JSONObject itemsObject = (JSONObject)jsonParser.parse(checkList.getCheckListItems());
+			JSONArray itemList = (JSONArray) itemsObject.get("list");
+			
+			for(int i=0;i<itemList.size();i++) {
+				JSONObject item = (JSONObject) itemList.get(i);
+				sql="insert into tbAccCheckDetails(checkListId,buyerId,styleId,purchaseOrderId,purchaseOrder,sizeId,colorId,sampleId,itemType,itemId,quantity,status,entryTime,userId) \n" + 
+						"values('"+item.get("cehckListId")+"','"+item.get("buyerId")+"','"+item.get("styleId")+"','"+item.get("purchaseOrderId")+"','"+item.get("purchaseOrder")+"','"+item.get("sizeId")+"','"+item.get("colorId")+"','"+item.get("sampleId")+"','"+item.get("itemType")+"','"+item.get("accItemId")+"','"+item.get("quantity")+"','"+item.get("status")+"',CURRENT_TIMESTAMP,'"+item.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}		
+		}
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean editCheckListItem(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql = "update tbAccCheckDetails set buyerId='"+checkList.getBuyerId()+"',styleId='"+checkList.getStyleId()+"',purchaseOrderId='"+checkList.getPurchaseOrderId()+"',sizeId = '"+checkList.getSizeId()+"',colorId='"+checkList.getColorId()+"',sampleId ='"+checkList.getSampleId()+"',quantity='"+checkList.getQuantity()+"',status='"+checkList.getStatus()+"' where autoId = '"+checkList.getAutoId()+"'";	
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}		
+		}
+		finally {
+			session.close();
+		}
+
+		return false;
 	}
 }

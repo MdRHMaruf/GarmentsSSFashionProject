@@ -6,6 +6,7 @@ import java.util.List;
 import pg.model.commonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -167,6 +168,14 @@ public interface OrderDAO {
 	//Purchase Order Approval for MD
 	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
 	boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
+	
+	
+	public boolean ConfirmCheckList(CheckListModel checkList);
+	public List<CheckListModel> getChekList();
+	public CheckListModel getCheckListInfo(String autoId);
+	public List<CheckListModel> getCheckListItems(String autoId);
+	public boolean editCheckList(CheckListModel checkList);
+	public boolean editCheckListItem(CheckListModel checkList);
 
 
 }

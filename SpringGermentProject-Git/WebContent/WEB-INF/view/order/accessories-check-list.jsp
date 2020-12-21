@@ -30,9 +30,9 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="parcelId" value=""> <input
-		type="hidden" id="parcelItemAutoId" value=""> <input
-		type="hidden" id="itemType" value="">
+	<input type="hidden" id="checkListId" value=""> <input
+		type="hidden" id="checkListItemAutoId" value=""> <input
+		type="hidden" id="checkItemType" value="">
 
 	<div class="card-box">
 		<!-- <div class="row">
@@ -107,8 +107,8 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1 pr-0 pl-1">
-				<label for="type" class="col-form-label-sm my-0 py-0">Item
-					Type</label> <select id="type" onchange="typeWiseIndentItemLoad()"
+				<label for="itemType" class="col-form-label-sm my-0 py-0">Item
+					Type</label> <select id="itemType" onchange="typeWiseIndentItemLoad()"
 					class="form-control-sm col-md-12 px-0">
 					<option value="1">Fabrics</option>
 					<option value="2">Accessories</option>
@@ -154,7 +154,7 @@
 
 			<div class="form-group col-md-1 mb-1  pr-0 pl-1">
 				<label for="status" class="col-form-label-sm my-0 py-0">Status</label>
-				<select class="form-control-sm col-md-12 col-md-12">
+				<select id="status" class="form-control-sm col-md-12 col-md-12">
 					<option value="1">Ok</option>
 					<option value="0">Missing</option>
 				</select>
@@ -188,7 +188,7 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
-							<th>Accessories Item</th>
+							<th>Accessories/Fabrics Item</th>
 							<th>Color</th>
 							<th>Size</th>
 							<th>Quantity</th>
@@ -258,10 +258,9 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>Auto Id</th>
 							<th>Buyer Name</th>
-							<th>Courier Name</th>
-							<th>Tracking No</th>
-							<th>Dispatched Date</th>
+							<th>Sample Type</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
@@ -269,14 +268,13 @@
 					<tbody id="poList">
 						<c:forEach items="${parcelList}" var="po" varStatus="counter">
 							<tr>
+								<td>${po.autoId}</td>
 								<td>${po.buyerName}</td>
-								<td>${po.courierName}</td>
-								<td>${po.trackingNo}</td>
-								<td>${po.dispatchedDate}</td>
+								<td>${po.sampleType}</td>
 								<td><i class="fa fa-search"
-									onclick="getParcelDetails(${po.autoId})"> </i></td>
+									onclick="getCheckListDetails(${po.autoId})"> </i></td>
 								<td><i class="fa fa-print"
-									onclick="parcelReport(${po.autoId})"> </i></td>
+									onclick="checkListReport(${po.autoId})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -49,6 +49,7 @@ import pg.model.commonModel;
 import pg.model.login;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -2059,12 +2060,64 @@ public class OrderController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<commonModel> sampleList = orderService.getSampleList();
 		List<Unit> unitList= registerService.getUnitList();	
-		List<ParcelModel> parcelList= orderService.parcelList();	
+		List<CheckListModel> checkList= orderService.getChekList();	
 		view.addObject("buyerList",buyerList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("unitList",unitList);
-		view.addObject("parcelList",parcelList);
+		view.addObject("parcelList",checkList);
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/confirmCheckList",method=RequestMethod.POST)
+	public String confirmCheckList(CheckListModel checkList) {
+		boolean insert=orderService.ConfirmCheckList(checkList);
+
+		if (insert) {
+			return "success";
+		}
+		return "fail";
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/getCheckListDetails",method=RequestMethod.GET)
+	public JSONObject getCheckListDetails(String autoId) {
+		JSONObject objectMain = new JSONObject();
+		ParcelModel parcelInfo = orderService.getParcelInfo(autoId);
+		List<ParcelModel> parcelItems = orderService.getParcelItems(autoId);
+		objectMain.put("parcelInfo", parcelInfo);
+		objectMain.put("parcelItems", parcelItems);
+		return objectMain;
+
+	}
+
+
+
+	@ResponseBody
+	@RequestMapping(value = "/editCheckList",method=RequestMethod.POST)
+	public String editCheckList(CheckListModel checkList) {
+		boolean insert=orderService.editCheckList(checkList);
+		if (insert) {
+			return "success";
+		}			
+		return "fail";
+
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/editCheckListItem",method=RequestMethod.GET)
+	public JSONObject editCheckListItem(CheckListModel checkList) {
+		JSONObject objectMain = new JSONObject();
+		boolean insert=orderService.editCheckListItem(checkList);
+		if (insert) {
+			List<CheckListModel> checkListItems = orderService.getCheckListItems(checkList.getCheckListId());
+			objectMain.put("result", checkListItems);
+		}else {
+			objectMain.put("result","Something Wrong");
+		}
+		return objectMain;
 	}
 
 }

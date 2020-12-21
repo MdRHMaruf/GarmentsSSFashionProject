@@ -11,6 +11,7 @@ import pg.dao.OrderDAO;
 import pg.model.commonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -27,7 +28,7 @@ import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
-import pg.registerModel.StyleItem;
+
 @Service
 public class OrderServiceImpl implements OrderService{
 	
@@ -638,6 +639,44 @@ public class OrderServiceImpl implements OrderService{
 		System.out.println("it's ok Service");
 		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
+
+	@Override
+	public boolean ConfirmCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.ConfirmCheckList(checkList);
+	}
+
+	@Override
+	public List<CheckListModel> getChekList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getChekList();
+	}
+
+	@Override
+	public CheckListModel getCheckListInfo(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getCheckListInfo(autoId);
+	}
+
+	@Override
+	public List<CheckListModel> getCheckListItems(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getCheckListItems(autoId);
+	}
+
+	@Override
+	public boolean editCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.editCheckList(checkList);
+	}
+
+	@Override
+	public boolean editCheckListItem(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.editCheckListItem(checkList);
+	}
+
+
 
 	
 
