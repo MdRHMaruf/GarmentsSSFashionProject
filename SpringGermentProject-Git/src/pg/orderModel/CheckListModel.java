@@ -20,13 +20,17 @@ public class CheckListModel {
 	 String sizeName;
 	 String sampleId;
 	 String sampleType;
+	 String itemType;
+	 String accItemId;
+	 String accItemName;
 	 String quantity;	 
 	 String status;
+	 
 	public CheckListModel() {
 		super();
 	}
 	
-	public CheckListModel(String autoId, String checkListId, String buyerId, String buyerName, String sampleId,String checkListItems,
+	public CheckListModel(String autoId, String checkListId, String buyerId, String buyerName, String sampleId,String sampleType,String checkListItems,
 			String remarks, String userId) {
 		super();
 		this.autoId = autoId;
@@ -34,14 +38,24 @@ public class CheckListModel {
 		this.buyerId = buyerId;
 		this.buyerName = buyerName;
 		this.sampleId = sampleId;
+		this.sampleType = sampleType;
 		this.checkListItems = checkListItems;
 		this.remarks = remarks;
 		this.userId = userId;
 	}
+	
+	public CheckListModel(String autoId, String buyerId, String sampleId,String remarks) {
+		super();
+		this.autoId = autoId;
+		this.checkListId = autoId;
+		this.buyerId = buyerId;
+		this.sampleId = sampleId;
+		this.remarks = remarks;
+	}
 
 	public CheckListModel(String autoId, String buyerId, String buyerName, String styleId, String styleNo,
 			String purchaseOrderId, String purchaseOrder, String colorId,
-			String colorName, String sizeId, String sizeName, String sampleId, String sampleType, String quantity) {
+			String colorName, String sizeId, String sizeName, String sampleId, String sampleType,String itemType,String accItemId,String accItemName, String quantity,String status) {
 		super();
 		this.autoId = autoId;
 		this.buyerId = buyerId;
@@ -56,7 +70,11 @@ public class CheckListModel {
 		this.sizeName = sizeName;
 		this.sampleId = sampleId;
 		this.sampleType = sampleType;
+		this.itemType = itemType;
+		this.accItemId = accItemId;
+		this.accItemName = accItemName;
 		this.quantity = quantity;
+		this.status = status;
 	}
 
 	public String getAutoId() {
@@ -198,4 +216,29 @@ public class CheckListModel {
 		this.status = status;
 	}
 
+	public String getItemType() {
+		return itemType;
+	}
+
+	public void setItemType(String itemType) {
+		this.itemType = itemType;
+	}
+
+	public String getAccItemId() {
+		return accItemId;
+	}
+
+	public void setAccItemId(String accItemId) {
+		this.accItemId = accItemId;
+	}
+
+	public String getAccItemName() {
+		return accItemName;
+	}
+
+	public void setAccItemName(String accItemName) {
+		this.accItemName = accItemName;
+	}
+
+	
 }

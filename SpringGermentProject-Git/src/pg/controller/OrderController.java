@@ -105,7 +105,6 @@ public class OrderController {
 	String poid;
 	String styleid;
 	String itemid;
-	String ParcelId;
 	String sampleId;
 
 
@@ -1889,25 +1888,17 @@ public class OrderController {
 	}
 
 
-	@ResponseBody
-	@RequestMapping(value = "/parcelRepor/{id}",method=RequestMethod.POST)
-	public String parcelRepor(@PathVariable ("id") String id) {
-		System.out.println(" Open Ooudoor sales report 1");
-
-		this.ParcelId=id;
-		return "yes";
-
-	}
+	
 
 
 	@ResponseBody
-	@RequestMapping(value = "/parcelReportView",method=RequestMethod.GET)
-	public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
+	@RequestMapping(value = "/parcelReportView/{id}")
+	public ModelAndView department_medicine_delvierOpen(ModelMap map, @PathVariable ("id") String id) {
 
 		System.out.println(" Open Ooudoor sales report ");	
 		ModelAndView view = new ModelAndView("order/ParcelReportView");
-
-		view.addObject("id",ParcelId);					
+		map.addAttribute("id",id);
+		view.addObject("id",id);					
 
 		return view;			
 	}
@@ -2085,10 +2076,10 @@ public class OrderController {
 	@RequestMapping(value = "/getCheckListDetails",method=RequestMethod.GET)
 	public JSONObject getCheckListDetails(String autoId) {
 		JSONObject objectMain = new JSONObject();
-		ParcelModel parcelInfo = orderService.getParcelInfo(autoId);
-		List<ParcelModel> parcelItems = orderService.getParcelItems(autoId);
-		objectMain.put("parcelInfo", parcelInfo);
-		objectMain.put("parcelItems", parcelItems);
+		CheckListModel checkListInfo = orderService.getCheckListInfo(autoId);
+		List<CheckListModel> checkListItems = orderService.getCheckListItems(autoId);
+		objectMain.put("checkListInfo", checkListInfo);
+		objectMain.put("checkListItems", checkListItems);
 		return objectMain;
 
 	}
@@ -2119,6 +2110,16 @@ public class OrderController {
 		}
 		return objectMain;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/checkListReportView/{id}")
+	public ModelAndView checkListReport(ModelMap map,@PathVariable ("id") String id) {
+		ModelAndView view = new ModelAndView("order/checkListReportView");
+		map.addAttribute("id",id);
+		return view;
+
+	}
+	
 
 }
 

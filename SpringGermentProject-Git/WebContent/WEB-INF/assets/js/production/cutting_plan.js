@@ -4,7 +4,8 @@ var lineValue = 0;
 
 var sizesListByGroup = JSON;
 
-function loadData() {
+window.onload = () => {
+	document.title = "Cutting Plan";
 
 	$.ajax({
 		type: 'GET',
@@ -16,10 +17,8 @@ function loadData() {
 			sizesListByGroup = obj.sizeList;
 		}
 	});
-
 }
 
-window.onload = loadData;
 
 function searchCuttingInformation(cuttingEntryId) {
 
@@ -60,14 +59,14 @@ function searchCuttingInformation(cuttingEntryId) {
 		  });*/
 }
 
-function searchProductPlan(buyerId, buyerorderId, styleId, itemId) {
+function searchProductPlan(buyerId, buyerOrderId, styleId, itemId) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
 		url: './searchBuyerPoDetails',
 		data: {
 			buyerId: buyerId,
-			buyerorderId: buyerorderId,
+			buyerorderId: buyerOrderId,
 			styleId: styleId,
 			itemId: itemId
 		},

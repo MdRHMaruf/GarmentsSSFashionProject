@@ -281,15 +281,12 @@
 
 					</div>
 					<div id="tableList" class="my-2">
-						<div class="row">
+						<!-- <div class="row">
 							<div class="col-md-12 table-responsive">
 								<table
 									class="table table-hover table-bordered table-sm mb-0 small-font">
 									<thead class="no-wrap-text bg-light">
-
 										<tr>
-
-
 											<th scope="col">Type</th>
 											<th scope="col">08-09</th>
 											<th scope="col">09-10</th>
@@ -367,7 +364,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div> -->
 					</div>
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">

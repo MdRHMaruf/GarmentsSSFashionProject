@@ -147,7 +147,7 @@ function styleWiseItemLoad() {
 					options += "<option id='itemName' value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
 				};
 				document.getElementById("itemName").innerHTML = options;
-				$('.selectpicker').selectpicker('refresh');
+				$('#itemName').selectpicker('refresh');
 				$("#itemName").prop("selectedIndex", 1).change();
 				itemId = 0;
 			}
@@ -332,7 +332,7 @@ function itemAddAction() {
 													<td id='size-${id}'>${sizeName}</td>
 													<td id='sampleType-${id}'>${sampleType}</td>
 													<td id='quantity-${id}'>${quantity}</td>
-													<td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
+													<td ><i class='fa fa-edit' onclick="parcelItemSet('${id}','new')"></i></td>
 													<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${styleId}','${itemId}')"></i></td>
 												</tr>`;
 									if (length > 1) $('#dataList tr:last').remove();
@@ -390,8 +390,6 @@ function itemAddAction() {
 		warningAlert("Buyer not selected... Please Select Buyer Name");
 		$("#buyerName").focus();
 	}
-
-
 }
 
 function itemEditAction() {
@@ -981,21 +979,8 @@ function editParcel() {
 
 
 function parcelReport(id) {
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './parcelRepor/' + id,
-		data: {
-
-		},
-		success: function (data) {
-			if (data == 'yes') {
-				let url = "parcelReportView";
-				window.open(url, '_blank');
-			}
-		}
-	});
+	let url = "parcelReportView/"+id;
+	window.open(url, '_blank');
 }
 
 

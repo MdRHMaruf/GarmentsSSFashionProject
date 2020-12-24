@@ -104,6 +104,15 @@ public class CommercialController {
 	String FrontImg="",BackImg;
 	
 	String StyleId="",ItemId="";
+	
+	@RequestMapping(value = "/master_lc")
+	public ModelAndView master_lc(ModelMap map,HttpSession session) {
+
+		ModelAndView view = new ModelAndView("commercial/master-lc");
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		view.addObject("buyerList",buyerList);
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
 
 
 	@RequestMapping(value = "deed_of_contact")

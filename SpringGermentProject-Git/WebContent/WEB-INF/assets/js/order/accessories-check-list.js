@@ -338,7 +338,7 @@ function itemAddAction() {
 		if (purchaseOrderId != 0) {
 			if (styleId != 0) {
 				if (itemId != 0) {
-					if (colorId != 0) {
+					if (accItemId != 0) {
 						if (sizeId != 0) {
 							if (sampleId != 0) {
 								if (quantity != 0) {
@@ -375,7 +375,7 @@ function itemAddAction() {
 													<td id='size-${id}'>${sizeName}</td>
 													<td id='quantity-${id}'>${quantity}</td>
 													<td><input id='checkStatus-${id}' type='checkbox' ${status == 1 ? "checked" : ""}/></td>
-													<td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
+													<td ><i class='fa fa-edit' onclick="checkListItemSet('${id}','new')"></i></td>
 													<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${styleId}','${itemId}')"></i></td>
 												</tr>`;
 
@@ -402,8 +402,8 @@ function itemAddAction() {
 							$("#size").focus();
 						}
 					} else {
-						warningAlert("Color Name not selected... Please Select Color Name");
-						$("#colorName").focus();
+						warningAlert("Fabrics Accessories not selected... Please Select Accessories");
+						$("#fabricsAccessoriesItem").focus();
 					}
 				} else {
 					warningAlert("Item Name not selected... Please Select Item Name");
@@ -427,9 +427,9 @@ function itemAddAction() {
 
 function itemEditAction() {
 
-	let autoId = $("#parcelItemAutoId").val();
-	let itemType = $("#itemType").val();
-	let parcelId = $("#parcelId").val();
+	let autoId = $("#checkListItemAutoId").val();
+	let checkItemType = $("#checkItemType").val();
+	let checkListId = $("#checkListId").val();
 	const rowList = $("#dataList tr");
 	const length = rowList.length;
 
@@ -441,37 +441,41 @@ function itemEditAction() {
 	let styleId = $("#styleNo").val();
 	let itemName = $("#itemName option:selected").text();
 	let itemId = $("#itemName").val();
+	let sampleId = $("#sampleType").val();
+	let sampleType = $("#sampleType option:selected").text();
+	let itemType = $("#itemType").val();
+	let accItemName = $("#fabricsAccessoriesItem option:selected").text();
+	let accItemId = $("#fabricsAccessoriesItem").val();
 	let colorName = $("#colorName option:selected").text();
 	let colorId = $("#colorName").val();
 	let sizeId = $("#size").val();
 	let sizeName = $("#size option:selected").text();
-	let sampleId = $("#sampleType").val();
-	let sampleType = $("#sampleType option:selected").text();
 	let quantity = $("#quantity").val() == "" ? 0 : $("#quantity").val();
+	let status = $("#status").val();
 	let userId = $("#userId").val();
 
 	if (buyerId != 0) {
 		if (purchaseOrderId != 0) {
 			if (styleId != 0) {
 				if (itemId != 0) {
-					if (colorId != 0) {
+					if (accItemId != 0) {
 						if (sizeId != 0) {
 							if (sampleId != 0) {
 								if (quantity != 0) {
-									if (itemType == 'new') {
+									if (checkItemType == 'new') {
 
 										$("#row-" + autoId).attr("data-buyer-id", buyerId);
 										$("#row-" + autoId).attr("data-purchase-order-id", purchaseOrderId);
 										$("#row-" + autoId).attr("data-style-id", styleId);
 										$("#row-" + autoId).attr("data-item-id", itemId);
+										$("#row-" + autoId).attr("data-item-type", itemType);
+										$("#row-" + autoId).attr("data-acc-item-id", accItemId);
 										$("#row-" + autoId).attr("data-color-id", colorId);
 										$("#row-" + autoId).attr("data-size-id", sizeId);
 										$("#row-" + autoId).attr("data-sample-id", sampleId);
-										$("#purchaseOrder-" + autoId).text(purchaseOrder);
-										$("#styleNo-" + autoId).text(styleNo);
+										$("#accItemName-" + autoId).text(accItemName);
 										$("#color-" + autoId).text(colorName);
 										$("#size-" + autoId).text(sizeName);
-										$("#sampleType-" + autoId).text(sampleType);
 										$("#quantity-" + autoId).text(quantity);
 										$("#btnAdd").prop("disabled", false);
 										$("#btnEdit").prop("disabled", true);
@@ -497,13 +501,16 @@ function itemEditAction() {
 													"sizeId": sizeId,
 													"sampleType": sampleType,
 													"sampleId": sampleId,
-													"quantity": quantity
+													"quantity": quantity,
+													"accItemId": accItemId,
+													"accItemName": accItemName,
+													"itemType": itemType,
+													"status": status
 												}
 												sessionObject = {
 													"buyerId": buyerId,
 													"itemList": itemList
 												}
-
 												sessionStorage.setItem("pendingCheckListItem", JSON.stringify(sessionObject));
 												break;
 											}
@@ -512,10 +519,10 @@ function itemEditAction() {
 										$.ajax({
 											type: 'GET',
 											dataType: 'json',
-											url: './editParcelItem',
+											url: './editCheckListItem',
 											data: {
 												autoId: autoId,
-												parcelId: parcelId,
+												checkListId : checkListId,
 												buyerId: buyerId,
 												purchaseOrderId: purchaseOrderId,
 												purchaseOrder: purchaseOrder,
@@ -523,7 +530,11 @@ function itemEditAction() {
 												colorId: colorId,
 												sizeId: sizeId,
 												sampleId: sampleId,
+												itemType : itemType,
+												accItemId : accItemId,
+												accItemName : accItemName,
 												quantity: quantity,
+												status: status,
 												userId: userId
 											},
 											success: function (data) {
@@ -560,8 +571,8 @@ function itemEditAction() {
 							$("#size").focus();
 						}
 					} else {
-						warningAlert("Color Name not selected... Please Select Color Name");
-						$("#colorName").focus();
+						warningAlert("Accessories Not selected... Please Select Accessories name");
+						$("#fabricsAccessoriesItem").focus();
 					}
 				} else {
 					warningAlert("Item Name not selected... Please Select Item Name");
@@ -632,7 +643,7 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 
 }
 
-function parcelItemSet(autoId, itemType) {
+function checkListItemSet(autoId, itemType) {
 
 	$("#checkListItemAutoId").val(autoId);
 	$("#checkItemType").val(itemType);
@@ -646,6 +657,9 @@ function parcelItemSet(autoId, itemType) {
 	$("#sampleType").val(row.attr('data-sample-id')).change();
 	$("#quantity").val($("#quantity-" + autoId).text());
 	$("#buyerName").val(row.attr('data-buyer-id')).change();
+	$("#itemType").val(row.attr('data-item-type'));
+	console.log("itemType=",row.attr('data-item-type'));
+	accItemId = row.attr('data-acc-item-id');
 	$("#btnAdd").prop("disabled", true);
 	$("#btnEdit").prop("disabled", false);
 }
@@ -808,6 +822,8 @@ $("#btnConfirm").click(() => {
 						dataType: 'json',
 						url: './editCheckList',
 						data: {
+							autoId : checkListId,
+							checkListId : checkListId,
 							buyerId: buyerId,
 							sampleId: sampleTypeId,
 							checkListItems: JSON.stringify(checkListItems),
@@ -846,10 +862,13 @@ function getCheckListDetails(autoId) {
 			autoId: autoId
 		},
 		success: function (data) {
-			setData(data.parcelInfo)
-			$("#parcelId").val(autoId);
+			console.log("buyer id="+data.checkListInfo.buyerId);
+			$("#buyerName").val(data.checkListInfo.buyerId).change();
+			$("#sampleType").val(data.checkListInfo.sampleId).change();
+			$("#remarks").val(data.checkListInfo.remarks);
+			$("#checkListId").val(autoId);
 			$("#dataList").empty();
-			drawItemDataTable(data.parcelItems);
+			drawItemDataTable(data.checkListItems);
 			if (sessionStorage.getItem("pendingCheckListItem")) {
 				const pendingCheckListItem = JSON.parse(sessionStorage.getItem("pendingCheckListItem"));
 				if ($("#buyerName").val() == pendingCheckListItem.buyerId) {
@@ -859,24 +878,6 @@ function getCheckListDetails(autoId) {
 			$("#exampleModal").modal('hide');
 		}
 	});
-
-}
-
-function setData(data) {
-
-	$("#buyerName").val(data.buyerId).change();
-	$("#courierName").val(data.courierId).change();
-	$("#trackingNo").val(data.trackingNo);
-	let dispatchedDate = new Date(data.dispatchedDate);
-	$("#dispatchedDate").val(dispatchedDate.getFullYear() + "-" + dispatchedDate.getMonth() + "-" + dispatchedDate.getDate() + "T" + ('0' + dispatchedDate.getHours()).slice(-2) + ":" + ('0' + dispatchedDate.getMinutes()).slice(-2));
-	$("#deliveryBy").val(data.deliveryBy).change();
-	$("#deliveryTo").val(data.deliveryTo);
-	$("#mobileNo").val(data.mobileNo);
-	$("#unit").val(data.unitId);
-	$("#grossWeight").val(data.grossWeight);
-	$("#rate").val(data.rate);
-	$("#amount").val(data.amount);
-	$("#remarks").val(data.remarks);
 
 }
 
@@ -949,22 +950,10 @@ function editParcel() {
 
 
 
-function parcelReport(id) {
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './parcelRepor/' + id,
-		data: {
-
-		},
-		success: function (data) {
-			if (data == 'yes') {
-				let url = "parcelReportView";
-				window.open(url, '_blank');
-			}
-		}
-	});
+function checkListReport(id) {
+	
+	let url = "checkListReportView/"+id;
+	window.open(url, '_blank');
 }
 
 
@@ -987,13 +976,13 @@ function drawSessionDataTable(data) {
 	for (var i = 0; i < length; i++) {
 		const rowData = data[i];
 		const id = rowData.autoId;
-		rows += `<tr id='row-${id}' class='newCheckListItem' data-type='newCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}' data-item-type='${rowData.itemType} data-acc-item-id='${rowData.accItemId}'>
+		rows += `<tr id='row-${id}' class='newCheckListItem' data-type='newCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}' data-item-type='${rowData.itemType}' data-acc-item-id='${rowData.accItemId}'>
 					<td id='accItemName-${id}'>${rowData.accItemName}</td>
 					<td id='color-${id}'>${rowData.colorName}</td>
 					<td id='size-${id}'>${rowData.sizeName}</td>
 					<td id='quantity-${id}'>${rowData.quantity}</td>
 					<td><input id='checkStatus-${id}' type="checkbox" ${rowData.status == 1 ? "checked" : ""}/></td>
-					<td ><i class='fa fa-edit' onclick="parcelItemSet('${id}','new')"></i></td>
+					<td ><i class='fa fa-edit' onclick="checkListItemSet('${id}','new')"></i></td>
 					<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','new','${rowData.styleId}','${rowData.itemId}')"></i></td>
 				</tr>`;
 		//rows.push(drawRowDataTable(data[i], i));
@@ -1010,14 +999,13 @@ function drawItemDataTable(data) {
 	for (var i = 0; i < length; i++) {
 		const rowData = data[i];
 		const id = rowData.autoId;
-		rows += `<tr id='row-${id}' class='oldCheckListItem' data-type='oldCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId} data-item-type='${rowData.itemType} data-acc-item-id='${rowData.accItemId}''>
-					<td id='accItemName-${id}'>${rowData.styleNo}</td>
-					<td id='purchaseOrder-${id}'>${rowData.purchaseOrder}</td>
+		rows += `<tr id='row-${id}' class='oldCheckListItem' data-type='oldCheckListItem' data-buyer-id='${rowData.buyerId}' data-purchase-order-id='${rowData.purchaseOrderId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-color-id='${rowData.colorId}' data-size-id='${rowData.sizeId}' data-sample-id='${rowData.sampleId}' data-item-type='${rowData.itemType}' data-acc-item-id='${rowData.accItemId}'>
+					<td id='accItemName-${id}'>${rowData.accItemName}</td>
 					<td id='color-${id}'>${rowData.colorName}</td>
 					<td id='size-${id}'>${rowData.sizeName}</td>
-					<td id='sampleType-${id}'>${rowData.sampleType}</td>
 					<td id='quantity-${id}'>${rowData.quantity}</td>
-					<td ><i class='fa fa-edit' onclick="parcelItemSet('${id}','old')"></i></td>
+					<td><input id='checkStatus-${id}' type="checkbox" ${rowData.status == 1 ? "checked" : ""}/></td>
+					<td ><i class='fa fa-edit' onclick="checkListItemSet('${id}','old')"></i></td>
 					<td ><i class='fa fa-trash' onclick="deleteParcelItem('${id}','old')"></i></td>
 				</tr>`;
 		//rows.push(drawRowDataTable(data[i], i));
