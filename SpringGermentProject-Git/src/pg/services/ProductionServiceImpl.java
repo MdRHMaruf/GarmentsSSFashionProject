@@ -13,7 +13,7 @@ import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
-import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.CuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
 import pg.registerModel.Machine;
@@ -26,7 +26,7 @@ public class ProductionServiceImpl implements ProductionService {
 	ProductionDAO productionDao;
 
 	@Override
-	public boolean cuttingRequisitionEnty(cuttingRequsition v) {
+	public boolean cuttingRequisitionEnty(CuttingRequsition v) {
 		// TODO Auto-generated method stub
 		return productionDao.cuttingRequisitionEnty(v);
 	}

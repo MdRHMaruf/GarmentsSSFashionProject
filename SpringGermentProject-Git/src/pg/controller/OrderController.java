@@ -45,8 +45,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import pg.model.commonModel;
-import pg.model.login;
+import pg.model.CommonModel;
+import pg.model.Login;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
@@ -58,7 +58,7 @@ import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.accessoriesindentcarton;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
@@ -442,6 +442,16 @@ public class OrderController {
 		objMain.put("itemList",itemList);
 		return objMain; 
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getStyleWiseBuyerPO",method=RequestMethod.GET)
+	public JSONObject getStyleWiseBuyerPO(String styleId) {
+		JSONObject objMain = new JSONObject();	
+		List<CommonModel> poList = orderService.getStyleWiseBuyerPO(styleId);
+
+		objMain.put("poList",poList);
+		return objMain; 
+	}
 
 
 
@@ -654,7 +664,7 @@ public class OrderController {
 	@RequestMapping(value = "/findfile/{start}/{end}/{user}",method=RequestMethod.POST)
 	public @ResponseBody JSONObject findfile(@PathVariable ("start") String start,@PathVariable ("end") String end,@PathVariable ("user") String user) {
 
-		List<pg.orderModel.fileUpload> FileList=orderService.findfiles(start, end,user);
+		List<pg.orderModel.FileUpload> FileList=orderService.findfiles(start, end,user);
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
@@ -783,17 +793,17 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_indent",method=RequestMethod.GET)
 	public ModelAndView accessories_indent(ModelMap map,HttpSession session) {
 
-		List<commonModel>purchaseorders=orderService.PurchaseOrders();
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 
 		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 
-		List<commonModel>accessoriesitem=orderService.AccessoriesItem("1");
+		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
 		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
 
 		//List<commonModel>unit=orderService.Unit();
-		List<commonModel>brand=orderService.Brands();
-		List<commonModel>color=orderService.AllColors();
+		List<CommonModel>brand=orderService.Brands();
+		List<CommonModel>color=orderService.AllColors();
 		ModelAndView view = new ModelAndView("order/accessories_indent");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("accessories",accessoriesitem);
@@ -833,7 +843,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<commonModel>styles=orderService.Styles(po);
+		List<CommonModel>styles=orderService.Styles(po);
 
 		for (int i = 0; i < styles.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -859,7 +869,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<commonModel>items=orderService.Items(buyerorderid,style);
+		List<CommonModel>items=orderService.Items(buyerorderid,style);
 
 		for (int i = 0; i < items.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -890,7 +900,7 @@ public class OrderController {
 
 		System.out.println("item "+item);
 
-		List<commonModel>items=orderService.styleItemsWiseColor(buyerorderid,style,item);
+		List<CommonModel>items=orderService.styleItemsWiseColor(buyerorderid,style,item);
 
 		for (int i = 0; i < items.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -914,7 +924,7 @@ public class OrderController {
 	public List purchaseOrders(@PathVariable ("po") String po,@PathVariable ("style") String style,@PathVariable ("item") String item) {
 		System.out.println(" shippingmarks ");
 
-		List<commonModel>shippingMarks=orderService.ShippingMark(po, style, item);
+		List<CommonModel>shippingMarks=orderService.ShippingMark(po, style, item);
 
 
 
@@ -932,7 +942,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<commonModel>sizes=orderService.Size(buyerorderid, style,item,color);
+		List<CommonModel>sizes=orderService.Size(buyerorderid, style,item,color);
 
 		for (int i = 0; i < sizes.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -957,7 +967,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<commonModel>sizes=orderService.SizewiseQty(buyerorderid, style,item,color,size);
+		List<CommonModel>sizes=orderService.SizewiseQty(buyerorderid, style,item,color,size);
 
 		for (int i = 0; i < sizes.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -983,7 +993,7 @@ public class OrderController {
 
 
 
-		List<commonModel>colors=orderService.Colors(style, item);
+		List<CommonModel>colors=orderService.Colors(style, item);
 
 		for (int i = 0; i < colors.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1013,7 +1023,7 @@ public class OrderController {
 
 
 
-		List<commonModel>qty=orderService.SizewiseQty(style,item,size,color,type);
+		List<CommonModel>qty=orderService.SizewiseQty(style,item,size,color,type);
 
 		for (int i = 0; i < qty.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1212,9 +1222,9 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_indent_curton",method=RequestMethod.GET)
 	public ModelAndView accessories_indent_curton(ModelMap map,HttpSession session) {
 
-		List<commonModel>purchaseorders=orderService.PurchaseOrders();
-		List<commonModel>accessoriesitem=orderService.AccessoriesItem("2");
-		List<commonModel>unit=orderService.Unit();
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
+		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
+		List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
 		view.addObject("purchaseorders",purchaseorders);
@@ -1228,13 +1238,13 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)
-	public JSONObject saveAccessoriesCurton(accessoriesindentcarton v) {
+	public JSONObject saveAccessoriesCurton(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 		boolean insert= orderService.saveAccessoriesCurton(v);
 
 		if(insert) {
-			List<accessoriesindentcarton>qty=orderService.getAccessoriesIndentCarton(v.getPoNo(),v.getStyle(),v.getItem(),v.getItemColor());
+			List<AccessoriesIndentCarton>qty=orderService.getAccessoriesIndentCarton(v.getPoNo(),v.getStyle(),v.getItem(),v.getItemColor());
 
 			for (int i = 0; i < qty.size(); i++) {
 				JSONObject obj=new JSONObject();
@@ -1264,13 +1274,13 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/editAccessoriesCurton",method=RequestMethod.POST)
-	public JSONObject editAccessoriesCurton(accessoriesindentcarton v) {
+	public JSONObject editAccessoriesCurton(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 		boolean insert= orderService.editAccessoriesCurton(v);
 
 		if(insert) {
-			List<accessoriesindentcarton>qty=orderService.getAccessoriesIndentCarton(v.getPoNo(),v.getStyle(),v.getItem(),v.getItemColor());
+			List<AccessoriesIndentCarton>qty=orderService.getAccessoriesIndentCarton(v.getPoNo(),v.getStyle(),v.getItem(),v.getItemColor());
 
 			for (int i = 0; i < qty.size(); i++) {
 				JSONObject obj=new JSONObject();
@@ -1300,11 +1310,11 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/getAllAccessoriesCartonData",method=RequestMethod.POST)
-	public JSONObject getAllAccessoriesCartonData(accessoriesindentcarton v) {
+	public JSONObject getAllAccessoriesCartonData(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<accessoriesindentcarton>qty=orderService.getAllAccessoriesCartonData();
+		List<AccessoriesIndentCarton>qty=orderService.getAllAccessoriesCartonData();
 
 		for (int i = 0; i < qty.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1337,7 +1347,7 @@ public class OrderController {
 		JSONArray mainarray = new JSONArray();
 
 		//List<AccessoriesIndent>list=orderService.getAccessoriesIndentItemDetails(id);
-		List<accessoriesindentcarton>list=orderService.getAccessoriesIndentCartonItemDetails(id);
+		List<AccessoriesIndentCarton>list=orderService.getAccessoriesIndentCartonItemDetails(id);
 
 		for (int i = 0; i < list.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1388,7 +1398,7 @@ public class OrderController {
 	@RequestMapping(value = "/fabrics_indent",method=RequestMethod.GET)
 	public ModelAndView fabrics_indent(ModelMap map,HttpSession session) {
 		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent();
-		List<commonModel>purchaseorders=orderService.PurchaseOrders();
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Brand> brandList = registerService.getBrandList();
@@ -1492,9 +1502,9 @@ public class OrderController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
-		List<commonModel> sampleList = orderService.getSampleList();
-		List<commonModel> inchargeList = orderService.getInchargeList();
-		List<commonModel> merchendizerList = orderService.getMerchendizerList();
+		List<CommonModel> sampleList = orderService.getSampleList();
+		List<CommonModel> inchargeList = orderService.getInchargeList();
+		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 
 		view.addObject("groupList",groupList);
 		view.addObject("buyerList",buyerList);
@@ -1723,7 +1733,7 @@ public class OrderController {
 	@RequestMapping(value = "/submitStyleFiles", method = RequestMethod.POST)
 	public ModelAndView submitFiles(@RequestParam String buyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam CommonsMultipartFile frontImage,@RequestParam CommonsMultipartFile backImage,HttpSession session,ModelMap map) throws IOException, SQLException {
 
-		List<login> user=(List<login>)session.getAttribute("pg_admin");
+		List<Login> user=(List<Login>)session.getAttribute("pg_admin");
 
 
 		String frontimg=getImageName(frontImage,session);
@@ -1761,7 +1771,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<commonModel>styles=orderService.BuyerWisePo(buyerId);
+		List<CommonModel>styles=orderService.BuyerWisePo(buyerId);
 
 		for (int i = 0; i < styles.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -1820,7 +1830,7 @@ public class OrderController {
 
 		ModelAndView view = new ModelAndView("order/parcel");
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
-		List<commonModel> sampleList = orderService.getSampleList();
+		List<CommonModel> sampleList = orderService.getSampleList();
 		List<Style> styleList= orderService.getStyleList();
 		List<CourierModel> courierList=orderService.getcourierList();
 		List<Unit> unitList= registerService.getUnitList();	
@@ -1912,7 +1922,7 @@ public class OrderController {
 
 
 		List<String> poList = orderService.getPurchaseOrderList();
-		List<commonModel> sampleList = orderService.getSampleList();
+		List<CommonModel> sampleList = orderService.getSampleList();
 		List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
 		view.addObject("Samples",Samples);
 		view.addObject("poList",poList);
@@ -2049,7 +2059,7 @@ public class OrderController {
 
 		ModelAndView view = new ModelAndView("order/accessories-check-list");
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
-		List<commonModel> sampleList = orderService.getSampleList();
+		List<CommonModel> sampleList = orderService.getSampleList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<CheckListModel> checkList= orderService.getChekList();	
 		view.addObject("buyerList",buyerList);

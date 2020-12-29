@@ -1,28 +1,28 @@
 package pg.model;
 
-public class commonModel {
+public class CommonModel {
 	
 	String id;
 	String name;
 	String qty;
 	String value;
 	
-	public commonModel() {
+	public CommonModel() {
 		
 	}
-	public commonModel( String qty) {
+	public CommonModel( String qty) {
 		super();
 		
 		this.qty = qty;
 	}
 	
-	public commonModel(String id, String name) {
+	public CommonModel(String id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 	
-	public commonModel(String id,String name,String value) {
+	public CommonModel(String id,String name,String value) {
 		super();
 		this.id = id;
 		this.name = name;

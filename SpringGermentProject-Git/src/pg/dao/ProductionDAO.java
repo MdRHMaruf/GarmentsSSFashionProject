@@ -8,7 +8,7 @@ import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
-import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.CuttingRequsition;
 import pg.proudctionModel.Process;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
@@ -18,10 +18,10 @@ import pg.registerModel.SizeGroup;
 public interface ProductionDAO {
 
 	//Cutting Requistion Entry
-	boolean cuttingRequisitionEnty(cuttingRequsition v);
+	boolean cuttingRequisitionEnty(CuttingRequsition v);
 
 	//Production
-	boolean productionEnty(cuttingRequsition v);
+	boolean productionEnty(CuttingRequsition v);
 	String getOrderQty(String buyerorderid, String style, String item);
 	boolean checkDoplicationPlanSet(ProductionPlan v);
 	boolean productionPlanSave(ProductionPlan v);

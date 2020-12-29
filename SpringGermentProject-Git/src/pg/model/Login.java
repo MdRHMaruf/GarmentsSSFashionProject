@@ -2,7 +2,7 @@ package pg.model;
 
 import java.io.Serializable;
 
-public class login implements Serializable{
+public class Login implements Serializable{
 	String user;
 	int id;
 	int type;
@@ -13,7 +13,7 @@ public class login implements Serializable{
 	
 	
 	
-	public login(int id,int type,String factoryId,String departmentId,String user,String pass) {
+	public Login(int id,int type,String factoryId,String departmentId,String user,String pass) {
 		this.user = user;
 		this.id = id;
 		this.type = type;

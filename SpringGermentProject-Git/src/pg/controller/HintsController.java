@@ -22,11 +22,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import pg.exception.UserBlockedException;
-import pg.model.ware;
-import pg.model.wareinfo;
-import pg.model.login;
-import pg.model.menu;
-import pg.model.module;
+import pg.model.Ware;
+import pg.model.WareInfo;
+import pg.model.Login;
+import pg.model.Menu;
+import pg.model.Module;
 import pg.services.PasswordService;
 import pg.services.PasswordServiceImpl;
 

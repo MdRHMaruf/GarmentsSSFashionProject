@@ -9,21 +9,21 @@ import java.util.List;
 
 import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
-import pg.model.login;
-import pg.model.menu;
-import pg.model.module;
-import pg.model.password;
-import pg.model.wareinfo;
+import pg.model.Login;
+import pg.model.Menu;
+import pg.model.Module;
+import pg.model.Password;
+import pg.model.WareInfo;
 
 public interface PasswordService {
-	public List<login> login(String loginName,String password) throws UserBlockedException;
-	public List<wareinfo> getAllStoreName();
-	public List<module> getAllModuleName();
-	public List<menu> getAllMenuName();
+	public List<Login> login(String loginName,String password) throws UserBlockedException;
+	public List<WareInfo> getAllStoreName();
+	public List<Module> getAllModuleName();
+	public List<Menu> getAllMenuName();
 
-	public List<module> getUserModule(int i);
-	public List<menu> getUserMenu(int i,int moduleId);
-	public List<menu> getAdminUserMenu(int i,int moduleId);
+	public List<Module> getUserModule(int i);
+	public List<Menu> getUserMenu(int i,int moduleId);
+	public List<Menu> getAdminUserMenu(int i,int moduleId);
 	
 	public List<OrganizationInfo> getOrganizationInfo();
 	public boolean changePassword(String userId, String userName, String password);

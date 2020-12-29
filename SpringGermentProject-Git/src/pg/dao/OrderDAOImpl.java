@@ -27,7 +27,7 @@ import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
 
 import pg.registerModel.Unit;
 import pg.config.SpringRootConfig;
-import pg.model.commonModel;
+import pg.model.CommonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
@@ -39,11 +39,11 @@ import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.fileUpload;
+import pg.orderModel.FileUpload;
 import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.accessoriesindentcarton;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.ItemDescription;
@@ -114,6 +114,43 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();
 
 				dataList.add(new Style(element[0].toString(), buyerId, "", element[1].toString(),"", ""));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select BuyerOrderId,PurchaseOrder \n" + 
+					"from TbBuyerOrderEstimateDetails boed\n" + 
+					"where boed.StyleId ='"+styleId+"' \n" + 
+					"group by boed.BuyerOrderId , boed.PurchaseOrder";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(),element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -1414,13 +1451,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> PurchaseOrders() {
+	public List<CommonModel> PurchaseOrders() {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1436,7 +1473,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1464,13 +1501,13 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public List<commonModel> Colors(String style, String item) {
+	public List<CommonModel> Colors(String style, String item) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1487,7 +1524,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1514,13 +1551,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> Items(String buyerorderid,String style) {
+	public List<CommonModel> Items(String buyerorderid,String style) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1536,7 +1573,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1563,13 +1600,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> AccessoriesItem(String type) {
+	public List<CommonModel> AccessoriesItem(String type) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1591,7 +1628,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1618,13 +1655,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> Size(String buyerorderid, String style, String item, String color) {
+	public List<CommonModel> Size(String buyerorderid, String style, String item, String color) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1640,7 +1677,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1666,13 +1703,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> Unit() {
+	public List<CommonModel> Unit() {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1687,7 +1724,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new commonModel(element[0].toString(),element[1].toString(),element[2].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString(),element[2].toString()));
 			}
 			tx.commit();
 			return query;
@@ -1709,13 +1746,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> Brands() {
+	public List<CommonModel> Brands() {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1731,7 +1768,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1758,13 +1795,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> ShippingMark(String po, String style, String item) {
+	public List<CommonModel> ShippingMark(String po, String style, String item) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1780,7 +1817,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				//Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel("",iter.next().toString()));
+				query.add(new CommonModel("",iter.next().toString()));
 
 			}
 
@@ -1807,13 +1844,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> AllColors() {
+	public List<CommonModel> AllColors() {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1829,7 +1866,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -1856,13 +1893,13 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> SizewiseQty(String buyerorderid,String style,String item,String color,String size) {
+	public List<CommonModel> SizewiseQty(String buyerorderid,String style,String item,String color,String size) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -1880,7 +1917,7 @@ public class OrderDAOImpl implements OrderDAO{
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
-				query.add(new commonModel(iter.next().toString()));
+				query.add(new CommonModel(iter.next().toString()));
 			}
 
 			tx.commit();
@@ -1912,7 +1949,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Transaction tx=null;
 
 		boolean inserted=false;
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2064,11 +2101,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> Styles(String po) {
+	public List<CommonModel> Styles(String po) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2084,7 +2121,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -2110,11 +2147,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> styleItemsWiseColor(String buyerorderid,String style,String item) {
+	public List<CommonModel> styleItemsWiseColor(String buyerorderid,String style,String item) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2130,7 +2167,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new commonModel(element[0].toString(),element[1].toString()));
+				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
 
@@ -2288,7 +2325,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2327,7 +2364,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2356,12 +2393,12 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean saveAccessoriesCurton(accessoriesindentcarton v) {
+	public boolean saveAccessoriesCurton(AccessoriesIndentCarton v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
 		boolean inserted=false;
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -2459,11 +2496,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor) {
+	public List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessoriesindentcarton> query=new ArrayList<accessoriesindentcarton>();
+		List<AccessoriesIndentCarton> query=new ArrayList<AccessoriesIndentCarton>();
 
 		try{
 			tx=session.getTransaction();
@@ -2479,7 +2516,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new accessoriesindentcarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+				query.add(new AccessoriesIndentCarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
 
 			}
 
@@ -2505,11 +2542,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAllAccessoriesCartonData() {
+	public List<AccessoriesIndentCarton> getAllAccessoriesCartonData() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessoriesindentcarton> query=new ArrayList<accessoriesindentcarton>();
+		List<AccessoriesIndentCarton> query=new ArrayList<AccessoriesIndentCarton>();
 
 		try{
 			tx=session.getTransaction();
@@ -2523,7 +2560,7 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				Object[] element = (Object[]) iter.next();
 
-				query.add(new accessoriesindentcarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+				query.add(new AccessoriesIndentCarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
 
 			}
 
@@ -2549,11 +2586,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAccessoriesIndentCartonItemDetails(String id) {
+	public List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<accessoriesindentcarton> query=new ArrayList<accessoriesindentcarton>();
+		List<AccessoriesIndentCarton> query=new ArrayList<AccessoriesIndentCarton>();
 
 		try{
 			tx=session.getTransaction();
@@ -2565,7 +2602,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new accessoriesindentcarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString()));
+				query.add(new AccessoriesIndentCarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString()));
 
 			}
 
@@ -2589,12 +2626,12 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean editAccessoriesCurton(accessoriesindentcarton v) {
+	public boolean editAccessoriesCurton(AccessoriesIndentCarton v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
 		boolean inserted=false;
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -3047,10 +3084,10 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> BuyerWisePo(String buyerId) {
+	public List<CommonModel> BuyerWisePo(String buyerId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<commonModel> dataList=new ArrayList<commonModel>();
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -3060,7 +3097,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new commonModel(element[0].toString(), element[1].toString()));
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -3077,10 +3114,10 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> getSampleList() {
+	public List<CommonModel> getSampleList() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<commonModel> dataList=new ArrayList<commonModel>();
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -3090,7 +3127,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new commonModel(element[0].toString(), element[1].toString()));
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -3107,10 +3144,10 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> getInchargeList() {
+	public List<CommonModel> getInchargeList() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<commonModel> dataList=new ArrayList<commonModel>();
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -3120,7 +3157,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new commonModel(element[0].toString(), element[1].toString()));
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -3137,10 +3174,10 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<commonModel> getMerchendizerList() {
+	public List<CommonModel> getMerchendizerList() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<commonModel> dataList=new ArrayList<commonModel>();
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -3150,7 +3187,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new commonModel(element[0].toString(), element[1].toString()));
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}
@@ -3488,7 +3525,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -3579,7 +3616,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();
@@ -4017,11 +4054,11 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<pg.orderModel.fileUpload> findfiles(String start, String end, String user) {
+	public List<pg.orderModel.FileUpload> findfiles(String start, String end, String user) {
 		boolean exists=false;
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<pg.orderModel.fileUpload> dataList=new ArrayList<pg.orderModel.fileUpload>();
+		List<pg.orderModel.FileUpload> dataList=new ArrayList<pg.orderModel.FileUpload>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -4032,7 +4069,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();							
-				dataList.add(new fileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
+				dataList.add(new FileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
 				exists=true;
 			}
 
@@ -4217,7 +4254,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<commonModel> query=new ArrayList<commonModel>();
+		List<CommonModel> query=new ArrayList<CommonModel>();
 
 		try{
 			tx=session.getTransaction();

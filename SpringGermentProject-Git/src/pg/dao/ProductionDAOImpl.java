@@ -23,7 +23,7 @@ import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
-import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.CuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.Line;
@@ -39,7 +39,7 @@ import pg.storeModel.AccessoriesSize;
 public class ProductionDAOImpl implements ProductionDAO{
 
 	@Override
-	public boolean cuttingRequisitionEnty(cuttingRequsition v) {
+	public boolean cuttingRequisitionEnty(CuttingRequsition v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -185,7 +185,7 @@ public class ProductionDAOImpl implements ProductionDAO{
 	}
 
 	@Override
-	public boolean productionEnty(cuttingRequsition v) {
+	public boolean productionEnty(CuttingRequsition v) {
 		// TODO Auto-generated method stub
 		return false;
 	}

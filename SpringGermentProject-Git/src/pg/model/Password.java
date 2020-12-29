@@ -13,7 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-public class password {
+public class Password {
 	
 	int id;
 	String user;

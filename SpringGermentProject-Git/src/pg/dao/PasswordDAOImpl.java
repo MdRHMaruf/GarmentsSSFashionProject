@@ -18,10 +18,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import pg.OrganizationModel.OrganizationInfo;
-import pg.model.login;
-import pg.model.menu;
-import pg.model.module;
-import pg.model.wareinfo;
+import pg.model.Login;
+import pg.model.Menu;
+import pg.model.Module;
+import pg.model.WareInfo;
 import pg.share.HibernateUtil;
 
 /**
@@ -32,11 +32,11 @@ public class PasswordDAOImpl implements PasswordDAO{
 
 	
 	@SuppressWarnings( { "unchecked", "deprecation" } )
-	public List<login> login(String uname, String upwd) {
+	public List<Login> login(String uname, String upwd) {
 		
 		Session session = HibernateUtil.openSession();
 		Transaction tx = null;
-		List<login> query=new ArrayList<login>();
+		List<Login> query=new ArrayList<Login>();
 		try {
 
 			tx = session.getTransaction();
@@ -47,7 +47,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new login(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+				query.add(new Login(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
 			}
 			
 			tx.commit();
@@ -68,10 +68,10 @@ public class PasswordDAOImpl implements PasswordDAO{
 	}
 
 	@Override
-	public List<wareinfo> getAllStoreName() {
+	public List<WareInfo> getAllStoreName() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<wareinfo> query=new ArrayList<wareinfo>();
+		List<WareInfo> query=new ArrayList<WareInfo>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -82,7 +82,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new wareinfo(Integer.parseInt(element[0].toString()),element[1].toString()));
+				query.add(new WareInfo(Integer.parseInt(element[0].toString()),element[1].toString()));
 			}
 			
 			tx.commit();
@@ -104,10 +104,10 @@ public class PasswordDAOImpl implements PasswordDAO{
 	
 	
 	@Override
-	public List<module> getAllModuleName() {
+	public List<Module> getAllModuleName() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<module> query=new ArrayList<module>();
+		List<Module> query=new ArrayList<Module>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -118,7 +118,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
+				query.add(new Module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
 			}
 			
 			tx.commit();
@@ -139,10 +139,10 @@ public class PasswordDAOImpl implements PasswordDAO{
 	}
 	
 	@Override
-	public List<menu> getAllMenuName() {
+	public List<Menu> getAllMenuName() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<menu> query=new ArrayList<menu>();
+		List<Menu> query=new ArrayList<Menu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -153,7 +153,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new menu(Integer.parseInt(element[0].toString()),element[1].toString(),"",""));
+				query.add(new Menu(Integer.parseInt(element[0].toString()),element[1].toString(),"",""));
 			}
 			
 			tx.commit();
@@ -175,11 +175,11 @@ public class PasswordDAOImpl implements PasswordDAO{
 	
 
 	
-	public List<module> getUserModule(int i) {
+	public List<Module> getUserModule(int i) {
 		
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<module> query=new ArrayList<module>();
+		List<Module> query=new ArrayList<Module>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -190,7 +190,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
+				query.add(new Module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
 			}
 			
 			tx.commit();
@@ -211,12 +211,12 @@ public class PasswordDAOImpl implements PasswordDAO{
 	}
 	
 	@Transactional
-	public List<menu> getUserMenu(int i,int moduleId){
+	public List<Menu> getUserMenu(int i,int moduleId){
 		
 		
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<menu> query=new ArrayList<menu>();
+		List<Menu> query=new ArrayList<Menu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -233,7 +233,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new menu(Integer.parseInt(element[0].toString()),element[1].toString(), element[2].toString(),  element[3].toString()));
+				query.add(new Menu(Integer.parseInt(element[0].toString()),element[1].toString(), element[2].toString(),  element[3].toString()));
 			}
 			
 			tx.commit();
@@ -255,11 +255,11 @@ public class PasswordDAOImpl implements PasswordDAO{
 	
 	@Transactional
 	@SuppressWarnings("unchecked")
-	public List<menu> getAdminUserMenu(int i,int moduleId){
+	public List<Menu> getAdminUserMenu(int i,int moduleId){
 	
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<menu> query=new ArrayList<menu>();
+		List<Menu> query=new ArrayList<Menu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -281,7 +281,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new menu(Integer.parseInt(element[0].toString()),element[1].toString(), element[2].toString(),element[3].toString()));
+				query.add(new Menu(Integer.parseInt(element[0].toString()),element[1].toString(), element[2].toString(),element[3].toString()));
 			}
 			
 			tx.commit();

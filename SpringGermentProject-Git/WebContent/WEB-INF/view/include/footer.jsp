@@ -10,6 +10,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/select2.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap-select.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap-select.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap-table-expandable.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/app.js"></script>
