@@ -3,9 +3,10 @@ package pg.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import pg.model.commonModel;
+import pg.model.CommonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -14,8 +15,8 @@ import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.accessoriesindentcarton;
-import pg.orderModel.parcelModel;
+import pg.orderModel.AccessoriesIndentCarton;
+import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
@@ -31,6 +32,7 @@ public interface OrderDAO {
 	//Style Create
 	List<ItemDescription> getItemDescriptionList();
 	List<Style> getBuyerWiseStylesItem(String buyerId);
+	List<CommonModel> getStyleWiseBuyerPO(String styleId);
 	List<ItemDescription> getStyleWiseItem(String styleId);
 
 	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
@@ -64,23 +66,23 @@ public interface OrderDAO {
 
 	//Accessories
 	public String maxAIno(); 
-	public List<commonModel>PurchaseOrders();
-	public List<commonModel>Styles(String po);
-	public List<commonModel>Colors(String style, String item);
-	public List<commonModel>Items(String buyerorderid,String style);
-	public List<commonModel>AccessoriesItem(String type);
-	public List<commonModel>Size(String buyerorderid, String style, String item, String color);
-	public List<commonModel>Unit();
-	public List<commonModel>Brands();
+	public List<CommonModel>PurchaseOrders();
+	public List<CommonModel>Styles(String po);
+	public List<CommonModel>Colors(String style, String item);
+	public List<CommonModel>Items(String buyerorderid,String style);
+	public List<CommonModel>AccessoriesItem(String type);
+	public List<CommonModel>Size(String buyerorderid, String style, String item, String color);
+	public List<CommonModel>Unit();
+	public List<CommonModel>Brands();
 
-	public List<commonModel>ShippingMark(String po, String style, String item);
-	public List<commonModel>AllColors();
-	public List<commonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
+	public List<CommonModel>ShippingMark(String po, String style, String item);
+	public List<CommonModel>AllColors();
+	public List<CommonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();
-	List<commonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
+	List<CommonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
 
 	List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
 	List<AccessoriesIndent> getPendingAccessoriesIndent();
@@ -90,12 +92,12 @@ public interface OrderDAO {
 	List<AccessoriesIndent> getPostedAccessoriesIndent();
 
 	//Accessories Carton
-	boolean saveAccessoriesCurton(accessoriesindentcarton v);
-	List<accessoriesindentcarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
-	List<accessoriesindentcarton> getAllAccessoriesCartonData();
+	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
+	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
+	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 
-	List<accessoriesindentcarton> getAccessoriesIndentCartonItemDetails(String id);
-	boolean editAccessoriesCurton(accessoriesindentcarton v);
+	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);
+	boolean editAccessoriesCurton(AccessoriesIndentCarton v);
 	boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
 			String installAccessories, String forAccessories);
 
@@ -111,10 +113,10 @@ public interface OrderDAO {
 	double getOrderQuantity(String purchaseOrder,String styleId,String itemId,String colorId);
 
 	//Common 
-	List<commonModel> BuyerWisePo(String buyerId);
-	List<commonModel> getSampleList();
-	List<commonModel> getInchargeList();
-	List<commonModel> getMerchendizerList();
+	List<CommonModel> BuyerWisePo(String buyerId);
+	List<CommonModel> getSampleList();
+	List<CommonModel> getInchargeList();
+	List<CommonModel> getMerchendizerList();
 
 	//Sample Requisition
 	boolean addItemToSampleRequisition(SampleRequisitionItem v);
@@ -135,7 +137,7 @@ public interface OrderDAO {
 
 	//File Upload
 	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user);
-	List<pg.orderModel.fileUpload> findfiles(String start, String end, String user);
+	List<pg.orderModel.FileUpload> findfiles(String start, String end, String user);
 	boolean fileDownload(String fileName, String user, String string, String computerName);
 	boolean deletefile(String filename);
 
@@ -149,10 +151,12 @@ public interface OrderDAO {
 	public List<CourierModel> getcourierList();
 	
 	
-	public boolean insertParcel(parcelModel parcel);
-	public List<parcelModel> parcelList();
-	public List<parcelModel> getParcelDetails(String id);
-	public boolean editParecel(parcelModel parcel);
+	public boolean ConfirmParcel(ParcelModel parcel);
+	public List<ParcelModel> parcelList();
+	public ParcelModel getParcelInfo(String autoId);
+	public List<ParcelModel> getParcelItems(String autoId);
+	public boolean editParecel(ParcelModel parcel);
+	public boolean editParecelItem(ParcelModel parcel);
 	
 	
 	public boolean sampleCadInsert(SampleCadAndProduction sample);
@@ -165,6 +169,14 @@ public interface OrderDAO {
 	//Purchase Order Approval for MD
 	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
 	boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
+	
+	
+	public boolean ConfirmCheckList(CheckListModel checkList);
+	public List<CheckListModel> getChekList();
+	public CheckListModel getCheckListInfo(String autoId);
+	public List<CheckListModel> getCheckListItems(String autoId);
+	public boolean editCheckList(CheckListModel checkList);
+	public boolean editCheckListItem(CheckListModel checkList);
 
 
 }

@@ -8,7 +8,7 @@ import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.Process;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
-import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.CuttingRequsition;
 import pg.registerModel.Department;
 import pg.registerModel.Line;
 import pg.registerModel.Machine;
@@ -16,7 +16,7 @@ import pg.registerModel.SizeGroup;
 
 public interface ProductionService {
 
-	boolean cuttingRequisitionEnty(cuttingRequsition v);
+	boolean cuttingRequisitionEnty(CuttingRequsition v);
 
 	//Production	
 

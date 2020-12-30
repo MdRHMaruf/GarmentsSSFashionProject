@@ -22,9 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
-import pg.model.login;
+import pg.model.Login;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.accessoriesindentcarton;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.proudctionModel.CuttingInformation;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Department;
@@ -1392,7 +1392,7 @@ public class StoreController {
 	@RequestMapping(value = "/fabrics_pending_transaction",method=RequestMethod.GET)
 	public ModelAndView fabrics_pending_transaction(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("store/fabrics-pending-transaction");
-		List<login> lg = (List<login>)session.getAttribute("pg_admin");
+		List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
 		
 		List<PendingTransaction> pendingList = storeService.getPendingTransactionList(lg.get(0).getDepartmentId());
 		view.addObject("pendingList",pendingList);
@@ -1441,7 +1441,7 @@ public class StoreController {
 	@RequestMapping(value = "/stock_position",method=RequestMethod.GET)
 	public ModelAndView stock_position(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("store/stock-position");
-		List<login> lg = (List<login>)session.getAttribute("pg_admin");
+		List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
 		
 		String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		List<StockItem> stockItemList = storeService.getStockItemSummeryList(currentDate,currentDate,lg.get(0).getDepartmentId());
@@ -1464,7 +1464,7 @@ public class StoreController {
 		@RequestMapping(value = "/stock_position_details",method=RequestMethod.GET)
 		public ModelAndView stock_position_details(ModelMap map,HttpSession session) {
 			ModelAndView view = new ModelAndView("store/stock-position-details");
-			List<login> lg = (List<login>)session.getAttribute("pg_admin");
+			List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
 			
 			String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 			List<StockItem> stockItemList = storeService.getStockItemDetailsList(currentDate,currentDate,lg.get(0).getDepartmentId());

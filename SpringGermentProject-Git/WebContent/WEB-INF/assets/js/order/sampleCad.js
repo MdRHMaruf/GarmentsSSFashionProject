@@ -8,6 +8,9 @@ var size;
 var sample;
 var sampleCommentId;
 
+window.onload = () => {
+	document.title = "Sample Cad";
+}  
 function poWiseStyleLoad() {
 	var purchaseOrder = $("#purchaseOrder option:selected").text();
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.barcodelib.barcode.a.c.f;
 
-import pg.model.commonModel;
+import pg.model.CommonModel;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrderItem;

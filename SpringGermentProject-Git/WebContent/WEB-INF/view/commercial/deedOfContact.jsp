@@ -2,14 +2,14 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="pg.model.wareinfo"%>
-<%@page import="pg.model.module"%>
-<%@page import="pg.model.login"%>
+<%@page import="pg.model.WareInfo"%>
+<%@page import="pg.model.Module"%>
+<%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
 	<%
-		List<login> lg = (List<login>) session.getAttribute("pg_admin");
+		List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
 	%>
 	<div class="page-wrapper">
 		<div class="container-fluid mt-2">

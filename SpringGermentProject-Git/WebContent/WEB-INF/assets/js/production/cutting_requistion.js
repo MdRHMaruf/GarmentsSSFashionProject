@@ -1,9 +1,11 @@
 
 var sizesListByGroup = JSON;
 
-function loadData() {
 
-	  $.ajax({
+window.onload = () => {
+
+	document.title = "Cutting Requisition";
+	$.ajax({
 	    type: 'GET',
 	    dataType: 'json',
 	    url: './sizesLoadByGroup',
@@ -13,17 +15,17 @@ function loadData() {
 	      sizesListByGroup = obj.sizeList;
 	    }
 	  });
+	
 
 }
 
-window.onload = loadData;
 
-function searchSampleReuisition(v){
+function searchSampleRequisition(v){
 
     $.ajax({
       type: 'GET',
       dataType: 'json',
-      url: './searchSampleReuisition/'+v,
+      url: './searchSampleRequisition/'+v,
       success: function (data) {
         if (data.result == "Something Wrong") {
           dangerAlert("Something went wrong");

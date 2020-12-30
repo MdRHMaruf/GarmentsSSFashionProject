@@ -31,17 +31,17 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import pg.OrganizationModel.OrganizationInfo;
-import pg.model.menu;
-import pg.model.menuinfo;
-import pg.model.module;
-import pg.model.moduleinfo;
-import pg.model.modulewisemenu;
-import pg.model.modulewisemenusubmenu;
-import pg.model.password;
-import pg.model.submenuinfo;
-import pg.model.useraccessmodule;
-import pg.model.ware;
-import pg.model.wareinfo;
+import pg.model.Menu;
+import pg.model.MenuInfo;
+import pg.model.Module;
+import pg.model.ModuleInfo;
+import pg.model.ModuleWiseMenu;
+import pg.model.ModuleWiseMenuSubMenu;
+import pg.model.Password;
+import pg.model.SubMenuInfo;
+import pg.model.UserAccessModule;
+import pg.model.Ware;
+import pg.model.WareInfo;
 import pg.services.SettingService;
 
 
@@ -59,9 +59,9 @@ public class SettingController {
 	@RequestMapping(value = "user_management_menu",method=RequestMethod.GET)
 	public ModelAndView create_menu() {
 
-		List<modulewisemenu> modulewisemenulist=settingService.getAllModuleWiseMenu();
-		List<module> modulelist=settingService.getAllModuleName();
-		List<modulewisemenusubmenu> modulewisesubmenulist=settingService.getAllModuleWiseSubmenu();
+		List<ModuleWiseMenu> modulewisemenulist=settingService.getAllModuleWiseMenu();
+		List<Module> modulelist=settingService.getAllModuleName();
+		List<ModuleWiseMenuSubMenu> modulewisesubmenulist=settingService.getAllModuleWiseSubmenu();
 
 		ModelAndView view = new ModelAndView("admin/menu");
 		view.addObject("modulewisemenulist", modulewisemenulist);
@@ -78,7 +78,7 @@ public class SettingController {
 	@RequestMapping(value = "/showModuleWiseMenu/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getmodulewisemenu(@PathVariable ("id") int id) {
 
-		List<menu> menulist=settingService.getAllModuleWiseMenu(id);
+		List<Menu> menulist=settingService.getAllModuleWiseMenu(id);
 
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
@@ -102,7 +102,7 @@ public class SettingController {
 
 	@ResponseBody
 	@RequestMapping(value = {"/addWare"},method=RequestMethod.POST)
-	public void addWare(ware ware) {
+	public void addWare(Ware ware) {
 
 		String msg = "Error occured while updating ware: ,  please try again";
 		try {
@@ -122,7 +122,7 @@ public class SettingController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = {"/user_access_menu"},method=RequestMethod.GET)
-	public @ResponseBody JSONObject  user_access_menu_post(useraccessmodule um) throws JSONException {
+	public @ResponseBody JSONObject  user_access_menu_post(UserAccessModule um) throws JSONException {
 
 		String ModuleList=um.getCombineModuleList();
 
@@ -132,7 +132,7 @@ public class SettingController {
 		moduleout=moduleout.replace("\"", "");
 
 		
-		List<modulewisemenusubmenu> moduleaccesslist=settingService.getAllModuleWiseMenuSubMenuName(um.getUser(), moduleout);
+		List<ModuleWiseMenuSubMenu> moduleaccesslist=settingService.getAllModuleWiseMenuSubMenuName(um.getUser(), moduleout);
 
 
 		JSONObject objmain = new JSONObject();
@@ -194,10 +194,10 @@ public class SettingController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getNewStore",method=RequestMethod.GET)
-	public ModelAndView loadWare(ware ware,HttpSession session,ModelMap modelmap) {
+	public ModelAndView loadWare(Ware ware,HttpSession session,ModelMap modelmap) {
 
-		List<wareinfo> warelist = (List<wareinfo>) session.getAttribute("storelist");
-		warelist.add(new wareinfo(ware.getId(),ware.getName()));
+		List<WareInfo> warelist = (List<WareInfo>) session.getAttribute("storelist");
+		warelist.add(new WareInfo(ware.getId(),ware.getName()));
 
 		ModelAndView view = new ModelAndView("admin/create_user");
 		view.addObject("warelist", warelist);
@@ -211,7 +211,7 @@ public class SettingController {
 
 	@ResponseBody
 	@RequestMapping(value = {"/addModule"},method=RequestMethod.POST)
-	public void addModule(moduleinfo module) {
+	public void addModule(ModuleInfo module) {
 
 		String msg = "Error occured while updating ware: ,  please try again";
 		try {
@@ -231,7 +231,7 @@ public class SettingController {
 
 	@ResponseBody
 	@RequestMapping(value = {"/addMenu"},method=RequestMethod.POST)
-	public void addMenu(menuinfo m) {
+	public void addMenu(MenuInfo m) {
 
 		String msg = "Error occured while updating ware: ,  please try again";
 		try {
@@ -252,7 +252,7 @@ public class SettingController {
 
 	@ResponseBody
 	@RequestMapping(value = {"/addSubMenu"},method=RequestMethod.POST)
-	public void addSubMenu(submenuinfo m) {
+	public void addSubMenu(SubMenuInfo m) {
 
 		System.out.println("submenu");
 		String msg = "Error occured while updating ware: ,  please try again";
@@ -274,7 +274,7 @@ public class SettingController {
 
 	@ResponseBody
 	@RequestMapping(value = {"/addUser"},method=RequestMethod.POST)
-	public String addUser(password pass) {
+	public String addUser(Password pass) {
 		System.out.println("adminuser");
 		String msg = "Error occured while creating user: ,  please try again";
 		try {

@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import pg.model.commonModel;
+import pg.model.CommonModel;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
 import pg.proudctionModel.SewingLinesModel;
 import pg.proudctionModel.ProductionPlan;
-import pg.proudctionModel.cuttingRequsition;
+import pg.proudctionModel.CuttingRequsition;
 import pg.proudctionModel.Process;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Department;
@@ -78,9 +78,9 @@ public class ProductionController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
-		List<commonModel> sampleList = orderService.getSampleList();
-		List<commonModel> inchargeList = orderService.getInchargeList();
-		List<commonModel> merchendizerList = orderService.getMerchendizerList();
+		List<CommonModel> sampleList = orderService.getSampleList();
+		List<CommonModel> inchargeList = orderService.getInchargeList();
+		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 
 
 
@@ -97,7 +97,7 @@ public class ProductionController {
 
 	//Cutting Requisition
 	@RequestMapping(value = "/cuttingRequisitionEnty",method=RequestMethod.POST)
-	public @ResponseBody String cuttingRequisitionEnty(cuttingRequsition v) {
+	public @ResponseBody String cuttingRequisitionEnty(CuttingRequsition v) {
 		String msg="Create occure while entry cutting requisition entry";
 		boolean flag= productionService.cuttingRequisitionEnty(v);
 		if(flag) {
@@ -127,7 +127,7 @@ public class ProductionController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
-		List<commonModel> merchendizerList = orderService.getMerchendizerList();
+		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanList();
 
 		view.addObject("groupList",groupList);
@@ -196,8 +196,8 @@ public class ProductionController {
 		List<Factory> factoryList= registerService.getFactoryNameList();
 
 
-		List<commonModel> inchargeList = orderService.getInchargeList();
-		List<commonModel> merchendizerList = orderService.getMerchendizerList();
+		List<CommonModel> inchargeList = orderService.getInchargeList();
+		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();

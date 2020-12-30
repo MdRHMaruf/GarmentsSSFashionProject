@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="86233f15-02fc-4cb0-a2c7-7a94e318baf1">
+	<property name="ireport.zoom" value="1.2100000000000093"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="sql" class="java.lang.String">
+		<defaultValueExpression><![CDATA["select *,(select styleno from TbStyleCreate b where b.StyleId=a.styleid) as StyleNo,(select b.itemname from tbItemDescription b where b.itemid=a.itemid)  as ItemName,(select name from tbCourier where id= a.courierId) as CourierName,(select CourierAddress from tbCourier where id= a.courierId) as CourierAddress,(select Telephone from tbCourier where id= a.courierId) as Telephone,(select MobileNo from tbCourier where id= a.courierId) as MobileNo,(select Fax from tbCourier where id= a.courierId) as Fax,(select Email from tbCourier where id= a.courierId) as Email,(select SkypeId from tbCourier where id= a.courierId) as SkypeId from tbparcel a where a.autoId=1"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select ac.autoId,ac.buyerId,ac.remarks,b.name as buyerName,acd.styleId,acd.purchaseOrderId,acd.colorId,isnull(c.Colorname,'')as colorName,acd.sizeId,isnull(ss.sizeName,'')as sizeName,acd.sampleId,sti.Name as sampleType,acd.itemType,acd.itemId,isnull(fi.ItemName,'') as fabricsName,isnull(ai.ItemName,'') as accessoriesName,acd.quantity,acd.status,ac.remarks
+from tbAccCheck ac
+left join tbAccCheckDetails acd
+on ac.autoId = acd.checkListId
+left join tbBuyer b
+on ac.buyerId = b.id
+left join TbFabricsItem fi
+on acd.itemId = fi.id and acd.itemType='1'
+left join TbAccessoriesItem ai
+on acd.itemId = ai.itemid and acd.itemType='2'
+left join tbColors c
+on acd.colorId = c.ColorId
+left join tbStyleSize ss
+on acd.sizeId = ss.id
+left join TbSampleTypeInfo sti
+on acd.sampleId = sti.AutoId
+where ac.autoId= '2']]>
+	</queryString>
+	<field name="autoId" class="java.lang.Integer"/>
+	<field name="buyerId" class="java.lang.String"/>
+	<field name="remarks" class="java.lang.String"/>
+	<field name="buyerName" class="java.lang.String"/>
+	<field name="styleId" class="java.lang.String"/>
+	<field name="purchaseOrderId" class="java.lang.String"/>
+	<field name="colorId" class="java.lang.String"/>
+	<field name="colorName" class="java.lang.String"/>
+	<field name="sizeId" class="java.lang.String"/>
+	<field name="sizeName" class="java.lang.String"/>
+	<field name="sampleId" class="java.lang.String"/>
+	<field name="sampleType" class="java.lang.String"/>
+	<field name="itemType" class="java.lang.String"/>
+	<field name="itemId" class="java.lang.String"/>
+	<field name="fabricsName" class="java.lang.String"/>
+	<field name="accessoriesName" class="java.lang.String"/>
+	<field name="quantity" class="java.math.BigDecimal"/>
+	<field name="status" class="java.lang.Integer"/>
+	<variable name="sl" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[1]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="118" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="26" width="553" height="11" uuid="8176ad4c-89a5-450c-b80b-89fa91837616"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-1" y="43" width="556" height="11" uuid="b1a783b7-16fa-4739-a407-467e1f01b5be"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tel:+88-031-2583247,2583245,Email:ssfashionwear@gmail.com liton@ssfashionwear.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="34" width="553" height="11" uuid="61d7d0bd-9f3c-45e7-b5ca-bd172208f456"/>
+				<textElement textAlignment="Center">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="-1" y="0" width="556" height="36" uuid="15815e0d-68a9-460b-b92e-2d094aa4f59c"/>
+				<textElement textAlignment="Center">
+					<font size="22" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quality Fashion Wear Ltd.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="59" width="555" height="13" uuid="184a31a4-c9b3-4ebf-b089-4dbeac3bc710"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Accessories Check List]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="71" width="100" height="14" uuid="c049fe1b-dec1-403b-884c-62f107b0169a"/>
+				<text><![CDATA[Check List ID:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="86" width="100" height="14" uuid="adbf7027-0f5a-4375-a290-deffb5b9e3d8"/>
+				<text><![CDATA[Buyer Name :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="101" width="100" height="14" uuid="330e7c6d-3967-4499-9812-708ef932b4b9"/>
+				<text><![CDATA[Sample Type :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="87" y="86" width="100" height="14" uuid="b72a96d2-4b2b-4a18-817a-0b8750e0ce13"/>
+				<textFieldExpression><![CDATA[$F{buyerName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="87" y="71" width="100" height="14" uuid="9e31746d-c37f-4a69-9cbe-d51367abef15"/>
+				<textFieldExpression><![CDATA[$F{autoId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="87" y="101" width="100" height="14" uuid="b5a7e27d-5507-4e98-ae4e-05b22ca68ec7"/>
+				<textFieldExpression><![CDATA[$F{sampleType}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="0" width="193" height="15" uuid="81928736-2292-4386-a35d-7469215e4da0"/>
+				<text><![CDATA[Item Nmae]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="90" height="15" uuid="3a2d3448-4fc2-4a5a-86b1-482c77a43234"/>
+				<text><![CDATA[Colorname]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="0" width="49" height="15" uuid="e30f24c1-f1dd-41d4-9f93-9ef25e7cda6b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[sizeName]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="0" width="68" height="15" uuid="8a40c40b-abee-45f4-b173-e7769c1afd03"/>
+				<text><![CDATA[quantity]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="c0bda79a-a6a5-4fd4-8019-215aab5e45f7"/>
+			</line>
+			<line>
+				<reportElement x="0" y="14" width="555" height="1" uuid="c19d7fb2-4fa1-4b63-8d85-ce68a2e6084d"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="15" uuid="decd8c0d-3bb9-47c6-81ad-0e881d24be90"/>
+			</line>
+			<line>
+				<reportElement x="554" y="0" width="1" height="15" uuid="e66348cd-a02d-4493-9f87-0d057dc6158c"/>
+			</line>
+			<staticText>
+				<reportElement x="477" y="0" width="68" height="15" uuid="175b6b32-0a7b-43d8-a2ef-9aa22c06ce90"/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="14" width="555" height="1" uuid="4e9d979e-9f76-4f73-8bb0-c2c07aa8f320"/>
+			</line>
+			<textField>
+				<reportElement x="3" y="0" width="193" height="15" uuid="e1d66920-e9ce-4919-b090-4d027ebc34e4"/>
+				<textFieldExpression><![CDATA[$F{itemType}.equals( "1" )?$F{fabricsName}:$F{accessoriesName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="90" height="15" uuid="518f0c7b-22c8-4ee5-b73d-383cb72f9be6"/>
+				<textFieldExpression><![CDATA[$F{colorName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="0" width="49" height="15" uuid="e42661d8-3ed1-482b-af4c-64a27923ea76"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{sizeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="387" y="0" width="68" height="15" uuid="077ecde4-96f3-4d7b-aebf-2bdbd0d44bf0"/>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="554" y="0" width="1" height="15" uuid="f978d036-d702-4fe1-8806-5c6e176edd99"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="15" uuid="dfbb28e7-bc28-44d0-840e-1013828d3d5c"/>
+			</line>
+			<textField>
+				<reportElement x="477" y="0" width="68" height="15" uuid="92dbc682-9e1f-4fe5-a647-5f989af602cf"/>
+				<textFieldExpression><![CDATA[$F{status}==1?"OK":"Missing"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

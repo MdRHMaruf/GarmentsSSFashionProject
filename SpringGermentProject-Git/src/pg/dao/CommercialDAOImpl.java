@@ -10,8 +10,13 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Repository;
 
+import pg.Commercial.MasterLC;
+import pg.Commercial.MasterLC.StyleInfo;
 import pg.Commercial.deedOfContacts;
 import pg.config.SpringRootConfig;
 import pg.orderModel.Style;
@@ -19,6 +24,235 @@ import pg.share.HibernateUtil;
 
 @Repository
 public class CommercialDAOImpl implements CommercialDAO{
+	
+	
+	@Override
+	public boolean masterLCSubmit(MasterLC masterLC) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="insert into tbMasterLC (masterLCNo,amendmentNo,amendmentDate,buyerId,senderBankId,receiverBankId,beneficiaryBankId,throughBankId,date,totalValue,currency,shipmentDate,expiryDate,remarks,entryTime,userId) "
+					+ "values('"+masterLC.getMasterLCNo()+"','"+masterLC.getAmendmentNo()+"','"+masterLC.getAmendmentDate()+"','"+masterLC.getBuyerId()+"','"+masterLC.getSenderBankId()+"','"+masterLC.getReceiverBankId()+"','"+masterLC.getBeneficiaryBankId()+"','"+masterLC.getThroughBankId()+"','"+masterLC.getDate()+"','"+masterLC.getTotalValue()+"','"+masterLC.getCurrencyId()+"','"+masterLC.getShipmentDate()+"','"+masterLC.getExpiryDate()+"','"+masterLC.getRemarks()+"',CURRENT_TIMESTAMP,'"+masterLC.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+
+			sql = "select isnull(max(autoid),0) as maxId from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			String masterLCId="0";
+			if(list.size()>0) {
+				masterLCId = list.get(0).toString();
+			}
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject styleObject = (JSONObject)jsonParser.parse(masterLC.getStyleList());
+			JSONArray styleList = (JSONArray) styleObject.get("list");
+			
+			for(int i=0;i<styleList.size();i++) {
+				JSONObject style = (JSONObject) styleList.get(i);
+				sql="insert into tbMasterLCDetails (masterLCId,amendmentNo,styleId,styleItemId,purchaseOrderId,quantity,unitPrice,amount,entryTime,userId) \r\n" + 
+						"values ('"+masterLCId+"','"+masterLC.getAmendmentNo()+"','"+style.get("styleId")+"','"+style.get("itemId")+"','"+style.get("purchaseOrderId")+"','"+style.get("quantity")+"','"+style.get("unitPrice")+"','"+style.get("amount")+"',CURRENT_TIMESTAMP,'"+style.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public List<MasterLC> getMasterLCAmendmentList(String masterLCNo, String buyerId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<MasterLC> dataList=new ArrayList<MasterLC>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql=" select autoId,masterLCNo,amendmentNo,convert(varchar,amendmentDate,25) as amendmentDate from tbMasterLC where masterLCNo='"+masterLCNo+"' and buyerId = '"+buyerId+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new MasterLC(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	
+
+	@Override
+	public List<MasterLC> getMasterLCList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<MasterLC> dataList=new ArrayList<MasterLC>();
+		MasterLC tempMasterLc = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql=" select mlc.masterLCNo,mlc.buyerId,b.name as buyerName,max(mlc.amendmentNo) as maxAmendmentNo,convert(varchar,mlc.date,25)as lcDate \r\n" + 
+					"from tbMasterLC mlc\r\n" + 
+					"left join tbBuyer b\r\n" + 
+					"on mlc.buyerId = b.id\r\n" + 
+					"group by mlc.masterLCNo,mlc.buyerId,mlc.amendmentNo,mlc.date,b.name";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				tempMasterLc = new MasterLC();
+				tempMasterLc.setMasterLCNo(element[0].toString());
+				tempMasterLc.setBuyerId(element[1].toString());
+				tempMasterLc.setBuyerName(element[2].toString());
+				tempMasterLc.setAmendmentNo(element[3].toString());
+				tempMasterLc.setDate(element[4].toString());
+				dataList.add(tempMasterLc);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public MasterLC getMasterLCInfo(String masterLCNo, String buyerId, String amendmentNo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		MasterLC tempMasterLc = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select m.autoId,m.masterLCNo,m.amendmentNo,convert(varchar,m.amendmentDate,25)as amendmentDate,m.buyerId,b.name as buyerName,senderBankId,receiverBankId,beneficiaryBankId,throughBankId,convert(varchar,date,25) as date,totalValue,currency,shipmentDate,expiryDate,m.remarks,m.userId \r\n" + 
+					"from tbMasterLC  m \r\n" + 
+					"left join tbBuyer b \r\n" + 
+					"on m.buyerId = b.id \r\n"
+					+ "where masterLCNo = '"+masterLCNo+"' and buyerId = '"+buyerId+"' and amendmentNo='"+amendmentNo+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				tempMasterLc = new MasterLC();
+				tempMasterLc.setAutoId(element[0].toString());
+				tempMasterLc.setMasterLCNo(element[1].toString());
+				tempMasterLc.setAmendmentNo(element[2].toString());
+				tempMasterLc.setAmendmentDate(element[3].toString());
+				tempMasterLc.setBuyerId(element[4].toString());
+				tempMasterLc.setBuyerName(element[5].toString());
+				tempMasterLc.setSenderBankId(element[6].toString());
+				tempMasterLc.setReceiverBankId(element[7].toString());
+				tempMasterLc.setBeneficiaryBankId(element[8].toString());
+				tempMasterLc.setThroughBankId(element[9].toString());
+				tempMasterLc.setDate(element[10].toString());
+				tempMasterLc.setTotalValue(element[11].toString());
+				tempMasterLc.setCurrencyId(element[12].toString());
+				tempMasterLc.setShipmentDate(element[13].toString());
+				tempMasterLc.setExpiryDate(element[14].toString());
+				tempMasterLc.setRemarks(element[15].toString());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return tempMasterLc;
+	}
+
+	@Override
+	public List<StyleInfo> getMasterLCStyles(String masterLCNo, String buyerId, String amendmentNo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<StyleInfo> dataList=new ArrayList<StyleInfo>();
+		StyleInfo tempStyleInfo = null;
+		MasterLC master = new MasterLC();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql=" select mld.autoId,mld.masterLCId,mld.amendmentNo,mld.styleId,sc.StyleNo,mld.styleItemId,id.itemname,mld.purchaseOrderId,(select top 1 PurchaseOrder from TbBuyerOrderEstimateDetails boed where boed.BuyerOrderId = mld.purchaseOrderId) as purchaseOrder,mld.quantity,mld.unitPrice,mld.amount from tbMasterLC mlc\r\n" + 
+					"left join tbMasterLCDetails mld\r\n" + 
+					"on mlc.autoId = mld.masterLCId and mlc.amendmentNo = mld.amendmentNo\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on mld.styleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on mld.styleItemId = id.itemid\r\n" + 
+					"where mlc.masterLCNo = '"+masterLCNo+"' and mlc.buyerId = '"+buyerId+"' and mlc.amendmentNo='"+amendmentNo+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempStyleInfo = master.new StyleInfo(element[0].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString());
+				//tempMasterLc = new StyleInfo(autoId, styleId, styleNo, itemId, itemName, purchaseOrderId, purchaseOrder, quantity, unitPrice, amount);
+				
+				dataList.add(tempStyleInfo);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
 
 	@Override
 	public boolean insertDeedOfContact(deedOfContacts v) {
@@ -351,5 +585,9 @@ public class CommercialDAOImpl implements CommercialDAO{
 		}
 		return dataList;
 	}
+
+	
+
+	
 
 }

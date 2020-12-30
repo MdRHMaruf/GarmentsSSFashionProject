@@ -8,9 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pg.dao.OrderDAO;
-import pg.model.commonModel;
+import pg.model.CommonModel;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
+import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
@@ -19,15 +20,15 @@ import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.accessoriesindentcarton;
-import pg.orderModel.parcelModel;
+import pg.orderModel.AccessoriesIndentCarton;
+import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
-import pg.registerModel.StyleItem;
+
 @Service
 public class OrderServiceImpl implements OrderService{
 	
@@ -45,7 +46,13 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getBuyerWiseStylesItem(buyerId);
 	}
-
+	
+	@Override
+	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getStyleWiseBuyerPO(styleId);
+	}
+	
 	@Override
 	public List<ItemDescription> getStyleWiseItem(String styleId) {
 		// TODO Auto-generated method stub
@@ -194,67 +201,67 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<commonModel> PurchaseOrders() {
+	public List<CommonModel> PurchaseOrders() {
 		// TODO Auto-generated method stub
 		return orderDAO.PurchaseOrders();
 	}
 
 	@Override
-	public List<commonModel> Styles(String po) {
+	public List<CommonModel> Styles(String po) {
 		// TODO Auto-generated method stub
 		return orderDAO.Styles(po);
 	}
 
 	@Override
-	public List<commonModel> Colors(String style, String item) {
+	public List<CommonModel> Colors(String style, String item) {
 		// TODO Auto-generated method stub
 		return orderDAO.Colors(style, item);
 	}
 
 	@Override
-	public List<commonModel> Items(String buyerorderid,String style) {
+	public List<CommonModel> Items(String buyerorderid,String style) {
 		// TODO Auto-generated method stub
 		return orderDAO.Items(buyerorderid,style);
 	}
 
 	@Override
-	public List<commonModel> AccessoriesItem(String type) {
+	public List<CommonModel> AccessoriesItem(String type) {
 		// TODO Auto-generated method stub
 		return orderDAO.AccessoriesItem(type);
 	}
 
 	@Override
-	public List<commonModel> Size(String buyerorderid, String style, String item, String color) {
+	public List<CommonModel> Size(String buyerorderid, String style, String item, String color) {
 		// TODO Auto-generated method stub
 		return orderDAO.Size(buyerorderid, style, item, color);
 	}
 
 	@Override
-	public List<commonModel> Unit() {
+	public List<CommonModel> Unit() {
 		// TODO Auto-generated method stub
 		return orderDAO.Unit();
 	}
 
 	@Override
-	public List<commonModel> Brands() {
+	public List<CommonModel> Brands() {
 		// TODO Auto-generated method stub
 		return orderDAO.Brands();
 	}
 
 	@Override
-	public List<commonModel> ShippingMark(String po, String style, String item) {
+	public List<CommonModel> ShippingMark(String po, String style, String item) {
 		// TODO Auto-generated method stub
 		return orderDAO.ShippingMark(po, style, item);
 	}
 
 	@Override
-	public List<commonModel> AllColors() {
+	public List<CommonModel> AllColors() {
 		// TODO Auto-generated method stub
 		return orderDAO.AllColors();
 	}
 
 	@Override
-	public List<commonModel> SizewiseQty(String buyerorderid, String style,String item,String color,String size) {
+	public List<CommonModel> SizewiseQty(String buyerorderid, String style,String item,String color,String size) {
 		// TODO Auto-generated method stub
 		return orderDAO.SizewiseQty(buyerorderid, style, item, color, size);
 	}
@@ -274,7 +281,7 @@ public class OrderServiceImpl implements OrderService{
 	
 
 	@Override
-	public List<commonModel> styleItemsWiseColor(String buyerorderid, String style, String item) {
+	public List<CommonModel> styleItemsWiseColor(String buyerorderid, String style, String item) {
 		// TODO Auto-generated method stub
 		return orderDAO.styleItemsWiseColor(buyerorderid, style, item);
 	}
@@ -316,32 +323,32 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean saveAccessoriesCurton(accessoriesindentcarton v) {
+	public boolean saveAccessoriesCurton(AccessoriesIndentCarton v) {
 		// TODO Auto-generated method stub
 		return orderDAO.saveAccessoriesCurton(v);
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAccessoriesIndentCarton(String poNo, String style, String item,
+	public List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item,
 			String itemColor) {
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesIndentCarton(poNo, style, item, itemColor);
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAllAccessoriesCartonData() {
+	public List<AccessoriesIndentCarton> getAllAccessoriesCartonData() {
 		// TODO Auto-generated method stub
 		return orderDAO.getAllAccessoriesCartonData();
 	}
 
 	@Override
-	public List<accessoriesindentcarton> getAccessoriesIndentCartonItemDetails(String id) {
+	public List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id) {
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesIndentCartonItemDetails(id);
 	}
 
 	@Override
-	public boolean editAccessoriesCurton(accessoriesindentcarton v) {
+	public boolean editAccessoriesCurton(AccessoriesIndentCarton v) {
 		// TODO Auto-generated method stub
 		return orderDAO.editAccessoriesCurton(v);
 	}
@@ -401,26 +408,26 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<commonModel> BuyerWisePo(String buyerId) {
+	public List<CommonModel> BuyerWisePo(String buyerId) {
 		// TODO Auto-generated method stub
 		return orderDAO.BuyerWisePo(buyerId);
 	}
 
 	
 	@Override
-	public List<commonModel> getSampleList() {
+	public List<CommonModel> getSampleList() {
 		// TODO Auto-generated method stub
 		return orderDAO.getSampleList();
 	}
 
 	@Override
-	public List<commonModel> getInchargeList() {
+	public List<CommonModel> getInchargeList() {
 		// TODO Auto-generated method stub
 		return orderDAO.getInchargeList();
 	}
 
 	@Override
-	public List<commonModel> getMerchendizerList() {
+	public List<CommonModel> getMerchendizerList() {
 		// TODO Auto-generated method stub
 		return orderDAO.getMerchendizerList();
 	}
@@ -506,7 +513,7 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<pg.orderModel.fileUpload> findfiles(String start, String end, String user) {
+	public List<pg.orderModel.FileUpload> findfiles(String start, String end, String user) {
 		// TODO Auto-generated method stub
 		return orderDAO.findfiles(start, end, user);
 	}
@@ -562,27 +569,39 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean insertParcel(parcelModel parcel) {
+	public boolean ConfirmParcel(ParcelModel parcel) {
 		// TODO Auto-generated method stub
-		return orderDAO.insertParcel(parcel);
+		return orderDAO.ConfirmParcel(parcel);
 	}
 
 	@Override
-	public List<parcelModel> parcelList( ) {
+	public List<ParcelModel> parcelList( ) {
 		// TODO Auto-generated method stub
 		return orderDAO.parcelList();
 	}
 
 	@Override
-	public List<parcelModel> getParcelDetails(String id) {
+	public ParcelModel getParcelInfo(String id) {
 		// TODO Auto-generated method stub
-		return orderDAO.getParcelDetails(id);
+		return orderDAO.getParcelInfo(id);
+	}
+	
+	@Override
+	public List<ParcelModel> getParcelItems(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getParcelItems(autoId);
 	}
 
 	@Override
-	public boolean editParecel(parcelModel parcel) {
+	public boolean editParecel(ParcelModel parcel) {
 		// TODO Auto-generated method stub
 		return orderDAO.editParecel(parcel);
+	}
+	
+	@Override
+	public boolean editParecelItem(ParcelModel parcel) {
+		// TODO Auto-generated method stub
+		return orderDAO.editParecelItem(parcel);
 	}
 
 	@Override
@@ -626,5 +645,45 @@ public class OrderServiceImpl implements OrderService{
 		System.out.println("it's ok Service");
 		return orderDAO.getSampleProduction(arg0,arg1,arg2);
 	}
+
+	@Override
+	public boolean ConfirmCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.ConfirmCheckList(checkList);
+	}
+
+	@Override
+	public List<CheckListModel> getChekList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getChekList();
+	}
+
+	@Override
+	public CheckListModel getCheckListInfo(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getCheckListInfo(autoId);
+	}
+
+	@Override
+	public List<CheckListModel> getCheckListItems(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getCheckListItems(autoId);
+	}
+
+	@Override
+	public boolean editCheckList(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.editCheckList(checkList);
+	}
+
+	@Override
+	public boolean editCheckListItem(CheckListModel checkList) {
+		// TODO Auto-generated method stub
+		return orderDAO.editCheckListItem(checkList);
+	}
+
+
+
+	
 
 }

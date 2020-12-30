@@ -1,5 +1,5 @@
-<%@page import="pg.model.login"%>
-<%@page import="pg.model.module"%>
+<%@page import="pg.model.Login"%>
+<%@page import="pg.model.Module"%>
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>

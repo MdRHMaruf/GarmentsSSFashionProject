@@ -11,17 +11,17 @@ import pg.dao.SettingDAO;
 import pg.dao.SettingDAOImpl;
 import pg.exception.UserBlockedException;
 
-import pg.model.menu;
-import pg.model.menuinfo;
-import pg.model.module;
-import pg.model.moduleinfo;
-import pg.model.modulewisemenu;
-import pg.model.modulewisemenusubmenu;
-import pg.model.password;
+import pg.model.Menu;
+import pg.model.MenuInfo;
+import pg.model.Module;
+import pg.model.ModuleInfo;
+import pg.model.ModuleWiseMenu;
+import pg.model.ModuleWiseMenuSubMenu;
+import pg.model.Password;
 
-import pg.model.submenuinfo;
-import pg.model.ware;
-import pg.model.wareinfo;
+import pg.model.SubMenuInfo;
+import pg.model.Ware;
+import pg.model.WareInfo;
 
 @Service
 public class SettingServiceImpl implements SettingService{
@@ -30,20 +30,20 @@ public class SettingServiceImpl implements SettingService{
 	private SettingDAOImpl settingDAO=new SettingDAOImpl();
 	
 	@Transactional
-	public List<module> getAllModuleName() {
+	public List<Module> getAllModuleName() {
 		// TODO Auto-generated method stub
 		return settingDAO.getAllModuleName();
 	}
 	
 	
 	@Transactional
-	public List<menu> getAllModuleWiseMenu(int i) {
+	public List<Menu> getAllModuleWiseMenu(int i) {
 		// TODO Auto-generated method stub
 		return settingDAO.getAllModuleWiseMenu(i);
 	}
 	
 	@Transactional
-	public List<modulewisemenu> getAllModuleWiseMenu() {
+	public List<ModuleWiseMenu> getAllModuleWiseMenu() {
 		// TODO Auto-generated method stub
 		return settingDAO.getAllModuleWiseMenu();
 	}
@@ -53,46 +53,46 @@ public class SettingServiceImpl implements SettingService{
 	private SettingDAO settDAO;
 
 	@Transactional
-	public boolean  addWare(ware ware) throws UserBlockedException{
+	public boolean  addWare(Ware ware) throws UserBlockedException{
 		return settDAO.addWare(ware);
 	}
 
 
 	@Override
-	public List<modulewisemenusubmenu> getAllModuleWiseMenuSubMenuName(int i, String menulist) {
+	public List<ModuleWiseMenuSubMenu> getAllModuleWiseMenuSubMenuName(int i, String menulist) {
 		// TODO Auto-generated method stub
 		return settDAO.getAllModuleWiseMenuSubMenuName(i, menulist);
 	}
 
 	@Override
-	public List<modulewisemenusubmenu> getAllModuleWiseSubmenu() {
+	public List<ModuleWiseMenuSubMenu> getAllModuleWiseSubmenu() {
 		// TODO Auto-generated method stub
 		return settDAO.getAllModuleWiseSubmenu();
 	}
 	
 	@Transactional
-	public boolean  addUser(password pass) throws UserBlockedException{
+	public boolean  addUser(Password pass) throws UserBlockedException{
 		return settDAO.addUser(pass);
 	}
 
 	@Transactional
-	public boolean  addModule(moduleinfo m) throws UserBlockedException{
+	public boolean  addModule(ModuleInfo m) throws UserBlockedException{
 		return settDAO.addModule(m);
 	}
 
 	@Transactional
-	public boolean  addMenu(menuinfo m) throws UserBlockedException{
+	public boolean  addMenu(MenuInfo m) throws UserBlockedException{
 		return settDAO.addMenu(m);
 	}
 	
 	@Transactional
-	public boolean  addSubMenu(submenuinfo m) throws UserBlockedException{
+	public boolean  addSubMenu(SubMenuInfo m) throws UserBlockedException{
 		return settDAO.addSubMenu(m);
 	}
 
 
 	@Override
-	public List<wareinfo> getAllWareName() {
+	public List<WareInfo> getAllWareName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

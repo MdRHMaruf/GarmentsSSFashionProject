@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import pg.exception.UserBlockedException;
-import pg.model.ware;
-import pg.model.wareinfo;
+import pg.model.Ware;
+import pg.model.WareInfo;
 import pg.registerModel.FactoryModel;
-import pg.model.login;
-import pg.model.menu;
-import pg.model.module;
+import pg.model.Login;
+import pg.model.Menu;
+import pg.model.Module;
 import pg.services.PasswordService;
 import pg.services.PasswordServiceImpl;
 import pg.services.RegisterService;
@@ -52,7 +52,7 @@ public class PasswordController {
 	public String login(Model m,HttpSession session) {
 		
 		System.out.println("log");
-		List<login> pass=(List<login>)session.getAttribute("pg_admin");
+		List<Login> pass=(List<Login>)session.getAttribute("pg_admin");
 		if(pass!=null) {
 			return "redirect:dashboard";
 		}
@@ -72,7 +72,7 @@ public class PasswordController {
 	{	
 
 		System.out.println("Log In execute");
-		List<login> lg=passService.login(name, password);
+		List<Login> lg=passService.login(name, password);
 		
 		this.userName=name;
 		this.passWord=password;
@@ -80,7 +80,7 @@ public class PasswordController {
 		if(lg.size()>0) {
 
 			
-			List<module> modulelist=passService.getUserModule(lg.get(0).getId());
+			List<Module> modulelist=passService.getUserModule(lg.get(0).getId());
 			modelmap.put("modulelist", modulelist);
 			
 			System.out.println("type "+lg.get(0).getType());
@@ -88,7 +88,7 @@ public class PasswordController {
 			if(lg.get(0).getType()==1 || lg.get(0).getType()==2) {
 
 				if(modulelist.size()>0) {
-					List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
+					List<Menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
 					modelmap.put("menulist", menulist);
 					modelmap.put("pg_admin", lg);
 					
@@ -105,7 +105,7 @@ public class PasswordController {
 			}
 			else {
 				if(modulelist.size()>0) {
-					List<menu> menulist=passService.getUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
+					List<Menu> menulist=passService.getUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
 					modelmap.put("menulist", menulist);
 					modelmap.put("pg_admin", lg);
 					
@@ -134,8 +134,8 @@ public class PasswordController {
 	@RequestMapping(value = {"dashboard"})
 	public String adminDashboard(ModelMap modelmap,HttpServletResponse response) {
 		try {
-			List<login> lg=passService.login(userName, passWord);
-			List<module> modulelist=passService.getUserModule(lg.get(0).getId());
+			List<Login> lg=passService.login(userName, passWord);
+			List<Module> modulelist=passService.getUserModule(lg.get(0).getId());
 			modelmap.put("modulelist", modulelist);
 			
 			//List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
@@ -156,8 +156,8 @@ public class PasswordController {
 	
 	@RequestMapping(value = "/modulewisemenu/{id}",method=RequestMethod.GET)
 	public @ResponseBody String modulewisemenu(@PathVariable ("id") int id,ModelMap modelmap,HttpSession session) {
-		List<login> lg=(List<login>)session.getAttribute("pg_admin");
-		List<menu> menulist=passService.getUserMenu(lg.get(0).getId(),id);
+		List<Login> lg=(List<Login>)session.getAttribute("pg_admin");
+		List<Menu> menulist=passService.getUserMenu(lg.get(0).getId(),id);
 		modelmap.put("menulist", menulist);
 
 		
@@ -169,10 +169,10 @@ public class PasswordController {
 	@RequestMapping(value = "user_create",method=RequestMethod.GET)
 	public ModelAndView create_user(ModelMap modelmap,HttpSession session) {
 		
-		List<module> modulelist=(List<module>)session.getAttribute("modulelist");
+		List<Module> modulelist=(List<Module>)session.getAttribute("modulelist");
 		modelmap.put("modulelist", modulelist);
 		
-		List<menu> menulist=(List<menu>)session.getAttribute("menulist");
+		List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
 		List<FactoryModel> factoryList = registerService.getAllFactories();
 		
 		modelmap.put("menulist", menulist);

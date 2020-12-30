@@ -12,18 +12,18 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import pg.model.ware;
-import pg.model.wareinfo;
+import pg.model.Ware;
+import pg.model.WareInfo;
 import pg.OrganizationModel.OrganizationInfo;
-import pg.model.menu;
-import pg.model.menuinfo;
-import pg.model.module;
-import pg.model.moduleinfo;
-import pg.model.modulewisemenu;
-import pg.model.modulewisemenusubmenu;
-import pg.model.password;
-import pg.model.submenuinfo;
-import pg.model.useraccessmodule;
+import pg.model.Menu;
+import pg.model.MenuInfo;
+import pg.model.Module;
+import pg.model.ModuleInfo;
+import pg.model.ModuleWiseMenu;
+import pg.model.ModuleWiseMenuSubMenu;
+import pg.model.Password;
+import pg.model.SubMenuInfo;
+import pg.model.UserAccessModule;
 import pg.share.HibernateUtil;
 
 @Repository
@@ -31,10 +31,10 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<module> getAllModuleName() {
+	public List<Module> getAllModuleName() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<module> query=new ArrayList<module>();
+		List<Module> query=new ArrayList<Module>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -45,7 +45,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new module(Integer.parseInt(element[0].toString()),element[1].toString(),Integer.parseInt(element[2].toString())));
+				query.add(new Module(Integer.parseInt(element[0].toString()),element[1].toString(),Integer.parseInt(element[2].toString())));
 			}
 
 			tx.commit();
@@ -68,10 +68,10 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<wareinfo> getAllWareName() {
+	public List<WareInfo> getAllWareName() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<wareinfo> query=new ArrayList<wareinfo>();
+		List<WareInfo> query=new ArrayList<WareInfo>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -82,7 +82,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new wareinfo(Integer.parseInt(element[0].toString()),element[1].toString()));
+				query.add(new WareInfo(Integer.parseInt(element[0].toString()),element[1].toString()));
 			}
 
 			tx.commit();
@@ -102,10 +102,10 @@ public class SettingDAOImpl implements SettingDAO {
 		return query;
 	}
 
-	public boolean  addWare(ware w) {
+	public boolean  addWare(Ware w) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<menu> query=new ArrayList<menu>();
+		List<Menu> query=new ArrayList<Menu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -149,7 +149,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 
-	public boolean  addModule(moduleinfo v) {
+	public boolean  addModule(ModuleInfo v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -191,7 +191,7 @@ public class SettingDAOImpl implements SettingDAO {
 		return false;
 	}
 
-	public boolean  addMenu(menuinfo v) {
+	public boolean  addMenu(MenuInfo v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -234,7 +234,7 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 
-	public boolean  addSubMenu(submenuinfo v) {
+	public boolean  addSubMenu(SubMenuInfo v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -281,11 +281,11 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 	@Override
-	public List<modulewisemenusubmenu> getAllModuleWiseMenuSubMenuName(int user,String menulist) {
+	public List<ModuleWiseMenuSubMenu> getAllModuleWiseMenuSubMenuName(int user,String menulist) {
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<modulewisemenusubmenu> query=new ArrayList<modulewisemenusubmenu>();
+		List<ModuleWiseMenuSubMenu> query=new ArrayList<ModuleWiseMenuSubMenu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -298,7 +298,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new modulewisemenusubmenu(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),Integer.parseInt(element[2].toString()), "",element[3].toString(),element[4].toString(),""));
+				query.add(new ModuleWiseMenuSubMenu(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),Integer.parseInt(element[2].toString()), "",element[3].toString(),element[4].toString(),""));
 			}
 
 			tx.commit();
@@ -318,11 +318,11 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 	@Override
-	public List<modulewisemenusubmenu> getAllModuleWiseSubmenu() {
+	public List<ModuleWiseMenuSubMenu> getAllModuleWiseSubmenu() {
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<modulewisemenusubmenu> query=new ArrayList<modulewisemenusubmenu>();
+		List<ModuleWiseMenuSubMenu> query=new ArrayList<ModuleWiseMenuSubMenu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -334,7 +334,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new modulewisemenusubmenu(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),Integer.parseInt(element[2].toString()), element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
+				query.add(new ModuleWiseMenuSubMenu(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),Integer.parseInt(element[2].toString()), element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 			}
 
 			tx.commit();
@@ -353,7 +353,7 @@ public class SettingDAOImpl implements SettingDAO {
 		return query;
 	}
 
-	public boolean  addUser(password v) {
+	public boolean  addUser(Password v) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -543,10 +543,10 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 	@Override
-	public List<menu> getAllModuleWiseMenu(int i) {
+	public List<Menu> getAllModuleWiseMenu(int i) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<menu> query=new ArrayList<menu>();
+		List<Menu> query=new ArrayList<Menu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -557,7 +557,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new menu(Integer.parseInt(element[0].toString()),element[1].toString(),"",""));
+				query.add(new Menu(Integer.parseInt(element[0].toString()),element[1].toString(),"",""));
 			}
 
 			tx.commit();
@@ -579,10 +579,10 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<modulewisemenu> getAllModuleWiseMenu() {
+	public List<ModuleWiseMenu> getAllModuleWiseMenu() {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		List<modulewisemenu> query=new ArrayList<modulewisemenu>();
+		List<ModuleWiseMenu> query=new ArrayList<ModuleWiseMenu>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -593,7 +593,7 @@ public class SettingDAOImpl implements SettingDAO {
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new modulewisemenu(Integer.parseInt(element[0].toString()),element[1].toString(),element[2].toString()));
+				query.add(new ModuleWiseMenu(Integer.parseInt(element[0].toString()),element[1].toString(),element[2].toString()));
 			}
 
 			tx.commit();

@@ -1,18 +1,24 @@
-function printProductPlan(buyerId,styleId,buyerorderId){
+
+window.onload = () => {
+	document.title = "Production Plan";
+
+}
+
+function printProductPlan(buyerId,styleId,buyerOrderId){
 	
 	//alert("buyerId "+buyerId);
-	 var url = "getProductionPlan/"+buyerId+"/"+styleId+"/"+buyerorderId;
+	 var url = "getProductionPlan/"+buyerId+"/"+styleId+"/"+buyerOrderId;
      window.open(url, '_blank');
 }
 
-function searchBuyerPoDetails(buyerId,buyerorderId,styleId,itemId){
+function searchBuyerPoDetails(buyerId,buyerOrderId,styleId,itemId){
 
     $.ajax({
       type: 'POST',
       dataType: 'json',
       data:{
 			buyerId:buyerId,
-			buyerorderId:buyerorderId,
+			buyerorderId:buyerOrderId,
 			styleId:styleId,
 			itemId:itemId
 			},

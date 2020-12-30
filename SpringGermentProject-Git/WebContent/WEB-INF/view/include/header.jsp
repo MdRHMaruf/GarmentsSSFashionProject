@@ -1,6 +1,6 @@
 <%@page import="java.util.ArrayList"%>
-<%@page import="pg.model.login"%>
-<%@page import="pg.model.menu"%>
+<%@page import="pg.model.Login"%>
+<%@page import="pg.model.Menu"%>
 <%@page import="java.util.List"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/select2.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/jquery-ui.css">
+   	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-select.css">
    	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-select.min.css">
    	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-table-expandable.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css">
@@ -38,9 +39,9 @@
 
 </head>
 <%
-				List<login> lg = (List<login>) session.getAttribute("pg_admin");
-				List<menu> list = (List<menu>) session.getAttribute("menulist");
-			%>
+	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+		List<Menu> list = (List<Menu>) session.getAttribute("menulist");
+%>
 
 <body>
 <div class="main-wrapper slide-nav">

@@ -1,6 +1,11 @@
 var lineId=0;
 var departmentId=0;
 
+window.onload = () => {
+	document.title = "Sewing Line Setup";
+
+}
+
 function factoryWiseLine(){
 	  var factoryId = $("#factoryId").val();
 	  if(factoryId!=0){
