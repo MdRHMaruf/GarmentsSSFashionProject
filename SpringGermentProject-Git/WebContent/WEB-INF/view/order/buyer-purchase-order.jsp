@@ -55,7 +55,7 @@
 								data-style="btn-light btn-sm border-light-gray">
 								<option value="0">Select Buyer</option>
 								<c:forEach items="${buyerList}" var="buyer">
-									<option id="buyerName" value="${buyer.buyerid}">${buyer.buyername}</option>
+									<option value="${buyer.buyerid}">${buyer.buyername}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -70,7 +70,7 @@
 							<select id="styleNo" class="selectpicker col-md-12"
 								onchange="styleWiseItemLoad()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleNo" value="0">Select Style</option>
+								<option value="0">Select Style</option>
 							</select>
 						</div>
 
@@ -82,7 +82,7 @@
 							<select id="itemType" class="selectpicker col-md-12"
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="itemType" value="0">Select Item Type</option>
+								<option value="0">Select Item Type</option>
 							</select>
 						</div>
 
@@ -97,9 +97,9 @@
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 
-								<option id="factory" value="0">Select Factory</option>
+								<option value="0">Select Factory</option>
 								<c:forEach items="${factoryList}" var="factory">
-									<option id="factory" value="${factory.factoryid}">${factory.factoryname}</option>
+									<option value="${factory.factoryid}">${factory.factoryname}</option>
 								</c:forEach>
 							</select>
 
@@ -115,9 +115,9 @@
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 
-								<option id="color" value="0">Select Color</option>
+								<option value="0">Select Color</option>
 								<c:forEach items="${colorList}" var="color">
-									<option id="color" value="${color.colorId}">${color.colorName}</option>
+									<option value="${color.colorId}">${color.colorName}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -163,8 +163,8 @@
 								<div class="form-group mb-0  row">
 									<label for="paymentTerm" class="col-md-6 col-form-label-sm pr-0">Payment
 										Term</label> <select id="paymentTerm" class="form-control-sm col-md-5">
-										<option id="paymentTerm" value="1">TT</option>
-										<option id="paymentTerm" value="2">LC</option>
+										<option value="1">TT</option>
+										<option value="2">LC</option>
 									</select>
 
 								</div>
@@ -174,9 +174,9 @@
 								<div class="form-group mb-0  row">
 									<label for="currency" class="col-md-4 col-form-label-sm pr-0">Currency</label>
 									<select id="currency" class="form-control-sm col-md-6">
-										<option id="currency" value="1">BDT</option>
-										<option id="currency" value="2">USD</option>
-										<option id="currency" value="3">ERO</option>
+										<option value="1">BDT</option>
+										<option value="2">USD</option>
+										<option value="3">ERO</option>
 									</select>
 
 								</div>
@@ -211,9 +211,9 @@
 					<div class="col-md-12">
 						<select id="sizeGroup" class="form-control-sm border-secondary"
 							style="width: 100%;" onchange="sizeLoadByGroup()">
-							<option id="sizeGroup" value="0">Select Size Group</option>
+							<option value="0">Select Size Group</option>
 							<c:forEach items="${groupList}" var="group" varStatus="counter">
-								<option id="sizeGroup" value="${group.groupId}">${group.groupName}</option>
+								<option value="${group.groupId}">${group.groupName}</option>
 							</c:forEach>
 						</select>
 					</div>

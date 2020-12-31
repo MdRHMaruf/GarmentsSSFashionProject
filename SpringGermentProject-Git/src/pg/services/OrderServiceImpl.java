@@ -48,6 +48,19 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
+	public List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getPurchaseOrderListByMultipleBuyers(buyersId);
+	}
+
+	@Override
+	public List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getBuyerPOStyleListByMultipleBuyers(buyersId);
+	}
+
+	
+	@Override
 	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleWiseBuyerPO(styleId);
@@ -682,8 +695,5 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.editCheckListItem(checkList);
 	}
 
-
-
-	
 
 }

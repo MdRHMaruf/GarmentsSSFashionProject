@@ -23,18 +23,143 @@ window.onload = () => {
 		data: {},
 		success: function (data) {
 			unitList = {};
-			
+
 			$("#unit").empty();
 			$("#unit").append("<option value='0'>Select Unit</option>");
 			data.unitList.forEach(unit => {
 				unitList[unit.unitId] = unit;
 				$("#unit").append(`<option value='${unit.unitId}'>${unit.unitName}</option>`);
 			});
-			
+
 			$('#unit').selectpicker('refresh');
 			$('#unit').val('0').change();
 		}
 	});
+
+	AINO();
+}
+
+
+function buyerWiseStyleLoad() {
+	var buyerId = $("#buyerName").val();
+
+	// alert("buyerId "+buyerId);
+	if (buyerId != 0) {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getBuyerWiseStylesItem',
+			data: {
+				buyerId: buyerId
+			},
+			success: function (data) {
+
+				var styleList = data.styleList;
+				var options = "<option  value='0' selected>Select Style</option>";
+				var length = styleList.length;
+				for (var i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('.selectpicker').selectpicker('refresh');
+				$('#styleNo').val(styleIdForSet).change();
+				styleIdForSet = 0;
+
+			}
+		});
+	} else {
+		var options = "<option value='0' selected>Select Style</option>";
+		$("#styleNo").html(options);
+		$('#styleNo').selectpicker('refresh');
+		$('#styleNo').val("0").change();
+	}
+
+}
+$('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if ($("#buyerName").val().length > 0) {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getPurchaseOrderAndStyleListByMultipleBuyers',
+			data: {
+				buyersId: $("#buyerName").val().toString()
+			},
+			success: function (data) {
+				let options = "";
+				let buyerPoList = data.buyerPOList;
+				let length = buyerPoList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + buyerPoList[i].name + "'>" + buyerPoList[i].name + "</option>";
+				};
+
+				$("#purchaseOrder").html(options);
+				$('#purchaseOrder').selectpicker('refresh');
+
+				options = "";
+				let styleList = data.styleList;
+
+				length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('#styleNo').selectpicker('refresh');
+				
+			}
+		});
+	} else {
+		$("#purchaseOrder").empty();
+		$("#purchaseOrder").selectpicker('refresh');
+		$("#styleNo").empty();
+		$("#styleNo").selectpicker('refresh');
+	}
+});
+
+$('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	
+
+	if ($("#purchaseOrder").val().length > 0) {
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getStyleListByMultiplePurchaseOrder',
+			data: {
+				purchaseOrdersId: $("#purchaseOrder").val().toString()
+			},
+			success: function (data) {
+				let options = "";
+
+				let styleList = data.styleList;
+
+				length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('#styleNo').selectpicker('refresh');
+				
+			}
+		});
+	} 
+});
+
+function refreshBuyerNameList() {
+	$("#buyerName").selectpicker('deselectAll');
+}
+function refreshPurchaseOrderList() {
+	$("#purchaseOrder").selectpicker('deselectAll');
+}
+function refreshStyleNoList() {
+	$("#styleNo").selectpicker('deselectAll');
+}
+function refreshItemNameList() {
+	$("#itemName").selectpicker('deselectAll');
+}
+function refreshColorList() {
+	$("#color").selectpicker('deselectAll');
+}
+function refreshShippingMarkList() {
+	$("#shippingMark").selectpicker('deselectAll');
 }
 
 function searchAccessoriesIndent(aiNo) {
@@ -321,10 +446,10 @@ function setOrder(data) {
 function LoadSize(data) {
 
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Size</option>";
+	var options = "<option value='0' selected>Select Size</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("size").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -422,14 +547,11 @@ function poWiseStyles() {
 
 function loadStyles(data) {
 	//console.log("dtt "+data[0].id);
-
-
-
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Style</option>";
+	var options = "<option  value='0' selected>Select Style</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -497,10 +619,10 @@ function styleWiseItems() {
 function loatItems(data) {
 
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Item Type</option>";
+	var options = "<option  value='0' selected>Select Item Type</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType'  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option   value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("itemName").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -627,10 +749,10 @@ function shipping() {
 
 function loadShppingMarks(data) {
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Item Type</option>";
+	var options = "<option  value='0' selected>Select Item Type</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + i + "'>" + itemList[i].name + "</option>";
+		options += "<option  value='" + i + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("shippingmark").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -647,7 +769,7 @@ function sizeRequiredBoxaction() {
 
 
 	var itemList = "";
-	var options = "<option id='itemType' value='0' selected>Select Item Type</option>";
+	var options = "<option  value='0' selected>Select Item Type</option>";
 
 	document.getElementById("size").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -713,10 +835,10 @@ function LoadColors(data) {
 	console.log(" colors ")
 
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Item Color</option>";
+	var options = "<option  value='0' selected>Select Item Color</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("itemcolor").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');

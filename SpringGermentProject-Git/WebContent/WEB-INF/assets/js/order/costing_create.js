@@ -49,10 +49,10 @@ function styleWiseItemLoad() {
       success: function (data) {
 
         var itemList = data.itemList;
-        var options = "<option id='itemName' value='0' selected>Select Item Name</option>";
+        var options = "<option  value='0' selected>Select Item Name</option>";
         var length = itemList.length;
         for (var i = 0; i < length; i++) {
-          options += "<option id='itemName' value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+          options += "<option  value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
         };
         document.getElementById("itemName").innerHTML = options;
         $('.selectpicker').selectpicker('refresh');
@@ -61,7 +61,7 @@ function styleWiseItemLoad() {
       }
     });
   } else {
-    var options = "<option id='itemName' value='0' selected>Select Item Name</option>";
+    var options = "<option  value='0' selected>Select Item Name</option>";
     $("#itemName").html(options);
     $('#itemName').selectpicker('refresh');
     $('#itemName').val(0).change();
@@ -84,19 +84,19 @@ function typeWiseParticularLoad() {
       success: function (data) {
 
         var particularList = data.particularList;
-        var options = "<option id='particularName' value='0' selected>Select Particular Name</option>";
+        var options = "<option  value='0' selected>Select Particular Name</option>";
         var length = particularList.length;
         for (var i = 0; i < length; i++) {
-          options += "<option id='particularName' value='" + particularList[i].particularItemId + "'>" + particularList[i].particularItemName + "</option>";
+          options += "<option  value='" + particularList[i].particularItemId + "'>" + particularList[i].particularItemName + "</option>";
         };
         document.getElementById("particularName").innerHTML = options;
-        $('.selectpicker').selectpicker('refresh');
+        $('#particularName').selectpicker('refresh');
         $('#particularName').val(particularItemIdForSet).change();
         particularItemIdForSet = 0;
       }
     });
   } else {
-    var options = "<option id='particularName' value='0' selected>Select Particular Name</option>";
+    var options = "<option  value='0' selected>Select Particular Name</option>";
     $("#particularName").html(options);
     $('#particularName').selectpicker('refresh');
     $('#particularName').val(0).change();

@@ -31,6 +31,8 @@ public interface OrderService {
 	//Style Create
 	List<ItemDescription> getItemDescriptionList();
 	List<Style> getBuyerWiseStylesItem(String buyerId);
+	List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId);
+	List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId);
 	List<CommonModel> getStyleWiseBuyerPO(String styleId);
 	List<ItemDescription> getStyleWiseItem(String styleId);
 

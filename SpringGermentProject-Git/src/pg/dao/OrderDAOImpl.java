@@ -55,6 +55,7 @@ import pg.share.HibernateUtil;
 import pg.share.ItemType;
 import pg.share.ProductionType;
 import pg.share.SizeValuesType;
+import pg.share.StateStatus;
 import pg.registerModel.AccessoriesItem;
 @Repository
 public class OrderDAOImpl implements OrderDAO{
@@ -128,6 +129,90 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+	
+	@Override
+	public List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.BuyerOrderId,boes.buyerId,boes.PurchaseOrder\n" + 
+					"from TbBuyerOrderEstimateDetails boes\n" + 
+					"where boes.buyerId in ("+buyersId+") and boes.stateStatus != '"+StateStatus.END.getType()+"'\n" + 
+					"group by boes.buyerId,boes.BuyerOrderId,boes.PurchaseOrder\n" + 
+					"order by boes.buyerId,boes.BuyerOrderId,boes.PurchaseOrder;";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(),element[2].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Style> dataList=new ArrayList<Style>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.StyleId,sc.StyleNo\n" + 
+					"from TbBuyerOrderEstimateDetails boes\n" + 
+					"left join TbStyleCreate sc\n" + 
+					"on boes.StyleId = sc.StyleId\n" + 
+					"where boes.buyerId in ("+buyersId+") and boes.stateStatus != '"+StateStatus.END.getType()+"'\n" + 
+					"group by boes.StyleId,sc.StyleNo\n" + 
+					"order by boes.StyleId,sc.StyleNo;";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Style(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	
 	
 	@Override
 	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {

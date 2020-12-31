@@ -432,6 +432,17 @@ public class OrderController {
 		objMain.put("styleList",styleList);
 		return objMain; 
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getPurchaseOrderAndStyleListByMultipleBuyers",method=RequestMethod.GET)
+	public JSONObject getPurchaseOrderAndStyleListByMultipleBuyers(String buyersId) {
+		JSONObject objMain = new JSONObject();	
+		List<Style> styleList = orderService.getBuyerPOStyleListByMultipleBuyers(buyersId);
+		List<CommonModel> poList = orderService.getPurchaseOrderListByMultipleBuyers(buyersId);
+		objMain.put("styleList",styleList);
+		objMain.put("buyerPOList",poList);
+		return objMain; 
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/getStyleWiseItem",method=RequestMethod.GET)
@@ -796,7 +807,7 @@ public class OrderController {
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 
 		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
-
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
 		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
@@ -807,7 +818,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/accessories_indent");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("accessories",accessoriesitem);
-		//view.addObject("unit",unit);
+		view.addObject("buyerList",buyerList);
 		view.addObject("brand",brand);
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
