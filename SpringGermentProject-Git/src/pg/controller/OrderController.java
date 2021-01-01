@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import com.sun.istack.internal.logging.Logger;
 
 import javassist.tools.reflect.Sample;
@@ -443,7 +442,25 @@ public class OrderController {
 		objMain.put("buyerPOList",poList);
 		return objMain; 
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getStyleListByMultiplePurchaseOrder",method=RequestMethod.GET)
+	public JSONObject getStyleListByMultiplePurchaseOrder(String purchaseOrders) {
+		JSONObject objMain = new JSONObject();	
+		List<Style> styleList = orderService.getBuyerPOStyleListByMultiplePurchaseOrders(purchaseOrders);
+		objMain.put("styleList",styleList);
+		return objMain; 
+	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getPurchaseOrderByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getPurchaseOrderByMultipleStyleId(String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<CommonModel> buyerPOList = orderService.getPurchaseOrderByMultipleStyle(styleIdList);
+		objMain.put("buyerPOList",buyerPOList);
+		return objMain; 
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/getStyleWiseItem",method=RequestMethod.GET)
 	public JSONObject getStyleWiseItem(String styleId) {
@@ -451,6 +468,27 @@ public class OrderController {
 		List<ItemDescription> itemList = orderService.getStyleWiseItem(styleId);
 
 		objMain.put("itemList",itemList);
+		return objMain; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getItemListByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getItemListByMultipleStyleId(String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<ItemDescription> itemList = orderService.getItemListByMultipleStyleId(styleIdList);
+
+		objMain.put("itemList",itemList);
+		return objMain; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getColorAndShippingListByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getColorAndShippingListByMultipleStyleId(String purchaseOrders,String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<Color> colorList = orderService.getColorListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+		List<String> shippingMarkList = orderService.getShippingMarkListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+		objMain.put("colorList",colorList);
+		objMain.put("shippingMarkList",shippingMarkList);
 		return objMain; 
 	}
 	

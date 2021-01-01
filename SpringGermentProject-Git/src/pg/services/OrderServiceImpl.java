@@ -58,6 +58,13 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getBuyerPOStyleListByMultipleBuyers(buyersId);
 	}
+	
+	@Override
+	public List<Style> getBuyerPOStyleListByMultiplePurchaseOrders(String purchaseOrders) {
+		// TODO Auto-generated method stub
+		return orderDAO.getBuyerPOStyleListByMultiplePurchaseOrders(purchaseOrders);
+	}
+
 
 	
 	@Override
@@ -67,10 +74,37 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
+	public List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList) {
+		// TODO Auto-generated method stub
+		return orderDAO.getPurchaseOrderByMultipleStyle(styleIdList);
+	}
+
+	
+	@Override
 	public List<ItemDescription> getStyleWiseItem(String styleId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleWiseItem(styleId);
 	}
+	
+	@Override
+	public List<ItemDescription> getItemListByMultipleStyleId(String styleIdList) {
+		// TODO Auto-generated method stub
+		return orderDAO.getItemListByMultipleStyleId(styleIdList);
+	}
+	
+	@Override
+	public List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders, String styleIdList) {
+		// TODO Auto-generated method stub
+		return orderDAO.getColorListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+	}
+
+	@Override
+	public List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders, String styleIdList) {
+		// TODO Auto-generated method stub
+		return orderDAO.getShippingMarkListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+	}
+
+	
 
 	@Override
 	public List<Style> getStyleList() {
@@ -695,5 +729,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.editCheckListItem(checkList);
 	}
 
+	
+	
 
 }

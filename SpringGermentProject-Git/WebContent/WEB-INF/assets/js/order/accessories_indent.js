@@ -77,12 +77,17 @@ function buyerWiseStyleLoad() {
 }
 $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#buyerName").val().length > 0) {
+		let buyerIdList = '';
+		$("#buyerName").val().forEach(id => {
+			buyerIdList += `'${id}',`;
+		});
+		buyerIdList = buyerIdList.slice(0, -1);
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
 			url: './getPurchaseOrderAndStyleListByMultipleBuyers',
 			data: {
-				buyersId: $("#buyerName").val().toString()
+				buyersId: buyerIdList
 			},
 			success: function (data) {
 				let options = "";
@@ -104,7 +109,7 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 				};
 				$("#styleNo").html(options);
 				$('#styleNo').selectpicker('refresh');
-				
+
 			}
 		});
 	} else {
@@ -116,15 +121,19 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 });
 
 $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-	
-
 	if ($("#purchaseOrder").val().length > 0) {
+		let poList = '';
+		$("#purchaseOrder").val().forEach(po => {
+			poList += `'${po}',`;
+		});
+		poList = poList.slice(0, -1);
+		let selectedStyleId = $("#styleNo").val();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
 			url: './getStyleListByMultiplePurchaseOrder',
 			data: {
-				purchaseOrdersId: $("#purchaseOrder").val().toString()
+				purchaseOrders: poList
 			},
 			success: function (data) {
 				let options = "";
@@ -137,10 +146,102 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
 				};
 				$("#styleNo").html(options);
 				$('#styleNo').selectpicker('refresh');
-				
+				$("#styleNo").selectpicker('val', selectedStyleId).change();
+
 			}
 		});
-	} 
+	}
+});
+
+$('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if ($("#styleNo").val().length > 0) {
+		let styleIdList = '';
+		$("#styleNo").val().forEach(id => {
+			styleIdList += `'${id}',`;
+		});
+		styleIdList = styleIdList.slice(0, -1);
+
+		if ($("#purchaseOrder").val().length > 0) {
+
+			let poList = '';
+			$("#purchaseOrder").val().forEach(id => {
+				poList += `'${id}',`;
+			});
+			poList = poList.slice(0, -1);
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './getColorAndShippingListByMultipleStyleId',
+				data: {
+					purchaseOrders : poList,
+					styleIdList : styleIdList
+				},
+				success: function (data) {
+					let options = "";
+					let colorList = data.colorList;
+					length = colorList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + colorList[i].colorId + "'>" + colorList[i].colorName + "</option>";
+					};
+					$("#color").html(options);
+					$('#color').selectpicker('refresh');
+
+					options = "";
+					let shippingMarkList = data.shippingMarkList;
+					length = shippingMarkList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + i + "'>" + shippingMarkList[i] + "</option>";
+					};
+					$("#shippingMark").html(options);
+					$('#shippingMark').selectpicker('refresh');
+
+				}
+			});
+		} else {
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './getPurchaseOrderByMultipleStyleId',
+				data: {
+					styleIdList: styleIdList
+				},
+				success: function (data) {
+					let options = "";
+					let buyerPoList = data.buyerPOList;
+					let length = buyerPoList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + buyerPoList[i].name + "'>" + buyerPoList[i].name + "</option>";
+					};
+
+					$("#purchaseOrder").html(options);
+					$('#purchaseOrder').selectpicker('refresh');
+
+				}
+			});
+		}
+
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getItemListByMultipleStyleId',
+			data: {
+				styleIdList: styleIdList
+			},
+			success: function (data) {
+				let options = "";
+				let itemList = data.itemList;
+				let length = itemList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+				};
+
+				$("#itemName").html(options);
+				$("#itemName").selectpicker('refresh');
+				$('#itemName').selectpicker('selectAll');
+
+			}
+		});
+	}
 });
 
 function refreshBuyerNameList() {

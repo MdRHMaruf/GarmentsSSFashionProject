@@ -34,8 +34,14 @@ public interface OrderDAO {
 	List<Style> getBuyerWiseStylesItem(String buyerId);
 	List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId);
 	List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId);
+	List<Style> getBuyerPOStyleListByMultiplePurchaseOrders(String purchaseOrders);
 	List<CommonModel> getStyleWiseBuyerPO(String styleId);
+	List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList);
 	List<ItemDescription> getStyleWiseItem(String styleId);
+	List<ItemDescription> getItemListByMultipleStyleId(String styleIdList);
+	
+	List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
+	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
 	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
 			String frontimg, String backimg) throws SQLException;

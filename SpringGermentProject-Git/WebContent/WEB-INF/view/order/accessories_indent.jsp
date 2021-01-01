@@ -72,7 +72,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
-											class="form-check-input" value=""> Combined
+											class="form-check-input" checked="checked"> Combined
 										</label>
 									</div>
 								</div>
@@ -85,7 +85,7 @@
 											<c:forEach items="${purchaseorders}" var="acc"
 												varStatus="counter">
 												<option name="purchaseOrder" id='purchaseOrder'
-													value="${acc.id}">${acc.name}</option>
+													value="${acc.name}">${acc.name}</option>
 											</c:forEach>
 										</select>
 										<button class="btn btn-sm btn-primary" type="button" onclick="refreshPurchaseOrderList()">
@@ -102,7 +102,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkStyleNo" type="checkbox" class="form-check-input"
-											value=""> Combined
+											checked="checked"> Combined
 										</label>
 									</div>
 								</div>
@@ -127,7 +127,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkItemName" type="checkbox" class="form-check-input"
-											value=""> Combined
+											checked="checked"> Combined
 										</label>
 									</div>
 								</div>
@@ -151,7 +151,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkColor" type="checkbox" class="form-check-input"
-											value=""> Combined
+											checked="checked"> Combined
 										</label>
 									</div>
 								</div>
@@ -179,7 +179,7 @@
 											<div class="form-check-inline">
 												<label class="form-check-label"> <input
 													id="checkShippingMark" type="checkbox"
-													class="form-check-input" value="">Combined
+													class="form-check-input" checked="checked">Combined
 												</label>
 											</div>
 										</div>
