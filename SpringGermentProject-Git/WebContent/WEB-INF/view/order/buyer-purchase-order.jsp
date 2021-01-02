@@ -1,3 +1,4 @@
+<%@page import="pg.share.Currency"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
@@ -30,8 +31,8 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="buyerPOId" value="0">
-	<input type="hidden" id="itemAutoId" value="0">
+	<input type="hidden" id="buyerPOId" value="0"> <input
+		type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -127,7 +128,8 @@
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="customerOrder "
-								class="col-md-4 col-form-label-sm pr-0 pb-0">Customer Order</label>
+								class="col-md-4 col-form-label-sm pr-0 pb-0">Customer
+								Order</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control-sm" id="customerOrder">
 							</div>
@@ -138,7 +140,8 @@
 
 						<div class="form-group mb-0 row">
 							<label for="purchaseOrder"
-								class="col-md-4 col-form-label-sm pr-0 pb-0">Purchase Order</label>
+								class="col-md-4 col-form-label-sm pr-0 pb-0">Purchase
+								Order</label>
 							<div class="col-md-8">
 								<input type="text" class="form-control-sm" id="purchaseOrder">
 							</div>
@@ -161,8 +164,9 @@
 						<div class="row">
 							<div class="col-md-5">
 								<div class="form-group mb-0  row">
-									<label for="paymentTerm" class="col-md-6 col-form-label-sm pr-0">Payment
-										Term</label> <select id="paymentTerm" class="form-control-sm col-md-5">
+									<label for="paymentTerm"
+										class="col-md-6 col-form-label-sm pr-0">Payment Term</label> <select
+										id="paymentTerm" class="form-control-sm col-md-5">
 										<option value="1">TT</option>
 										<option value="2">LC</option>
 									</select>
@@ -174,9 +178,15 @@
 								<div class="form-group mb-0  row">
 									<label for="currency" class="col-md-4 col-form-label-sm pr-0">Currency</label>
 									<select id="currency" class="form-control-sm col-md-6">
-										<option value="1">BDT</option>
-										<option value="2">USD</option>
-										<option value="3">ERO</option>
+										<option value="0">Select Currency</option>
+										<%
+											int length = Currency.values().length;
+											for (int i = 0; i < length; i++) {
+										%>
+										<option value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+										<%
+											}
+										%>
 									</select>
 
 								</div>
@@ -192,7 +202,8 @@
 									<i class="fa fa-plus-circle"></i> Add
 								</button>
 								<button id="btnEdit" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()" disabled>
+									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
+									disabled>
 									<i class="fa fa-pencil-square"></i> Edit
 								</button>
 								<button id="btnReset" type="button"
@@ -261,8 +272,9 @@
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" disabled>
-					<i class="fa fa-pencil-square" ></i> Edit
+					class="btn btn-primary btn-sm ml-1" onclick="buyerPoEditAction()"
+					disabled>
+					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
@@ -307,13 +319,11 @@
 							<tr>
 								<td>${po.buyerPoId}</td>
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
-								<td >${po.date}</td>
+								<td>${po.date}</td>
 								<td><i class="fa fa-search"
-									onclick="searchBuyerPO(${po.buyerPoId})">
-								</i></td>
+									onclick="searchBuyerPO(${po.buyerPoId})"> </i></td>
 								<td><i class="fa fa-print"
-									onclick="printBuyerPO(${po.buyerPoId})">
-								</i></td>
+									onclick="printBuyerPO(${po.buyerPoId})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

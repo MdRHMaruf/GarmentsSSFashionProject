@@ -58,7 +58,8 @@
 												<option value="${buyer.buyerid}">${buyer.buyername}</option>
 											</c:forEach>
 										</select>
-										<button class="btn btn-sm btn-primary" type="button" onclick="refreshBuyerNameList()">
+										<button class="btn btn-sm btn-primary" type="button"
+											onclick="refreshBuyerNameList()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -88,7 +89,8 @@
 													value="${acc.name}">${acc.name}</option>
 											</c:forEach>
 										</select>
-										<button class="btn btn-sm btn-primary" type="button" onclick="refreshPurchaseOrderList()">
+										<button class="btn btn-sm btn-primary" type="button"
+											onclick="refreshPurchaseOrderList()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -113,7 +115,8 @@
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
 										</select>
-										<button class="btn btn-sm btn-primary" type="button" onclick="refreshStyleNoList()">
+										<button class="btn btn-sm btn-primary" type="button"
+											onclick="refreshStyleNoList()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -138,7 +141,8 @@
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
 										</select>
-										<button class="btn btn-sm btn-primary" type="button" onclick="refreshItemNameList()">
+										<button class="btn btn-sm btn-primary" type="button"
+											onclick="refreshItemNameList()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -163,7 +167,8 @@
 											aria-describedby="findButton">
 
 										</select>
-										<button class="btn btn-sm btn-primary" type="button" onclick="refreshColorList()">
+										<button class="btn btn-sm btn-primary" type="button"
+											onclick="refreshColorList()">
 											<i class="fa fa-refresh"></i>
 										</button>
 									</div>
@@ -191,7 +196,8 @@
 													data-style="btn-light btn-sm border-light-gray"
 													aria-describedby="findButton">
 												</select>
-												<button class="btn btn-sm btn-primary" type="button" onclick="refreshShippingMarkList()">
+												<button class="btn btn-sm btn-primary" type="button"
+													onclick="refreshShippingMarkList()">
 													<i class="fa fa-refresh"></i>
 												</button>
 											</div>
@@ -209,7 +215,8 @@
 														Required</strong></label>
 											</div>
 										</div>
-										<button class="btn btn-sm btn-primary" type="button">
+										<button class="btn btn-sm btn-primary" type="button"
+											id="btnRecyclingData">
 											<i class="fa fa-recycle"></i> Recycling Data
 										</button>
 									</div>
@@ -318,63 +325,39 @@
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="grandQty"
-												class="col-form-label-sm mb-0 py-0"><strong>Grand Qty</strong></label>
+											<label for="grandQty" class="col-form-label-sm mb-0 py-0"><strong>Grand
+													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="grandQty" readonly>
+										<input type="number" class='form-control-sm' id="grandQty"
+											readonly>
 									</div>
 								</div>
 							</div>
 
 						</div>
-						
+
 						<div class="col-md-4">
 							<div class="row">
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="orderQty"
-												class="col-form-label-sm mb-0 py-0"><strong>Order Qty</strong></label>
+											<label for="orderQty" class="col-form-label-sm mb-0 py-0"><strong>Order
+													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="orderQty" readonly>
+										<input type="number" class='form-control-sm' id="orderQty"
+											readonly>
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="dozenQty"
-												class="col-form-label-sm mb-0 py-0"><strong>Dozen Qty</strong></label>
+											<label for="dozenQty" class="col-form-label-sm mb-0 py-0"><strong>Dozen
+													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="dozenQty" readonly>
-									</div>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-4 px-1">
-									<div class="form-group  mb-1"
-										style="padding-left: 1px; padding-right: 1px;">
-										<div class="d-flex justify-content-between">
-											<label for="reqPerPcs"
-												class="col-form-label-sm mb-0 py-0"><strong>Req.Per Pcs</strong></label>
-										</div>
-										<input type="number" class='form-control-sm'
-											id="reqPerPcs">
-									</div>
-								</div>
-								<div class="col-md-4 px-1">
-									<div class="form-group  mb-1"
-										style="padding-left: 1px; padding-right: 1px;">
-										<div class="d-flex justify-content-between">
-											<label for="reqPerDozen"
-												class="col-form-label-sm mb-0 py-0"><strong>Req.Per Dozen</strong></label>
-										</div>
-										<input type="number" class='form-control-sm'
-											id="reqPerDozen" readonly>
+										<input type="number" class='form-control-sm' id="dozenQty"
+											readonly>
 									</div>
 								</div>
 							</div>
@@ -383,75 +366,119 @@
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="perUnit"
-												class="col-form-label-sm mb-0 py-0"><strong>Per Unit</strong></label>
+											<label for="reqPerPcs" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
+													Pcs</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="perUnit">
+										<input type="number" class='form-control-sm' id="reqPerPcs">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="totalBox"
-												class="col-form-label-sm mb-0 py-0"><strong>Total Box</strong></label>
+											<label for="reqPerDozen" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
+													Dozen</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="totalBox" readonly>
-									</div>
-								</div>
-								<div class="col-md-4 px-1">
-									<div class="form-group  mb-1"
-										style="padding-left: 1px; padding-right: 1px;">
-										<div class="d-flex justify-content-between">
-											<label for="divideBy"
-												class="col-form-label-sm mb-0 py-0"><strong>Divide By</strong></label>
-										</div>
-										<input type="number" class='form-control-sm'
-											id="divideBy">
+										<input type="number" class='form-control-sm' id="reqPerDozen"
+											readonly>
 									</div>
 								</div>
 							</div>
-							<div class="mt-1"><strong>Extra</strong></div>
 							<div class="row">
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="inPercent"
-												class="col-form-label-sm mb-0 py-0"><strong>In Percent(%)</strong></label>
+											<label for="perUnit" class="col-form-label-sm mb-0 py-0"><strong>Per
+													Unit</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="inPercent">
+										<input type="number" class='form-control-sm' id="perUnit">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="percentQty"
-												class="col-form-label-sm mb-0 py-0"><strong>Percent Qty</strong></label>
+											<label for="totalBox" class="col-form-label-sm mb-0 py-0"><strong>Total
+													Box</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="percentQty" readonly>
+										<input type="number" class='form-control-sm' id="totalBox"
+											readonly>
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="totalQty"
-												class="col-form-label-sm mb-0 py-0"><strong>Total Qty</strong></label>
+											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
+													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm'
-											id="totalQty" readonly>
+										<input type="number" class='form-control-sm' id="divideBy">
+									</div>
+								</div>
+							</div>
+							<div class="mt-1">
+								<strong>Extra</strong>
+							</div>
+							<div class="row">
+								<div class="col-md-4 px-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-between">
+											<label for="inPercent" class="col-form-label-sm mb-0 py-0"><strong>In
+													Percent(%)</strong></label>
+										</div>
+										<input type="number" class='form-control-sm' id="inPercent">
+									</div>
+								</div>
+								<div class="col-md-4 px-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-between">
+											<label for="percentQty" class="col-form-label-sm mb-0 py-0"><strong>Percent
+													Qty</strong></label>
+										</div>
+										<input type="number" class='form-control-sm' id="percentQty"
+											readonly>
+									</div>
+								</div>
+								<div class="col-md-4 px-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-between">
+											<label for="totalQty" class="col-form-label-sm mb-0 py-0"><strong>Total
+													Qty</strong></label>
+										</div>
+										<input type="number" class='form-control-sm' id="totalQty"
+											readonly>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
+					<div class="alert alert-success alert-dismissible fade show"
+						style="display: none;">
+						<p id="successAlert" class="mb-0">
+							<strong>Success!</strong> Unit Name Save Successfully..
+						</p>
+					</div>
+					<div class="alert alert-warning alert-dismissible fade show"
+						style="display: none;">
+						<p id="warningAlert" class="mb-0">
+							<strong>Warning!</strong> Unit Name Empty.Please Enter Unit
+							Name...
+						</p>
+					</div>
+					<div class="alert alert-danger alert-dismissible fade show"
+						style="display: none;">
+						<p id="dangerAlert" class="mb-0">
+							<strong>Wrong!</strong> Something Wrong...
+						</p>
+					</div>
+					
+						<div id="tableList">
+						</div>
+					
 					<div class="row mt-1">
 
 						<div class="col-sm-4">

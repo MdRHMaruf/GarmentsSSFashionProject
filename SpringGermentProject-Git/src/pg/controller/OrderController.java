@@ -16,9 +16,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import com.sun.istack.internal.logging.Logger;
-
-import javassist.tools.reflect.Sample;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -31,9 +28,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,33 +39,33 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.istack.internal.logging.Logger;
+
 import pg.model.CommonModel;
 import pg.model.Login;
+import pg.orderModel.AccessoriesIndent;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
+import pg.orderModel.ParcelModel;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.AccessoriesIndentCarton;
-import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
-import pg.registerModel.Department;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.ItemDescription;
-import pg.registerModel.Line;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
@@ -1092,6 +1087,14 @@ public class OrderController {
 	}
 
 
+	@ResponseBody
+	@RequestMapping(value = "/getAccessoriesRecyclingData",method = RequestMethod.GET)
+	public JSONObject getAccessoriesRecyclingData(String query){
+		JSONObject objmain = new JSONObject();
+		objmain.put("dataList",orderService.getAccessoriesRecyclingData(query));
+		return objmain;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
 	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {

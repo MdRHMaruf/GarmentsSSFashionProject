@@ -86,6 +86,7 @@ public interface OrderService {
 	public List<CommonModel>AllColors();
 	public List<CommonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 
+	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query);
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();

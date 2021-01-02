@@ -173,8 +173,8 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 				dataType: 'json',
 				url: './getColorAndShippingListByMultipleStyleId',
 				data: {
-					purchaseOrders : poList,
-					styleIdList : styleIdList
+					purchaseOrders: poList,
+					styleIdList: styleIdList
 				},
 				success: function (data) {
 					let options = "";
@@ -190,7 +190,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					let shippingMarkList = data.shippingMarkList;
 					length = shippingMarkList.length;
 					for (let i = 0; i < length; i++) {
-						options += "<option value='" + i + "'>" + shippingMarkList[i] + "</option>";
+						options += "<option value='" + shippingMarkList[i] + "'>" + shippingMarkList[i] + "</option>";
 					};
 					$("#shippingMark").html(options);
 					$('#shippingMark').selectpicker('refresh');
@@ -262,6 +262,281 @@ function refreshColorList() {
 function refreshShippingMarkList() {
 	$("#shippingMark").selectpicker('deselectAll');
 }
+
+$("#btnRecyclingData").click(() => {
+	let buyersId = $("#buyerName").val();
+	let purchaseOrdersId = $("#purchaseOrder").val();
+	let stylesId = $("#styleNo").val();
+	let itemsId = $("#itemName").val();
+	let colorsId = $("#color").val();
+	let shippingMarks = $("#shippingMark").val();
+
+	let colPurchaseOrder = 'boed.purchaseOrder,';
+	let colStyleId = 'boed.styleId,';
+	let colStyleNo = 'sc.styleNo,';
+	let colItemId = 'boed.itemId,';
+	let colItemName = 'id.itemName,';
+	let colColorId = 'boed.colorId,';
+	let colColorName = 'c.colorName,'
+	let colShippingMark = 'boed.shippingMarks,';
+
+	let checkPurchaseOrder = $("#checkPurchaseOrder").prop('checked');
+	let checkStyleNo = $("#checkStyleNo").prop('checked');
+	let checkItemName = $("#checkItemName").prop('checked');
+	let checkColor = $("#checkColor").prop('checked');
+	let checkShippingMark = $("#checkShippingMark").prop('checked');
+	let checkSizeRequired = $("#checkSizeRequired").prop('checked');
+
+	let groupPurchaseOrder = 'boed.purchaseOrder,';
+	let groupStyleId = 'boed.styleId,';
+	let groupStyleNo = 'sc.styleNo,'
+	let groupItemId = 'boed.itemId,';
+	let groupItemName = 'id.itemName,';
+	let groupColorId = 'boed.colorId,';
+	let groupColorName = 'c.colorName,'
+	let groupShippingMark = 'boed.ShippingMarks,';
+
+
+	if (purchaseOrdersId.length > 0) {
+		if (stylesId.length > 0) {
+			if (itemsId.length > 0) {
+
+				purchaseOrdersId = '';
+				$("#purchaseOrder").val().forEach(id => {
+					purchaseOrdersId += `'${id}',`;
+				});
+				purchaseOrdersId = purchaseOrdersId.slice(0, -1);
+
+				stylesId = '';
+				$("#styleNo").val().forEach(id => {
+					stylesId += `'${id}',`;
+				});
+				stylesId = stylesId.slice(0, -1);
+
+				itemsId = '';
+				$("#itemName").val().forEach(id => {
+					itemsId += `'${id}',`;
+				});
+				itemsId = itemsId.slice(0, -1);
+
+				let queryPurchaseOrder = ` boed.purchaseOrder in (${purchaseOrdersId}) `;
+				let queryStylesId = ` and boed.styleId in (${stylesId}) `;
+				let queryItemsId = ` and  boed.itemId in (${itemsId}) `;
+
+				let queryColorsId = '';
+				let queryShippingMarks = '';
+
+				if (colorsId.length > 0) {
+					colorsId = '';
+					$("#color").val().forEach(id => {
+						colorsId += `'${id}',`;
+					});
+					colorsId = colorsId.slice(0, -1);
+					queryColorsId = ` and  boed.colorId in (${colorsId}) `;
+				}
+				if (shippingMarks.length > 0) {
+					shippingMarks = '';
+					$("#shippingMark").val().forEach(id => {
+						shippingMarks += `'${id}',`;
+					});
+					shippingMarks = shippingMarks.slice(0, -1);
+					queryShippingMarks = ` and  boed.shippingMarks in (${shippingMarks}) `;
+				}
+
+				if (checkPurchaseOrder) {
+					colPurchaseOrder = `'${$("#purchaseOrder").val().toString()}' as purchaseOrder,`;
+					groupPurchaseOrder = ``;
+				}
+				if (checkStyleNo) {
+					colStyleId = `'${$("#styleNo").val().toString()}' as styleId,`;
+					colStyleNo = `'' as styleNo,`;
+
+					groupStyleId = ``;
+					groupStyleNo = ``;
+				}
+				if (checkItemName) {
+					colItemId = `'${$("#itemName").val().toString()}' as itemId,`;
+					colItemName = `'' as itemName,`;
+
+					groupItemId = '';
+					groupItemName = '';
+				}
+				if (checkColor) {
+					colColorId = `'${$("#color").val().toString()}' as colorId,`;
+					colColorName = `'' as colorName,`;
+
+					groupColorId = '';
+					groupColorName = '';
+				}
+				if (checkShippingMark) {
+					colShippingMark = `'${$("#shippingMark").val().toString()}' as ShippingMarks,`;
+					groupShippingMark = '';
+				}
+
+
+
+
+				if (checkSizeRequired) {
+
+					let query = `select ${colPurchaseOrder} ${colStyleId} ${colStyleNo} ${colItemId} ${colItemName} ${colColorId} ${colColorName} ${colShippingMark} sum(boed.TotalUnit) as orderQty
+								from TbBuyerOrderEstimateDetails boed
+								left join TbStyleCreate sc
+								on boed.StyleId = sc.StyleId
+								left join tbItemDescription id
+								on boed.ItemId = id.itemId
+								left join tbColors c
+								on boed.ColorId = c.ColorId
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks}`;
+
+					let groupBy = groupPurchaseOrder.concat(groupStyleId, groupStyleNo, groupItemId, groupItemName, groupColorId, groupColorName, groupShippingMark);
+
+					if (groupBy.length > 0) {
+						groupBy = groupBy.slice(0, -1);
+						query += `group by ${groupBy} 
+							 order by ${groupBy}`;
+					}
+
+					$.ajax({
+						type: 'GET',
+						dataType: 'json',
+						url: './getAccessoriesRecyclingDataWithSize',
+						data: {
+							query: query
+						},
+						success: function (data) {
+
+
+							let tables = `<div class="row mt-1">
+												<div class="col-md-12 table-responsive" >
+													<table class="table table-hover table-bordered table-sm mb-0 small-font">
+													<thead class="no-wrap-text bg-light">
+														<tr>
+															<th  class="min-width-150">Purchase Order</th>
+															<th  class="min-width-150">Style No</th>
+															<th  class="min-width-150">Item Name</th>
+															<th >Color</th>
+															<th >Shipping Mark</th>
+															<th >Order Qty</th>
+															<th ><i class="fa fa-edit"></i></th>
+															<th ><i class="fa fa-trash"></i></th>
+														</tr>
+													</thead>
+													<tbody id="dataList">`
+							let dataList = data.dataList;
+							let length = dataList.length;
+							let orderQty = 0;
+							for (let i = 0; i < length; i++) {
+								let row = dataList[i];
+								tables += `<tr id='row-${i}' data-style-id='${row.styleId}' data-item-id='${row.itemId}' data-color-id='${row.itemColorId}'>
+											<td id='purchaseOrder-${i}'>${row.purchaseOrder} </td>
+											<td id='styleNo-${i}'>${row.styleNo} </td>
+											<td id='itemName-${i}'>${row.itemname} </td>
+											<td id='color-${i}'>${row.itemcolor} </td>
+											<td id='shippingMark-${i}'>${row.shippingmark} </td>
+											<td id='orderQty-${i}'>${parseFloat(row.orderqty).toFixed(1)} </td>
+											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
+											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
+										</tr>`;
+								orderQty += parseFloat(row.orderqty);
+							}
+							tables += "</tbody></table> </div></div>";
+							$("#tableList").empty();
+							$("#tableList").append(tables);
+							console.log("RecyclingData = ", data, tables);
+
+
+							$("#orderQty").val(orderQty);
+						}
+					});
+				} else {
+
+					let query = `select ${colPurchaseOrder} ${colStyleId} ${colStyleNo} ${colItemId} ${colItemName} ${colColorId} ${colColorName} ${colShippingMark} sum(boed.TotalUnit) as orderQty
+								from TbBuyerOrderEstimateDetails boed
+								left join TbStyleCreate sc
+								on boed.StyleId = sc.StyleId
+								left join tbItemDescription id
+								on boed.ItemId = id.itemId
+								left join tbColors c
+								on boed.ColorId = c.ColorId
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks}`;
+
+					let groupBy = groupPurchaseOrder.concat(groupStyleId, groupStyleNo, groupItemId, groupItemName, groupColorId, groupColorName, groupShippingMark);
+
+					if (groupBy.length > 0) {
+						groupBy = groupBy.slice(0, -1);
+						query += `group by ${groupBy} 
+							 order by ${groupBy}`;
+					}
+
+					$.ajax({
+						type: 'GET',
+						dataType: 'json',
+						url: './getAccessoriesRecyclingData',
+						data: {
+							query: query
+						},
+						success: function (data) {
+
+
+							let tables = `<div class="row mt-1">
+												<div class="col-md-12 table-responsive" >
+													<table class="table table-hover table-bordered table-sm mb-0 small-font">
+													<thead class="no-wrap-text bg-light">
+														<tr>
+															<th  class="min-width-150">Purchase Order</th>
+															<th  class="min-width-150">Style No</th>
+															<th  class="min-width-150">Item Name</th>
+															<th >Color</th>
+															<th >Shipping Mark</th>
+															<th >Order Qty</th>
+															<th ><i class="fa fa-edit"></i></th>
+															<th ><i class="fa fa-trash"></i></th>
+														</tr>
+													</thead>
+													<tbody id="dataList">`
+							let dataList = data.dataList;
+							let length = dataList.length;
+							let orderQty = 0;
+							for (let i = 0; i < length; i++) {
+								let row = dataList[i];
+								tables += `<tr id='row-${i}' data-style-id='${row.styleId}' data-item-id='${row.itemId}' data-color-id='${row.itemColorId}'>
+											<td id='purchaseOrder-${i}'>${row.purchaseOrder} </td>
+											<td id='styleNo-${i}'>${row.styleNo} </td>
+											<td id='itemName-${i}'>${row.itemname} </td>
+											<td id='color-${i}'>${row.itemcolor} </td>
+											<td id='shippingMark-${i}'>${row.shippingmark} </td>
+											<td id='orderQty-${i}'>${parseFloat(row.orderqty).toFixed(1)} </td>
+											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
+											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
+										</tr>`;
+								orderQty += parseFloat(row.orderqty);
+							}
+							tables += "</tbody></table> </div></div>";
+							$("#tableList").empty();
+							$("#tableList").append(tables);
+							console.log("RecyclingData = ", data, tables);
+
+
+							$("#orderQty").val(orderQty);
+						}
+					});
+				}
+
+
+
+			} else {
+				warningAlert("Please Select Any Item Name");
+				$("#itemName").focus();
+			}
+		} else {
+			warningAlert("Please Select Any Style NO");
+			$("#styleNo").focus();
+		}
+	} else {
+		warningAlert("Please Select Any Purchase Order");
+		$("#purchaseOrder").focus();
+	}
+})
 
 function searchAccessoriesIndent(aiNo) {
 	$.ajax({
@@ -1854,4 +2129,39 @@ function setAccessoriesItemCartonDetails(data) {
 
 	$('#btnSave').prop('disabled', true);
 	$('#btnEdit').prop('disabled', false);
+}
+
+
+
+function successAlert(message) {
+	var element = $(".alert");
+	element.hide();
+	element = $(".alert-success");
+	document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
+}
+
+function warningAlert(message) {
+	var element = $(".alert");
+	element.hide();
+	element = $(".alert-warning");
+	document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
+}
+
+function dangerAlert(message) {
+	var element = $(".alert");
+	element.hide();
+	element = $(".alert-danger");
+	document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
 }

@@ -145,12 +145,12 @@
 					<label for="currency"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
 					<select id="currency" class="form-control-sm col-md-8 px-0">
-						<option id="currency" value="0">Select Currency</option>
+						<option value="0">Select Currency</option>
 						<%
 							length = Currency.values().length;
 							for (int i = 0; i < length; i++) {
 						%>
-						<option id="currency" value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+						<option value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
 						<%
 							}
 						%>

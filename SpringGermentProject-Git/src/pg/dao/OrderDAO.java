@@ -4,28 +4,24 @@ import java.sql.SQLException;
 import java.util.List;
 
 import pg.model.CommonModel;
+import pg.orderModel.AccessoriesIndent;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
+import pg.orderModel.ParcelModel;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.AccessoriesIndentCarton;
-import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
-import pg.registerModel.Factory;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
-import pg.registerModel.SizeGroup;
-import pg.registerModel.StyleItem;
-import pg.registerModel.Unit;
 
 public interface OrderDAO {
 
@@ -87,6 +83,7 @@ public interface OrderDAO {
 	public List<CommonModel>AllColors();
 	public List<CommonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 
+	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query);
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();

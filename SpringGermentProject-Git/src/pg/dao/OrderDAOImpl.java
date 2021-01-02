@@ -2210,6 +2210,61 @@ public class OrderDAOImpl implements OrderDAO{
 		return query;
 
 	}
+	
+	@Override
+	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<AccessoriesIndent> dataList=new ArrayList<AccessoriesIndent>();
+		AccessoriesIndent tempAccessories = null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			List<?> list = session.createSQLQuery(query).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempAccessories = new AccessoriesIndent();
+				tempAccessories.setPurchaseOrder(element[0].toString());
+				tempAccessories.setStyleId(element[1].toString());
+				tempAccessories.setStyleNo(element[2].toString());
+				tempAccessories.setItemId(element[3].toString());
+				tempAccessories.setItemname(element[4].toString());
+				tempAccessories.setItemColorId(element[5].toString());
+				tempAccessories.setItemcolor(element[6].toString());
+				tempAccessories.setShippingmark(element[7].toString());
+				tempAccessories.setOrderqty(element[8].toString());
+				//tempAccessories.setOrderqty(element[9].toString());
+				
+				dataList.add(tempAccessories);
+
+			}
+
+
+
+			tx.commit();
+
+			return dataList;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return dataList;
+	}
 
 
 	@Override
@@ -5889,4 +5944,6 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 	}
+
+	
 }
