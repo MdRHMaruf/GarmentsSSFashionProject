@@ -1096,6 +1096,14 @@ public class OrderController {
 	}
 	
 	@ResponseBody
+	@RequestMapping(value = "/getAccessoriesRecyclingDataWithSize",method = RequestMethod.GET)
+	public JSONObject getAccessoriesRecyclingDataWithSize(String query,String query2){
+		JSONObject objmain = new JSONObject();
+		objmain.put("dataList",orderService.getAccessoriesRecyclingDataWithSize(query, query2));
+		return objmain;
+	}
+	
+	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
 	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {
 		JSONObject objmain = new JSONObject();

@@ -320,6 +320,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
+	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2) {
+		// TODO Auto-generated method stub
+		return orderDAO.getAccessoriesRecyclingDataWithSize(query,query2);
+	}
+	
+	@Override
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
 		return orderDAO.insertaccessoriesIndent(ai);

@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.Check;
@@ -2245,6 +2246,73 @@ public class OrderDAOImpl implements OrderDAO{
 
 			}
 
+
+
+			tx.commit();
+
+			return dataList;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return dataList;
+	}
+	
+	@Override
+	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<AccessoriesIndent> dataList=new ArrayList<AccessoriesIndent>();
+		AccessoriesIndent tempAccessories = null;
+		ArrayList<Size> sizeList = null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			List<?> list = session.createSQLQuery(query).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempAccessories = new AccessoriesIndent();
+				tempAccessories.setPurchaseOrder(element[0].toString());
+				tempAccessories.setStyleId(element[1].toString());
+				tempAccessories.setStyleNo(element[2].toString());
+				tempAccessories.setItemId(element[3].toString());
+				tempAccessories.setItemname(element[4].toString());
+				tempAccessories.setItemColorId(element[5].toString());
+				tempAccessories.setItemcolor(element[6].toString());
+				tempAccessories.setShippingmark(element[7].toString());
+				tempAccessories.setOrderqty(element[8].toString());
+				tempAccessories.setSizeGroupId(element[9].toString());
+				
+				dataList.add(tempAccessories);
+
+			}
+			
+			for(int i = 0;i< dataList.size();i++){
+				query = query2.replace("SIZEGROUPID", dataList.get(i).getSizeGroupId());
+				list = session.createSQLQuery(query).list();
+				sizeList = new ArrayList<>();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					sizeList.add(new Size(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
+				}
+				dataList.get(i).setSizeList(sizeList);
+			}
 
 
 			tx.commit();

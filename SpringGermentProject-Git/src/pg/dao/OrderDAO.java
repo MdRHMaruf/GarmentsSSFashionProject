@@ -84,6 +84,7 @@ public interface OrderDAO {
 	public List<CommonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 
 	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query);
+	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2);
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();

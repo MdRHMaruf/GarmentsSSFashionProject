@@ -377,8 +377,10 @@ $("#btnRecyclingData").click(() => {
 
 
 				if (checkSizeRequired) {
+					
+					let groupBy = groupPurchaseOrder.concat(groupStyleId, groupStyleNo, groupItemId, groupItemName, groupColorId, groupColorName, groupShippingMark);
 
-					let query = `select ${colPurchaseOrder} ${colStyleId} ${colStyleNo} ${colItemId} ${colItemName} ${colColorId} ${colColorName} ${colShippingMark} sum(boed.TotalUnit) as orderQty
+					let query = `select ${colPurchaseOrder} ${colStyleId} ${colStyleNo} ${colItemId} ${colItemName} ${colColorId} ${colColorName} ${colShippingMark} sum(boed.TotalUnit) as orderQty,boed.sizeGroupId
 								from TbBuyerOrderEstimateDetails boed
 								left join TbStyleCreate sc
 								on boed.StyleId = sc.StyleId
@@ -386,26 +388,36 @@ $("#btnRecyclingData").click(() => {
 								on boed.ItemId = id.itemId
 								left join tbColors c
 								on boed.ColorId = c.ColorId
-								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks}`;
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} 
+								group by ${groupBy} boed.sizeGroupId 
+								order by ${groupBy} boed.sizeGroupId`;
 
-					let groupBy = groupPurchaseOrder.concat(groupStyleId, groupStyleNo, groupItemId, groupItemName, groupColorId, groupColorName, groupShippingMark);
-
-					if (groupBy.length > 0) {
-						groupBy = groupBy.slice(0, -1);
-						query += `group by ${groupBy} 
-							 order by ${groupBy}`;
-					}
-
+					let query2 =  `select ss.id,boed.sizeGroupId,ss.sizeName, sum(sv.sizeQuantity) as orderQty,ss.sortingNo
+					from TbBuyerOrderEstimateDetails boed
+					left join TbStyleCreate sc
+					on boed.StyleId = sc.StyleId
+					left join tbItemDescription id
+					on boed.ItemId = id.itemId
+					left join tbColors c
+					on boed.ColorId = c.ColorId
+					left join tbSizeValues sv
+					on sv.linkedAutoId = boed.autoId and sv.type = 1
+					left join tbStyleSize ss
+					on sv.sizeId = ss.id 
+					where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
+					group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
+					order by ${groupBy} boed.sizeGroupId,ss.sortingNo`;
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
 						url: './getAccessoriesRecyclingDataWithSize',
 						data: {
-							query: query
+							query: query,
+							query2: query2
 						},
 						success: function (data) {
 
-
+							console.log(data);
 							let tables = `<div class="row mt-1">
 												<div class="col-md-12 table-responsive" >
 													<table class="table table-hover table-bordered table-sm mb-0 small-font">
@@ -489,6 +501,8 @@ $("#btnRecyclingData").click(() => {
 															<th >Color</th>
 															<th >Shipping Mark</th>
 															<th >Order Qty</th>
+															<th >% Qty</th>
+															<th >Total Qty</th>
 															<th ><i class="fa fa-edit"></i></th>
 															<th ><i class="fa fa-trash"></i></th>
 														</tr>
@@ -506,6 +520,8 @@ $("#btnRecyclingData").click(() => {
 											<td id='color-${i}'>${row.itemcolor} </td>
 											<td id='shippingMark-${i}'>${row.shippingmark} </td>
 											<td id='orderQty-${i}'>${parseFloat(row.orderqty).toFixed(1)} </td>
+											<td><input type='form-control-sm' id='percentQty-${i}' type="number"/></td>
+											<td><input type='form-control-sm' id='totalQty-${i}' type="number"/></td>
 											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
 											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
 										</tr>`;

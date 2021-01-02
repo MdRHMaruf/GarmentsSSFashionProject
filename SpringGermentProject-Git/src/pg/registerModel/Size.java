@@ -24,7 +24,15 @@ public class Size {
 		this.sizeQuantity = sizeQuantity;
 	}
 	
-	
+	public Size(String sizeId, String groupId, String sizeName,String sizeQuantity, String sizeSorting) {
+		super();
+		this.sizeId = sizeId;
+		this.groupId = groupId;
+		this.sizeName = sizeName;
+		this.sizeQuantity = sizeQuantity;
+		this.sizeSorting = sizeSorting;
+		
+	}
 	public Size(String sizeId, String groupId,String groupName, String sizeName, String sizeSorting, String userId) {
 		super();
 		this.sizeId = sizeId;

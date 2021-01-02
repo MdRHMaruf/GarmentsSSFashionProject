@@ -1,6 +1,10 @@
 
 package pg.orderModel;
 
+import java.util.ArrayList;
+
+import pg.registerModel.Size;
+
 public class AccessoriesIndent {
 	String autoid;
 	String user;
@@ -40,6 +44,7 @@ public class AccessoriesIndent {
 	String purchaseOrder;
 	String styleNo;
 	String sizeGroupId;
+	ArrayList<Size> sizeList;
 	public AccessoriesIndent() {
 		
 	}
@@ -359,6 +364,16 @@ public class AccessoriesIndent {
 	}
 	public void setSizeGroupId(String sizeGroupId) {
 		this.sizeGroupId = sizeGroupId;
+	}
+
+
+	public ArrayList<Size> getSizeList() {
+		return sizeList;
+	}
+
+
+	public void setSizeList(ArrayList<Size> sizeList) {
+		this.sizeList = sizeList;
 	}
 	
 
