@@ -402,10 +402,10 @@ $("#btnRecyclingData").click(() => {
 								left join tbColors c
 								on boed.ColorId = c.ColorId
 								left join tbSizeValues sv
-								on sv.linkedAutoId = boed.autoId and sv.type = 1
+								on boed.autoId = sv.linkedAutoId and sv.type = 1
 								left join tbStyleSize ss
 								on sv.sizeId = ss.id 
-								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId} and boed.clor and boed.sizeGroupId = 'SIZEGROUPID'
 								group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
 								order by boed.sizeGroupId, ${groupBy} ss.sortingNo`;
 					$.ajax({
@@ -452,13 +452,13 @@ $("#btnRecyclingData").click(() => {
 											<tbody id="orderList-${sizeGroupId}" class="orderPreview">`
 									isClosingNeed = true;
 								}
-								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}>
-								<td id='purchaseOrder-${i}'>${item.purchaseOrder}</td>
-								<td id='styleNo-${i}'>${item.styleNo}</td>
-								<td id='itemName-${i}'>${item.itemname}</td>
-								<td id='itemColor-${i}'>${item.itemcolor}</td>
-								<td id='shippingMark-${i}'>${item.shippingmark}</td>
-								<td>OrderQty</td>`;
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
+											<td id='purchaseOrder-${i}'>${item.purchaseOrder}</td>
+											<td id='styleNo-${i}'>${item.styleNo}</td>
+											<td id='itemName-${i}'>${item.itemname}</td>
+											<td id='itemColor-${i}'>${item.itemcolor}</td>
+											<td id='shippingMark-${i}'>${item.shippingmark}</td>
+											<td>OrderQty</td>`;
 								let sizeList = item.sizeList;
 								let sizeListLength = sizeList.length;
 
@@ -552,7 +552,7 @@ $("#btnRecyclingData").click(() => {
 											<td id='color-${i}'>${item.itemcolor} </td>
 											<td id='shippingMark-${i}'>${item.shippingmark} </td>
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)} </td>
-											<td><span id='inPercent-${i}'>${inPercent}</span>% <span id="percentQty-${i}">${parseFloat((item.orderqty*inPercent)/100).toFixed(1)} </span> </td>
+											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty*inPercent)/100).toFixed(1)} </span>) </td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" value="${(parseFloat(item.orderqty)+((item.orderqty*inPercent)/100)).toFixed(1)}"/></td>
 											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
 											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>

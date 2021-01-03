@@ -73,7 +73,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
-											class="form-check-input" checked="checked"> Combined
+											class="form-check-input" > Combined
 										</label>
 									</div>
 								</div>
@@ -104,7 +104,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkStyleNo" type="checkbox" class="form-check-input"
-											checked="checked"> Combined
+											> Combined
 										</label>
 									</div>
 								</div>
@@ -130,7 +130,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkItemName" type="checkbox" class="form-check-input"
-											checked="checked"> Combined
+											> Combined
 										</label>
 									</div>
 								</div>
@@ -155,7 +155,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkColor" type="checkbox" class="form-check-input"
-											checked="checked"> Combined
+											> Combined
 										</label>
 									</div>
 								</div>
@@ -184,7 +184,7 @@
 											<div class="form-check-inline">
 												<label class="form-check-label"> <input
 													id="checkShippingMark" type="checkbox"
-													class="form-check-input" checked="checked">Combined
+													class="form-check-input" >Combined
 												</label>
 											</div>
 										</div>
