@@ -2852,6 +2852,9 @@ input[type=number] {
 .max-width-100{
   	max-width: 100px; 
 }
+.max-width-50{
+  	max-width: 50px; 
+}
 .form-control-sm{
 	border: 1px solid #ced4da;
 }

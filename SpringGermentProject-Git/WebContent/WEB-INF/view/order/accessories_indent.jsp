@@ -311,7 +311,7 @@
 											<div class="col-md-12">
 												<select id="unit" class="selectpicker form-control"
 													data-live-search="true"
-													data-style="btn-light btn-sm border-light-gray">
+													data-style="btn-light btn-sm border-light-gray" onchange="setGrandQty()">
 
 													<c:forEach items="${unit}" var="unit" varStatus="counter">
 														<option value="${unit.id}">${unit.name}</option>
@@ -369,7 +369,7 @@
 											<label for="reqPerPcs" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
 													Pcs</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="reqPerPcs">
+										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setGrandQty()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -428,7 +428,7 @@
 											<label for="inPercent" class="col-form-label-sm mb-0 py-0"><strong>In
 													Percent(%)</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="inPercent">
+										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setGrandQty()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -475,449 +475,15 @@
 							<strong>Wrong!</strong> Something Wrong...
 						</p>
 					</div>
-					
-						<div id="tableList">
-						</div>
-					
+
+					<div id="tableList"></div>
 					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Indent No</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="aiNo" type="text" class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">Purchase Order</label>
-								</div>
-								<div class="col-sm-7 p-0">
-
-									<select name="purchaseOrder" id="purchaseOrder"
-										class="selectpicker form-control" data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm"
-										onchange="poWiseStyles()">
-										<option name="purchaseOrder" id="purchaseOrder" value="0">Select
-											Purchase Order</option>
-
-										<c:forEach items="${purchaseorders}" var="acc"
-											varStatus="counter">
-											<option name="purchaseOrder" id='purchaseOrder'
-												value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-
-
-							</div>
-						</div>
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">Style No</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="styleNo2" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm"
-										onchange="styleWiseItems()">
-									</select>
-								</div>
-
-
-							</div>
-						</div>
-
-					</div>
-
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Item Name</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="itemName" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm"
-										onchange="styleItemsWiseColor()">
-									</select>
-								</div>
-
-
-							</div>
-						</div>
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<div style="width: 108px;" class="form-check form-check-inline">
-										<input class="form-check-input ml-1" type="checkbox"
-											id="shippingCheck" value="option1" onclick="shipping()">
-										<label class="form-check-label" for="inlineCheckbox1">Shipping</label>
-									</div>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="shippingmark" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label style="width: 120px;" class="form-label ml-1">Color</label>
-								</div>
-								<div class="col-sm-7 p-0">
-
-
-									<select id="colorName" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm"
-										onchange="sizeReqCheck()">
-										<option id="colorName" value="0">Select Color</option>
-
-										<c:forEach items="${colors}" var="color" varStatus="counter">
-											<option id='colorName' value="${color.id}">${color.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label style="width: 150px;" class="form-label">Accessories
-										Item</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="accessoriesItem" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-										<option id="accessoriesItem" value="0">Select Item</option>
-										<c:forEach items="${accessories}" var="acc"
-											varStatus="counter">
-											<option id='accessoriesItem' value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-
-							</div>
-
-						</div>
-
-						<div class="col-sm-4">
-
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input ml-1" type="checkbox"
-											id="sameAsCheck" value="option1"> <label
-											class="form-check-label" for="inlineCheckbox1">Same
-											As</label>
-									</div>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="sameAsAccessories"
-										class="selectpicker form-control" data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-										<option id="sameAsAccessories" value="0">Select Item</option>
-										<c:forEach items="${accessories}" var="acc"
-											varStatus="counter">
-											<option id='sameAsAccessories' value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-
-							</div>
-
-						</div>
-
-
-
-						<div class="col-sm-4 pl-0 pr-1">
-							<div class="row">
-								<div class="col-sm-5"></div>
-								<div class="col-sm-7">
-									<button height: 30px;" onclick="btnInstallEvent()"
-										class="btn btn-info btn-block btn-sm">Install From</button>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-
-					<div class="row mt-1">
-
-						<!-- <div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Accessories Size</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="accessoriesSize" type="text" class="form-control-sm"></input>
-								</div>
-							</div>
-						</div> -->
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<div class="form-check form-check-inline">
-										<input class="form-check-input input-sm ml-1"
-											onclick="sizeReqCheck()" type="checkbox" id="sizeReqCheck"
-											value="option1"> <label class="form-check-label"
-											for="inlineCheckbox1">Size Req. Size</label>
-									</div>
-								</div>
-
-								<div class="col-sm-7 p-0">
-									<select style="margin-left: 1px;" id="size"
-										class="selectpicker form-control" data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm"
-										onchange="sizeWiseOrderQty()">
-
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<!-- <div class="col-sm-4">
-							<div class="row">
-								
-							</div>
-						</div> -->
-					</div>
-
-
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Order Qty</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="orderQty" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-6 p-0">
-									<label type="text" class="form-label ml-1">Req. Per Pcs</label>
-								</div>
-								<div class="col-sm-6 p-0">
-									<input id="reqPerPcs" type="text" class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-2">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">Per Unit</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="perUnit" type="text" class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">Total Qty</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="totalQty" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Qty In Dozen</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="qtyInDozen" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-6 p-0">
-									<label style="width: 120px;" class="form-label ml-1">Req.
-										Per Dozen</label>
-								</div>
-								<div class="col-sm-6 p-0">
-									<input id="reqPerDozen" type="text" class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-2">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label style="width: 110px;" class="form-label ml-1">Total
-										Box</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="totalBox" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">Grand Qty</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="grandQty" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Divided By</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="dividedBy" onkeyup="dividedBy()" type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-6 p-0">
-									<label class="form-label ml-1">Extra In %</label>
-								</div>
-								<div class="col-sm-6 p-0">
-									<input id="extraIn" onkeyup="percentageQty()" type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-2">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label ml-1">%Qty</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<input id="percentQty" readonly type="text"
-										class="form-control-sm"></input>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label style="width: 120px;" class="form-label ml-1">Color</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="color" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-										<option id="color" value="0">Select Color</option>
-
-										<c:forEach items="${color}" var="acc" varStatus="counter">
-											<option id='color' value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-
-					</div>
-
-
-					<div class="row mt-1">
-
-						<div class="col-sm-4">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label class="form-label">Unit</label>
-								</div>
-								<div class="col-sm-7 p-0">
-									<select id="unit" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-
-										<c:forEach items="${unit}" var="acc" varStatus="counter">
-											<option value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-3">
-							<div class="row">
-								<div class="col-sm-6 p-0">
-									<label class="form-label ml-1">Brand</label>
-								</div>
-								<div class="col-sm-6 p-0">
-									<select id="brand" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light border-secondary form-control-sm">
-										<option id="brand" value="0">Select Brand</option>
-
-										<c:forEach items="${brand}" var="acc" varStatus="counter">
-											<option id='brand' value="${acc.id}">${acc.name}</option>
-										</c:forEach>
-									</select>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-sm-5">
+						<div class="col-md-12">
 							<div class="d-flex justify-content-end">
 								<div class="row">
 									<div class="ml-auto pr-1">
-										<button class="btn btn-primary btn-sm " id="btnSave"
-											onclick="saveEvent()">Save</button>
+										<button class="btn btn-primary btn-sm " id="btnAdd"
+											>Add</button>
 									</div>
 									<div class="pr-1">
 										<button class="btn btn-primary btn-sm" id="btnEdit"
@@ -926,17 +492,12 @@
 									<div class="pr-1">
 										<button class="btn btn-primary btn-sm">Refresh</button>
 									</div>
-									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">Preview</button>
-									</div>
-									<div class="pr-1">
-										<button class="btn btn-primary btn-sm"
-											onclick="confrimEvent()">Confirm</button>
-									</div>
+
 								</div>
 							</div>
 						</div>
 					</div>
+
 
 					<div class="row mt-1">
 						<div style="overflow: auto; max-height: 300px;"
@@ -978,7 +539,25 @@
 							</table>
 						</div>
 					</div>
+					<div class="row mt-1">
+						<div class="col-sm-12">
+							<div class="d-flex justify-content-end">
+								<div class="row">
 
+									<div class="pr-1">
+										<button class="btn btn-primary btn-sm">Refresh</button>
+									</div>
+									<div class="pr-1">
+										<button class="btn btn-primary btn-sm">Preview</button>
+									</div>
+									<div class="pr-1">
+										<button class="btn btn-primary btn-sm"
+											onclick="confrimEvent()">Confirm</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

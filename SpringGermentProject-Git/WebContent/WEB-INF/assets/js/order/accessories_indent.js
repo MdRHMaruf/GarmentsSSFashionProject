@@ -1,8 +1,8 @@
-var stylevalue = 0;
-var itemvalue = 0;
-var colorvalue = 0;
-var sizevalue = 0;
-var find = 0;
+let stylevalue = 0;
+let itemvalue = 0;
+let colorvalue = 0;
+let sizevalue = 0;
+let find = 0;
 
 $("#aiNo").attr('disabled', true);
 $("#shippingmark").attr('disabled', true);
@@ -41,7 +41,7 @@ window.onload = () => {
 
 
 function buyerWiseStyleLoad() {
-	var buyerId = $("#buyerName").val();
+	let buyerId = $("#buyerName").val();
 
 	// alert("buyerId "+buyerId);
 	if (buyerId != 0) {
@@ -54,10 +54,10 @@ function buyerWiseStyleLoad() {
 			},
 			success: function (data) {
 
-				var styleList = data.styleList;
-				var options = "<option  value='0' selected>Select Style</option>";
-				var length = styleList.length;
-				for (var i = 0; i < length; i++) {
+				let styleList = data.styleList;
+				let options = "<option  value='0' selected>Select Style</option>";
+				let length = styleList.length;
+				for (let i = 0; i < length; i++) {
 					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
 				};
 				$("#styleNo").html(options);
@@ -68,7 +68,7 @@ function buyerWiseStyleLoad() {
 			}
 		});
 	} else {
-		var options = "<option value='0' selected>Select Style</option>";
+		let options = "<option value='0' selected>Select Style</option>";
 		$("#styleNo").html(options);
 		$('#styleNo').selectpicker('refresh');
 		$('#styleNo').val("0").change();
@@ -374,10 +374,11 @@ $("#btnRecyclingData").click(() => {
 				}
 
 
-
+				let inPercent = $("#inPercent").val();
+				inPercent = inPercent == ''?0:inPercent;
 
 				if (checkSizeRequired) {
-					
+
 					let groupBy = groupPurchaseOrder.concat(groupStyleId, groupStyleNo, groupItemId, groupItemName, groupColorId, groupColorName, groupShippingMark);
 
 					let query = `select ${colPurchaseOrder} ${colStyleId} ${colStyleNo} ${colItemId} ${colItemName} ${colColorId} ${colColorName} ${colShippingMark} sum(boed.TotalUnit) as orderQty,boed.sizeGroupId
@@ -392,21 +393,21 @@ $("#btnRecyclingData").click(() => {
 								group by ${groupBy} boed.sizeGroupId 
 								order by ${groupBy} boed.sizeGroupId`;
 
-					let query2 =  `select ss.id,boed.sizeGroupId,ss.sizeName, sum(sv.sizeQuantity) as orderQty,ss.sortingNo
-					from TbBuyerOrderEstimateDetails boed
-					left join TbStyleCreate sc
-					on boed.StyleId = sc.StyleId
-					left join tbItemDescription id
-					on boed.ItemId = id.itemId
-					left join tbColors c
-					on boed.ColorId = c.ColorId
-					left join tbSizeValues sv
-					on sv.linkedAutoId = boed.autoId and sv.type = 1
-					left join tbStyleSize ss
-					on sv.sizeId = ss.id 
-					where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
-					group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
-					order by ${groupBy} boed.sizeGroupId,ss.sortingNo`;
+					let query2 = `select ss.id,boed.sizeGroupId,ss.sizeName, sum(sv.sizeQuantity) as orderQty,ss.sortingNo
+								from TbBuyerOrderEstimateDetails boed
+								left join TbStyleCreate sc
+								on boed.StyleId = sc.StyleId
+								left join tbItemDescription id
+								on boed.ItemId = id.itemId
+								left join tbColors c
+								on boed.ColorId = c.ColorId
+								left join tbSizeValues sv
+								on sv.linkedAutoId = boed.autoId and sv.type = 1
+								left join tbStyleSize ss
+								on sv.sizeId = ss.id 
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
+								group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
+								order by boed.sizeGroupId, ${groupBy} ss.sortingNo`;
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
@@ -416,48 +417,79 @@ $("#btnRecyclingData").click(() => {
 							query2: query2
 						},
 						success: function (data) {
-
-							console.log(data);
-							let tables = `<div class="row mt-1">
-												<div class="col-md-12 table-responsive" >
-													<table class="table table-hover table-bordered table-sm mb-0 small-font">
-													<thead class="no-wrap-text bg-light">
-														<tr>
-															<th  class="min-width-150">Purchase Order</th>
-															<th  class="min-width-150">Style No</th>
-															<th  class="min-width-150">Item Name</th>
-															<th >Color</th>
-															<th >Shipping Mark</th>
-															<th >Order Qty</th>
-															<th ><i class="fa fa-edit"></i></th>
-															<th ><i class="fa fa-trash"></i></th>
-														</tr>
-													</thead>
-													<tbody id="dataList">`
 							let dataList = data.dataList;
 							let length = dataList.length;
-							let orderQty = 0;
+							sizeGroupId = "";
+							let tables = "";
+							let isClosingNeed = false;
 							for (let i = 0; i < length; i++) {
-								let row = dataList[i];
-								tables += `<tr id='row-${i}' data-style-id='${row.styleId}' data-item-id='${row.itemId}' data-color-id='${row.itemColorId}'>
-											<td id='purchaseOrder-${i}'>${row.purchaseOrder} </td>
-											<td id='styleNo-${i}'>${row.styleNo} </td>
-											<td id='itemName-${i}'>${row.itemname} </td>
-											<td id='color-${i}'>${row.itemcolor} </td>
-											<td id='shippingMark-${i}'>${row.shippingmark} </td>
-											<td id='orderQty-${i}'>${parseFloat(row.orderqty).toFixed(1)} </td>
-											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
-											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
-										</tr>`;
-								orderQty += parseFloat(row.orderqty);
+								let item = dataList[i];
+
+								if (sizeGroupId != item.sizeGroupId) {
+									if (isClosingNeed) {
+										tables += "</tbody></table> </div></div>";
+									}
+									sizeGroupId = item.sizeGroupId;
+									tables += `<div class="row">
+														<div class="col-md-12 table-responsive" >
+											<table class="table table-hover table-bordered table-sm mb-0 small-font">
+											<thead class="no-wrap-text bg-light">
+											<tr>
+											<th  class="min-width-150">Purchase Order</th>
+											<th  class="min-width-150">Style No</th>
+											<th  class="min-width-150">Item Name</th>
+											<th >Color</th>
+											<th >Shipping Mark</th>
+											<th >Field Type</th>`
+									let sizeListLength = item.sizeList.length;
+									for (let j = 0; j < sizeListLength; j++) {
+										tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + item.sizeList[j].sizeName + "</th>";
+									}
+									tables += `<th scope="col"><i class="fa fa-edit"></i></th>
+												<th scope="col"><i class="fa fa-trash"></i></th>
+												</tr>
+											</thead>
+											<tbody id="orderList-${sizeGroupId}" class="orderPreview">`
+									isClosingNeed = true;
+								}
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}>
+								<td id='purchaseOrder-${i}'>${item.purchaseOrder}</td>
+								<td id='styleNo-${i}'>${item.styleNo}</td>
+								<td id='itemName-${i}'>${item.itemname}</td>
+								<td id='itemColor-${i}'>${item.itemcolor}</td>
+								<td id='shippingMark-${i}'>${item.shippingmark}</td>
+								<td>OrderQty</td>`;
+								let sizeList = item.sizeList;
+								let sizeListLength = sizeList.length;
+
+								for (let j = 0; j < sizeListLength; j++) {
+
+									tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
+								}
+								tables += `<td><i class='fa fa-edit' > </i></td><td><i class='fa fa-trash'> </i></td></tr>`;
+
+								
+								tables += `<tr>
+												<td colspan="5" rowspan="2"></td>
+												<td>(%) Qty</td>`
+												for (let j = 0; j < sizeListLength; j++) {
+													tables += `<td><span id='inPercent-${sizeList[j].sizeId}'>${inPercent}</span>% (<span id='percentQty-${sizeList[j].sizeId}'>${parseFloat((sizeList[j].sizeQuantity*inPercent)/100).toFixed(1)}</span>)</td>`;
+												}
+								tables += "<td colspan='2' rowspan='2'></td></tr>"
+
+								tables += `<tr>
+												<td>Total</td>`
+												for (let j = 0; j < sizeListLength; j++) {
+													tables += `<td><input id='total-${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' value="${(parseFloat(sizeList[j].sizeQuantity)+((sizeList[j].sizeQuantity*inPercent)/100)).toFixed(1)}"/></td>`;
+												}
+								tables += "</tr>"
 							}
 							tables += "</tbody></table> </div></div>";
+
 							$("#tableList").empty();
 							$("#tableList").append(tables);
-							console.log("RecyclingData = ", data, tables);
 
-
-							$("#orderQty").val(orderQty);
+							
 						}
 					});
 				} else {
@@ -507,33 +539,33 @@ $("#btnRecyclingData").click(() => {
 															<th ><i class="fa fa-trash"></i></th>
 														</tr>
 													</thead>
-													<tbody id="dataList">`
+													<tbody id="orderList" class="orderPreview">`
 							let dataList = data.dataList;
 							let length = dataList.length;
 							let orderQty = 0;
 							for (let i = 0; i < length; i++) {
-								let row = dataList[i];
-								tables += `<tr id='row-${i}' data-style-id='${row.styleId}' data-item-id='${row.itemId}' data-color-id='${row.itemColorId}'>
-											<td id='purchaseOrder-${i}'>${row.purchaseOrder} </td>
-											<td id='styleNo-${i}'>${row.styleNo} </td>
-											<td id='itemName-${i}'>${row.itemname} </td>
-											<td id='color-${i}'>${row.itemcolor} </td>
-											<td id='shippingMark-${i}'>${row.shippingmark} </td>
-											<td id='orderQty-${i}'>${parseFloat(row.orderqty).toFixed(1)} </td>
-											<td><input type='form-control-sm' id='percentQty-${i}' type="number"/></td>
-											<td><input type='form-control-sm' id='totalQty-${i}' type="number"/></td>
+								let item = dataList[i];
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
+											<td id='purchaseOrder-${i}'>${item.purchaseOrder} </td>
+											<td id='styleNo-${i}'>${item.styleNo} </td>
+											<td id='itemName-${i}'>${item.itemname} </td>
+											<td id='color-${i}'>${item.itemcolor} </td>
+											<td id='shippingMark-${i}'>${item.shippingmark} </td>
+											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)} </td>
+											<td><span id='inPercent-${i}'>${inPercent}</span>% <span id="percentQty-${i}">${parseFloat((item.orderqty*inPercent)/100).toFixed(1)} </span> </td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" value="${(parseFloat(item.orderqty)+((item.orderqty*inPercent)/100)).toFixed(1)}"/></td>
 											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
 											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
 										</tr>`;
-								orderQty += parseFloat(row.orderqty);
+								orderQty += parseFloat(item.orderqty);
 							}
 							tables += "</tbody></table> </div></div>";
 							$("#tableList").empty();
 							$("#tableList").append(tables);
-							console.log("RecyclingData = ", data, tables);
 
 
 							$("#orderQty").val(orderQty);
+							setGrandQty();
 						}
 					});
 				}
@@ -554,6 +586,70 @@ $("#btnRecyclingData").click(() => {
 	}
 })
 
+$("#btnAdd").click(()=>{
+	let rowList = $(".orderPreviewRow");
+	let length = rowList.length;
+	  
+	if(length>0){
+		let accessoriesItem = $("#accessoriesItem").val();
+		let accessoriesSize = $("#accessoriesSize").val();
+		let accessoriesColor = $("#accessoriesColor").val();
+		let accessoriesBrand = $("#brand").val();
+		let unit = $("#unit").val();
+		let grandQty = $("#grandQty").val();
+
+		if(accessoriesItem.length>0){
+			if(unit >0){
+				for(let i=0;i<accessoriesItem.length;i++){
+					let accessoriesItemId = accessoriesItem[i];
+					let accessoriesItemName = $("#accessoriesItem option[value='"+accessoriesItemId+"']").text();
+
+					rowList.each((index,row) =>{
+						let rowId = row.id.slice(9);
+						console.log(row);
+						let isSizeRequired = row.getAttribute('data-size-required');
+
+						let purchaseOrder = $("#purchaseOrder-"+rowId).text();
+						let styleId = row.getAttribute('data-style-id');
+						let itemId = row.getAttribute('data-item-id');
+						let colorId = row.getAttribute('data-color-id');
+						let styleNo = $("#styleNo-"+rowId).text();
+						let itemName = $("#itemName-"+rowId).text();
+						let color = $("#color-"+rowId).text();;
+						let shippingMark = $("#shippingMark-"+rowId).text();
+						let totalRequired = $("#totalQty-"+rowId).val();
+						if(isSizeRequired){
+							let newRow=`<tr>
+										<td>${i}</td>
+										<td>${purchaseOrder}</td>
+										<td>${styleNo}</td>
+										<td>${itemName}</td>
+										<td>${color}</td>
+										<td>${shippingMark}</td>
+										<td>${accessoriesItemName}</td>
+										<td></td>
+										<td>${totalRequired}</td>
+										<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
+									</tr>`
+							$("#dataList").append(newRow);
+						}else{
+
+						}
+					});
+				}
+			}else{
+				warningAlert("Unit Selected.....Please Select Unit");
+				$("#unit").focus();
+			}
+		}else{
+			warningAlert("Accessories Item Not Selected.....Please Select accessories Item");
+			$("#accessoriesItem").focus();
+		}
+	}else{
+		warningAlert("Please Recycling your data");
+	}
+})
+
 function searchAccessoriesIndent(aiNo) {
 	$.ajax({
 		type: 'GET',
@@ -564,7 +660,7 @@ function searchAccessoriesIndent(aiNo) {
 		},
 		success: function (data) {
 			if (data == "Success") {
-				var url = "printAccessoriesIndent";
+				let url = "printAccessoriesIndent";
 				window.open(url, '_blank');
 
 			}
@@ -574,13 +670,13 @@ function searchAccessoriesIndent(aiNo) {
 }
 
 function btnInstallEvent() {
-	var purchaseOrder = $("#purchaseOrder option:selected").text();
-	var userId = $("#user_hidden").val();
-	var styleId = $("#styleNo").val();
-	var itemId = $("#itemName").val();
-	var colorId = $("#colorName").val();
-	var installAccessories = $("#sameAsAccessories").val();
-	var forAccessories = $("#accessoriesItem").val();
+	let purchaseOrder = $("#purchaseOrder option:selected").text();
+	let userId = $("#user_hidden").val();
+	let styleId = $("#styleNo").val();
+	let itemId = $("#itemName").val();
+	let colorId = $("#colorName").val();
+	let installAccessories = $("#sameAsAccessories").val();
+	let forAccessories = $("#accessoriesItem").val();
 
 	if (purchaseOrder != '') {
 		if (styleId != '0') {
@@ -658,7 +754,7 @@ function btnInstallEvent() {
 
 function sizeReqCheck() {
 
-	var checkvalue = $("#sizeReqCheck").is(':checked') ? 'checked' : 'unchecked';
+	let checkvalue = $("#sizeReqCheck").is(':checked') ? 'checked' : 'unchecked';
 	if (checkvalue == 'checked') {
 		$('#size').prop('disabled', false);
 		$('#size').selectpicker('refresh');
@@ -675,7 +771,7 @@ function sizeReqCheck() {
 function sizeWiseOrderQty() {
 
 
-	var size = $("#size").val();
+	let size = $("#size").val();
 
 	if (size != '0' && find == 0) {
 		loadOrderQty(size);
@@ -684,11 +780,11 @@ function sizeWiseOrderQty() {
 }
 
 function loadOrderQty(size) {
-	var buyerorderid = $("#purchaseOrder").val();
-	var color = $("#colorName").val();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
-	var size = size;
+	let buyerorderid = $("#purchaseOrder").val();
+	let color = $("#colorName").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
+	
 
 	if (style != 0 && buyerorderid != '0' || item != '0' || color != '0') {
 
@@ -741,10 +837,10 @@ function loadOrderQty(size) {
 function styleitemColorWiseSize() {
 
 
-	var buyerorderid = $("#purchaseOrder").val();
-	var color = $("#colorName").val();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
+	let buyerorderid = $("#purchaseOrder").val();
+	let color = $("#colorName").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
 
 	if (style != 0 && buyerorderid != '0' || item != '0' || color != '0') {
 
@@ -797,10 +893,10 @@ function styleitemColorWiseSize() {
 
 function setOrder(data) {
 	console.log("order qty " + data[0].qty);
-	var orderqty = parseFloat(data[0].qty);
+	let orderqty = parseFloat(data[0].qty);
 	$("#orderQty").val(orderqty);
 
-	var indozen = parseFloat((orderqty / 12));
+	let indozen = parseFloat((orderqty / 12));
 
 	$("#qtyInDozen").val(indozen);
 
@@ -812,22 +908,22 @@ function setOrder(data) {
 	$("#dividedBy").val(1);
 	$("#totalBox").val(orderqty);
 
-	var ReqQty = parseFloat($('#reqPerPcs').val() == '' ? "0" : $('#reqPerPcs').val()) * parseFloat($('#totalBox').val() == '' ? "0" : $('#totalBox').val());
+	let ReqQty = parseFloat($('#reqPerPcs').val() == '' ? "0" : $('#reqPerPcs').val()) * parseFloat($('#totalBox').val() == '' ? "0" : $('#totalBox').val());
 
-	var extraQty = parseFloat($('#extraIn').val() == '' ? "0" : $('#extraIn').val());
+	let extraQty = parseFloat($('#extraIn').val() == '' ? "0" : $('#extraIn').val());
 
 
 
-	var extraValue = (ReqQty * extraQty) / 100
+	let extraValue = (ReqQty * extraQty) / 100
 
 	$("#percentQty").val(extraValue);
 
-	var totalQty = ReqQty + extraValue;
+	let totalQty = ReqQty + extraValue;
 	$("#totalQty").val(totalQty);
 
-	var unitValue = parseFloat($('#unit').val() == '' ? "0" : unitList[$('#unit').val()].unitValue);
+	let unitValue = parseFloat($('#unit').val() == '' ? "0" : unitList[$('#unit').val()].unitValue);
 
-	var grandQty = parseFloat((totalQty / unitValue));
+	let grandQty = parseFloat((totalQty / unitValue));
 
 
 	$("#grandQty").val(grandQty);
@@ -837,10 +933,10 @@ function setOrder(data) {
 
 function LoadSize(data) {
 
-	var itemList = data;
-	var options = "<option value='0' selected>Select Size</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option value='0' selected>Select Size</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("size").innerHTML = options;
@@ -895,7 +991,7 @@ function AINO() {
 function poWiseStyles() {
 
 
-	var po = $("#purchaseOrder").val();
+	let po = $("#purchaseOrder").val();
 
 	console.log("po " + po)
 	if (po != 0) {
@@ -910,8 +1006,6 @@ function poWiseStyles() {
 			success: function (data) {
 				console.log("dt " + data.result)
 				loadStyles(data.result);
-
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -939,10 +1033,10 @@ function poWiseStyles() {
 
 function loadStyles(data) {
 	//console.log("dtt "+data[0].id);
-	var itemList = data;
-	var options = "<option  value='0' selected>Select Style</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option  value='0' selected>Select Style</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("styleNo").innerHTML = options;
@@ -958,8 +1052,8 @@ function loadStyles(data) {
 function styleWiseItems() {
 
 
-	var buyerorderid = $("#purchaseOrder").val();
-	var style = $("#styleNo").val();
+	let buyerorderid = $("#purchaseOrder").val();
+	let style = $("#styleNo").val();
 
 
 	if (style != 0 && buyerorderid != '0') {
@@ -1010,10 +1104,10 @@ function styleWiseItems() {
 
 function loatItems(data) {
 
-	var itemList = data;
-	var options = "<option  value='0' selected>Select Item Type</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option  value='0' selected>Select Item Type</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option   value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("itemName").innerHTML = options;
@@ -1024,9 +1118,9 @@ function loatItems(data) {
 }
 
 function styleItemsWiseColor() {
-	var buyerorderid = $("#purchaseOrder").val();
-	var style = $("#styleNo").val();
-	var item = $('#itemName').val();
+	let buyerorderid = $("#purchaseOrder").val();
+	let style = $("#styleNo").val();
+	let item = $('#itemName').val();
 	if (item != '0') {
 		$.ajax({
 			type: 'GET',
@@ -1068,10 +1162,10 @@ function styleItemsWiseColor() {
 
 function loatItemsWiseColor(data) {
 
-	var itemList = data;
-	var options = "<option id='colorName' value='0' selected>Select Color Type</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option id='colorName' value='0' selected>Select Color Type</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option id='colorName'  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("colorName").innerHTML = options;
@@ -1082,16 +1176,16 @@ function loatItemsWiseColor(data) {
 }
 
 function shipping() {
-	var checkvalue = $("#shippingCheck").is(':checked') ? 'checked' : 'unchecked';
+	let checkvalue = $("#shippingCheck").is(':checked') ? 'checked' : 'unchecked';
 	if (checkvalue == 'checked') {
 		$("#shippingmark").attr('disabled', false);
 	} else {
 		$("#shippingmark").attr('disabled', true);
 	}
 
-	var po = $("#purchaseOrder").val();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
+	let po = $("#purchaseOrder").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
 
 	console.log("Po " + po + " style " + style + " item " + item)
 
@@ -1140,10 +1234,10 @@ function shipping() {
 
 
 function loadShppingMarks(data) {
-	var itemList = data;
-	var options = "<option  value='0' selected>Select Item Type</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option  value='0' selected>Select Item Type</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option  value='" + i + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("shippingmark").innerHTML = options;
@@ -1160,8 +1254,8 @@ function sizeRequiredBoxaction() {
 
 
 
-	var itemList = "";
-	var options = "<option  value='0' selected>Select Item Type</option>";
+	let itemList = "";
+	let options = "<option  value='0' selected>Select Item Type</option>";
 
 	document.getElementById("size").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -1173,8 +1267,8 @@ function sizeRequiredBoxaction() {
 function itemWiseColor() {
 
 
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
 
 	console.log("style " + style)
 	if (style != 0) {
@@ -1226,10 +1320,10 @@ function LoadColors(data) {
 
 	console.log(" colors ")
 
-	var itemList = data;
-	var options = "<option  value='0' selected>Select Item Color</option>";
-	var length = itemList.length;
-	for (var i = 0; i < length; i++) {
+	let itemList = data;
+	let options = "<option  value='0' selected>Select Item Color</option>";
+	let length = itemList.length;
+	for (let i = 0; i < length; i++) {
 		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("itemcolor").innerHTML = options;
@@ -1243,13 +1337,13 @@ function LoadColors(data) {
 function SizeWiseQty() {
 
 
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
-	var size = $("#size").val();
-	var color = 0;
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
+	let size = $("#size").val();
+	let color = 0;
 	color = $("#colorName").val();
 
-	var type = 1;
+	let type = 1;
 
 	if (color == 0) {
 		type = 1;
@@ -1304,11 +1398,11 @@ function SizeWiseQty() {
 }
 
 function requiredperdozen() {
-	var orderqty = $("#orderQty").val();
-	var perpcs = $("#reqPerPcs").val();
-	var qtyindozen = $("#qtyInDozen").val();
-	var perdozen = perpcs * qtyindozen;
-	var totalqty = orderqty * perpcs;
+	let orderqty = $("#orderQty").val();
+	let perpcs = $("#reqPerPcs").val();
+	let qtyindozen = $("#qtyInDozen").val();
+	let perdozen = perpcs * qtyindozen;
+	let totalqty = orderqty * perpcs;
 
 	$("#reqPerDozen").val(perdozen);
 
@@ -1318,10 +1412,10 @@ function requiredperdozen() {
 }
 
 function totalbox() {
-	var orderqty = $("#orderQty").val();
-	var perunit = $("#perUnit").val();
+	let orderqty = $("#orderQty").val();
+	let perunit = $("#perUnit").val();
 
-	var totalbox = orderqty / perunit;
+	let totalbox = orderqty / perunit;
 
 	$("#totalBox").val(totalbox);
 
@@ -1331,10 +1425,10 @@ function totalbox() {
 }
 
 function dividedBy() {
-	var totalbox = $("#totalBox").val();
-	var divideby = $("#dividedBy").val();
+	let totalbox = $("#totalBox").val();
+	let divideby = $("#dividedBy").val();
 
-	var totalQty = totalbox / divideby;
+	let totalQty = totalbox / divideby;
 
 
 
@@ -1344,34 +1438,44 @@ function dividedBy() {
 }
 
 
-function percentageQty() {
+function setGrandQty() {
 
+	let orderQty = $("#orderQty").val();
+	console.log("order qty",orderQty);
+	orderQty = orderQty == '' ? 0 : orderQty;
+	let dozenQty = parseFloat(orderQty/12).toFixed(1);
 
-	var ReqQty = parseFloat($('#reqPerPcs').val() == '' ? "0" : $('#reqPerPcs').val()) * parseFloat($('#totalBox').val() == '' ? "0" : $('#totalBox').val());
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = (reqPerPcs==0 || reqPerPcs == '') ? 1 : reqPerPcs;
 
-	var extraQty = parseFloat($('#extraIn').val() == '' ? "0" : $('#extraIn').val());
+	let reqPerDozen = 12 * reqPerPcs;
 
+	let reqQty = orderQty * reqPerPcs; 
 
-	var extraValue = (ReqQty * extraQty) / 100
+	let inPercent = $("#inPercent").val();
+	inPercent = inPercent == '' ? 0 : inPercent;
 
-	$("#percentQty").val(extraValue);
+	let percentQty = (reqQty * inPercent) / 100 ;
 
-	var totalQty = ReqQty + extraValue;
+	let totalQty = reqQty + percentQty;
+
+	$("#dozenQty").val(dozenQty);
+	$("#reqPerPcs").val(reqPerPcs);
+	$("#reqPerDozen").val(reqPerDozen);
+	$("#percentQty").val(percentQty);
 	$("#totalQty").val(totalQty);
 
-	var unitValue = parseFloat($('#unit').val() == '0' ? "0" : unitList[$('#unit').val()].unitValue);
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue==0?1:unitValue;
 
-
-	var grandQty = parseFloat((totalQty / unitValue));
-
-
+	let grandQty = parseFloat((totalQty / unitValue));
 	$("#grandQty").val(grandQty);
 }
 
 
 function confrimEvent() {
-	var user = $("#user_hidden").val();
-	var aiNo = $("#aiNo").val();
+	let user = $("#user_hidden").val();
+	let aiNo = $("#aiNo").val();
 
 	$.ajax({
 		type: 'POST',
@@ -1411,40 +1515,40 @@ function confrimEvent() {
 
 function editEvent() {
 
-	var autoid = $("#accIndentId").val();
-	var user = $("#user_hidden").val();
-	var POno = $("#purchaseOrder option:selected").text();
-	//var POno=$("#purchaseOrder").val();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
+	let autoid = $("#accIndentId").val();
+	let user = $("#user_hidden").val();
+	let POno = $("#purchaseOrder option:selected").text();
+	//let POno=$("#purchaseOrder").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
 
 
-	var itemColor = $("#colorName").val();
-	var ShippingMark = $("#shippingmark").val();
+	let itemColor = $("#colorName").val();
+	let ShippingMark = $("#shippingmark").val();
 
-	var accessoriesItem = $("#accessoriesItem").val();
+	let accessoriesItem = $("#accessoriesItem").val();
 
-	var accessoriesSize = $("#accessoriesSize").val();
-	var size = $("#size").val();
+	let accessoriesSize = $("#accessoriesSize").val();
+	let size = $("#size").val();
 
-	var orderqty = $("#orderQty").val();
-	var qtyindozen = $("#qtyInDozen").val();
+	let orderqty = $("#orderQty").val();
+	let qtyindozen = $("#qtyInDozen").val();
 
 
-	var reqperpcs = $("#reqPerPcs").val();
+	let reqperpcs = $("#reqPerPcs").val();
 
-	var reqperdozen = $("#reqPerDozen").val();
-	var perunit = $("#perUnit").val();
-	var totalbox = $("#totalBox").val();
-	var dividedby = $("#dividedBy").val();
-	var extraInpercent = $("#extraIn").val();
-	var percentqty = $("#percentQty").val();
-	var totalqty = $("#totalQty").val();
+	let reqperdozen = $("#reqPerDozen").val();
+	let perunit = $("#perUnit").val();
+	let totalbox = $("#totalBox").val();
+	let dividedby = $("#dividedBy").val();
+	let extraInpercent = $("#extraIn").val();
+	let percentqty = $("#percentQty").val();
+	let totalqty = $("#totalQty").val();
 
-	var unit = $("#unit").text();
-	var grandqty = $("#grandQty").val();
-	var brand = $("#brand").val();
-	var accessoriescolor = $("#color").val();
+	let unit = $("#unit").text();
+	let grandqty = $("#grandQty").val();
+	let brand = $("#brand").val();
+	let accessoriescolor = $("#color").val();
 
 	if (POno == 0) {
 		alert("Select Purchase Order No")
@@ -1524,39 +1628,39 @@ function editEvent() {
 function saveEvent() {
 
 
-	var user = $("#user_hidden").val();
-	var POno = $("#purchaseOrder option:selected").text();
-	//var POno=$("#purchaseOrder").val();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
+	let user = $("#user_hidden").val();
+	let POno = $("#purchaseOrder option:selected").text();
+	//let POno=$("#purchaseOrder").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
 
 
-	var itemColor = $("#colorName").val();
-	var ShippingMark = $("#shippingmark").val();
+	let itemColor = $("#colorName").val();
+	let ShippingMark = $("#shippingmark").val();
 
-	var accessoriesItem = $("#accessoriesItem").val();
+	let accessoriesItem = $("#accessoriesItem").val();
 
-	var accessoriesSize = $("#accessoriesSize").val();
-	var size = $("#size").val();
+	let accessoriesSize = $("#accessoriesSize").val();
+	let size = $("#size").val();
 
-	var orderqty = $("#orderQty").val();
-	var qtyindozen = $("#qtyInDozen").val();
+	let orderqty = $("#orderQty").val();
+	let qtyindozen = $("#qtyInDozen").val();
 
 
-	var reqperpcs = $("#reqPerPcs").val();
+	let reqperpcs = $("#reqPerPcs").val();
 
-	var reqperdozen = $("#reqPerDozen").val();
-	var perunit = $("#perUnit").val();
-	var totalbox = $("#totalBox").val();
-	var dividedby = $("#dividedBy").val();
-	var extraInpercent = $("#extraIn").val();
-	var percentqty = $("#percentQty").val();
-	var totalqty = $("#totalQty").val();
+	let reqperdozen = $("#reqPerDozen").val();
+	let perunit = $("#perUnit").val();
+	let totalbox = $("#totalBox").val();
+	let dividedby = $("#dividedBy").val();
+	let extraInpercent = $("#extraIn").val();
+	let percentqty = $("#percentQty").val();
+	let totalqty = $("#totalQty").val();
 
-	var unit = $("#unit").val();
-	var grandqty = $("#grandQty").val();
-	var brand = $("#brand").val();
-	var accessoriescolor = $("#color").val();
+	let unit = $("#unit").val();
+	let grandqty = $("#grandQty").val();
+	let brand = $("#brand").val();
+	let accessoriescolor = $("#color").val();
 
 	if (POno == 0) {
 		alert("Select Purchase Order No")
@@ -1637,10 +1741,10 @@ function saveEvent() {
 
 
 function AccessoriesDataShowInTable(data) {
-	var rows = [];
-	var length = data.length;
+	let rows = [];
+	let length = data.length;
 
-	for (var i = 0; i < length; i++) {
+	for (let i = 0; i < length; i++) {
 		rows.push(drawRowDataTable(data[i], i + 1));
 	}
 
@@ -1649,7 +1753,7 @@ function AccessoriesDataShowInTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + c + "</td>"));
 	row.append($("<td>" + rowData.po + "</td>"));
 	row.append($("<td>" + rowData.style + "</td>"));
@@ -1703,7 +1807,7 @@ function accessoriesItemSet(id) {
 }
 
 function setAccessoriesItemDetails(data) {
-	var itemList = data;
+	let itemList = data;
 
 
 	$('#orderQty').val(itemList[0].orderqty);
@@ -1754,23 +1858,23 @@ function setAccessoriesItemDetails(data) {
 function setTotalQtyForCurton() {
 
 
-	var length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	var width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	var height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	var add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
+	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
+	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
+	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
+	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
 
-	var multiplication1 = length1 + width1 + height1 + add1;
+	let multiplication1 = length1 + width1 + height1 + add1;
 
-	var length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	var width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	var height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	var add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
+	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
+	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
+	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
+	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
 
-	var devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
+	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
 
-	var multiplication2 = length2 + width2 + height2 + add2;
+	let multiplication2 = length2 + width2 + height2 + add2;
 
-	var totalqty = (multiplication1 * multiplication2 * 2) / devideBy;
+	let totalqty = (multiplication1 * multiplication2 * 2) / devideBy;
 
 
 	$('#qty').val(totalqty);
@@ -1779,32 +1883,32 @@ function setTotalQtyForCurton() {
 }
 
 function editAccessoriesCurton() {
-	var autoid = $("#accIndentId").val();
-	var user = $("#user_hidden").val();
-	var poNo = $("#purchaseOrder option:selected").text();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
-	var itemColor = $("#colorName").val();
-	var shippingMark = $("#shippingmark").val();
-	var accessoriesItem = $("#accessoriesItem").val();
-	var accessoriesSize = $("#accessoriesSize").val();
-	var unit = $("#unit").val();
+	let autoid = $("#accIndentId").val();
+	let user = $("#user_hidden").val();
+	let poNo = $("#purchaseOrder option:selected").text();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
+	let itemColor = $("#colorName").val();
+	let shippingMark = $("#shippingmark").val();
+	let accessoriesItem = $("#accessoriesItem").val();
+	let accessoriesSize = $("#accessoriesSize").val();
+	let unit = $("#unit").val();
 
-	var orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
-	var length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	var width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	var height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	var add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
+	let orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
+	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
+	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
+	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
+	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
 
-	var devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
+	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
 
-	var length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	var width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	var height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	var add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
-	var ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
+	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
+	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
+	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
+	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
+	let ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
 
-	var totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
+	let totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
 
 	if (poNo != '0') {
 		if (style != '0') {
@@ -1891,31 +1995,31 @@ function editAccessoriesCurton() {
 }
 
 function saveAccessoriesCurton() {
-	var user = $("#user_hidden").val();
-	var poNo = $("#purchaseOrder option:selected").text();
-	var style = $("#styleNo").val();
-	var item = $("#itemName").val();
-	var itemColor = $("#colorName").val();
-	var shippingMark = $("#shippingmark").val();
-	var accessoriesItem = $("#accessoriesItem").val();
-	var accessoriesSize = $("#accessoriesSize").val();
-	var unit = $("#unit").val();
+	let user = $("#user_hidden").val();
+	let poNo = $("#purchaseOrder option:selected").text();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
+	let itemColor = $("#colorName").val();
+	let shippingMark = $("#shippingmark").val();
+	let accessoriesItem = $("#accessoriesItem").val();
+	let accessoriesSize = $("#accessoriesSize").val();
+	let unit = $("#unit").val();
 
-	var orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
-	var length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	var width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	var height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	var add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
+	let orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
+	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
+	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
+	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
+	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
 
-	var devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
+	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
 
-	var length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	var width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	var height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	var add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
-	var ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
+	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
+	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
+	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
+	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
+	let ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
 
-	var totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
+	let totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
 
 	if (poNo != '0') {
 		if (style != '0') {
@@ -2036,10 +2140,10 @@ function btnAllCartonIndent() {
 }
 
 function AccessoriesCartonDataShowInTable(data) {
-	var rows = [];
-	var length = data.length;
+	let rows = [];
+	let length = data.length;
 
-	for (var i = 0; i < length; i++) {
+	for (let i = 0; i < length; i++) {
 		rows.push(drawRowDataCartonTable(data[i], i + 1));
 	}
 
@@ -2048,7 +2152,7 @@ function AccessoriesCartonDataShowInTable(data) {
 
 function drawRowDataCartonTable(rowData, c) {
 
-	var row = $("<tr />")
+	let row = $("<tr />")
 	row.append($("<td>" + c + "</td>"));
 	row.append($("<td>" + rowData.poNo + "</td>"));
 	row.append($("<td>" + rowData.style + "</td>"));
@@ -2099,7 +2203,7 @@ function accessoriesCartonItemSet(id) {
 
 
 function setAccessoriesItemCartonDetails(data) {
-	var itemList = data;
+	let itemList = data;
 
 	$('#accIndentId').val(itemList[0].autoid);
 	$('#orderQty').val(itemList[0].orderqty);
@@ -2150,7 +2254,7 @@ function setAccessoriesItemCartonDetails(data) {
 
 
 function successAlert(message) {
-	var element = $(".alert");
+	let element = $(".alert");
 	element.hide();
 	element = $(".alert-success");
 	document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -2161,7 +2265,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-	var element = $(".alert");
+	let element = $(".alert");
 	element.hide();
 	element = $(".alert-warning");
 	document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -2172,7 +2276,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-	var element = $(".alert");
+	let element = $(".alert");
 	element.hide();
 	element = $(".alert-danger");
 	document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
