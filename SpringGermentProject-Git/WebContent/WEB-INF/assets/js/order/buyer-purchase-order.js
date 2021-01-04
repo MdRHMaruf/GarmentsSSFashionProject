@@ -73,10 +73,10 @@ function buyerWiseStyleLoad() {
       success: function (data) {
 
         var styleList = data.styleList;
-        var options = "<option id='styleNo' value='0' selected>Select Style</option>";
+        var options = "<option  value='0' selected>Select Style</option>";
         var length = styleList.length;
         for (var i = 0; i < length; i++) {
-          options += "<option id='styleNo' value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+          options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
         };
         $("#styleNo").html(options);
         $('.selectpicker').selectpicker('refresh');
@@ -86,14 +86,13 @@ function buyerWiseStyleLoad() {
       }
     });
   } else {
-    var options = "<option id='styleNo' value='0' selected>Select Style</option>";
+    var options = "<option value='0' selected>Select Style</option>";
     $("#styleNo").html(options);
     $('#styleNo').selectpicker('refresh');
     $('#styleNo').val("0").change();
   }
 
 }
-
 function styleWiseItemLoad() {
   var styleId = $("#styleNo").val();
 
@@ -108,10 +107,10 @@ function styleWiseItemLoad() {
       success: function (data) {
 
         var itemList = data.itemList;
-        var options = "<option id='itemType' value='0' selected>Select Item Type</option>";
+        var options = "<option value='0' selected>Select Item Type</option>";
         var length = itemList.length;
         for (var i = 0; i < length; i++) {
-          options += "<option id='itemType' value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+          options += "<option value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
         };
         document.getElementById("itemType").innerHTML = options;
         $('.selectpicker').selectpicker('refresh');
@@ -120,7 +119,7 @@ function styleWiseItemLoad() {
       }
     });
   } else {
-    var options = "<option id='itemType' value='0' selected>Select Item Type</option>";
+    var options = "<option value='0' selected>Select Item Type</option>";
     $("#itemType").html(options);
     $('#itemType').selectpicker('refresh');
     $('#itemType').val(itemIdForSet).change();

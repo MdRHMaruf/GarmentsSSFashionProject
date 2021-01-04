@@ -61,10 +61,10 @@ function buyerWisePoLoad() {
 function loadPoNo(data) {
 
 	let itemList = data;
-	let options = "<option id='purchaseOrder' value='0'>Select Purchase Order</option>";
+	let options = "<option  value='0'>Select Purchase Order</option>";
 	let length = itemList.length;
 	for (let i = 0; i < length; i++) {
-		options += "<option id='purchaseOrder' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("purchaseOrder").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -142,10 +142,10 @@ function styleWiseItemLoad() {
 			success: function (data) {
 
 				let itemList = data.itemList;
-				let options = "<option id='itemName' value='0'>Select Item Name</option>";
+				let options = "<option  value='0'>Select Item Name</option>";
 				let length = itemList.length;
 				for (let i = 0; i < length; i++) {
-					options += "<option id='itemName' value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+					options += "<option  value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
 				};
 				document.getElementById("itemName").innerHTML = options;
 				$('.selectpicker').selectpicker('refresh');
@@ -154,7 +154,7 @@ function styleWiseItemLoad() {
 			}
 		});
 	} else {
-		let options = "<option id='itemName' value='0'>Select Item Name</option>";
+		let options = "<option  value='0'>Select Item Name</option>";
 		$("#itemName").html(options);
 		$('#itemName').selectpicker('refresh');
 		$('#itemName').val(0).change();
@@ -211,10 +211,10 @@ function styleItemsWiseColor() {
 function loadItemsWiseColor(data) {
 
 	let itemList = data;
-	let options = "<option id='colorName' value='0'>Select Color Type</option>";
+	let options = "<option value='0'>Select Color Type</option>";
 	let length = itemList.length;
 	for (let i = 0; i < length; i++) {
-		options += "<option id='colorName'  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("colorName").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -246,10 +246,10 @@ function styleItemWiseColorSizeLoad() {
 			success: function (data) {
 
 				let colorList = data.size;
-				let options = "<option id='size' value='0'>Select Item Color</option>";
+				let options = "<option value='0'>Select Item Color</option>";
 				let length = colorList.length;
 				for (let i = 0; i < length; i++) {
-					options += "<option id='size' value='" + colorList[i].id + "'>" + colorList[i].name + "</option>";
+					options += "<option value='" + colorList[i].id + "'>" + colorList[i].name + "</option>";
 				};
 				document.getElementById("size").innerHTML = options;
 				$('.selectpicker').selectpicker('refresh');
@@ -258,7 +258,7 @@ function styleItemWiseColorSizeLoad() {
 			}
 		});
 	} else {
-		let options = "<option id='size' value='0' selected>Select Item Color</option>";
+		let options = "<option value='0' selected>Select Item Color</option>";
 		$("#size").html(options);
 		$('#size').selectpicker('refresh');
 		$('#size').val(0).change();

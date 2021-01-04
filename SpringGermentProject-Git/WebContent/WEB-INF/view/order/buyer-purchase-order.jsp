@@ -1,3 +1,4 @@
+<%@page import="pg.share.Currency"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
@@ -30,8 +31,8 @@
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-	<input type="hidden" id="buyerPOId" value="0">
-	<input type="hidden" id="itemAutoId" value="0">
+	<input type="hidden" id="buyerPOId" value="0"> <input
+		type="hidden" id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -55,7 +56,7 @@
 								data-style="btn-light btn-sm border-light-gray">
 								<option value="0">Select Buyer</option>
 								<c:forEach items="${buyerList}" var="buyer">
-									<option id="buyerName" value="${buyer.buyerid}">${buyer.buyername}</option>
+									<option value="${buyer.buyerid}">${buyer.buyername}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -70,7 +71,7 @@
 							<select id="styleNo" class="selectpicker col-md-12"
 								onchange="styleWiseItemLoad()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleNo" value="0">Select Style</option>
+								<option value="0">Select Style</option>
 							</select>
 						</div>
 
@@ -82,7 +83,7 @@
 							<select id="itemType" class="selectpicker col-md-12"
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="itemType" value="0">Select Item Type</option>
+								<option value="0">Select Item Type</option>
 							</select>
 						</div>
 
@@ -97,9 +98,9 @@
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 
-								<option id="factory" value="0">Select Factory</option>
+								<option value="0">Select Factory</option>
 								<c:forEach items="${factoryList}" var="factory">
-									<option id="factory" value="${factory.factoryid}">${factory.factoryname}</option>
+									<option value="${factory.factoryid}">${factory.factoryname}</option>
 								</c:forEach>
 							</select>
 
@@ -115,9 +116,9 @@
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 
-								<option id="color" value="0">Select Color</option>
+								<option value="0">Select Color</option>
 								<c:forEach items="${colorList}" var="color">
-									<option id="color" value="${color.colorId}">${color.colorName}</option>
+									<option value="${color.colorId}">${color.colorName}</option>
 								</c:forEach>
 							</select>
 						</div>
@@ -127,7 +128,8 @@
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="customerOrder "
-								class="col-md-4 col-form-label-sm pr-0 pb-0">Customer Order</label>
+								class="col-md-4 col-form-label-sm pr-0 pb-0">Customer
+								Order</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control-sm" id="customerOrder">
 							</div>
@@ -138,7 +140,8 @@
 
 						<div class="form-group mb-0 row">
 							<label for="purchaseOrder"
-								class="col-md-4 col-form-label-sm pr-0 pb-0">Purchase Order</label>
+								class="col-md-4 col-form-label-sm pr-0 pb-0">Purchase
+								Order</label>
 							<div class="col-md-8">
 								<input type="text" class="form-control-sm" id="purchaseOrder">
 							</div>
@@ -161,10 +164,11 @@
 						<div class="row">
 							<div class="col-md-5">
 								<div class="form-group mb-0  row">
-									<label for="paymentTerm" class="col-md-6 col-form-label-sm pr-0">Payment
-										Term</label> <select id="paymentTerm" class="form-control-sm col-md-5">
-										<option id="paymentTerm" value="1">TT</option>
-										<option id="paymentTerm" value="2">LC</option>
+									<label for="paymentTerm"
+										class="col-md-6 col-form-label-sm pr-0">Payment Term</label> <select
+										id="paymentTerm" class="form-control-sm col-md-5">
+										<option value="1">TT</option>
+										<option value="2">LC</option>
 									</select>
 
 								</div>
@@ -174,9 +178,15 @@
 								<div class="form-group mb-0  row">
 									<label for="currency" class="col-md-4 col-form-label-sm pr-0">Currency</label>
 									<select id="currency" class="form-control-sm col-md-6">
-										<option id="currency" value="1">BDT</option>
-										<option id="currency" value="2">USD</option>
-										<option id="currency" value="3">ERO</option>
+										<option value="0">Select Currency</option>
+										<%
+											int length = Currency.values().length;
+											for (int i = 0; i < length; i++) {
+										%>
+										<option value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+										<%
+											}
+										%>
 									</select>
 
 								</div>
@@ -192,7 +202,8 @@
 									<i class="fa fa-plus-circle"></i> Add
 								</button>
 								<button id="btnEdit" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()" disabled>
+									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
+									disabled>
 									<i class="fa fa-pencil-square"></i> Edit
 								</button>
 								<button id="btnReset" type="button"
@@ -211,9 +222,9 @@
 					<div class="col-md-12">
 						<select id="sizeGroup" class="form-control-sm border-secondary"
 							style="width: 100%;" onchange="sizeLoadByGroup()">
-							<option id="sizeGroup" value="0">Select Size Group</option>
+							<option value="0">Select Size Group</option>
 							<c:forEach items="${groupList}" var="group" varStatus="counter">
-								<option id="sizeGroup" value="${group.groupId}">${group.groupName}</option>
+								<option value="${group.groupId}">${group.groupName}</option>
 							</c:forEach>
 						</select>
 					</div>
@@ -261,8 +272,9 @@
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" disabled>
-					<i class="fa fa-pencil-square" ></i> Edit
+					class="btn btn-primary btn-sm ml-1" onclick="buyerPoEditAction()"
+					disabled>
+					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
@@ -307,13 +319,11 @@
 							<tr>
 								<td>${po.buyerPoId}</td>
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
-								<td >${po.date}</td>
+								<td>${po.date}</td>
 								<td><i class="fa fa-search"
-									onclick="searchBuyerPO(${po.buyerPoId})">
-								</i></td>
+									onclick="searchBuyerPO(${po.buyerPoId})"> </i></td>
 								<td><i class="fa fa-print"
-									onclick="printBuyerPO(${po.buyerPoId})">
-								</i></td>
+									onclick="printBuyerPO(${po.buyerPoId})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

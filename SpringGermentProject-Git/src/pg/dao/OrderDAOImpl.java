@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 
 import javax.imageio.ImageIO;
 
+import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.annotations.Check;
@@ -55,6 +56,7 @@ import pg.share.HibernateUtil;
 import pg.share.ItemType;
 import pg.share.ProductionType;
 import pg.share.SizeValuesType;
+import pg.share.StateStatus;
 import pg.registerModel.AccessoriesItem;
 @Repository
 public class OrderDAOImpl implements OrderDAO{
@@ -130,6 +132,131 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 	
 	@Override
+	public List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.BuyerOrderId,boes.buyerId,boes.PurchaseOrder\n" + 
+					"from TbBuyerOrderEstimateDetails boes\n" + 
+					"where boes.buyerId in ("+buyersId+") and boes.stateStatus != '"+StateStatus.END.getType()+"'\n" + 
+					"group by boes.buyerId,boes.BuyerOrderId,boes.PurchaseOrder\n" + 
+					"order by boes.buyerId,boes.BuyerOrderId,boes.PurchaseOrder;";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(),element[2].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId) {
+		// TODO Auto-generated method stub
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Style> dataList=new ArrayList<Style>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.StyleId,sc.StyleNo\n" + 
+					"from TbBuyerOrderEstimateDetails boes\n" + 
+					"left join TbStyleCreate sc\n" + 
+					"on boes.StyleId = sc.StyleId\n" + 
+					"where boes.buyerId in ("+buyersId+") and boes.stateStatus != '"+StateStatus.END.getType()+"'\n" + 
+					"group by boes.StyleId,sc.StyleNo\n" + 
+					"order by boes.StyleId,sc.StyleNo;";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Style(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<Style> getBuyerPOStyleListByMultiplePurchaseOrders(String purchaseOrders) {
+		// TODO Auto-generated method stub
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Style> dataList=new ArrayList<Style>();
+		
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.StyleId,sc.StyleNo\n" + 
+					"from TbBuyerOrderEstimateDetails boes\n" + 
+					"left join TbStyleCreate sc\n" + 
+					"on boes.StyleId = sc.StyleId\n" + 
+					"where boes.purchaseOrder in ("+purchaseOrders+") and boes.stateStatus != '"+StateStatus.END.getType()+"'\n" + 
+					"group by boes.StyleId,sc.StyleNo\n" + 
+					"order by boes.StyleId,sc.StyleNo;";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Style(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	
+	@Override
 	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
@@ -142,6 +269,43 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="select BuyerOrderId,PurchaseOrder \n" + 
 					"from TbBuyerOrderEstimateDetails boed\n" + 
 					"where boed.StyleId ='"+styleId+"' \n" + 
+					"group by boed.BuyerOrderId , boed.PurchaseOrder";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(),element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select BuyerOrderId,PurchaseOrder \n" + 
+					"from TbBuyerOrderEstimateDetails boed\n" + 
+					"where boed.StyleId in ("+styleIdList+") \n" + 
 					"group by boed.BuyerOrderId , boed.PurchaseOrder";
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -199,7 +363,115 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+	
+	@Override
+	public List<ItemDescription> getItemListByMultipleStyleId(String styleIdList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ItemDescription> dataList=new ArrayList<ItemDescription>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
 
+			String sql="select itemId,(select itemName from tbItemDescription where itemid = si.itemId) as itemName from tbStyleWiseItem si where styleId in ("+styleIdList+")";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new ItemDescription(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Color> dataList=new ArrayList<Color>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boes.ColorId,c.Colorname\r\n" + 
+					"from TbBuyerOrderEstimateDetails boes\r\n" + 
+					"left join tbColors c\r\n" + 
+					"on boes.ColorId = c.ColorId\r\n" + 
+					"where boes.purchaseOrder in ("+purchaseOrders+") and boes.StyleId in ("+styleIdList+") and boes.stateStatus != '8'\r\n" + 
+					"group by boes.ColorId,c.Colorname\r\n" + 
+					"order by boes.ColorId,c.Colorname";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new Color(element[0].toString(), element[1].toString(), "", ""));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<String> dataList=new ArrayList<String>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select  boed.ShippingMarks\r\n" + 
+					"from TbBuyerOrderEstimateDetails boed\r\n" + 
+					"where boed.purchaseOrder in ("+purchaseOrders+") and boed.StyleId in ("+styleIdList+") and boed.stateStatus != '8'\r\n" + 
+					"group by boed.ShippingMarks\r\n" + 
+					"order by boed.ShippingMarks";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Object shipping:list)
+			{	
+				dataList.add(shipping.toString());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
 
 	@Override
 	public boolean SaveStyleCreate(String user, String buyerId, String itemId, String styleNo,String size, String date,
@@ -1938,6 +2210,128 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return query;
 
+	}
+	
+	@Override
+	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<AccessoriesIndent> dataList=new ArrayList<AccessoriesIndent>();
+		AccessoriesIndent tempAccessories = null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			List<?> list = session.createSQLQuery(query).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempAccessories = new AccessoriesIndent();
+				tempAccessories.setPurchaseOrder(element[0].toString());
+				tempAccessories.setStyleId(element[1].toString());
+				tempAccessories.setStyleNo(element[2].toString());
+				tempAccessories.setItemId(element[3].toString());
+				tempAccessories.setItemname(element[4].toString());
+				tempAccessories.setItemColorId(element[5].toString());
+				tempAccessories.setItemcolor(element[6].toString());
+				tempAccessories.setShippingmark(element[7].toString());
+				tempAccessories.setOrderqty(element[8].toString());
+				//tempAccessories.setOrderqty(element[9].toString());
+				
+				dataList.add(tempAccessories);
+
+			}
+
+
+
+			tx.commit();
+
+			return dataList;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return dataList;
+	}
+	
+	@Override
+	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<AccessoriesIndent> dataList=new ArrayList<AccessoriesIndent>();
+		AccessoriesIndent tempAccessories = null;
+		ArrayList<Size> sizeList = null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			List<?> list = session.createSQLQuery(query).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempAccessories = new AccessoriesIndent();
+				tempAccessories.setPurchaseOrder(element[0].toString());
+				tempAccessories.setStyleId(element[1].toString());
+				tempAccessories.setStyleNo(element[2].toString());
+				tempAccessories.setItemId(element[3].toString());
+				tempAccessories.setItemname(element[4].toString());
+				tempAccessories.setItemColorId(element[5].toString());
+				tempAccessories.setItemcolor(element[6].toString());
+				tempAccessories.setShippingmark(element[7].toString());
+				tempAccessories.setOrderqty(element[8].toString());
+				tempAccessories.setSizeGroupId(element[9].toString());
+				
+				dataList.add(tempAccessories);
+
+			}
+			
+			for(int i = 0;i< dataList.size();i++){
+				query = query2.replace("SIZEGROUPID", dataList.get(i).getSizeGroupId());
+				list = session.createSQLQuery(query).list();
+				sizeList = new ArrayList<>();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					sizeList.add(new Size(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
+				}
+				dataList.get(i).setSizeList(sizeList);
+			}
+
+
+			tx.commit();
+
+			return dataList;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return dataList;
 	}
 
 
@@ -5618,4 +6012,6 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 	}
+
+	
 }

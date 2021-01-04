@@ -1,6 +1,10 @@
 
 package pg.orderModel;
 
+import java.util.ArrayList;
+
+import pg.registerModel.Size;
+
 public class AccessoriesIndent {
 	String autoid;
 	String user;
@@ -38,8 +42,9 @@ public class AccessoriesIndent {
 	String indentColorId;
 	String aiNo;
 	String purchaseOrder;
-	
 	String styleNo;
+	String sizeGroupId;
+	ArrayList<Size> sizeList;
 	public AccessoriesIndent() {
 		
 	}
@@ -336,35 +341,39 @@ public class AccessoriesIndent {
 	public void setAccessoriescolor(String accessoriescolor) {
 		this.accessoriescolor = accessoriescolor;
 	}
-
-
 	public String getAiNo() {
 		return aiNo;
 	}
-
-
 	public void setAiNo(String aiNo) {
 		this.aiNo = aiNo;
 	}
-
-
 	public String getPurchaseOrder() {
 		return purchaseOrder;
 	}
-
-
 	public void setPurchaseOrder(String purchaseOrder) {
 		this.purchaseOrder = purchaseOrder;
 	}
-
-
 	public String getStyleNo() {
 		return styleNo;
 	}
-
-
 	public void setStyleNo(String styleNo) {
 		this.styleNo = styleNo;
+	}
+	public String getSizeGroupId() {
+		return sizeGroupId;
+	}
+	public void setSizeGroupId(String sizeGroupId) {
+		this.sizeGroupId = sizeGroupId;
+	}
+
+
+	public ArrayList<Size> getSizeList() {
+		return sizeList;
+	}
+
+
+	public void setSizeList(ArrayList<Size> sizeList) {
+		this.sizeList = sizeList;
 	}
 	
 

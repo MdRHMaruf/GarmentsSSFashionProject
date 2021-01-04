@@ -1,25 +1,10 @@
 package pg.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.URLConnection;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,49 +13,19 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sun.istack.internal.logging.Logger;
 
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
 import pg.Commercial.deedOfContacts;
-import pg.model.CommonModel;
-import pg.model.Login;
-import pg.orderModel.BuyerPO;
-import pg.orderModel.BuyerPoItem;
-import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
-import pg.orderModel.PurchaseOrder;
-import pg.orderModel.PurchaseOrderItem;
-import pg.orderModel.SampleRequisitionItem;
-import pg.orderModel.Style;
-
-import pg.orderModel.AccessoriesIndentCarton;
-import pg.registerModel.AccessoriesItem;
-import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
-import pg.registerModel.Color;
-import pg.registerModel.FabricsItem;
-import pg.registerModel.Factory;
-import pg.registerModel.FactoryModel;
-import pg.registerModel.ItemDescription;
-import pg.registerModel.MerchandiserInfo;
-import pg.registerModel.ParticularItem;
-import pg.registerModel.Size;
-import pg.registerModel.SizeGroup;
-import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.CommercialService;
 import pg.services.OrderService;
 import pg.services.RegisterService;
-import pg.share.Currency;
 
 
 @Controller

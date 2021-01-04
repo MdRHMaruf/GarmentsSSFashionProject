@@ -17,10 +17,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.sun.istack.internal.logging.Logger;
-
-import javassist.tools.reflect.Sample;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,9 +28,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,33 +39,33 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.istack.internal.logging.Logger;
+
 import pg.model.CommonModel;
 import pg.model.Login;
+import pg.orderModel.AccessoriesIndent;
+import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.BuyerPO;
 import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
+import pg.orderModel.ParcelModel;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.orderModel.AccessoriesIndent;
-import pg.orderModel.AccessoriesIndentCarton;
-import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
-import pg.registerModel.Department;
 import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.ItemDescription;
-import pg.registerModel.Line;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
@@ -432,7 +426,36 @@ public class OrderController {
 		objMain.put("styleList",styleList);
 		return objMain; 
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getPurchaseOrderAndStyleListByMultipleBuyers",method=RequestMethod.GET)
+	public JSONObject getPurchaseOrderAndStyleListByMultipleBuyers(String buyersId) {
+		JSONObject objMain = new JSONObject();	
+		List<Style> styleList = orderService.getBuyerPOStyleListByMultipleBuyers(buyersId);
+		List<CommonModel> poList = orderService.getPurchaseOrderListByMultipleBuyers(buyersId);
+		objMain.put("styleList",styleList);
+		objMain.put("buyerPOList",poList);
+		return objMain; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getStyleListByMultiplePurchaseOrder",method=RequestMethod.GET)
+	public JSONObject getStyleListByMultiplePurchaseOrder(String purchaseOrders) {
+		JSONObject objMain = new JSONObject();	
+		List<Style> styleList = orderService.getBuyerPOStyleListByMultiplePurchaseOrders(purchaseOrders);
+		objMain.put("styleList",styleList);
+		return objMain; 
+	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getPurchaseOrderByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getPurchaseOrderByMultipleStyleId(String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<CommonModel> buyerPOList = orderService.getPurchaseOrderByMultipleStyle(styleIdList);
+		objMain.put("buyerPOList",buyerPOList);
+		return objMain; 
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/getStyleWiseItem",method=RequestMethod.GET)
 	public JSONObject getStyleWiseItem(String styleId) {
@@ -440,6 +463,27 @@ public class OrderController {
 		List<ItemDescription> itemList = orderService.getStyleWiseItem(styleId);
 
 		objMain.put("itemList",itemList);
+		return objMain; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getItemListByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getItemListByMultipleStyleId(String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<ItemDescription> itemList = orderService.getItemListByMultipleStyleId(styleIdList);
+
+		objMain.put("itemList",itemList);
+		return objMain; 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getColorAndShippingListByMultipleStyleId",method=RequestMethod.GET)
+	public JSONObject getColorAndShippingListByMultipleStyleId(String purchaseOrders,String styleIdList) {
+		JSONObject objMain = new JSONObject();	
+		List<Color> colorList = orderService.getColorListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+		List<String> shippingMarkList = orderService.getShippingMarkListByMultiplePoAndStyle(purchaseOrders, styleIdList);
+		objMain.put("colorList",colorList);
+		objMain.put("shippingMarkList",shippingMarkList);
 		return objMain; 
 	}
 	
@@ -796,7 +840,7 @@ public class OrderController {
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 
 		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
-
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
 		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
@@ -807,7 +851,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/accessories_indent");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("accessories",accessoriesitem);
-		//view.addObject("unit",unit);
+		view.addObject("buyerList",buyerList);
 		view.addObject("brand",brand);
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
@@ -1043,6 +1087,22 @@ public class OrderController {
 	}
 
 
+	@ResponseBody
+	@RequestMapping(value = "/getAccessoriesRecyclingData",method = RequestMethod.GET)
+	public JSONObject getAccessoriesRecyclingData(String query){
+		JSONObject objmain = new JSONObject();
+		objmain.put("dataList",orderService.getAccessoriesRecyclingData(query));
+		return objmain;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getAccessoriesRecyclingDataWithSize",method = RequestMethod.GET)
+	public JSONObject getAccessoriesRecyclingDataWithSize(String query,String query2){
+		JSONObject objmain = new JSONObject();
+		objmain.put("dataList",orderService.getAccessoriesRecyclingDataWithSize(query, query2));
+		return objmain;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
 	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {

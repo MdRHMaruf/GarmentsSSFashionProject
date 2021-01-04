@@ -31,8 +31,16 @@ public interface OrderService {
 	//Style Create
 	List<ItemDescription> getItemDescriptionList();
 	List<Style> getBuyerWiseStylesItem(String buyerId);
+	List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId);
+	List<Style> getBuyerPOStyleListByMultipleBuyers(String buyersId);
+	List<Style> getBuyerPOStyleListByMultiplePurchaseOrders(String purchaseOrders);
 	List<CommonModel> getStyleWiseBuyerPO(String styleId);
+	List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList);
 	List<ItemDescription> getStyleWiseItem(String styleId);
+	List<ItemDescription> getItemListByMultipleStyleId(String styleIdList);
+	
+	List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
+	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
 	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
 			String frontimg, String backimg) throws SQLException;
@@ -78,6 +86,8 @@ public interface OrderService {
 	public List<CommonModel>AllColors();
 	public List<CommonModel>SizewiseQty(String buyerorderid, String style,String item,String color,String size);
 
+	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query);
+	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2);
 	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();
