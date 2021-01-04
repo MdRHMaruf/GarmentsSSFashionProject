@@ -375,7 +375,7 @@ $("#btnRecyclingData").click(() => {
 
 
 				let inPercent = $("#inPercent").val();
-				inPercent = inPercent == ''?0:inPercent;
+				inPercent = inPercent == '' ? 0 : inPercent;
 
 				if (checkSizeRequired) {
 
@@ -405,7 +405,7 @@ $("#btnRecyclingData").click(() => {
 								on boed.autoId = sv.linkedAutoId and sv.type = 1
 								left join tbStyleSize ss
 								on sv.sizeId = ss.id 
-								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId} and boed.clor and boed.sizeGroupId = 'SIZEGROUPID'
+								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
 								group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
 								order by boed.sizeGroupId, ${groupBy} ss.sortingNo`;
 					$.ajax({
@@ -464,24 +464,32 @@ $("#btnRecyclingData").click(() => {
 
 								for (let j = 0; j < sizeListLength; j++) {
 
-									tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
+									tables += `<td id='orderQty-${i}${sizeList[j].sizeId}' class='sizes-${i}'>${sizeList[j].sizeQuantity}</td>`
 								}
 								tables += `<td><i class='fa fa-edit' > </i></td><td><i class='fa fa-trash'> </i></td></tr>`;
 
-								
+
 								tables += `<tr>
 												<td colspan="5" rowspan="2"></td>
 												<td>(%) Qty</td>`
-												for (let j = 0; j < sizeListLength; j++) {
-													tables += `<td><span id='inPercent-${sizeList[j].sizeId}'>${inPercent}</span>% (<span id='percentQty-${sizeList[j].sizeId}'>${parseFloat((sizeList[j].sizeQuantity*inPercent)/100).toFixed(1)}</span>)</td>`;
-												}
+								for (let j = 0; j < sizeListLength; j++) {
+									if (sizeList[j].sizeQuantity > 0) {
+										tables += `<td><span id='inPercent-${i}${sizeList[j].sizeId}'>${inPercent}</span>% (<span id='percentQty-${i}${sizeList[j].sizeId}'>${parseFloat((sizeList[j].sizeQuantity * inPercent) / 100).toFixed(1)}</span>)</td>`;
+									} else {
+										tables += `<td></td>`;
+									}
+								}
 								tables += "<td colspan='2' rowspan='2'></td></tr>"
 
 								tables += `<tr>
 												<td>Total</td>`
-												for (let j = 0; j < sizeListLength; j++) {
-													tables += `<td><input id='total-${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' value="${(parseFloat(sizeList[j].sizeQuantity)+((sizeList[j].sizeQuantity*inPercent)/100)).toFixed(1)}"/></td>`;
-												}
+								for (let j = 0; j < sizeListLength; j++) {
+									if (sizeList[j].sizeQuantity > 0) {
+										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' value="${(parseFloat(sizeList[j].sizeQuantity) + ((sizeList[j].sizeQuantity * inPercent) / 100)).toFixed(1)}"/></td>`;
+									} else {
+										tables += `<td></td>`;
+									}
+								}
 								tables += "</tr>"
 							}
 							tables += "</tbody></table> </div></div>";
@@ -489,7 +497,7 @@ $("#btnRecyclingData").click(() => {
 							$("#tableList").empty();
 							$("#tableList").append(tables);
 
-							
+
 						}
 					});
 				} else {
@@ -552,8 +560,8 @@ $("#btnRecyclingData").click(() => {
 											<td id='color-${i}'>${item.itemcolor} </td>
 											<td id='shippingMark-${i}'>${item.shippingmark} </td>
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)} </td>
-											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty*inPercent)/100).toFixed(1)} </span>) </td>
-											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" value="${(parseFloat(item.orderqty)+((item.orderqty*inPercent)/100)).toFixed(1)}"/></td>
+											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)} </span>) </td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" value="${(parseFloat(item.orderqty) + ((item.orderqty * inPercent) / 100)).toFixed(1)}"/></td>
 											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
 											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
 										</tr>`;
@@ -586,11 +594,11 @@ $("#btnRecyclingData").click(() => {
 	}
 })
 
-$("#btnAdd").click(()=>{
+$("#btnAdd").click(() => {
 	let rowList = $(".orderPreviewRow");
 	let length = rowList.length;
-	  
-	if(length>0){
+
+	if (length > 0) {
 		let accessoriesItem = $("#accessoriesItem").val();
 		let accessoriesSize = $("#accessoriesSize").val();
 		let accessoriesColor = $("#accessoriesColor").val();
@@ -598,28 +606,28 @@ $("#btnAdd").click(()=>{
 		let unit = $("#unit").val();
 		let grandQty = $("#grandQty").val();
 
-		if(accessoriesItem.length>0){
-			if(unit >0){
-				for(let i=0;i<accessoriesItem.length;i++){
+		if (accessoriesItem != 0) {
+			if (unit > 0) {
+				for (let i = 0; i < accessoriesItem.length; i++) {
 					let accessoriesItemId = accessoriesItem[i];
-					let accessoriesItemName = $("#accessoriesItem option[value='"+accessoriesItemId+"']").text();
+					let accessoriesItemName = $("#accessoriesItem option[value='" + accessoriesItemId + "']").text();
 
-					rowList.each((index,row) =>{
+					rowList.each((index, row) => {
 						let rowId = row.id.slice(9);
 						console.log(row);
 						let isSizeRequired = row.getAttribute('data-size-required');
 
-						let purchaseOrder = $("#purchaseOrder-"+rowId).text();
+						let purchaseOrder = $("#purchaseOrder-" + rowId).text();
 						let styleId = row.getAttribute('data-style-id');
 						let itemId = row.getAttribute('data-item-id');
 						let colorId = row.getAttribute('data-color-id');
-						let styleNo = $("#styleNo-"+rowId).text();
-						let itemName = $("#itemName-"+rowId).text();
-						let color = $("#color-"+rowId).text();;
-						let shippingMark = $("#shippingMark-"+rowId).text();
-						let totalRequired = $("#totalQty-"+rowId).val();
-						if(isSizeRequired){
-							let newRow=`<tr>
+						let styleNo = $("#styleNo-" + rowId).text();
+						let itemName = $("#itemName-" + rowId).text();
+						let color = $("#color-" + rowId).text();;
+						let shippingMark = $("#shippingMark-" + rowId).text();
+						let totalRequired = $("#totalQty-" + rowId).val();
+						if (isSizeRequired) {
+							let newRow = `<tr>
 										<td>${i}</td>
 										<td>${purchaseOrder}</td>
 										<td>${styleNo}</td>
@@ -632,24 +640,147 @@ $("#btnAdd").click(()=>{
 										<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
 									</tr>`
 							$("#dataList").append(newRow);
-						}else{
+						} else {
 
 						}
 					});
 				}
-			}else{
+			} else {
 				warningAlert("Unit Selected.....Please Select Unit");
 				$("#unit").focus();
 			}
-		}else{
+		} else {
 			warningAlert("Accessories Item Not Selected.....Please Select accessories Item");
 			$("#accessoriesItem").focus();
 		}
-	}else{
+	} else {
 		warningAlert("Please Recycling your data");
 	}
 })
 
+function setInPercentAndTotalInPreviewTable() {
+	console.log("calculate");
+	let reqPerPcs =$("#reqPerPcs").val();
+	reqPerPcs =  parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let inPercent = $("#inPercent").val();
+	inPercent =  parseFloat(inPercent == '' ? 0 : inPercent);
+
+	let rowList = $(".orderPreviewRow");
+	let length = rowList.length;
+
+	rowList.each((index, row) => {
+
+		let rowId = row.id.slice(9);
+		console.log(row);
+		let isSizeRequired = row.getAttribute('data-size-required');
+
+		if (isSizeRequired == "true") {
+			let sizes = $(".sizes-" + rowId);
+			sizes.each((index, td) => {
+				let cellId = td.id.slice(9);
+				let orderQyt = parseFloat($("#orderQty-" + cellId).text());
+				let totalQty = (orderQyt * reqPerPcs);
+				let percentQty = (totalQty * inPercent) / 100;
+				totalQty = totalQty + percentQty;
+
+				console.log(cellId,inPercent,percentQty);
+				$("#inPercent-" + cellId).text(inPercent.toFixed(1));
+				$("#percentQty-" + cellId).text(percentQty.toFixed(1));
+				$("#totalQty-" + cellId).val(totalQty.toFixed(1));
+			})
+
+		} else {
+
+			let orderQyt = parseFloat($("#orderQty-" + rowId).text());
+			let totalQty = (orderQyt * reqPerPcs);
+			let percentQty = (totalQty * inPercent) / 100;
+			totalQty = totalQty + percentQty;
+
+
+			$("#inPercent-" + rowId).text(inPercent.toFixed(1));
+			$("#percentQty-" + rowId).text(percentQty.toFixed(1));
+			$("#totalQty-" + rowId).val(totalQty.toFixed(1));
+		}
+
+	});
+}
+
+
+
+function requiredperdozen() {
+	let orderqty = $("#orderQty").val();
+	let perpcs = $("#reqPerPcs").val();
+	let qtyindozen = $("#qtyInDozen").val();
+	let perdozen = perpcs * qtyindozen;
+	let totalqty = orderqty * perpcs;
+
+	$("#reqPerDozen").val(perdozen);
+
+	$("#totalQty").val(totalqty);
+
+
+}
+
+function totalbox() {
+	let orderqty = $("#orderQty").val();
+	let perunit = $("#perUnit").val();
+
+	let totalbox = orderqty / perunit;
+
+	$("#totalBox").val(totalbox);
+
+	$("#totalQty").val(totalbox);
+
+
+}
+
+function dividedBy() {
+	let totalbox = $("#totalBox").val();
+	let divideby = $("#dividedBy").val();
+
+	let totalQty = totalbox / divideby;
+
+
+
+	$("#totalQty").val(totalQty);
+
+
+}
+
+
+function setGrandQty() {
+
+	let orderQty = $("#orderQty").val();
+	console.log("order qty", orderQty);
+	orderQty = orderQty == '' ? 0 : orderQty;
+	let dozenQty = parseFloat(orderQty / 12).toFixed(1);
+
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = (reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs;
+
+	let reqPerDozen = 12 * reqPerPcs;
+
+	let reqQty = orderQty * reqPerPcs;
+
+	let inPercent = $("#inPercent").val();
+	inPercent = inPercent == '' ? 0 : inPercent;
+
+	let percentQty = (reqQty * inPercent) / 100;
+
+	let totalQty = reqQty + percentQty;
+
+	$("#dozenQty").val(dozenQty);
+	$("#reqPerDozen").val(reqPerDozen);
+	$("#percentQty").val(percentQty);
+	$("#totalQty").val(totalQty);
+
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let grandQty = parseFloat((totalQty / unitValue));
+	$("#grandQty").val(grandQty);
+}
 function searchAccessoriesIndent(aiNo) {
 	$.ajax({
 		type: 'GET',
@@ -784,7 +915,7 @@ function loadOrderQty(size) {
 	let color = $("#colorName").val();
 	let style = $("#styleNo").val();
 	let item = $("#itemName").val();
-	
+
 
 	if (style != 0 && buyerorderid != '0' || item != '0' || color != '0') {
 
@@ -1397,80 +1528,6 @@ function SizeWiseQty() {
 
 }
 
-function requiredperdozen() {
-	let orderqty = $("#orderQty").val();
-	let perpcs = $("#reqPerPcs").val();
-	let qtyindozen = $("#qtyInDozen").val();
-	let perdozen = perpcs * qtyindozen;
-	let totalqty = orderqty * perpcs;
-
-	$("#reqPerDozen").val(perdozen);
-
-	$("#totalQty").val(totalqty);
-
-
-}
-
-function totalbox() {
-	let orderqty = $("#orderQty").val();
-	let perunit = $("#perUnit").val();
-
-	let totalbox = orderqty / perunit;
-
-	$("#totalBox").val(totalbox);
-
-	$("#totalQty").val(totalbox);
-
-
-}
-
-function dividedBy() {
-	let totalbox = $("#totalBox").val();
-	let divideby = $("#dividedBy").val();
-
-	let totalQty = totalbox / divideby;
-
-
-
-	$("#totalQty").val(totalQty);
-
-
-}
-
-
-function setGrandQty() {
-
-	let orderQty = $("#orderQty").val();
-	console.log("order qty",orderQty);
-	orderQty = orderQty == '' ? 0 : orderQty;
-	let dozenQty = parseFloat(orderQty/12).toFixed(1);
-
-	let reqPerPcs = $("#reqPerPcs").val();
-	reqPerPcs = (reqPerPcs==0 || reqPerPcs == '') ? 1 : reqPerPcs;
-
-	let reqPerDozen = 12 * reqPerPcs;
-
-	let reqQty = orderQty * reqPerPcs; 
-
-	let inPercent = $("#inPercent").val();
-	inPercent = inPercent == '' ? 0 : inPercent;
-
-	let percentQty = (reqQty * inPercent) / 100 ;
-
-	let totalQty = reqQty + percentQty;
-
-	$("#dozenQty").val(dozenQty);
-	$("#reqPerPcs").val(reqPerPcs);
-	$("#reqPerDozen").val(reqPerDozen);
-	$("#percentQty").val(percentQty);
-	$("#totalQty").val(totalQty);
-
-	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
-	unitValue = unitValue==0?1:unitValue;
-
-	let grandQty = parseFloat((totalQty / unitValue));
-	$("#grandQty").val(grandQty);
-}
 
 
 function confrimEvent() {

@@ -234,7 +234,7 @@
 								<div class="row">
 									<div class="col-md-12 input-group-append">
 										<select id="accessoriesItem" class="selectpicker w-100"
-											multiple data-selected-text-format="count > 4"
+											
 											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
@@ -369,7 +369,7 @@
 											<label for="reqPerPcs" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
 													Pcs</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setGrandQty()">
+										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setGrandQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -428,7 +428,7 @@
 											<label for="inPercent" class="col-form-label-sm mb-0 py-0"><strong>In
 													Percent(%)</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setGrandQty()">
+										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setGrandQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
