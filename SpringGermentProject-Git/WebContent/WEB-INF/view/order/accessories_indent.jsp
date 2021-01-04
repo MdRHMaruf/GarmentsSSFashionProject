@@ -311,7 +311,7 @@
 											<div class="col-md-12">
 												<select id="unit" class="selectpicker form-control"
 													data-live-search="true"
-													data-style="btn-light btn-sm border-light-gray" onchange="setGrandQty()">
+													data-style="btn-light btn-sm border-light-gray" onchange="setUnitQty()">
 
 													<c:forEach items="${unit}" var="unit" varStatus="counter">
 														<option value="${unit.id}">${unit.name}</option>
@@ -325,10 +325,10 @@
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="grandQty" class="col-form-label-sm mb-0 py-0"><strong>Grand
+											<label for="unitQty" class="col-form-label-sm mb-0 py-0"><strong>Unit
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="grandQty"
+										<input type="number" class='form-control-sm' id="unitQty"
 											readonly>
 									</div>
 								</div>
@@ -369,7 +369,7 @@
 											<label for="reqPerPcs" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
 													Pcs</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setGrandQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -428,7 +428,7 @@
 											<label for="inPercent" class="col-form-label-sm mb-0 py-0"><strong>In
 													Percent(%)</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setGrandQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -501,8 +501,8 @@
 
 					<div class="row mt-1">
 						<div style="overflow: auto; max-height: 300px;"
-							class="col-sm-12 p-0">
-							<table class="table table-bordered">
+							class="col-sm-12 p-0 table-responsive">
+							<table class="table table-hover table-bordered table-sm mb-0 small-font">
 								<thead>
 									<tr>
 										<th style="width: 15px;">Sl#</th>
@@ -514,27 +514,13 @@
 										<th>Accssories Name</th>
 										<th>Size</th>
 										<th>Total Required</th>
-										<th>Edit</th>
+										<th><i class="fa fa-edit"></i></th>
+										<th><i class="fa fa-trash"></i></th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
 
-									<c:forEach items="${listAccPending}" var="listItem"
-										varStatus="counter">
-										<tr>
-											<td>${counter.count}</td>
-											<td>${listItem.po}</td>
-											<td id='name${listItem.autoid}'>${listItem.style}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.itemname}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.itemcolor}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.shippingmark}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.accessoriesName}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.sizeName}</td>
-											<td id='telephone${listItem.autoid}'>${listItem.requiredUnitQty}</td>
-											<td><i class="fa fa-edit"
-												onclick="accessoriesItemSet(${listItem.autoid})"> </i></td>
-										</tr>
-									</c:forEach>
+									
 								</tbody>
 							</table>
 						</div>
