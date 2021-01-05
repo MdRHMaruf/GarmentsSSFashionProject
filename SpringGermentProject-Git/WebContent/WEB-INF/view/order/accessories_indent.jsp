@@ -595,8 +595,8 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
-							<th><span><i class="fa fa-print"></i></span></th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -609,9 +609,9 @@
 								<td>${list.styleNo}</td>
 								<td>${list.itemname}</td>
 								<td><i class="fa fa-search"
-									onclick="searchAccessoriesIndent(${list.aiNo})"> </i></td>
+									onclick="searchAccessoriesIndent('${list.aiNo}')"> </i></td>
 									<td><i class="fa fa-print"
-									onclick="printAccessoriesIndent(${list.aiNo})"> </i></td>
+									onclick="printAccessoriesIndent('${list.aiNo}')"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

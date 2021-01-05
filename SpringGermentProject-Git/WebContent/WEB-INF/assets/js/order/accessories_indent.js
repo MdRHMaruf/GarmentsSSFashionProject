@@ -723,7 +723,36 @@ function editAction() {
 	let autoId = $("#autoId").val();
 	let indentType = $("#indentType").val();
 	if (indentType == 'newIndentRow') {
+		console.log("autoId -",autoId);
+		let row = $("#newIndentRow-"+autoId);
+		console.log("row",row);
+		let orderQty = $("#orderQty").val();
+		let dozenQty = parseFloat(orderQty / 12).toFixed(2);
+		let reqPerPcs = $("#reqPerPcs").val();
+		reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+		let reqPerDozen = parseFloat((orderQty * reqPerPcs) / 12).toFixed(2);
+		let perUnit = $("#perUnit").val();
+		let totalBox = $("#totalBox").val();
+		let divideBy = $("#divideBy").val();
+		let inPercent = $("#inPercent").val();
+		let percentQty = $("#percentQty").val();
+		let totalQty = $("#totalQty").val();
 
+		let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+		unitValue = unitValue == 0 ? 1 : unitValue;
+		let unitQty = (totalQty / unitValue).toFixed(2);
+		console.log(row);
+		row.attr('data-order-qty',orderQty);
+		row.attr('data-dozen-qty',dozenQty);
+		row.attr('data-req-per-pcs',reqPerPcs);
+		row.attr('data-req-per-dozen',reqPerDozen);
+		row.attr('data-per-unit',perUnit);
+		row.attr('data-total-box',totalBox);
+		row.attr('data-divide-by',divideBy);
+		row.attr('data-in-percent',inPercent);
+		row.attr('data-percent-qty',percentQty);
+		row.attr('data-total-qty',totalQty);
+		$("#indentUnitQty-"+autoId).text(unitQty);
 	} else {
 		$.ajax({
 			type: 'POST',
