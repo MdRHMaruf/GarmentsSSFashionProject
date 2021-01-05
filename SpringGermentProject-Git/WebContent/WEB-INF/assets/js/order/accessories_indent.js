@@ -4,12 +4,9 @@ let colorvalue = 0;
 let sizevalue = 0;
 let find = 0;
 
-$("#aiNo").attr('disabled', true);
-$("#shippingmark").attr('disabled', true);
 
-$('#size').prop('disabled', true);
-$('#btnSave').prop('disabled', false);
-$('#btnEdit').prop('disabled', true);
+$('#btnSave').show();
+$('#btnEdit').hide();
 
 let unitList = {};
 
@@ -373,9 +370,12 @@ $("#btnRecyclingData").click(() => {
 					groupShippingMark = '';
 				}
 
+				let reqPerPcs = $("#reqPerPcs").val();
+				reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 
 				let inPercent = $("#inPercent").val();
-				inPercent = inPercent == '' ? 0 : inPercent;
+				inPercent = parseFloat(inPercent == '' ? 0 : inPercent);
+
 
 				if (checkSizeRequired) {
 
@@ -443,20 +443,18 @@ $("#btnRecyclingData").click(() => {
 											<th >Field Type</th>`
 									let sizeListLength = item.sizeList.length;
 									for (let j = 0; j < sizeListLength; j++) {
-										tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + item.sizeList[j].sizeName + "</th>";
+										tables += `<th id='sizeHeading-${sizeGroupId}${item.sizeList[j].sizeId}' class='sizeHeading-${sizeGroupId}' class="min-width-60 mx-auto" scope="col">${item.sizeList[j].sizeName}</th>`;
 									}
-									tables += `<th scope="col"><i class="fa fa-edit"></i></th>
-												<th scope="col"><i class="fa fa-trash"></i></th>
-												</tr>
+									tables += `</tr>
 											</thead>
-											<tbody id="orderList-${sizeGroupId}" class="orderPreview">`
+											<tbody id="orderPreviewList-${sizeGroupId}" class="orderPreview">`
 									isClosingNeed = true;
 								}
 								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
 											<td id='purchaseOrder-${i}'>${item.purchaseOrder}</td>
 											<td id='styleNo-${i}'>${item.styleNo}</td>
 											<td id='itemName-${i}'>${item.itemname}</td>
-											<td id='itemColor-${i}'>${item.itemcolor}</td>
+											<td id='color-${i}'>${item.itemcolor}</td>
 											<td id='shippingMark-${i}'>${item.shippingmark}</td>
 											<td>OrderQty</td>`;
 								let sizeList = item.sizeList;
@@ -464,28 +462,26 @@ $("#btnRecyclingData").click(() => {
 
 								for (let j = 0; j < sizeListLength; j++) {
 
-									tables += `<td id='orderQty-${i}${sizeList[j].sizeId}' class='sizes-${i}'>${sizeList[j].sizeQuantity}</td>`
+									tables += `<td id='orderQty-${i}${sizeList[j].sizeId}' data-size-id='${sizeList[j].sizeId}' class='sizes-${i}'>${sizeList[j].sizeQuantity}</td>`
 								}
-								tables += `<td><i class='fa fa-edit' > </i></td><td><i class='fa fa-trash'> </i></td></tr>`;
 
-
-								tables += `<tr>
+								tables += `</tr><tr>
 												<td colspan="5" rowspan="2"></td>
 												<td>(%) Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
-										tables += `<td><span id='inPercent-${i}${sizeList[j].sizeId}'>${inPercent}</span>% (<span id='percentQty-${i}${sizeList[j].sizeId}'>${parseFloat((sizeList[j].sizeQuantity * inPercent) / 100).toFixed(1)}</span>)</td>`;
+
+										tables += `<td><span id='inPercent-${i}${sizeList[j].sizeId}'>${inPercent}</span>% (<span id='percentQty-${i}${sizeList[j].sizeId}'>${parseFloat((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100).toFixed(1)}</span>)</td>`;
 									} else {
 										tables += `<td></td>`;
 									}
 								}
-								tables += "<td colspan='2' rowspan='2'></td></tr>"
 
-								tables += `<tr>
+								tables += `</tr><tr>
 												<td>Total</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
-										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' value="${(parseFloat(sizeList[j].sizeQuantity) + ((sizeList[j].sizeQuantity * inPercent) / 100)).toFixed(1)}"/></td>`;
+										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' onkeyup="setInPercentInPreviewTable('${i}${sizeList[j].sizeId}')" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
 									} else {
 										tables += `<td></td>`;
 									}
@@ -496,7 +492,8 @@ $("#btnRecyclingData").click(() => {
 
 							$("#tableList").empty();
 							$("#tableList").append(tables);
-
+							setTotalOrderQty();
+							setUnitQty();
 
 						}
 					});
@@ -543,14 +540,12 @@ $("#btnRecyclingData").click(() => {
 															<th >Order Qty</th>
 															<th >% Qty</th>
 															<th >Total Qty</th>
-															<th ><i class="fa fa-edit"></i></th>
-															<th ><i class="fa fa-trash"></i></th>
 														</tr>
 													</thead>
 													<tbody id="orderList" class="orderPreview">`
 							let dataList = data.dataList;
 							let length = dataList.length;
-							let orderQty = 0;
+
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
 								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
@@ -559,21 +554,17 @@ $("#btnRecyclingData").click(() => {
 											<td id='itemName-${i}'>${item.itemname} </td>
 											<td id='color-${i}'>${item.itemcolor} </td>
 											<td id='shippingMark-${i}'>${item.shippingmark} </td>
-											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)} </td>
-											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)} </span>) </td>
-											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" value="${(parseFloat(item.orderqty) + ((item.orderqty * inPercent) / 100)).toFixed(1)}"/></td>
-											<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
-											<td ><i class="fa fa-trash" onclick="deleteAction(${i})" style='cursor:pointer;'></i></td>
+											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)}</td>
+											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)}</span>) </td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}')" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
 										</tr>`;
-								orderQty += parseFloat(item.orderqty);
+
 							}
 							tables += "</tbody></table> </div></div>";
 							$("#tableList").empty();
 							$("#tableList").append(tables);
-
-
-							$("#orderQty").val(orderQty);
-							setGrandQty();
+							setTotalOrderQty();
+							setUnitQty();
 						}
 					});
 				}
@@ -599,54 +590,124 @@ $("#btnAdd").click(() => {
 	let length = rowList.length;
 
 	if (length > 0) {
-		let accessoriesItem = $("#accessoriesItem").val();
+		let accessoriesItemId = $("#accessoriesItem").val();
+		let accessoriesItemName = $("#accessoriesItem option:selected").text();
+
 		let accessoriesSize = $("#accessoriesSize").val();
-		let accessoriesColor = $("#accessoriesColor").val();
-		let accessoriesBrand = $("#brand").val();
-		let unit = $("#unit").val();
-		let grandQty = $("#grandQty").val();
+		let accessoriesColorId = $("#accessoriesColor").val();
+		let accessoriesBrandId = $("#brand").val();
+		let unitId = $("#unit").val();
+		let unitQty = $("#unitQty").val();
 
-		if (accessoriesItem != 0) {
-			if (unit > 0) {
-				for (let i = 0; i < accessoriesItem.length; i++) {
-					let accessoriesItemId = accessoriesItem[i];
-					let accessoriesItemName = $("#accessoriesItem option[value='" + accessoriesItemId + "']").text();
+		let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+		unitValue = unitValue == 0 ? 1 : unitValue;
 
-					rowList.each((index, row) => {
-						let rowId = row.id.slice(9);
-						console.log(row);
-						let isSizeRequired = row.getAttribute('data-size-required');
+		let accessoriesDataList = $("#dataList tr");
+		length = accessoriesDataList.length;
+		let listRowId = 0;
+		if (length > 0) listRowId = accessoriesDataList[length - 1].id.slice(13);
 
-						let purchaseOrder = $("#purchaseOrder-" + rowId).text();
-						let styleId = row.getAttribute('data-style-id');
-						let itemId = row.getAttribute('data-item-id');
-						let colorId = row.getAttribute('data-color-id');
-						let styleNo = $("#styleNo-" + rowId).text();
-						let itemName = $("#itemName-" + rowId).text();
-						let color = $("#color-" + rowId).text();;
-						let shippingMark = $("#shippingMark-" + rowId).text();
-						let totalRequired = $("#totalQty-" + rowId).val();
-						if (isSizeRequired) {
-							let newRow = `<tr>
-										<td>${i}</td>
-										<td>${purchaseOrder}</td>
+		if (accessoriesItemId != 0) {
+			if (unitId != 0) {
+
+				rowList.each((index, row) => {
+					let rowId = row.id.slice(9);
+					//conosle.log(row);
+					let isSizeRequired = row.getAttribute('data-size-required');
+					let sizeGroupId = row.getAttribute('data-size-group-id');
+					let purchaseOrder = $("#purchaseOrder-" + rowId).text();
+					let styleId = row.getAttribute('data-style-id');
+					let itemId = row.getAttribute('data-item-id');
+					let colorId = row.getAttribute('data-color-id');
+					let styleNo = $("#styleNo-" + rowId).text();
+					let itemName = $("#itemName-" + rowId).text();
+					let color = $("#color-" + rowId).text();;
+					let shippingMark = $("#shippingMark-" + rowId).text();
+
+					if (isSizeRequired == 'true') {
+
+						let sizes = $(".sizes-" + rowId);
+						sizes.each((index, td) => {
+							let cellId = td.id.slice(9);
+							let sizeId = td.getAttribute('data-size-id');
+							let sizeName = $("#sizeHeading-" + sizeGroupId + sizeId).text();
+							let orderQty = $("#orderQty-" + cellId).text();
+							let dozenQty = parseFloat(orderQty / 12).toFixed(2);
+							let reqPerPcs = $("#reqPerPcs").val();
+							reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+							let reqPerDozen = parseFloat((orderQty * reqPerPcs) / 12).toFixed(2);
+							let perUnit = $("#perUnit").val();
+							let totalBox = $("#totalBox").val();
+							let divideBy = $("#divideBy").val();
+							let inPercent = $("#inPercent-" + cellId).text();
+							let percentQty = $("#percentQty-" + cellId).text();
+							let totalQty = $("#totalQty-" + cellId).val();
+
+
+							let unitQty = (totalQty / unitValue).toFixed(2);
+							if (unitQty > 0) {
+
+								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' 
+										data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
+										data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
+										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
+										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
+										<td>${++length}</td>
+										<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
 										<td>${styleNo}</td>
 										<td>${itemName}</td>
 										<td>${color}</td>
-										<td>${shippingMark}</td>
+										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
+										<td>${accessoriesItemName}</td>
+										<td>${sizeName}</td>
+										<td id='indentUnitQty-${listRowId}'>${unitQty}</td>
+										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
+										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
+									</tr>`
+								$("#dataList").append(newRow);
+
+							}
+
+						})
+					} else {
+						let orderQty = $("#orderQty-" + rowId).text();
+						let dozenQty = parseFloat(orderQty / 12).toFixed(2);
+						let reqPerPcs = $("#reqPerPcs").val();
+						reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+						let reqPerDozen = parseFloat((orderQty * reqPerPcs) / 12).toFixed(2);
+						let perUnit = $("#perUnit").val();
+						let totalBox = $("#totalBox").val();
+						let divideBy = $("#divideBy").val();
+						let inPercent = $("#inPercent-" + rowId).text();
+						let percentQty = $("#percentQty-" + rowId).text();
+						let totalQty = $("#totalQty-" + rowId).val();
+
+
+						let unitQty = (totalQty / unitValue).toFixed(2);
+
+
+						let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
+										data-size-id='' data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
+										data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
+										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
+										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
+										<td>${++length}</td>
+										<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
+										<td>${styleNo}</td>
+										<td>${itemName}</td>
+										<td>${color}</td>
+										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
 										<td>${accessoriesItemName}</td>
 										<td></td>
-										<td>${totalRequired}</td>
-										<td ><i class="fa fa-edit" onclick="editAction(${i})" style='cursor:pointer;'></i></td>
+										<td id='indentUnitQty-${listRowId}'>${unitQty}</td>
+										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
+										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-							$("#dataList").append(newRow);
-						} else {
-
-						}
-					});
-				}
+						$("#dataList").append(newRow);
+					}
+				});
 			} else {
-				warningAlert("Unit Selected.....Please Select Unit");
+				warningAlert("Unit not Selected.....Please Select Unit");
 				$("#unit").focus();
 			}
 		} else {
@@ -658,13 +719,403 @@ $("#btnAdd").click(() => {
 	}
 })
 
+function editAction() {
+	let autoId = $("#autoId").val();
+	let indentType = $("#indentType").val();
+	if (indentType == 'newIndentRow') {
+
+	} else {
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: './editAccessoriesIndent',
+			data: {
+				autoid: autoid,
+				po: POno,
+				style: style,
+				itemname: item,
+				itemcolor: itemColor,
+				shippingmark: ShippingMark,
+				accessoriesname: accessoriesItem,
+				accessoriessize: accessoriesSize,
+				size: size,
+				orderqty: orderqty,
+				qtyindozen: qtyindozen,
+				reqperpcs: reqperpcs,
+				reqperdozen: reqperdozen,
+				perunit: perunit,
+				totalbox: totalbox,
+				dividedby: dividedby,
+				extrainpercent: extraInpercent,
+				percentqty: percentqty,
+				totalqty: totalqty,
+				unit: unit,
+				unitQty: unitQty,
+				brand: brand,
+				accessoriescolor: accessoriescolor
+
+
+			},
+			success: function (data) {
+
+				alert(data);
+
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+				//alert("Server Error");
+				if (jqXHR.status === 0) {
+					alert('Not connect.\n Verify Network.');
+				} else if (jqXHR.status == 404) {
+					alert('Requested page not found.');
+				} else if (jqXHR.status == 500) {
+					alert('Internal Server Error.');
+				} else if (errorThrown === 'parsererror') {
+					alert('Requested JSON parse failed');
+				} else if (errorThrown === 'timeout') {
+					alert('Time out error');
+				} else if (errorThrown === 'abort') {
+					alert('Ajax request aborted ');
+				} else {
+					alert('Uncaught Error.\n' + jqXHR.responseText);
+				}
+
+			}
+		});
+	}
+}
+
+function refreshAction() {
+	$("#buyerName").selectpicker('deselectAll');
+	$("#purchaseOrder").selectpicker('deselectAll');
+	$("#styleNo").selectpicker('deselectAll');
+	$("#itemName").selectpicker('deselectAll');
+	$("#color").selectpicker('deselectAll');
+	$("#shippingMark").selectpicker('deselectAll');
+
+	$("#checkPurchaseOrder").prop('checked', false);
+	$("#checkStyleNo").prop('checked', false);
+	$("#checkItemName").prop('checked', false);
+	$("#checkColor").prop('checked', false);
+	$("#checkShippingMark").prop('checked', false);
+
+	$("#accessoriesItem").val(0).change();
+	$("#accessoriesSize").val("");
+	$("#accessoriesColor").val(0).change();
+	$("#brand").val(0).change();
+	$("#unit").val(0).change();
+	$("#unitQty").val(0);
+
+	$("#orderQty").val(0);
+	$("#dozenQty").val(0);
+	$("#reqPerPcs").val(1);
+	$("#reqPerDozen").val(12);
+	$("#perUnit").val(0);
+	$("#totalBox").val(0);
+	$("#divideBy").val(1);
+	$("#inPercent").val(0);
+	$("#percentQty").val(0);
+	$("#totalQty").val(0);
+
+	$("#orderQty").val(0);
+	$("#tableList").empty();
+
+	$("#autoId").val("");
+	$("#indentType").val("");
+
+	$('#btnAdd').show();
+	$('#btnEdit').hide();
+
+}
+
+
+function confirmAction() {
+	let userId = $("#userId").val();
+	let accessoriesIndentId = $("#accessoriesIndentId").val();
+
+	let rowList = $("#dataList tr");
+	let length = rowList.length;
+
+
+	if (length > 0) {
+		if (confirm("Are you Confirm to Save This Accessories Indent?")) {
+			newIndentList = $("tr.newIndentRow");
+
+			let accessoriesItems = {};
+			accessoriesItems['list'] = [];
+
+			newIndentList.each((index, indentRow) => {
+				let id = indentRow.id.slice(13);
+
+				const indent = {
+					purchaseOrder: $("#indentPurchaseOrder-" + id).text(),
+					styleId: indentRow.getAttribute('data-style-id'),
+					itemId: indentRow.getAttribute('data-item-id'),
+					colorId: indentRow.getAttribute('data-color-id'),
+					shippingMark: $("#indentShippingMark-" + id).text(),
+					sizeId: indentRow.getAttribute('data-size-id'),
+					accessoriesItemId: indentRow.getAttribute('data-accessories-item-id'),
+					accessoriesSize: indentRow.getAttribute('data-accessories-size'),
+					accessoriesColorId: indentRow.getAttribute('data-accessories-color-id'),
+					accessoriesBrandId: indentRow.getAttribute('data-accessories-brand-id'),
+					orderQty: indentRow.getAttribute('data-order-qty'),
+					dozenQty: indentRow.getAttribute('data-dozen-qty'),
+					reqPerPcs: indentRow.getAttribute('data-req-per-pcs'),
+					reqPerDozen: indentRow.getAttribute('data-req-per-dozen'),
+					perUnit: indentRow.getAttribute('data-per-unit'),
+					totalBox: indentRow.getAttribute('data-total-box'),
+					divideBy: indentRow.getAttribute('data-divide-by'),
+					inPercent: indentRow.getAttribute('data-in-percent'),
+					percentQty: indentRow.getAttribute('data-percent-qty'),
+					totalQty: indentRow.getAttribute('data-total-qty'),
+					unitId: indentRow.getAttribute('data-unit-id'),
+					unitQty: $("#indentUnitQty-" + id).text(),
+					userId: userId
+				}
+
+				accessoriesItems.list.push(indent);
+			})
+
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: './confirmAccessoriesIndent',
+				data: {
+					accessoriesIndentId: accessoriesIndentId,
+					accessoriesItems: JSON.stringify(accessoriesItems),
+				},
+				success: function (data) {
+					if (data.result != 'something wrong') {
+						$("#accessoriesIndentId").val(data.result);
+						$("#accessoriesId").text(data.result);
+						alert("Accessories Save Successfully;")
+					} else {
+						alert("Incomplete...Something Wrong");
+					}
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					//alert("Server Error");
+					if (jqXHR.status === 0) {
+						alert('Not connect.\n Verify Network.');
+					} else if (jqXHR.status == 404) {
+						alert('Requested page not found.');
+					} else if (jqXHR.status == 500) {
+						alert('Internal Server Error.');
+					} else if (errorThrown === 'parsererror') {
+						alert('Requested JSON parse failed');
+					} else if (errorThrown === 'timeout') {
+						alert('Time out error');
+					} else if (errorThrown === 'abort') {
+						alert('Ajax request aborted ');
+					} else {
+						alert('Uncaught Error.\n' + jqXHR.responseText);
+					}
+
+				}
+			});
+
+		}
+	} else {
+		warningAlert("You have not added any indent id... Please Insert Any indent Id");
+	}
+
+}
+
+function setIndentItem(rowId, indentType) {
+	if (indentType == 'newIndentRow') {
+		let row = $("#newIndentRow-" + rowId);
+
+		$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
+		$("#accessoriesSize").val(row.attr('data-accessories-size'));
+		$("#accessoriesColor").val(row.attr('data-accessories-color-id')).change();
+		$("#brand").val(row.attr('data-accessories-brand-id')).change();
+		$("#unit").val(row.attr('data-unit-id')).change();
+		$("#unitQty").val($("#intentUnitQty-" + rowId).text());
+		$("#orderQty").val(row.attr('data-order-qty'));
+		$("#dozenQty").val(row.attr('data-dozen-qty'));
+		$("#reqPesPcs").val(row.attr('data-req-per-pcs'));
+		$("#reqPerDozen").val(row.attr('data-req-per-dozen'));
+		$("#perUnit").val(row.attr('data-per-unit'));
+		$("#totalBox").val(row.attr('data-total-box'));
+		$("#divideBy").val(row.attr('data-divide-by'));
+		$("#inPercent").val(row.attr('data-in-percent'));
+		$("#percentQty").val(row.attr('data-percent-qty'));
+		$("#totalQty").val(row.attr('data-total-qty'));
+		$("#autoId").val(rowId);
+		$("#indentType").val(indentType);
+		$('#btnAdd').hide();
+		$('#btnEdit').show();
+	} else {
+
+	}
+
+}
+
+function deleteIndentRow(rowId, indentType) {
+	if (confirm("Are you sure to Delete this Accessories?")) {
+		if (indentType == 'newIndentRow') {
+			$("#newIndentRow-" + rowId).remove();
+		} else {
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './deleteAccessoriesIndent',
+				data: {
+					autoId: rowId
+				},
+				success: function (data) {
+					if (data.result != 'something wrong') {
+						alert("Accessories Indent Item Delete Successfully..");
+						$("#oldIndentRow-" + rowId).remove();
+					} else {
+						alert("Incomplete...Something Wrong");
+					}
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					//alert("Server Error");
+					if (jqXHR.status === 0) {
+						alert('Not connect.\n Verify Network.');
+					} else if (jqXHR.status == 404) {
+						alert('Requested page not found.');
+					} else if (jqXHR.status == 500) {
+						alert('Internal Server Error.');
+					} else if (errorThrown === 'parsererror') {
+						alert('Requested JSON parse failed');
+					} else if (errorThrown === 'timeout') {
+						alert('Time out error');
+					} else if (errorThrown === 'abort') {
+						alert('Ajax request aborted ');
+					} else {
+						alert('Uncaught Error.\n' + jqXHR.responseText);
+					}
+
+				}
+			});
+		}
+	}
+}
+function saveEvent() {
+
+
+	let user = $("#user_hidden").val();
+	let POno = $("#purchaseOrder option:selected").text();
+	//let POno=$("#purchaseOrder").val();
+	let style = $("#styleNo").val();
+	let item = $("#itemName").val();
+
+
+	let itemColor = $("#colorName").val();
+	let ShippingMark = $("#shippingmark").val();
+
+	let accessoriesItem = $("#accessoriesItem").val();
+
+	let accessoriesSize = $("#accessoriesSize").val();
+	let size = $("#size").val();
+
+	let orderqty = $("#orderQty").val();
+	let qtyindozen = $("#qtyInDozen").val();
+
+
+	let reqperpcs = $("#reqPerPcs").val();
+
+	let reqperdozen = $("#reqPerDozen").val();
+	let perunit = $("#perUnit").val();
+	let totalbox = $("#totalBox").val();
+	let dividedby = $("#dividedBy").val();
+	let extraInpercent = $("#extraIn").val();
+	let percentqty = $("#percentQty").val();
+	let totalqty = $("#totalQty").val();
+
+	let unit = $("#unit").val();
+	let unitQty = $("#unitQty").val();
+	let brand = $("#brand").val();
+	let accessoriescolor = $("#color").val();
+
+	if (POno == 0) {
+		alert("Select Purchase Order No")
+	} else if (style == 0) {
+		alert("Select Style No")
+	} else if (item == 0) {
+		alert("Select Item Name")
+	} else if (accessoriesItem == 0) {
+		alert("Select accessories Item name")
+	} else {
+
+		//conosle.log("style " + style)
+		if (style != 0) {
+
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: './insertAccessoriesIndent',
+				data: {
+					po: POno,
+					style: style,
+					itemname: item,
+					itemcolor: itemColor,
+					shippingmark: ShippingMark,
+					accessoriesname: accessoriesItem,
+					accessoriessize: accessoriesSize,
+					size: size,
+					orderqty: orderqty,
+					qtyindozen: qtyindozen,
+					reqperpcs: reqperpcs,
+					reqperdozen: reqperdozen,
+					perunit: perunit,
+					totalbox: totalbox,
+					dividedby: dividedby,
+					extrainpercent: extraInpercent,
+					percentqty: percentqty,
+					totalqty: totalqty,
+					unit: unit,
+					unitQty: unitQty,
+					brand: brand,
+					accessoriescolor: accessoriescolor
+				},
+				success: function (data) {
+
+					$("#dataList").empty();
+					$("#dataList").append(AccessoriesDataShowInTable(data.result));
+
+
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					//alert("Server Error");
+					if (jqXHR.status === 0) {
+						alert('Not connect.\n Verify Network.');
+					} else if (jqXHR.status == 404) {
+						alert('Requested page not found.');
+					} else if (jqXHR.status == 500) {
+						alert('Internal Server Error.');
+					} else if (errorThrown === 'parsererror') {
+						alert('Requested JSON parse failed');
+					} else if (errorThrown === 'timeout') {
+						alert('Time out error');
+					} else if (errorThrown === 'abort') {
+						alert('Ajax request aborted ');
+					} else {
+						alert('Uncaught Error.\n' + jqXHR.responseText);
+					}
+
+				}
+			});
+
+
+		}
+	}
+}
+
+
+
+
 function setInPercentAndTotalInPreviewTable() {
-	console.log("calculate");
-	let reqPerPcs =$("#reqPerPcs").val();
-	reqPerPcs =  parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 
 	let inPercent = $("#inPercent").val();
-	inPercent =  parseFloat(inPercent == '' ? 0 : inPercent);
+	inPercent = parseFloat(inPercent == '' ? 0 : inPercent);
 
 	let rowList = $(".orderPreviewRow");
 	let length = rowList.length;
@@ -672,7 +1123,7 @@ function setInPercentAndTotalInPreviewTable() {
 	rowList.each((index, row) => {
 
 		let rowId = row.id.slice(9);
-		console.log(row);
+		//conosle.log(row);
 		let isSizeRequired = row.getAttribute('data-size-required');
 
 		if (isSizeRequired == "true") {
@@ -684,7 +1135,7 @@ function setInPercentAndTotalInPreviewTable() {
 				let percentQty = (totalQty * inPercent) / 100;
 				totalQty = totalQty + percentQty;
 
-				console.log(cellId,inPercent,percentQty);
+				//conosle.log(cellId,inPercent,percentQty);
 				$("#inPercent-" + cellId).text(inPercent.toFixed(1));
 				$("#percentQty-" + cellId).text(percentQty.toFixed(1));
 				$("#totalQty-" + cellId).val(totalQty.toFixed(1));
@@ -706,7 +1157,21 @@ function setInPercentAndTotalInPreviewTable() {
 	});
 }
 
+function setInPercentInPreviewTable(id) {
+	let orderQty = parseFloat($("#orderQty-" + id).text());
+	let totalQty = $("#totalQty-" + id).val() == '' ? 0 : $("#totalQty-" + id).val();
 
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let totalReqQty = orderQty * reqPerPcs;
+	let percentQty = totalQty - totalReqQty;
+
+	let inPercent = (percentQty * 100) / totalReqQty;
+
+	$("#inPercent-" + id).text(inPercent.toFixed(1));
+	$("#percentQty-" + id).text(percentQty.toFixed(1));
+}
 
 function requiredperdozen() {
 	let orderqty = $("#orderQty").val();
@@ -748,11 +1213,42 @@ function dividedBy() {
 
 }
 
+function setTotalOrderQty() {
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 
-function setGrandQty() {
+	let inPercent = $("#inPercent").val();
+	inPercent = parseFloat(inPercent == '' ? 0 : inPercent);
+
+	let rowList = $(".orderPreviewRow");
+	let totalOrderQty = 0;
+
+	rowList.each((index, row) => {
+
+		let rowId = row.id.slice(9);
+		//conosle.log(row);
+		let isSizeRequired = row.getAttribute('data-size-required');
+
+		if (isSizeRequired == "true") {
+			let sizes = $(".sizes-" + rowId);
+			sizes.each((index, td) => {
+				let cellId = td.id.slice(9);
+				let orderQty = parseFloat($("#orderQty-" + cellId).text());
+				totalOrderQty += orderQty;
+			});
+		} else {
+			totalOrderQty += parseFloat($("#orderQty-" + rowId).text());
+		}
+
+	});
+
+	$("#orderQty").val(totalOrderQty.toFixed(1));
+}
+
+function setUnitQty() {
 
 	let orderQty = $("#orderQty").val();
-	console.log("order qty", orderQty);
+	//conosle.log("order qty", orderQty);
 	orderQty = orderQty == '' ? 0 : orderQty;
 	let dozenQty = parseFloat(orderQty / 12).toFixed(1);
 
@@ -778,10 +1274,30 @@ function setGrandQty() {
 	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
 	unitValue = unitValue == 0 ? 1 : unitValue;
 
-	let grandQty = parseFloat((totalQty / unitValue));
-	$("#grandQty").val(grandQty);
+	let unitQty = parseFloat((totalQty / unitValue));
+	$("#unitQty").val(unitQty);
 }
+
+
 function searchAccessoriesIndent(aiNo) {
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './accessoriesIndentInfo',
+		data: {
+			aiNo: aiNo
+		},
+		success: function (data) {
+			if (data == "Success") {
+				let url = "printAccessoriesIndent";
+				window.open(url, '_blank');
+
+			}
+		}
+	});
+
+}
+function printAccessoriesIndent(aiNo) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -1023,7 +1539,7 @@ function styleitemColorWiseSize() {
 }
 
 function setOrder(data) {
-	console.log("order qty " + data[0].qty);
+	//conosle.log("order qty " + data[0].qty);
 	let orderqty = parseFloat(data[0].qty);
 	$("#orderQty").val(orderqty);
 
@@ -1054,10 +1570,10 @@ function setOrder(data) {
 
 	let unitValue = parseFloat($('#unit').val() == '' ? "0" : unitList[$('#unit').val()].unitValue);
 
-	let grandQty = parseFloat((totalQty / unitValue));
+	let unitQty = parseFloat((totalQty / unitValue));
 
 
-	$("#grandQty").val(grandQty);
+	$("#unitQty").val(unitQty);
 
 }
 
@@ -1124,7 +1640,7 @@ function poWiseStyles() {
 
 	let po = $("#purchaseOrder").val();
 
-	console.log("po " + po)
+	//conosle.log("po " + po)
 	if (po != 0) {
 
 		$.ajax({
@@ -1135,7 +1651,7 @@ function poWiseStyles() {
 
 			},
 			success: function (data) {
-				console.log("dt " + data.result)
+				//conosle.log("dt " + data.result)
 				loadStyles(data.result);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -1163,7 +1679,7 @@ function poWiseStyles() {
 
 
 function loadStyles(data) {
-	//console.log("dtt "+data[0].id);
+	////conosle.log("dtt "+data[0].id);
 	let itemList = data;
 	let options = "<option  value='0' selected>Select Style</option>";
 	let length = itemList.length;
@@ -1172,7 +1688,7 @@ function loadStyles(data) {
 	};
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
-	console.log("style " + stylevalue);
+	//conosle.log("style " + stylevalue);
 	$('#styleNo').val(stylevalue).change();
 	stylevalue = 0;
 
@@ -1318,7 +1834,7 @@ function shipping() {
 	let style = $("#styleNo").val();
 	let item = $("#itemName").val();
 
-	console.log("Po " + po + " style " + style + " item " + item)
+	//conosle.log("Po " + po + " style " + style + " item " + item)
 
 
 	if (po != '' && style != '' && item != '') {
@@ -1401,7 +1917,7 @@ function itemWiseColor() {
 	let style = $("#styleNo").val();
 	let item = $("#itemName").val();
 
-	console.log("style " + style)
+	//conosle.log("style " + style)
 	if (style != 0) {
 
 		$.ajax({
@@ -1449,7 +1965,7 @@ function itemWiseColor() {
 
 function LoadColors(data) {
 
-	console.log(" colors ")
+	//conosle.log(" colors ")
 
 	let itemList = data;
 	let options = "<option  value='0' selected>Select Item Color</option>";
@@ -1483,7 +1999,7 @@ function SizeWiseQty() {
 	}
 
 
-	console.log("style " + style)
+	//conosle.log("style " + style)
 	if (style != 0) {
 
 		$.ajax({
@@ -1530,271 +2046,117 @@ function SizeWiseQty() {
 
 
 
-function confrimEvent() {
-	let user = $("#user_hidden").val();
-	let aiNo = $("#aiNo").val();
+// function editEvent() {
 
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './confrimAccessoriesIndent',
-		data: {
-			user: user,
-			aiNo: aiNo
-		},
-		success: function (data) {
-
-			alert(data);
-
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			//alert("Server Error");
-			if (jqXHR.status === 0) {
-				alert('Not connect.\n Verify Network.');
-			} else if (jqXHR.status == 404) {
-				alert('Requested page not found.');
-			} else if (jqXHR.status == 500) {
-				alert('Internal Server Error.');
-			} else if (errorThrown === 'parsererror') {
-				alert('Requested JSON parse failed');
-			} else if (errorThrown === 'timeout') {
-				alert('Time out error');
-			} else if (errorThrown === 'abort') {
-				alert('Ajax request aborted ');
-			} else {
-				alert('Uncaught Error.\n' + jqXHR.responseText);
-			}
-
-		}
-	});
-}
+// 	let autoid = $("#accIndentId").val();
+// 	let user = $("#user_hidden").val();
+// 	let POno = $("#purchaseOrder option:selected").text();
+// 	//let POno=$("#purchaseOrder").val();
+// 	let style = $("#styleNo").val();
+// 	let item = $("#itemName").val();
 
 
-function editEvent() {
+// 	let itemColor = $("#colorName").val();
+// 	let ShippingMark = $("#shippingmark").val();
 
-	let autoid = $("#accIndentId").val();
-	let user = $("#user_hidden").val();
-	let POno = $("#purchaseOrder option:selected").text();
-	//let POno=$("#purchaseOrder").val();
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
+// 	let accessoriesItem = $("#accessoriesItem").val();
 
+// 	let accessoriesSize = $("#accessoriesSize").val();
+// 	let size = $("#size").val();
 
-	let itemColor = $("#colorName").val();
-	let ShippingMark = $("#shippingmark").val();
-
-	let accessoriesItem = $("#accessoriesItem").val();
-
-	let accessoriesSize = $("#accessoriesSize").val();
-	let size = $("#size").val();
-
-	let orderqty = $("#orderQty").val();
-	let qtyindozen = $("#qtyInDozen").val();
+// 	let orderqty = $("#orderQty").val();
+// 	let qtyindozen = $("#qtyInDozen").val();
 
 
-	let reqperpcs = $("#reqPerPcs").val();
+// 	let reqperpcs = $("#reqPerPcs").val();
 
-	let reqperdozen = $("#reqPerDozen").val();
-	let perunit = $("#perUnit").val();
-	let totalbox = $("#totalBox").val();
-	let dividedby = $("#dividedBy").val();
-	let extraInpercent = $("#extraIn").val();
-	let percentqty = $("#percentQty").val();
-	let totalqty = $("#totalQty").val();
+// 	let reqperdozen = $("#reqPerDozen").val();
+// 	let perunit = $("#perUnit").val();
+// 	let totalbox = $("#totalBox").val();
+// 	let dividedby = $("#dividedBy").val();
+// 	let extraInpercent = $("#extraIn").val();
+// 	let percentqty = $("#percentQty").val();
+// 	let totalqty = $("#totalQty").val();
 
-	let unit = $("#unit").text();
-	let grandqty = $("#grandQty").val();
-	let brand = $("#brand").val();
-	let accessoriescolor = $("#color").val();
+// 	let unit = $("#unit").text();
+// 	let unitQty = $("#unitQty").val();
+// 	let brand = $("#brand").val();
+// 	let accessoriescolor = $("#color").val();
 
-	if (POno == 0) {
-		alert("Select Purchase Order No")
-	} else if (style == 0) {
-		alert("Select Style No")
-	} else if (item == 0) {
-		alert("Select Item Name")
-	} else if (accessoriesItem == 0) {
-		alert("Select accessories Item name")
-	} else {
+// 	if (POno == 0) {
+// 		alert("Select Purchase Order No")
+// 	} else if (style == 0) {
+// 		alert("Select Style No")
+// 	} else if (item == 0) {
+// 		alert("Select Item Name")
+// 	} else if (accessoriesItem == 0) {
+// 		alert("Select accessories Item name")
+// 	} else {
 
-		console.log("style " + style)
-		if (style != 0) {
+// 		//conosle.log("style " + style)
+// 		if (style != 0) {
 
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: './editAccessoriesIndent',
-				data: {
-					autoid: autoid,
-					po: POno,
-					style: style,
-					itemname: item,
-					itemcolor: itemColor,
-					shippingmark: ShippingMark,
-					accessoriesname: accessoriesItem,
-					accessoriessize: accessoriesSize,
-					size: size,
-					orderqty: orderqty,
-					qtyindozen: qtyindozen,
-					reqperpcs: reqperpcs,
-					reqperdozen: reqperdozen,
-					perunit: perunit,
-					totalbox: totalbox,
-					dividedby: dividedby,
-					extrainpercent: extraInpercent,
-					percentqty: percentqty,
-					totalqty: totalqty,
-					unit: unit,
-					grandqty: grandqty,
-					brand: brand,
-					accessoriescolor: accessoriescolor
-
-
-				},
-				success: function (data) {
-
-					alert(data);
-
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					//alert("Server Error");
-					if (jqXHR.status === 0) {
-						alert('Not connect.\n Verify Network.');
-					} else if (jqXHR.status == 404) {
-						alert('Requested page not found.');
-					} else if (jqXHR.status == 500) {
-						alert('Internal Server Error.');
-					} else if (errorThrown === 'parsererror') {
-						alert('Requested JSON parse failed');
-					} else if (errorThrown === 'timeout') {
-						alert('Time out error');
-					} else if (errorThrown === 'abort') {
-						alert('Ajax request aborted ');
-					} else {
-						alert('Uncaught Error.\n' + jqXHR.responseText);
-					}
-
-				}
-			});
+// 			$.ajax({
+// 				type: 'POST',
+// 				dataType: 'json',
+// 				url: './editAccessoriesIndent',
+// 				data: {
+// 					autoid: autoid,
+// 					po: POno,
+// 					style: style,
+// 					itemname: item,
+// 					itemcolor: itemColor,
+// 					shippingmark: ShippingMark,
+// 					accessoriesname: accessoriesItem,
+// 					accessoriessize: accessoriesSize,
+// 					size: size,
+// 					orderqty: orderqty,
+// 					qtyindozen: qtyindozen,
+// 					reqperpcs: reqperpcs,
+// 					reqperdozen: reqperdozen,
+// 					perunit: perunit,
+// 					totalbox: totalbox,
+// 					dividedby: dividedby,
+// 					extrainpercent: extraInpercent,
+// 					percentqty: percentqty,
+// 					totalqty: totalqty,
+// 					unit: unit,
+// 					unitQty: unitQty,
+// 					brand: brand,
+// 					accessoriescolor: accessoriescolor
 
 
-		}
-	}
-}
+// 				},
+// 				success: function (data) {
 
-function saveEvent() {
+// 					alert(data);
 
+// 				},
+// 				error: function (jqXHR, textStatus, errorThrown) {
+// 					//alert("Server Error");
+// 					if (jqXHR.status === 0) {
+// 						alert('Not connect.\n Verify Network.');
+// 					} else if (jqXHR.status == 404) {
+// 						alert('Requested page not found.');
+// 					} else if (jqXHR.status == 500) {
+// 						alert('Internal Server Error.');
+// 					} else if (errorThrown === 'parsererror') {
+// 						alert('Requested JSON parse failed');
+// 					} else if (errorThrown === 'timeout') {
+// 						alert('Time out error');
+// 					} else if (errorThrown === 'abort') {
+// 						alert('Ajax request aborted ');
+// 					} else {
+// 						alert('Uncaught Error.\n' + jqXHR.responseText);
+// 					}
 
-	let user = $("#user_hidden").val();
-	let POno = $("#purchaseOrder option:selected").text();
-	//let POno=$("#purchaseOrder").val();
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-
-
-	let itemColor = $("#colorName").val();
-	let ShippingMark = $("#shippingmark").val();
-
-	let accessoriesItem = $("#accessoriesItem").val();
-
-	let accessoriesSize = $("#accessoriesSize").val();
-	let size = $("#size").val();
-
-	let orderqty = $("#orderQty").val();
-	let qtyindozen = $("#qtyInDozen").val();
-
-
-	let reqperpcs = $("#reqPerPcs").val();
-
-	let reqperdozen = $("#reqPerDozen").val();
-	let perunit = $("#perUnit").val();
-	let totalbox = $("#totalBox").val();
-	let dividedby = $("#dividedBy").val();
-	let extraInpercent = $("#extraIn").val();
-	let percentqty = $("#percentQty").val();
-	let totalqty = $("#totalQty").val();
-
-	let unit = $("#unit").val();
-	let grandqty = $("#grandQty").val();
-	let brand = $("#brand").val();
-	let accessoriescolor = $("#color").val();
-
-	if (POno == 0) {
-		alert("Select Purchase Order No")
-	} else if (style == 0) {
-		alert("Select Style No")
-	} else if (item == 0) {
-		alert("Select Item Name")
-	} else if (accessoriesItem == 0) {
-		alert("Select accessories Item name")
-	} else {
-
-		console.log("style " + style)
-		if (style != 0) {
-
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: './insertAccessoriesIndent',
-				data: {
-
-					po: POno,
-					style: style,
-					itemname: item,
-					itemcolor: itemColor,
-					shippingmark: ShippingMark,
-					accessoriesname: accessoriesItem,
-					accessoriessize: accessoriesSize,
-					size: size,
-					orderqty: orderqty,
-					qtyindozen: qtyindozen,
-					reqperpcs: reqperpcs,
-					reqperdozen: reqperdozen,
-					perunit: perunit,
-					totalbox: totalbox,
-					dividedby: dividedby,
-					extrainpercent: extraInpercent,
-					percentqty: percentqty,
-					totalqty: totalqty,
-					unit: unit,
-					grandqty: grandqty,
-					brand: brand,
-					accessoriescolor: accessoriescolor
+// 				}
+// 			});
 
 
-				},
-				success: function (data) {
-
-					$("#dataList").empty();
-					$("#dataList").append(AccessoriesDataShowInTable(data.result));
-
-
-				},
-				error: function (jqXHR, textStatus, errorThrown) {
-					//alert("Server Error");
-					if (jqXHR.status === 0) {
-						alert('Not connect.\n Verify Network.');
-					} else if (jqXHR.status == 404) {
-						alert('Requested page not found.');
-					} else if (jqXHR.status == 500) {
-						alert('Internal Server Error.');
-					} else if (errorThrown === 'parsererror') {
-						alert('Requested JSON parse failed');
-					} else if (errorThrown === 'timeout') {
-						alert('Time out error');
-					} else if (errorThrown === 'abort') {
-						alert('Ajax request aborted ');
-					} else {
-						alert('Uncaught Error.\n' + jqXHR.responseText);
-					}
-
-				}
-			});
-
-
-		}
-	}
-}
+// 		}
+// 	}
+// }
 
 
 function AccessoriesDataShowInTable(data) {
@@ -1874,7 +2236,7 @@ function setAccessoriesItemDetails(data) {
 	$('#qtyInDozen').val(itemList[0].qtyindozen);
 	$('#reqPerDozen').val(itemList[0].reqperdozen);
 	$('#totalBox').val(itemList[0].totalbox);
-	$('#grandQty').val(itemList[0].requiredUnitQty);
+	$('#unitQty').val(itemList[0].requiredUnitQty);
 	$('#dividedBy').val(itemList[0].dividedby);
 	$('#extraIn').val(itemList[0].extrainpercent);
 	$('#percentQty').val(itemList[0].percentqty);
@@ -1888,8 +2250,8 @@ function setAccessoriesItemDetails(data) {
 	itemvalue = itemList[0].itemname;
 	colorvalue = itemList[0].itemcolor;
 	sizevalue = itemList[0].sizeName;
-	console.log("instyle " + stylevalue);
-	console.log("incolorvalue " + colorvalue);
+	//conosle.log("instyle " + stylevalue);
+	//conosle.log("incolorvalue " + colorvalue);
 
 	$('#purchaseOrder option').map(function () {
 		if ($(this).text() == itemList[0].po) return this;

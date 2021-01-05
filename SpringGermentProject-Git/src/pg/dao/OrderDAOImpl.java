@@ -2336,7 +2336,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public boolean insertaccessoriesIndent(AccessoriesIndent ai) {
+	public boolean insertAccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
@@ -2754,7 +2754,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean confrimAccessoriesIndent(String user, String aiNo) {
+	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -2763,26 +2763,58 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
+			if(accessoriesIndentId.equals("New")) {
+				String sql="select (isnull(max(AINo),0)+1) as maxId from tbAccessoriesIndent";
+				List<?> list = session.createSQLQuery(sql).list();
+				if(list.size()>0) {		
+					accessoriesIndentId = list.get(0).toString();
+				}
+			}
+			
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(accessoriesItems);
+			JSONObject indentObject = (JSONObject)jsonParser.parse(accessoriesItems);
+			JSONArray indentList = (JSONArray) indentObject.get("list");
+			
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="insert into tbAccessoriesIndent (AINo,styleid, PurchaseOrder, "
+						+ "Itemid, ColorId, "
+						+ "ShippingMarks, accessoriesItemId, "
+						+ "accessoriesSize, "
+						+ "size, PerUnit, TotalBox,"
+						+ " OrderQty, QtyInDozen, "
+						+ "ReqPerPices, ReqPerDoz, "
+						+ "DividedBy, PercentageExtra, "
+						+ "PercentageExtraQty, TotalQty, "
+						+ "UnitId, RequireUnitQty, "
+						+ "IndentColorId, IndentBrandId, IndentDate, "
+						+ " IndentTime, IndentPostBy) values('"+accessoriesIndentId+"','"+indent.get("styleId")+"','"+indent.get("purchaseOrder")+"','"+indent.get("itemId")+"',"
+						+ "'"+indent.get("colorId")+"','"+indent.get("shippingMarks")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"',"
+						+ "'"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
+						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
+						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
 
-			String sql="update tbAccessoriesIndent set  AINo='"+aiNo+"',IndentPostBy='"+user+"' where AINo IS NULL";
-			session.createSQLQuery(sql).executeUpdate();
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
 			tx.commit();
 
-			return true;
+			return accessoriesIndentId;
 		}
 		catch(Exception e){
-
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			e.printStackTrace();
+			
 		}
 
 		finally {
 			session.close();
 		}
 
-		return false;
+		return "something wrong";
 
 	}
 
