@@ -326,9 +326,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
-	public boolean insertaccessoriesIndent(AccessoriesIndent ai) {
+	public boolean insertAccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
-		return orderDAO.insertaccessoriesIndent(ai);
+		return orderDAO.insertAccessoriesIndent(ai);
 	}
 
 	@Override
@@ -370,9 +370,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean confrimAccessoriesIndent(String user, String aiNo) {
+	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems) {
 		// TODO Auto-generated method stub
-		return orderDAO.confrimAccessoriesIndent(user, aiNo);
+		return orderDAO.confirmAccessoriesIndent(accessoriesIndentId, accessoriesItems);
 	}
 	
 	@Override

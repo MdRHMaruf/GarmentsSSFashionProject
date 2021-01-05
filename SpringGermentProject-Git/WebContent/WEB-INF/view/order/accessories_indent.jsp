@@ -14,8 +14,10 @@
 %>
 
 
-<input type="hidden" id="user_hidden" value="<%=lg.get(0).getId()%>">
-<input type="hidden" id="accIndentId" value="0">
+<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+<input type="hidden" id="autoId" value="">
+<input type="hidden" id="indentType" value="">
+<input type="hidden" id="accessoriesIndentId" value="New">
 
 <div class="page-wrapper">
 	<div class="m-2">
@@ -25,7 +27,7 @@
 					<div class="d-flex justify-content-end">
 						<div class="mr-auto">
 							<h4 style="text-align: left;" class="font-weight-bold">
-								Accessories Indent <span class="badge badge-primary">New</span>
+								Accessories Indent <span class="badge badge-primary" id='accessoriesId'>New</span>
 							</h4>
 						</div>
 
@@ -73,7 +75,7 @@
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
-											class="form-check-input" > Combined
+											class="form-check-input"> Combined
 										</label>
 									</div>
 								</div>
@@ -103,8 +105,8 @@
 										No</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
-											id="checkStyleNo" type="checkbox" class="form-check-input"
-											> Combined
+											id="checkStyleNo" type="checkbox" class="form-check-input">
+											Combined
 										</label>
 									</div>
 								</div>
@@ -129,8 +131,8 @@
 										Name</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
-											id="checkItemName" type="checkbox" class="form-check-input"
-											> Combined
+											id="checkItemName" type="checkbox" class="form-check-input">
+											Combined
 										</label>
 									</div>
 								</div>
@@ -154,8 +156,8 @@
 									<label for="color" class="col-form-label-sm mb-0 py-0">Color</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
-											id="checkColor" type="checkbox" class="form-check-input"
-											> Combined
+											id="checkColor" type="checkbox" class="form-check-input">
+											Combined
 										</label>
 									</div>
 								</div>
@@ -184,7 +186,7 @@
 											<div class="form-check-inline">
 												<label class="form-check-label"> <input
 													id="checkShippingMark" type="checkbox"
-													class="form-check-input" >Combined
+													class="form-check-input">Combined
 												</label>
 											</div>
 										</div>
@@ -234,7 +236,6 @@
 								<div class="row">
 									<div class="col-md-12 input-group-append">
 										<select id="accessoriesItem" class="selectpicker w-100"
-											
 											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
@@ -311,7 +312,8 @@
 											<div class="col-md-12">
 												<select id="unit" class="selectpicker form-control"
 													data-live-search="true"
-													data-style="btn-light btn-sm border-light-gray" onchange="setUnitQty()">
+													data-style="btn-light btn-sm border-light-gray"
+													onchange="setUnitQty()">
 
 													<c:forEach items="${unit}" var="unit" varStatus="counter">
 														<option value="${unit.id}">${unit.name}</option>
@@ -369,7 +371,8 @@
 											<label for="reqPerPcs" class="col-form-label-sm mb-0 py-0"><strong>Req.Per
 													Pcs</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="reqPerPcs" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="reqPerPcs"
+											onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -428,7 +431,8 @@
 											<label for="inPercent" class="col-form-label-sm mb-0 py-0"><strong>In
 													Percent(%)</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="inPercent" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="inPercent"
+											onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 								<div class="col-md-4 px-1">
@@ -482,15 +486,21 @@
 							<div class="d-flex justify-content-end">
 								<div class="row">
 									<div class="ml-auto pr-1">
-										<button class="btn btn-primary btn-sm " id="btnAdd"
-											>Add</button>
+										<button class="btn btn-primary btn-sm " id="btnAdd">
+											<i class="fa fa-plus-circle"></i> Add
+										</button>
 									</div>
 									<div class="pr-1">
 										<button class="btn btn-primary btn-sm" id="btnEdit"
-											onclick="editEvent()">Edit</button>
+											onclick="editAction()">
+											<i class="fa fa-pencil-square"></i> Edit
+										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">Refresh</button>
+										<button class="btn btn-primary btn-sm"
+											onclick="refreshAction()">
+											<i class="fa fa-refresh"></i> Refresh
+										</button>
 									</div>
 
 								</div>
@@ -502,7 +512,8 @@
 					<div class="row mt-1">
 						<div style="overflow: auto; max-height: 300px;"
 							class="col-sm-12 p-0 table-responsive">
-							<table class="table table-hover table-bordered table-sm mb-0 small-font">
+							<table
+								class="table table-hover table-bordered table-sm mb-0 small-font">
 								<thead>
 									<tr>
 										<th style="width: 15px;">Sl#</th>
@@ -520,7 +531,7 @@
 								</thead>
 								<tbody id="dataList">
 
-									
+
 								</tbody>
 							</table>
 						</div>
@@ -529,17 +540,23 @@
 						<div class="col-sm-12">
 							<div class="d-flex justify-content-end">
 								<div class="row">
-
-									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">Refresh</button>
-									</div>
-									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">Preview</button>
-									</div>
 									<div class="pr-1">
 										<button class="btn btn-primary btn-sm"
-											onclick="confrimEvent()">Confirm</button>
+											onclick="confirmAction()">
+											<i class="fas fa-save"></i> Confirm
+										</button>
 									</div>
+									<div class="pr-1">
+										<button class="btn btn-primary btn-sm">
+											<i class="fa fa-refresh"></i> Refresh
+										</button>
+									</div>
+									<div class="pr-1">
+										<button class="btn btn-primary btn-sm">
+											<i class="fas fa-print"></i> Preview
+										</button>
+									</div>
+
 								</div>
 							</div>
 						</div>
@@ -578,6 +595,7 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
+							<th><span><i class="fa fa-print"></i></span></th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
@@ -592,6 +610,8 @@
 								<td>${list.itemname}</td>
 								<td><i class="fa fa-search"
 									onclick="searchAccessoriesIndent(${list.aiNo})"> </i></td>
+									<td><i class="fa fa-print"
+									onclick="printAccessoriesIndent(${list.aiNo})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

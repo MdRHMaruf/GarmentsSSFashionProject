@@ -1108,7 +1108,7 @@ public class OrderController {
 	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
-		boolean insert= orderService.insertaccessoriesIndent(v);
+		boolean insert= orderService.insertAccessoriesIndent(v);
 
 		if(insert) {
 			List<AccessoriesIndent>qty=orderService.getAccessoriesIndent(v.getPo(),v.getStyle(),v.getItemname(),v.getItemcolor());
@@ -1178,16 +1178,14 @@ public class OrderController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/confrimAccessoriesIndent",method=RequestMethod.POST)
-	public String confrimAccessoriesIndent(String user,String aiNo) {
-		String msg="Create Occured while cofrim accessories indent";
+	@RequestMapping(value = "/confirmAccessoriesIndent",method=RequestMethod.POST)
+	public JSONObject confirmAccessoriesIndent(String accessoriesIndentId,String accessoriesItems) {
+		JSONObject objmain = new JSONObject();
 
-		boolean update= orderService.confrimAccessoriesIndent(user,aiNo);
-		if(update){
-			msg="Update Accessories successfully Confrimed";
-		}
+		String result = orderService.confirmAccessoriesIndent(accessoriesIndentId,accessoriesItems);
+		objmain.put("result", result);
 
-		return msg;
+		return objmain;
 	}
 
 	@ResponseBody

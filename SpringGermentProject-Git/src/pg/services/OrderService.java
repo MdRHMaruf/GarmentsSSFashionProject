@@ -88,7 +88,7 @@ public interface OrderService {
 
 	public List<AccessoriesIndent> getAccessoriesRecyclingData(String query);
 	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2);
-	public boolean insertaccessoriesIndent(AccessoriesIndent ai);
+	public boolean insertAccessoriesIndent(AccessoriesIndent ai);
 
 	public List<AccessoriesIndent>PendingList();
 	List<CommonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
@@ -96,7 +96,7 @@ public interface OrderService {
 	List<AccessoriesIndent> getPendingAccessoriesIndent();
 	List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id);
 	boolean editaccessoriesIndent(AccessoriesIndent v);
-	boolean confrimAccessoriesIndent(String user, String aiNo);
+	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent();
 
 	//Accessories Carton
