@@ -4396,9 +4396,9 @@ public class OrderDAOImpl implements OrderDAO{
 				sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
-						" on ai.styleid = style.StyleId \r\n" + 
+						" on ai.styleid = cast(style.styleId as varchar) \r\n" + 
 						" left join tbColors c\r\n" + 
-						" on ai.ColorId = c.ColorId \r\n" + 
+						" on ai.ColorId = cast(c.colorId as varchar) \r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
 						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
 						" left join tbunits unit\r\n" + 
