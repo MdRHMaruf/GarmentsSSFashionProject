@@ -416,7 +416,7 @@
 											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
 													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="divideBy">
+										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty()">
 									</div>
 								</div>
 							</div>

@@ -31,6 +31,7 @@ public class AccessoriesIndent {
 	String percentqty;
 	String totalqty;
 	String unit;
+	String unitId;
 	String grandqty;
 	String brand;
 	String accessoriesColorId;
@@ -69,7 +70,6 @@ public class AccessoriesIndent {
 	
 	public AccessoriesIndent(String AccIndentId,String PurchaseOrder,String StyleNo,String ItemName,String ColorName,String ShippingMarks,String AccessoriesName,String SizeName,String accessoriesSize,String PerUnit,String TotalBox,String OrderQty,String QtyInDozen,String ReqPerPices,String ReqPerDoz,String DividedBy,String PercentageExtra,String PercentageExtraQty,String TotalQty,String UnitName,String RequireUnitQty,String IndentBrandId,String IndentColorId) {
 		this.autoid=AccIndentId;
-		System.out.println("StyleNo "+StyleNo);
 		this.style=StyleNo;
 		this.po=PurchaseOrder;
 		this.itemname=ItemName;
@@ -374,6 +374,16 @@ public class AccessoriesIndent {
 
 	public void setSizeList(ArrayList<Size> sizeList) {
 		this.sizeList = sizeList;
+	}
+
+
+	public String getUnitId() {
+		return unitId;
+	}
+
+
+	public void setUnitId(String unitId) {
+		this.unitId = unitId;
 	}
 	
 

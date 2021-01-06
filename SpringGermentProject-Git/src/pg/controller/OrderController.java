@@ -1196,14 +1196,14 @@ public class OrderController {
 	}
 
 
-	@RequestMapping(value = "/printAccessoriesIndent",method=RequestMethod.GET)
-	public @ResponseBody ModelAndView printAccessoriesIndent(ModelMap map) {
+	@RequestMapping(value = "/printAccessoriesIndent/{accIndentId}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printAccessoriesIndent(ModelMap map,@PathVariable ("accIndentId") String accIndentId) {
 
 
 		ModelAndView view=new ModelAndView("order/printAccessoriesIndent");
 
 
-		map.addAttribute("AiNo", AiNo);
+		map.addAttribute("AiNo", accIndentId);
 
 
 		return view;
@@ -1213,12 +1213,23 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping(value = "/editAccessoriesIndent",method=RequestMethod.POST)
 	public String editAccessoriesIndent(AccessoriesIndent v) {
-		//JSONObject objmain = new JSONObject();
-		//JSONArray mainarray = new JSONArray();
-		String msg="Create Occured while updating accessories indent";
-		boolean update= orderService.editaccessoriesIndent(v);
+		String msg= "something wrong";
+		boolean update= orderService.editAccessoriesIndent(v);
 		if(update) {
-			msg="Update Accessories successfully";
+			msg="successfull";
+		}
+
+
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteAccessoriesIndent",method=RequestMethod.POST)
+	public String deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId) {
+		String msg= "something wrong";
+		boolean update= orderService.deleteAccessoriesIndent(accessorienIndentId, indentAutoId);
+		if(update) {
+			msg="successfull";
 		}
 
 
@@ -1227,50 +1238,56 @@ public class OrderController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/accessoriesItemSet/{id}",method=RequestMethod.GET)
-	public JSONObject accessoriesItemSet(@PathVariable ("id") String id) {
+	@RequestMapping(value = "/getAccessoriesIndentList",method=RequestMethod.GET)
+	public JSONObject getAccessoriesIndentList(String accessoriesIndentId) {
 		JSONObject objmain = new JSONObject();
-		JSONArray mainarray = new JSONArray();
+		//JSONArray mainarray = new JSONArray();
 
-		List<AccessoriesIndent>list=orderService.getAccessoriesIndentItemDetails(id);
+		List<AccessoriesIndent>list=orderService.getAccessoriesIndentItemList(accessoriesIndentId);
 
-		for (int i = 0; i < list.size(); i++) {
-			JSONObject obj=new JSONObject();
+		/*
+		 * for (int i = 0; i < list.size(); i++) { JSONObject obj=new JSONObject();
+		 * 
+		 * obj.put("autoid", list.get(i).getAutoid()); obj.put("po",
+		 * list.get(i).getPo()); obj.put("style", list.get(i).getStyle());
+		 * obj.put("itemname", list.get(i).getItemname()); obj.put("itemcolor",
+		 * list.get(i).getItemcolor()); obj.put("shippingmark",
+		 * list.get(i).getShippingmark()); obj.put("accessoriesname",
+		 * list.get(i).getAccessoriesName()); obj.put("sizeName",
+		 * list.get(i).getSizeName()); obj.put("accessoriessize",
+		 * list.get(i).getAccessoriessize());
+		 * obj.put("perunit",df.format(Double.parseDouble( list.get(i).getPerunit())));
+		 * obj.put("totalbox",
+		 * df.format(Double.parseDouble(list.get(i).getTotalbox())));
+		 * obj.put("orderqty",
+		 * df.format(Double.parseDouble(list.get(i).getOrderqty())));
+		 * obj.put("qtyindozen",
+		 * df.format(Double.parseDouble(list.get(i).getQtyindozen())));
+		 * obj.put("reqperpcs",
+		 * df.format(Double.parseDouble(list.get(i).getReqperpcs())));
+		 * obj.put("reqperdozen",
+		 * df.format(Double.parseDouble(list.get(i).getReqperdozen())));
+		 * obj.put("dividedby",
+		 * df.format(Double.parseDouble(list.get(i).getDividedby())));
+		 * obj.put("extrainpercent",
+		 * df.format(Double.parseDouble(list.get(i).getExtrainpercent())));
+		 * obj.put("percentqty",
+		 * df.format(Double.parseDouble(list.get(i).getPercentqty())));
+		 * obj.put("totalqty",
+		 * df.format(Double.parseDouble(list.get(i).getTotalqty()))); obj.put("unit",
+		 * list.get(i).getUnit()); obj.put("requiredUnitQty",
+		 * df.format(Double.parseDouble(list.get(i).getRequiredUnitQty())));
+		 * obj.put("indentBrandId", list.get(i).getIndentBrandId());
+		 * obj.put("indentColorId", list.get(i).getIndentColorId());
+		 * 
+		 * obj.put("indentColorId", list.get(i).getIndentColorId());
+		 * 
+		 * mainarray.add(obj);
+		 * 
+		 * }
+		 */
 
-			obj.put("autoid", list.get(i).getAutoid());
-			obj.put("po", list.get(i).getPo());
-			obj.put("style", list.get(i).getStyle());
-			obj.put("itemname", list.get(i).getItemname());
-			obj.put("itemcolor", list.get(i).getItemcolor());
-			obj.put("shippingmark", list.get(i).getShippingmark());
-			obj.put("accessoriesname", list.get(i).getAccessoriesName());
-			obj.put("sizeName", list.get(i).getSizeName());
-
-			System.out.println("itemcolor "+list.get(i).getItemcolor());
-			obj.put("accessoriessize", list.get(i).getAccessoriessize());
-			obj.put("perunit",df.format(Double.parseDouble( list.get(i).getPerunit())));
-			obj.put("totalbox", df.format(Double.parseDouble(list.get(i).getTotalbox())));
-			obj.put("orderqty", df.format(Double.parseDouble(list.get(i).getOrderqty())));
-			obj.put("qtyindozen", df.format(Double.parseDouble(list.get(i).getQtyindozen())));
-			obj.put("reqperpcs", df.format(Double.parseDouble(list.get(i).getReqperpcs())));
-			obj.put("reqperdozen", df.format(Double.parseDouble(list.get(i).getReqperdozen())));
-			obj.put("dividedby", df.format(Double.parseDouble(list.get(i).getDividedby())));
-			obj.put("extrainpercent", df.format(Double.parseDouble(list.get(i).getExtrainpercent())));
-			obj.put("percentqty", df.format(Double.parseDouble(list.get(i).getPercentqty())));
-			obj.put("totalqty", df.format(Double.parseDouble(list.get(i).getTotalqty())));
-			obj.put("unit", list.get(i).getUnit());
-			obj.put("requiredUnitQty", df.format(Double.parseDouble(list.get(i).getRequiredUnitQty())));
-			obj.put("indentBrandId", list.get(i).getIndentBrandId());
-			obj.put("indentColorId", list.get(i).getIndentColorId());
-
-			obj.put("indentColorId", list.get(i).getIndentColorId());
-
-			mainarray.add(obj);
-
-		}
-
-		objmain.put("result", mainarray);
-		System.out.println(" obj main "+objmain);
+		objmain.put("result", list);
 
 		return objmain;
 

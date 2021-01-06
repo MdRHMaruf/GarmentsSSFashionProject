@@ -2676,28 +2676,79 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id) {
+	public List<AccessoriesIndent> getAccessoriesIndentItemList(String accessoriesIndentId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-
-		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
+		AccessoriesIndent tempIndent = null;
+		List<AccessoriesIndent> dataList=new ArrayList<AccessoriesIndent>();
 
 		try{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,a.StyleId,a.ItemId,a.ColorId,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName,a.size,a.accessoriesSize,a.PerUnit,a.TotalBox,a.OrderQty,a.QtyInDozen,a.ReqPerPices,a.ReqPerDoz,a.DividedBy,a.PercentageExtra,a.PercentageExtraQty,a.TotalQty,isnull((select UnitName from tbunits where UnitId=a.UnitId),'') as UnitName,a.RequireUnitQty,a.IndentBrandId,a.IndentColorId from tbAccessoriesIndent a where a.AccIndentId='"+id+"'";
+			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(sc.StyleNo,'')as StyleNo,ai.Itemid,ISNULL(id.itemname,'') as ItemName,ai.ColorId,ISNULL(c.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty \r\n" + 
+					"from tbAccessoriesIndent ai  \r\n" + 
+					"left join TbStyleCreate sc \r\n" + 
+					"on ai.styleid = cast(sc.StyleId as varchar) \r\n" + 
+					"left join tbItemDescription id \r\n" + 
+					"on ai.Itemid = cast(id.itemid as varchar) \r\n" + 
+					"left join tbColors c \r\n" + 
+					"on ai.ColorId = cast(c.colorId as varchar) \r\n" + 
+					"left join tbbrands b \r\n" + 
+					"on ai.IndentBrandId = b.id \r\n" + 
+					"left join TbAccessoriesItem aItem \r\n" + 
+					"on ai.accessoriesItemId = aItem.itemid \r\n" + 
+					"left join tbStyleSize ss \r\n" + 
+					"on ai.size = ss.id \r\n" + 
+					"left join tbColors ic\r\n" + 
+					"on ai.IndentColorId = ic.ColorId\r\n" + 
+					"left join tbunits u \r\n" + 
+					"on ai.UnitId = u.Unitid \r\n" + 
+					"where ai.AINo = '"+accessoriesIndentId+"' order by ai.AccIndentId,ai.ColorId,ai.accessoriesItemId,ss.sortingNo";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new AccessoriesIndent(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString(),element[21].toString(),element[22].toString()));
+				tempIndent = new AccessoriesIndent();
+				tempIndent.setAiNo(element[0].toString());
+				tempIndent.setAutoid(element[1].toString());
+				tempIndent.setPurchaseOrder(element[2].toString());
+				tempIndent.setStyleId(element[3].toString());
+				tempIndent.setStyleNo(element[4].toString());
+				tempIndent.setItemId(element[5].toString());
+				tempIndent.setItemname(element[6].toString());
+				tempIndent.setItemColorId(element[7].toString());
+				tempIndent.setItemcolor(element[8].toString());
+				tempIndent.setShippingmark(element[9].toString());
+				tempIndent.setSize(element[10].toString());
+				tempIndent.setSizeName(element[11].toString());
+				tempIndent.setOrderqty(element[12].toString());
+				tempIndent.setQtyindozen(element[13].toString());
+				tempIndent.setReqperpcs(element[14].toString());
+				tempIndent.setReqperdozen(element[15].toString());
+				tempIndent.setPerunit(element[16].toString());
+				tempIndent.setTotalbox(element[17].toString());
+				tempIndent.setDividedby(element[18].toString());
+				tempIndent.setExtrainpercent(element[19].toString());
+				tempIndent.setPercentqty(element[20].toString());
+				tempIndent.setTotalqty(element[21].toString());
+				tempIndent.setAccessoriesId(element[22].toString());
+				tempIndent.setAccessoriesName(element[23].toString());
+				tempIndent.setAccessoriessize(element[24].toString());
+				tempIndent.setAccessoriesColorId(element[25].toString());
+				tempIndent.setAccessoriescolor(element[26].toString());
+				tempIndent.setIndentBrandId(element[27].toString());
+				tempIndent.setBrand(element[28].toString());
+				tempIndent.setUnitId(element[29].toString());
+				tempIndent.setUnit(element[30].toString());
+				tempIndent.setRequiredUnitQty(element[31].toString());
+				dataList.add(tempIndent);
 			}
 
 			tx.commit();
 
-			return query;
+			return dataList;
 		}
 		catch(Exception e){
 
@@ -2711,11 +2762,11 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 
-		return query;
+		return dataList;
 	}
 
 	@Override
-	public boolean editaccessoriesIndent(AccessoriesIndent ai) {
+	public boolean editAccessoriesIndent(AccessoriesIndent ai) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -2726,9 +2777,46 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 
-			String sql="update tbAccessoriesIndent set  PerUnit='"+ai.getPerunit()+"',TotalBox='"+ai.getTotalbox()+"',OrderQty='"+ai.getOrderqty()+"',QtyInDozen='"+ai.getQtyindozen()+"',"
+			String sql="update tbAccessoriesIndent set  accessoriesItemId='"+ai.getAccessoriesId()+"',accessoriesSize='"+ai.getAccessoriessize()+"',indentColorId='"+ai.getAccessoriesColorId()+"',indentBrandId='"+ai.getIndentBrandId()+"',unitId='"+ai.getUnitId()+"',PerUnit='"+ai.getPerunit()+"',TotalBox='"+ai.getTotalbox()+"',OrderQty='"+ai.getOrderqty()+"',QtyInDozen='"+ai.getQtyindozen()+"',"
 					+ "ReqPerPices='"+ai.getReqperpcs()+"',ReqPerDoz='"+ai.getReqperdozen()+"',DividedBy='"+ai.getDividedby()+"',PercentageExtra='"+ai.getExtrainpercent()+"',PercentageExtraQty='"+ai.getPercentqty()+"',"
-					+ "TotalQty='"+ai.getTotalqty()+"',RequireUnitQty='"+ai.getGrandqty()+"',IndentColorId='"+ai.getAccessoriescolor()+"',IndentBrandId='"+ai.getBrand()+"',IndentDate=GETDATE(),IndentTime=GETDATE(),IndentPostBy='"+ai.getUser()+"' where AccIndentId='"+ai.getAutoid()+"'";
+					+ "TotalQty='"+ai.getTotalqty()+"',RequireUnitQty='"+ai.getGrandqty()+"',IndentDate=GETDATE(),IndentTime=GETDATE(),IndentPostBy='"+ai.getUser()+"' where AccIndentId='"+ai.getAutoid()+"' and aino='"+ai.getAiNo()+"'";
+
+			session.createSQLQuery(sql).executeUpdate();
+
+
+			tx.commit();
+
+			return true;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+
+	}
+	
+	@Override
+	public boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CommonModel> query=new ArrayList<CommonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+
+			String sql="delete from tbAccessoriesIndent where AccIndentId='"+indentAutoId+"' and aino='"+accessorienIndentId+"'";
 
 			session.createSQLQuery(sql).executeUpdate();
 

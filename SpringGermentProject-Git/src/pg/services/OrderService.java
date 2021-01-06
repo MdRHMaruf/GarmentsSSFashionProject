@@ -94,8 +94,9 @@ public interface OrderService {
 	List<CommonModel> styleItemsWiseColor(String buyerorderid,String style,String item);
 	List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
 	List<AccessoriesIndent> getPendingAccessoriesIndent();
-	List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id);
-	boolean editaccessoriesIndent(AccessoriesIndent v);
+	List<AccessoriesIndent> getAccessoriesIndentItemList(String accessoriesItemId);
+	boolean editAccessoriesIndent(AccessoriesIndent v);
+	boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId);
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent();
 
