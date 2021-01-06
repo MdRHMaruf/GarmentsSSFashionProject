@@ -416,7 +416,7 @@
 											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
 													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="divideBy">
+										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty()">
 									</div>
 								</div>
 							</div>
@@ -595,8 +595,8 @@
 							<th>Purchase Order</th>
 							<th>Style No</th>
 							<th>Item Name</th>
-							<th><span><i class="fa fa-print"></i></span></th>
 							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -609,9 +609,9 @@
 								<td>${list.styleNo}</td>
 								<td>${list.itemname}</td>
 								<td><i class="fa fa-search"
-									onclick="searchAccessoriesIndent(${list.aiNo})"> </i></td>
+									onclick="searchAccessoriesIndent('${list.aiNo}')"> </i></td>
 									<td><i class="fa fa-print"
-									onclick="printAccessoriesIndent(${list.aiNo})"> </i></td>
+									onclick="printAccessoriesIndent('${list.aiNo}')"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

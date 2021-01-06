@@ -358,15 +358,20 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id) {
+	public List<AccessoriesIndent> getAccessoriesIndentItemList(String id) {
 		// TODO Auto-generated method stub
-		return orderDAO.getAccessoriesIndentItemDetails(id);
+		return orderDAO.getAccessoriesIndentItemList(id);
 	}
 
 	@Override
-	public boolean editaccessoriesIndent(AccessoriesIndent v) {
+	public boolean editAccessoriesIndent(AccessoriesIndent v) {
 		// TODO Auto-generated method stub
-		return orderDAO.editaccessoriesIndent(v);
+		return orderDAO.editAccessoriesIndent(v);
+	}
+	@Override
+	public boolean deleteAccessoriesIndent(String accessorienIndentId, String indentAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.deleteAccessoriesIndent(accessorienIndentId, indentAutoId);
 	}
 
 	@Override
@@ -740,6 +745,8 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editCheckListItem(checkList);
 	}
+
+	
 
 	
 	

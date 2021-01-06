@@ -92,8 +92,9 @@ public interface OrderDAO {
 
 	List<AccessoriesIndent> getAccessoriesIndent(String po, String style, String itemname, String itemcolor);
 	List<AccessoriesIndent> getPendingAccessoriesIndent();
-	List<AccessoriesIndent> getAccessoriesIndentItemDetails(String id);
-	boolean editaccessoriesIndent(AccessoriesIndent v);
+	List<AccessoriesIndent> getAccessoriesIndentItemList(String accessoriesIndentId);
+	boolean editAccessoriesIndent(AccessoriesIndent v);
+	boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId);
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent();
 

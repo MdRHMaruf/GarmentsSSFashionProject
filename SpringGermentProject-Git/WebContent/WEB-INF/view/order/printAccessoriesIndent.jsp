@@ -27,7 +27,25 @@
     	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select a.AINo,a.PurchaseOrder,a.ShippingMarks,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName,(select colorName from tbColors where ColorId=a.ColorId) as Color,ISNULL((select name from tbbrands where id=a.IndentBrandId),'') as BrandName,(select ItemName from TbAccessoriesItem where Itemid=a.accessoriesItemId) as AccessoriesName,a.accessoriesSize,(select SizeName from tbStyleSize where id=a.size) as SizeName,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.TotalQty from tbAccessoriesIndent a where AiNo ='"+AiNo+"' order by a.ColorId,a.accessoriesItemId,a.size";
+		String Sql="select ai.AINo,ai.PurchaseOrder,ai.ShippingMarks,isnull(sc.StyleNo,'')as StyleNo,ISNULL(id.itemname,'') as ItemName,ISNULL(c.colorName,'')as Color, "+
+				"ISNULL(b.name,'') as BrandName,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ISNULL(ss.sizeName,'') as SizeName,ISNULL(u.unitname,'') as UnitName,ai.TotalQty "+
+				"from tbAccessoriesIndent ai  "+
+				"left join TbStyleCreate sc "+
+				"on ai.styleid = cast(sc.StyleId as varchar) "+
+				"left join tbItemDescription id "+
+				"on ai.Itemid = cast(id.itemid as varchar) "+
+				"left join tbColors c "+
+				"on ai.ColorId = cast(c.colorId as varchar) "+
+				"left join tbbrands b "+
+				"on ai.IndentBrandId = b.id "+
+				"left join TbAccessoriesItem aItem "+
+				"on ai.accessoriesItemId = aItem.itemid "+
+				"left join tbStyleSize ss "+
+				"on ai.size = ss.id "+
+				"left join tbunits u "+
+				"on ai.UnitId = u.Unitid "+
+				"where ai.AINo = '"+AiNo+"' "+
+				"order by ai.ColorId,ai.accessoriesItemId,ai.size";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesIndent.jrxml");
