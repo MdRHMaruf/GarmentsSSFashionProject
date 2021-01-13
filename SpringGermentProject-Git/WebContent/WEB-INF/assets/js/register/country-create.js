@@ -90,8 +90,8 @@ function setData(countryId) {
 
   document.getElementById("countryId").value = countryId;
   document.getElementById("countryName").value = document.getElementById("countryName" + countryId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

@@ -182,8 +182,8 @@ function groupEditAction() {
 
             $("#groupTableList").empty();
             $("#groupTableList").append(drawGroupTable(data.result));
-            document.getElementById("btnGroupSave").disabled = false;
-            document.getElementById("btnGroupEdit").disabled = true;
+            $("#btnGroupSave").show();
+  $("#btnGroupEdit").hide();
 
           }
         }
@@ -196,6 +196,11 @@ function groupEditAction() {
   }
 }
 
+function groupModalCloseAction(){
+  $("groupId").val("");
+  $("#btnGroupSave").show();
+  $("#btnGroupEdit").hide();
+}
 
 function refreshAction() {
   location.reload();
@@ -219,16 +224,17 @@ function setData(sizeId, groupId) {
   document.getElementById("sizeGroupId").value = groupId;
   document.getElementById("sizeGroupName").value = document.getElementById("sizeGroup" + sizeId).innerHTML;
   document.getElementById("sizeName").value = document.getElementById("sizeName" + sizeId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  document.getElementById("sorting").value = document.getElementById("sizeSorting" + sizeId).innerHTML;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 
 function setGroupData(groupId) {
   document.getElementById("groupId").value = groupId;
   document.getElementById("groupName").value = document.getElementById("groupName" + groupId).innerHTML;
-  document.getElementById("btnGroupSave").disabled = true;
-  document.getElementById("btnGroupEdit").disabled = false;
+  $("#btnGroupSave").hide();
+  $("#btnGroupEdit").show();
 }
 
 function drawDataTable(data) {

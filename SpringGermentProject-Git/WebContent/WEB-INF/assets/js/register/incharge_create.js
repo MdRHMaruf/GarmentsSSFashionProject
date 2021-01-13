@@ -184,8 +184,8 @@ function setData(inchargeId) {
   $("#factoryName").change();
   console.log("department Id",document.getElementById("depId" + inchargeId).value);
   
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

@@ -1,5 +1,6 @@
 window.onload = ()=>{
-	document.title = "Brand Create";
+  document.title = "Brand Create";
+ 
 } 
 
 function saveAction() {
@@ -84,8 +85,8 @@ function setData(brandId) {
   document.getElementById("brandId").value = brandId;
   document.getElementById("brandName").value = document.getElementById("brandName" + brandId).innerHTML;
   document.getElementById("brandCode").value = document.getElementById("brandCode" + brandId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

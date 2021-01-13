@@ -37,7 +37,7 @@
 
 								<div class="col-sm-12 col-md-5 col-lg-5">
 									<button style="height: 38px;" type="button"
-										class="btn btn-primary" data-toggle="modal"
+										class="btn btn-primary" data-toggle="modal" onclick="createNewEvent()"
 										data-target="#exampleModal">Create Supplier</button>
 								</div>
 
@@ -213,13 +213,14 @@
 								</div>
 
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-									<button class="btn btn-primary" id="save" type="button"
+									
+									<button class="btn btn-primary btn-sm" id="save" type="button"
 										onclick="insertSupplier()">Save</button>
-									<button class="btn btn-secondary" id="edit" type="button"
-										onclick="editSupplier(this)">Edit</button>
-									<button class="btn btn-danger" type="button">Refresh</button>
+									<button class="btn btn-success btn-sm" id="edit" type="button"
+										onclick="editSupplier(this) style="display: none;"">Edit</button>
+									<button class="btn btn-secondary btn-sm" type="button">Refresh</button>
+									<button type="button" class="btn btn-secondary btn-sm"
+										data-dismiss="modal">Close</button>
 								</div>
 							</div>
 						</div>

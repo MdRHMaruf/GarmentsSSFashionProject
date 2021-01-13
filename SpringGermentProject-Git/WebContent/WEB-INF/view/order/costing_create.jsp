@@ -201,8 +201,8 @@
 								<i class="fa fa-plus-circle"></i> Add
 							</button>
 							<button id="btnEdit" type="button"
-								class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-								disabled>
+								class="btn btn-success btn-sm ml-1" onclick="editAction()"
+								style="display: none;">
 								<i class="fa fa-pencil-square"></i> Edit
 							</button>
 						</div>
@@ -239,7 +239,7 @@
 								<i class="fas fa-save"></i> Confirm
 							</button>
 							<button id="btnRefresh" type="button"
-								class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+								class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
 								<i class="fa fa-refresh"></i> Refresh
 							</button>
 						</div>
@@ -287,9 +287,9 @@
 								<td>${costing.itemName}</td>
 								<td>${costing.date}</td>
 								<td><i class="fa fa-search"
-									onclick="searchCosting(${costing.styleId}, ${costing.itemId})"></i></td>
+									onclick="searchCosting(${costing.styleId}, ${costing.itemId})" style='cursor: pointer;'></i></td>
 								<td><i class="fa fa-print"
-									onclick="itemWiseCostingReport(${costing.styleId}, ${costing.itemId})"></i></td>
+									onclick="itemWiseCostingReport(${costing.styleId}, ${costing.itemId})" style='cursor: pointer;'></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -335,7 +335,7 @@
 								<td>${costing.styleName}</td>
 								<td>${costing.itemName}</td>
 								<td><i class="fas fa-copy"
-									onclick="cloningCosting(${costing.styleId}, ${costing.itemId})"></i></td>
+									onclick="cloningCosting(${costing.styleId}, ${costing.itemId})" style="cursor: pointer;"></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

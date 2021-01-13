@@ -96,8 +96,8 @@ function setData(colorId) {
   document.getElementById("colorId").value = colorId;
   document.getElementById("colorName").value = document.getElementById("colorName" + colorId).innerHTML;
   document.getElementById("colorCode").value = document.getElementById("colorCode" + colorId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

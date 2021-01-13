@@ -105,8 +105,8 @@ function setData(departmentId,factoryId) {
   document.getElementById("departmentId").value = departmentId;
   document.getElementById("factoryName").value = factoryId;
   document.getElementById("departmentName").value = document.getElementById("departmentName" + departmentId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

@@ -1,5 +1,6 @@
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/common.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/popper.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/bootstrap.min.js"></script>

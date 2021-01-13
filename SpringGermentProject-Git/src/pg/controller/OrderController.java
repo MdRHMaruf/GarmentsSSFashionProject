@@ -839,7 +839,7 @@ public class OrderController {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 
-		List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
+		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
@@ -856,7 +856,7 @@ public class OrderController {
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
 
-		view.addObject("listAccPending",listAccPending);
+		//view.addObject("listAccPending",listAccPending);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1477,8 +1477,8 @@ public class OrderController {
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Brand> brandList = registerService.getBrandList();
-		List<Unit> unitList = registerService.getUnitList();
-		List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
+		//List<Unit> unitList = registerService.getUnitList();
+		//List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
 		ModelAndView view = new ModelAndView("order/fabrics-indent");
 
 		view.addObject("fabricindentsummarylist", fabricindentsummarylist);
@@ -1486,50 +1486,54 @@ public class OrderController {
 		view.addObject("fabricsList",fabricsItemList);
 		view.addObject("colorList",colorList);
 		view.addObject("brandList",brandList);
-		view.addObject("unitList",unitList);
-		view.addObject("fabricsIndentList",fabricsIndentList);
+		//view.addObject("unitList",unitList);
+		//view.addObject("fabricsIndentList",fabricsIndentList);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-	@RequestMapping(value = "/saveFabricsIndent",method=RequestMethod.POST)
-	public @ResponseBody JSONObject saveFabricsIndent(FabricsIndent	fabricsIndent) {
+	@RequestMapping(value = "/confirmFabricsIndent",method=RequestMethod.POST)
+	public @ResponseBody JSONObject confirmFabricsIndent(String	fabricsIndentId,String fabricsItems) {
 		JSONObject objmain = new JSONObject();
-		if(!orderService.isFabricsIndentExist(fabricsIndent)) {
-			if(orderService.saveFabricsIndent(fabricsIndent)) {
-
-				List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
-
-				objmain.put("result",fabricsIndentList);
-			}else {
-				objmain.put("result", "Something Wrong");
-			}
-		}else {
-			objmain.put("result", "duplicate");
-		}
+		
+		objmain.put("result",orderService.confirmFabricsIndent(fabricsIndentId, fabricsItems));
+			
 		return objmain;
 	}
 
 	@RequestMapping(value = "/editFabricsIndent",method=RequestMethod.POST)
 	public @ResponseBody JSONObject editFabricsIndent(FabricsIndent	fabricsIndent) {
 		JSONObject objmain = new JSONObject();
-		if(!orderService.isFabricsIndentExist(fabricsIndent)) {
+	
 			if(orderService.editFabricsIndent(fabricsIndent)) {
-				List<FabricsIndent> fabricsIndentList = orderService.getFabricsIndentList();
-				objmain.put("result",fabricsIndentList);
+				objmain.put("result","Successful");
 			}else {
 				objmain.put("result", "Something Wrong");
 			}
-		}else {
-			objmain.put("result", "duplicate");
-		}
+		
 
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchFabricsIndent",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchFabricsIndent(String indentId) {
+		JSONObject objmain = new JSONObject();
+		List<FabricsIndent> fabricsIndentList  = orderService.getFabricsIndent(indentId);
+		objmain.put("fabricsIndentList",fabricsIndentList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteFabricsIndent",method=RequestMethod.GET)
+	public @ResponseBody JSONObject deleteFabricsIndent(String autoId,String indentId) {
+		JSONObject objmain = new JSONObject();
+		
+		objmain.put("result",orderService.deleteFabricsIndent(autoId, indentId));
 		return objmain;
 	}
 
 	@RequestMapping(value = "/getFabricsIndent",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getFabricsIndent(String autoId) {
 		JSONObject objmain = new JSONObject();
-		FabricsIndent fabricsIndent = orderService.getFabricsIndent(autoId);
+		FabricsIndent fabricsIndent = orderService.getFabricsIndentInfo(autoId);
 		objmain.put("fabricsIndent",fabricsIndent);
 		return objmain;
 	}
@@ -1554,6 +1558,15 @@ public class OrderController {
 	public @ResponseBody JSONObject getOrderQtyByPOStyleItemAndColor(String purchaseOrder,String styleId,String itemId,String colorId) {
 		JSONObject objmain = new JSONObject();
 		double orderQty = orderService.getOrderQuantity(purchaseOrder,styleId,itemId,colorId);
+		objmain.put("orderQuantity",orderQty);
+		objmain.put("dozenQuantity", orderQty/12);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/getOrderQtyByMultipleId",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getOrderQtyByMultipleId(String purchaseOrder,String styleId,String itemId,String colorId) {
+		JSONObject objmain = new JSONObject();
+		double orderQty = orderService.getOrderQuantityByMultipleId(purchaseOrder,styleId,itemId,colorId);
 		objmain.put("orderQuantity",orderQty);
 		objmain.put("dozenQuantity", orderQty/12);
 		return objmain;
@@ -1866,35 +1879,17 @@ public class OrderController {
 	}
 
 
-	@ResponseBody
-	@RequestMapping(value = "/fabricsIndentReport/{poid}/{styleid}/{itemid}",method=RequestMethod.POST)
-	public String fabricsIndentReport(@PathVariable ("poid") String poid,@PathVariable ("styleid") String styleid,@PathVariable ("itemid") String itemid) {
-		System.out.println(" Open Ooudoor sales report 1");
-
-		this.poid=poid;
-		this.styleid=styleid;
-		this.itemid=itemid;
-
-		return "yes";
-
-	}
+	
 
 
 
 
 	@ResponseBody
-	@RequestMapping(value = "/fabricsIndentReportView",method=RequestMethod.GET)
-	public ModelAndView fabricsIndentReportView(ModelAndView map, FabricsIndent p) {
+	@RequestMapping(value = "/fabricsIndentReportView/{indentId}",method=RequestMethod.GET)
+	public ModelAndView fabricsIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
 
-		System.out.println(" Open Ooudoor sales report ");	
 		ModelAndView view = new ModelAndView("order/fabricsIndentReport");
-
-		view.addObject("poid",poid);
-		view.addObject("styleid",styleid);
-		view.addObject("itemid",itemid);
-
-
-
+		view.addObject("indentId",indentId);
 		return view;
 
 	}

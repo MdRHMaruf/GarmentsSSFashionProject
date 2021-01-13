@@ -202,12 +202,12 @@
 									<i class="fa fa-plus-circle"></i> Add
 								</button>
 								<button id="btnEdit" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
-									disabled>
+									class="btn btn-success btn-sm ml-1" onclick="itemSizeEdit()"
+									style="display: none;">
 									<i class="fa fa-pencil-square"></i> Edit
 								</button>
 								<button id="btnReset" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="reset()">
+									class="btn btn-secondary btn-sm ml-1" onclick="reset()">
 									<i class="fa fa-refresh"></i> Reset
 								</button>
 							</div>
@@ -249,9 +249,9 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">Note</span>
 					</div>
-					<input id="note" type="text" class="form-control"
+					<textarea id="note" class="form-control"
 						aria-label="Sizing example input"
-						aria-describedby="inputGroup-sizing-sm">
+						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -259,9 +259,9 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">Remarks</span>
 					</div>
-					<input id="remarks" type="text" class="form-control"
+					<textarea id="remarks" class="form-control"
 						aria-label="Sizing example input"
-						aria-describedby="inputGroup-sizing-sm">
+						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
 		</div>
@@ -272,12 +272,12 @@
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="buyerPoEditAction()"
-					disabled>
-					<i class="fa fa-pencil-square"></i> Edit
+					class="btn btn-success btn-sm ml-1" onclick="buyerPoEditAction()"
+					style='display: none'>
+					<i class="fa fa-pencil-square"></i> Edit PO
 				</button>
 				<button id="btnRefresh" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+					class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
 			</div>
@@ -321,9 +321,9 @@
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
 								<td>${po.date}</td>
 								<td><i class="fa fa-search"
-									onclick="searchBuyerPO(${po.buyerPoId})"> </i></td>
+									onclick="searchBuyerPO(${po.buyerPoId})" style='cursor : pointer;'> </i></td>
 								<td><i class="fa fa-print"
-									onclick="printBuyerPO(${po.buyerPoId})"> </i></td>
+									onclick="printBuyerPO(${po.buyerPoId})" style='cursor : pointer;'> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

@@ -1,6 +1,6 @@
 
 window.onload = ()=>{
-	document.title = "Fabrics Create";	
+  document.title = "Fabrics Create";	
 } 
 
 
@@ -178,8 +178,8 @@ function setData(fabricsItemId) {
         $("#reference").val(fabricsItem.reference);
         $("#unit").val(fabricsItem.unitId).change();
         drawUnitTable(fabricsItem.unitList);
-        document.getElementById("btnSave").disabled = true;
-        document.getElementById("btnEdit").disabled = false;
+        $("#btnSave").hide();
+        $("#btnEdit").show();
       }
     }
   });

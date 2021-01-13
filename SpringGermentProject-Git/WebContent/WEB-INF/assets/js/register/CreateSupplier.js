@@ -3,8 +3,7 @@ window.onload = ()=>{
 	maxsupplierId();
 } 
 
-$("#save").attr('disabled', false);
-$("#edit").attr('disabled', true);
+
 $("#suppier_id").attr('disabled', true);
 
 function maxsupplierId(){
@@ -237,14 +236,19 @@ function SupplierDetails(value){
 
 				console.log(data);
 				setData(data);
-				$("#save").attr('disabled', true);
-				$("#edit").attr('disabled', false);
+				$("#save").hide();
+				$("#edit").show();
 
 			}
 		});
 	}
 
 
+}
+
+function createNewEvent(){
+	$("#save").show();
+	$("#edit").hide();
 }
 
 

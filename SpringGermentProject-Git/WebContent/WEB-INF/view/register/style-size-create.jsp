@@ -86,10 +86,10 @@
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()"><i class="fas fa-save"></i> Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-primary btn-sm"
-								onclick="editAction()" disabled><i class="fa fa-pencil-square"></i> Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
+								onclick="editAction()" style='display: none;'><i class="fa fa-pencil-square"></i> Edit</button>
 							<button type="button" id="btnRefresh"
-								class="btn btn-primary btn-sm" onclick="refreshAction()"><i class="fa fa-refresh"></i> Refresh</button>
+								class="btn btn-secondary btn-sm" onclick="refreshAction()"><i class="fa fa-refresh"></i> Refresh</button>
 
 						</div>
 						<div class="col-sm-7 col-md-7 col-lg-7 shadow ">
@@ -123,9 +123,9 @@
 													<td>${counter.count}</td>
 													<td id='sizeGroup${size.sizeId}'>${size.groupName}</td>
 													<td id='sizeName${size.sizeId}'>${size.sizeName}</td>
-													<td>${size.sizeSorting}</td>
+													<td id='sizeSorting${size.sizeId}'>${size.sizeSorting}</td>
 													<td><i class="fa fa-edit"
-														onclick="setData(${size.sizeId},${size.groupId})"> </i></td>
+														onclick="setData(${size.sizeId},${size.groupId})" style="cursor: pointer;"> </i></td>
 												</tr>
 											</c:forEach>
 										</tbody>
@@ -146,7 +146,7 @@
 				<div class="modal-header">
 					<h5 class="modal-title">Style Size Group</h5>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
+						aria-label="Close" onclick="groupModalCloseAction()">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
@@ -185,9 +185,9 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary btn-sm"
-						data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
-					<button type="button" id="btnGroupSave" class="btn btn-primary btn-sm" onclick="groupSaveAction()"><i class="fas fa-save"></i> Save as changes </button>
-					<button type="button" id="btnGroupEdit" class="btn btn-primary btn-sm" onclick="groupEditAction()" disabled><i class="fa fa-pencil-square"></i> Edit</button>
+						data-dismiss="modal" onclick="groupModalCloseAction()"><i class="fa fa-close"></i> Close</button>
+					<button type="button" id="btnGroupSave" class="btn btn-primary btn-sm" onclick="groupSaveAction()"><i class="fas fa-save"></i> Save as New Group </button>
+					<button type="button" id="btnGroupEdit" class="btn btn-success btn-sm" onclick="groupEditAction()" style="display: none;"><i class="fa fa-pencil-square"></i> Edit Group Name</button>
 				</div>
 			</div>
 		</div>

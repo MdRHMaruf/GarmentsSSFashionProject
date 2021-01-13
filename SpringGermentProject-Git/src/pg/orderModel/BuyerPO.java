@@ -19,6 +19,8 @@ public class BuyerPO {
 	String date;
 	String userId;
 	List<BuyerPoItem> itemList;
+	String changedItemsList;
+
 	public BuyerPO() {}
 	
 	public BuyerPO(String buyerPoId, String buyerId, String paymentTerm, String currency, double totalUnit,
@@ -142,6 +144,12 @@ public class BuyerPO {
 		this.itemList = itemList;
 	}
 
-	
+	public String getChangedItemsList() {
+		return changedItemsList;
+	}
+
+	public void setChangedItemsList(String changedItemsList) {
+		this.changedItemsList = changedItemsList;
+	}
 	
 }

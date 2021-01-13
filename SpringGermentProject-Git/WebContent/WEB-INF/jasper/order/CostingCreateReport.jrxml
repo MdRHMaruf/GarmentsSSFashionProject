@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CostingCreateReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9318d7bd-180d-40bf-964b-74bf5bbf4acb">
 	<property name="ireport.zoom" value="1.7715610000000195"/>
-	<property name="ireport.x" value="99"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="413"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select *,(select frontpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName) )as frontpic,(select backpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName)) as backpic from funCostingForStyle('38') a order by a.ItemName desc"]]></defaultValueExpression>
@@ -33,9 +33,10 @@
 	<variable name="gUnitPrice" class="java.math.BigDecimal">
 		<variableExpression><![CDATA[$V{gGTotal}/12]]></variableExpression>
 	</variable>
-	<variable name="fobAmountCheck" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{GroupType}==1?($V{fobAmountCheck}+$F{Amount}):$V{fobAmountCheck}]]></variableExpression>
-		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	<variable name="fobAmountCheck" class="java.math.BigDecimal" resetType="Group" resetGroup="ItemGp" incrementType="Column" calculation="Sum">
+		<variableExpression><![CDATA[($F{GroupType}=='1'?($V{fobAmountCheck}+$F{Amount}):$V{fobAmountCheck})]]></variableExpression>
+		<initialValueExpression><![CDATA[0
+]]></initialValueExpression>
 	</variable>
 	<group name="ItemGp">
 		<groupExpression><![CDATA[$F{ItemName}]]></groupExpression>
@@ -203,11 +204,6 @@
 					<box leftPadding="2"/>
 					<text><![CDATA[G-TOTAL]]></text>
 				</staticText>
-				<staticText>
-					<reportElement x="96" y="42" width="249" height="13" uuid="874bc1ff-6d5c-460d-a933-d09d4de3e534"/>
-					<box leftPadding="2"/>
-					<text><![CDATA[UNIT PRICE]]></text>
-				</staticText>
 				<line>
 					<reportElement x="346" y="28" width="1" height="14" uuid="97b5b556-bfa1-410c-a388-f4aa5624ca35"/>
 				</line>
@@ -236,10 +232,10 @@
 					<textElement textAlignment="Right"/>
 					<textFieldExpression><![CDATA[$V{gUnitPrice}]]></textFieldExpression>
 				</textField>
-				<textField>
-					<reportElement x="161" y="28" width="100" height="14" uuid="2fcb4369-8ca9-4f50-99d3-30b594445c1a"/>
+				<textField evaluationTime="Band" pattern="">
+					<reportElement x="98" y="41" width="248" height="14" uuid="2fcb4369-8ca9-4f50-99d3-30b594445c1a"/>
 					<textElement markup="none"/>
-					<textFieldExpression><![CDATA[$V{fobAmountCheck}>0?"(FOB)":"(CMT)"]]></textFieldExpression>
+					<textFieldExpression><![CDATA["UNIT PRICE "+($V{fobAmountCheck}>0?"(FOB)":"(CMT)")]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>

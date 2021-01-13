@@ -2,6 +2,7 @@ package pg.orderModel;
 
 public class FabricsIndent {
 	String autoId;
+	String indentId;
 	String purchaseOrder;
 	String buyerOrderId;
 	String buyerName;
@@ -27,6 +28,7 @@ public class FabricsIndent {
 	double grandQty;
 	double previousReceiveQty;
 	String purchaserOrderid;
+	String indentDate;
 	
 	public FabricsIndent(String BuyerName,String BuyerOrderId, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
 		this.buyerName=BuyerName;
@@ -337,29 +339,31 @@ public class FabricsIndent {
 	public void setPurchaserOrderid(String purchaserOrderid) {
 		this.purchaserOrderid = purchaserOrderid;
 	}
-
-
-
 	public String getBuyerOrderId() {
 		return buyerOrderId;
 	}
-
-
-
 	public void setBuyerOrderId(String buyerOrderId) {
 		this.buyerOrderId = buyerOrderId;
 	}
-
-
-
 	public String getBuyerName() {
 		return buyerName;
 	}
-
-
-
 	public void setBuyerName(String buyerName) {
 		this.buyerName = buyerName;
+	}
+	public String getIndentId() {
+		return indentId;
+	}
+	public void setIndentId(String indentId) {
+		this.indentId = indentId;
+	}
+
+	public String getIndentDate() {
+		return indentDate;
+	}
+
+	public void setIndentDate(String indentDate) {
+		this.indentDate = indentDate;
 	}
 	
 	

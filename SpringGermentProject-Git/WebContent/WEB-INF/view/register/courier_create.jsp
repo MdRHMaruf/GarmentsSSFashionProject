@@ -200,14 +200,15 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-										<button class="btn btn-primary" type="button" id="save"
+									
+										<button class="btn btn-primary btn-sm" type="button" id="save"
 											onclick="insertCourier()">Save</button>
-										<button class="btn btn-secondary" type="button" id="edit"
-											onclick="editCourier()">Edit</button>
-										<button class="btn btn-danger" type="button"
+										<button class="btn btn-success btn-sm" type="button" id="edit"
+											onclick="editCourier()" style="display: none;">Edit</button>
+										<button class="btn btn-secondary btn-sm" type="button"
 											onclick="reloadPage()">Refresh</button>
+											<button type="button" class="btn btn-secondary btn-sm"
+										data-dismiss="modal">Close</button>
 								</div>
 							</div>
 						</div>
@@ -232,19 +233,10 @@
 							</table>
 						</div>
 					</div>
-
-
-
 				</div>
 			</div>
 		</div>
 
-
-		<%-- <script>
-				$('.bsdatepicker').datepicker({
-
-				});
-			</script> --%>
 		<jsp:include page="../include/footer.jsp" />
 
 		<script

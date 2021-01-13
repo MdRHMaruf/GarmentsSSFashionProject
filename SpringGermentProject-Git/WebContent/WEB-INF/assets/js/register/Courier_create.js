@@ -4,8 +4,6 @@ window.onload = ()=>{
 	maxCourierId();
 } 
 
-$("#save").attr('disabled', false);
-$("#edit").attr('disabled', true);
 $("#courier_id").attr('disabled', true);
 
 function maxCourierId(){
@@ -204,8 +202,8 @@ function courieriDetails(value){
 
 				console.log(data);
 				setData(data);
-				$("#save").attr('disabled', true);
-				$("#edit").attr('disabled', false);
+				$("#save").hide();
+				$("#edit").show();
 
 			}
 		});

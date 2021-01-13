@@ -1,3 +1,4 @@
+<%@page import="net.sf.jasperreports.engine.export.JRXlsExporter"%>
 <%@ page contentType="application/pdf" %>
 
 <%@ page trimDirectiveWhitespaces="true"%>
@@ -90,7 +91,6 @@
         JasperReport jr = JasperCompileManager.compileReport(jd);
       
         JasperPrint jp = JasperFillManager.fillReport(jr, map, sp.getDataSource().getConnection());
-
         //Exporting the report as a PDF
         JasperExportManager.exportReportToPdfStream(jp, response.getOutputStream());
     } catch (FileNotFoundException e) {

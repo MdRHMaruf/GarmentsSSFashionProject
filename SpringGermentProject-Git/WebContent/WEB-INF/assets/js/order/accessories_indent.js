@@ -33,7 +33,7 @@ window.onload = () => {
 		}
 	});
 
-	AINO();
+
 }
 
 
@@ -1538,8 +1538,6 @@ function sizeReqCheck() {
 }
 
 function sizeWiseOrderQty() {
-
-
 	let size = $("#size").val();
 
 	if (size != '0' && find == 0) {
@@ -1715,48 +1713,7 @@ function LoadSize(data) {
 
 }
 
-function AINO() {
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './maxAIno',
-		data: {
-
-
-
-
-		},
-		success: function (data) {
-			$("#aiNo").val(data);
-
-
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			//alert("Server Error");
-			if (jqXHR.status === 0) {
-				alert('Not connect.\n Verify Network.');
-			} else if (jqXHR.status == 404) {
-				alert('Requested page not found.');
-			} else if (jqXHR.status == 500) {
-				alert('Internal Server Error.');
-			} else if (errorThrown === 'parsererror') {
-				alert('Requested JSON parse failed');
-			} else if (errorThrown === 'timeout') {
-				alert('Time out error');
-			} else if (errorThrown === 'abort') {
-				alert('Ajax request aborted ');
-			} else {
-				alert('Uncaught Error.\n' + jqXHR.responseText);
-			}
-
-		}
-	});
-
-}
-
-
-
+/*
 function poWiseStyles() {
 
 
@@ -1885,7 +1842,9 @@ function loatItems(data) {
 	itemvalue = 0;
 
 }
+*/
 
+/*
 function styleItemsWiseColor() {
 	let buyerorderid = $("#purchaseOrder").val();
 	let style = $("#styleNo").val();
@@ -1943,7 +1902,8 @@ function loatItemsWiseColor(data) {
 	colorvalue = 0;
 
 }
-
+*/
+/*
 function shipping() {
 	let checkvalue = $("#shippingCheck").is(':checked') ? 'checked' : 'unchecked';
 	if (checkvalue == 'checked') {
@@ -1951,31 +1911,19 @@ function shipping() {
 	} else {
 		$("#shippingmark").attr('disabled', true);
 	}
-
 	let po = $("#purchaseOrder").val();
 	let style = $("#styleNo").val();
 	let item = $("#itemName").val();
-
 	//conosle.log("Po " + po + " style " + style + " item " + item)
-
-
 	if (po != '' && style != '' && item != '') {
-
-
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
 			url: './shippingMark/' + po + '/' + style + '/' + item,
 			data: {
-
-
-
-
 			},
 			success: function (data) {
 				loadShppingMarks(data);
-
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -2000,8 +1948,8 @@ function shipping() {
 	}
 
 }
-
-
+*/
+/*
 function loadShppingMarks(data) {
 	let itemList = data;
 	let options = "<option  value='0' selected>Select Item Type</option>";
@@ -2020,22 +1968,16 @@ function loadShppingMarks(data) {
 
 
 function sizeRequiredBoxaction() {
-
-
-
 	let itemList = "";
 	let options = "<option  value='0' selected>Select Item Type</option>";
-
 	document.getElementById("size").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
 	$('#size').val("0").change();
 }
+*/
 
-
-
+/*
 function itemWiseColor() {
-
-
 	let style = $("#styleNo").val();
 	let item = $("#itemName").val();
 
@@ -2047,16 +1989,10 @@ function itemWiseColor() {
 			dataType: 'json',
 			url: './itemWiseColor/' + style + '/' + item,
 			data: {
-
-
-
-
 			},
 			success: function (data) {
-
 				LoadColors(data.color);
 				//itemWiseSize();
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -2086,9 +2022,7 @@ function itemWiseColor() {
 
 
 function LoadColors(data) {
-
 	//conosle.log(" colors ")
-
 	let itemList = data;
 	let options = "<option  value='0' selected>Select Item Color</option>";
 	let length = itemList.length;
@@ -2098,10 +2032,7 @@ function LoadColors(data) {
 	document.getElementById("itemcolor").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
 	$('#itemcolor').val("0").change();
-
-
 }
-
 
 function SizeWiseQty() {
 
@@ -2129,16 +2060,9 @@ function SizeWiseQty() {
 			dataType: 'json',
 			url: './SizeWiseQty/' + style + '/' + item + '/' + size + '/' + color + '/' + type,
 			data: {
-
-
-
-
 			},
 			success: function (data) {
-
 				setOrder(data.size)
-
-
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -2164,407 +2088,7 @@ function SizeWiseQty() {
 
 	}
 
-}
-
-
-//Accessories Curton 
-function setTotalQtyForCurton() {
-
-
-	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
-
-	let multiplication1 = length1 + width1 + height1 + add1;
-
-	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
-
-	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
-
-	let multiplication2 = length2 + width2 + height2 + add2;
-
-	let totalqty = (multiplication1 * multiplication2 * 2) / devideBy;
-
-
-	$('#qty').val(totalqty);
-
-
-}
-
-function editAccessoriesCurton() {
-	let autoid = $("#accIndentId").val();
-	let user = $("#user_hidden").val();
-	let poNo = $("#purchaseOrder option:selected").text();
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-	let itemColor = $("#colorName").val();
-	let shippingMark = $("#shippingmark").val();
-	let accessoriesItem = $("#accessoriesItem").val();
-	let accessoriesSize = $("#accessoriesSize").val();
-	let unit = $("#unit").val();
-
-	let orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
-	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
-
-	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
-
-	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
-	let ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
-
-	let totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
-
-	if (poNo != '0') {
-		if (style != '0') {
-			if (item != '0') {
-				if (itemColor != '0') {
-					if (accessoriesItem != '0') {
-						$.ajax({
-							type: 'POST',
-							dataType: 'json',
-							url: './editAccessoriesCurton',
-							data: {
-								autoid: autoid,
-								user: user,
-								poNo: poNo,
-								style: style,
-								item: item,
-								itemColor: itemColor,
-								shippingMark: shippingMark,
-								accessoriesItem: accessoriesItem,
-								accessoriesSize: accessoriesSize,
-								unit: unit,
-								orderqty: orderqty,
-								length1: length1,
-								width1: width1,
-								height1: height1,
-								add1: add1,
-								devideBy: devideBy,
-								length2: length2,
-								width2: width2,
-								height2: height2,
-								add2: add2,
-								totalQty: totalQty,
-								ply: ply
-							},
-							success: function (data) {
-								//alert(data);
-
-								$("#dataList").empty();
-								$("#dataList").append(AccessoriesCartonDataShowInTable(data.result));
-
-							},
-							error: function (jqXHR, textStatus, errorThrown) {
-								//alert("Server Error");
-								if (jqXHR.status === 0) {
-									alert('Not connect.\n Verify Network.');
-								} else if (jqXHR.status == 404) {
-									alert('Requested page not found.');
-								} else if (jqXHR.status == 500) {
-									alert('Internal Server Error.');
-								} else if (errorThrown === 'parsererror') {
-									alert('Requested JSON parse failed');
-								} else if (errorThrown === 'timeout') {
-									alert('Time out error');
-								} else if (errorThrown === 'abort') {
-									alert('Ajax request aborted ');
-								} else {
-									alert('Uncaught Error.\n' + jqXHR.responseText);
-								}
-
-							}
-						});
-					}
-					else {
-						alert("Provide Accessories Item");
-					}
-				}
-				else {
-					alert("Provide Item Color");
-				}
-			}
-			else {
-				alert("Provide Item Name");
-			}
-		}
-		else {
-			alert("Provide Style No");
-		}
-	}
-	else {
-		alert("Provide Purchase Order No");
-	}
-
-
-}
-
-function saveAccessoriesCurton() {
-	let user = $("#user_hidden").val();
-	let poNo = $("#purchaseOrder option:selected").text();
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-	let itemColor = $("#colorName").val();
-	let shippingMark = $("#shippingmark").val();
-	let accessoriesItem = $("#accessoriesItem").val();
-	let accessoriesSize = $("#accessoriesSize").val();
-	let unit = $("#unit").val();
-
-	let orderqty = parseFloat($('#orderQty').val() == '' ? "0" : $('#orderQty').val());
-	let length1 = parseFloat($('#length1').val() == '' ? "0" : $('#length1').val());
-	let width1 = parseFloat($('#width1').val() == '' ? "0" : $('#width1').val());
-	let height1 = parseFloat($('#height1').val() == '' ? "0" : $('#height1').val());
-	let add1 = parseFloat($('#add1').val() == '' ? "0" : $('#add1').val());
-
-	let devideBy = parseFloat($('#devideBy').val() == '' ? "0" : $('#devideBy').val());
-
-	let length2 = parseFloat($('#length2').val() == '' ? "0" : $('#length2').val());
-	let width2 = parseFloat($('#width2').val() == '' ? "0" : $('#width2').val());
-	let height2 = parseFloat($('#height2').val() == '' ? "0" : $('#height2').val());
-	let add2 = parseFloat($('#add2').val() == '' ? "0" : $('#add2').val());
-	let ply = parseFloat($('#ply').val() == '' ? "0" : $('#ply').val());
-
-	let totalQty = parseFloat($('#qty').val() == '' ? "0" : $('#qty').val());
-
-	if (poNo != '0') {
-		if (style != '0') {
-			if (item != '0') {
-				if (itemColor != '0') {
-					if (accessoriesItem != '0') {
-						$.ajax({
-							type: 'POST',
-							dataType: 'json',
-							url: './saveAccessoriesCurton',
-							data: {
-								user: user,
-								poNo: poNo,
-								style: style,
-								item: item,
-								itemColor: itemColor,
-								shippingMark: shippingMark,
-								accessoriesItem: accessoriesItem,
-								accessoriesSize: accessoriesSize,
-								unit: unit,
-								orderqty: orderqty,
-								length1: length1,
-								width1: width1,
-								height1: height1,
-								add1: add1,
-								devideBy: devideBy,
-								length2: length2,
-								width2: width2,
-								height2: height2,
-								add2: add2,
-								totalQty: totalQty,
-								ply: ply
-							},
-							success: function (data) {
-								//alert(data);
-
-								$("#dataList").empty();
-								$("#dataList").append(AccessoriesCartonDataShowInTable(data.result));
-
-							},
-							error: function (jqXHR, textStatus, errorThrown) {
-								//alert("Server Error");
-								if (jqXHR.status === 0) {
-									alert('Not connect.\n Verify Network.');
-								} else if (jqXHR.status == 404) {
-									alert('Requested page not found.');
-								} else if (jqXHR.status == 500) {
-									alert('Internal Server Error.');
-								} else if (errorThrown === 'parsererror') {
-									alert('Requested JSON parse failed');
-								} else if (errorThrown === 'timeout') {
-									alert('Time out error');
-								} else if (errorThrown === 'abort') {
-									alert('Ajax request aborted ');
-								} else {
-									alert('Uncaught Error.\n' + jqXHR.responseText);
-								}
-
-							}
-						});
-					}
-					else {
-						alert("Provide Accessories Item");
-					}
-				}
-				else {
-					alert("Provide Item Color");
-				}
-			}
-			else {
-				alert("Provide Item Name");
-			}
-		}
-		else {
-			alert("Provide Style No");
-		}
-	}
-	else {
-		alert("Provide Purchase Order No");
-	}
-
-
-
-}
-
-function btnAllCartonIndent() {
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './getAllAccessoriesCartonData',
-		success: function (data) {
-			//alert(data);
-
-			$("#dataList").empty();
-			$("#dataList").append(AccessoriesCartonDataShowInTable(data.result));
-
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			//alert("Server Error");
-			if (jqXHR.status === 0) {
-				alert('Not connect.\n Verify Network.');
-			} else if (jqXHR.status == 404) {
-				alert('Requested page not found.');
-			} else if (jqXHR.status == 500) {
-				alert('Internal Server Error.');
-			} else if (errorThrown === 'parsererror') {
-				alert('Requested JSON parse failed');
-			} else if (errorThrown === 'timeout') {
-				alert('Time out error');
-			} else if (errorThrown === 'abort') {
-				alert('Ajax request aborted ');
-			} else {
-				alert('Uncaught Error.\n' + jqXHR.responseText);
-			}
-
-		}
-	});
-}
-
-function AccessoriesCartonDataShowInTable(data) {
-	let rows = [];
-	let length = data.length;
-
-	for (let i = 0; i < length; i++) {
-		rows.push(drawRowDataCartonTable(data[i], i + 1));
-	}
-
-	return rows;
-}
-
-function drawRowDataCartonTable(rowData, c) {
-
-	let row = $("<tr />")
-	row.append($("<td>" + c + "</td>"));
-	row.append($("<td>" + rowData.poNo + "</td>"));
-	row.append($("<td>" + rowData.style + "</td>"));
-	row.append($("<td>" + rowData.itemName + "</td>"));
-	row.append($("<td>" + rowData.itemColor + "</td>"));
-	row.append($("<td>" + rowData.shippingMark + "</td>"));
-	row.append($("<td>" + rowData.accessoriesName + "</td>"));
-	row.append($("<td>" + rowData.cartonSize + "</td>"));
-	row.append($("<td>" + rowData.totalQty + "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=\"accessoriesCartonItemSet(" + rowData.autoId + ")\"> </i></td>"));
-	return row;
-}
-
-
-
-function accessoriesCartonItemSet(id) {
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		url: './accessoriesCartonItemSet/' + id,
-		success: function (data) {
-
-			setAccessoriesItemCartonDetails(data.result);
-
-
-		},
-		error: function (jqXHR, textStatus, errorThrown) {
-			//alert("Server Error");
-			if (jqXHR.status === 0) {
-				alert('Not connect.\n Verify Network.');
-			} else if (jqXHR.status == 404) {
-				alert('Requested page not found.');
-			} else if (jqXHR.status == 500) {
-				alert('Internal Server Error.');
-			} else if (errorThrown === 'parsererror') {
-				alert('Requested JSON parse failed');
-			} else if (errorThrown === 'timeout') {
-				alert('Time out error');
-			} else if (errorThrown === 'abort') {
-				alert('Ajax request aborted ');
-			} else {
-				alert('Uncaught Error.\n' + jqXHR.responseText);
-			}
-
-		}
-	});
-}
-
-
-function setAccessoriesItemCartonDetails(data) {
-	let itemList = data;
-
-	$('#accIndentId').val(itemList[0].autoid);
-	$('#orderQty').val(itemList[0].orderqty);
-	$('#length1').val(itemList[0].length1);
-	$('#width1').val(itemList[0].width1);
-	$('#height1').val(itemList[0].height1);
-	$('#add1').val(itemList[0].add1);
-
-	$('#length2').val(itemList[0].length2);
-	$('#width2').val(itemList[0].width2);
-	$('#height2').val(itemList[0].height2);
-	$('#add2').val(itemList[0].add2);
-
-	$('#devideBy').val(itemList[0].devideBy);
-	$('#qty').val(itemList[0].totalQty);
-	$('#ply').val(itemList[0].ply);
-	$('#cartonSize').val(itemList[0].accessoriesSize);
-
-
-
-
-	stylevalue = itemList[0].style;
-	itemvalue = itemList[0].item;
-	colorvalue = itemList[0].itemColor;
-
-
-	$('#purchaseOrder option').map(function () {
-		if ($(this).text() == itemList[0].poNo) return this;
-	}).attr('selected', 'selected').change();
-
-
-	$('#shippingCheck').val(itemList[0].shippingMark);
-	//$('#colorName').val(itemList[0].poitemcolor);
-	$('#accessoriesItem').val(itemList[0].accessoriesItem);
-	$('#cartonSize').val(itemList[0].accessoriesSize);
-
-	//
-
-	$('#sizeReqCheck').prop("checked", true);
-
-
-	find = 1;
-
-	$('#btnSave').prop('disabled', true);
-	$('#btnEdit').prop('disabled', false);
-}
-
-
+}*/
 
 function successAlert(message) {
 	let element = $(".alert");
