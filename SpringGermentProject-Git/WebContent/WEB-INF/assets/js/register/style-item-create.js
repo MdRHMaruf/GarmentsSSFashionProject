@@ -95,8 +95,8 @@ function setData(styleItemId) {
   document.getElementById("styleItemId").value = styleItemId;
   document.getElementById("styleItemName").value = document.getElementById("styleItemName" + styleItemId).innerHTML;
   document.getElementById("styleItemCode").value = document.getElementById("styleItemCode" + styleItemId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

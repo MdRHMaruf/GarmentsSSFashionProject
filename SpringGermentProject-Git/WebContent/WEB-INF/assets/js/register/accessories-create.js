@@ -175,8 +175,8 @@ function setData(accessoriesItemId) {
         $("#accessoriesItemCode").val(accessoriesItem.accessoriesItemCode);
         $("#unit").val(accessoriesItem.unitId).change();
         drawUnitTable(accessoriesItem.unitList);
-        document.getElementById("btnSave").disabled = true;
-        document.getElementById("btnEdit").disabled = false;
+        $("#btnSave").hide();
+        $("#btnEdit").show();
       }
     }
   });

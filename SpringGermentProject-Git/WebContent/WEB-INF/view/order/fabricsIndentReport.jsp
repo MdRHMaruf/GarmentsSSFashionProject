@@ -44,56 +44,49 @@
 	ArrayList<FabricsIndent> list=new ArrayList<FabricsIndent>();
 	list = (ArrayList<FabricsIndent>) request.getAttribute("list");
 	
-	String poid=(String) request.getAttribute("poid");
-	String styleid=(String) request.getAttribute("styleid");
-	String itemid=(String) request.getAttribute("itemid");
-	
-	
-	
-	
-	
-	
-	
+	String indentId=(String) request.getAttribute("indentId");
     try {
-    	
     	SpringRootConfig sp=new SpringRootConfig();
-    	
-    
     	List<HashMap<String,String>> datalist=new ArrayList<HashMap<String,String>>();
     	
     	Session dbsession=HibernateUtil.openSession();
 		Transaction tx=null;
         
 	
-		String Sql="select a.id,(select styleno from TbStyleCreate where styleid=a.styleId) as styleno,(select itemname from tbitemdescription where itemid=a.itemid) as itemname,(select colorname from tbcolors where ColorId=a.itemcolor) as itemcolor,(select ItemName from tbfabricsItem where id=a.fabricsid) as FabricsItemName,(select colorname from tbcolors where ColorId=a.fabricscolor) as fabricscolor,(select name from tbbrands where id=a.brand) as brand,a.width,a.GSM,a.Yard,a.qty,a.dozenqty,a.consumption,a.TotalQty,a.RequireUnitQty,(select unitname from tbunits where Unitid=a.unitId) as unit,(select Signature from TbMerchendiserInfo where MUserId=a.entryby) as Signature  from tbFabricsIndent a where a.PurchaseOrder=(select PurchaseOrder from TbBuyerOrderEstimateDetails where BuyerOrderId='"+poid+"' group by PurchaseOrder) and  a.styleid='"+styleid+"' and a.itemid='"+itemid+"'";
+		String Sql="select ai.id,sc.StyleNo as styleno,id.itemname as itemname,itemC.Colorname as itemcolor,fi.ItemName as FabricsItemName,fabricsC.Colorname as fabricscolor,b.name as brand,ai.width,ai.GSM,ai.Yard,ai.qty,ai.dozenqty,ai.consumption,ai.TotalQty,ai.RequireUnitQty,u.unitname as unit,mi.Signature as Signature \r\n"+  
+				"from tbFabricsIndent ai \r\n"+
+				"left join TbStyleCreate sc \r\n"+
+				"on ai.styleId = sc.StyleId \r\n"+
+				"left join tbItemDescription id \r\n"+
+				"on ai.itemid = id.itemid \r\n"+
+				"left join tbColors itemC \r\n"+
+				"on ai.itemcolor = itemC.ColorId \r\n"+
+				"left join TbFabricsItem fi \r\n"+
+				"on ai.fabricsid = fi.id \r\n"+
+				"left join tbColors fabricsC \r\n"+
+				"on ai.fabricscolor = fabricsC.ColorId \r\n"+
+				"left join tbbrands b \r\n"+
+				"on ai.brand = b.id  \r\n"+
+				"left join tbunits u \r\n"+
+				"on ai.unitId = u.Unitid \r\n"+
+				"left join TbMerchendiserInfo mi \r\n"+
+				"on ai.entryby = mi.MUserId \r\n"+
+				"where ai.indentId = '"+indentId+"'";
     	System.out.println("Query "+Sql);
     	
         
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsIndent.jrxml");
         InputStream input = new FileInputStream(new File(jrxmlFile));
 
-        
     	JasperDesign jd=JRXmlLoader.load(input);
 		JRDesignQuery jq=new JRDesignQuery();
 		
 		jq.setText(Sql);
 		jd.setQuery(jq);
-		
-        //Generating the report
-        JasperReport jr = JasperCompileManager.compileReport(jd);
-      
+        JasperReport jr = JasperCompileManager.compileReport(jd);  
         JasperPrint jp = JasperFillManager.fillReport(jr, null, sp.getDataSource().getConnection());
-
-        //Exporting the report as a PDF
         JasperExportManager.exportReportToPdfStream(jp, response.getOutputStream());
 		
-		
-		
-        //Generating the report
-      
-		
-		
-
     } catch (FileNotFoundException e) {
         e.printStackTrace();
     } catch (JRException e) {

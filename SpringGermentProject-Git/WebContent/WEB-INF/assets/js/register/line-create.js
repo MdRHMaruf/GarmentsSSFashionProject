@@ -150,8 +150,8 @@ function setData(factoryId, departmentId, lineId) {
   document.getElementById("factoryName").value = factoryId;
   $("#factoryName").change();
   document.getElementById("lineName").value = document.getElementById("lineName" + lineId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

@@ -71,10 +71,10 @@
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-primary btn-sm" onclick="editAction()"
-								disabled>Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
+								style="display: none;">Edit</button>
 							<button type="button" id="btnRefresh"
-								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>
+								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 
 						</div>
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
@@ -107,7 +107,7 @@
 											<td>${merchandiserinfo.sl}</td>
 											<td id='name${merchandiserinfo.merchendiserId}'>${merchandiserinfo.name}</td>
 											<td id='telephone${merchandiserinfo.merchendiserId}'>${merchandiserinfo.telephone}</td>
-											<td><input type="hidden" id='mobile${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.mobile}" /><input type="hidden" id='fax${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.fax}" /><input type="hidden" id='email${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.email}"/><input type="hidden" id='address${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.address}"/> <input type="hidden" id='skype${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.skype}"/><i class="fa fa-edit"  onclick="setData(${merchandiserinfo.merchendiserId})"> </i></td>
+											<td><input type="hidden" id='mobile${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.mobile}" /><input type="hidden" id='fax${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.fax}" /><input type="hidden" id='email${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.email}"/><input type="hidden" id='address${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.address}"/> <input type="hidden" id='skype${merchandiserinfo.merchendiserId}' value="${merchandiserinfo.skype}"/><i class="fa fa-edit"  onclick="setData(${merchandiserinfo.merchendiserId})" style="cursor: pointer;"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

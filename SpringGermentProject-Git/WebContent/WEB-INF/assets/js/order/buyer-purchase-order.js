@@ -1,7 +1,7 @@
-var styleIdForSet = 0;
-var itemIdForSet = 0;
-var sizeValueListForSet = [];
-var sizesListByGroup = JSON;
+let styleIdForSet = 0;
+let itemIdForSet = 0;
+let sizeValueListForSet = [];
+let sizesListByGroup = JSON;
 
 window.onload = () =>{
 
@@ -50,7 +50,7 @@ function printBuyerPO(buyerPoId) {
     },
     success: function (data) {
       if (data == "Success") {
-        var url = "printBuyerPoOrder";
+        let url = "printBuyerPoOrder";
         window.open(url, '_blank');
 
       }
@@ -59,7 +59,7 @@ function printBuyerPO(buyerPoId) {
 }
 
 function buyerWiseStyleLoad() {
-  var buyerId = $("#buyerName").val();
+  let buyerId = $("#buyerName").val();
 
   // alert("buyerId "+buyerId);
   if (buyerId != 0) {
@@ -72,10 +72,10 @@ function buyerWiseStyleLoad() {
       },
       success: function (data) {
 
-        var styleList = data.styleList;
-        var options = "<option  value='0' selected>Select Style</option>";
-        var length = styleList.length;
-        for (var i = 0; i < length; i++) {
+        let styleList = data.styleList;
+        let options = "<option  value='0' selected>Select Style</option>";
+        let length = styleList.length;
+        for (let i = 0; i < length; i++) {
           options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
         };
         $("#styleNo").html(options);
@@ -86,7 +86,7 @@ function buyerWiseStyleLoad() {
       }
     });
   } else {
-    var options = "<option value='0' selected>Select Style</option>";
+    let options = "<option value='0' selected>Select Style</option>";
     $("#styleNo").html(options);
     $('#styleNo').selectpicker('refresh');
     $('#styleNo').val("0").change();
@@ -94,7 +94,7 @@ function buyerWiseStyleLoad() {
 
 }
 function styleWiseItemLoad() {
-  var styleId = $("#styleNo").val();
+  let styleId = $("#styleNo").val();
 
   if (styleId != 0) {
     $.ajax({
@@ -106,10 +106,10 @@ function styleWiseItemLoad() {
       },
       success: function (data) {
 
-        var itemList = data.itemList;
-        var options = "<option value='0' selected>Select Item Type</option>";
-        var length = itemList.length;
-        for (var i = 0; i < length; i++) {
+        let itemList = data.itemList;
+        let options = "<option value='0' selected>Select Item Type</option>";
+        let length = itemList.length;
+        for (let i = 0; i < length; i++) {
           options += "<option value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
         };
         document.getElementById("itemType").innerHTML = options;
@@ -119,7 +119,7 @@ function styleWiseItemLoad() {
       }
     });
   } else {
-    var options = "<option value='0' selected>Select Item Type</option>";
+    let options = "<option value='0' selected>Select Item Type</option>";
     $("#itemType").html(options);
     $('#itemType').selectpicker('refresh');
     $('#itemType').val(itemIdForSet).change();
@@ -130,18 +130,18 @@ function styleWiseItemLoad() {
 
 function itemSizeAdd() {
 
-  var buyerPOId = $("#buyerPOId").val();
-  var buyerId = $("#buyerName").val();
-  var styleId = $("#styleNo").val();
-  var itemId = $("#itemType").val();
-  var factoryId = $("#factory").val();
-  var colorId = $("#color").val();
-  var sizeGroupId = $("#sizeGroup").val();
-  var customerOrder = $("#customerOrder").val();
-  var purchaseOrder = $("#purchaseOrder").val();
-  var shippingMark = $("#shippingMark").val();
-  var userId = $("#userId").val();
-  var totalUnit = 0;
+  let buyerPOId = $("#buyerPOId").val();
+  let buyerId = $("#buyerName").val();
+  let styleId = $("#styleNo").val();
+  let itemId = $("#itemType").val();
+  let factoryId = $("#factory").val();
+  let colorId = $("#color").val();
+  let sizeGroupId = $("#sizeGroup").val();
+  let customerOrder = $("#customerOrder").val();
+  let purchaseOrder = $("#purchaseOrder").val();
+  let shippingMark = $("#shippingMark").val();
+  let userId = $("#userId").val();
+  let totalUnit = 0;
 
 
   if (buyerId != 0) {
@@ -151,11 +151,11 @@ function itemSizeAdd() {
           if (colorId != 0) {
             if (sizeGroupId != 0) {
               if (purchaseOrder != "") {
-                var sizeListLength = $(".sizeValue").length;
-                var sizeList = "";
-                for (var i = 0; i < sizeListLength; i++) {
-                  var quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
-                  var id = $("#sizeId" + i).val().trim();
+                let sizeListLength = $(".sizeValue").length;
+                let sizeList = "";
+                for (let i = 0; i < sizeListLength; i++) {
+                  let quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
+                  let id = $("#sizeId" + i).val().trim();
                   sizeList += "id=" + id + ",quantity=" + quantity + " ";
                   totalUnit += Number(quantity);
                 }
@@ -179,10 +179,10 @@ function itemSizeAdd() {
                     sizeGroupId: sizeGroupId,
                     sizeListString: sizeList,
                     totalUnit: totalUnit,
-                    unitCmt: 1,
-                    totalPrice: 1,
-                    unitFob: 1,
-                    totalAmount: 1,
+                    unitCmt: 0,
+                    totalPrice: 0,
+                    unitFob: 0,
+                    totalAmount: 0,
                     userId: userId
                   },
                   success: function (data) {
@@ -229,23 +229,26 @@ function itemSizeAdd() {
 
 }
 
+
 function itemSizeEdit() {
 
-  var buyerPOId = $("#buyerPOId").val();
-  var itemAutoId = $("#itemAutoId").val();
-  var buyerId = $("#buyerName").val();
-  var styleId = $("#styleNo").val();
-  var itemId = $("#itemType").val();
-  var factoryId = $("#factory").val();
-  var colorId = $("#color").val();
-  var sizeGroupId = $("#sizeGroup").val();
-  var customerOrder = $("#customerOrder").val();
-  var purchaseOrder = $("#purchaseOrder").val();
-  var shippingMark = $("#shippingMark").val();
-  var itemAutoId = $("#itemAutoId").val();
-  var unitFob = $("#unitFob" + itemAutoId).text();
-  var userId = $("#userId").val();
-  var totalUnit = 0;
+  let buyerPOId = $("#buyerPOId").val();
+  let itemAutoId = $("#itemAutoId").val();
+  let buyerId = $("#buyerName").val();
+  let styleId = $("#styleNo").val();
+  let itemId = $("#itemType").val();
+  let factoryId = $("#factory").val();
+  let colorId = $("#color").val();
+  let sizeGroupId = $("#sizeGroup").val();
+  let customerOrder = $("#customerOrder").val();
+  let purchaseOrder = $("#purchaseOrder").val();
+  let shippingMark = $("#shippingMark").val();
+  let unitCmt = $("#unitCmt" + itemAutoId).val();
+  let unitFob = $("#unitFob" + itemAutoId).val();
+  let userId = $("#userId").val();
+  let totalUnit = 0;
+  let totalPrice = 0;
+  let totalAmount = 0;
 
 
   if (buyerId != 0) {
@@ -255,15 +258,16 @@ function itemSizeEdit() {
           if (colorId != 0) {
             if (sizeGroupId != 0) {
               if (purchaseOrder != "") {
-                var sizeListLength = $(".sizeValue").length;
-                var sizeList = "";
-                for (var i = 0; i < sizeListLength; i++) {
-                  var quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
-                  var id = $("#sizeId" + i).val().trim();
+                let sizeListLength = $(".sizeValue").length;
+                let sizeList = "";
+                for (let i = 0; i < sizeListLength; i++) {
+                  let quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
+                  let id = $("#sizeId" + i).val().trim();
                   sizeList += "id=" + id + ",quantity=" + quantity + " ";
                   totalUnit += Number(quantity);
                 }
-
+                totalPrice = totalUnit * unitCmt;
+                totalAmount = totalUnit * unitFob;
 
                 $.ajax({
                   type: 'POST',
@@ -283,10 +287,10 @@ function itemSizeEdit() {
                     sizeGroupId: sizeGroupId,
                     sizeListString: sizeList,
                     totalUnit: totalUnit,
-                    unitCmt: 1,
-                    totalPrice: 1,
+                    unitCmt: unitCmt,
+                    totalPrice: totalPrice,
                     unitFob: unitFob,
-                    totalAmount: 1,
+                    totalAmount: totalAmount,
                     userId: userId
                   },
                   success: function (data) {
@@ -331,31 +335,32 @@ function itemSizeEdit() {
 }
 
 function submitAction() {
-  var buyerPoId = $("#buyerPOId").val();
-  var buyerId = $("#buyerName").val();
-  var paymentTerm = $("#paymentTerm").val();
-  var currency = $("#currency").val();
+  let buyerPoId = $("#buyerPOId").val();
+  let buyerId = $("#buyerName").val();
+  let paymentTerm = $("#paymentTerm").val();
+  let currency = $("#currency").val();
 
-  var totalRow = $(".totalUnit");
+  let rowList = $("#tableList tr");
 
-  var totalUnit = 0;
-  var unitCmt = 0;
-  var totalPrice = 0;
-  var unitFob = 0;
-  var totalAmount = 0;
+  let totalUnit = 0;
+  let unitCmt = 0;
+  let totalPrice = 0;
+  let unitFob = 0;
+  let totalAmount = 0;
 
-  for (var i = 0; i < totalRow.length; i++) {
-    var autoId = $('#itemRow' + i).data('id');
+  rowList.forEach(row =>{
+    let autoId = row.attr('data-auto-id');
+    console.log("auto id=",autoId);
     totalUnit += Number($("#totalUnit" + autoId).text());
-    unitCmt += Number($("#unitCmt" + autoId).text());
+    unitCmt += Number($("#unitCmt" + autoId).val());
     totalPrice += Number($("#totalPrice" + autoId).text());
-    unitFob += Number($("#unitFob" + autoId).text());
+    unitFob += Number($("#unitFob" + autoId).val());
     totalAmount += Number($("#totalAmount" + autoId).text());
-  }
+  });
 
-  var note = $("#note").val();
-  var remarks = $("#remarks").val();
-  var userId = $("#userId").val();
+  let note = $("#note").val();
+  let remarks = $("#remarks").val();
+  let userId = $("#userId").val();
 
 
 
@@ -405,29 +410,45 @@ function submitAction() {
 
 function buyerPoEditAction() {
 
-  var buyerPoId = $("#buyerPOId").val();
-  var buyerId = $("#buyerName").val();
-  var paymentTerm = $("#paymentTerm").val();
-  var currency = $("#currency").val();
-  var totalRow = $(".totalUnit");
+  let buyerPoId = $("#buyerPOId").val();
+  let buyerId = $("#buyerName").val();
+  let paymentTerm = $("#paymentTerm").val();
+  let currency = $("#currency").val();
+  let rowList = $("#tableList tr.dataRow");
 
-  var totalUnit = 0;
-  var unitCmt = 0;
-  var totalPrice = 0;
-  var unitFob = 0;
-  var totalAmount = 0;
-  for (var i = 0; i < totalRow.length; i++) {
-    var autoId = $('#itemRow' + i).data('id');
+  let totalUnit = 0;
+  let unitCmt = 0;
+  let totalPrice = 0;
+  let unitFob = 0;
+  let totalAmount = 0;
+
+  rowList.each((index , row )=>{
+    let autoId = row.getAttribute('data-auto-id');
     totalUnit += Number($("#totalUnit" + autoId).text());
-    unitCmt += Number($("#unitCmt" + autoId).text());
+    unitCmt += Number($("#unitCmt" + autoId).val());
     totalPrice += Number($("#totalPrice" + autoId).text());
-    unitFob += Number($("#unitFob" + autoId).text());
+    unitFob += Number($("#unitFob" + autoId).val());
     totalAmount += Number($("#totalAmount" + autoId).text());
-  }
+  });
 
-  var note = $("#note").val();
-  var remarks = $("#remarks").val();
-  var userId = $("#userId").val();
+  let changedItems = {};
+  changedItems['list'] = [];
+  rowList = $("#tableList tr.changed");
+  rowList.each((index , row )=>{
+    let autoId = row.getAttribute('data-auto-id');
+    let item = {
+      autoId : autoId,
+      unitCmt : Number($("#unitCmt" + autoId).val()),
+      totalPrice : Number($("#totalPrice" + autoId).text()),
+      unitFob : Number($("#unitFob" + autoId).val()),
+      totalAmount : Number($("#totalAmount" + autoId).text())
+    }
+    changedItems.list.push(item);
+  });
+
+  let note = $("#note").val();
+  let remarks = $("#remarks").val();
+  let userId = $("#userId").val();
 
   console.log("Edit function call");
   if (buyerPoId != "0") {
@@ -449,6 +470,7 @@ function buyerPoEditAction() {
           totalAmount: totalAmount,
           note: note,
           remarks: remarks,
+          changedItemsList : JSON.stringify(changedItems),
           userId: userId
         },
         success: function (data) {
@@ -488,7 +510,7 @@ function searchBuyerPO(buyerPoNo) {
         dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
       } else {
 
-        var buyerPo = data.buyerPO;
+        let buyerPo = data.buyerPO;
         console.log(buyerPo);
         $("#buyerPOId").val(buyerPo.buyerPoId);
         $("#buyerName").val(buyerPo.buyerId).change();
@@ -499,8 +521,8 @@ function searchBuyerPO(buyerPoNo) {
 
         drawItemTable(buyerPo.itemList);
         $('.modal').modal('hide')
-        $("#btnPOSubmit").prop("disabled", true);
-        $("#btnPOEdit").prop("disabled", false);
+        $("#btnPOSubmit").hide();
+        $("#btnPOEdit").show();
         $("#btnPreview").prop("disabled", false);
       }
     }
@@ -525,7 +547,7 @@ function searchBuyerPO(buyerPoNo) {
 //         dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
 //       } else {
 
-//         var buyerPo = data.buyerPO;
+//         let buyerPo = data.buyerPO;
 //         console.log(buyerPo);
 //         alert(buyerPoNo);
 //       }
@@ -548,7 +570,7 @@ function setBuyerPoItemDataForEdit(itemAutoId) {
         dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
       } else {
 
-        var item = data.poItem;
+        let item = data.poItem;
         console.log(item);
         $("#itemAutoId").val(item.autoId);
         $("#customerOrder").val(item.customerOrder);
@@ -561,8 +583,8 @@ function setBuyerPoItemDataForEdit(itemAutoId) {
         $("#sizeGroup").val(item.sizeGroupId).change();
 
         $("#itemAutoId").val(itemAutoId);
-        $("#btnAdd").prop("disabled", true);
-        $("#btnEdit").prop("disabled", false);
+        $("#btnAdd").hide();
+        $("#btnEdit").show();
 
         styleIdForSet = item.styleId;
         itemIdForSet = item.itemId;
@@ -577,7 +599,7 @@ function setBuyerPoItemDataForEdit(itemAutoId) {
 
 function deleteBuyerPoItem(itemAutoId) {
 
-  var buyerPoId = $("#buyerPOId").val();
+  let buyerPoId = $("#buyerPOId").val();
   if (confirm("Are you sure to Delete this item")) {
     $.ajax({
       type: 'GET',
@@ -596,8 +618,8 @@ function deleteBuyerPoItem(itemAutoId) {
         } else {
           drawItemTable(data.result);
           $('.modal').modal('hide');
-          $("#btnPOSubmit").prop("disabled", true);
-          $("#btnPOEdit").prop("disabled", false);
+          $("#btnPOSubmit").hide();
+          $("#btnPOEdit").show();
           $("#btnPreview").prop("disabled", false);
         }
       }
@@ -607,12 +629,12 @@ function deleteBuyerPoItem(itemAutoId) {
 }
 
 function reset() {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   $("#sizeGroup").val("0").change();
   $("#itemAutoId").val("0");
-  $("#btnAdd").prop("disabled", false);
-  $("#btnEdit").prop("disabled", true);
+  $("#btnAdd").show();
+  $("#btnEdit").hide();
 }
 
 function refreshAction() {
@@ -622,20 +644,34 @@ function refreshAction() {
 
 function sizeLoadByGroup() {
 
-  var groupId = $("#sizeGroup").val().trim();
-  var child = "";
-  var length = 0;
+  let groupId = $("#sizeGroup").val().trim();
+  let child = "";
+  let length = 0;
   if (groupId != "0") {
     length = sizesListByGroup['groupId' + groupId].length;
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       //child += " <div class=\"list-group-item pt-0 pb-0 sizeNameList\"> <div class=\"form-group row mb-0\"><label for=\"sizeId" + sizesListByGroup['groupId' + groupId][i].sizeId + "\" class=\"col-md-6 col-form-label-sm pb-0 mb-0\" style=\"height:25px;\">" + sizesListByGroup['groupId' + groupId][i].sizeName + "</label><input type=\"number\" class=\"form-control-sm col-md-6\" id=\"sizeValue" + sizesListByGroup['groupId' + groupId][i].sizeId + "\" style=\"height:25px;\"></div></div>";
-      child += " <div class=\"list-group-item pt-0 pb-0\"> <div class=\"form-group row mb-0\"><label for=\"sizeValue" + i + "\" class=\"col-md-6 col-form-label-sm pb-0 mb-0\" style=\"height:25px;\">" + sizesListByGroup['groupId' + groupId][i].sizeName + "</label><input type=\"number\" class=\"form-control-sm col-md-6 sizeValue\" id=\"sizeValue" + i + "\" style=\"height:25px;\"> <input type=\"hidden\" id=\"sizeId" + i + "\" value=" + sizesListByGroup['groupId' + groupId][i].sizeId + "></div></div>";
+      child += `<div class="list-group-item pt-0 pb-0"> 
+                  <div class="form-group row mb-0">
+                    <label for="sizeValue${i}" class="col-md-6 col-form-label-sm pb-0 mb-0" style="height:25px;">${sizesListByGroup['groupId' + groupId][i].sizeName}</label>
+                    <input type="number" class="form-control-sm col-md-6 sizeValue" id="sizeValue${i}" style="height:25px;">
+                    <input type="hidden" id="sizeId${i}" value="${sizesListByGroup['groupId' + groupId][i].sizeId}">
+                  </div>
+                </div>`;
     }
 
   }
   $("#listGroup").html(child);
+
+  $(".sizeValue").each((index,inputText) =>{
+    inputText.addEventListener('keyup',(event)=>{
+      if(event.keyCode == 13) {
+        $("#sizeValue"+(index+1)).focus();
+      }
+    })
+  });
   if (sizeValueListForSet.length > 0) {
-    for (var i = 0; i < length; i++) {
+    for (let i = 0; i < length; i++) {
       $("#sizeValue" + i).val(sizeValueListForSet[i].sizeQuantity);
     }
     sizeValueListForSet = [];
@@ -648,18 +684,32 @@ function setData(unitId) {
   document.getElementById("unitId").value = unitId;
   document.getElementById("unitName").value = document.getElementById("unitName" + unitId).innerHTML;
   document.getElementById("unitValue").value = document.getElementById("unitValue" + unitId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnAdd").hide();
+  $("#btnEdit").show();
 
 }
 
+function unitCmtFobTotalChange(autoId){
+
+  let totalUnit = Number($("#totalUnit" + autoId).text());
+  let unitCmt = Number($("#unitCmt" + autoId).val());
+  let totalPrice = totalUnit * unitCmt;
+  let unitFob = Number($("#unitFob" + autoId).val());
+  let totalAmount = totalUnit * unitFob;
+
+
+  $("#itemRow-"+autoId).addClass('changed');
+  $("#totalPrice"+autoId).text(totalPrice.toFixed(2));
+  $("#totalAmount"+autoId).text(totalAmount.toFixed(2))
+}
+
 function drawItemTable(dataList) {
-  var length = dataList.length;
+  let length = dataList.length;
   sizeGroupId = "";
-  var tables = "";
-  var isClosingNeed = false;
-  for (var i = 0; i < length; i++) {
-    var item = dataList[i];
+  let tables = "";
+  let isClosingNeed = false;
+  for (let i = 0; i < length; i++) {
+    let item = dataList[i];
 
     if (sizeGroupId != item.sizeGroupId) {
       if (isClosingNeed) {
@@ -678,8 +728,8 @@ function drawItemTable(dataList) {
                   <th scope="col">Purchase Order</th>
                   <th scope="col">Shipping Mark</th>
                   <th scope="col">Sizes Reg-Tall-N/A</th>`
-      var sizeListLength = sizesListByGroup['groupId' + sizeGroupId].length;
-      for (var j = 0; j < sizeListLength; j++) {
+      let sizeListLength = sizesListByGroup['groupId' + sizeGroupId].length;
+      for (let j = 0; j < sizeListLength; j++) {
         tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + sizesListByGroup['groupId' + sizeGroupId][j].sizeName + "</th>";
       }
       tables += `<th scope="col">Total Units</th>
@@ -694,15 +744,21 @@ function drawItemTable(dataList) {
               <tbody id="dataList">`
       isClosingNeed = true;
     }
-    tables += "<tr id='itemRow" + i + "' data-id='" + item.autoId + "'><td>" + item.style + "</td><td>" + item.itemName + "</td><td>" + item.colorName + "</td><td>" + item.customerOrder + "</td><td>" + item.purchaseOrder + "</td><td>" + item.shippingMark + "</td><td>" + item.sizeReg + "</td>"
-    var sizeList = item.sizeList;
-    var sizeListLength = sizeList.length;
+    tables += "<tr id='itemRow-" + item.autoId + "' class='dataRow notChanged' data-auto-id='" + item.autoId + "'><td>" + item.style + "</td><td>" + item.itemName + "</td><td>" + item.colorName + "</td><td>" + item.customerOrder + "</td><td>" + item.purchaseOrder + "</td><td>" + item.shippingMark + "</td><td>" + item.sizeReg + "</td>"
+    let sizeList = item.sizeList;
+    let sizeListLength = sizeList.length;
 
-    for (var j = 0; j < sizeListLength; j++) {
+    for (let j = 0; j < sizeListLength; j++) {
 
       tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
     }
-    tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + item.totalUnit + "</td><td class='unitCmt' id='unitCmt" + item.autoId + "'>" + item.unitCmt + "</td><td class='totalPrice' id='totalPrice" + item.autoId + "'>" + item.totalPrice + "</td><td class='unitFob' id='unitFob" + item.autoId + "' contenteditable='true'>" + item.unitFob + "</td><td class='totalAmount' id='totalAmount" + item.autoId + "'>" + item.totalAmount + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+    tables += `<td class='totalUnit' id='totalUnit${item.autoId}'>${item.totalUnit}</td>
+                <td class='unitCmt' ><input id='unitCmt${item.autoId}' class='form-control-sm min-width-60 max-width-100' type='number' value='${item.unitCmt}' onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
+                <td class='totalPrice' id='totalPrice${item.autoId}'>${item.totalPrice}</td>
+                <td class='unitFob'><input id='unitFob${item.autoId}' class='form-control-sm min-width-60 max-width-100' value="${item.unitFob}" onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
+                <td class='totalAmount' id='totalAmount${item.autoId}'>${item.totalAmount}</td>
+                <td><i class='fa fa-edit' onclick="setBuyerPoItemDataForEdit('${item.autoId}')" style='cursor : pointer;'> </i></td>
+                <td><i class='fa fa-trash' onclick="deleteBuyerPoItem('${item.autoId}')" style='cursor : pointer;'> </i></td></tr>`;
 
   }
   tables += "</tbody></table> </div></div>";
@@ -711,10 +767,10 @@ function drawItemTable(dataList) {
 }
 
 function drawDataTable(data) {
-  var rows = [];
-  var length = data.length;
+  let rows = [];
+  let length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     rows.push(drawRowDataTable(data[i], i));
   }
 
@@ -723,7 +779,7 @@ function drawDataTable(data) {
 
 function drawRowDataTable(rowData, c) {
 
-  var row = $("<tr />")
+  let row = $("<tr />")
   row.append($("<td>" + rowData.unitId + "</td>"));
   row.append($("<td id='unitName" + rowData.unitId + "'>" + rowData.unitName + "</td>"));
   row.append($("<td id='unitValue" + rowData.unitId + "'>" + rowData.unitValue + "</td>"));
@@ -733,7 +789,7 @@ function drawRowDataTable(rowData, c) {
 }
 
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -744,7 +800,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -755,7 +811,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -773,7 +829,7 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
   $("#search").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#poList tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });

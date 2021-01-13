@@ -96,8 +96,8 @@ function setData(localItemId) {
   document.getElementById("localItemId").value = localItemId;
   document.getElementById("localItemName").value = document.getElementById("localItemName" + localItemId).innerHTML;
   document.getElementById("localItemCode").value = document.getElementById("localItemCode" + localItemId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

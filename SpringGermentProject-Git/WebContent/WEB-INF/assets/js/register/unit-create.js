@@ -96,8 +96,8 @@ function setData(unitId) {
   document.getElementById("unitId").value = unitId;
   document.getElementById("unitName").value = document.getElementById("unitName" + unitId).innerHTML;
   document.getElementById("unitValue").value = document.getElementById("unitValue" + unitId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

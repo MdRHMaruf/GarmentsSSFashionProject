@@ -88,8 +88,8 @@ function setData(processId) {
 
   document.getElementById("processId").value = processId;
   document.getElementById("processName").value = document.getElementById("processName" + processId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

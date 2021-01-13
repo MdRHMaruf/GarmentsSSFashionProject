@@ -434,11 +434,17 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.isFabricsIndentExist(fabricsIndent);
 	}
+	
+	@Override
+	public boolean deleteFabricsIndent(String autoId, String indentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.deleteFabricsIndent(autoId, indentId);
+	}
 
 	@Override
-	public boolean saveFabricsIndent(FabricsIndent fabricsIndent) {
+	public String confirmFabricsIndent(String fabricsIndentId,String fabricsItems) {
 		// TODO Auto-generated method stub
-		return orderDAO.saveFabricsIndent(fabricsIndent);
+		return orderDAO.confirmFabricsIndent(fabricsIndentId, fabricsItems);
 	}
 
 	@Override
@@ -448,11 +454,17 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public FabricsIndent getFabricsIndent(String indentId) {
+	public FabricsIndent getFabricsIndentInfo(String autoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getFabricsIndentInfo(autoId);
+	}
+
+	@Override
+	public List<FabricsIndent> getFabricsIndent(String indentId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getFabricsIndent(indentId);
 	}
-
+	
 	@Override
 	public List<Style> getPOWiseStyleList(String purchaseOrder) {
 		// TODO Auto-generated method stub
@@ -469,6 +481,12 @@ public class OrderServiceImpl implements OrderService{
 	public double getOrderQuantity(String purchaseOrder, String styleId, String itemId, String colorId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getOrderQuantity(purchaseOrder, styleId, itemId, colorId);
+	}
+	
+	@Override
+	public double getOrderQuantityByMultipleId(String purchaseOrder, String styleId, String itemId, String colorId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getOrderQuantityByMultipleId(purchaseOrder, styleId, itemId, colorId);
 	}
 
 	@Override

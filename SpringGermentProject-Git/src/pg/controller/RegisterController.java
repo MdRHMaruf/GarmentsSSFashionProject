@@ -2236,8 +2236,8 @@ public class RegisterController {
 		}
 
 		@ResponseBody
-		@RequestMapping(value = "/factorytWiseDepartment/{factoryId}",method=RequestMethod.GET)
-		public JSONObject factorytWiseDepartment(@PathVariable ("factoryId") String factoryId) {
+		@RequestMapping(value = "/factoryWiseDepartment/{factoryId}",method=RequestMethod.GET)
+		public JSONObject factoryWiseDepartment(@PathVariable ("factoryId") String factoryId) {
 			JSONObject objMain = new JSONObject();	
 			List<Department> departmentList = registerService.getFactoryWiseDepartment(factoryId);
 

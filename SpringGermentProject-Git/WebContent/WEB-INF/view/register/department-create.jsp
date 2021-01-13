@@ -67,10 +67,10 @@
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-primary btn-sm"
-								onclick="editAction()" disabled>Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
+								onclick="editAction()" style="display: none;">Edit</button>
 							<button type="button" id="btnRefresh"
-								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>
+								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 
 						</div>
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
@@ -105,7 +105,7 @@
 													<td id='factoryName${department.departmentId}'>${department.factoryName}</td>
 													<td id='departmentName${department.departmentId}'>${department.departmentName}</td>
 													<td><i class="fa fa-edit"
-														onclick="setData(${department.departmentId},${department.factoryId})"> </i></td>
+														onclick="setData(${department.departmentId},${department.factoryId})" style="cursor: pointer;"> </i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

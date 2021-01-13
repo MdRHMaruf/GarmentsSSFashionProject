@@ -112,12 +112,15 @@ public interface OrderDAO {
 	List<String> getPurchaseOrderList();
 	List<Color> getStyleItemWiseColor(String styleId,String itemId);
 	List<Style> getPOWiseStyleList(String purchaseOrder);
-	boolean saveFabricsIndent(FabricsIndent fabricsIndent);
+	public String confirmFabricsIndent(String fabricsIndentId,String fabricsItems);
 	boolean editFabricsIndent(FabricsIndent fabricsIndent);
 	boolean isFabricsIndentExist(FabricsIndent fabricsIndent);
+	boolean deleteFabricsIndent(String autoId,String indentId);
 	List<FabricsIndent> getFabricsIndentList();
-	FabricsIndent getFabricsIndent(String indentId);
+	FabricsIndent getFabricsIndentInfo(String autoId);
+	List<FabricsIndent> getFabricsIndent(String indentId);
 	double getOrderQuantity(String purchaseOrder,String styleId,String itemId,String colorId);
+	double getOrderQuantityByMultipleId(String purchaseOrder,String styleId,String itemId,String colorId);
 
 	//Common 
 	List<CommonModel> BuyerWisePo(String buyerId);

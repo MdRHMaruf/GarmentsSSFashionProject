@@ -180,13 +180,14 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-									<button class="btn btn-primary" id="save" type="button"
+									
+									<button class="btn btn-primary btn-sm" id="save" type="button"
 										onclick="FactoryCreate()">Save</button>
-									<button class="btn btn-secondary" id="edit" type="button"
-										onclick="editFactory()">Edit</button>
-									<button class="btn btn-danger" type="button">Refresh</button>
+									<button class="btn btn-success btn-sm" id="edit" type="button"
+										onclick="editFactory()" style="display: none;">Edit</button>
+									<button class="btn btn-secondary btn-sm" type="button">Refresh</button>
+									<button type="button" class="btn btn-secondary btn-sm"
+										data-dismiss="modal">Close</button>
 								</div>
 							</div>
 						</div>

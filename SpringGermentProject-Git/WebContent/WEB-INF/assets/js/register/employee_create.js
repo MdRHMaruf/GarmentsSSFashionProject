@@ -138,7 +138,7 @@ function drawRow(rowData,c) {
 	row.append($("<td>" + rowData.EmployeeName+ "</td>"));
 	row.append($("<td>" + rowData.Department+ "</td>"));
 	row.append($("<td>" + rowData.Designation+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=setData('"+encodeURIComponent(rowData.EmployeeName)+"','"+encodeURIComponent(rowData.DepartmentId)+"','"+encodeURIComponent(rowData.DesignationId)+"','"+encodeURIComponent(rowData.EmployeeCode)+"','"+encodeURIComponent(rowData.CardNo)+"','"+encodeURIComponent(rowData.Line)+"','"+encodeURIComponent(rowData.Grade)+"','"+encodeURIComponent(rowData.JoinDate)+"')> </i></td>"));
+	row.append($("<td ><i class='fa fa-edit' onclick=setData('"+encodeURIComponent(rowData.EmployeeName)+"','"+encodeURIComponent(rowData.DepartmentId)+"','"+encodeURIComponent(rowData.DesignationId)+"','"+encodeURIComponent(rowData.EmployeeCode)+"','"+encodeURIComponent(rowData.CardNo)+"','"+encodeURIComponent(rowData.Line)+"','"+encodeURIComponent(rowData.Grade)+"','"+encodeURIComponent(rowData.JoinDate)+"') style='cursor : pointer;'> </i></td>"));
 	
 
 	return row;
@@ -167,8 +167,8 @@ function setData(EmployeeName,Department,Designation,EmployeeCode,CardNo,Line,Gr
 	$("#joinDate").val(JoinDate);
 	
 	document.getElementById("employeeCode").disabled = true;
-	document.getElementById("btnSave").disabled = true;
-    document.getElementById("btnEdit").disabled = false;
+	$("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

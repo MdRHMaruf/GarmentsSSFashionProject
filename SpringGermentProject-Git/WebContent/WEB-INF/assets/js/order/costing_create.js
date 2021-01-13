@@ -495,8 +495,8 @@ function editAction() {
                 $("#consumption-" + autoId).text(consumption);
                 $("#unitPrice-" + autoId).text(unitPrice);
                 $("#amount-" + autoId).text(amount);
-                $("#btnAdd").prop("disabled", false);
-                $("#btnEdit").prop("disabled", true);
+                $("#btnAdd").show();
+                $("#btnEdit").hide();
 
                 let sessionObject = JSON.parse(sessionStorage.getItem("pendingCosting") ? sessionStorage.getItem("pendingCosting") : "{}");
                 let itemList = sessionObject.itemList ? sessionObject.itemList : [];
@@ -561,8 +561,8 @@ function editAction() {
                     } else if (data.result == "duplicate") {
                       dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                     } else {
-                      $("#btnAdd").prop("disabled", false);
-                      $("#btnEdit").prop("disabled", true);
+                      $("#btnAdd").show();
+                      $("#btnEdit").hide();
                       $("#dataList").empty();
                       $("#dataList").append(drawDataTable(data.result));
                       successAlert("Costing Item Edit Successfully");
@@ -715,8 +715,8 @@ function costingItemSet(autoId, itemType) {
       }
     });
   }
-  $("#btnAdd").prop("disabled", true);
-  $("#btnEdit").prop("disabled", false);
+  $("#btnAdd").hide();
+  $("#btnEdit").show();
 }
 
 function deleteCostingItem(autoId, rowType, styleId, itemId) {

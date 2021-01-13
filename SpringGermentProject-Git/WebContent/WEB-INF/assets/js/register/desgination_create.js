@@ -128,12 +128,11 @@ function setData(departmentId,designationId,designationName){
 	id = decodeURIComponent(designationId);
 	departmentId = decodeURIComponent(departmentId);
 	let designation = decodeURIComponent(designationName);
-	let departmentName = decodeURIComponent(departmentName);
 	$("#departmentName").val(departmentId).change();
 	$("#designation").val(designation);
 	
-	document.getElementById("btnSave").disabled = true;
-    document.getElementById("btnEdit").disabled = false;
+	$("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

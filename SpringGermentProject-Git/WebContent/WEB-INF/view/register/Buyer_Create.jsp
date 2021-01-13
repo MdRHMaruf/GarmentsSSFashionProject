@@ -35,12 +35,13 @@
 										<i class="fa fa-search"></i>
 									</button>
 								</div>
-								
-																<div class="col-sm-12 col-md-4 col-lg-4">
+
+								<div class="col-sm-12 col-md-4 col-lg-4">
 									<button style="height: 38px;" type="button"
 										class="btn btn-primary" data-toggle="modal"
-										data-target="#exampleModalCenter">Create New</button>
-										
+										data-target="#exampleModalCenter" onclick="createNewEvent()">Create
+										New</button>
+
 								</div>
 							</div>
 
@@ -70,8 +71,8 @@
 								<div class="modal-body">
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Buyer
-											Name</label>
+										<label style="text-align: left;" class="col-sm-2"><span
+											id="redwarning" style="color: red">*</span>Buyer Name</label>
 										<div class="col-sm-4">
 											<input id="buyer_name" type="text" class="form-control">
 										</div>
@@ -93,8 +94,8 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Buyer
-											Address</label>
+										<label style="text-align: left;" class="col-sm-2"><span
+											id="redwarning" style="color: red">*</span>Buyer Address</label>
 										<div class="col-sm-4">
 											<textarea rows="5" cols="5" id="buyer_address"
 												class="form-control" placeholder="Enter text here"></textarea>
@@ -116,7 +117,8 @@
 												class="form-control" placeholder="Enter text here"></textarea>
 										</div>
 
-										<label class="col-sm-2"><span id="redwarning" style="color:red">*</span>Country</label>
+										<label class="col-sm-2"><span id="redwarning"
+											style="color: red">*</span>Country</label>
 										<div class="col-sm-4">
 											<%--  <select class="form-control">
 	                         <option>-- Select --</option>
@@ -134,7 +136,8 @@
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
-										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Telphone</label>
+										<label style="text-align: left;" class="col-sm-2"><span
+											id="redwarning" style="color: red">*</span>Telphone</label>
 										<div class="col-sm-4">
 											<input id="telphone" type="text" class="form-control">
 										</div>
@@ -151,7 +154,8 @@
 											<input id="fax" type="text" class="form-control">
 										</div>
 
-										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>E-mail</label>
+										<label style="text-align: left;" class="col-sm-2"><span
+											id="redwarning" style="color: red">*</span>E-mail</label>
 										<div class="col-sm-5">
 											<input id="e_mail" type="text" class="form-control">
 										</div>
@@ -193,7 +197,7 @@
 
 										<label style="text-align: left;" class="col-sm-2">Country</label>
 										<div class="col-sm-5">
-											
+
 											<input id="bank_country" type="text" class="form-control"
 												onkeypress="CountriesSearch(this)">
 										</div>
@@ -201,14 +205,15 @@
 
 								</div>
 								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary"
-										data-dismiss="modal">Close</button>
-									<button class="btn btn-primary" type="button" id="save"
+
+									<button class="btn btn-primary btn-sm" type="button" id="save"
 										onclick="insertBuyer()">Save</button>
-									<button class="btn btn-secondary" type="button" id="edit"
+									<button class="btn btn-success btn-sm" type="button" id="edit"
 										onclick="editBuyer()">Edit</button>
-									<button class="btn btn-danger" type="button"
+									<button class="btn btn-secondary btn-sm" type="button"
 										onclick="reloadPage()">Refresh</button>
+									<button type="button" class="btn btn-secondary btn-sm"
+										data-dismiss="modal">Close</button>
 								</div>
 							</div>
 						</div>
@@ -239,11 +244,7 @@
 		</div>
 
 
-		<%-- <script>
-				$('.bsdatepicker').datepicker({
 
-				});
-			</script> --%>
 		<jsp:include page="../include/footer.jsp" />
 
 		<script

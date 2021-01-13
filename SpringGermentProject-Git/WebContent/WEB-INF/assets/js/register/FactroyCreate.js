@@ -4,8 +4,6 @@ window.onload = ()=>{
 	maxFactoryId();
 } 
 
-$("#save").attr('disabled', false);
-$("#edit").attr('disabled', true);
 $("#id").attr('disabled', true);
 
 
@@ -209,9 +207,8 @@ function factoryDetails(value){
 
 				console.log(data);
 				setData(data);
-				$("#save").attr('disabled', true);
-				$("#edit").attr('disabled', false);
-
+				$("#save").hide();
+				$("#edit").show();
 			}
 		});
 	}

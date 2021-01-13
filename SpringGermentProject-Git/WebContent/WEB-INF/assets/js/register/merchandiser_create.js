@@ -115,9 +115,8 @@ function setData(merchendiserId) {
   document.getElementById("email").value = document.getElementById("email" + merchendiserId).value;
   document.getElementById("skype").value = document.getElementById("skype" + merchendiserId).value;
   document.getElementById("address").value = document.getElementById("address" + merchendiserId).value;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
-
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 }
 
 function drawDataTable(data) {

@@ -111,13 +111,16 @@ public interface OrderService {
 	//Fabrics Indent
 	List<String> getPurchaseOrderList();
 	List<FabricsIndent> getFabricsIndentList();
-	boolean saveFabricsIndent(FabricsIndent fabricsIndent);
+	public String confirmFabricsIndent(String fabricsIndentId,String fabricsItems);
 	boolean editFabricsIndent(FabricsIndent fabricsIndent);
 	boolean isFabricsIndentExist(FabricsIndent fabricsIndent);
-	FabricsIndent getFabricsIndent(String indentId);
+	boolean deleteFabricsIndent(String autoId,String indentId);
+	FabricsIndent getFabricsIndentInfo(String autoId);
+	List<FabricsIndent> getFabricsIndent(String indentId);
 	List<Style> getPOWiseStyleList(String purchaseOrder);
 	List<Color> getStyleItemWiseColor(String styleId,String itemId);
 	double getOrderQuantity(String purchaseOrder,String styleId,String itemId,String colorId);
+	double getOrderQuantityByMultipleId(String purchaseOrder,String styleId,String itemId,String colorId);
 	List<CommonModel> BuyerWisePo(String buyerId);
 
 	//Sample Requisition

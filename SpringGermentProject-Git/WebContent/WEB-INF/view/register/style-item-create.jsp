@@ -51,10 +51,10 @@
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-primary btn-sm" onclick="editAction()"
-								disabled>Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
+								style="display: none">Edit</button>
 							<button type="button" id="btnRefresh"
-								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>
+								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 
 						</div>
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
@@ -87,7 +87,7 @@
 											<td>${styleItem.styleItemId}</td>
 											<td id='styleItemName${styleItem.styleItemId}'>${styleItem.styleItemName}</td>
 											<td id='styleItemCode${styleItem.styleItemId}'>${styleItem.styleItemCode}</td>
-											<td><i class="fa fa-edit" onclick="setData(${styleItem.styleItemId})"> </i></td>
+											<td><i class="fa fa-edit" style='cursor: pointer;' onclick="setData(${styleItem.styleItemId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

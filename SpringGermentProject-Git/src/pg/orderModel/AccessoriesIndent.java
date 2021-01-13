@@ -45,6 +45,7 @@ public class AccessoriesIndent {
 	String purchaseOrder;
 	String styleNo;
 	String sizeGroupId;
+	String indentDate;
 	ArrayList<Size> sizeList;
 	public AccessoriesIndent() {
 		
@@ -384,6 +385,16 @@ public class AccessoriesIndent {
 
 	public void setUnitId(String unitId) {
 		this.unitId = unitId;
+	}
+
+
+	public String getIndentDate() {
+		return indentDate;
+	}
+
+
+	public void setIndentDate(String indentDate) {
+		this.indentDate = indentDate;
 	}
 	
 

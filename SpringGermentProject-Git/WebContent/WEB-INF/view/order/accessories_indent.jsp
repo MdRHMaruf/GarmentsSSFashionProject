@@ -510,7 +510,7 @@
 
 
 					<div class="row mt-1">
-						<div style="overflow: auto; max-height: 300px;"
+						<div style="overflow: auto; max-height: 550px;"
 							class="col-sm-12 p-0 table-responsive">
 							<table
 								class="table table-hover table-bordered table-sm mb-0 small-font">
@@ -593,8 +593,7 @@
 							<th>SL#</th>
 							<th>Indent No</th>
 							<th>Purchase Order</th>
-							<th>Style No</th>
-							<th>Item Name</th>
+							<th>Indent Date</th>						
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
@@ -606,8 +605,7 @@
 								<td>${counter.count}</td>
 								<td>${list.aiNo}</td>
 								<td>${list.purchaseOrder}</td>
-								<td>${list.styleNo}</td>
-								<td>${list.itemname}</td>
+								<td>${list.indentDate}</td>
 								<td><i class="fa fa-search"
 									onclick="searchAccessoriesIndent('${list.aiNo}')"> </i></td>
 									<td><i class="fa fa-print"

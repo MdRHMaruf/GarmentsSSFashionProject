@@ -32,9 +32,15 @@
 	</div>
 	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
 	<input type="hidden" id="fabricsIndentAutoId" value="0">
+	<input type="hidden" id="fabricsIndentId" value="0">
+	<input type="hidden" id="indentType" value="newIndent">
+	
 	<div class="card-box m-2">
-			<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Fabrics Indent</h5>
+		<header class="d-flex justify-content-between">
+			<h5 class="text-center" style="display: inline;">
+				Fabrics Indent <span class="badge badge-primary"
+					id='indentId'>New</span>
+			</h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
@@ -46,19 +52,21 @@
 		<div class="row ">
 			<div class="form-group col-md-3 mb-1 px-1">
 				<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
-					Order</label> <select id="purchaseOrder" onchange="poWiseStyleLoad()"
-					class="selectpicker col-md-12 px-0" data-live-search="true"
+					Order</label> <select id="purchaseOrder"
+					class="selectpicker col-md-12 px-0" multiple
+					data-selected-text-format="count > 4" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
-					<option id="purchaseOrder" value="0">Select Purchase Order</option>
+					<option value="0">Select Purchase Order</option>
 					<c:forEach items="${purchaseorders}" var="acc" varStatus="counter">
-						<option name="purchaseOrder" id='purchaseOrder' value="${acc.id}">${acc.name}</option>
+						<option value="${acc.name}">${acc.name}</option>
 					</c:forEach>
 				</select>
 			</div>
 			<div class="form-group col-md-3 mb-1 px-1">
 				<label for="styleNo" class="col-form-label-sm mb-0 pb-0">Style
-					No</label> <select id="styleNo" onchange="styleWiseItemLoad()"
-					class="selectpicker col-md-12 px-0" data-live-search="true"
+					No</label> <select id="styleNo" class="selectpicker col-md-12 px-0"
+					multiple data-selected-text-format="count > 4"
+					data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
 					<option id="styleNo" value="0">Select Style</option>
 
@@ -68,9 +76,9 @@
 			<div class="form-group col-md-4 mb-1 px-1">
 				<label for="itemName" class="col-form-label-sm mb-0 pb-0">Item
 					Name</label> <select id="itemName" class="selectpicker col-md-12 px-0"
+					multiple data-selected-text-format="count > 4"
 					data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray"
-					onchange="styleItemWiseColorLoad()">
+					data-style="btn-light btn-sm border-light-gray">
 					<option id="itemName" value="0">Select Item Name</option>
 
 				</select>
@@ -80,10 +88,10 @@
 
 			<div class="form-group col-md-2 mb-1 pl-1">
 				<label for="itemColor" class="col-form-label-sm mb-0 pb-0">Color</label>
-				<select id="itemColor" class="selectpicker col-md-12 px-0"
-					data-live-search="true"
+				<select id="itemColor" class="selectpicker col-md-12 px-0" multiple
+					data-selected-text-format="count > 4" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray"
-					onchange="setOrderQtyByPOStyleItemColor()">
+					onchange="colorChangeAction()">
 					<option id="itemColor" value="0">Select Item Color</option>
 
 				</select>
@@ -164,7 +172,7 @@
 					<select id="unit" class="selectpicker col-md-12"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray"
-						onchange="unitChangeAction()">
+						onchange="totalQuantityCalculate()">
 						<option id="unit" value="0">Select Unit</option>
 						<c:forEach items="${unitList}" var="unit">
 							<option id="unit" value="${unit.unitId}">${unit.unitName}</option>
@@ -177,7 +185,7 @@
 			<div class="col-sm-9 col-md-9 col-lg-2 pr-0 pl-1">
 				<label for="width" class="col-form-label-sm mb-0 pb-0">Width</label>
 				<input id="width" type="number" class="form-control-sm pr-0 pl-1"
-					onkeyup="gsmCalculation()">
+					onkeyup="gsmCalculation()" disabled="disabled">
 			</div>
 
 		</div>
@@ -233,55 +241,56 @@
 
 		</div>
 
-		<div class="row mt-1 d-flex justify-content-between">
-			<div class="col-sm-6 pl-1">
+		<div class="row mt-1 ">
+			<div class="col-md-12 pl-1 d-flex justify-content-end">
 				<div>
-					<button id="btnSave" class="btn btn-primary btn-sm"
-						onclick="saveAction()">Save</button>
-					<button id="btnEdit" class="btn btn-primary btn-sm"
-						onclick="editAction()" disabled>Edit</button>
-					<button id="btnRefresh" class="btn btn-secondary btn-sm"
-						onclick="refreshAction()">Refresh</button>
-					<button id="btnPereview" class="btn btn-success btn-sm">Preview</button>
+					<button id="btnAdd" class="btn btn-primary btn-sm"
+						onclick="addAction()">Add</button>
+					<button id="btnEdit" class="btn btn-success btn-sm"
+						onclick="editAction()" style='display: none;'>Edit</button>
+					<button id="btnRefresh" class="btn btn-secondary btn-sm" onclick='fieldRefresh()'
+						>Refresh</button>
 				</div>
 			</div>
-			
-			<div class="col-sm-5 pl-1">
+
+			<%-- <div class="col-sm-5 pl-1">
 				<div class="input-group input-group-sm">
 					<input id="search" type="text" class="form-control"
-						placeholder="Search Fabrics Indent" aria-label="Recipient's username"
-						aria-describedby="basic-addon2">
+						placeholder="Search Fabrics Indent"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<span class="input-group-text"><i class="fa fa-search"
 							style="cursor: pointer;"></i></span>
 					</div>
 				</div>
 
-			</div>
+			</div> --%>
 		</div>
 		<hr class="my-1">
 		<div class="row mt-1">
-			<div style="overflow: auto; max-height: 300px;"
+			<div style="overflow: auto; max-height: 550px;"
 				class="col-sm-12 px-1 table-responsive">
-				<table class="table table-hover table-bordered table-sm mb-0 small-font">
+				<table
+					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
 
 							<th>P.O.</th>
 							<th>Style</th>
-							<th>Item Name</th>
 							<th>Color Name</th>
-							<th>Fabrices Item</th>
+							<th>Fabrics Item</th>
+							<th>Fabrics Color</th>
 							<th>Dozen</th>
 							<th>Consumption</th>
 							<th>%QTY</th>
-							<th>Total QTY</th>
 							<th>Unit</th>
-							<th><i class="fa fa-info-circle"></i></th>
+							<th>Total QTY</th>
+							<th><i class="fa fa-edit"></i></th>
+							<th><i class="fa fa-trash"></i></th>
 						</tr>
 					</thead>
 					<tbody id="dataList">
-						<c:forEach items="${fabricsIndentList}" var="indent"
+						<%-- <c:forEach items="${fabricsIndentList}" var="indent"
 							varStatus="counter">
 							<tr>
 								<td>${indent.purchaseOrder}</td>
@@ -298,12 +307,35 @@
 									onclick="viewFabricsIndent(${indent.autoId})"
 									style="cursor: pointer;"></i></td>
 							</tr>
-						</c:forEach>
+						</c:forEach> --%>
 					</tbody>
 				</table>
 			</div>
 		</div>
+		<div class="row mt-1">
+			<div class="col-sm-12">
+				<div class="d-flex justify-content-end">
+					<div class="row">
+						<div class="pr-1">
+							<button class="btn btn-primary btn-sm" onclick="confirmAction()">
+								<i class="fas fa-save"></i> Confirm
+							</button>
+						</div>
+						<div class="pr-1">
+							<button class="btn btn-secondary btn-sm" onclick="refreshAction()">
+								<i class="fa fa-refresh"></i> Refresh
+							</button>
+						</div>
+						<div class="pr-1">
+							<button id="btnPreview" class="btn btn-info btn-sm" onclick="fabricIndentReport()">
+								<i class="fas fa-print"></i> Preview
+							</button>
+						</div>
 
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -313,7 +345,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="search" type="text" class="form-control"
+					<input id="modalSearch" type="text" class="form-control"
 						placeholder="Search Fabric Indent"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -330,24 +362,24 @@
 					<thead>
 						<tr>
 							<th>SL#</th>
-							<th>Buyer Name</th>
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Item Name</th>
+							<th>Indent Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
-						<c:forEach items="${fabricindentsummarylist}" var="po" varStatus="counter">
+						<c:forEach items="${fabricindentsummarylist}" var="po"
+							varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
-								<td >${po.buyerName}</td>
-						<%-- 		/*<td >${po.buyerOrderId}</td>*/ --%>
-								<td >${po.purchaseOrder}</td>
-								<td >${po.styleName}</td>
-								<td >${po.itemName}</td>
-								<td><i class="fa fa-search"
-									onclick="FabricIndentReport(${po.buyerOrderId},${po.styleId},${po.itemId})">
+								<td>${po.purchaseOrder}</td>
+								<td>${po.styleName}</td>
+								<td>${po.itemName}</td>
+								<td>${po.indentDate}</td>
+								<td><i class="fa fa-search" style='cursor: pointer;'
+									onclick="searchFabricsIndent('${po.indentId}')">
 								</i></td>
 							</tr>
 						</c:forEach>

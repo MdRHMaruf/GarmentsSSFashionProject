@@ -90,8 +90,8 @@ function setData(sampleTypeId) {
 
   document.getElementById("sampleTypeId").value = sampleTypeId;
   document.getElementById("sampleTypeName").value = document.getElementById("sampleTypeName" + sampleTypeId).innerHTML;
-  document.getElementById("btnSave").disabled = true;
-  document.getElementById("btnEdit").disabled = false;
+  $("#btnSave").hide();
+  $("#btnEdit").show();
 
 }
 

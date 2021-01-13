@@ -1,5 +1,5 @@
-$("#save").attr('disabled', false);
-$("#edit").attr('disabled', true);
+$("#save").show();
+$("#edit").hide();
 $("#buyer_id").attr('disabled', true);
 
 
@@ -209,15 +209,21 @@ function BuyerDetails(value){
 
 			},
 			success: function (data) {
+				$("#save").hide();
+				$("#edit").show();
 				setData(data);
-				$("#save").attr('disabled', true);
-				$("#edit").attr('disabled', false);
+				
 
 			}
 		});
 	}
 
 
+}
+
+function createNewEvent(){
+	$("#save").show();
+	$("#edit").hide();
 }
 
 
