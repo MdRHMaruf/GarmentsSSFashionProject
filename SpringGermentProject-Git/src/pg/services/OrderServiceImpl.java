@@ -386,6 +386,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.saveAccessoriesCurton(v);
 	}
+	
+	@Override
+	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
+		// TODO Auto-generated method stub
+		return orderDAO.confirmCartonIndent(cartonIndentId, cartonItems);
+	}
 
 	@Override
 	public List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item,

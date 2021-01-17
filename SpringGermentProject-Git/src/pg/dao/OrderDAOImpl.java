@@ -409,9 +409,9 @@ public class OrderDAOImpl implements OrderDAO{
 		Transaction tx=null;
 		List<Color> dataList=new ArrayList<Color>();
 		try{
+			
 			tx=session.getTransaction();
 			tx.begin();
-
 			String sql="select  boes.ColorId,c.Colorname\r\n" + 
 					"from TbBuyerOrderEstimateDetails boes\r\n" + 
 					"left join tbColors c\r\n" + 
@@ -2794,6 +2794,101 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return "something wrong";
 
+	}
+	
+	@Override
+	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if(cartonIndentId.equals("New")) {
+				String sql="select (isnull(max(indentId),0)+1) as maxId from tbFabricsIndent";
+				List<?> list = session.createSQLQuery(sql).list();
+				if(list.size()>0) {		
+					cartonIndentId = list.get(0).toString();
+				}
+			}
+
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(cartonItems);
+			JSONObject indentObject = (JSONObject)jsonParser.parse(cartonItems);
+			JSONArray indentList = (JSONArray) indentObject.get("list");
+
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="insert into tbAccessoriesIndentForCarton ("
+						+ "indentId,"
+						+ "styleid,"
+						+ "PurchaseOrder,"
+						+ "Itemid,"
+						+ "ColorId,"
+						+ "ShippingMarks,"
+						+ "sizeId,"					
+						+ "accessoriesItemId,"
+						+ "cartonSize,"
+						+ "OrderQty,"
+						+ "Length1,"
+						+ "Width1,"
+						+ "Height1,"
+						+ "Add1,"		
+						+ "Add2,"
+						+ "DivideBy,"
+						+ "Ply,"
+						+ "type,"
+						+ "cbm,"
+						+ "Qty,"
+						+ "unitId,"
+						+ "IndentDate,"
+						+ "IndentTime,"
+						+ "IndentPostBy) values ("
+						+ "'"+cartonIndentId+"',"
+						+ "'"+indent.get("styleId")+"',"
+						+ "'"+indent.get("purchaseOrder")+"',"
+						+ "'"+indent.get("itemId")+"',"
+						+ "'"+indent.get("colorId")+"',"
+						+ "'"+indent.get("shippingMark")+"',"
+						+ "'"+indent.get("sizeId")+"',"
+						+ "'"+indent.get("accessoriesItemId")+"',"
+						+ "'"+indent.get("cartonSize")+"',"
+						+ "'"+indent.get("orderQty")+"',"
+						+ "'"+indent.get("length")+"',"
+						+ "'"+indent.get("width")+"',"
+						+ "'"+indent.get("height")+"',"
+						+ "'"+indent.get("add1")+"',"
+						+ "'"+indent.get("add2")+"',"
+						+ "'"+indent.get("divideBy")+"',"
+						+ "'"+indent.get("ply")+"',"
+						+ "'"+indent.get("type")+"',"
+						+ "'"+indent.get("cbm")+"',"
+						+ "'"+indent.get("totalQty")+"',"
+						+ "'"+indent.get("unitId")+"',"
+						+ "CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+indent.get("userId")+"'"
+						+ ")";
+
+
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			tx.commit();
+			return cartonIndentId;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return "something wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "something wrong";
 	}
 
 	@Override

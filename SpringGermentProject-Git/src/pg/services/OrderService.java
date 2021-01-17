@@ -103,6 +103,7 @@ public interface OrderService {
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
+	String confirmCartonIndent(String cartonIndentId,String cartonItems);
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);

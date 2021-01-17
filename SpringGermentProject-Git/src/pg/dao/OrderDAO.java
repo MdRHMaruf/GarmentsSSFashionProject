@@ -101,6 +101,7 @@ public interface OrderDAO {
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
+	String confirmCartonIndent(String cartonIndentId,String cartonItems);
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 
