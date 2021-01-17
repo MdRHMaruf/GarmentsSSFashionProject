@@ -77,7 +77,7 @@ function setData(styleItemAutoId ) {
 
 	
 	$('#buyerId').val($('#hBuyerId'+styleItemAutoId).val()).change();
-	$('.selectpicker').selectpicker('refresh');
+	$('#buyerId').selectpicker('refresh');
 	
 	$('#styleNo').val($('#hStyleNo'+styleItemAutoId).val());
 	
@@ -85,7 +85,7 @@ function setData(styleItemAutoId ) {
 	$('#size').val($('#hSize'+styleItemAutoId).val());
 	
 	$('#itemId').val($('#hItemId'+styleItemAutoId).val()).change();
-	$('.selectpicker').selectpicker('refresh');
+	$('#itemId').selectpicker('refresh');
 	
 	
 	$('#styleItemAutoId').val(styleItemAutoId);
@@ -117,11 +117,11 @@ function getImage(id) {
 
 
     $.ajax({
-      type: 'POST',
+      type: 'GET',
       dataType: 'json',
-      url: './getImages/',
+      url: './getImages',
       data: {
-    	  styleItemAutoId:id
+    	  styleItemAutoId : id
       },
       success: function (data) {
     	  

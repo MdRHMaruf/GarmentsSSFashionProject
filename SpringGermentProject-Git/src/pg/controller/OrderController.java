@@ -2206,10 +2206,8 @@ public class OrderController {
 
 	}
 	
-	@RequestMapping(value = "/getImages",method=RequestMethod.POST)
+	@RequestMapping(value = "/getImages",method=RequestMethod.GET)
 	public @ResponseBody List<Style> getImages(Style style) {
-		
-		
 		List<Style> images=orderService.images(style);
 		
 		System.out.println("front "+images.get(0).getFrontimage());

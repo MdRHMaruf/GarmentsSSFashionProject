@@ -663,7 +663,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-				datalist.add(new Style(element[0].toString(),StyleNo,element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString()));
+				datalist.add(new Style(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString()));
 				i++;
 			}
 
@@ -6201,9 +6201,6 @@ public class OrderDAOImpl implements OrderDAO{
 		List<MerchandiserInfo>list=new ArrayList<>();
 
 		try {
-
-				
-
 
 			//Response response=null;
 			SpringRootConfig sp=new SpringRootConfig();
