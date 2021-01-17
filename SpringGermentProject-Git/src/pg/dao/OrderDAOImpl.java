@@ -517,7 +517,7 @@ public class OrderDAOImpl implements OrderDAO{
 		return Id;
 	}
 
-	private boolean CheckStyleAlreadyExist(String buyerId, String styleNo) {
+	private boolean CheckStyleAlreadyExist(String buyerId, String styleNo,String styleId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -527,7 +527,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select StyleId from TbStyleCreate where StyleNo='"+styleNo+"' and BuyerId='"+buyerId+"' and Finished='0'";
+			String sql="select StyleId from TbStyleCreate where StyleNo='"+styleNo+"' and BuyerId='"+buyerId+"' and styleId != '"+styleId+"' and Finished='0'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -6336,7 +6336,7 @@ public class OrderDAOImpl implements OrderDAO{
 			boolean frontimgexists=false;
 			boolean backimgexists=false;
 			
-			if(CheckStyleAlreadyExist(buyerId,styleNo)) {
+			if(!CheckStyleAlreadyExist(buyerId,styleNo,styleid)) {
 				
 				String sql="update TbStyleCreate set BuyerId='"+buyerId+"',StyleNo='"+styleNo+"',date='"+date+"' where styleid='"+styleid+"'";
 				System.out.println(sql);
@@ -6407,7 +6407,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			if(!CheckStyleAlreadyExist(buyerId,styleNo)) {
+			if(!CheckStyleAlreadyExist(buyerId,styleNo,StyleId)) {
 				StyleId=getMaxStyleId();
 				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
 				System.out.println(sql);
