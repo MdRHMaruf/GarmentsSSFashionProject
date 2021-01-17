@@ -1,7 +1,9 @@
+var buyerid=$("#buyer").val();
+console.log(" buyer con "+buyerid)
 
-window.onload = () => {
-	document.title = "Style Create";
-}
+$('.selectpicker').selectpicker('refresh');
+ $('#buyerId').val(buyerid).change();
+
 
 function readFrontURL(input) {
         if (input.files && input.files[0]) {
@@ -34,7 +36,7 @@ function readBackURL(input) {
 }
 
 function btnsaveAction(v){
-	
+	console.log(" btnsave action")
 	
 	var i=0;
 	var hexvalues = [];
@@ -68,72 +70,74 @@ function btnsaveAction(v){
    });  
     
 
-	
-/*	var paperElement = document.getElementById("modalPapers");
-
-	  if (!paperElement.value) {
-	    console.log("No files selected.")
-	    return;
-	  }
-	  var form = document.getElementById("myForm");
-	  var formData = new FormData(form);
-	  var xhr = getXMLHTTP();
-	  xhr.open('POST', "submitFiles");
-	  xhr.onreadystatechange = function() {
-	    if (xhr.readyState == 4 && xhr.status == 405) {
-	      console.log("Files Uploaded")
-	    }
-	  }
-	  xhr.send(formData);*/
-	
-/*	var buyerId = $("#buyername").val().trim();
-	var itemId = $("#itemname").val().trim();
-	var styleNo = $("#styleno").val().trim();
-	var userId = $("#userId").val();
-	var data=$('#data').val();
-	
-	var fronImage = new FormData($('#uploadFrontImage')[0]);
-	var backImage = new FormData($('#uploadBackImage')[0]);
-	
-
-	
-    $.ajax({
-        url: './btnSaveAction',
-        type: "POST",
-        dataType: 'json',
-        contentType: false,
-        processData: false,
-        cache: false,
-        data: fronImage,
-        success: function (data) {
-        	alert(data);
-        }
-      });*/
 }
 
 
-function setData(styleItemAutoId) {
+function setData(styleItemAutoId ) {
 
 	
-	//alert("styleItemAutoId "+styleItemAutoId );
-
-	  //document.getElementById("styleItemAutoId").value = styleItemAutoId;
-	  
-	  
-	alert("");
-	  
-/*	  document.getElementById("styleNo").value = document.getElementById("styleNo" + styleItemAutoId).innerHTML;
-	  document.getElementById("itemId").value = document.getElementById("itemId" + styleItemAutoId).value;
-	    document.getElementById("mobile").value = document.getElementById("mobile" + merchendiserId).value;
-	  document.getElementById("fax").value = document.getElementById("fax" + merchendiserId).value;
-	  document.getElementById("email").value = document.getElementById("email" + merchendiserId).value;
-	  document.getElementById("skype").value = document.getElementById("skype" + merchendiserId).value;
-	  document.getElementById("address").value = document.getElementById("address" + merchendiserId).value;*/
+	$('#buyerId').val($('#hBuyerId'+styleItemAutoId).val()).change();
+	$('.selectpicker').selectpicker('refresh');
+	
+	$('#styleNo').val($('#hStyleNo'+styleItemAutoId).val());
+	
+	$('#date').val($('#hDate'+styleItemAutoId).val());
+	$('#size').val($('#hSize'+styleItemAutoId).val());
+	
+	$('#itemId').val($('#hItemId'+styleItemAutoId).val()).change();
+	$('.selectpicker').selectpicker('refresh');
+	
+	
+	$('#styleItemAutoId').val(styleItemAutoId);
+	$('#styleid').val($('#hStyleId'+styleItemAutoId).val());
+	$('#hbuyerId').val($('#hBuyerId'+styleItemAutoId).val());
+	
+	
+	var styleItemId=$('#styleItemAutoId').val();
+	var styleid=$('#styleid').val();
+	
+	console.log("styleItemId "+styleItemId);
+	console.log("styleid "+styleid);
+	 
 	 
 	  document.getElementById("btnSave").disabled = true;
 	  document.getElementById("btnEdit").disabled = false;
+	  
+	  
+	  getImage(styleItemAutoId)
+	  
+	 
 
 	}
+
+
+
+function getImage(id) {
+	 
+
+
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: './getImages/',
+      data: {
+    	  styleItemAutoId:id
+      },
+      success: function (data) {
+    	  
+    	 
+    	  
+    	  $('#blahFront') .attr('src',"data:image/png;base64,"+data[0].frontimage).width(150).height(200);
+    	  $('#blahBack') .attr('src',"data:image/png;base64,"+data[0].backImage).width(150).height(200);
+    	 //document.getElementById('signnatureSet').src="data:image/jpeg;base64,"+data;
+    	
+
+
+    	  
+      }
+    });
+
+}
 
 $(document).ready(function () {
 	  $("input:text").focus(function () { $(this).select(); });

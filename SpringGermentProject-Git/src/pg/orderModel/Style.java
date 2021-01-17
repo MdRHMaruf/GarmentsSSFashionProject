@@ -15,10 +15,20 @@ public class Style {
 	String itemId;
 	String styleItemAutoId;
 	
-	private MultipartFile  frontimage;
-	private MultipartFile  backImage;
+	private byte[]  frontimage;
+	private byte[]  backImage;
 	
 	public Style() {}
+	
+	public Style(String id) {
+		this.styleItemAutoId=id;
+	}
+	
+	
+	public Style(byte[] fron, byte [] back) {
+		this.frontimage=fron;
+		this.backImage=back;
+	}
 	
 	public Style(String styleId, String buyerId, String buyerName, String styleNo, String itemType, String size) {
 		super();
@@ -30,11 +40,17 @@ public class Style {
 		this.size = size;
 	}
 
-	public Style(String StyleItemAutoId,String StyleNo,String ItemName,String ItemId) {
+	public Style(String StyleItemAutoId,String buyerid,String styleid, String StyleNo,String date, String ItemName,String ItemId, String size) {
 		this.styleItemAutoId=StyleItemAutoId;
+		this.buyerId=buyerid;
+		this.styleId=styleid;
 		this.styleNo=StyleNo;
+		this.date=date;
 		this.itemName=ItemName;
 		this.itemId=ItemId;
+		this.size=size;
+		
+		
 	}
 	
 	
@@ -82,19 +98,19 @@ public class Style {
 		this.styleItemAutoId = styleItemAutoId;
 	}
 
-	public MultipartFile getFrontimage() {
+	public byte[] getFrontimage() {
 		return frontimage;
 	}
 
-	public void setFrontimage(MultipartFile frontimage) {
+	public void setFrontimage(byte[] frontimage) {
 		this.frontimage = frontimage;
 	}
 
-	public MultipartFile getBackImage() {
+	public byte[] getBackImage() {
 		return backImage;
 	}
 
-	public void setBackImage(MultipartFile backImage) {
+	public void setBackImage(byte[] backImage) {
 		this.backImage = backImage;
 	}
 
