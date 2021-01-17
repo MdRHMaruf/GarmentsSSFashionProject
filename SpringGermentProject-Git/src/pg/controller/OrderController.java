@@ -1298,18 +1298,30 @@ public class OrderController {
 	public ModelAndView accessories_indent_curton(ModelMap map,HttpSession session) {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
-		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
-		List<CommonModel>unit=orderService.Unit();
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		//List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
+		//List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
 		view.addObject("purchaseorders",purchaseorders);
-		view.addObject("accessories",accessoriesitem);
-		view.addObject("unit",unit);
+		view.addObject("buyerList",buyerList);
+		//view.addObject("unit",unit);
 		//map.addAttribute("styleList",styleList);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/confirmCartonIndent",method=RequestMethod.POST)
+	public JSONObject confirmCartonIndent(String cartonIndentId,String cartonItems) {
+		JSONObject objmain = new JSONObject();
+		
+			objmain.put("result", orderService.confirmCartonIndent(cartonIndentId, cartonItems));
+
+			return objmain;
+		
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)

@@ -60,10 +60,10 @@ function buyerWisePoLoad() {
 function loadPoNo(data) {
 
 	let itemList = data;
-	let options = "<option id='purchaseOrder' value='0'>Select Purchase Order</option>";
+	let options = "<option value='0'>Select Purchase Order</option>";
 	let length = itemList.length;
 	for (let i = 0; i < length; i++) {
-		options += "<option id='purchaseOrder' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("purchaseOrder").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
@@ -673,7 +673,7 @@ function insertParcel() {
 	let delieryTime = $("#delieryTime").val();
 	let deliveryTo = $("#deliveryTo").val();
 
-
+	console.log(dispatchedDate);
 
 
 	if (styleNo != 0) {
