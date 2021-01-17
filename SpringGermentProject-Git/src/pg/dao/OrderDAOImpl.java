@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import javax.imageio.ImageIO;
 
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
@@ -23,6 +25,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
 
@@ -48,6 +51,7 @@ import pg.orderModel.AccessoriesIndentCarton;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.ItemDescription;
+import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
@@ -472,105 +476,8 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+	
 
-	@Override
-	public boolean SaveStyleCreate(String user, String buyerId, String itemId, String styleNo,String size, String date,
-			String frontimg, String backimg) throws SQLException{
-		SpringRootConfig sp=new SpringRootConfig();
-
-
-		try {
-			boolean frontimgexists=false;
-			boolean backimgexists=false;
-			File frontimgfile =new File(frontimg);
-			File backimgfile =new File(frontimg);
-
-			if(frontimgfile.exists()) {
-				frontimgexists=true;
-			}
-
-			if(backimgfile.exists()) {
-				backimgexists=true;
-			}
-
-
-			String StyleId="";
-
-
-
-			if(!CheckStyleAlreadyExist(buyerId,styleNo)) {
-				StyleId=getMaxStyleId();
-				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
-				System.out.println(sql);
-				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
-
-				StringTokenizer token=new StringTokenizer(itemId,",");
-				while(token.hasMoreTokens()) {
-					String itemIdValue=token.nextToken();
-					String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemIdValue+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
-					System.out.println(sqlStyleItem);
-					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
-				}
-
-			}
-
-
-			if(frontimgexists) {
-
-				BufferedImage bufferedImage=ImageIO.read(frontimgfile);
-				ByteArrayOutputStream byteOutStream=new ByteArrayOutputStream();
-				ImageIO.write(bufferedImage, "png", byteOutStream);
-
-
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				//use another encoding if JPG is innappropriate for you
-				ImageIO.write(bufferedImage, "jpg", baos );
-				baos.flush();
-				byte[] immAsBytes = baos.toByteArray();
-				baos.close();
-
-				java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement("update tbStyleWiseItem set frontpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'");
-				ByteArrayInputStream bais = new ByteArrayInputStream(immAsBytes);
-				//pstmt.setString(1, txtSl.getText().trim());
-				pstmt.setBinaryStream(1, bais, immAsBytes.length);
-				pstmt.executeUpdate();
-				pstmt.close();
-			}
-
-			if(backimgexists) {
-
-				BufferedImage bufferedImage=ImageIO.read(backimgfile);
-				ByteArrayOutputStream byteOutStream=new ByteArrayOutputStream();
-				ImageIO.write(bufferedImage, "png", byteOutStream);
-
-
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				//use another encoding if JPG is innappropriate for you
-				ImageIO.write(bufferedImage, "jpg", baos );
-				baos.flush();
-				byte[] immAsBytes = baos.toByteArray();
-				baos.close();
-
-				java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement("update tbStyleWiseItem set backpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'");
-				ByteArrayInputStream bais = new ByteArrayInputStream(immAsBytes);
-				//pstmt.setString(1, txtSl.getText().trim());
-				pstmt.setBinaryStream(1, bais, immAsBytes.length);
-				pstmt.executeUpdate();
-				pstmt.close();
-			}
-
-			sp.getDataSource().close();
-
-			return true;
-
-
-		} catch (Exception e) {
-			System.out.println("Error,"+e.getMessage());
-		}
-
-
-		return false;
-	}
 
 	private String getStyleId(String buyerId, String styleNo) {
 
@@ -731,8 +638,8 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			String sql="select a.Id,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId from tbStyleWiseItem a order by StyleId,BuyerId";
-
+			//String sql="select a.Id,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId from tbStyleWiseItem a order by StyleId,BuyerId";
+			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a order by StyleId,BuyerId";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			String StyleNo="",PerStyle="";
@@ -756,7 +663,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-				datalist.add(new Style(element[0].toString(),StyleNo,element[2].toString(),element[3].toString()));
+				datalist.add(new Style(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString()));
 				i++;
 			}
 
@@ -6285,6 +6192,189 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 	}
+
+	@Override
+	public List<Style> images(Style style) {
+		//ByteArrayOutputStream out = new ByteArrayOutputStream();
+		byte[] fileBytes = null;
+		List<Style>ImageList=new ArrayList<>();
+		List<MerchandiserInfo>list=new ArrayList<>();
+
+		try {
+
+			//Response response=null;
+			SpringRootConfig sp=new SpringRootConfig();
+			Connection con = null;
+			PreparedStatement ps = null;
+			con = sp.getConnection();
+			String sql="select frontpic, backpic from tbStyleWiseItem where id='"+style.getStyleItemAutoId()+"' ";
+
+			System.out.println(" merchediser list query "+sql);
+			ps =con.prepareStatement(sql)  ;
+
+			int a=0;
+			ResultSet result = ps.executeQuery();
+			if (result.next()) {
+				a++;
+				System.out.println(" a increament "+a);
+
+				//fileBytes = result.getBytes("signature");
+				ImageList.add(new Style(result.getBytes("frontpic"),result.getBytes("backpic")));
+
+
+
+
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ImageList;
+	}
+
+	@Override
+	public boolean editStyle(String styleItemAutoId, String buyerId, String itemId, String styleid, String styleNo,
+			String size, String date, MultipartFile frontImage, MultipartFile backImage) {
+		
+		SpringRootConfig sp=new SpringRootConfig();
+		try {
+			boolean frontimgexists=false;
+			boolean backimgexists=false;
+			
+			if(CheckStyleAlreadyExist(buyerId,styleNo)) {
+				
+				String sql="update TbStyleCreate set BuyerId='"+buyerId+"',StyleNo='"+styleNo+"',date='"+date+"' where styleid='"+styleid+"'";
+				System.out.println(sql);
+				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
+
+			
+					String sqlStyleItem="update tbStyleWiseItem set BuyerId='"+buyerId+"',ItemId='"+itemId+"',size='"+size+"' where styleid='"+styleid+"' and id='"+styleItemAutoId+"'";
+					System.out.println(sqlStyleItem);
+					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
+					
+					
+					byte[] photoBytes = frontImage.getBytes();
+					
+					if(photoBytes.length!=0) {
+						String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
+						System.out.println(" frontimage update "+sql1);
+						java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+						ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
+						pstmt.setBinaryStream(1, bais, photoBytes.length);
+						pstmt.executeUpdate();
+						pstmt.close();
+						
+					}
+
+	
+					
+					photoBytes = backImage.getBytes();
+
+					
+					if(photoBytes.length!=0) {
+						String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
+							System.out.println(" backimage update "+sql1);
+						    java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+							ByteArrayInputStream  bais = new ByteArrayInputStream(photoBytes);
+							pstmt.setBinaryStream(1, bais, photoBytes.length);
+							pstmt.executeUpdate();
+							pstmt.close();
+					}
+
+				
+
+			}
+			
+			sp.getDataSource().close();
+
+			return true;
+
+
+		} catch (Exception e) {
+			System.out.println("Error,"+e.getMessage());
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean SaveStyleCreate(String user, String buyerId, String itemId, String styleNo,String size, String date,
+			MultipartFile frontimg, MultipartFile backimg) throws SQLException{
+		SpringRootConfig sp=new SpringRootConfig();
+
+
+		try {
+			boolean frontimgexists=false;
+			boolean backimgexists=false;
+
+
+			String StyleId="";
+
+
+
+			if(!CheckStyleAlreadyExist(buyerId,styleNo)) {
+				StyleId=getMaxStyleId();
+				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
+				System.out.println(sql);
+				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
+
+				StringTokenizer token=new StringTokenizer(itemId,",");
+				while(token.hasMoreTokens()) {
+					String itemIdValue=token.nextToken();
+					String sqlStyleItem="insert into tbStyleWiseItem (StyleId,BuyerId,ItemId,size,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+itemIdValue+"','"+size+"',CURRENT_TIMESTAMP,'"+user+"');";
+					System.out.println(sqlStyleItem);
+					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
+				}
+
+			}
+			
+
+
+			if(frontimg.getBytes()!=null) {
+				
+				byte[] photoBytes = frontimg.getBytes();
+
+				String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
+				System.out.println(" frontimage update "+sql1);
+				java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+				ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
+				//pstmt.setString(1, txtSl.getText().trim());
+				pstmt.setBinaryStream(1, bais, photoBytes.length);
+				pstmt.executeUpdate();
+				pstmt.close();
+
+	
+			}
+
+			if(backimg.getBytes()!=null) {
+				
+				
+				byte[] photoBytes = backimg.getBytes();
+
+				String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
+				System.out.println(" backimage update "+sql1);
+				java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+				ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
+				//pstmt.setString(1, txtSl.getText().trim());
+				pstmt.setBinaryStream(1, bais, photoBytes.length);
+				pstmt.executeUpdate();
+				pstmt.close();
+
+			}
+
+			sp.getDataSource().close();
+
+			return true;
+
+
+		} catch (Exception e) {
+			System.out.println("Error,"+e.getMessage());
+		}
+
+
+		return false;
+	}
+
 
 
 }
