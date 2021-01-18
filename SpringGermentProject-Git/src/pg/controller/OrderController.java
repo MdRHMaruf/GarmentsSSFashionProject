@@ -1301,12 +1301,13 @@ public class OrderController {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
-		//List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
+		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
 		//List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("buyerList",buyerList);
+		view.addObject("indentList",indentList);
 		//view.addObject("unit",unit);
 		//map.addAttribute("styleList",styleList);
 
@@ -1325,6 +1326,14 @@ public class OrderController {
 		
 	}
 
+	@RequestMapping(value = "/searchCartonIndent",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchCartonIndent(String indentId) {
+		JSONObject objmain = new JSONObject();
+		List<AccessoriesIndentCarton> cartonIndentList  = orderService.getAccessoriesIndentCartonItemDetails(indentId);
+		objmain.put("cartonIndentList",cartonIndentList);
+		return objmain;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)
 	public JSONObject saveAccessoriesCurton(AccessoriesIndentCarton v) {

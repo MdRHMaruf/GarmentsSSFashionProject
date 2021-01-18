@@ -482,7 +482,7 @@ function shipping() {
 			data: {
 			},
 			success: function (data) {
-				loadShppingMarks(data);
+				loadShippingMarks(data);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -508,16 +508,16 @@ function shipping() {
 
 }
 
-function loadShppingMarks(data) {
+function loadShippingMarks(data) {
 	let itemList = data;
 	let options = "<option  value='0' selected>Select Item Type</option>";
 	let length = itemList.length;
 	for (let i = 0; i < length; i++) {
 		options += "<option  value='" + i + "'>" + itemList[i].name + "</option>";
 	};
-	document.getElementById("shippingmark").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#shippingmark').val("0").change();
+	document.getElementById("shippingMark").innerHTML = options;
+	$('#shippingMark').selectpicker('refresh');
+	$('#shippingMark').val("0").change();
 }
 
 function sizeRequiredBoxaction() {
@@ -781,8 +781,8 @@ function addCartonIndent() {
 	let size = '';
 	let isCheck = $("#sizeReqCheck").is(':checked');
 	if(isCheck){
-		sizeId = $("#accessoriesSize").val();
-		size = $("#accessoriesSize option:selected").text();
+		sizeId = $("#size").val();
+		size = $("#size option:selected").text();
 	} 
 	let unitId = $("#unit").val();
 	let unit = $("#unit option:selected").val();
@@ -920,7 +920,7 @@ function viewIndent(autoId, indentType) {
 
 	
   }
-function deleteFabricsIndent(autoId, indentType) {
+function deleteIndent(autoId, indentType) {
 	let indentId = $("#fabricsIndentId").val();
   
 	if (confirm("Are You Sure To Delete this fabrics Indent?")) {
@@ -1008,8 +1008,8 @@ function confirmAction() {
 		  },
 		  success: function (data) {
 			if (data.result != 'something wrong') {
-			  $("#cartonIndentId").val(data.result);
-			  $("#indentId").text(data.result);
+			  $("#cartonIndentId").text(data.result);
+			  $("#indentId").val(data.result);
 			  alert("Carton Indent Save Successfully;")
 			} else {
 			  alert("Incomplete...Something Wrong");
@@ -1042,6 +1042,50 @@ function confirmAction() {
 	  warningAlert("You have not added any Carton... Please Add any Carton");
 	}
   
+  }
+
+  
+function searchIndent(indentId) {
+	
+	$.ajax({
+	  type: 'GET',
+	  dataType: 'json',
+	  url: './searchCartonIndent',
+	  data: {
+		indentId: indentId
+	  },
+	  success: function (data) {
+		$("#dataList").empty();
+		let row='';
+		data.cartonIndentList.forEach((indent) => {
+			
+		  console.log(indent);
+			row += `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-buyer-id='${buyerId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
+		  data-shipping-mark='${shippingMark}' data-size-id='${sizeId}' data-order-quantity='${orderQty}' data-accessories-item-id='${accessoriesItemId}' data-type='${type}' data-add1='${add1}' data-add2='${add2}'   data-unit-id='${unitId}' data-divide-by='${divideBy}'  data-carton-size='${cartonSize}' >
+					  <td id='purchaseOrder-${listRowId}'>${purchaseOrder}</td>
+					  <td id='styleNo-${listRowId}'>${styleNo}</td>
+					  <td id='colorName-${listRowId}'>${colorName}</td>
+					  <td id='accessoriesName-${listRowId}'>${accessoriesName}</td>
+					  <td id='ply-${listRowId}'>${ply}</td>
+					  <td id='length-${listRowId}'>${length1}</td>
+					  <td id='width-${listRowId}'>${width1}</td>
+					  <td id='height-${listRowId}'>${height1}</td>
+					  <td id='unit-${listRowId}'>${unit}</td>
+					  <td id='size-${listRowId}'>${size}</td>
+					  <td id='cbm-${listRowId}'>${cbm}</td>
+					  <td id='totalQty-${listRowId}'>${totalQty}</td>
+					  <td><i class='fa fa-edit' onclick="viewIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
+					  <td><i class='fa fa-trash' onclick="deleteIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
+				  </tr>`;
+  
+		 
+		});
+		$("#dataList").append(row);
+		$("#indentId").text(data.fabricsIndentList[0].indentId);
+		$("#fabricsIndentId").text(data.fabricsIndentList[0].indentId);
+		$("#exampleModal").modal('hide');
+	  }
+	});
   }
 
 function saveAccessoriesCarton() {

@@ -409,7 +409,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Transaction tx=null;
 		List<Color> dataList=new ArrayList<Color>();
 		try{
-			
+
 			tx=session.getTransaction();
 			tx.begin();
 			String sql="select  boes.ColorId,c.Colorname\r\n" + 
@@ -476,7 +476,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
-	
+
 
 
 	private String getStyleId(String buyerId, String styleNo) {
@@ -2795,7 +2795,7 @@ public class OrderDAOImpl implements OrderDAO{
 		return "something wrong";
 
 	}
-	
+
 	@Override
 	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
 		// TODO Auto-generated method stub
@@ -2806,7 +2806,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 			if(cartonIndentId.equals("New")) {
-				String sql="select (isnull(max(indentId),0)+1) as maxId from tbFabricsIndent";
+				String sql="select (isnull(max(indentId),0)+1) as maxId from tbAccessoriesIndentForCarton";
 				List<?> list = session.createSQLQuery(sql).list();
 				if(list.size()>0) {		
 					cartonIndentId = list.get(0).toString();
@@ -2822,6 +2822,7 @@ public class OrderDAOImpl implements OrderDAO{
 				JSONObject indent = (JSONObject) indentList.get(i);
 				String sql="insert into tbAccessoriesIndentForCarton ("
 						+ "indentId,"
+						+ "buyerId,"
 						+ "styleid,"
 						+ "PurchaseOrder,"
 						+ "Itemid,"
@@ -2846,6 +2847,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "IndentTime,"
 						+ "IndentPostBy) values ("
 						+ "'"+cartonIndentId+"',"
+						+ "'"+indent.get("buyerId")+"',"
 						+ "'"+indent.get("styleId")+"',"
 						+ "'"+indent.get("purchaseOrder")+"',"
 						+ "'"+indent.get("itemId")+"',"
@@ -3051,15 +3053,17 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AccIndentId,a.PurchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select ItemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.ShippingMarks,(select itemname from TbAccessoriesItem where itemid=a.accessoriesItemId) as AccessoriesName, cartonSize,a.Qty from tbAccessoriesIndentForCarton a order by a.PurchaseOrder,a.StyleId,a.ItemId,a.ColorId";
+			String sql="select indentId,(SELECT CONVERT(varchar, indentDate, 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId,IndentDate";
 			List<?> list = session.createSQLQuery(sql).list();
-
+			AccessoriesIndentCarton tempAcc = null;
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-
-				query.add(new AccessoriesIndentCarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString()));
+				tempAcc = new AccessoriesIndentCarton();
+				tempAcc.setIndentId(element[0].toString());
+				tempAcc.setIndentDate(element[1].toString());
+				query.add(tempAcc);
 
 			}
 
@@ -3090,18 +3094,60 @@ public class OrderDAOImpl implements OrderDAO{
 		Transaction tx=null;
 
 		List<AccessoriesIndentCarton> query=new ArrayList<AccessoriesIndentCarton>();
-
+		AccessoriesIndentCarton tempIndent = new AccessoriesIndentCarton();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-
-			String sql="select a.AccIndentId,a.PurchaseOrder,a.StyleId,a.ItemId,a.ColorId,a.ShippingMarks,a.accessoriesItemId,a.cartonSize,a.UnitId,a.OrderQty,a.Qty,a.Length1,a.Width1,a.Height1,a.Add1,a.Length2,a.Width2,a.Height2,a.Add2,a.DivideBy,a.Ply from tbAccessoriesIndentForCarton a where a.AccIndentId='"+id+"'";
-
+			String sql="select a.indentId,a.buyerId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.ColorId,c.Colorname,a.ShippingMarks,a.sizeId,isnull(ss.sizeName,'')as sizeName,a.accessoriesItemId,ai.itemname as accessoriesName,a.cartonSize,a.Ply,a.type,a.OrderQty,a.Length1,a.Width1,a.Height1,a.Add1,a.Add2,a.UnitId,u.unitname,a.DivideBy,a.cbm,a.Qty,a.IndentPostBy,a.autoId \n" + 
+					"from tbAccessoriesIndentForCarton a \n" + 
+					"left join TbStyleCreate sc\n" + 
+					"on a.styleid = sc.StyleId\n" + 
+					"left join tbItemDescription id\n" + 
+					"on a.Itemid = id.itemid\n" + 
+					"left join tbColors c\n" + 
+					"on a.ColorId = c.ColorId\n" + 
+					"left join tbStyleSize ss\n" + 
+					"on a.sizeId = ss.id\n" + 
+					"left join TbAccessoriesItem ai\n" + 
+					"on a.accessoriesItemId = ai.itemid\n" + 
+					"left join tbunits u\n" + 
+					"on a.UnitId = u.Unitid\n" + 
+					"where a.indentId='"+id+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new AccessoriesIndentCarton(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString(),element[18].toString(),element[19].toString(),element[20].toString()));
+				tempIndent.setAutoId(element[29].toString());
+				tempIndent.setIndentId(element[0].toString());
+				tempIndent.setBuyerId(element[1].toString());
+				tempIndent.setPoNo(element[2].toString());
+				tempIndent.setStyleId(element[3].toString());
+				tempIndent.setStyle(element[4].toString());
+				tempIndent.setItemId(element[5].toString());
+				tempIndent.setItem(element[6].toString());
+				tempIndent.setItemColorId(element[7].toString());
+				tempIndent.setItemColor(element[8].toString());
+				tempIndent.setShippingMark(element[9].toString());
+				tempIndent.setAccessoriesSizeId(element[10].toString());
+				tempIndent.setAccessoriesSize(element[11].toString());
+				tempIndent.setAccessoriesItemId(element[12].toString());
+				tempIndent.setAccessoriesItem(element[13].toString());
+				tempIndent.setCatronSize(element[14].toString());
+				tempIndent.setPly(element[15].toString());
+				tempIndent.setType(element[16].toString());
+				tempIndent.setOrderqty(element[17].toString());
+				tempIndent.setLength1(element[18].toString());
+				tempIndent.setWidth1(element[19].toString());
+				tempIndent.setHeight1(element[20].toString());
+				tempIndent.setAdd1(element[21].toString());
+				tempIndent.setAdd2(element[22].toString());
+				tempIndent.setUnitId(element[23].toString());
+				tempIndent.setUnit(element[24].toString());
+				tempIndent.setDevideBy(element[25].toString());
+				tempIndent.setCbm(element[26].toString());
+				tempIndent.setTotalQty(element[27].toString());
+				tempIndent.setUser(element[28].toString());
+				query.add(tempIndent);
 
 			}
 
@@ -3389,7 +3435,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("totalQty")+"',"
 						+ "'"+indent.get("unitId")+"',"
 						+ "'"+indent.get("grandQty")+"','0',"
-								+ "GETDATE(),"
+						+ "GETDATE(),"
 						+ "CURRENT_TIMESTAMP,"
 						+ "'"+indent.get("userId")+"'"
 						+ ") ";
@@ -3579,8 +3625,8 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-	
-	
+
+
 			String sql="select a.indentId,a.PurchaseOrder,a.styleId,\r\n" + 
 					"isnull(sc.StyleNo,'') as styleNo,a.itemid,\r\n" + 
 					"isnull(id.itemname,'')as itemName,(SELECT CONVERT(varchar, a.indentDate, 25)) as indentDate  \r\n" + 
@@ -3591,7 +3637,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on a.itemid = cast(id.itemid as varchar)\r\n" + 
 					"group by a.indentId,a.purchaseorder,a.styleId,sc.StyleNo, a.itemid,id.itemname,a.indentDate  ";
 			session.createSQLQuery(sql).list();
-	
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -3609,19 +3655,19 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 			return dataList;
 		}
-	
+
 		catch(Exception ee){
 			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
-	
+
 		finally {
 			session.close();
 		}
-	
+
 		return dataList;
 	}
 
@@ -4524,13 +4570,13 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"2", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
 			}
 
-			sql="select aic.AccIndentId ,style.StyleNo,'Curton' as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.size,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\r\n" + 
+			sql="select aic.indentId ,style.StyleNo,'Curton' as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.size,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\r\n" + 
 					" from tbAccessoriesIndentForCarton aic\r\n" + 
 					" left join TbStyleCreate style\r\n" + 
 					" on aic.styleid = style.StyleId \r\n" + 
 					" left join tbunits unit\r\n" + 
 					" on aic.UnitId = unit.Unitid \r\n" + 
-					" where aic.poNo = '"+poNo+"' and  poapproval='1'  order by aic.AccIndentId";
+					" where aic.poNo = '"+poNo+"' and  poapproval='1'  order by aic.indentId";
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -6330,56 +6376,50 @@ public class OrderDAOImpl implements OrderDAO{
 	@Override
 	public boolean editStyle(String styleItemAutoId, String buyerId, String itemId, String styleid, String styleNo,
 			String size, String date, MultipartFile frontImage, MultipartFile backImage) {
-		
+
 		SpringRootConfig sp=new SpringRootConfig();
 		try {
 			boolean frontimgexists=false;
 			boolean backimgexists=false;
-			
+
 			if(!CheckStyleAlreadyExist(buyerId,styleNo,styleid)) {
-				
+
 				String sql="update TbStyleCreate set BuyerId='"+buyerId+"',StyleNo='"+styleNo+"',date='"+date+"' where styleid='"+styleid+"'";
 				System.out.println(sql);
 				sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
 
-			
-					String sqlStyleItem="update tbStyleWiseItem set BuyerId='"+buyerId+"',ItemId='"+itemId+"',size='"+size+"' where styleid='"+styleid+"' and id='"+styleItemAutoId+"'";
-					System.out.println(sqlStyleItem);
-					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
-					
-					
-					byte[] photoBytes = frontImage.getBytes();
-					
-					if(photoBytes.length!=0) {
-						String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
-						System.out.println(" frontimage update "+sql1);
-						java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
-						ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
-						pstmt.setBinaryStream(1, bais, photoBytes.length);
-						pstmt.executeUpdate();
-						pstmt.close();
-						
-					}
 
-	
-					
-					photoBytes = backImage.getBytes();
+				String sqlStyleItem="update tbStyleWiseItem set BuyerId='"+buyerId+"',ItemId='"+itemId+"',size='"+size+"' where styleid='"+styleid+"' and id='"+styleItemAutoId+"'";
+				System.out.println(sqlStyleItem);
+				sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
 
-					
-					if(photoBytes.length!=0) {
-						String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
-							System.out.println(" backimage update "+sql1);
-						    java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
-							ByteArrayInputStream  bais = new ByteArrayInputStream(photoBytes);
-							pstmt.setBinaryStream(1, bais, photoBytes.length);
-							pstmt.executeUpdate();
-							pstmt.close();
-					}
 
-				
+				byte[] photoBytes = frontImage.getBytes();
 
+				if(photoBytes.length!=0) {
+					String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
+					System.out.println(" frontimage update "+sql1);
+					java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+					ByteArrayInputStream bais = new ByteArrayInputStream(photoBytes);
+					pstmt.setBinaryStream(1, bais, photoBytes.length);
+					pstmt.executeUpdate();
+					pstmt.close();
+
+				}
+
+				photoBytes = backImage.getBytes();
+
+				if(photoBytes.length!=0) {
+					String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+styleid+"'  and id='"+styleItemAutoId+"'";
+					System.out.println(" backimage update "+sql1);
+					java.sql.PreparedStatement pstmt=sp.getDataSource().getConnection().prepareStatement(sql1);
+					ByteArrayInputStream  bais = new ByteArrayInputStream(photoBytes);
+					pstmt.setBinaryStream(1, bais, photoBytes.length);
+					pstmt.executeUpdate();
+					pstmt.close();
+				}
 			}
-			
+
 			sp.getDataSource().close();
 
 			return true;
@@ -6388,7 +6428,7 @@ public class OrderDAOImpl implements OrderDAO{
 		} catch (Exception e) {
 			System.out.println("Error,"+e.getMessage());
 		}
-		
+
 		return false;
 	}
 
@@ -6396,8 +6436,6 @@ public class OrderDAOImpl implements OrderDAO{
 	public boolean SaveStyleCreate(String user, String buyerId, String itemId, String styleNo,String size, String date,
 			MultipartFile frontimg, MultipartFile backimg) throws SQLException{
 		SpringRootConfig sp=new SpringRootConfig();
-
-
 		try {
 			boolean frontimgexists=false;
 			boolean backimgexists=false;
@@ -6422,11 +6460,11 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 
 			}
-			
+
 
 
 			if(frontimg.getBytes()!=null) {
-				
+
 				byte[] photoBytes = frontimg.getBytes();
 
 				String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
@@ -6438,12 +6476,12 @@ public class OrderDAOImpl implements OrderDAO{
 				pstmt.executeUpdate();
 				pstmt.close();
 
-	
+
 			}
 
 			if(backimg.getBytes()!=null) {
-				
-				
+
+
 				byte[] photoBytes = backimg.getBytes();
 
 				String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
