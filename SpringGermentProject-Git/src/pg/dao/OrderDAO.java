@@ -148,10 +148,10 @@ public interface OrderDAO {
 	List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem);
 
 	//File Upload
-	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user);
+	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user, String buyerName, String purchaseOrder);
 	List<pg.orderModel.FileUpload> findfiles(String start, String end, String user);
 	boolean fileDownload(String fileName, String user, String string, String computerName);
-	boolean deletefile(String filename);
+	boolean deletefile(String filename, String id);
 
 	//Sample Production
 	List<SampleCadAndProduction> getSampleCommentsList();
@@ -193,6 +193,11 @@ public interface OrderDAO {
 	public List<Style>images(Style style);
 	public boolean editStyle(String styleItemAutoId,String buyerId,String itemId,String styleid,String styleNo,String size,String date,MultipartFile frontImage,MultipartFile backImage);
 
+	// Create by Arman
+	List<CommonModel> departmentWiseReceiver(String deptId);
+	public boolean saveFileAccessDetails(CommonModel v);
+	List<CommonModel> getAllFromFileLogDetails(CommonModel v);
+	public boolean addNewPermission (CommonModel v);
 }
 
 

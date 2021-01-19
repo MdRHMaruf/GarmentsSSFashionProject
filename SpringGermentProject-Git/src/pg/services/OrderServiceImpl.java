@@ -32,7 +32,7 @@ import pg.registerModel.ParticularItem;
 
 @Service
 public class OrderServiceImpl implements OrderService{
-	
+
 	@Autowired 
 	OrderDAO orderDAO;
 
@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getBuyerWiseStylesItem(buyerId);
 	}
-	
+
 	@Override
 	public List<CommonModel> getPurchaseOrderListByMultipleBuyers(String buyersId) {
 		// TODO Auto-generated method stub
@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getBuyerPOStyleListByMultipleBuyers(buyersId);
 	}
-	
+
 	@Override
 	public List<Style> getBuyerPOStyleListByMultiplePurchaseOrders(String purchaseOrders) {
 		// TODO Auto-generated method stub
@@ -67,32 +67,32 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 
-	
+
 	@Override
 	public List<CommonModel> getStyleWiseBuyerPO(String styleId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleWiseBuyerPO(styleId);
 	}
-	
+
 	@Override
 	public List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList) {
 		// TODO Auto-generated method stub
 		return orderDAO.getPurchaseOrderByMultipleStyle(styleIdList);
 	}
 
-	
+
 	@Override
 	public List<ItemDescription> getStyleWiseItem(String styleId) {
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleWiseItem(styleId);
 	}
-	
+
 	@Override
 	public List<ItemDescription> getItemListByMultipleStyleId(String styleIdList) {
 		// TODO Auto-generated method stub
 		return orderDAO.getItemListByMultipleStyleId(styleIdList);
 	}
-	
+
 	@Override
 	public List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders, String styleIdList) {
 		// TODO Auto-generated method stub
@@ -105,7 +105,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getShippingMarkListByMultiplePoAndStyle(purchaseOrders, styleIdList);
 	}
 
-	
+
 
 	@Override
 	public List<Style> getStyleList() {
@@ -118,15 +118,15 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleWiseItemList();
 	}
-	
-	
+
+
 	@Override
 	public List<Style> getStyleAndItem(String value) {
 		// TODO Auto-generated method stub
 		return orderDAO.getStyleAndItem(value);
 	}
 
-	
+
 	@Override
 	public List<ParticularItem> getTypeWiseParticularList(String type) {
 		// TODO Auto-generated method stub
@@ -138,7 +138,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.saveCosting(costing);
 	}
-	
+
 	@Override
 	public String confirmCosting(List<Costing> costingList) {
 		// TODO Auto-generated method stub
@@ -174,7 +174,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.cloningCosting(oldStyleId, oldItemId);
 	}
-	
+
 	@Override
 	public Costing getCostingItem(String autoId) {
 		// TODO Auto-generated method stub
@@ -313,13 +313,13 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesRecyclingData(query);
 	}
-	
+
 	@Override
 	public List<AccessoriesIndent> getAccessoriesRecyclingDataWithSize(String query,String query2) {
 		// TODO Auto-generated method stub
 		return orderDAO.getAccessoriesRecyclingDataWithSize(query,query2);
 	}
-	
+
 	@Override
 	public boolean insertAccessoriesIndent(AccessoriesIndent ai) {
 		// TODO Auto-generated method stub
@@ -332,7 +332,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.PendingList();
 	}
 
-	
+
 
 	@Override
 	public List<CommonModel> styleItemsWiseColor(String buyerorderid, String style, String item) {
@@ -374,7 +374,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.confirmAccessoriesIndent(accessoriesIndentId, accessoriesItems);
 	}
-	
+
 	@Override
 	public List<AccessoriesIndent> getPostedAccessoriesIndent() {
 		// TODO Auto-generated method stub
@@ -435,7 +435,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.isFabricsIndentExist(fabricsIndent);
 	}
-	
+
 	@Override
 	public boolean deleteFabricsIndent(String autoId, String indentId) {
 		// TODO Auto-generated method stub
@@ -465,7 +465,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getFabricsIndent(indentId);
 	}
-	
+
 	@Override
 	public List<Style> getPOWiseStyleList(String purchaseOrder) {
 		// TODO Auto-generated method stub
@@ -483,7 +483,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getOrderQuantity(purchaseOrder, styleId, itemId, colorId);
 	}
-	
+
 	@Override
 	public double getOrderQuantityByMultipleId(String purchaseOrder, String styleId, String itemId, String colorId) {
 		// TODO Auto-generated method stub
@@ -496,7 +496,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.BuyerWisePo(buyerId);
 	}
 
-	
+
 	@Override
 	public List<CommonModel> getSampleList() {
 		// TODO Auto-generated method stub
@@ -590,9 +590,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user) {
+	public boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user, String buyerName, String purchaseOrder) {
 		// TODO Auto-generated method stub
-		return orderDAO.fileUpload(uploadFileName, computerName, string, purpose, user);
+		return orderDAO.fileUpload(uploadFileName, computerName, string, purpose, user ,buyerName,  purchaseOrder);
 	}
 
 	@Override
@@ -608,9 +608,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean deletefile(String filename) {
+	public boolean deletefile(String filename,String id) {
 		// TODO Auto-generated method stub
-		return orderDAO.deletefile(filename);
+		return orderDAO.deletefile(filename,id);
 	}
 
 	@Override
@@ -620,8 +620,8 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.InstallDataAsSameParticular(userId, purchaseOrder, styleId, itemId, colorId, installAccessories, forAccessories);
 	}
 
-	
-	
+
+
 	@Override
 	public List<SampleCadAndProduction> getSampleCommentsList() {
 		// TODO Auto-generated method stub
@@ -638,7 +638,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.postSampleProductionInfo(sampleCadAndProduction);
 	}
-	
+
 	@Override
 	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
 		// TODO Auto-generated method stub
@@ -668,7 +668,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getParcelInfo(id);
 	}
-	
+
 	@Override
 	public List<ParcelModel> getParcelItems(String autoId) {
 		// TODO Auto-generated method stub
@@ -680,7 +680,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editParecel(parcel);
 	}
-	
+
 	@Override
 	public boolean editParecelItem(ParcelModel parcel) {
 		// TODO Auto-generated method stub
@@ -710,7 +710,7 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editSampleCad(sample);
 	}
-	
+
 	@Override
 	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType) {
 		// TODO Auto-generated method stub
@@ -764,6 +764,15 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editCheckListItem(checkList);
 	}
+	
+	// Create by Arman
+	
+		@Override
+		public List<CommonModel> departmentWiseReceiver(String deptId) {
+			// TODO Auto-generated method stub
+			return orderDAO.departmentWiseReceiver(deptId);
+		}
+
 
 	@Override
 	public List<Style> images(Style style) {
@@ -785,5 +794,22 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.SaveStyleCreate(user, buyerName, itemName, styleNo, size, date, frontimg, backimg);
 	}
 
-	
+	@Override
+	public boolean saveFileAccessDetails(CommonModel v) {
+		// TODO Auto-generated method stub
+		return orderDAO.saveFileAccessDetails(v);
+	}
+
+	@Override
+	public List<CommonModel> getAllFromFileLogDetails(CommonModel v) {
+		// TODO Auto-generated method stub
+		return orderDAO.getAllFromFileLogDetails(v);
+	}
+
+	@Override
+	public boolean addNewPermission(CommonModel v) {
+		// TODO Auto-generated method stub
+		return orderDAO.addNewPermission(v);
+	}
+
 }

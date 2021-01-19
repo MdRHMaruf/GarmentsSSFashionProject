@@ -16,12 +16,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.sun.istack.internal.logging.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -102,6 +99,12 @@ public class OrderController {
 	String styleid;
 	String itemid;
 	String sampleId;
+	
+	String empCode[],dept,userId;
+
+	int type;
+	
+	boolean fileupload=false;
 
 
 	//Style Create 
@@ -620,7 +623,8 @@ public class OrderController {
 
 
 		ModelAndView view = new ModelAndView("order/fileupload");
-
+		view.addObject("buyer", registerService.getAllBuyers());
+		view.addObject("dept", registerService.getDepartmentList());
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -630,8 +634,13 @@ public class OrderController {
 
 
 	// Process multiple file upload action and return a result page to user. 
-	@RequestMapping(value="/save-product/{purpose}/{user}", method={RequestMethod.PUT, RequestMethod.POST})
-	public String uploadFileSubmit(@PathVariable ("purpose") String purpose,@PathVariable ("user") String user, MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value="/save-product/{purpose}/{user}/{buyerName}/{purchaseOrder}", method={RequestMethod.PUT, RequestMethod.POST})
+	public String uploadFileSubmit(
+			@PathVariable ("purpose") String purpose,
+			@PathVariable ("user") String user,
+			@PathVariable ("buyerName") String buyerName,
+			@PathVariable ("purchaseOrder") String purchaseOrder,
+			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
 		try
 		{
 
@@ -680,7 +689,7 @@ public class OrderController {
 
 				System.out.println(" file names "+uploadFileName);
 
-				orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user);
+				orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
 
 				// Create server side target file path.
 
@@ -697,6 +706,12 @@ public class OrderController {
 
 			// Set message that will be displayed in return page.
 			//  model.addAttribute("message", msgBuf.toString());
+			
+			if (fileupload) {
+				CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+				boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+				fileupload=false;
+			}
 
 		}catch(IOException ex)
 		{
@@ -821,10 +836,10 @@ public class OrderController {
 	}
 
 
-	@RequestMapping(value = "/delete/{filename:.+}",method=RequestMethod.POST)
-	public @ResponseBody boolean findfile(@PathVariable ("filename") String filename) {
+	@RequestMapping(value = "/delete/{filename:.+}/{id}",method=RequestMethod.POST)
+	public @ResponseBody boolean findfile(@PathVariable ("filename") String filename,@PathVariable ("id") String id) {
 
-		boolean delete=orderService.deletefile(filename);
+		boolean delete=orderService.deletefile(filename,id);
 
 		if (delete) {
 			File file=new File(UPLOAD_FILE_SAVE_FOLDER+filename);
@@ -1880,8 +1895,6 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping(value = "/buyerWisePoLoad/{buyerId}",method=RequestMethod.POST)
 	public JSONObject buyerWisePoNo(@PathVariable ("buyerId") String buyerId) {
-		System.out.println(" powisestyles ");
-
 
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
@@ -2237,5 +2250,62 @@ public class OrderController {
 		return images;
 	}
 
+	// Create by Arman
+	@ResponseBody
+	@RequestMapping(value = "/departmentWiseReceiver/{deptId}",method=RequestMethod.POST)
+	public List departmentWiseReceiver(@PathVariable ("deptId") String deptId) {
+		List<CommonModel> departmentWiseReceiverList= orderService.departmentWiseReceiver(deptId);
+
+		return departmentWiseReceiverList;				
+	}
+	
+	@RequestMapping(value = "/saveFileAccessDetails", method = RequestMethod.POST)
+	public @ResponseBody String saveFileAccessDetails(
+			@RequestParam (value="empCode[]",  required=false) String [] empCode,
+			@RequestParam (value="dept",  required=false) String dept,
+			@RequestParam (value="type",  required=false) int type,
+			@RequestParam (value="userId",  required=false) String userId) {
+		
+		this.empCode=empCode;
+		this.dept=dept;
+		this.type=type;
+		this.userId=userId;
+		
+		//CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+//		boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+		fileupload=true;
+		
+		return "success";
+
+	}
+	
+	@RequestMapping(value = "/getIdWiseFileLogDetails", method = RequestMethod.POST)
+	public @ResponseBody List<CommonModel> getAllFromFileLogDetails(CommonModel v) {
+
+		List<CommonModel> AllFromFileLogDetails = orderService.getAllFromFileLogDetails(v);
+
+		return AllFromFileLogDetails;
+	}
+	
+	@RequestMapping(value = "/addNewPermission", method = RequestMethod.POST)
+	public @ResponseBody String addNewPermission(
+			@RequestParam (value="empCode[]",  required=false) String [] empCode,
+			@RequestParam (value="dept",  required=false) String dept,
+			@RequestParam (value="type",  required=false) int type,
+			@RequestParam (value="id",  required=false) String id,
+			@RequestParam (value="userId",  required=false) String userId) {
+		CommonModel AddNewPermission=new CommonModel(empCode,dept,userId,type,id);
+		boolean ADDNewPermission=orderService.addNewPermission(AddNewPermission);
+		return "success";
+
+	}
+	
+	/*@RequestMapping(value = "/setModalData", method = RequestMethod.POST)
+	public @ResponseBody List<CommonModel> setModalData(CommonModel v) {
+
+		List<CommonModel> setModalData = orderService.getModalData(v);
+
+		return setModalData;
+	}*/
 }
 
