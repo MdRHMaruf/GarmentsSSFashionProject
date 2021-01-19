@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.sql.ordering.antlr.OrderByAliasResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import pg.dao.OrderDAO;
 import pg.model.CommonModel;
@@ -234,12 +235,6 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getBuyerPO(buyerPoNo);
 	}
 
-	@Override
-	public boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo, String size,
-			String date, String frontimg, String backimg) throws SQLException {
-		// TODO Auto-generated method stub
-		return orderDAO.SaveStyleCreate(user, buyerName, itemName, styleNo, size, date, frontimg, backimg);
-	}
 
 	@Override
 	public String maxAIno() {
@@ -390,6 +385,12 @@ public class OrderServiceImpl implements OrderService{
 	public boolean saveAccessoriesCurton(AccessoriesIndentCarton v) {
 		// TODO Auto-generated method stub
 		return orderDAO.saveAccessoriesCurton(v);
+	}
+	
+	@Override
+	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
+		// TODO Auto-generated method stub
+		return orderDAO.confirmCartonIndent(cartonIndentId, cartonItems);
 	}
 
 	@Override
@@ -763,13 +764,34 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editCheckListItem(checkList);
 	}
-
+	
 	// Create by Arman
 	
+		@Override
+		public List<CommonModel> departmentWiseReceiver(String deptId) {
+			// TODO Auto-generated method stub
+			return orderDAO.departmentWiseReceiver(deptId);
+		}
+
+
 	@Override
-	public List<CommonModel> departmentWiseReceiver(String deptId) {
+	public List<Style> images(Style style) {
 		// TODO Auto-generated method stub
-		return orderDAO.departmentWiseReceiver(deptId);
+		return orderDAO.images(style);
+	}
+
+	@Override
+	public boolean editStyle(String styleItemAutoId, String buyerId, String itemId, String styleid, String styleNo,
+			String size, String date, MultipartFile frontImage, MultipartFile backImage) {
+		// TODO Auto-generated method stub
+		return orderDAO.editStyle(styleItemAutoId, buyerId, itemId, styleid, styleNo, size, date, frontImage, backImage);
+	}
+
+	@Override
+	public boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo, String size,
+			String date, MultipartFile frontimg, MultipartFile backimg) throws SQLException {
+		// TODO Auto-generated method stub
+		return orderDAO.SaveStyleCreate(user, buyerName, itemName, styleNo, size, date, frontimg, backimg);
 	}
 
 	@Override
@@ -789,7 +811,5 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.addNewPermission(v);
 	}
-
-
 
 }

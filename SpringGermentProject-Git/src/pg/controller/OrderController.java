@@ -25,6 +25,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +38,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.sun.istack.internal.logging.Logger;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import pg.model.CommonModel;
 import pg.model.Login;
 import pg.orderModel.AccessoriesIndent;
@@ -1312,18 +1315,30 @@ public class OrderController {
 	public ModelAndView accessories_indent_curton(ModelMap map,HttpSession session) {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
-		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
-		List<CommonModel>unit=orderService.Unit();
+		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		//List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
+		//List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
 		view.addObject("purchaseorders",purchaseorders);
-		view.addObject("accessories",accessoriesitem);
-		view.addObject("unit",unit);
+		view.addObject("buyerList",buyerList);
+		//view.addObject("unit",unit);
 		//map.addAttribute("styleList",styleList);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/confirmCartonIndent",method=RequestMethod.POST)
+	public JSONObject confirmCartonIndent(String cartonIndentId,String cartonItems) {
+		JSONObject objmain = new JSONObject();
+		
+			objmain.put("result", orderService.confirmCartonIndent(cartonIndentId, cartonItems));
+
+			return objmain;
+		
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)
@@ -1833,30 +1848,34 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/submitStyleFiles", method = RequestMethod.POST)
-	public ModelAndView submitFiles(@RequestParam String buyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam CommonsMultipartFile frontImage,@RequestParam CommonsMultipartFile backImage,HttpSession session,ModelMap map) throws IOException, SQLException {
+	public ModelAndView submitFiles(@RequestParam String submit,@RequestParam String styleItemAutoId,@RequestParam String styleid,@RequestParam String buyerId,@RequestParam String hbuyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam MultipartFile frontImage,@RequestParam MultipartFile backImage,HttpSession session,Model map,RedirectAttributes attr) throws IOException, SQLException {
 
+
+		
 		List<Login> user=(List<Login>)session.getAttribute("pg_admin");
-
-
-		String frontimg=getImageName(frontImage,session);
-		System.out.println("frontimg "+frontimg);
-		this.FrontImg=frontimg;
-
-		String backimg=getImageName(backImage,session);
-		this.BackImg=backimg;
-		System.out.println("backimg "+backimg);
-
 		String userId=Integer.toString(user.get(0).getId());
-
-		boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontimg,backimg) ;
-
-		if(flag) {
-			System.out.println("Sucess");
+		
+		if (submit.equals("1")) {
+			
+			boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontImage,backImage) ;
+			
+		}else {
+			
+			System.out.println("styleItemAutoId "+styleItemAutoId);
+			System.out.println("buyerId "+buyerId);
+			System.out.println("itemId "+itemId);
+			System.out.println("styleid "+styleid);
+			System.out.println("styleNo "+styleNo);
+			System.out.println("size "+size);
+			System.out.println("date "+date);
+			System.out.println("frontImage "+frontImage);
+			System.out.println("backImage "+backImage);
+			boolean flag=orderService.editStyle(styleItemAutoId, hbuyerId, itemId,styleid, styleNo, size, date, frontImage, backImage);
 		}
-
+		
 		ModelAndView view=new ModelAndView("redirect:style_create");
-		map.addAttribute("buyerId", buyerId);
-
+		
+		
 
 		return view;
 	}
@@ -2212,12 +2231,20 @@ public class OrderController {
 
 	}
 	
+	@RequestMapping(value = "/getImages",method=RequestMethod.GET)
+	public @ResponseBody List<Style> getImages(Style style) {
+		List<Style> images=orderService.images(style);
+		
+		System.out.println("front "+images.get(0).getFrontimage());
+		
+		
+		return images;
+	}
+
 	// Create by Arman
-	
 	@ResponseBody
 	@RequestMapping(value = "/departmentWiseReceiver/{deptId}",method=RequestMethod.POST)
 	public List departmentWiseReceiver(@PathVariable ("deptId") String deptId) {
-
 		List<CommonModel> departmentWiseReceiverList= orderService.departmentWiseReceiver(deptId);
 
 		return departmentWiseReceiverList;				

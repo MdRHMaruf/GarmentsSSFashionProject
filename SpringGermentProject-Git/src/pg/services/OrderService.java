@@ -24,6 +24,7 @@ import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.SizeGroup;
 import pg.registerModel.StyleItem;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface OrderService {
 
@@ -37,12 +38,12 @@ public interface OrderService {
 	List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList);
 	List<ItemDescription> getStyleWiseItem(String styleId);
 	List<ItemDescription> getItemListByMultipleStyleId(String styleIdList);
+	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
+			MultipartFile frontimg, MultipartFile backimg) throws SQLException;
 	
 	List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
-	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
-			String frontimg, String backimg) throws SQLException;
 	List<Style> getStyleList();
 	List<Style> getStyleWiseItemList();
 	List<Style> getStyleAndItem(String value);
@@ -101,6 +102,7 @@ public interface OrderService {
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
+	String confirmCartonIndent(String cartonIndentId,String cartonItems);
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);
@@ -188,6 +190,8 @@ public interface OrderService {
 	public boolean editCheckList(CheckListModel checkList);
 	public boolean editCheckListItem(CheckListModel checkList);
 	
+	public List<Style>images(Style style);
+	public boolean editStyle(String styleItemAutoId,String buyerId,String itemId,String styleid,String styleNo,String size,String date,MultipartFile frontImage,MultipartFile backImage);
 
 	// Create by Arman
 	

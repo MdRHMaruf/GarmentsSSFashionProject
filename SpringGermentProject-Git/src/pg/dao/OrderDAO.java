@@ -22,6 +22,7 @@ import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface OrderDAO {
 
@@ -35,12 +36,12 @@ public interface OrderDAO {
 	List<CommonModel> getPurchaseOrderByMultipleStyle(String styleIdList);
 	List<ItemDescription> getStyleWiseItem(String styleId);
 	List<ItemDescription> getItemListByMultipleStyleId(String styleIdList);
+	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
+			MultipartFile frontimg, MultipartFile backimg) throws SQLException;
 	
 	List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
-	boolean SaveStyleCreate(String user, String buyerName, String itemName, String styleNo,String size, String date,
-			String frontimg, String backimg) throws SQLException;
 	List<Style> getStyleWiseItemList();
 	List<Style> getStyleList();
 	List<Style> getStyleAndItem(String value);
@@ -100,6 +101,7 @@ public interface OrderDAO {
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
+	String confirmCartonIndent(String cartonIndentId,String cartonItems);
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 
@@ -188,6 +190,8 @@ public interface OrderDAO {
 	public boolean editCheckList(CheckListModel checkList);
 	public boolean editCheckListItem(CheckListModel checkList);
 
+	public List<Style>images(Style style);
+	public boolean editStyle(String styleItemAutoId,String buyerId,String itemId,String styleid,String styleNo,String size,String date,MultipartFile frontImage,MultipartFile backImage);
 
 	// Create by Arman
 	List<CommonModel> departmentWiseReceiver(String deptId);

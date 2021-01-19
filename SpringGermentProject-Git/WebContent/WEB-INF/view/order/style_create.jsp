@@ -2,13 +2,19 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@page import="pg.model.WareInfo"%>
-<%@page import="pg.model.Module"%>
+
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
-<%
+<%	
+
 	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+	String buyerid=(String) request.getAttribute("buyerId");
+	/* System.out.println(" buyer id "+request.getAttribute("buyerId"));
+	String styleid=(String) request.getAttribute("style");
+	System.out.println(" styleid "+styleid);
+	String date=(String) request.getAttribute("date");
+	System.out.println(" date "+date); */
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">
@@ -25,10 +31,12 @@
 			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		<input type="hidden" id="unitId" value="0">
+<!-- 		<input type="hidden" id="unitId" value="0">
 	 	<input type="hidden" id="itemDescriptionId" value="0">
 	 	<input type="hidden" id="buyerid" value="0">
-	 	<input type="hidden" id="styleItemAutoId" value="0">
+	 	<input type="hidden" id="styleItemAutoId" value="0"> -->
+	 	
+	 	
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -44,27 +52,58 @@
 							<hr>
 								<%-- <form  id="myForm" method="POST" enctype="multipart/form-data"> --%>
 							<form  id="myForm" action="submitStyleFiles" method="POST" enctype="multipart/form-data">
+							
+							
+	<%	
+
+	
+	String buyerid1=(String) request.getAttribute("buyerId");
+	System.out.println(" buyer id "+request.getAttribute("buyerId"));
+	String styleid1=(String) request.getAttribute("style");
+	System.out.println(" styleid "+styleid1);
+	String date1=(String) request.getAttribute("date");
+	System.out.println(" date "+date1);
+	
+	
+	
+	//System.out.println(" bid "+${customerEmail});
+%>
+							
+							
 								<div class="row">
+								
+								<input type="hidden" id="hbuyerId" name="hbuyerId" />
+								<input type="hidden" id="styleid" name="styleid" />
+								<input type="hidden" id="styleItemAutoId" name="styleItemAutoId"/>
+								
+								
 									<select id="buyerId" name="buyerId" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
 										<option name="buyerId" id="buyerId" value="0">Select Buyer Name</option>
+										
+										
+										
 										<c:forEach items="${buyerList}" var="blist" varStatus="counter">
 											<option name="buyerId"  id="buyerId" value="${blist.buyerid}">${blist.buyername}</option>
 										</c:forEach>
-									</select>		
-	
+										
+									
+									</select>	
+									
+								
 								</div>
 							<div class="row">
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="styleno">Style No:</label> 
-										<input type="text" name="styleNo" class="form-control" id="styleNo" >
+										
+										<input type="text"  name="styleNo" class="form-control" id="styleNo" accesskey="C">
 									</div>							
 								</div>							
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="unitValue">Date:</label> 									
 										<div class="input-group date" data-provide="datepicker">
-												    <input id="date" name="date"  type="date" class="form-control">
+												    <input id="date" value=<%=date1%> name="date"  type="date" class="form-control">
 										</div>
 									</div>						
 								</div>									
@@ -78,7 +117,7 @@
 							</div>	
 
 								<div class="row">
-									<select id="itemId" name="itemId" multiple="multiple" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
+									<select id="itemId" name="itemId" multiple="multiple" class="itemId col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
 										<option id="itemId" name="itemId" value="0">Select Item Name</option>
 										<c:forEach items="${itemList}" var="list" varStatus="counter">
 											<option id="itemId" name="itemId" value="${list.itemId}">${list.itemName}</option>
@@ -107,10 +146,9 @@
 									</div>								
 								</div>
 							</div>		
-							<button type="submit" id="btnSave" class="btn btn-primary btn-sm"  onclick="btnsaveAction()"
-								>Save</button>
+							<button type="submit" accesskey="S" id="btnSave" name="submit" value="1" class="btn btn-primary btn-sm"  onclick="btnsaveAction()">Save</button>
 
-							<button type="submit" id="btnEdit" class="btn btn-primary btn-sm" onclick="btneditAction()"
+							<button type="submit" id="btnEdit" name="submit" value="2" class="btn btn-primary btn-sm" onclick="btneditAction()"
 								disabled>Edit</button>
 							<button type="submit" id="btnRefresh"
 								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>							
@@ -148,7 +186,7 @@
 											<td>${counter.count}</td>
 											<td id='styleNo${slist.styleItemAutoId}'>${slist.styleNo}</td>
 											<td> <input id='itemId${slist.styleItemAutoId}' type="hidden" value='1'/> ${slist.itemName}</td>
-											<td><i class="fa fa-edit" onclick="setData(${slist.styleItemAutoId})"> </i></td>
+											<td><input type="hidden" id='hStyleId${slist.styleItemAutoId}' value="${slist.styleId}" /><input type="hidden" id='hBuyerId${slist.styleItemAutoId}' value="${slist.buyerId}" /><input type="hidden" id='hItemId${slist.styleItemAutoId}' value="${slist.itemId}" /><input type="hidden" id='hDate${slist.styleItemAutoId}' value="${slist.date}" /><input type="hidden" id='hStyleNo${slist.styleItemAutoId}' value="${slist.styleNo}" /><input type="hidden" id='hSize${slist.styleItemAutoId}' value="${slist.size}" /><i class="fa fa-edit" onclick="setData(${slist.styleItemAutoId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -180,3 +218,7 @@
 			</script>
 <script
 	src="${pageContext.request.contextPath}/assets/js/order/style-create.js"></script>
+	
+	<script>
+	  
+	</script>
