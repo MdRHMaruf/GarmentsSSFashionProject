@@ -1626,6 +1626,8 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<Style> styleList= orderService.getStyleList();
+		List<Color> colorList = registerService.getColorList();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -1634,6 +1636,8 @@ public class OrderController {
 
 		view.addObject("groupList",groupList);
 		view.addObject("buyerList",buyerList);
+		view.addObject("styleList",styleList);
+		view.addObject("colorList",colorList);
 		//view.addObject("factoryList",factoryList);
 		view.addObject("sampleReqList",sampleReqList);
 		view.addObject("sampleList",sampleList);

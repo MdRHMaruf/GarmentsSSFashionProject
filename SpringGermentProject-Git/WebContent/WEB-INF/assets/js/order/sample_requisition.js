@@ -460,60 +460,40 @@ function loadStyles(data) {
 
 }
 
-function styleWiseItems() {
-
-
-	var buyerorderid = $("#purchaseOrder").val();
-	var style = $("#styleNo").val();
-
-	/*	alert("buyerorderid "+buyerorderid);
-		alert("style "+style);*/
-
-	if (style != 0 && buyerorderid != '0') {
-
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './stylewiseitems',
-			data: {
-				buyerorderid: buyerorderid,
-				style: style
-
-			},
-			success: function (data) {
-
-				loatItems(data.result);
-
-
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-
-
+function styleWiseItemLoad() {
+	var styleId = $("#styleNo").val();
+  
+	if (styleId != 0) {
+	  $.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './getStyleWiseItem',
+		data: {
+		  styleId: styleId
+		},
+		success: function (data) {
+  
+		  var itemList = data.itemList;
+		  var options = "<option  value='0' selected>Select Item Name</option>";
+		  var length = itemList.length;
+		  for (var i = 0; i < length; i++) {
+			options += "<option  value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+		  };
+		  document.getElementById("itemName").innerHTML = options;
+		  $('.selectpicker').selectpicker('refresh');
+		  $('#itemName').val(itemValue).change();
+		  itemValue = 0;
+		}
+	  });
+	} else {
+	  var options = "<option  value='0' selected>Select Item Name</option>";
+	  $("#itemName").html(options);
+	  $('#itemName').selectpicker('refresh');
+	  $('#itemName').val(0).change();
+	  itemValue = 0;
 	}
-
-
-
-}
-
+  
+  }
 
 function loatItems(data) {
 

@@ -4548,7 +4548,6 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();
 				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"1", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[11].toString(),true));				
 			}
-
 			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 					" from tbAccessoriesIndent ai \r\n" + 
 					" left join TbStyleCreate style\r\n" + 
@@ -4567,12 +4566,14 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"2", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
 			}
 
-			sql="select aic.indentId ,style.StyleNo,'Curton' as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.size,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\r\n" + 
-					" from tbAccessoriesIndentForCarton aic\r\n" + 
-					" left join TbStyleCreate style\r\n" + 
-					" on aic.styleid = style.StyleId \r\n" + 
-					" left join tbunits unit\r\n" + 
-					" on aic.UnitId = unit.Unitid \r\n" + 
+			sql="select aic.indentId ,style.StyleNo,ai.itemname as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,aic.sizeId,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
+					" from tbAccessoriesIndentForCarton aic\n" + 
+					" left join TbStyleCreate style\n" + 
+					" on aic.styleid = style.StyleId \n" + 
+					" left join tbunits unit\n" + 
+					" on aic.UnitId = unit.Unitid \n" + 
+					" left join TbAccessoriesItem ai\n" + 
+					" on aic.accessoriesItemId = ai.itemid \r\n" + 
 					" where aic.poNo = '"+poNo+"' and  poapproval='1'  order by aic.indentId";
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)

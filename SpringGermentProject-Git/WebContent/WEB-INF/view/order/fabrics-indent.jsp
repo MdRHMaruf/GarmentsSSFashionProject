@@ -182,10 +182,15 @@
 
 			</div>
 
-			<div class="col-sm-9 col-md-9 col-lg-2 pr-0 pl-1">
-				<label for="width" class="col-form-label-sm mb-0 pb-0">Width</label>
+			<div class="col-sm-9 col-md-2 col-lg-2 pr-0 pl-1">
+				<label for="width" class="col-form-label-sm mb-0 pb-0">Fabrics Width</label>
 				<input id="width" type="number" class="form-control-sm pr-0 pl-1"
 					onkeyup="gsmCalculation()" disabled="disabled">
+			</div>
+			
+			<div class="col-sm-9 col-md-2 col-lg-2 pr-0 pl-1">
+				<label for="markingWidth" class="col-form-label-sm mb-0 pb-0">Marking Width</label>
+				<input id="markingWidth" type="number" class="form-control-sm pr-0 pl-1">
 			</div>
 
 		</div>

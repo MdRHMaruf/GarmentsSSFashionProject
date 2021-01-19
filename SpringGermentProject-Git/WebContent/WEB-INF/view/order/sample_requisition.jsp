@@ -34,7 +34,21 @@
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Sample Requisition</h5>
+			<div>
+				<h5 class="text-center" style="display: inline;">Sample
+					Requisition</h5>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input ml-1" type="radio" name="radio"
+						id="withPO" value="" checked> <label
+						class="form-check-label" for="withPO">With PO</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="radio"
+						id="withOutPO" value=""> <label class="form-check-label"
+						for="withOutPO">With Out PO</label>
+				</div>
+			</div>
+
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
@@ -62,12 +76,14 @@
 					</div>
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 1px; padding-right: 1px;">
-						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase Order:</label>
+						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
+							Order:</label>
 						<div class="row">
 							<select id="purchaseOrder" class="selectpicker col-md-12"
 								onchange="poWiseStyles()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="purchaseOrder" value="0">Select Purchase Order</option>
+								<option id="purchaseOrder" value="0">Select Purchase
+									Order</option>
 							</select>
 						</div>
 
@@ -78,9 +94,12 @@
 							No:</label>
 						<div class="row">
 							<select id="styleNo" class="selectpicker col-md-12"
-								onchange="styleWiseItems()" data-live-search="true"
+								onchange="styleWiseItemLoad()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleNo" value="0">Select Style</option>
+								<option  value="0">Select Style</option>
+										<c:forEach items="${styleList}" var="style">
+											<option  value="${style.styleId}">${style.styleNo}</option>
+										</c:forEach>
 							</select>
 						</div>
 
@@ -91,14 +110,15 @@
 						<div class="row">
 							<select id="itemName" class="selectpicker col-md-12"
 								data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray" onchange="styleItemsWiseColor()">
+								data-style="btn-light btn-sm border-light-gray"
+								onchange="styleItemsWiseColor()">
 								<option id="itemName" value="0">Select Item Description</option>
 							</select>
 						</div>
 
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="form-group col-md-4 mb-1" style="padding-right: 1px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0">Color</label>
@@ -106,7 +126,10 @@
 							<select id="colorName" class="selectpicker col-md-12"
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-
+								<option value="0">Select Color</option>
+								<c:forEach items="${colorList}" var="color">
+									<option value="${color.colorId}">${color.colorName}</option>
+								</c:forEach>
 							</select>
 						</div>
 					</div>
@@ -125,8 +148,8 @@
 								</c:forEach>
 							</select>
 						</div>
-					</div>					
-<%-- 					<div class="form-group col-md-2 mb-1" style="padding-right: 1px;">
+					</div>
+					<%-- 					<div class="form-group col-md-2 mb-1" style="padding-right: 1px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0">Sample Type</label>
 						<div class="row">
 							<select id="color" class="selectpicker col-md-12"
@@ -140,7 +163,7 @@
 							</select>
 						</div>
 					</div> --%>
-					
+
 					<div class="form-group col-md-2 mb-1" style="padding-right: 16px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Sample
 							Deadline</label>
@@ -167,43 +190,46 @@
 				</div>
 
 				<div class="row">
-				  <div class="form-group col-md-4 mb-1" style="padding-right: 1px;">
-							<label for="marchendizerId" class="col-form-label-sm mb-0 pb-0">Merchendizer</label>
-							<div class="row">
-								<select id="marchendizerId" class="selectpicker col-md-12"
-									data-live-search="true"
-									data-style="btn-light btn-sm border-light-gray">
-									<option id="marchendizerId" value="0">Select Merchendizer</option>
-									<c:forEach items="${merchendizerList}" var="list">
-										<option id="marchendizerId" value="${list.id}">${list.name}</option>
-									</c:forEach>
-								</select>
-							</div>
-	
-					</div>		
+					<div class="form-group col-md-4 mb-1" style="padding-right: 1px;">
+						<label for="marchendizerId" class="col-form-label-sm mb-0 pb-0">Merchendizer</label>
+						<div class="row">
+							<select id="marchendizerId" class="selectpicker col-md-12"
+								data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="marchendizerId" value="0">Select
+									Merchendizer</option>
+								<c:forEach items="${merchendizerList}" var="list">
+									<option id="marchendizerId" value="${list.id}">${list.name}</option>
+								</c:forEach>
+							</select>
+						</div>
+
+					</div>
 					<div class="form-group col-md-8 mb-1" style="padding-right: 29px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Instruction/Remark</label>
 						<div class="row">
-							<input type="text" id="instruction" class="col-md-12 form-control-sm" />
+							<input type="text" id="instruction"
+								class="col-md-12 form-control-sm" />
 						</div>
-					</div>				
+					</div>
 				</div>
 
 				<div class="row">
-							<div class="col-md-12 d-flex justify-content-end">
-								<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
-									onclick="itemSizeAdd()">
-									<i class="fa fa-plus-circle"></i> Add
-								</button>
-								<button id="btnEdit" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()" disabled>
-									<i class="fa fa-pencil-square"></i> Edit
-								</button>
-								<button id="btnReset" type="button"
-									class="btn btn-primary btn-sm ml-1" onclick="reset()">
-									<i class="fa fa-refresh"></i> Reset
-								</button>
-							</div>
+					<div class="col-md-12 d-flex justify-content-end">
+						<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
+							onclick="itemSizeAdd()">
+							<i class="fa fa-plus-circle"></i> Add
+						</button>
+						<button id="btnEdit" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
+							disabled>
+							<i class="fa fa-pencil-square"></i> Edit
+						</button>
+						<button id="btnReset" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="reset()">
+							<i class="fa fa-refresh"></i> Reset
+						</button>
+					</div>
 				</div>
 
 
@@ -230,69 +256,72 @@
 
 			</div>
 		</div>
-		
-		
-		
-		
+
+
+
+
 		<div id="tableList"></div>
 
-	
-		<div class="row">	
-			<div class="col-md-6">
-				<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
-				<table class="table table-hover table-bordered table-sm mb-0 small-font">
-					<thead>
-						<tr>
-							<th style="width: 15px;">Sl#</th>
-							<th>Fabrics Name</th>
-						</tr>
-					</thead>
-					<tbody id="dataList">
-								
 
-					</tbody>
-				</table>
-				</div>
-			</div>
-			
-			<div class="col-md-6">
-
-				<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
-				<table class="table table-hover table-bordered table-sm mb-0 small-font">
-					<thead>
-						<tr>
-							<th style="width: 15px;">Sl#</th>
-							<th>Accessories Name</th>
-						</tr>
-					</thead>
-					<tbody id="dataList">
-								
-
-					</tbody>
-				</table>
-				</div>
-			</div>
-		</div>
-	
-		</div>
 		<div class="row">
-			<div class="col-md-12 d-flex justify-content-end">
-				<button id="btnPOSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="confrimAction()">
-					<i class="fas fa-save"></i> Confrim
-				</button>
-				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" disabled>
-					<i class="fa fa-pencil-square" ></i> Edit
-				</button>
-				<button id="btnRefresh" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
-					<i class="fa fa-refresh"></i> Refresh
-				</button>
+			<div class="col-md-6">
+				<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
+					<table
+						class="table table-hover table-bordered table-sm mb-0 small-font">
+						<thead>
+							<tr>
+								<th style="width: 15px;">Sl#</th>
+								<th>Fabrics Name</th>
+							</tr>
+						</thead>
+						<tbody id="dataList">
 
+
+						</tbody>
+					</table>
+				</div>
 			</div>
+
+			<div class="col-md-6">
+
+				<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
+					<table
+						class="table table-hover table-bordered table-sm mb-0 small-font">
+						<thead>
+							<tr>
+								<th style="width: 15px;">Sl#</th>
+								<th>Accessories Name</th>
+							</tr>
+						</thead>
+						<tbody id="dataList">
+
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-md-12 d-flex justify-content-end">
+			<button id="btnPOSubmit" type="button" class="btn btn-primary btn-sm"
+				onclick="confrimAction()">
+				<i class="fas fa-save"></i> Confrim
+			</button>
+			<button id="btnPOEdit" type="button"
+				class="btn btn-primary btn-sm ml-1" onclick="buyerPoEditAction()"
+				disabled>
+				<i class="fa fa-pencil-square"></i> Edit
+			</button>
+			<button id="btnRefresh" type="button"
+				class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+				<i class="fa fa-refresh"></i> Refresh
+			</button>
+
 		</div>
 	</div>
+</div>
 </div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
@@ -330,14 +359,12 @@
 							<tr>
 								<td>${counter.count}</td>
 								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
-								<td >${po.styleNo}</td>
-								<td >${po.sampleDeadline}</td>
+								<td>${po.styleNo}</td>
+								<td>${po.sampleDeadline}</td>
 								<td><i class="fa fa-search"
-									onclick="searchSampleRequisition(${po.autoId})">
-								</i></td>
+									onclick="searchSampleRequisition(${po.autoId})"> </i></td>
 								<td><i class="fa fa-print"
-									onclick="printSampleRequisition(${po.autoId})">
-								</i></td>
+									onclick="printSampleRequisition(${po.autoId})"> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
