@@ -16,7 +16,6 @@ import java.util.StringTokenizer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import javax.imageio.ImageIO;
-
 import org.apache.jasper.tagplugins.jstl.core.ForEach;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -26,9 +25,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.sun.org.apache.xerces.internal.impl.dtd.models.DFAContentModel;
-
 import pg.registerModel.Unit;
 import pg.config.SpringRootConfig;
 import pg.model.CommonModel;
@@ -3389,7 +3386,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("totalQty")+"',"
 						+ "'"+indent.get("unitId")+"',"
 						+ "'"+indent.get("grandQty")+"','0',"
-								+ "GETDATE(),"
+						+ "GETDATE(),"
 						+ "CURRENT_TIMESTAMP,"
 						+ "'"+indent.get("userId")+"'"
 						+ ") ";
@@ -3579,8 +3576,8 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-	
-	
+
+
 			String sql="select a.indentId,a.PurchaseOrder,a.styleId,\r\n" + 
 					"isnull(sc.StyleNo,'') as styleNo,a.itemid,\r\n" + 
 					"isnull(id.itemname,'')as itemName,(SELECT CONVERT(varchar, a.indentDate, 25)) as indentDate  \r\n" + 
@@ -3591,7 +3588,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on a.itemid = cast(id.itemid as varchar)\r\n" + 
 					"group by a.indentId,a.purchaseorder,a.styleId,sc.StyleNo, a.itemid,id.itemname,a.indentDate  ";
 			session.createSQLQuery(sql).list();
-	
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -3609,19 +3606,19 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 			return dataList;
 		}
-	
+
 		catch(Exception ee){
 			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
-	
+
 		finally {
 			session.close();
 		}
-	
+
 		return dataList;
 	}
 
@@ -4694,7 +4691,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean fileUpload(String Filename, String pcname, String ipaddress,String purpose,String user) {
+	public boolean fileUpload(String Filename, String pcname, String ipaddress,String purpose,String user,String buyerName, String purchaseOrder) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
@@ -4702,10 +4699,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 			if (!duplicateFile(user, Filename)) {
-				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP)";
+				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime, buyerid, purchaseorder) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP,'"+buyerName+"','"+purchaseOrder+"')";
 				session.createSQLQuery(sql).executeUpdate();
-
-
 				tx.commit();
 				return true;
 			}
@@ -4770,6 +4765,7 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		List<pg.orderModel.FileUpload> dataList=new ArrayList<pg.orderModel.FileUpload>();
+		int userwiseupload=0;
 		try{
 			tx=session.getTransaction();
 			tx.begin();
@@ -4782,6 +4778,69 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();							
 				dataList.add(new FileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
 				exists=true;
+			}
+			
+			if (list.size()==0) {
+				String fileid="";
+						
+				sql="select uploadedfileid from tbuploadfilelogdetails where alloweduser='"+user+"'";
+				System.out.println(sql);
+				List<?> list1 = session.createSQLQuery(sql).list();
+				/*fileid=list1.get(0).toString();
+				System.out.println(" found file id 1 "+fileid);*/
+				for(Iterator<?> iter = list1.iterator(); iter.hasNext();)
+				{	
+					fileid=iter.next().toString();
+					
+				}	
+				System.out.println(" found file id for user "+fileid);
+				
+				 sql="SELECT  autoid, FileName,(select username from Tblogin where id=a.UploadBy) as UploadBy, UploadIp, UploadMachine, Purpose,convert(varchar, UploadDate, 23) as UploadDate, convert(varchar, UploadEntryTime, 25) as uploaddatetime ,isnull((select username from Tblogin where id=a.DownloadBy),'') as DownloadBy, isnull(DownloadIp,'') as downloadip,isnull( DownloadMachine,'') as downloadmachine,isnull(convert(varchar, DownloadDate, 23),'') as DownloadDate, isnull(convert(varchar, DownloadEntryTime, 25),'') as downloaddatetime  FROM  TbUploadFileLogInfo a where autoid='"+fileid+"' and a.UploadDate between '"+start+"' and '"+end+"'";
+				System.out.println(sql);
+				List<?> list2 = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list2.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();							
+					dataList.add(new FileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
+					exists=true;
+				}
+				
+				if (list2.size()==0) {
+					String deptid="";
+					sql="select departmentid from tblogin where id='"+user+"'";
+					System.out.println(sql);
+					List<?> list3 = session.createSQLQuery(sql).list();
+					
+					for(Iterator<?> iter = list3.iterator(); iter.hasNext();)
+					{	
+						deptid=iter.next().toString();
+						
+					}	
+					
+					sql="select uploadedfileid from tbuploadfilelogdetails where dept='"+deptid+"'";
+					System.out.println(sql);
+					List<?> list4 = session.createSQLQuery(sql).list();
+					
+					System.out.println(" found file id 1 "+fileid);
+					for(Iterator<?> iter = list4.iterator(); iter.hasNext();)
+					{	
+						fileid=iter.next().toString();
+						
+					}	
+					System.out.println(" found file id for dept "+fileid);
+					
+					
+					 	sql="SELECT  autoid, FileName,(select username from Tblogin where id=a.UploadBy) as UploadBy, UploadIp, UploadMachine, Purpose,convert(varchar, UploadDate, 23) as UploadDate, convert(varchar, UploadEntryTime, 25) as uploaddatetime ,isnull((select username from Tblogin where id=a.DownloadBy),'') as DownloadBy, isnull(DownloadIp,'') as downloadip,isnull( DownloadMachine,'') as downloadmachine,isnull(convert(varchar, DownloadDate, 23),'') as DownloadDate, isnull(convert(varchar, DownloadEntryTime, 25),'') as downloaddatetime  FROM  TbUploadFileLogInfo a where autoid='"+fileid+"' and a.UploadDate between '"+start+"' and '"+end+"'";
+						System.out.println(sql);
+						List<?> list5 = session.createSQLQuery(sql).list();
+						for(Iterator<?> iter = list5.iterator(); iter.hasNext();)
+						{	
+							Object[] element = (Object[]) iter.next();							
+							dataList.add(new FileUpload(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString()));
+							exists=true;
+						}
+				}
+				
 			}
 
 
@@ -4833,17 +4892,20 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public boolean deletefile(String filename) {
+	public boolean deletefile(String filename,String id) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		try{
 			tx=session.getTransaction();
 			tx.begin();
 
+			String sql="";
 
-			String sql="delete from TbUploadFileLogInfo where filename like '%"+filename+"%' and DownloadBy is null and DownloadIp is null and DownloadMachine is null and DownloadDate is null and DownloadEntryTime is null";
+			sql="delete from TbUploadFileLogInfo where filename like '%"+filename+"%' and DownloadBy is null and DownloadIp is null and DownloadMachine is null and DownloadDate is null and DownloadEntryTime is null";
 			session.createSQLQuery(sql).executeUpdate();
 
+			sql="delete from tbuploadfilelogdetails where uploadedfileid='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
 
 			tx.commit();
 			return true;
@@ -6288,6 +6350,164 @@ public class OrderDAOImpl implements OrderDAO{
 		return false;
 	}
 
+
+	// Create by Arman
+
+	@Override
+	public List<CommonModel> departmentWiseReceiver(String deptId) {
+		// TODO Auto-generated method stub
+		String sql = "";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		List<CommonModel> dataList = new ArrayList<CommonModel>();
+		try {
+
+			tx = session.getTransaction();
+			tx.begin();
+
+			//sql = "select EmployeeCode,Name from tbemployeeinfo where departmentid='"+deptId+"' order by EmployeeCode";
+			sql="select id,username from tblogin where departmentId='"+deptId+"' order by id";
+			List<?> list = session.createSQLQuery(sql).list();
+			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString(),"",""));
+
+			}
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean saveFileAccessDetails(CommonModel v) {
+		// TODO Auto-generated method stub
+		System.err.println("hi : "+v.getType());
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		String sql = "";
+		String slno="";
+		try {
+
+			tx = session.getTransaction();
+			tx.begin();
+
+			sql="select max(autoid) as uploadfileid from tbuploadfileloginfo";
+			List<?> list = session.createSQLQuery(sql).list();
+			String uploadfileid = list.get(0).toString();
+
+			sql="delete from tbuploadfilelogdetails where uploadedfileid='"+uploadfileid+"' ";
+			session.createSQLQuery(sql).executeUpdate();
+
+			if(v.getType()!=0) {
+				for (int i = 0; i < v.getEmpCode().length; i++) {
+					sql = "insert into tbuploadfilelogdetails (uploadedfileid, dept, alloweduser, datetime, entryby) values ('"+uploadfileid+"','"+v.getDept()+"','"+v.getEmpCode()[i]+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+					session.createSQLQuery(sql).executeUpdate();
+				}
+			}else {
+				sql = "insert into tbuploadfilelogdetails (uploadedfileid, dept, alloweduser, datetime, entryby) values ('"+uploadfileid+"','"+v.getDept()+"','',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<CommonModel> getAllFromFileLogDetails(CommonModel v) {
+		// TODO Auto-generated method stub
+		String sql = "";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		List<CommonModel> dataList = new ArrayList<CommonModel>();
+		try {
+
+			tx = session.getTransaction();
+			tx.begin();
+
+			//sql = "select dept, (select isnull((alloweduser+','),'') from tbuploadfilelogdetails FOR XML PATH('')) as emp from tbuploadfilelogdetails GROUP BY dept";
+			//sql = " select dept, (select isnull(CAST((alloweduser+',') as VARCHAR(50)),'') from tbuploadfilelogdetails FOR XML PATH('')) as emp from tbuploadfilelogdetails GROUP BY dept ";
+			//			sql="select dept,alloweduser from tbuploadfilelogdetails where uploadedfileid='"+v.getId()+"'";
+			sql="select a.dept,a.alloweduser,(select b.DepartmentName from TbDepartmentInfo b where b.departmentid=a.dept) as DepartmentName,isnull((select b.username from Tblogin b where b.id=a.alloweduser),'') as username from tbuploadfilelogdetails a where a.uploadedfileid='"+v.getId()+"' ";
+			List<?> list = session.createSQLQuery(sql).list();
+			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
+
+				Object[] element = (Object[]) iter.next();
+
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),""));
+
+			}
+			tx.commit();
+		} catch (Exception e) {
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean addNewPermission(CommonModel v) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		String sql = "";
+		try {
+
+			tx = session.getTransaction();
+			tx.begin();
+
+			sql="delete from tbuploadfilelogdetails where uploadedfileid='"+v.getId()+"' ";
+			session.createSQLQuery(sql).executeUpdate();
+
+			if(v.getType()!=0) {
+				for (int i = 0; i < v.getEmpCode().length; i++) {
+					sql = "insert into tbuploadfilelogdetails (uploadedfileid, dept, alloweduser, datetime, entryby) values ('"+v.getId()+"','"+v.getDept()+"','"+v.getEmpCode()[i]+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+					session.createSQLQuery(sql).executeUpdate();
+				}
+			}else {
+
+				sql = "insert into tbuploadfilelogdetails (uploadedfileid, dept, alloweduser, datetime, entryby) values ('"+v.getId()+"','"+v.getDept()+"','',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return false;
+	}
+
 	@Override
 	public List<Style> images(Style style) {
 		//ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -6469,6 +6689,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 	}
+
 
 
 
