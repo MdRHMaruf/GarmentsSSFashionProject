@@ -339,8 +339,8 @@ function submitAction() {
   let buyerId = $("#buyerName").val();
   let paymentTerm = $("#paymentTerm").val();
   let currency = $("#currency").val();
-
-  let rowList = $("#tableList tr");
+  let totalRow = $("#tableList tr");
+  let rowList = $("#tableList tr.dataRow");
 
   let totalUnit = 0;
   let unitCmt = 0;
@@ -348,8 +348,10 @@ function submitAction() {
   let unitFob = 0;
   let totalAmount = 0;
 
-  rowList.forEach(row =>{
-    let autoId = row.attr('data-auto-id');
+  console.log("rowList",rowList);
+  rowList.each((index,row) =>{
+    console.log(row);
+    let autoId = row.getAttribute('data-auto-id');
     console.log("auto id=",autoId);
     totalUnit += Number($("#totalUnit" + autoId).text());
     unitCmt += Number($("#unitCmt" + autoId).val());

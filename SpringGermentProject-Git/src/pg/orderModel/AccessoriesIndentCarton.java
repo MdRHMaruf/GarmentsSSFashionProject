@@ -1,14 +1,24 @@
 package pg.orderModel;
 
 public class AccessoriesIndentCarton {
+	String autoId;
+	String indentId;
+	String buyerId;
 	String user="";
 	String poNo="";
+	String styleId="";
 	String style="";
+	String itemId = "";
 	String item="";
+	String itemColorId = "";
 	String itemColor="";
 	String shippingMark="";
+	String accessoriesItemId = "";
 	String accessoriesItem="";
+	String accessoriesSizeId="";
 	String accessoriesSize="";
+	String catronSize="";
+	String unitId="";
 	String unit="";
 	String orderqty="";
 	String length1="";
@@ -21,8 +31,11 @@ public class AccessoriesIndentCarton {
 	String add2="";
 	String totalQty="";
 	String devideBy="";
+	String cbm = "";
 	String ply="";
+	String type="";
 	String autoid="";
+	String indentDate;
 	public AccessoriesIndentCarton() {
 		
 	}
@@ -211,6 +224,106 @@ public class AccessoriesIndentCarton {
 		this.devideBy = devideBy;
 	}
 
-	
-	
+	public String getAutoId() {
+		return autoId;
+	}
+
+	public void setAutoId(String autoId) {
+		this.autoId = autoId;
+	}
+
+	public String getIndentId() {
+		return indentId;
+	}
+
+	public void setIndentId(String indentId) {
+		this.indentId = indentId;
+	}
+
+	public String getIndentDate() {
+		return indentDate;
+	}
+
+	public void setIndentDate(String indentDate) {
+		this.indentDate = indentDate;
+	}
+	public String getBuyerId() {
+		return buyerId;
+	}
+
+	public void setBuyerId(String buyerId) {
+		this.buyerId = buyerId;
+	}
+
+	public String getStyleId() {
+		return styleId;
+	}
+
+	public void setStyleId(String styleId) {
+		this.styleId = styleId;
+	}
+
+	public String getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
+
+	public String getItemColorId() {
+		return itemColorId;
+	}
+
+	public void setItemColorId(String itemColorId) {
+		this.itemColorId = itemColorId;
+	}
+
+	public String getAccessoriesItemId() {
+		return accessoriesItemId;
+	}
+
+	public void setAccessoriesItemId(String accessoriesItemId) {
+		this.accessoriesItemId = accessoriesItemId;
+	}
+
+	public String getUnitId() {
+		return unitId;
+	}
+
+	public void setUnitId(String unitId) {
+		this.unitId = unitId;
+	}
+
+	public String getAccessoriesSizeId() {
+		return accessoriesSizeId;
+	}
+
+	public void setAccessoriesSizeId(String accessoriesSizeId) {
+		this.accessoriesSizeId = accessoriesSizeId;
+	}
+
+	public String getCatronSize() {
+		return catronSize;
+	}
+
+	public void setCatronSize(String catronSize) {
+		this.catronSize = catronSize;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getCbm() {
+		return cbm;
+	}
+
+	public void setCbm(String cbm) {
+		this.cbm = cbm;
+	}
 }

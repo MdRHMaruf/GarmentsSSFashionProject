@@ -13,38 +13,26 @@
 %>
 
 <input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-<input type="hidden" id="indentId" value="0">
+<input type="hidden" id="indentId" value="New">
 <input type="hidden" id="indentAutoId" value="0">
 
 <div class="page-wrapper">
 
 	<div class="card-box m-2">
-		<div class="d-flex">
+		<header class="d-flex justify-content-between">
 			<div class="mr-auto">
 				<h4 style="text-align: left;" class="font-weight-bold">
 					Carton Indent <span id='cartonIndentId' class="badge badge-primary">New</span>
 				</h4>
 			</div>
 
-			<div class="p-0">
-				<div class="input-group">
-					<div class="input-group-append">
-						<input type="text"
-							class="form-control mdb-autocomplete input-sm ml-1"
-							placeholder="Search" aria-label="Search"><span
-							style="height: 30px;" class="input-group-text" id="search"><i
-							class="fa fa-cog" aria-hidden="true"></i></span>
-					</div>
-				</div>
-			</div>
-			<div class="p-0">
-				<div class="col-sm-3 col-md-3 col-lg-3">
-					<button style="height: 35px;" id="find" type="button"
-						class="btn btn-primary btn-sm">Find</button>
-				</div>
-			</div>
+			<button type="button" class="btn btn-outline-dark btn-sm"
+				data-toggle="modal" data-target="#exampleModal">
+				<i class="fa fa-search"></i>
+			</button>
 
-		</div>
+		</header>
+		<hr class="my-1">
 		<%-- <div class="row">
 					<label for="buyerName" class="col-form-label-sm mb-0 pr-0 col-md-2">Buyer
 						Name:</label> <select id="buyerName" class="selectpicker col-md-9"
@@ -222,8 +210,7 @@
 					<select id="accessoriesItem" class="form-control selectpicker"
 						aria-label="Sizing example input"
 						aria-describedby="inputGroup-sizing-sm" data-live-search="true"
-						data-style="btn-light btn-sm border-secondary form-control-sm"
-						onchange="sizeWiseOrderQty()">
+						data-style="btn-light btn-sm border-secondary form-control-sm">
 						<option value="52" selected>CARTON</option>
 						<option value="53">DIVIDER / CENTRE PAD</option>
 					</select>
@@ -630,6 +617,53 @@
 	</div>
 </div>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="modalSearch" type="text" class="form-control"
+						placeholder="Search Fabric Indent"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Indent Id</th>
+							<th>Indent Date</th>
+							<th><span><i class="fa fa-search"></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${indentList}" var="po"
+							varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td>${po.indentId}</td>
+								<td>${po.indentDate}</td>
+								<td><i class="fa fa-search" style='cursor: pointer;'
+									onclick="searchIndent('${po.indentId}')">
+								</i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
 
 
 

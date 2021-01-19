@@ -1316,12 +1316,13 @@ public class OrderController {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
-		//List<CommonModel>accessoriesitem=orderService.AccessoriesItem("2");
+		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
 		//List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("buyerList",buyerList);
+		view.addObject("indentList",indentList);
 		//view.addObject("unit",unit);
 		//map.addAttribute("styleList",styleList);
 
@@ -1340,6 +1341,14 @@ public class OrderController {
 		
 	}
 
+	@RequestMapping(value = "/searchCartonIndent",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchCartonIndent(String indentId) {
+		JSONObject objmain = new JSONObject();
+		List<AccessoriesIndentCarton> cartonIndentList  = orderService.getAccessoriesIndentCartonItemDetails(indentId);
+		objmain.put("cartonIndentList",cartonIndentList);
+		return objmain;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)
 	public JSONObject saveAccessoriesCurton(AccessoriesIndentCarton v) {
@@ -1617,6 +1626,8 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<Style> styleList= orderService.getStyleList();
+		List<Color> colorList = registerService.getColorList();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -1625,6 +1636,8 @@ public class OrderController {
 
 		view.addObject("groupList",groupList);
 		view.addObject("buyerList",buyerList);
+		view.addObject("styleList",styleList);
+		view.addObject("colorList",colorList);
 		//view.addObject("factoryList",factoryList);
 		view.addObject("sampleReqList",sampleReqList);
 		view.addObject("sampleList",sampleList);

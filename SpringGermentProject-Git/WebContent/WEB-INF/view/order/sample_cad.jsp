@@ -314,16 +314,25 @@
 										</div>
 									</div>
 
-									<div class="row d-flex justify-content-end mt-1">
-
-										<button class="btn btn-sm btn-warning mr-3" id="btnUpload">Upload</button>
-
-									</div>
-
 								</div>
 
 							</div>
+<div class="row mt-1">
+						<div style="width: 55%">
+							<div class="progress">
+								<div id="bar" class="progress-bar" style="width: 0%"></div>
+							</div>
 
+							<div class="input-group mt-2">
+								<div class="custom-file">
+									<input type="file" id="files" multiple="">
+								</div>
+								<div class="input-group-append">
+									<button class="btn btn-sm btn-primary" type="button" id="uploadButton" value="Upload">Upload</button>
+								</div>
+							</div>
+						</div>
+					</div>
 						</div>
 
 					</div>

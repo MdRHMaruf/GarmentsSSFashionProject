@@ -63,9 +63,9 @@
 										Name</label> <select id="styleName" onchange="styleWiseItemLoad()"
 										class="selectpicker col-md-9 px-0" data-live-search="true"
 										data-style="btn-light btn-sm border-light-gray">
-										<option id="styleName" value="0">Select Style Name</option>
+										<option  value="0">Select Style Name</option>
 										<c:forEach items="${styleList}" var="style">
-											<option id="styleName" value="${style.styleId}">${style.styleNo}</option>
+											<option  value="${style.styleId}">${style.styleNo}</option>
 										</c:forEach>
 									</select>
 
@@ -364,20 +364,33 @@
 			<div class="modal-body">
 				<div class="row">
 					<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
-						<table class="table table-bordered">
+						<table class="table table-hover table-bordered table-sm mb-0">
 							<thead>
 								<tr>
 									<th style="width: 15px;">Sl#</th>
 									<th>Style</th>
+									<th>Costing Date</th>
 									<th>Check</th>
 								</tr>
 							</thead>
+							<tbody id="groupCostingList">
+								<c:forEach items="${costingList}" var="costing"
+							varStatus="counter">
+							<tr>
+								<td>${costing.styleName}</td>
+								<td>${costing.itemName}</td>
+								<td>${costing.date}</td>
+								<td><input type="checkbox" onclick="cloningCosting(${costing.styleId}, ${costing.itemId})" /></td>
+							</tr>
+						</c:forEach>
+							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button id="btnGroupPreview" type="button" class="btn btn-sm btn-info" data-dismiss="modal">Preview</button>
+				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

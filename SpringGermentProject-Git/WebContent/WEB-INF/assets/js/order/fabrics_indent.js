@@ -297,6 +297,7 @@ function addAction() {
   let fabricsColorId = $("#fabricsColor").val();
   let fabricsColors = $("#fabricsColor option:selected").text();
   let brandId = $("#brand").val();
+  let markingWidth = $("#markingWidth").val();
 
 
 
@@ -318,7 +319,7 @@ function addAction() {
 
                     let row = `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-style-id='${styleId}' data-item-id='${itemId}' data-item-color-id='${itemColorId}' 
                     data-fabrics-id='${fabricsId}' data-quantity='${quantity}' data-dozen-qty='${dozenQuantity}' data-in-percent='${inPercent}' data-total-quantity='${totalQuantity}'
-                    data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}'>
+                    data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}' data-marking-width='${markingWidth}'>
                                   <td id='purchaseOrder-${listRowId}'>${purchaseOrder}</td>
                                   <td id='styleNo-${listRowId}'>${styleNo}</td>
                                   <td id='itemColor-${listRowId}'>${itemColors}</td>
@@ -415,6 +416,7 @@ function confirmAction() {
           yard: indentRow.getAttribute('data-yard'),
           gsm: indentRow.getAttribute('data-gsm'),
           grandQty: $("#totalQty-" + id).text(),
+          markingWidth: indentRow.getAttribute('data-marking-width'),
           userId: userId
         }
 

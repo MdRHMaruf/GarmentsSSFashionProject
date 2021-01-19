@@ -125,11 +125,11 @@ function indentItemAdd() {
                       dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                     } else {
                       //$("#dataList").empty();
-                      $("#dataList").append(drawDataTable(data.poItemList));
+                      $("#dataList").append(drawDataTable(data.poItemList,"checked"));
                       $('.tableSelect').selectpicker('refresh');
 
                       setSupplierValue(data.poItemList);
-                      setCurrencyValue(data.poItemList);
+                      //setCurrencyValue(data.poItemList);
 
                     }
                   }
@@ -190,22 +190,6 @@ function submitAction() {
 
   let isChecked = false;
 
-  for (let i = 0; i < length; i++) {
-
-    const id = rowList[i].id.slice(4);
-    const type = rowList[i].getAttribute("data-type");
-    const supplierId = $("#supplier-" + id).val();
-    const rate = $("#rate-" + id).val();
-    const dollar = $("#dollar-" + id).text();
-    const currency = $("#currency-" + id).val();
-    const amount = $("#amount-" + id).text();
-    const checked = $("#check-" + id).prop('checked');
-    if (checked) isChecked = checked;
-    itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
-  }
-
-  itemList = itemList.slice(0, -1);
-
   const poNo = $("#poNo").val();
   const orderDate = $("#orderDate").val();
   const deliveryDate = $("#deliveryDate").val();
@@ -218,6 +202,21 @@ function submitAction() {
   const note = $("#note").val();
   const subject = $("#subject").val();
   const userId = $("#userId").val();
+
+  for (let i = 0; i < length; i++) {
+
+    const id = rowList[i].id.slice(4);
+    const type = rowList[i].getAttribute("data-type");
+    const supplierId = $("#supplier-" + id).val();
+    const rate = $("#rate-" + id).val();
+    const dollar = $("#dollar-" + id).text();
+    const amount = $("#amount-" + id).text();
+    const checked = $("#check-" + id).prop('checked');
+    if (checked) isChecked = checked;
+    itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
+  }
+
+  itemList = itemList.slice(0, -1);
 
 
   if (length > 0) {
@@ -490,7 +489,6 @@ function drawDataTable(data , isChecked = "") {
     <td>${rowData.unit}</td>
     <td id='dollar-${autoId}'>${rowData.dollar}</td>
     <td><input id='rate-${autoId}' class='form-control-sm min-width-60' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
-    <td><select id='currency-${autoId}' class='selectpicker tableSelect' data-live-search='true' data-style='btn-light btn-sm border-light-gray'>${currencyOptions}</select></td>
     <td id='amount-${autoId}'>${rowData.amount}</td>
     <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
     </tr>`

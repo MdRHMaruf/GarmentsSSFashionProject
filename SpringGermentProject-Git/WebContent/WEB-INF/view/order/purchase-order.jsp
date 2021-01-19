@@ -247,7 +247,6 @@
 							<th>Unit</th>
 							<th>Dollar</th>
 							<th>Rate</th>
-							<th>Currency</th>
 							<th>Amount</th>
 							<th><input type="checkbox" id="allCheck"></th>
 						</tr>
@@ -281,9 +280,9 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" for="note">Note</span>
 					</div>
-					<input id="note" type="text" class="form-control"
+					<textarea id="note" class="form-control"
 						aria-label="Sizing example input"
-						aria-describedby="inputGroup-sizing-sm">
+						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -291,9 +290,9 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" for="subject">Subject</span>
 					</div>
-					<input id="subject" type="text" class="form-control"
+					<textarea id="subject" class="form-control"
 						aria-label="Sizing example input"
-						aria-describedby="inputGroup-sizing-sm">
+						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
 		</div>

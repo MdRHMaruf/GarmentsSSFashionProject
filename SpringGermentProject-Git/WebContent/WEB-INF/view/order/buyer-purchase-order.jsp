@@ -265,6 +265,23 @@
 				</div>
 			</div>
 		</div>
+		<div class="row mt-1">
+			<div style="width: 55%">
+				<div class="progress">
+					<div id="bar" class="progress-bar" style="width: 0%"></div>
+				</div>
+
+				<div class="input-group mt-2">
+					<div class="custom-file">
+						<input type="file" id="files" multiple="">
+					</div>
+					<div class="input-group-append">
+						<button class="btn btn-sm btn-primary" type="button"
+							id="uploadButton" value="Upload">Upload</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-12 d-flex justify-content-end">
 				<button id="btnPOSubmit" type="button"
@@ -321,9 +338,11 @@
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
 								<td>${po.date}</td>
 								<td><i class="fa fa-search"
-									onclick="searchBuyerPO(${po.buyerPoId})" style='cursor : pointer;'> </i></td>
+									onclick="searchBuyerPO(${po.buyerPoId})"
+									style='cursor: pointer;'> </i></td>
 								<td><i class="fa fa-print"
-									onclick="printBuyerPO(${po.buyerPoId})" style='cursor : pointer;'> </i></td>
+									onclick="printBuyerPO(${po.buyerPoId})"
+									style='cursor: pointer;'> </i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
