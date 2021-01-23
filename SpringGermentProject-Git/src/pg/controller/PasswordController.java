@@ -1,5 +1,6 @@
 package pg.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+
+import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.Ware;
 import pg.model.WareInfo;
@@ -33,13 +36,16 @@ import pg.services.PasswordServiceImpl;
 import pg.services.RegisterService;
 
 
+import pg.share.SessionBean;
 
 @Controller
-@SessionAttributes({"pg_admin","storelist","warelist","modulelist","menulist"})
+@SessionAttributes({"userId","userName","storelist","warelist","modulelist","menulist"})
 
 public class PasswordController {
 
-	String userName="",passWord="";
+	List<SessionBean> sessionlist=new ArrayList<SessionBean>();
+	
+	static String userName="",passWord="";
 
 
 	@Autowired
@@ -62,25 +68,33 @@ public class PasswordController {
 	}
 
 	@RequestMapping(value = {"/loginout"},method=RequestMethod.GET)
-	public String loginout() {
+	public String loginout(HttpServletRequest request) {
 		
+		HttpSession session=request.getSession();
+		session.invalidate();
+
 		return "login"; //JSP - /WEB-INF/view/login.jsp
 	}
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public String login(@RequestParam String name,@RequestParam String password,ModelMap modelmap,HttpServletResponse response) throws UserBlockedException	
+	public String login(@RequestParam String name,@RequestParam String password,HttpServletRequest request,ModelMap modelmap) throws UserBlockedException	
 	{	
 
+	
+		
 		System.out.println("Log In execute");
 		List<Login> lg=passService.login(name, password);
 		
 		this.userName=name;
+		System.out.println(" login user "+userName);
 		this.passWord=password;
 		
 		if(lg.size()>0) {
 
 			
+			
 			List<Module> modulelist=passService.getUserModule(lg.get(0).getId());
+			//session.put("modulelist", modulelist);
 			modelmap.put("modulelist", modulelist);
 			
 			System.out.println("type "+lg.get(0).getType());
@@ -88,14 +102,13 @@ public class PasswordController {
 			if(lg.get(0).getType()==1 || lg.get(0).getType()==2) {
 
 				if(modulelist.size()>0) {
+
+		
+					modelmap.put("modulelist", modulelist);
+					
 					List<Menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
 					modelmap.put("menulist", menulist);
-					modelmap.put("pg_admin", lg);
-					
-					Cookie ck=new Cookie("username", lg.get(0).getUser());
-					ck.setMaxAge(3600);
-					response.addCookie(ck);
-
+				
 					return "redirect:dashboard";
 				}
 				else {
@@ -106,13 +119,9 @@ public class PasswordController {
 			else {
 				if(modulelist.size()>0) {
 					List<Menu> menulist=passService.getUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
-					modelmap.put("menulist", menulist);
+					modelmap.put("modulelist", modulelist);
 					modelmap.put("pg_admin", lg);
-					
-					Cookie ck=new Cookie("username", lg.get(0).getUser());
-					ck.setMaxAge(3600);
-					response.addCookie(ck);
-
+				
 					return "redirect:dashboard";
 				}
 				else {
@@ -132,33 +141,78 @@ public class PasswordController {
 	}
 
 	@RequestMapping(value = {"dashboard"})
-	public String adminDashboard(ModelMap modelmap,HttpServletResponse response) {
-		try {
-			List<Login> lg=passService.login(userName, passWord);
+	public String adminDashboard(ModelMap modelmap,HttpServletRequest request,HttpSession sessionnew) throws UserBlockedException {
+			
+		System.out.println("DuserName "+userName);
+		System.out.println("DpassWord "+passWord);
+		String uname=userName;
+		String pass=passWord;
+
+		userName="";
+		passWord="";
+		
+		HttpSession session=request.getSession();
+		
+		long sessionValue=session.getCreationTime();
+		
+		System.out.println("sessionValue "+sessionValue);
+		
+		List<Login> lg=passService.login(uname, pass);
+		
+
+		if(lg.size()>0) {
+			
+			
 			List<Module> modulelist=passService.getUserModule(lg.get(0).getId());
 			modelmap.put("modulelist", modulelist);
 			
-			//List<menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
-			//modelmap.put("menulist", menulist);
-			modelmap.put("pg_admin", lg);
+				List<OrganizationInfo> organizationInfo=passService.getOrganizationInfo();
 			
-			Cookie ck=new Cookie("username", lg.get(0).getUser());
-			ck.setMaxAge(3600);
-			response.addCookie(ck);
-		} catch (UserBlockedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				
+				modelmap.put("organization_info", organizationInfo);
+				modelmap.put("pg_admin", lg);
+				
+				
+				
+				sessionlist.add(new SessionBean(sessionValue,Integer.toString(lg.get(0).getId()),uname,pass));
+				
+				
+				modelmap.put("userName", uname);
+				modelmap.put("userId", Integer.toString(lg.get(0).getId()));
+				
+
+				
 		}
-		System.out.println("dashboad Execute");
+		else {
+			
+			for(int a=0;a<sessionlist.size();a++) {
+				if(sessionValue==sessionlist.get(a).getSessionValue()) {
+					modelmap.put("userName",sessionlist.get(a).getUserName());
+					modelmap.put("userId",  sessionlist.get(a).getUserId());
+				}
+				
+			}
+
+		
+		}
+		
+
+			
 		return "index"; //JSP - /WEB-INF/view/index.jsp
 	}
 
 	
 	@RequestMapping(value = "/modulewisemenu/{id}",method=RequestMethod.GET)
 	public @ResponseBody String modulewisemenu(@PathVariable ("id") int id,ModelMap modelmap,HttpSession session) {
-		List<Login> lg=(List<Login>)session.getAttribute("pg_admin");
-		List<Menu> menulist=passService.getUserMenu(lg.get(0).getId(),id);
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
+		System.out.println("userId "+userId);
+		List<Menu> menulist=passService.getUserMenu(Integer.parseInt(userId),id);
 		modelmap.put("menulist", menulist);
+		
+		modelmap.put("userName", userName);
+		modelmap.put("userId", userId);
 
 		
 		return "index"; //JSP - /WEB-INF/view/index.jsp
@@ -167,29 +221,39 @@ public class PasswordController {
 
 	
 	@RequestMapping(value = "user_create",method=RequestMethod.GET)
-	public ModelAndView create_user(ModelMap modelmap,HttpSession session) {
+	public ModelAndView create_user(ModelMap map,HttpSession session) {
 		
 		List<Module> modulelist=(List<Module>)session.getAttribute("modulelist");
-		modelmap.put("modulelist", modulelist);
+		map.put("modulelist", modulelist);
 		
 		List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
 		List<FactoryModel> factoryList = registerService.getAllFactories();
 		
-		modelmap.put("menulist", menulist);
+		map.put("menulist", menulist);
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("setting/create_user");
 		view.addObject("modulelist",modulelist);
 		view.addObject("menulist",menulist);
 		view.addObject("factoryList",factoryList);
 		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 	
 	@RequestMapping(value = "change_password",method=RequestMethod.GET)
-	public ModelAndView change_password(ModelMap modelmap,HttpSession session) {
+	public ModelAndView change_password(ModelMap map,HttpSession session) {
 		
-		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("setting/change_password");
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		
 		
 		return view; //JSP - /WEB-INF/view/index.jsp

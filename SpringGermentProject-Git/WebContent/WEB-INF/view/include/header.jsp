@@ -39,7 +39,8 @@
 
 </head>
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
 		List<Menu> list = (List<Menu>) session.getAttribute("menulist");
 %>
 
@@ -54,7 +55,7 @@
             </div>
             <div class="header-right">
                 <div class="page-title-box pull-left">
-                    <h3><%=lg.get(0).getUser()%></h3>
+                    <h3><%=userName%></h3>
                 </div>
                 <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar">
                     <i class="fa fa-bars" aria-hidden="true"></i>
@@ -62,7 +63,7 @@
                 <ul class="nav navbar-nav navbar-right user-menu pull-right">
                     <div class="dropdown">
                         <a class="dropdown-toggle" href="#" role="button" id="profileLinkDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span><i class="far fa-user"></i></span> <%=lg.get(0).getUser()%>
+                            <span><i class="far fa-user"></i></span> <%=userName%>
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="profileLinkDropdown">

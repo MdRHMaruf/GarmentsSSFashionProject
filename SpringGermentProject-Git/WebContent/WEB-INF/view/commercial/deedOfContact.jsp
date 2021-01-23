@@ -6,14 +6,18 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
+
+<%
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
+%>
+
 <jsp:include page="../include/header.jsp" />
 
-	<%
-		List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
-	%>
+
 	<div class="page-wrapper">
 		<div class="container-fluid mt-2">
-			<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+			<input type="hidden" id="userId" value="<%=userId%>">
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card-box pt-2 pb-2">

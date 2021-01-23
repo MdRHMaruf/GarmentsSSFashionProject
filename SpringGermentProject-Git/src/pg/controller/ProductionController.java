@@ -2,6 +2,7 @@
 package pg.controller;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import pg.model.CommonModel;
+import pg.model.Login;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
@@ -41,6 +43,7 @@ import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
+import pg.services.PasswordService;
 import pg.services.ProductionService;
 import pg.services.RegisterService;
 import pg.share.ProductionType;
@@ -57,6 +60,9 @@ public class ProductionController {
 
 	@Autowired
 	private OrderService orderService;
+	
+	@Autowired
+	private PasswordService passService;
 
 	@Autowired
 	private ProductionService productionService;
@@ -73,6 +79,9 @@ public class ProductionController {
 	@RequestMapping(value = "/cutting_requisition",method=RequestMethod.GET)
 	public ModelAndView cutting_requisition(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/cutting_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
@@ -91,6 +100,10 @@ public class ProductionController {
 		view.addObject("sampleList",sampleList);
 		view.addObject("inchargeList",inchargeList);
 		view.addObject("merchendizerList",merchendizerList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -109,11 +122,20 @@ public class ProductionController {
 	//Fabrics Receive 
 	@RequestMapping(value = "/fabrics_received",method=RequestMethod.GET)
 	public ModelAndView fabrics_receive(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-receive");
 		List<Unit> unitList= registerService.getUnitList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("unitList", unitList);
 		view.addObject("supplierList",supplierList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -122,6 +144,10 @@ public class ProductionController {
 	@RequestMapping(value = "/production_plan",method=RequestMethod.GET)
 	public ModelAndView production_plan(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/production_plan");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
@@ -136,6 +162,10 @@ public class ProductionController {
 		view.addObject("sampleReqList",sampleReqList);
 		view.addObject("merchendizerList",merchendizerList);
 		view.addObject("productionPlanList",productionPlanList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -191,6 +221,9 @@ public class ProductionController {
 	@RequestMapping(value = "/cutting_plan",method=RequestMethod.GET)
 	public ModelAndView cutting_plan(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/cutting_plan");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<Factory> factoryList= registerService.getFactoryNameList();
@@ -209,6 +242,9 @@ public class ProductionController {
 		view.addObject("merchendizerList",merchendizerList);
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("cuttingInformationList",cuttingInformationList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -276,6 +312,9 @@ public class ProductionController {
 	@RequestMapping(value = "/sewing_line_setup",method=RequestMethod.GET)
 	public ModelAndView sewing_line_setup(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<Factory> factorylist = registerService.getFactoryNameList();
 		List<Line> lines=productionService.getLineNames();
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
@@ -284,7 +323,9 @@ public class ProductionController {
 		view.addObject("factorylist",factorylist);
 		map.addAttribute("lines",lines);
 
-
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -313,6 +354,8 @@ public class ProductionController {
 	public ModelAndView layout_plan(ModelMap map,HttpSession session) {
 
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanFromCutting();
 		List<ProductionPlan> layoutList = productionService.getInspectionLayoutList(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
@@ -322,6 +365,8 @@ public class ProductionController {
 		view.addObject("layoutList",layoutList);
 		view.addObject("employeeList",employeeList);
 
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -449,11 +494,17 @@ public class ProductionController {
 
 
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails("1");
 		List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport("1");
 		ModelAndView view = new ModelAndView("production/sewing_hourly_layout");
 		view.addObject("layoutList",layoutList);
 		view.addObject("sewingProductionList",sewingProductionList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -510,11 +561,17 @@ public class ProductionController {
 	@RequestMapping(value = "/sewing_production",method=RequestMethod.GET)
 	public ModelAndView sewing_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> sewingLayoutList = productionService.getSewingProductionReport("1");
 		List<ProductionPlan> sewingProudctiontList = productionService.getSewingProductionReport("2");
 		ModelAndView view = new ModelAndView("production/sewing_hourly_production");
 		view.addObject("sewingLayoutList",sewingLayoutList);
 		view.addObject("sewingProudctiontList",sewingProudctiontList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -619,9 +676,13 @@ public class ProductionController {
 
 		//List<ProductionPlan> sewingProductionList = productionService.getSewingProductionReport();
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/sewing_finishing_reject");
 		//view.addObject("sewingProductionList",sewingProductionList);
-
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -747,11 +808,16 @@ public class ProductionController {
 	@RequestMapping(value = "/finishing_layout",method=RequestMethod.GET)
 	public ModelAndView finshing_layout(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_LAYOUT.getType()));
 		ModelAndView view = new ModelAndView("production/finishing-layout");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -759,11 +825,17 @@ public class ProductionController {
 	@RequestMapping(value = "/iron_layout",method=RequestMethod.GET)
 	public ModelAndView iron_layout(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_LAYOUT.getType()));
 		ModelAndView view = new ModelAndView("production/iron-layout");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -771,11 +843,17 @@ public class ProductionController {
 	@RequestMapping(value = "/final_qc_layout",method=RequestMethod.GET)
 	public ModelAndView final_qc_layout(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_LAYOUT.getType()));
 		ModelAndView view = new ModelAndView("production/final-qc-layout");
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -783,6 +861,10 @@ public class ProductionController {
 	@RequestMapping(value = "/line_inspection_production",method=RequestMethod.GET)
 	public ModelAndView line_inspection_production(ModelMap map,HttpSession session) {
 		//List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PRODUCTION.getType()));
 		List<ProductionPlan> productionPlanList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
@@ -790,6 +872,9 @@ public class ProductionController {
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
 		view.addObject("processlist",processlist);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -797,6 +882,9 @@ public class ProductionController {
 	@RequestMapping(value = "/finishing_production",method=RequestMethod.GET)
 	public ModelAndView finishing_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_PASS.getType()));
 		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PASS.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
@@ -804,6 +892,9 @@ public class ProductionController {
 		view.addObject("layoutList",layoutList);
 		view.addObject("productionList",productionList);
 		view.addObject("processlist",processlist);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -812,6 +903,9 @@ public class ProductionController {
 	@RequestMapping(value = "/iron_production",method=RequestMethod.GET)
 	public ModelAndView iron_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINISHING_PASS.getType()));
 		List<ProductionPlan> productionList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.IRON_PASS.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
@@ -819,6 +913,9 @@ public class ProductionController {
 		view.addObject("productionList",productionList);
 		view.addObject("layoutList",layoutList);
 		view.addObject("processlist",processlist);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -827,6 +924,9 @@ public class ProductionController {
 	@RequestMapping(value = "/final_qc_production",method=RequestMethod.GET)
 	public ModelAndView final_qc_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanForCutting();
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_PRODUCTION.getType()));
 		List<ProcessInfo> processlist = registerService.getProcessList();
@@ -834,6 +934,9 @@ public class ProductionController {
 		view.addObject("productionPlanList",productionPlanList);
 		view.addObject("layoutList",layoutList);
 		view.addObject("processlist",processlist);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -841,12 +944,18 @@ public class ProductionController {
 	@RequestMapping(value = "/line_inspection_reject",method=RequestMethod.GET)
 	public ModelAndView line_inspection_reject(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_INSPECTION_LAYOUT.getType()));
 		List<ProductionPlan> rejectList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.LINE_REJECT.getType()));
 
 		ModelAndView view = new ModelAndView("production/line_inspection_reject");
 		view.addObject("rejectList",rejectList);
 		view.addObject("layoutList",layoutList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -935,6 +1044,8 @@ public class ProductionController {
 	@RequestMapping(value = "/poly_production",method=RequestMethod.GET)
 	public ModelAndView poly_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		List<ProductionPlan> layoutList = productionService.getLayoutPlanDetails(String.valueOf(ProductionType.FINAL_QC_PRODUCTION.getType()));
 		List<ProductionPlan> polyList = productionService.getPolyPackingDetails("1");
 
@@ -942,6 +1053,9 @@ public class ProductionController {
 		view.addObject("polyList",polyList);
 		view.addObject("layoutList",layoutList);
 
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -986,12 +1100,19 @@ public class ProductionController {
 	@RequestMapping(value = "/send_cutting_body",method=RequestMethod.GET)
 	public ModelAndView send_cutting_body(ModelMap map,HttpSession session) {
 		
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/send_cutting_body");
 		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();
 		List<CuttingInformation> sendCuttingBodyInfoList = productionService.getSendCuttingBodyInfoList();
 		
 		view.addObject("cuttingInformationList",cuttingInformationList);
 		view.addObject("sendCuttingBodyInfoList",sendCuttingBodyInfoList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; 
 	}
 
@@ -1040,6 +1161,9 @@ public class ProductionController {
 	@RequestMapping(value = "/receive_cutting_body",method=RequestMethod.GET)
 	public ModelAndView receive_cutting_body(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("production/receive_cutting_body");
 		
 		List<CuttingInformation> sendCuttingBodyInfoList = productionService.getSendCuttingBodyInfoList();
@@ -1047,6 +1171,9 @@ public class ProductionController {
 		
 		view.addObject("sendCuttingBodyInfoList",sendCuttingBodyInfoList);
 		view.addObject("receiveCuttingBodyInfoList",receiveCuttingBodyInfoList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; 
 	}
 	

@@ -7,14 +7,19 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
+
+<%
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
+%>
+
+
 <jsp:include page="../include/header.jsp" />
 <script type="text/javascript"> var contexPath = "<%=request.getContextPath()%>
 	";
 </script>
 <body onload="getOrganizationName()">
-	<%
-		List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
-	%>
+
 
 	<div class="page-wrapper">
 		<div class="container-fluid">
@@ -31,9 +36,9 @@
 				</p>
 			</div>
 			<div class="row mt-1"></div>
-			<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+			<input type="hidden" id="userId" value="<%=userId%>">
 			<input type="hidden" id="organizationId"
-				value="<%=lg.get(0).getId()%>">
+				value="<%=userId%>">
 			<div class="row mt-2">
 				<div class="col-lg-12">
 					<div class="card-box">

@@ -371,4 +371,40 @@ public class PasswordDAOImpl implements PasswordDAO{
 
 		return query;
 	}
+	
+	@Override
+	public String getUserDepartmentId(String userId) {
+		String depId="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				depId=iter.next().toString();
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return depId;
+	}
 }

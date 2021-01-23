@@ -219,9 +219,16 @@ public class RegisterController {
 
 
 	@RequestMapping(value = "/supplier_create",method=RequestMethod.GET)
-	public ModelAndView supplier_create(ModelMap map) {
+	public ModelAndView supplier_create(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/Supplier_Create");
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -382,9 +389,15 @@ public class RegisterController {
 	//Factory Create
 
 	@RequestMapping(value = "/factory_create",method=RequestMethod.GET)
-	public ModelAndView factory_create(ModelMap map) {
+	public ModelAndView factory_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/Factory_Create");
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -527,9 +540,15 @@ public class RegisterController {
 	//Courier Create
 
 	@RequestMapping(value = "/courier_create",method=RequestMethod.GET)
-	public ModelAndView courier_create(ModelMap map) {
+	public ModelAndView courier_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/courier_create");
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -671,11 +690,16 @@ public class RegisterController {
 	@RequestMapping(value = "/brand_create",method=RequestMethod.GET)
 	public ModelAndView brand_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/brand-create");
 		List<Brand> brandList = registerService.getBrandList();
 		System.out.println("list size="+brandList.size());
 
 		map.addAttribute("brandList",brandList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -750,12 +774,17 @@ public class RegisterController {
 	@RequestMapping(value = "/fabrics_create",method=RequestMethod.GET)
 	public ModelAndView fabrics_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/fabrics-create");
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Unit> unitList = registerService.getUnitList();
 
 		map.addAttribute("fabricsItemList",fabricsItemList);
 		view.addObject("unitList",unitList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -851,12 +880,18 @@ public class RegisterController {
 	@RequestMapping(value = "/accessories_create",method=RequestMethod.GET)
 	public ModelAndView accessories_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/accessories-create");
 		List<AccessoriesItem> accessoriesItemList = registerService.getAccessoriesItemList();
 		List<Unit> unitList = registerService.getUnitList();
 
 		map.addAttribute("accessoriesItemList",accessoriesItemList);
 		view.addObject("unitList",unitList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -939,10 +974,14 @@ public class RegisterController {
 	@RequestMapping(value = "/local_item_create",method=RequestMethod.GET)
 	public ModelAndView local_item_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/local-item-create");
 		List<LocalItem> localItemList = registerService.getLocalItemList();
 
 		map.addAttribute("localItemList",localItemList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1016,11 +1055,16 @@ public class RegisterController {
 	@RequestMapping(value = "/item_description_create",method=RequestMethod.GET)
 	public ModelAndView item_description_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/style-item-create");
 		List<StyleItem> styleItemList = registerService.getStyleItemList();
 		System.out.println("list size="+styleItemList.size());
 
 		map.addAttribute("styleItemList",styleItemList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1094,10 +1138,14 @@ public class RegisterController {
 	@RequestMapping(value = "/unit_create",method=RequestMethod.GET)
 	public ModelAndView unit_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/unit-create");
 		List<Unit> unitList = registerService.getUnitList();
 
 		map.addAttribute("unitList",unitList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1179,10 +1227,15 @@ public class RegisterController {
 	@RequestMapping(value = "/color_create",method=RequestMethod.GET)
 	public ModelAndView color_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/color-create");
 		List<Color> colorList = registerService.getColorList();
 
 		map.addAttribute("colorList",colorList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1256,9 +1309,13 @@ public class RegisterController {
 	@RequestMapping(value = "/costing_details_create",method=RequestMethod.GET)
 	public ModelAndView costing_details_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/particular-item-create");
 		List<ParticularItem> particularItemList = registerService.getParticularItemList();
 
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		map.addAttribute("particularItemList",particularItemList);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1334,10 +1391,14 @@ public class RegisterController {
 	@RequestMapping(value = "/country_create",method=RequestMethod.GET)
 	public ModelAndView country_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/country-create");
 		List<Country> countryList = registerService.getCountryList();
 
 		map.addAttribute("countryList",countryList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1411,10 +1472,14 @@ public class RegisterController {
 	@RequestMapping(value = "/sample_type_create",method=RequestMethod.GET)
 	public ModelAndView sample_type_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/sample-type-create");
 		List<SampleType> sampleTypeList = registerService.getSampleTypeList();
 
 		map.addAttribute("sampleTypeList",sampleTypeList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1569,10 +1634,14 @@ public class RegisterController {
 	@RequestMapping(value = "/merchandiser_create",method=RequestMethod.GET)
 	public ModelAndView merchandiser_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/merchandiser_create");
 		List<MerchandiserInfo> merchandiserList= registerService.getMerchandiserList();
 
-
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		map.addAttribute("merchandiserList",merchandiserList);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1646,6 +1715,9 @@ public class RegisterController {
 	@RequestMapping(value = "/incharge_create",method=RequestMethod.GET)
 	public ModelAndView incharge_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/incharge_create");
 		List<FactoryModel> factoryList= registerService.getAllFactories();
 
@@ -1653,6 +1725,9 @@ public class RegisterController {
 		map.addAttribute("inchargeList",inchargeList);
 
 		map.addAttribute("factoryList",factoryList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -1706,10 +1781,16 @@ public class RegisterController {
 	@RequestMapping(value = "/line_create",method=RequestMethod.GET)
 	public ModelAndView line_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("register/line-create");
 		List<Line> lineList = registerService.getLineList();
 		List<FactoryModel> factoryList = registerService.getAllFactories();
 
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		map.addAttribute("lineList",lineList);
 		view.addObject("factoryList",factoryList);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1820,9 +1901,18 @@ public class RegisterController {
 	@RequestMapping(value = "/style_size_create",method=RequestMethod.GET)
 	public ModelAndView style_size_create(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+	
+		
 		ModelAndView view = new ModelAndView("register/style-size-create");
 		List<Size> sizeList = registerService.getStyleSizeList();
 		view.addObject("sizeList",sizeList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1982,10 +2072,17 @@ public class RegisterController {
 	//Designation Create
 	
 		@RequestMapping(value = "/desgination_create",method=RequestMethod.GET)
-		public ModelAndView desgination_create(ModelMap map) {
+		public ModelAndView desgination_create(ModelMap map,HttpSession session) {
+			
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
 			
 			List<Department> departmentList = registerService.getDepartmentList();
 			ModelAndView view = new ModelAndView("register/desgination_create");
+			
+			
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
 			
 			view.addObject("department",departmentList);
 			return view; //JSP - /WEB-INF/view/index.jsp
@@ -2089,7 +2186,10 @@ public class RegisterController {
 		//Employee
 		
 		@RequestMapping(value = "/employee_create",method=RequestMethod.GET)
-		public ModelAndView employee_create(ModelMap map) {
+		public ModelAndView employee_create(ModelMap map,HttpSession session) {
+			
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
 			
 			List<Line> lineList = registerService.getLineList();
 			List<Designation> designationList = registerService.getDesignationList();
@@ -2099,6 +2199,10 @@ public class RegisterController {
 			view.addObject("department",departmentList);
 			view.addObject("designation",designationList);
 			view.addObject("line",lineList);
+			
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
+			
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 		
@@ -2214,14 +2318,20 @@ public class RegisterController {
 		//Machine Create
 		
 		@RequestMapping(value = "/machine_create",method=RequestMethod.GET)
-		public ModelAndView machine_create(ModelMap map) {
+		public ModelAndView machine_create(ModelMap map,HttpSession session) {
 					
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
 			List<Employee> employeeList = registerService.getEmployeeList();
 			List<Factory> factorylist = registerService.getFactoryNameList();
 			ModelAndView view = new ModelAndView("register/machine_create");
 			
 			view.addObject("employee",employeeList);
 			view.addObject("factorylist",factorylist);
+			
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
+			
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 		
@@ -2352,12 +2462,19 @@ public class RegisterController {
 		//Process Create
 		
 		@RequestMapping(value = "/process_create",method=RequestMethod.GET)
-		public ModelAndView process_create(ModelMap map) {
+		public ModelAndView process_create(ModelMap map,HttpSession session) {
+			
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
 			
 			List<ProcessInfo> List= registerService.getProcessList();
 			ModelAndView view = new ModelAndView("register/process_create");
 			
 			view.addObject("processlist",List);
+			
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
+			
 			return view; //JSP - /WEB-INF/view/index.jsp
 		}
 
