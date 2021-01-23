@@ -5,17 +5,17 @@
 
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
-<jsp:include page="../include/header.jsp" />
+
 <%	
 
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
 	String buyerid=(String) request.getAttribute("buyerId");
-	/* System.out.println(" buyer id "+request.getAttribute("buyerId"));
-	String styleid=(String) request.getAttribute("style");
-	System.out.println(" styleid "+styleid);
-	String date=(String) request.getAttribute("date");
-	System.out.println(" date "+date); */
+	String userId=(String)session.getAttribute("userId");
+	String userName=(String)session.getAttribute("userName");
+
 %>
+
+<jsp:include page="../include/header.jsp" />
+
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
@@ -30,7 +30,7 @@
 			style="display: none;">
 			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+		<input type="hidden" id="userId" value="<%=userId%>">
 <!-- 		<input type="hidden" id="unitId" value="0">
 	 	<input type="hidden" id="itemDescriptionId" value="0">
 	 	<input type="hidden" id="buyerid" value="0">

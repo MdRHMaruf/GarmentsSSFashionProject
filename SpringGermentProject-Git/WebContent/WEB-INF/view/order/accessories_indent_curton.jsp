@@ -6,13 +6,16 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
-<jsp:include page="../include/header.jsp" />
 
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
 %>
 
-<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+<jsp:include page="../include/header.jsp" />
+
+
+<input type="hidden" id="userId" value="<%=userId%>">
 <input type="hidden" id="indentId" value="New">
 <input type="hidden" id="indentAutoId" value="0">
 

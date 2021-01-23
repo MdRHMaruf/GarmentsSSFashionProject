@@ -8,8 +8,12 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 
-<%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+<%	
+
+	String userId=(String) request.getAttribute("userId");	
+	String userName=(String) request.getAttribute("userName");	
+	String buyerid=(String) request.getAttribute("buyerId");
+
 %>
 
 <div class="page-wrapper">

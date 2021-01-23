@@ -79,4 +79,10 @@ public class PasswordServiceImpl implements PasswordService {
 		// TODO Auto-generated method stub
 		return passDAO.getOrganizationInfo();
 	}
+
+	@Override
+	public String getUserDepartmentId(String userId) {
+		// TODO Auto-generated method stub
+		return passDAO.getUserDepartmentId(userId);
+	}
 }

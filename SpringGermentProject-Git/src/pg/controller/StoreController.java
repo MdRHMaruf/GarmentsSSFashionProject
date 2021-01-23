@@ -32,6 +32,7 @@ import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
+import pg.services.PasswordService;
 import pg.services.ProductionService;
 import pg.services.RegisterService;
 import pg.services.StoreService;
@@ -70,6 +71,9 @@ public class StoreController {
 	private OrderService orderService;
 	@Autowired
 	private StoreService storeService;
+	
+	@Autowired
+	private PasswordService passService;
 
 	String InvoiceNo="";
 	String Type="";
@@ -77,11 +81,18 @@ public class StoreController {
 	//Fabrics Receive 
 	@RequestMapping(value = "/fabrics_receive",method=RequestMethod.GET)
 	public ModelAndView fabrics_receive(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("store/fabrics-receive");
 		List<Unit> unitList= registerService.getUnitList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("unitList", unitList);
 		view.addObject("supplierList",supplierList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; 
 	}
 
@@ -164,9 +175,18 @@ public class StoreController {
 	//Fabrics Quality Control
 	@RequestMapping(value = "/fabrics_quality_control",method=RequestMethod.GET)
 	public ModelAndView fabrics_quality_control(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-quality-control");
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("supplierList",supplierList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -212,9 +232,18 @@ public class StoreController {
 	//Fabrics Return
 	@RequestMapping(value = "/fabrics_return",method=RequestMethod.GET)
 	public ModelAndView fabrics_return(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-return");
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("supplierList",supplierList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -296,11 +325,21 @@ public class StoreController {
 	//Fabrics Issue
 	@RequestMapping(value = "/fabrics_issue",method=RequestMethod.GET)
 	public ModelAndView fabrics_issue(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-issue");
 		List<Department> departmentList = registerService.getDepartmentList();
 		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
 		map.addAttribute("departmentList",departmentList);
 		view.addObject("cuttingReqList",cuttingReqList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -378,9 +417,18 @@ public class StoreController {
 	//Fabrics IssueReturn
 	@RequestMapping(value = "/fabrics_issue_return",method=RequestMethod.GET)
 	public ModelAndView fabrics_issue_return(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-issue-return");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -454,9 +502,18 @@ public class StoreController {
 
 	@RequestMapping(value = "/fabrics_transfer_out",method=RequestMethod.GET)
 	public ModelAndView fabrics_transer_out(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-transfer-out");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -522,9 +579,16 @@ public class StoreController {
 
 	@RequestMapping(value = "/fabrics_transfer_in",method=RequestMethod.GET)
 	public ModelAndView fabrics_transfer_in(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
 		ModelAndView view = new ModelAndView("store/fabrics-transfer-in");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 	
@@ -599,11 +663,20 @@ public class StoreController {
 	//Accessories Receive 
 	@RequestMapping(value = "/accessories_receive",method=RequestMethod.GET)
 	public ModelAndView accessories_receive(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/accessories-receive");
 		List<Unit> unitList= registerService.getUnitList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("unitList", unitList);
 		view.addObject("supplierList",supplierList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -719,9 +792,16 @@ public class StoreController {
 	//Accessories Quality Control
 	@RequestMapping(value = "/accessories_quality_control",method=RequestMethod.GET)
 	public ModelAndView accessories_quality_control(ModelMap map,HttpSession session) {
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
 		ModelAndView view = new ModelAndView("store/accessories-quality-control");
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("supplierList",supplierList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -767,9 +847,18 @@ public class StoreController {
 	//Accessories Return
 	@RequestMapping(value = "/accessories_return",method=RequestMethod.GET)
 	public ModelAndView accessories_return(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/accessories-return");
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		view.addObject("supplierList",supplierList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -851,11 +940,21 @@ public class StoreController {
 	//Accessories Issue
 	@RequestMapping(value = "/accessories_issue",method=RequestMethod.GET)
 	public ModelAndView accessories_issue(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/accessories-issue");
 		List<Department> departmentList = registerService.getDepartmentList();
 		List<CuttingInformation> requisitionList =  productionService.getReceiveCuttingBodyInfoList();
 		map.addAttribute("departmentList",departmentList);
 		map.addAttribute("requisitionList",requisitionList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -947,9 +1046,19 @@ public class StoreController {
 	//Accessories IssueReturn
 	@RequestMapping(value = "/accessories_issue_return",method=RequestMethod.GET)
 	public ModelAndView accessories_issue_return(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/accessories-issue-return");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -1023,9 +1132,19 @@ public class StoreController {
 
 	@RequestMapping(value = "/accessories_transfer_out",method=RequestMethod.GET)
 	public ModelAndView accessories_transer_out(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/accessories-transfer-out");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -1091,9 +1210,16 @@ public class StoreController {
 
 	@RequestMapping(value = "/accessories_transfer_in",method=RequestMethod.GET)
 	public ModelAndView accessories_transfer_in(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
 		ModelAndView view = new ModelAndView("store/accessories-transfer-in");
 		List<Department> departmentList = registerService.getDepartmentList();
 		map.addAttribute("departmentList",departmentList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 	
@@ -1168,6 +1294,10 @@ public class StoreController {
 
 	@RequestMapping(value = "/general_item_create",method=RequestMethod.GET)
 	public ModelAndView general_item_create(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
 		ModelAndView view = new ModelAndView("store/general_item_create");
 		List<Unit> unitList= registerService.getUnitList();
 		List<StoreGeneralCategory> catList= registerService.getStoreCategoryList();
@@ -1175,6 +1305,10 @@ public class StoreController {
 		view.addObject("unitList", unitList);
 		view.addObject("catList", catList);
 		view.addObject("itemList", List);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 
 		return view; 
 	}
@@ -1246,6 +1380,11 @@ public class StoreController {
 
 	@RequestMapping(value = "/general_received",method=RequestMethod.GET)
 	public ModelAndView general_received(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/general_received");
 
 
@@ -1264,6 +1403,10 @@ public class StoreController {
 		view.addObject("addList", addList);
 		view.addObject("receivedInvoiceList", receivedInvoiceList);
 		map.addAttribute("InvoiceId", maxInvoice);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 
 		return view; 
 	}
@@ -1323,12 +1466,20 @@ public class StoreController {
 
 	@RequestMapping(value = "/cutting_fabrics_requistion",method=RequestMethod.GET)
 	public ModelAndView cutting_fabrics_requistion(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		List<CuttingInformation> cuttingInformationList = productionService.getCuttingInformationList();
 		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
 		ModelAndView view = new ModelAndView("store/cutting_fabrics_requistion");
 
 		view.addObject("cuttingInformationList",cuttingInformationList);
 		view.addObject("cuttingReqList",cuttingReqList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; 
 	}
 
@@ -1368,11 +1519,20 @@ public class StoreController {
 
 	@RequestMapping(value = "/cutting_fabrics_issue",method=RequestMethod.GET)
 	public ModelAndView cutting_fabrics_issue(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
 		ModelAndView view = new ModelAndView("store/cutting_fabrics_issue");
 
 		//view.addObject("cuttingInformationList",cuttingInformationList);
 		view.addObject("cuttingReqList",cuttingReqList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -1391,11 +1551,21 @@ public class StoreController {
 	//fabrics pending transaction
 	@RequestMapping(value = "/fabrics_pending_transaction",method=RequestMethod.GET)
 	public ModelAndView fabrics_pending_transaction(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-pending-transaction");
 		List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
 		
 		List<PendingTransaction> pendingList = storeService.getPendingTransactionList(lg.get(0).getDepartmentId());
 		view.addObject("pendingList",pendingList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 
@@ -1403,9 +1573,13 @@ public class StoreController {
 	@RequestMapping(value = "/printFabricsIssue/{transactionId}/{transactionType}")
 	public @ResponseBody ModelAndView printFabricsIssue(ModelMap map,@PathVariable ("transactionId") String transactionId,@PathVariable ("transactionType") String transactionType) {
 
+
+		
 		ModelAndView view=new ModelAndView("store/printFabricsIssue");
 		map.addAttribute("transactionId", transactionId);
 		map.addAttribute("transactionType", transactionType);
+		
+
 		return view;
 	}
 	
@@ -1428,11 +1602,21 @@ public class StoreController {
 	//accessories pending transaction
 	@RequestMapping(value = "/accessories_pending_transaction",method=RequestMethod.GET)
 	public ModelAndView accessories_pending_transaction(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/fabrics-pending-transaction");
 		List<Department> departmentList = registerService.getDepartmentList();
 		List<CuttingInformation> cuttingReqList = productionService.getCuttingRequisitionList();
 		map.addAttribute("departmentList",departmentList);
 		view.addObject("cuttingReqList",cuttingReqList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 	
@@ -1440,12 +1624,22 @@ public class StoreController {
 	// Stock Position
 	@RequestMapping(value = "/stock_position",method=RequestMethod.GET)
 	public ModelAndView stock_position(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("store/stock-position");
-		List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
+	
 		
 		String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-		List<StockItem> stockItemList = storeService.getStockItemSummeryList(currentDate,currentDate,lg.get(0).getDepartmentId());
+		List<StockItem> stockItemList = storeService.getStockItemSummeryList(currentDate,currentDate,departmentId);
 		view.addObject("stockItemList",stockItemList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
+		
 		return view; 
 	}
 	
@@ -1463,14 +1657,23 @@ public class StoreController {
 	// Stock Position Details
 		@RequestMapping(value = "/stock_position_details",method=RequestMethod.GET)
 		public ModelAndView stock_position_details(ModelMap map,HttpSession session) {
+			
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
+			String departmentId=passService.getUserDepartmentId(userId);
+			
 			ModelAndView view = new ModelAndView("store/stock-position-details");
-			List<Login> lg = (List<Login>)session.getAttribute("pg_admin");
+			
 			
 			String currentDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-			List<StockItem> stockItemList = storeService.getStockItemDetailsList(currentDate,currentDate,lg.get(0).getDepartmentId());
+			List<StockItem> stockItemList = storeService.getStockItemDetailsList(currentDate,currentDate,departmentId);
 			
 			System.out.println("list size-"+stockItemList.size());
 			view.addObject("stockItemList",stockItemList);
+			
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
+			map.addAttribute("departmentId",departmentId);
 			return view; 
 		}
 		

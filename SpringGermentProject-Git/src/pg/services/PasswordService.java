@@ -27,4 +27,5 @@ public interface PasswordService {
 	
 	public List<OrganizationInfo> getOrganizationInfo();
 	public boolean changePassword(String userId, String userName, String password);
+	public String getUserDepartmentId(String userId);
 }

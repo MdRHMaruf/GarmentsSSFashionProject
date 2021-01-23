@@ -25,6 +25,7 @@ import pg.registerModel.BuyerModel;
 import pg.registerModel.Unit;
 import pg.services.CommercialService;
 import pg.services.OrderService;
+import pg.services.PasswordService;
 import pg.services.RegisterService;
 
 
@@ -33,6 +34,9 @@ import pg.services.RegisterService;
 public class CommercialController {
 
 
+	@Autowired
+	private PasswordService passService;
+	
 	private static final String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
 
 	private static final String UPLOAD_DIRECTORY ="/WEB-INF/upload";  
@@ -65,11 +69,20 @@ public class CommercialController {
 	@RequestMapping(value = "/master_lc")
 	public ModelAndView master_lc(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
+		String departmentId=passService.getUserDepartmentId(userId);
+		
 		ModelAndView view = new ModelAndView("commercial/master-lc");
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<MasterLC> masterLCList= commercialService.getMasterLCList();
 		view.addObject("buyerList",buyerList);
 		view.addObject("masterLCList",masterLCList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("departmentId",departmentId);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -104,6 +117,10 @@ public class CommercialController {
 	@RequestMapping(value = "deed_of_contact")
 	public ModelAndView deed_of_contact(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("commercial/deedOfContact");
 
 		
@@ -115,6 +132,9 @@ public class CommercialController {
 		view.addObject("Lists",ContractsList);
 		view.addObject("unitList",unitList);
 		view.addObject("buyerList", buyerList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		
 		
 
@@ -151,13 +171,15 @@ public class CommercialController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/deedofcontractview",method=RequestMethod.GET)
-	public ModelAndView department_medicine_delvierOpen(ModelAndView map, FabricsIndent p) {
+	public ModelAndView department_medicine_delvierOpen(ModelMap map, FabricsIndent p,HttpSession session) {
 		
-			System.out.println(" deed of contacts report ");	
-			ModelAndView view = new ModelAndView("commercial/deedOfContactReport");
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		ModelAndView view = new ModelAndView("commercial/deedOfContactReport");
 	
-			view.addObject("contractId",contractId);
-		 	
+		view.addObject("contractId",contractId);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		 	
 			
 			

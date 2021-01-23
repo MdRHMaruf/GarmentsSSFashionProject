@@ -159,6 +159,9 @@ public class OrderController {
 	@RequestMapping(value = "/costing_create",method=RequestMethod.GET)
 	public ModelAndView costing_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/costing_create");
 		List<Unit> unitList= registerService.getUnitList();	
 		List<Style> styleList= orderService.getStyleList();
@@ -170,6 +173,9 @@ public class OrderController {
 		map.addAttribute("buyerList",buyerList);
 		map.addAttribute("particularList",particularList);
 		map.addAttribute("costingList",costingList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -425,6 +431,9 @@ public class OrderController {
 	@RequestMapping(value = "/buyer_purchase_order",method=RequestMethod.GET)
 	public ModelAndView buyer_purchase_order(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/buyer-purchase-order");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
@@ -436,6 +445,9 @@ public class OrderController {
 		view.addObject("factoryList",factoryList);
 		view.addObject("colorList",colorList);
 		view.addObject("buyerPoList",buyerPoList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -686,9 +698,15 @@ public class OrderController {
 	public ModelAndView fileUpload(ModelMap map,HttpSession session) {
 
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/fileupload");
 		view.addObject("buyer", registerService.getAllBuyers());
 		view.addObject("dept", registerService.getDepartmentList());
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -918,6 +936,10 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_indent",method=RequestMethod.GET)
 	public ModelAndView accessories_indent(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
@@ -936,6 +958,9 @@ public class OrderController {
 		view.addObject("brand",brand);
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		//view.addObject("listAccPending",listAccPending);
 
@@ -1378,6 +1403,9 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_indent_curton",method=RequestMethod.GET)
 	public ModelAndView accessories_indent_curton(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
@@ -1387,6 +1415,9 @@ public class OrderController {
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("buyerList",buyerList);
 		view.addObject("indentList",indentList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		//view.addObject("unit",unit);
 		//map.addAttribute("styleList",styleList);
 
@@ -1574,6 +1605,10 @@ public class OrderController {
 	//Fabrics Indent 
 	@RequestMapping(value = "/fabrics_indent",method=RequestMethod.GET)
 	public ModelAndView fabrics_indent(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent();
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
 		List<Color> colorList = registerService.getColorList();
@@ -1588,6 +1623,10 @@ public class OrderController {
 		view.addObject("fabricsList",fabricsItemList);
 		view.addObject("colorList",colorList);
 		view.addObject("brandList",brandList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		//view.addObject("unitList",unitList);
 		//view.addObject("fabricsIndentList",fabricsIndentList);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1687,6 +1726,9 @@ public class OrderController {
 	@RequestMapping(value = "/sample_requisition",method=RequestMethod.GET)
 	public ModelAndView sample_requisition(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
@@ -1707,6 +1749,9 @@ public class OrderController {
 		view.addObject("sampleList",sampleList);
 		view.addObject("inchargeList",inchargeList);
 		view.addObject("merchendizerList",merchendizerList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1775,6 +1820,10 @@ public class OrderController {
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)
 	public ModelAndView purchase_order(ModelMap map,HttpSession session) {
 
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/purchase-order");
 		List<String> poList = orderService.getPurchaseOrderList();
 		List<Factory> factoryList = registerService.getFactoryNameList();
@@ -1786,6 +1835,9 @@ public class OrderController {
 		view.addObject("merchendiserList",merchandiserList);
 		view.addObject("supplierList",supplierList);
 		view.addObject("purchaseOrderList",purchaseOrderList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1855,9 +1907,15 @@ public class OrderController {
 	@RequestMapping(value = "/sample_production",method=RequestMethod.GET)
 	public ModelAndView sample_production(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("order/sample_production");
 		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
 		view.addObject("sampleCommentsList",sampleCommentsList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -1911,6 +1969,9 @@ public class OrderController {
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/style_create");
 		List<BuyerModel> List= registerService.getAllBuyers();
 		List<ItemDescription> itemList= orderService.getItemDescriptionList();
@@ -1920,6 +1981,9 @@ public class OrderController {
 		map.addAttribute("buyerList",List);
 		map.addAttribute("itemList",itemList);
 		map.addAttribute("styleList",styleList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -2006,6 +2070,9 @@ public class OrderController {
 	@RequestMapping(value = "/parcel",method=RequestMethod.GET)
 	public ModelAndView parcel(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/parcel");
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -2020,6 +2087,9 @@ public class OrderController {
 		view.addObject("courierList",courierList);
 		view.addObject("unitList",unitList);
 		view.addObject("parcelList",parcelList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -2096,6 +2166,12 @@ public class OrderController {
 	@RequestMapping(value = "/sample_cad",method=RequestMethod.GET)
 	public ModelAndView sample_cad(ModelMap map,HttpSession session) {
 
+		
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
+		
 		ModelAndView view = new ModelAndView("order/sample_cad");
 
 
@@ -2106,6 +2182,9 @@ public class OrderController {
 		view.addObject("poList",poList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("SampleList",Samples);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -2169,6 +2248,7 @@ public class OrderController {
 	@RequestMapping(value = "/SampleReportView",method=RequestMethod.GET)
 	public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
 
+		
 		System.out.println(" Open Ooudoor sales report ");	
 		ModelAndView view = new ModelAndView("order/SampleCadReportView");
 
@@ -2179,9 +2259,14 @@ public class OrderController {
 
 
 	@RequestMapping(value="/purchase_order_approve_from_md",method=RequestMethod.GET)
-	public @ResponseBody ModelAndView purchase_order_approve_from_md(ModelMap map){
+	public @ResponseBody ModelAndView purchase_order_approve_from_md(ModelMap map,HttpSession session){
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/purchase-order-approve-from-md");
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view;
 	}
@@ -2235,6 +2320,9 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_check_list",method=RequestMethod.GET)
 	public ModelAndView accessories_check_list(ModelMap map,HttpSession session) {
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("order/accessories-check-list");
 		List<BuyerModel> buyerList= registerService.getAllBuyers();
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -2244,6 +2332,10 @@ public class OrderController {
 		view.addObject("sampletype",sampleList);
 		view.addObject("unitList",unitList);
 		view.addObject("parcelList",checkList);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 	

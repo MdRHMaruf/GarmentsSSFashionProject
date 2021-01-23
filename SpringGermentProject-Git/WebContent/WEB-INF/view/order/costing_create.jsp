@@ -6,10 +6,14 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
-<jsp:include page="../include/header.jsp" />
+
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
 %>
+
+<jsp:include page="../include/header.jsp" />
+
 
 <div class="page-wrapper">
 	<div class="m-2">
@@ -31,10 +35,12 @@
 				<strong>Wrong!</strong> Something Wrong...
 			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		<input type="hidden" id="itemAutoId" value="0"> <input
-			type="hidden" id="itemType" value="new"> <input type="hidden"
-			id="costingNo" value="new">
+
+		<input type="hidden" id="userId" value="<%=userId%>">
+		<input type="hidden" id="itemAutoId" value="0">
+		<input type="hidden" id="itemType" value="new">
+		<input type="hidden" id="costingNo" value="new">
+
 		<div class="card-box pt-1">
 			<header class="d-flex justify-content-between">
 				<h5 class="text-center" style="display: inline;">

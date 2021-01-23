@@ -10,8 +10,11 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
+String departmentId=(String)session.getAttribute("departmentId");
 %>
+
 <div class="page-wrapper">
 	<div class="alert alert-success alert-dismissible fade show"
 		style="display: none;">
@@ -31,9 +34,9 @@
 			<strong>Wrong!</strong> Something Wrong...
 		</p>
 	</div>
-	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="userId" value="<%=userId%>">
 	<input type="hidden" id="departmentId"
-		value="<%=lg.get(0).getDepartmentId()%>"> <input type="hidden"
+		value="<%=departmentId%>"> <input type="hidden"
 		id="poNo" value="0">
 
 	<div class="card-box">
