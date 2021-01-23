@@ -6,10 +6,15 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
-<jsp:include page="../include/header.jsp" />
+
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
+String departmentId=(String)session.getAttribute("departmentId");
 %>
+
+<jsp:include page="../include/header.jsp" />
+
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
@@ -24,8 +29,8 @@
 			style="display: none;">
 			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		<input type="hidden" id="departmentId" value="<%=lg.get(0).getDepartmentId()%>">
+		<input type="hidden" id="userId" value="<%=userId%>">
+		<input type="hidden" id="departmentId" value="<%=departmentId%>">
 		<input type="hidden" id="itemId" value="0">
 
 		<div class="row">

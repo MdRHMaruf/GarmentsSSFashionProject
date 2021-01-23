@@ -3,6 +3,7 @@ package pg.dao;
 
 import java.util.List;
 
+import pg.model.Login;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.proudctionModel.CuttingInformation;
@@ -104,5 +105,7 @@ public interface ProductionDAO {
 	List<ProductionPlan> getReceiveCuttingBodyList(String cuttingEntryId,String sizeGroupId);
 	public List<CuttingInformation> getReceiveCuttingBodyInfoList();
 	String receiveCuttingPlanBodyQuantity(String sendItemList,String userId);
+	
+	
 }
 

@@ -6,13 +6,17 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
+
+
+<%
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
+%>
 <jsp:include page="../include/header.jsp" />
 
 
 <body onload="RetrieveLines()">
-	<%
-		List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
-	%>
+
 	<div class="page-wrapper">
 		<div class="content container-fluid">
 			<div class="alert alert-success alert-dismissible fade show"
@@ -35,7 +39,7 @@
 				</p>
 			</div>
 
-			<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+			<input type="hidden" id="userId" value="<%=userId%>">
 			<input type="hidden" id="accessoriesItemId" value="0">
 
 			<div class="row">

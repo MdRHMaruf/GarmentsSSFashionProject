@@ -194,15 +194,21 @@ public class SettingController {
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/getNewStore",method=RequestMethod.GET)
-	public ModelAndView loadWare(Ware ware,HttpSession session,ModelMap modelmap) {
+	public ModelAndView loadWare(Ware ware,HttpSession session,ModelMap map) {
 
 		List<WareInfo> warelist = (List<WareInfo>) session.getAttribute("storelist");
 		warelist.add(new WareInfo(ware.getId(),ware.getName()));
 
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("admin/create_user");
 		view.addObject("warelist", warelist);
 
-		modelmap.put("storelist", warelist);
+		map.put("storelist", warelist);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -295,9 +301,13 @@ public class SettingController {
 
 	
 	@RequestMapping(value = "organization_create",method=RequestMethod.GET)
-	public ModelAndView organization_create(ModelMap map) {
+	public ModelAndView organization_create(ModelMap map,HttpSession session) {
 		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("setting/organization-create");
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 		
 		return view; //JSP - /WEB-INF/view/index.jsp
 		
