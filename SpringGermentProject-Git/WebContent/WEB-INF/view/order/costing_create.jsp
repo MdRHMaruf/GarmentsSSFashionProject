@@ -32,11 +32,15 @@
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
-		<input type="hidden" id="itemAutoId" value="0">
-		<input type="hidden" id="itemType" value="new">
+		<input type="hidden" id="itemAutoId" value="0"> <input
+			type="hidden" id="itemType" value="new"> <input type="hidden"
+			id="costingNo" value="new">
 		<div class="card-box pt-1">
 			<header class="d-flex justify-content-between">
-				<h5 class="text-center" style="display: inline;">Costing Create</h5>
+				<h5 class="text-center" style="display: inline;">
+					Costing Create <span class="badge badge-primary"
+						id='badgeCostingNo'>New</span>
+				</h5>
 				<div class="row">
 					<div class="col-md-12">
 						<button type="button" class="btn btn-outline-dark btn-sm"
@@ -63,9 +67,9 @@
 										Name</label> <select id="styleName" onchange="styleWiseItemLoad()"
 										class="selectpicker col-md-9 px-0" data-live-search="true"
 										data-style="btn-light btn-sm border-light-gray">
-										<option  value="0">Select Style Name</option>
+										<option value="0">Select Style Name</option>
 										<c:forEach items="${styleList}" var="style">
-											<option  value="${style.styleId}">${style.styleNo}</option>
+											<option value="${style.styleId}">${style.styleNo}</option>
 										</c:forEach>
 									</select>
 
@@ -77,7 +81,8 @@
 									<label for="itemName" class="col-md-3 col-form-label-sm pr-0">Item
 										Name</label> <select id="itemName" class="selectpicker col-md-9 px-0"
 										data-live-search="true"
-										data-style="btn-light btn-sm border-light-gray" onchange="loadCostingOnStyleChange()">
+										data-style="btn-light btn-sm border-light-gray"
+										onchange="loadCostingOnStyleChange()">
 
 										<option id="itemName" value="0">Select Item Name</option>
 
@@ -87,8 +92,7 @@
 							</div>
 							<div class="col-md-1">
 								<button type="button" class="btn btn-outline-dark btn-sm"
-									onclick="cloneButtonAction()"
-									title="Copy Costing">
+									onclick="cloneButtonAction()" title="Copy Costing">
 									<i class="fas fa-copy"></i>
 								</button>
 							</div>
@@ -234,9 +238,13 @@
 					</div>
 					<div class="row mt-1">
 						<div class="col-md-12 d-flex justify-content-end">
-							<button id="btnConfirm" type="button"
-								class="btn btn-primary btn-sm ml-1" >
-								<i class="fas fa-save"></i> Confirm
+							<button id="btnNewCosting" type="button"
+								class="btn btn-primary btn-sm ml-1" title="Save As New Costing">
+								<i class="fas fa-save"></i> New Costing
+							</button>
+							<button id="btnEditCosting" type="button"
+								class="btn btn-success btn-sm ml-1" style="display: none;">
+								<i class="fas fa-pencil-square"></i> Edit Costing
 							</button>
 							<button id="btnRefresh" type="button"
 								class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
@@ -272,9 +280,9 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>Costing No</th>
 							<th>Style</th>
 							<th>Item Name</th>
-							<th>Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th>Print</th>
 						</tr>
@@ -283,13 +291,16 @@
 						<c:forEach items="${costingList}" var="costing"
 							varStatus="counter">
 							<tr>
+								<td>${costing.costingNo}</td>
 								<td>${costing.styleName}</td>
 								<td>${costing.itemName}</td>
-								<td>${costing.date}</td>
+
 								<td><i class="fa fa-search"
-									onclick="searchCosting(${costing.styleId}, ${costing.itemId})" style='cursor: pointer;'></i></td>
+									onclick="searchCosting('${costing.styleId}', '${costing.itemId}','${costing.costingNo}')"
+									style='cursor: pointer;'></i></td>
 								<td><i class="fa fa-print"
-									onclick="itemWiseCostingReport(${costing.styleId}, ${costing.itemId})" style='cursor: pointer;'></i></td>
+									onclick="itemWiseCostingReport('${costing.styleId}', '${costing.itemId}','${costing.costingNo}')"
+									style='cursor: pointer;'></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -323,6 +334,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>Costing No</th>
 							<th>Style</th>
 							<th>Item Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
@@ -332,10 +344,12 @@
 						<c:forEach items="${costingList}" var="costing"
 							varStatus="counter">
 							<tr>
+								<td>${costing.costingNo	}</td>
 								<td>${costing.styleName}</td>
 								<td>${costing.itemName}</td>
 								<td><i class="fas fa-copy"
-									onclick="cloningCosting(${costing.styleId}, ${costing.itemId})" style="cursor: pointer;"></i></td>
+									onclick="cloningCosting('${costing.costingNo}','${costing.styleId}', '${costing.itemId}')"
+									style="cursor: pointer;"></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -363,34 +377,46 @@
 
 			<div class="modal-body">
 				<div class="row">
+					<select id="buyerName" class="selectpicker col-md-12"
+						onchange="buyerWiseCostingLoad()" data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option value="0">Select Buyer</option>
+						<c:forEach items="${buyerList}" var="buyer">
+							<option value="${buyer.buyerid}">${buyer.buyername}</option>
+						</c:forEach>
+					</select>
+				</div>
+				<div class="row">
 					<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
 						<table class="table table-hover table-bordered table-sm mb-0">
 							<thead>
 								<tr>
-									<th style="width: 15px;">Sl#</th>
+									<th style="width: 15px;">Costing No</th>
 									<th>Style</th>
-									<th>Costing Date</th>
+									<th>Item Name</th>
 									<th>Check</th>
 								</tr>
 							</thead>
 							<tbody id="groupCostingList">
 								<c:forEach items="${costingList}" var="costing"
-							varStatus="counter">
-							<tr>
-								<td>${costing.styleName}</td>
-								<td>${costing.itemName}</td>
-								<td>${costing.date}</td>
-								<td><input type="checkbox" onclick="cloningCosting(${costing.styleId}, ${costing.itemId})" /></td>
-							</tr>
-						</c:forEach>
+									varStatus="counter">
+									<tr id='groupRow-${costing.costingNo }' data-id='${costing.costingNo}'>
+										<td>${costing.costingNo}</td>
+										<td>${costing.styleName}</td>
+										<td>${costing.itemName}</td>
+										<td><input id='groupCheck-${costing.costingNo }' type="checkbox" /></td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button id="btnGroupPreview" type="button" class="btn btn-sm btn-info" data-dismiss="modal">Preview</button>
-				<button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+				<button id="btnGroupPreview" type="button"
+					class="btn btn-sm btn-info" onclick="printGroupCosting()">Preview</button>
+				<button type="button" class="btn btn-sm btn-secondary"
+					data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>

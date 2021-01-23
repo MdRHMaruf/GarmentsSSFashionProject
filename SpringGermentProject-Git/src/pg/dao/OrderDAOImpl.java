@@ -830,8 +830,16 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 			String sql="";
+			
+			sql = "select (isnull(max(costingNo),0)+1) as maxId from TbCostingCreate";
+			List<?> list = session.createSQLQuery(sql).list();
+			String costingNo="0";
+			if(list.size()>0) {
+				costingNo = list.get(0).toString();
+			}
 			for(Costing costing:costingList) {
 				sql="insert into TbCostingCreate ("
+						+ "costingNo,"
 						+ "StyleId,"
 						+ "ItemId,"
 						+ "GroupType,"
@@ -850,6 +858,78 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "UserId)"
 						+ " values "
 						+ "("
+						+ "'"+costingNo+"',"
+						+ "'"+costing.getStyleId()+"',"
+						+ "'"+costing.getItemId()+"',"
+						+ "'"+costing.getParticularType()+"',"
+						+ "'"+costing.getParticularId()+"',"
+						+ "'"+costing.getSize()+"',"
+						+ "'"+costing.getUnitId()+"',"
+						+ "'"+costing.getWidth()+"',"
+						+ "'"+costing.getYard()+"',"
+						+ "'"+costing.getGsm()+"',"
+						+ "'"+costing.getConsumption()+"',"
+						+ "'"+costing.getUnitPrice()+"',"
+						+ "'"+costing.getAmount()+"',"
+						+ "'"+costing.getCommission()+"',"
+						+ "'"+costing.getDate()+"',"
+						+ "CURRENT_TIMESTAMP,"
+						+ "'"+costing.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return costingNo;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return "Something Wrong";
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+
+		return "Something Wrong";
+	}
+	
+	
+	@Override
+	public String editCostingNo(List<Costing> costingList) {
+
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="";
+			for(Costing costing:costingList) {
+				sql="insert into TbCostingCreate ("
+						+ "costingNo,"
+						+ "StyleId,"
+						+ "ItemId,"
+						+ "GroupType,"
+						+ "FabricationItemId,"
+						+ "size,"
+						+ "UnitId,"
+						+ "width,"
+						+ "yard,"
+						+ "gsm,"
+						+ "consumption,"
+						+ "UnitPrice,"
+						+ "Amount,"
+						+ "Comission,"
+						+ "SubmissionDate,"
+						+ "EntryTime,"
+						+ "UserId)"
+						+ " values "
+						+ "("
+						+ "'"+costing.getCostingNo()+"',"
 						+ "'"+costing.getStyleId()+"',"
 						+ "'"+costing.getItemId()+"',"
 						+ "'"+costing.getParticularType()+"',"
@@ -966,7 +1046,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<Costing> getCostingList(String styleId, String itemId) {
+	public List<Costing> getCostingList(String styleId, String itemId,String costingNo) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -987,7 +1067,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on cc.FabricationItemId = fi.id and cc.GroupType='1'\r\n" + 
 					"left join TbParticularItemInfo pi\r\n" + 
 					"on cc.FabricationItemId = pi.AutoId and cc.GroupType='2' \r\n"+
-					"where cc.styleId='"+styleId+"' and cc.itemId='"+itemId+"'";
+					"where cc.styleId='"+styleId+"' and cc.itemId='"+itemId+"' and cc.costingNo='"+costingNo+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1009,6 +1089,68 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return datalist;
 	}
+	
+	@Override
+	public List<Costing> getBuyerWiseCostingList(String buyerId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<Costing> datalist=new ArrayList<Costing>();	
+		Costing tempCosting = null;
+		try{	
+			tx=session.getTransaction();
+			tx.begin();	
+			String sql="select cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
+					"from TbStyleCreate sc\n" + 
+					"inner join TbCostingCreate cc\n" + 
+					"on sc.StyleId = cc.StyleId\n" + 
+					"left join TbStyleCreate styleC\n" + 
+					"on sc.StyleId = styleC.StyleId\n" + 
+					"left join tbItemDescription id\n" + 
+					"on cc.ItemId = id.itemid\n" + 
+					"where sc.BuyerId = '"+buyerId+"' \n" + 
+					"group by cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
+					"order by cc.costingNo desc";
+			if(buyerId.equals("0")) { 
+				sql="select cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
+					"from TbStyleCreate sc\n" + 
+					"inner join TbCostingCreate cc\n" + 
+					"on sc.StyleId = cc.StyleId\n" + 
+					"left join TbStyleCreate styleC\n" + 
+					"on sc.StyleId = styleC.StyleId\n" + 
+					"left join tbItemDescription id\n" + 
+					"on cc.ItemId = id.itemid\n" + 
+					"where sc.BuyerId != '"+buyerId+"' \n" + 
+					"group by cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
+					"order by cc.costingNo desc";
+			}
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempCosting = new Costing();
+				tempCosting.setCostingNo(element[0].toString());
+				tempCosting.setStyleId(element[1].toString());
+				tempCosting.setStyleName(element[2].toString());
+				tempCosting.setItemId(element[3].toString());
+				tempCosting.setItemName(element[4].toString());
+				datalist.add(tempCosting);				
+			}			
+			tx.commit();			
+		}	
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
 
 	@Override
 	public List<Costing> getCostingList() {
@@ -1016,23 +1158,26 @@ public class OrderDAOImpl implements OrderDAO{
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
-		List<Costing> datalist=new ArrayList<Costing>();	
+		List<Costing> datalist=new ArrayList<Costing>();
+		Costing temp = null;
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount,(select convert(varchar,cc.SubmissionDate,103))as date \r\n" + 
+			String sql="select cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount \r\n" + 
 					"from TbCostingCreate cc\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on cc.StyleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
 					"on cc.ItemId = id.itemid\r\n" + 
-					"group by cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,cc.SubmissionDate";
+					"group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				datalist.add(new Costing("0", element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), "","","", "", "",0.0, 0.0, 0.0, 0.0, 0.0, Double.valueOf(element[4].toString()), 0.0, element[5].toString(), "0"));				
+				temp = new Costing("0", element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), "","","", "", "",0.0, 0.0, 0.0, 0.0, 0.0, Double.valueOf(element[5].toString()), 0.0,"", "0");
+				temp.setCostingNo(element[0].toString());
+				datalist.add(temp);				
 			}			
 			tx.commit();			
 		}	
@@ -1049,7 +1194,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<Costing> cloningCosting(String oldStyleId, String oldItemId) {
+	public List<Costing> cloningCosting(String costingNo,String oldStyleId, String oldItemId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		List<Costing> datalist=new ArrayList<Costing>();
@@ -1069,7 +1214,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on cc.FabricationItemId = fi.id and cc.GroupType='1'\r\n" + 
 					"left join TbParticularItemInfo pi\r\n" + 
 					"on cc.FabricationItemId = pi.AutoId and cc.GroupType='2' \r\n"+
-					"where cc.styleId='"+oldStyleId+"' and cc.itemId='"+oldItemId+"'";
+					"where cc.costingNo='"+costingNo+"' and cc.styleId='"+oldStyleId+"' and cc.itemId='"+oldItemId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
