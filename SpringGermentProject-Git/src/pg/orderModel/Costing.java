@@ -2,6 +2,7 @@ package pg.orderModel;
 
 public class Costing {
 	String autoId;
+	String costingNo;
 	String styleId;
 	String styleName;
 	String itemId;
@@ -188,6 +189,14 @@ public class Costing {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+
+	public String getCostingNo() {
+		return costingNo;
+	}
+
+	public void setCostingNo(String costingNo) {
+		this.costingNo = costingNo;
 	}
 	
 	

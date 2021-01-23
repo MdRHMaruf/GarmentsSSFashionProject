@@ -52,11 +52,13 @@ public interface OrderService {
 	List<ParticularItem> getTypeWiseParticularList(String type);
 	public boolean saveCosting(Costing costing);
 	public String confirmCosting(List<Costing> costingList);
+	public String editCostingNo(List<Costing> costingList);
 	public boolean editCosting(Costing costing);
 	public boolean deleteCosting(String autoId);
-	List<Costing> getCostingList(String styleId,String itemId);
+	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
+	List<Costing> getBuyerWiseCostingList(String buyerId);
 	List<Costing> getCostingList();
-	public List<Costing> cloningCosting(String oldStyleId,String oldItemId);
+	public List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
 	//Buyder Po Order
