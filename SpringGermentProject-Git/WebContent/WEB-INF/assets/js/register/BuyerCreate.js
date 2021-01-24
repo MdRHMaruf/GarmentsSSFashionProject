@@ -70,7 +70,7 @@ function CountriesSearch(v){
 
 function insertBuyer(){
 	let user=$("#userId").val();
-
+	console.log("user id=",user);
 	let buyerid=$("#buyer_id").val();
 	let buyername=$("#buyer_name").val();
 	let buyercode=$("#buyer_code").val();
@@ -228,6 +228,7 @@ function createNewEvent(){
 
 
 function setData(data){
+	console.log(data);
 	$("#buyer_id").val(data[0]);
 	$("#buyer_name").val(data[1]);
 	$("#buyer_code").val(data[2]);

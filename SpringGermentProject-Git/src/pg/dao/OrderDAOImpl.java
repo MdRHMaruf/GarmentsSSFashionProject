@@ -3545,6 +3545,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "width,"
 						+ "Yard,"
 						+ "GSM,"
+						+ "markingWidth,"
 						+ "qty,"
 						+ "dozenqty,"
 						+ "consumption,"
@@ -3569,6 +3570,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("width")+"',"
 						+ "'"+indent.get("yard")+"',"
 						+ "'"+indent.get("gsm")+"',"
+						+ "'"+indent.get("markingWidth")+"',"
 						+ "'"+indent.get("orderQty")+"',"
 						+ "'"+indent.get("dozenQty")+"',"
 						+ "'"+indent.get("consumption")+"',"
@@ -3621,6 +3623,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "width='"+fabricsIndent.getWidth()+"',"
 					+ "Yard='"+fabricsIndent.getYard()+"',"
 					+ "GSM='"+fabricsIndent.getGsm()+"',"
+					+ "markingWidth='"+fabricsIndent.getMarkingWidth()+"',"
 					+ "qty='"+fabricsIndent.getQty()+"',"
 					+ "dozenqty='"+fabricsIndent.getDozenQty()+"',"
 					+ "consumption='"+fabricsIndent.getConsumption()+"',"
@@ -3719,12 +3722,12 @@ public class OrderDAOImpl implements OrderDAO{
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-
+		FabricsIndent tempFabrics = null;
 		List<FabricsIndent> datalist=new ArrayList<FabricsIndent>();	
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select rf.id,rf.PurchaseOrder,rf.styleId,sc.StyleNo,rf.itemId,id.itemname,rf.itemcolor,c.Colorname,rf.fabricsid,fi.ItemName,rf.qty,rf.dozenqty,rf.consumption,rf.inPercent,rf.PercentQty,TotalQty,rf.unitId,u.unitname  \r\n" + 
+			String sql="select rf.id,rf.PurchaseOrder,rf.styleId,sc.StyleNo,rf.itemId,id.itemname,rf.itemcolor,c.Colorname,rf.fabricsid,fi.ItemName,rf.qty,rf.dozenqty,rf.consumption,rf.inPercent,rf.PercentQty,TotalQty,rf.unitId,u.unitname,rf.markingWidth  \r\n" + 
 					"from tbFabricsIndent rf\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on rf.StyleId = sc.StyleId\r\n" + 
@@ -3742,7 +3745,9 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				datalist.add(new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), Double.valueOf(element[10].toString()),  Double.valueOf(element[11].toString()),  Double.valueOf(element[12].toString()),  Double.valueOf(element[13].toString()),  Double.valueOf(element[14].toString()),  Double.valueOf(element[15].toString()), element[16].toString(), element[17].toString()));		
+				tempFabrics = new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), Double.valueOf(element[10].toString()),  Double.valueOf(element[11].toString()),  Double.valueOf(element[12].toString()),  Double.valueOf(element[13].toString()),  Double.valueOf(element[14].toString()),  Double.valueOf(element[15].toString()), element[16].toString(), element[17].toString());
+				tempFabrics.setMarkingWidth(element[18].toString());
+				datalist.add(tempFabrics);		
 			}			
 			tx.commit();			
 		}	
@@ -3767,17 +3772,9 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-
-
-			String sql="select a.indentId,a.PurchaseOrder,a.styleId,\r\n" + 
-					"isnull(sc.StyleNo,'') as styleNo,a.itemid,\r\n" + 
-					"isnull(id.itemname,'')as itemName,(SELECT CONVERT(varchar, a.indentDate, 25)) as indentDate  \r\n" + 
+			String sql="select a.indentId,(SELECT CONVERT(varchar, a.indentDate, 25)) as indentDate  \r\n" + 
 					"from tbFabricsIndent a \r\n" + 
-					"left join tbStyleCreate sc\r\n" + 
-					"on a.styleId = cast(sc.StyleId as varchar)\r\n" + 
-					"left join tbItemDescription id\r\n" + 
-					"on a.itemid = cast(id.itemid as varchar)\r\n" + 
-					"where a.entryby='"+userId+"' group by a.indentId,a.purchaseorder,a.styleId,sc.StyleNo, a.itemid,id.itemname,a.indentDate  ";
+					"where a.entryby='"+userId+"' group by a.indentId,a.indentDate  order by a.indentDate desc";
 			session.createSQLQuery(sql).list();
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -3786,12 +3783,7 @@ public class OrderDAOImpl implements OrderDAO{
 				tempFabrics = new FabricsIndent();
 				Object[] element = (Object[]) iter.next();							
 				tempFabrics.setIndentId(element[0].toString());
-				tempFabrics.setPurchaseOrder(element[1].toString());
-				tempFabrics.setStyleId(element[2].toString());
-				tempFabrics.setStyleName(element[3].toString());
-				tempFabrics.setItemId(element[4].toString());
-				tempFabrics.setItemName(element[5].toString());
-				tempFabrics.setIndentDate(element[6].toString());
+				tempFabrics.setIndentDate(element[1].toString());
 				dataList.add(tempFabrics);
 			}
 			tx.commit();
@@ -3823,7 +3815,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select id,PurchaseOrder,styleId,itemid,itemcolor,fabricsid,(select ItemName from TbFabricsItem where id=rf.fabricsid) as FabricsName,qty,dozenqty,consumption,inPercent,PercentQty,TotalQty,unitId,width,Yard,GSM,RequireUnitQty,fabricscolor,brand,entryby from tbFabricsIndent rf where id = '"+autoId+"'";
+			String sql="select id,PurchaseOrder,styleId,itemid,itemcolor,fabricsid,(select ItemName from TbFabricsItem where id=rf.fabricsid) as FabricsName,qty,dozenqty,consumption,inPercent,PercentQty,TotalQty,unitId,width,Yard,GSM,RequireUnitQty,fabricscolor,brand,entryby,markingWidth from tbFabricsIndent rf where id = '"+autoId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -3831,7 +3823,7 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();
 
 				indent = new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(),  Double.valueOf(element[7].toString()),  Double.valueOf(element[8].toString()),  Double.valueOf(element[9].toString()),  Double.valueOf(element[10].toString()),  Double.valueOf(element[11].toString()), Double.valueOf(element[12].toString()),  element[13].toString(),  Double.valueOf(element[14].toString()),  Double.valueOf(element[15].toString()),  Double.valueOf(element[16].toString()), Double.valueOf(element[17].toString()), element[18].toString()  ,element[19].toString(),element[20].toString());
-
+				indent.setMarkingWidth(element[21].toString());
 			}			
 			tx.commit();			
 		}	
@@ -3858,7 +3850,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();	
 			String sql="select fi.id,fi.indentId,fi.PurchaseOrder,fi.styleId,isnull(sc.StyleNo,'') as styleNo,fi.itemid,isnull(id.itemname,'')as itemName,fi.itemcolor,isnull(itemColor.Colorname,'') as itemColorName,fabricsid,\r\n" + 
-					"fabricsI.ItemName as fabricsName,fi.fabricscolor,fabricsColor.Colorname as fabricsColorName,fi.qty,fi.dozenqty,fi.consumption,fi.inPercent,fi.PercentQty,fi.TotalQty,fi.unitId,u.unitname,fi.width,fi.Yard,fi.GSM,fi.RequireUnitQty,fi.brand,fi.entryby \r\n" + 
+					"fabricsI.ItemName as fabricsName,fi.fabricscolor,fabricsColor.Colorname as fabricsColorName,fi.qty,fi.dozenqty,fi.consumption,fi.inPercent,fi.PercentQty,fi.TotalQty,fi.unitId,u.unitname,fi.width,fi.Yard,fi.GSM,fi.RequireUnitQty,fi.brand,fi.entryby,fi.markingWidth \r\n" + 
 					"from tbFabricsIndent fi\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on fi.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -3906,6 +3898,7 @@ public class OrderDAOImpl implements OrderDAO{
 				indent.setGrandQty(Double.valueOf(element[24].toString()));
 				indent.setBrandId(element[25].toString());
 				indent.setUserId(element[26].toString());
+				indent.setMarkingWidth(element[27].toString());
 				indentList.add(indent);
 			}			
 			tx.commit();			
