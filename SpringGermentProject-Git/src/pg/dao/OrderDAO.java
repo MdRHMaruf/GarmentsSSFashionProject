@@ -43,7 +43,7 @@ public interface OrderDAO {
 	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
 	List<Style> getStyleWiseItemList(String userId);
-	List<Style> getStyleList();
+	List<Style> getStyleList(String userId);
 	List<Style> getStyleAndItem(String value);
 
 	//Costing Create
@@ -55,7 +55,7 @@ public interface OrderDAO {
 	boolean deleteCosting(String autoId);
 	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
 	List<Costing> getBuyerWiseCostingList(String buyerId);
-	List<Costing> getCostingList();
+	List<Costing> getCostingList(String userId);
 	//Buyer Po Order
 	List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
@@ -113,7 +113,7 @@ public interface OrderDAO {
 			String installAccessories, String forAccessories);
 
 	//Fabrics Indent
-	List<String> getPurchaseOrderList();
+	List<String> getPurchaseOrderList(String userId);
 	List<Color> getStyleItemWiseColor(String styleId,String itemId);
 	List<Style> getPOWiseStyleList(String purchaseOrder);
 	public String confirmFabricsIndent(String fabricsIndentId,String fabricsItems);

@@ -591,7 +591,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public List<Style> getStyleList() {
+	public List<Style> getStyleList(String userId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -599,7 +599,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql="select StyleId,StyleNo from TbStyleCreate order by StyleNo";		
+			String sql="select StyleId,StyleNo from TbStyleCreate where userId='"+userId+"' order by StyleNo";		
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1153,7 +1153,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<Costing> getCostingList() {
+	public List<Costing> getCostingList(String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1169,7 +1169,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on cc.StyleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
 					"on cc.ItemId = id.itemid\r\n" + 
-					"group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname";
+					"where cc.userId='"+userId+"' group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -3409,7 +3409,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<String> getPurchaseOrderList() {
+	public List<String> getPurchaseOrderList(String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -3420,7 +3420,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			String sql="select PurchaseOrder from TbBuyerOrderEstimateDetails where PurchaseOrder != '' group by PurchaseOrder order by PurchaseOrder";
+			String sql="select PurchaseOrder from TbBuyerOrderEstimateDetails where PurchaseOrder != '' and userId='"+userId+"' group by PurchaseOrder order by PurchaseOrder";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
@@ -4221,7 +4221,7 @@ public class OrderDAOImpl implements OrderDAO{
 			session.createSQLQuery(sql).executeUpdate();
 
 			//String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
-			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' ";
+			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and sampleReqId IS NULL";
 
 			session.createSQLQuery(sqlupdate).executeUpdate();
 
@@ -4290,7 +4290,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.sampleReqId,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.purchaseOrder,a.StyleId,a.Date";
+			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.purchaseOrder,a.StyleId,a.Date";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
