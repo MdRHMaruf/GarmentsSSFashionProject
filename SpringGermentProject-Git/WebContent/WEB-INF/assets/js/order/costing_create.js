@@ -1,5 +1,5 @@
-var itemIdForSet = 0;
-var particularItemIdForSet = 0;
+let itemIdForSet = 0;
+let particularItemIdForSet = 0;
 
 window.onload = () => {
   document.title = "Costing Create";
@@ -13,30 +13,29 @@ window.onload = () => {
   }
 }
 
-function itemWiseCostingReport(styleId, itemId) {
-
-
-  $.ajax({
-    type: 'GET',
-    dataType: 'json',
-    url: './costingReportInfo',
-    data: {
-      styleId: styleId,
-      itemId: itemId
-    },
-    success: function (data) {
-      if (data == "Success") {
-        var url = "printCostingReport";
-        window.open(url, '_blank');
-
-      }
-    }
-  });
+function itemWiseCostingReport(styleId, itemId,costingNo) {
+  // $.ajax({
+  //   type: 'GET',
+  //   dataType: 'json',
+  //   url: './costingReportInfo',
+  //   data: {
+  //     styleId: styleId,
+  //     itemId: itemId,
+  //     costingNo: costingNo
+  //   },
+  //   success: function (data) {
+  //     if (data == "Success") {
+       
+  //     }
+  //   }
+  // });
+  let url = `printCostingReport/${styleId}/${itemId}/${costingNo}`;
+  window.open(url, '_blank');
 
 }
 
 function styleWiseItemLoad() {
-  var styleId = $("#styleName").val();
+  let styleId = $("#styleName").val();
 
   if (styleId != 0) {
     $.ajax({
@@ -48,20 +47,20 @@ function styleWiseItemLoad() {
       },
       success: function (data) {
 
-        var itemList = data.itemList;
-        var options = "<option  value='0' selected>Select Item Name</option>";
-        var length = itemList.length;
-        for (var i = 0; i < length; i++) {
+        let itemList = data.itemList;
+        let options = "<option  value='0' selected>Select Item Name</option>";
+        let length = itemList.length;
+        for (let i = 0; i < length; i++) {
           options += "<option  value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
         };
         document.getElementById("itemName").innerHTML = options;
-        $('.selectpicker').selectpicker('refresh');
-        $('#itemName').val(itemIdForSet).change();
+        $('#itemName').selectpicker('refresh');
+        $("#itemName").prop("selectedIndex", 1).change();
         itemIdForSet = 0;
       }
     });
   } else {
-    var options = "<option  value='0' selected>Select Item Name</option>";
+    let options = "<option  value='0' selected>Select Item Name</option>";
     $("#itemName").html(options);
     $('#itemName').selectpicker('refresh');
     $('#itemName').val(0).change();
@@ -71,7 +70,7 @@ function styleWiseItemLoad() {
 }
 
 function typeWiseParticularLoad() {
-  var type = $("#particularType").val();
+  let type = $("#particularType").val();
 
   if (type != 0) {
     $.ajax({
@@ -83,10 +82,10 @@ function typeWiseParticularLoad() {
       },
       success: function (data) {
 
-        var particularList = data.particularList;
-        var options = "<option  value='0' selected>Select Particular Name</option>";
-        var length = particularList.length;
-        for (var i = 0; i < length; i++) {
+        let particularList = data.particularList;
+        let options = "<option  value='0' selected>Select Particular Name</option>";
+        let length = particularList.length;
+        for (let i = 0; i < length; i++) {
           options += "<option  value='" + particularList[i].particularItemId + "'>" + particularList[i].particularItemName + "</option>";
         };
         document.getElementById("particularName").innerHTML = options;
@@ -96,7 +95,7 @@ function typeWiseParticularLoad() {
       }
     });
   } else {
-    var options = "<option  value='0' selected>Select Particular Name</option>";
+    let options = "<option  value='0' selected>Select Particular Name</option>";
     $("#particularName").html(options);
     $('#particularName').selectpicker('refresh');
     $('#particularName').val(0).change();
@@ -106,12 +105,12 @@ function typeWiseParticularLoad() {
 
 
 function cloneButtonAction() {
-  var styleId = $("#styleName").val();
-  var itemId = $("#itemName").val();
+  let styleId = $("#styleName").val();
+  let itemId = $("#itemName").val();
   if (styleId != 0) {
     if (itemId != 0) {
       $('#cloneModal').modal('show');
-      var element = $(".alert");
+      let element = $(".alert");
       element.hide();
     } else {
       warningAlert("Item Type not selected... Please Select Item Type");
@@ -124,8 +123,9 @@ function cloneButtonAction() {
 }
 
 function loadCostingOnStyleChange() {
-  var styleId = $("#styleName").val();
-  var itemId = $("#itemName").val();
+  let styleId = $("#styleName").val();
+  let itemId = $("#itemName").val();
+  let costingNo = $("#costingNo").val();
   $("#dataList").empty();
   if (styleId != 0 && itemId != 0) {
     $.ajax({
@@ -134,7 +134,8 @@ function loadCostingOnStyleChange() {
       url: './searchCosting',
       data: {
         styleId: styleId,
-        itemId: itemId
+        itemId: itemId,
+        costingNo : costingNo
       },
       success: function (data) {
         if (data.result == "Something Wrong") {
@@ -158,17 +159,51 @@ function loadCostingOnStyleChange() {
   }
 }
 
-function cloningCosting(oldStyleId, oldItemId) {
-  var newStyleId = $("#styleName").val();
-  var newStyleName = $("#styleName option:selected").text();
-  var newItemId = $("#itemName").val();
-  var newItemName = $("#itemName option:selected").text();
-  var userId = $("#userId").val();
+function buyerWiseCostingLoad(){
+  let buyerId = $("#buyerName").val();
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './buyerWiseCostingSearch',
+    data: {
+      buyerId: buyerId
+    },
+    success: function (data) {
+      $("#groupCostingList").empty();
+      $("#groupCostingList").append(drawGroupCostingList(data.result));
+
+    }
+  });
+}
+
+function printGroupCosting(){
+
+  let groupStyleList = $("#groupCostingList tr");
+  let costingId = '';
+  groupStyleList.each((index,row)=>{
+
+    let id = row.getAttribute('data-id');
+    if($("#groupCheck-"+id).prop("checked")==true)
+      costingId += id+",";
+  });
+  console.log("Costing id-",costingId);
+  if(costingId.length >0){
+    
+  }
+}
+
+function cloningCosting(costingNo,oldStyleId, oldItemId) {
+  let newStyleId = $("#styleName").val();
+  let newStyleName = $("#styleName option:selected").text();
+  let newItemId = $("#itemName").val();
+  let newItemName = $("#itemName option:selected").text();
+  let userId = $("#userId").val();
   $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './cloningCosting',
     data: {
+      costingNo: costingNo,
       oldStyleId: oldStyleId,
       oldItemId: oldItemId,
       newStyleId: newStyleId,
@@ -216,8 +251,8 @@ function cloningCosting(oldStyleId, oldItemId) {
                               <td id='consumption-${id}'>${rowData.consumption}</td>
                               <td id='unitPrice-${id}'>${rowData.unitPrice}</td>
                               <td id='amount-${id}'>${rowData.amount}</td>
-                              <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
-                              <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${rowData.styleId}','${rowData.itemId}')"></i></td>
+                              <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')" style="cursor:pointer;"></i></td>
+                              <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${rowData.styleId}','${rowData.itemId}')" style="cursor:pointer;"></i></td>
                             </tr>`;
               $("#dataList").append(row);
 
@@ -259,30 +294,29 @@ function addAction() {
   const rowList = $("#dataList tr");
   const length = rowList.length;
   let isExist = false;
+  let costingNo = $("#costingNo").val();
 
 
+  let styleName = $("#styleName option:selected").text();
+  let styleId = $("#styleName").val();
+  let itemName = $("#itemName option:selected").text();
+  let itemId = $("#itemName").val();
+  let particularType = $("#particularType").val();
+  let particularName = $("#particularName option:selected").text();
+  let particularId = $("#particularName").val();
+  let unitId = $("#unit").val();
+  let commission = $("#commission").val() == "" ? 0 : $("#commission").val();
+  let width = $("#width").val() == "" ? 0 : $("#width").val();
+  let yard = $("#yard").val() == "" ? "0" : $("#yard").val();
+  let gsm = $("#gsm").val() == "" ? "0" : $("#gsm").val();
 
-  var styleName = $("#styleName option:selected").text();
-  var styleId = $("#styleName").val();
-  var itemName = $("#itemName option:selected").text();
-  var itemId = $("#itemName").val();
-  var particularType = $("#particularType").val();
-  var particularName = $("#particularName option:selected").text();
-  var particularId = $("#particularName").val();
-  var unitId = $("#unit").val();
-  var commission = $("#commission").val() == "" ? 0 : $("#commission").val();
-  var width = $("#width").val() == "" ? 0 : $("#width").val();
-  var yard = $("#yard").val() == "" ? "0" : $("#yard").val();
-  var gsm = $("#gsm").val() == "" ? "0" : $("#gsm").val();
-
-  var consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
-  var unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
-  var amount = Number(consumption) * Number(unitPrice);
+  let consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
+  let unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
+  let amount = Number(consumption) * Number(unitPrice);
 
 
   for (let i = 0; i < length; i++) {
-
-    if (particularId == rowList[i].getAttribute("data-particular-id")) {
+    if (particularId == rowList[i].getAttribute("data-particular-id") && particularType == rowList[i].getAttribute("data-particular-type")) {
       isExist = true;
       break;
     }
@@ -290,10 +324,6 @@ function addAction() {
 
   if (!isExist) {
     //console.log(sessionStorage.getItem("pendingCosting").itemList);
-    let sessionObject = JSON.parse(sessionStorage.getItem("pendingCosting") ? sessionStorage.getItem("pendingCosting") : "{}");
-    let itemList = sessionObject.itemList ? sessionObject.itemList : [];
-
-
     if (styleId != 0) {
       if (itemId != 0) {
         if (particularId != 0) {
@@ -303,28 +333,7 @@ function addAction() {
 
 
               const id = length;
-              itemList.push({
-                "autoId": id,
-                "styleId": styleId,
-                "styleName": styleName,
-                "itemId": itemId,
-                "itemName": itemName,
-                "particularType": particularType,
-                "particularId": particularId,
-                "particularName": particularName,
-                "unitId": unitId,
-                "commission": commission,
-                "width": width,
-                "yard": yard,
-                "gsm": gsm,
-                "consumption": consumption,
-                "unitPrice": unitPrice,
-                "amount": amount
-              });
-
-
-
-
+              
               const row = `<tr id='row-${id}' class='newCosting' data-type='newCosting' data-style-id='${styleId}' data-item-id='${itemId}' data-particular-type='${particularType}' data-particular-id='${particularId}' data-unit-id='${unitId}' data-commission='${commission}'>
                   <td id='styleNo-${id}'>${styleName}</td>
                   <td id='particularName-${id}'>${particularName}</td>
@@ -334,18 +343,42 @@ function addAction() {
                   <td id='consumption-${id}'>${consumption}</td>
                   <td id='unitPrice-${id}'>${unitPrice}</td>
                   <td id='amount-${id}'>${amount}</td>
-                  <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
-                  <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${styleId}','${itemId}')"></i></td>
+                  <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')" style="cursor:pointer;"></i></td>
+                  <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${styleId}','${itemId}')" style="cursor:pointer;"></i></td>
                 </tr>`;
               $("#dataList").append(row);
 
-              sessionObject = {
-                "styleId": styleId,
-                "itemId": itemId,
-                "itemList": itemList
-              }
+              if(costingNo == "New"){
+                let sessionObject = JSON.parse(sessionStorage.getItem("pendingCosting") ? sessionStorage.getItem("pendingCosting") : "{}");
+                let itemList = sessionObject.itemList ? sessionObject.itemList : [];
 
-              sessionStorage.setItem("pendingCosting", JSON.stringify(sessionObject));
+                itemList.push({
+                  "autoId": id,
+                  "styleId": styleId,
+                  "styleName": styleName,
+                  "itemId": itemId,
+                  "itemName": itemName,
+                  "particularType": particularType,
+                  "particularId": particularId,
+                  "particularName": particularName,
+                  "unitId": unitId,
+                  "commission": commission,
+                  "width": width,
+                  "yard": yard,
+                  "gsm": gsm,
+                  "consumption": consumption,
+                  "unitPrice": unitPrice,
+                  "amount": amount
+                });
+
+                sessionObject = {
+                  "styleId": styleId,
+                  "itemId": itemId,
+                  "itemList": itemList
+                }
+                sessionStorage.setItem("pendingCosting", JSON.stringify(sessionObject));
+              }
+              
 
             } else {
               warningAlert("Consumption is empty ... Please Enter Consumption");
@@ -374,26 +407,21 @@ function addAction() {
   } else {
     warningAlert("This Particular Item Already Exist , Please Change Particular Name or Click edit icon to change value....");
   }
-
-
-
-
 }
 
-$("#btnConfirm").click(() => {
+$("#btnNewCosting").click(() => {
   let rowList = $("#dataList tr");
   let length = rowList.length;
 
   if (length > 0) {
-    rowList = $("tr.newCosting");
-    length = rowList.length;
-    if (length > 0) {
+    // rowList = $("tr.newCosting");
+    // length = rowList.length;
+   
       let costingList = '';
 
       for (let i = 0; i < length; i++) {
         const newRow = rowList[i];
         const id = newRow.id.slice(4);
-
 
         let styleNo = $("#styleName option:selected").text();
         let styleId = $("#styleName").val();
@@ -410,7 +438,7 @@ $("#btnConfirm").click(() => {
         let consumption = $("#consumption-" + id).text();
         let unitPrice = $("#unitPrice-" + id).text();
         let amount = $("#amount-" + id).text();
-        var submissionDate = $("#submissionDate").val();
+        let submissionDate = $("#submissionDate").val();
         let userId = $("#userId").val();
 
         costingList += `autoId : ${id},styleId : ${styleId},styleNo : ${styleNo},itemId : ${itemId},itemName : ${itemName},particularType : ${particularType},particularId : ${particularId},particularName : ${particularName}
@@ -431,10 +459,83 @@ $("#btnConfirm").click(() => {
             } else if (data.result == "duplicate") {
               dangerAlert("Duplicate Item Name..This Item Name Already Exist")
             } else {
-
               // $("#dataList").empty();
               // $("#dataList").append(drawDataTable(data.result));
               successAlert("Costing Item Save Successfully");
+              $("#costingNo").val(data.result);
+              $("#badgeCostingNo").text(data.result);
+              $("#btnEditCosting").show();
+              $("#dataList").empty();
+              $("#dataList").append(drawDataTable(data.particularList));
+                     
+              sessionStorage.setItem("pendingCosting",false);
+            }
+          }
+        });
+      }
+
+  } else {
+    warningAlert("Please Enter Any Particular Name...");
+  }
+});
+
+
+$("#btnEditCosting").click(() => {
+  let rowList = $("#dataList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.newCosting");
+    length = rowList.length;
+    if (length > 0) {
+      let costingList = '';
+      let costingNo = $("#costingNo").val();
+      for (let i = 0; i < length; i++) {
+        const newRow = rowList[i];
+        const id = newRow.id.slice(4);
+
+        let styleNo = $("#styleName option:selected").text();
+        let styleId = $("#styleName").val();
+        let itemName = $("#itemName option:selected").text();
+        let itemId = $("#itemName").val();
+        let particularType = newRow.getAttribute("data-particular-type");
+        let particularName = $("#particularName -" + id).text();
+        let particularId = newRow.getAttribute("data-particular-id");
+        let unitId = newRow.getAttribute("data-unit-id");
+        let commission = newRow.getAttribute("data-commission");
+        let width = $("#width-" + id).text();
+        let yard = $("#yard-" + id).text();
+        let gsm = $("#gsm-" + id).text();
+        let consumption = $("#consumption-" + id).text();
+        let unitPrice = $("#unitPrice-" + id).text();
+        let amount = $("#amount-" + id).text();
+        let submissionDate = $("#submissionDate").val();
+        let userId = $("#userId").val();
+
+        costingList += `autoId : ${id},styleId : ${styleId},styleNo : ${styleNo},itemId : ${itemId},itemName : ${itemName},particularType : ${particularType},particularId : ${particularId},particularName : ${particularName}
+                      ,unitId : ${unitId},commission : ${commission},width : ${width},yard : ${yard},gsm : ${gsm},consumption : ${consumption},unitPrice : ${unitPrice},amount : ${amount},submissionDate : ${submissionDate},userId : ${userId},costingNo: ${costingNo} #`;
+      }
+      costingList = costingList.slice(0, -1);
+      if (confirm("Are you sure to confirm..")) {
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: './editCostingNo',
+          data: {
+            costingList: costingList
+          },
+          success: function (data) {
+            if (data.result == "Something Wrong") {
+              dangerAlert("Something went wrong");
+            } else if (data.result == "duplicate") {
+              dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+            } else {
+              // $("#dataList").empty();
+              // $("#dataList").append(drawDataTable(data.result));
+              successAlert("Costing Item Save Successfully");
+              $("#dataList").empty();
+              $("#dataList").append(drawDataTable(data.particularList));
+                     
               sessionStorage.setItem("pendingCosting",false);
             }
           }
@@ -449,25 +550,25 @@ $("#btnConfirm").click(() => {
 
 function editAction() {
 
-  var autoId = $("#itemAutoId").val();
-  var itemType = $("#itemType").val();
-  var styleId = $("#styleName").val();
-  var styleName = $("#styleName option:selected").text();
-  var itemId = $("#itemName").val();
-  var itemName = $("#itemName option:selected").text();
-  var particularType = $("#particularType").val();
-  var particularId = $("#particularName").val();
-  var particularName = $("#particularName option:selected").text();
-  var unitId = $("#unit").val();
-  var commission = $("#commission").val() == "" ? 0 : $("#commission").val();
-  var submissionDate = $("#submissionDate").val();
-  var width = $("#width").val() == "" ? 0 : $("#width").val();
-  var yard = $("#yard").val() == "" ? "0" : $("#yard").val();
-  var gsm = $("#gsm").val() == "" ? "0" : $("#gsm").val();
-  var consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
-  var unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
-  var amount = Number(consumption) * Number(unitPrice);
-  var userId = $("#userId").val();
+  let autoId = $("#itemAutoId").val();
+  let itemType = $("#itemType").val();
+  let styleId = $("#styleName").val();
+  let styleName = $("#styleName option:selected").text();
+  let itemId = $("#itemName").val();
+  let itemName = $("#itemName option:selected").text();
+  let particularType = $("#particularType").val();
+  let particularId = $("#particularName").val();
+  let particularName = $("#particularName option:selected").text();
+  let unitId = $("#unit").val();
+  let commission = $("#commission").val() == "" ? 0 : $("#commission").val();
+  let submissionDate = $("#submissionDate").val();
+  let width = $("#width").val() == "" ? 0 : $("#width").val();
+  let yard = $("#yard").val() == "" ? "0" : $("#yard").val();
+  let gsm = $("#gsm").val() == "" ? "0" : $("#gsm").val();
+  let consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
+  let unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
+  let amount = Number(consumption) * Number(unitPrice);
+  let userId = $("#userId").val();
 
 
 
@@ -533,12 +634,14 @@ function editAction() {
                 }
 
               } else {
+                let costingNo = $("#costingNo").val();
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
                   url: './editCosting',
                   data: {
                     autoId: autoId,
+                    costingNo: costingNo,
                     styleId: styleId,
                     itemId: itemId,
                     particularType: particularType,
@@ -616,7 +719,7 @@ function refreshAction() {
 
 
 function inputSetByUnit() {
-  var unit = $("#unit option:selected").text();
+  let unit = $("#unit option:selected").text();
 
   if (unit.toLowerCase() == "kg") {
     $("#gsm").val("0");
@@ -631,11 +734,14 @@ function inputSetByUnit() {
   }
 }
 
-function searchCosting(styleId, itemId) {
+function searchCosting(styleId, itemId,costingNo) {
 
+  $("#costingNo").val(costingNo);
+  $("#badgeCostingNo").text(costingNo);
   $("#dataList").empty();
   itemIdForSet = itemId;
   $("#styleName").val(styleId).change();
+  $("#btnEditCosting").show();
   // $.ajax({
   //   type: 'GET',
   //   dataType: 'json',
@@ -651,7 +757,7 @@ function searchCosting(styleId, itemId) {
   //       dangerAlert("Duplicate Item Name..This Item Name Already Exist")
   //     } else {
   //       $('#searchModal').modal('hide');
-  //       var costingList = data.result;
+  //       let costingList = data.result;
   //       itemIdForSet = costingList[0].itemId;
   //       $("#styleName").val(costingList[0].styleId).change();
   //       $("#dataList").empty();
@@ -693,7 +799,7 @@ function costingItemSet(autoId, itemType) {
           dangerAlert("Duplicate Item Name..This Item Name Already Exist")
         } else {
 
-          var costing = data.result;
+          let costing = data.result;
           $("#itemAutoId").val(costing.autoId);
           $("#itemType").val("old");
           itemIdForSet = costing.itemId;
@@ -703,7 +809,7 @@ function costingItemSet(autoId, itemType) {
           $("#particularName").val(costing.particularId).change();
           $("#unit").val(costing.unitId).change();
           $("#commission").val(costing.commission);
-          var date = costing.date.split("/");
+          let date = costing.date.split("/");
           $("#submissionDate").val(date[2] + "-" + date[1] + "-" + date[0]);
           $("#width").val(costing.width);
           $("#yard").val(costing.yard);
@@ -731,6 +837,7 @@ function deleteCostingItem(autoId, rowType, styleId, itemId) {
 
       $("#row-" + autoId).remove();
     } else {
+      let costingNo = $("#costingNo").val();
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -738,7 +845,8 @@ function deleteCostingItem(autoId, rowType, styleId, itemId) {
         data: {
           autoId: autoId,
           styleId: styleId,
-          itemId: itemId
+          itemId: itemId,
+          costingNo : costingNo
         },
         success: function (data) {
           if (data.result == "Something Wrong") {
@@ -747,7 +855,7 @@ function deleteCostingItem(autoId, rowType, styleId, itemId) {
             dangerAlert("Duplicate Item Name..This Item Name Already Exist")
           } else {
 
-            var costingList = data.result;
+            let costingList = data.result;
             // if (costingList.size > 0) {
             //   itemIdForSet = costingList[0].itemId;
             //   $("#styleName").val(costingList[0].styleId).change();
@@ -773,7 +881,7 @@ function drawDataTable(data) {
   let rows = "";
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
     rows += `<tr id='row-${id}' class='previousCosting' data-type='previousCosting' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-particular-type='${rowData.particularType}' data-particular-id='${rowData.particularId}' data-unit-id='${rowData.unitId}' data-commission='${rowData.commission}'>
@@ -785,8 +893,8 @@ function drawDataTable(data) {
             <td id='consumption-${id}'>${rowData.consumption}</td>
             <td id='unitPrice-${id}'>${rowData.unitPrice}</td>
             <td id='amount-${id}'>${rowData.amount}</td>
-            <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','old')"></i></td>
-            <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','old','${rowData.styleId}','${rowData.itemId}')"></i></td>
+            <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','old')" style="cursor:pointer;"></i></td>
+            <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','old','${rowData.styleId}','${rowData.itemId}')" style="cursor:pointer;"></i></td>
     </tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
@@ -799,7 +907,7 @@ function drawSessionDataTable(data) {
   let rows = "";
   const length = data.length;
 
-  for (var i = 0; i < length; i++) {
+  for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
     rows += `<tr id='row-${id}' class='newCosting' data-type='newCosting' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-particular-type='${rowData.particularType}' data-particular-id='${rowData.particularId}' data-unit-id='${rowData.unitId}' data-commission='${rowData.commission}'>
@@ -811,8 +919,8 @@ function drawSessionDataTable(data) {
             <td id='consumption-${id}'>${rowData.consumption}</td>
             <td id='unitPrice-${id}'>${rowData.unitPrice}</td>
             <td id='amount-${id}'>${rowData.amount}</td>
-            <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')"></i></td>
-            <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${rowData.styleId}','${rowData.itemId}')"></i></td>
+            <td ><i class='fa fa-edit' onclick="costingItemSet('${id}','new')" style="cursor:pointer;"></i></td>
+            <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${rowData.styleId}','${rowData.itemId}')" style="cursor:pointer;"></i></td>
     </tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
@@ -820,8 +928,28 @@ function drawSessionDataTable(data) {
   return rows;
 }
 
+
+function drawGroupCostingList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (let i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='groupRow-${costing.costingNo }' data-id='${costing.costingNo}'>
+    <td>${rowData.costingNo}</td>
+    <td>${rowData.styleName}</td>
+    <td>${rowData.itemName}</td>
+    <td><input id='groupCheck-${costing.costingNo}' type="checkbox" /></td>
+  </tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+
+  return rows;
+}
+
 function successAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-success");
   document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
@@ -832,7 +960,7 @@ function successAlert(message) {
 }
 
 function warningAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-warning");
   document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
@@ -843,7 +971,7 @@ function warningAlert(message) {
 }
 
 function dangerAlert(message) {
-  var element = $(".alert");
+  let element = $(".alert");
   element.hide();
   element = $(".alert-danger");
   document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
@@ -861,7 +989,7 @@ $(document).ready(function () {
 });
 $(document).ready(function () {
   $("#searchCosting").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#costingListTable tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
@@ -870,12 +998,12 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $("#cloneCostingSearch").on("keyup", function () {
-    var value = $(this).val().toLowerCase();
+    let value = $(this).val().toLowerCase();
     $("#cloneCostingTable tr").filter(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
 });
 
-var today = new Date();
+let today = new Date();
 document.getElementById("submissionDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);

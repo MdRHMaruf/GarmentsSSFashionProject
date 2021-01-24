@@ -36,7 +36,7 @@ public class SpringRootConfig {
        public BasicDataSource getDataSource(){
            BasicDataSource bds=new BasicDataSource();
            bds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-          // bds.setUrl("jdbc:sqlserver://172.16.50.54:1433;databaseName =SSFashionSpringProject");
+           //bds.setUrl("jdbc:sqlserver://172.16.50.54:1433;databaseName =SSFashionSpringProject");
            bds.setUrl("jdbc:sqlserver://localhost;databaseName =SSFashionSpringProject");
            bds.setUsername("sa");
            bds.setPassword("Cursor777");

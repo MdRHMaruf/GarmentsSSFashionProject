@@ -96,8 +96,8 @@ public class OrderController {
 	private RegisterService registerService;
 
 	String poid;
-	String styleid;
-	String itemid;
+	//String styleid;
+	//String itemid;
 	String sampleId;
 	
 	String empCode[],dept,userId;
@@ -113,7 +113,7 @@ public class OrderController {
 
 	String FrontImg="",BackImg;
 
-	String StyleId="",ItemId="",AiNo="",BuyerPoId="",SampleReqId="";
+	String AiNo="",BuyerPoId="",SampleReqId="";
 
 
 	private String getImageName(CommonsMultipartFile frontImage, HttpSession session) throws IOException  {
@@ -165,10 +165,12 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/costing_create");
 		List<Unit> unitList= registerService.getUnitList();	
 		List<Style> styleList= orderService.getStyleList();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<ParticularItem> particularList = orderService.getTypeWiseParticularList("1");
 		List<Costing> costingList = orderService.getCostingList();
 		map.addAttribute("styleList",styleList);
 		map.addAttribute("unitList",unitList);
+		map.addAttribute("buyerList",buyerList);
 		map.addAttribute("particularList",particularList);
 		map.addAttribute("costingList",costingList);
 		
@@ -179,16 +181,16 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
-	public @ResponseBody JSONObject cloningCosting(String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
+	public @ResponseBody JSONObject cloningCosting(String costingNo,String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
 		JSONObject objmain = new JSONObject();
 
-		List<Costing> costingList = orderService.cloningCosting(oldStyleId,oldItemId);
+		List<Costing> costingList = orderService.cloningCosting(costingNo,oldStyleId,oldItemId);
 		objmain.put("result",costingList);
 
 		return objmain;
 	}
 
-	@RequestMapping(value = "/saveCosting",method=RequestMethod.POST)
+	/*@RequestMapping(value = "/saveCosting",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveCosting(Costing costing) {
 		JSONObject objmain = new JSONObject();
 		if(orderService.saveCosting(costing)) {
@@ -198,7 +200,7 @@ public class OrderController {
 			objmain.put("result", "Something Wrong");
 		}
 		return objmain;
-	}
+	}*/
 
 	@RequestMapping(value = "/confirmCosting",method=RequestMethod.POST)
 	public @ResponseBody JSONObject confirmCosting(String costingList) {
@@ -208,7 +210,7 @@ public class OrderController {
 			String[] itemList = costingList.split("#");
 			System.out.println("Item List size="+itemList.length);
 			List<Costing> list = new ArrayList<Costing>();
-			String autoId,styleId,styleNo,itemId,itemName,particularType,particularId,particularName,unitId,commission,width,yard,gsm,consumption,unitPrice,amount,date,userId;
+			String autoId,styleId="",styleNo,itemId="",itemName,particularType,particularId,particularName,unitId,commission,width,yard,gsm,consumption,unitPrice,amount,date,userId;
 
 			for (String item : itemList) {
 				System.out.println(item);
@@ -233,7 +235,58 @@ public class OrderController {
 				userId = itemProperty[17].substring(itemProperty[17].indexOf(":")+1).trim();
 				list.add(new Costing(autoId, styleId, itemId, particularType, particularId, unitId, Double.valueOf(width), Double.valueOf(yard), Double.valueOf(gsm), Double.valueOf(consumption), Double.valueOf(unitPrice), Double.valueOf(amount), Double.valueOf(commission), date, userId));
 			}
-			objmain.put("result",orderService.confirmCosting(list));
+			String costingNo = orderService.confirmCosting(list);
+			objmain.put("result",costingNo);
+			objmain.put("particularList",orderService.getCostingList(styleId, itemId, costingNo));
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+
+
+		return objmain;
+	}
+	
+	
+	@RequestMapping(value = "/editCostingNo",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editCostingNo(String costingList) {
+		JSONObject objmain = new JSONObject();
+
+		try {
+			String[] itemList = costingList.split("#");
+			System.out.println("Item List size="+itemList.length);
+			List<Costing> list = new ArrayList<Costing>();
+			Costing temp = null;
+			String costingNo="",autoId,styleId="",styleNo,itemId="",itemName,particularType,particularId,particularName,unitId,commission,width,yard,gsm,consumption,unitPrice,amount,date,userId;
+
+			for (String item : itemList) {
+				System.out.println(item);
+				String[] itemProperty = item.split(",");
+				autoId = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
+				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
+				styleNo = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
+				itemId = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
+				itemName = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				particularType = itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim();
+				particularId = itemProperty[6].substring(itemProperty[6].indexOf(":")+1).trim();
+				particularName = itemProperty[7].substring(itemProperty[7].indexOf(":")+1).trim();
+				unitId = itemProperty[8].substring(itemProperty[8].indexOf(":")+1).trim();
+				commission = itemProperty[9].substring(itemProperty[9].indexOf(":")+1).trim();
+				width = itemProperty[10].substring(itemProperty[10].indexOf(":")+1).trim();
+				yard = itemProperty[11].substring(itemProperty[11].indexOf(":")+1).trim();
+				gsm = itemProperty[12].substring(itemProperty[12].indexOf(":")+1).trim();
+				consumption = itemProperty[13].substring(itemProperty[13].indexOf(":")+1).trim();
+				unitPrice = itemProperty[14].substring(itemProperty[14].indexOf(":")+1).trim();
+				amount = itemProperty[15].substring(itemProperty[15].indexOf(":")+1).trim();
+				date = itemProperty[16].substring(itemProperty[16].indexOf(":")+1).trim();
+				userId = itemProperty[17].substring(itemProperty[17].indexOf(":")+1).trim();
+				costingNo = itemProperty[18].substring(itemProperty[18].indexOf(":")+1).trim();
+				temp = new Costing(autoId, styleId, itemId, particularType, particularId, unitId, Double.valueOf(width), Double.valueOf(yard), Double.valueOf(gsm), Double.valueOf(consumption), Double.valueOf(unitPrice), Double.valueOf(amount), Double.valueOf(commission), date, userId);
+				temp.setCostingNo(costingNo);
+				list.add(temp);
+			}
+			
+			objmain.put("result",orderService.editCostingNo(list));
+			objmain.put("particularList",orderService.getCostingList(styleId, itemId, costingNo));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -247,7 +300,7 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 		if(orderService.editCosting(costing)) {
 
-			List<Costing> costingList = orderService.getCostingList(costing.getStyleId(),costing.getItemId());
+			List<Costing> costingList = orderService.getCostingList(costing.getStyleId(),costing.getItemId(),costing.getCostingNo());
 
 			objmain.put("result",costingList);
 		}else {
@@ -258,11 +311,11 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/deleteCosting",method=RequestMethod.GET)
-	public @ResponseBody JSONObject deleteCosting(String autoId,String styleId,String itemId) {
+	public @ResponseBody JSONObject deleteCosting(String autoId,String styleId,String itemId,String costingNo) {
 		JSONObject objmain = new JSONObject();
 		if(orderService.deleteCosting(autoId)) {
 
-			List<Costing> costingList = orderService.getCostingList(styleId,itemId);
+			List<Costing> costingList = orderService.getCostingList(styleId,itemId,costingNo);
 
 			objmain.put("result",costingList);
 		}else {
@@ -273,11 +326,21 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/searchCosting",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchCosting(String styleId,String itemId) {
+	public @ResponseBody JSONObject searchCosting(String styleId,String itemId,String costingNo) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
-		List<Costing> costingList = orderService.getCostingList(styleId,itemId);
+		List<Costing> costingList = orderService.getCostingList(styleId,itemId,costingNo);
+		objmain.put("result",costingList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/buyerWiseCostingSearch",method=RequestMethod.GET)
+	public @ResponseBody JSONObject buyerWiseCostingSearch(String buyerId) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<Costing> costingList = orderService.getBuyerWiseCostingList(buyerId);
 		objmain.put("result",costingList);
 		return objmain;
 	}
@@ -292,22 +355,23 @@ public class OrderController {
 		return objmain;
 	}
 
-	@RequestMapping(value = "/costingReportInfo",method=RequestMethod.GET)
+	/*@RequestMapping(value = "/costingReportInfo",method=RequestMethod.GET)
 	public @ResponseBody String costingReportInfo(String styleId,String itemId) {
 		this.StyleId=styleId;
 		this.ItemId=itemId;
 		return "Success";
-	}
+	}*/
 
-	@RequestMapping(value = "/printCostingReport",method=RequestMethod.GET)
-	public @ResponseBody ModelAndView printCostingReport(ModelMap map) {
+	@RequestMapping(value = "/printCostingReport/{styleId}/{itemId}/{costingNo}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printCostingReport(ModelMap map,@PathVariable("styleId") String styleId,@PathVariable("itemId") String itemId,@PathVariable("costingNo") String costingNo) {
 
 
 		ModelAndView view=new ModelAndView("order/printCostingReport");
 
 
-		map.addAttribute("StyleId", StyleId);
-		map.addAttribute("ItemId", ItemId);
+		map.addAttribute("StyleId", styleId);
+		map.addAttribute("ItemId", itemId);
+		map.addAttribute("costingNo", costingNo);
 
 		return view;
 	}

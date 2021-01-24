@@ -50,12 +50,14 @@ public interface OrderDAO {
 	List<ParticularItem> getTypeWiseParticularList(String type);
 	boolean saveCosting(Costing costing);
 	String confirmCosting(List<Costing> costingList);
+	String editCostingNo(List<Costing> costingList);
 	boolean editCosting(Costing costing);
 	boolean deleteCosting(String autoId);
-	List<Costing> getCostingList(String styleId,String itemId);
+	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
+	List<Costing> getBuyerWiseCostingList(String buyerId);
 	List<Costing> getCostingList();
 	//Buyer Po Order
-	List<Costing> cloningCosting(String oldStyleId,String oldItemId);
+	List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
 

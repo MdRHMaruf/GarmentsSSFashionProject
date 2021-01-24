@@ -23,11 +23,11 @@
 		
     	String StyleId=(String)request.getAttribute("StyleId");
     	String ItemId=(String)request.getAttribute("ItemId");
-	
+    	String costingNo=(String)request.getAttribute("costingNo");
     	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select *,(select frontpic from tbStyleWiseItem where styleid='"+StyleId+"' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName) )as frontpic,(select backpic from tbStyleWiseItem where styleid='"+StyleId+"' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName)) as backpic from funCostingForStyleWiseItem('"+StyleId+"','"+ItemId+"') a order by a.ItemName desc";
+		String Sql="select *,(select frontpic from tbStyleWiseItem where styleid='"+StyleId+"' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName) )as frontpic,(select backpic from tbStyleWiseItem where styleid='"+StyleId+"' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName)) as backpic from funCostingForStyleWiseItem('"+StyleId+"','"+ItemId+"','"+costingNo+"') a order by a.ItemName desc";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CostingCreateReport.jrxml");

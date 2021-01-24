@@ -144,6 +144,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.confirmCosting(costingList);
 	}
+	
+	@Override
+	public String editCostingNo(List<Costing> costingList) {
+		// TODO Auto-generated method stub
+		return orderDAO.editCostingNo(costingList);
+	}
 
 	@Override
 	public boolean editCosting(Costing costing) {
@@ -158,9 +164,15 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Costing> getCostingList(String styleId, String itemId) {
+	public List<Costing> getCostingList(String styleId, String itemId,String costingNo) {
 		// TODO Auto-generated method stub
-		return orderDAO.getCostingList(styleId, itemId);
+		return orderDAO.getCostingList(styleId, itemId, costingNo);
+	}
+	
+	@Override
+	public List<Costing> getBuyerWiseCostingList(String buyerId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getBuyerWiseCostingList(buyerId);
 	}
 
 	@Override
@@ -170,9 +182,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Costing> cloningCosting(String oldStyleId, String oldItemId) {
+	public List<Costing> cloningCosting(String costingNo,String oldStyleId, String oldItemId) {
 		// TODO Auto-generated method stub
-		return orderDAO.cloningCosting(oldStyleId, oldItemId);
+		return orderDAO.cloningCosting(costingNo,oldStyleId, oldItemId);
 	}
 
 	@Override
