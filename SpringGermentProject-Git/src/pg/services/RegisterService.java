@@ -41,7 +41,7 @@ public interface RegisterService {
 	public List<String> BuyersList(String value);
 	public List<BuyerModel> BuyersDetails(String value);
 	public boolean editBuyer(BuyerModel buyer);
-	public List<BuyerModel> getAllBuyers();
+	public List<BuyerModel> getAllBuyers(String userId);
 	
 	
 	//Supplier Create

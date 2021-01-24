@@ -69,7 +69,7 @@ function CountriesSearch(v){
 
 
 function insertBuyer(){
-	let user=$("#user_hidden").val();
+	let user=$("#userId").val();
 
 	let buyerid=$("#buyer_id").val();
 	let buyername=$("#buyer_name").val();
@@ -254,7 +254,7 @@ function setData(data){
 
 function editBuyer(){
 	
-	let user=$("#user_hidden").val();
+	let user=$("#userId").val();
 
 	let buyerid=$("#buyer_id").val();
 	let buyername=$("#buyer_name").val();
@@ -348,14 +348,14 @@ function editBuyer(){
 function GetAllBuyers(){
 	//$("#itemtable").addClass('ac_loading');
 
-
+	let user=$("#userId").val();
 
 
 	$.ajax({
 
-		type:'POST',
+		type:'GET',
 		dataType:'json',
-		url:'./getAllBuyers',
+		url:'./getAllBuyers/'+user,
 		success:function(data)
 		{
 			

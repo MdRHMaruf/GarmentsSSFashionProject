@@ -114,9 +114,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Style> getStyleWiseItemList() {
+	public List<Style> getStyleWiseItemList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getStyleWiseItemList();
+		return orderDAO.getStyleWiseItemList(userId);
 	}
 
 
@@ -236,9 +236,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<BuyerPO> getBuyerPoList() {
+	public List<BuyerPO> getBuyerPoList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getBuyerPoList();
+		return orderDAO.getBuyerPoList(userId);
 	}
 
 	@Override
@@ -255,9 +255,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<CommonModel> PurchaseOrders() {
+	public List<CommonModel> PurchaseOrders(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.PurchaseOrders();
+		return orderDAO.PurchaseOrders(userId);
 	}
 
 	@Override
@@ -388,9 +388,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<AccessoriesIndent> getPostedAccessoriesIndent() {
+	public List<AccessoriesIndent> getPostedAccessoriesIndent(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPostedAccessoriesIndent();
+		return orderDAO.getPostedAccessoriesIndent(userId);
 	}
 
 	@Override
@@ -652,9 +652,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
+	public List<FabricsIndent> getStyleDetailsForFabricsIndent(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getStyleDetailsForFabricsIndent();
+		return orderDAO.getStyleDetailsForFabricsIndent(userId);
 	}
 
 	@Override

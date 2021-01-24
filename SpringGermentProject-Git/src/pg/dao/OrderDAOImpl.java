@@ -622,7 +622,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public List<Style> getStyleWiseItemList() {
+	public List<Style> getStyleWiseItemList(String userId) {
 
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -636,7 +636,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 			//String sql="select a.Id,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId from tbStyleWiseItem a order by StyleId,BuyerId";
-			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a order by StyleId,BuyerId";
+			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' order by StyleId,BuyerId";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			String StyleNo="",PerStyle="";
@@ -1622,7 +1622,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<BuyerPO> getBuyerPoList() {
+	public List<BuyerPO> getBuyerPoList(String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1634,7 +1634,7 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="select autoId,BuyerId,b.name,(select convert(varchar,bos.EntryTime,103))as date from TbBuyerOrderEstimateSummary bos\r\n" + 
 					"join tbBuyer b\r\n" + 
 					"on b.id = bos.BuyerId\r\n" + 
-					"order by bos.autoId desc";
+					" where bos.userId='"+userId+"' order by bos.autoId desc";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1748,7 +1748,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<CommonModel> PurchaseOrders() {
+	public List<CommonModel> PurchaseOrders(String userId) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
@@ -1760,7 +1760,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails group by BuyerOrderId,PurchaseOrder";
+			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where userId='"+userId+"' group by BuyerOrderId,PurchaseOrder";
 			System.out.println(" max ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -2474,7 +2474,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<AccessoriesIndent> getPostedAccessoriesIndent() {
+	public List<AccessoriesIndent> getPostedAccessoriesIndent(String userId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -2486,7 +2486,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, a.IndentDate, 25)) indentDate\r\n" + 
 					"from tbAccessoriesIndent a \r\n" + 
-					"where AiNo IS NOT NULL \r\n" + 
+					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
 					"group by a.AINo,a.PurchaseOrder,a.IndentDate";
 
 
@@ -3759,7 +3759,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<FabricsIndent> getStyleDetailsForFabricsIndent() {
+	public List<FabricsIndent> getStyleDetailsForFabricsIndent(String userId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		FabricsIndent tempFabrics = null;
@@ -3777,7 +3777,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on a.styleId = cast(sc.StyleId as varchar)\r\n" + 
 					"left join tbItemDescription id\r\n" + 
 					"on a.itemid = cast(id.itemid as varchar)\r\n" + 
-					"group by a.indentId,a.purchaseorder,a.styleId,sc.StyleNo, a.itemid,id.itemname,a.indentDate  ";
+					"where a.entryby='"+userId+"' group by a.indentId,a.purchaseorder,a.styleId,sc.StyleNo, a.itemid,id.itemname,a.indentDate  ";
 			session.createSQLQuery(sql).list();
 
 			List<?> list = session.createSQLQuery(sql).list();

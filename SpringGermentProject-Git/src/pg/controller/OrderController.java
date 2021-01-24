@@ -165,7 +165,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/costing_create");
 		List<Unit> unitList= registerService.getUnitList();	
 		List<Style> styleList= orderService.getStyleList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<ParticularItem> particularList = orderService.getTypeWiseParticularList("1");
 		List<Costing> costingList = orderService.getCostingList();
 		map.addAttribute("styleList",styleList);
@@ -436,10 +436,10 @@ public class OrderController {
 		
 		ModelAndView view = new ModelAndView("order/buyer-purchase-order");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<Color> colorList = registerService.getColorList();
-		List<BuyerPO> buyerPoList = orderService.getBuyerPoList();
+		List<BuyerPO> buyerPoList = orderService.getBuyerPoList(userId);
 		view.addObject("groupList",groupList);
 		view.addObject("buyerList",buyerList);
 		view.addObject("factoryList",factoryList);
@@ -702,7 +702,7 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/fileupload");
-		view.addObject("buyer", registerService.getAllBuyers());
+		view.addObject("buyer", registerService.getAllBuyers(userId));
 		view.addObject("dept", registerService.getDepartmentList());
 		
 		map.addAttribute("userId",userId);
@@ -940,13 +940,13 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
-		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent();
+		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent(userId);
 
 		//List<commonModel>unit=orderService.Unit();
 		List<CommonModel>brand=orderService.Brands();
@@ -1406,8 +1406,8 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
 		//List<CommonModel>unit=orderService.Unit();
 
@@ -1608,9 +1608,9 @@ public class OrderController {
 		
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
-		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent();
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders();
+			
+		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent(userId);
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Brand> brandList = registerService.getBrandList();
@@ -1731,7 +1731,7 @@ public class OrderController {
 		
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<Style> styleList= orderService.getStyleList();
 		List<Color> colorList = registerService.getColorList();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
@@ -1973,10 +1973,10 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/style_create");
-		List<BuyerModel> List= registerService.getAllBuyers();
+		List<BuyerModel> List= registerService.getAllBuyers(userId);
 		List<ItemDescription> itemList= orderService.getItemDescriptionList();
 
-		List<Style> styleList= orderService.getStyleWiseItemList();
+		List<Style> styleList= orderService.getStyleWiseItemList(userId);
 
 		map.addAttribute("buyerList",List);
 		map.addAttribute("itemList",itemList);
@@ -1993,8 +1993,7 @@ public class OrderController {
 
 
 		
-		List<Login> user=(List<Login>)session.getAttribute("pg_admin");
-		String userId=Integer.toString(user.get(0).getId());
+		String userId=(String)session.getAttribute("userId");
 		
 		if (submit.equals("1")) {
 			
@@ -2074,7 +2073,7 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/parcel");
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<Style> styleList= orderService.getStyleList();
 		List<CourierModel> courierList=orderService.getcourierList();
@@ -2324,7 +2323,7 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/accessories-check-list");
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<CheckListModel> checkList= orderService.getChekList();	

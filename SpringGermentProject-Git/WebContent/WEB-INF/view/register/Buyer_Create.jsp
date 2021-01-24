@@ -6,11 +6,16 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
-<jsp:include page="../include/header.jsp" />
 
-<%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+<%	
+
+	String buyerid=(String) request.getAttribute("buyerId");
+	String userId=(String)session.getAttribute("userId");
+	String userName=(String)session.getAttribute("userName");
+
 %>
+
+<jsp:include page="../include/header.jsp" />
 
 <div class="page-wrapper">
 	<div class="content container-fluid">
@@ -25,7 +30,7 @@
 
 						<div class="col-sm-12 col-md-6 col-lg-6">
 
-
+							<input type="hidden" id="userId" value="<%=userId%>">
 							<div class="input-group my-2">
 								<input type="text" class="form-control"
 									placeholder="Search Buyer Name" aria-describedby="findButton"
