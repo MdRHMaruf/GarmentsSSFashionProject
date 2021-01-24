@@ -164,10 +164,10 @@ public class OrderController {
 		
 		ModelAndView view = new ModelAndView("order/costing_create");
 		List<Unit> unitList= registerService.getUnitList();	
-		List<Style> styleList= orderService.getStyleList();
+		List<Style> styleList= orderService.getStyleList(userId);
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<ParticularItem> particularList = orderService.getTypeWiseParticularList("1");
-		List<Costing> costingList = orderService.getCostingList();
+		List<Costing> costingList = orderService.getCostingList(userId);
 		map.addAttribute("styleList",styleList);
 		map.addAttribute("unitList",unitList);
 		map.addAttribute("buyerList",buyerList);
@@ -1732,7 +1732,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
-		List<Style> styleList= orderService.getStyleList();
+		List<Style> styleList= orderService.getStyleList(userId);
 		List<Color> colorList = registerService.getColorList();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
@@ -1755,7 +1755,33 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/getAllColor",method=RequestMethod.POST)
+	public JSONObject getAllColor() {
 
+		JSONObject objmain = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+		
+
+		List<Color>items=registerService.getColorList();
+
+		for (int i = 0; i < items.size(); i++) {
+			JSONObject obj=new JSONObject();
+
+			obj.put("id", items.get(i).getColorId());
+			obj.put("name", items.get(i).getColorName());
+
+			mainarray.add(obj);
+
+		}
+
+		objmain.put("result", mainarray);
+
+
+		return objmain;
+
+	}
+	
 	@RequestMapping(value = "/addItemToSampleRequisition",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addItemToSampleRequisition(SampleRequisitionItem v) {
 		JSONObject objmain = new JSONObject();
@@ -1772,6 +1798,20 @@ public class OrderController {
 		return objmain;
 	}
 
+	@RequestMapping(value = "/userWiseNullSampleReqDataList",method=RequestMethod.POST)
+	public @ResponseBody JSONObject userWiseNullSampleReqDataList(String userId) {
+		JSONObject objmain = new JSONObject();
+		
+		System.out.println("SampleIncompleteData");
+		JSONArray mainArray = new JSONArray();
+		List<SampleRequisitionItem> sampleList = orderService.getIncomepleteSampleRequisitionItemList(userId);
+		//List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionItemList(v.getUserId());
+		objmain.put("result",sampleList);
+		
+		System.out.println("SampleIncompleteData Size"+sampleList.size());
+		
+		return objmain;
+	}
 
 	@RequestMapping(value = "/confirmItemToSampleRequisition",method=RequestMethod.POST)
 	public @ResponseBody String confirmItemToSampleRequisition(SampleRequisitionItem v) {
@@ -1825,7 +1865,7 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/purchase-order");
-		List<String> poList = orderService.getPurchaseOrderList();
+		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<Factory> factoryList = registerService.getFactoryNameList();
 		List<MerchandiserInfo> merchandiserList = registerService.getMerchandiserList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
@@ -2075,7 +2115,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/parcel");
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
-		List<Style> styleList= orderService.getStyleList();
+		List<Style> styleList= orderService.getStyleList(userId);
 		List<CourierModel> courierList=orderService.getcourierList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<ParcelModel> parcelList= orderService.parcelList();	
@@ -2174,7 +2214,7 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/sample_cad");
 
 
-		List<String> poList = orderService.getPurchaseOrderList();
+		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
 		view.addObject("Samples",Samples);

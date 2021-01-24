@@ -8,11 +8,14 @@
 <%@page import="java.util.List"%>
 
 <%
+
+
 String userId=(String)session.getAttribute("userId");
 String userName=(String)session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
+
 
 <div class="page-wrapper">
 	<div class="alert alert-success alert-dismissible fade show"
@@ -41,16 +44,11 @@ String userName=(String)session.getAttribute("userName");
 			<div>
 				<h5 class="text-center" style="display: inline;">Sample
 					Requisition</h5>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input ml-1" type="radio" name="radio"
-						id="withPO" value="" checked> <label
-						class="form-check-label" for="withPO">With PO</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="radio"
-						id="withOutPO" value=""> <label class="form-check-label"
-						for="withOutPO">With Out PO</label>
-				</div>
+					<div class="col-sm-12">
+						<input name="active" value="1" type="radio" checked>
+											With PO <input name="active" value="0" type="radio">Without PO
+					</div>
+
 			</div>
 
 			<button type="button" class="btn btn-outline-dark btn-sm"
@@ -194,22 +192,8 @@ String userName=(String)session.getAttribute("userName");
 				</div>
 
 				<div class="row">
-					<div class="form-group col-md-4 mb-1" style="padding-right: 1px;">
-						<label for="marchendizerId" class="col-form-label-sm mb-0 pb-0">Merchendizer</label>
-						<div class="row">
-							<select id="marchendizerId" class="selectpicker col-md-12"
-								data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option id="marchendizerId" value="0">Select
-									Merchendizer</option>
-								<c:forEach items="${merchendizerList}" var="list">
-									<option id="marchendizerId" value="${list.id}">${list.name}</option>
-								</c:forEach>
-							</select>
-						</div>
 
-					</div>
-					<div class="form-group col-md-8 mb-1" style="padding-right: 29px;">
+					<div class="form-group col-md-12 mb-1" style="padding-right: 29px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Instruction/Remark</label>
 						<div class="row">
 							<input type="text" id="instruction"
@@ -310,7 +294,7 @@ String userName=(String)session.getAttribute("userName");
 	<div class="row">
 		<div class="col-md-12 d-flex justify-content-end">
 			<button id="btnPOSubmit" type="button" class="btn btn-primary btn-sm"
-				onclick="confrimAction()">
+				onclick="confirmAction()">
 				<i class="fas fa-save"></i> Confrim
 			</button>
 			<button id="btnPOEdit" type="button"
