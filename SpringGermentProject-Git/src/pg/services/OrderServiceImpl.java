@@ -108,9 +108,9 @@ public class OrderServiceImpl implements OrderService{
 
 
 	@Override
-	public List<Style> getStyleList() {
+	public List<Style> getStyleList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getStyleList();
+		return orderDAO.getStyleList(userId);
 	}
 
 	@Override
@@ -176,9 +176,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<Costing> getCostingList() {
+	public List<Costing> getCostingList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getCostingList();
+		return orderDAO.getCostingList(userId);
 	}
 
 	@Override
@@ -431,9 +431,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<String> getPurchaseOrderList() {
+	public List<String> getPurchaseOrderList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPurchaseOrderList();
+		return orderDAO.getPurchaseOrderList(userId);
 	}
 
 	@Override

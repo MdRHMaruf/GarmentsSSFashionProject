@@ -44,7 +44,7 @@ public interface OrderService {
 	List<Color> getColorListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
-	List<Style> getStyleList();
+	List<Style> getStyleList(String userId);
 	List<Style> getStyleWiseItemList(String userId);
 	List<Style> getStyleAndItem(String value);
 
@@ -57,7 +57,7 @@ public interface OrderService {
 	public boolean deleteCosting(String autoId);
 	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
 	List<Costing> getBuyerWiseCostingList(String buyerId);
-	List<Costing> getCostingList();
+	List<Costing> getCostingList(String userId);
 	public List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
@@ -112,7 +112,7 @@ public interface OrderService {
 
 
 	//Fabrics Indent
-	List<String> getPurchaseOrderList();
+	List<String> getPurchaseOrderList(String userId);
 	List<FabricsIndent> getFabricsIndentList();
 	public String confirmFabricsIndent(String fabricsIndentId,String fabricsItems);
 	boolean editFabricsIndent(FabricsIndent fabricsIndent);

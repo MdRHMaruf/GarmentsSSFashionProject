@@ -124,7 +124,7 @@ public class CommercialController {
 		ModelAndView view = new ModelAndView("commercial/deedOfContact");
 
 		
-		List<String> poList = orderService.getPurchaseOrderList();
+		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<Unit> unitList = registerService.getUnitList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<deedOfContacts>ContractsList=commercialService.deedOfContractsList();
