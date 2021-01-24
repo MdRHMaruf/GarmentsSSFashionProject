@@ -51,9 +51,14 @@ public class RegisterController {
 
 
 	@RequestMapping(value = "/buyer_create",method=RequestMethod.GET)
-	public ModelAndView buyer_create(ModelMap map) {
-
+	public ModelAndView buyer_create(ModelMap map,HttpSession session) {
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/Buyer_Create");
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -188,14 +193,15 @@ public class RegisterController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/getAllBuyers",method=RequestMethod.POST)
-	public JSONObject getAllBuyers() {
+	@RequestMapping(value = "/getAllBuyers/{user}",method=RequestMethod.GET)
+	public JSONObject getAllBuyers(@PathVariable ("user") String user) {
 		System.out.println(" all buyers list ");
 
+		
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
-		List<BuyerModel> buyerdetails=registerService.getAllBuyers();
+		List<BuyerModel> buyerdetails=registerService.getAllBuyers(user);
 
 		for (int i = 0; i < buyerdetails.size(); i++) {
 			JSONObject obj=new JSONObject();

@@ -75,7 +75,7 @@ public class CommercialController {
 		String departmentId=passService.getUserDepartmentId(userId);
 		
 		ModelAndView view = new ModelAndView("commercial/master-lc");
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<MasterLC> masterLCList= commercialService.getMasterLCList();
 		view.addObject("buyerList",buyerList);
 		view.addObject("masterLCList",masterLCList);
@@ -126,7 +126,7 @@ public class CommercialController {
 		
 		List<String> poList = orderService.getPurchaseOrderList();
 		List<Unit> unitList = registerService.getUnitList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<deedOfContacts>ContractsList=commercialService.deedOfContractsList();
 		
 		view.addObject("Lists",ContractsList);

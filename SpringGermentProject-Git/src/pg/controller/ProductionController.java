@@ -84,7 +84,7 @@ public class ProductionController {
 		
 		ModelAndView view = new ModelAndView("production/cutting_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -150,7 +150,7 @@ public class ProductionController {
 		
 		ModelAndView view = new ModelAndView("production/production_plan");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
-		List<BuyerModel> buyerList= registerService.getAllBuyers();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
 		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
