@@ -45,7 +45,7 @@ public interface OrderService {
 	List<String> getShippingMarkListByMultiplePoAndStyle(String purchaseOrders,String styleIdList);
 
 	List<Style> getStyleList();
-	List<Style> getStyleWiseItemList();
+	List<Style> getStyleWiseItemList(String userId);
 	List<Style> getStyleAndItem(String value);
 
 	//Costing Create
@@ -67,13 +67,13 @@ public interface OrderService {
 	boolean deleteBuyerPoItem(String itemAutoId);
 	boolean submitBuyerPO(BuyerPO buyerPo);
 	boolean editBuyerPO(BuyerPO buyerPo);
-	List<BuyerPO> getBuyerPoList();
+	List<BuyerPO> getBuyerPoList(String userId);
 	BuyerPO getBuyerPO(String buyerPoNo);
 	
 
 	//Accessories
 	public String maxAIno(); 
-	public List<CommonModel>PurchaseOrders();
+	public List<CommonModel>PurchaseOrders(String userId);
 	public List<CommonModel>Styles(String po);
 	public List<CommonModel>Colors(String style, String item);
 	public List<CommonModel>Items(String buyerorderid,String style);
@@ -98,7 +98,7 @@ public interface OrderService {
 	boolean editAccessoriesIndent(AccessoriesIndent v);
 	boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId);
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
-	List<AccessoriesIndent> getPostedAccessoriesIndent();
+	List<AccessoriesIndent> getPostedAccessoriesIndent(String userId);
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
@@ -159,7 +159,7 @@ public interface OrderService {
 	boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction);
 
 
-	public List<FabricsIndent> getStyleDetailsForFabricsIndent();
+	public List<FabricsIndent> getStyleDetailsForFabricsIndent(String userId);
 	public List<CourierModel> getcourierList();
 	public boolean ConfirmParcel(ParcelModel parcel);
 

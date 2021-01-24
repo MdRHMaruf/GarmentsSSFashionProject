@@ -450,7 +450,7 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 
 	@Override
-	public List<BuyerModel> getAllBuyers() {
+	public List<BuyerModel> getAllBuyers(String userId) {
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -461,7 +461,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer order by id";
+			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' order by id";
 			System.out.println(" buyer details query ");
 
 			List<?> list = session.createSQLQuery(sql).list();

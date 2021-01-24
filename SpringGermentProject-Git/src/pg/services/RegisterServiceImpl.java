@@ -489,9 +489,9 @@ public class RegisterServiceImpl implements RegisterService{
 	}
 
 	@Override
-	public List<BuyerModel> getAllBuyers() {
+	public List<BuyerModel> getAllBuyers(String userId) {
 		// TODO Auto-generated method stub
-		return registerDao.getAllBuyers();
+		return registerDao.getAllBuyers(userId);
 	}
 
 	@Override
