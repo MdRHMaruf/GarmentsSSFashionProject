@@ -54,7 +54,7 @@
 		Transaction tx=null;
         
 	
-		String Sql="select ai.id,isnull(sc.StyleNo,'') as styleno,isnull(id.itemname,'') as itemname,isnull(itemC.Colorname,'') as itemcolor,fi.ItemName as FabricsItemName,fabricsC.Colorname as fabricscolor,b.name as brand,ai.width,ai.GSM,ai.Yard,ai.qty,ai.dozenqty,ai.consumption,ai.TotalQty,ai.RequireUnitQty,u.unitname as unit,mi.Signature as Signature  \r\n"+  
+		String Sql="select ai.id,isnull(sc.StyleNo,'') as styleno,isnull(id.itemname,'') as itemname,isnull(itemC.Colorname,'') as itemcolor,fi.ItemName as FabricsItemName,fabricsC.Colorname as fabricscolor,b.name as brand,ai.width,ai.GSM,ai.Yard,ai.qty,ai.markingWidth,ai.dozenqty,ai.consumption,ai.TotalQty,ai.RequireUnitQty,u.unitname as unit,mi.Signature as Signature  \r\n"+  
 				"from tbFabricsIndent ai "+
 				"left join TbStyleCreate sc  "+
 				"on ai.styleId = cast(sc.StyleId as varchar) "+

@@ -299,16 +299,19 @@ function addAction() {
   let brandId = $("#brand").val();
   let markingWidth = $("#markingWidth").val();
 
+  let indentDataList = $("#dataList tr");
+  let length = indentDataList.length;
 
   let isExist = false;
-  indentDataList.each((index, row) => {
+   for(let i=0;i<length;i++){
+    row = indentDataList[i];
     let id = row.id.slice(4);
     if ($("#purchaseOrder-" + id).text() == purchaseOrder && row.getAttribute('data-style-id') == styleId && row.getAttribute('data-item-id') == itemId
       && row.getAttribute('data-item-color-id') == itemColorId && row.getAttribute('data-fabrics-id') == fabricsId && row.getAttribute('data-fabrics-color-id') == fabricsColorId) {
       isExist = true;
       break;
     }
-  })
+  }
 
   if (styleId != 0) {
     if (itemId != 0) {
@@ -319,15 +322,11 @@ function addAction() {
               if (consumption != 0) {
                 if (unitId != 0) {
                   if (fabricsColorId != 0) {
-
-
-
-                    let indentDataList = $("#dataList tr");
-                    let length = indentDataList.length;
+    
                     let listRowId = 0;
                     if (length > 0) listRowId = indentDataList[length - 1].id.slice(4);
 
-                    if (isExist) {
+                    if (!isExist) {
                       let row = `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-style-id='${styleId}' data-item-id='${itemId}' data-item-color-id='${itemColorId}' 
                       data-fabrics-id='${fabricsId}' data-quantity='${quantity}' data-dozen-qty='${dozenQuantity}' data-in-percent='${inPercent}' data-total-quantity='${totalQuantity}'
                       data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}' data-marking-width='${markingWidth}'>

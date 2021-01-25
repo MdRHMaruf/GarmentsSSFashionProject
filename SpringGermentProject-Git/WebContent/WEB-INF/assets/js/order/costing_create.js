@@ -936,11 +936,11 @@ function drawGroupCostingList(data) {
   for (let i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='groupRow-${costing.costingNo }' data-id='${costing.costingNo}'>
+    rows += `<tr id='groupRow-${rowData.costingNo }' data-id='${rowData.costingNo}'>
     <td>${rowData.costingNo}</td>
     <td>${rowData.styleName}</td>
     <td>${rowData.itemName}</td>
-    <td><input id='groupCheck-${costing.costingNo}' type="checkbox" /></td>
+    <td><input id='groupCheck-${rowData.costingNo}' type="checkbox" /></td>
   </tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
