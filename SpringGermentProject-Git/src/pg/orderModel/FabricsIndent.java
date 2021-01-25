@@ -29,6 +29,7 @@ public class FabricsIndent {
 	double previousReceiveQty;
 	String purchaserOrderid;
 	String indentDate;
+	String markingWidth;
 	
 	public FabricsIndent(String BuyerName,String BuyerOrderId, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
 		this.buyerName=BuyerName;
@@ -364,6 +365,14 @@ public class FabricsIndent {
 
 	public void setIndentDate(String indentDate) {
 		this.indentDate = indentDate;
+	}
+
+	public String getMarkingWidth() {
+		return markingWidth;
+	}
+
+	public void setMarkingWidth(String markingWidth) {
+		this.markingWidth = markingWidth;
 	}
 	
 	

@@ -6,7 +6,7 @@ let sizesListByGroup = JSON;
 window.onload = () =>{
 
   document.title = "Buyer Purchase Order";
-
+  let userId = $("#userId").val();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -23,7 +23,8 @@ window.onload = () =>{
     dataType: 'json',
     url: './getBuyerPOItemsList',
     data: {
-      buyerPoNo: "0"
+      buyerPoNo: "0",
+      userId: userId
     },
     success: function (data) {
       if (data.result == "Something Wrong") {
@@ -143,89 +144,104 @@ function itemSizeAdd() {
   let userId = $("#userId").val();
   let totalUnit = 0;
 
-
-  if (buyerId != 0) {
-    if (styleId != 0) {
-      if (itemId != 0) {
-        if (factoryId != 0) {
-          if (colorId != 0) {
-            if (sizeGroupId != 0) {
-              if (purchaseOrder != "") {
-                let sizeListLength = $(".sizeValue").length;
-                let sizeList = "";
-                for (let i = 0; i < sizeListLength; i++) {
-                  let quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
-                  let id = $("#sizeId" + i).val().trim();
-                  sizeList += "id=" + id + ",quantity=" + quantity + " ";
-                  totalUnit += Number(quantity);
-                }
-
-
-                $.ajax({
-                  type: 'POST',
-                  dataType: 'json',
-                  url: './addItemToBuyerPO',
-                  data: {
-                    autoId: "0",
-                    buyerPOId: buyerPOId,
-                    buyerId: buyerId,
-                    styleId: styleId,
-                    itemId: itemId,
-                    factoryId: factoryId,
-                    colorId: colorId,
-                    customerOrder: customerOrder,
-                    purchaseOrder: purchaseOrder,
-                    shippingMark: shippingMark,
-                    sizeGroupId: sizeGroupId,
-                    sizeListString: sizeList,
-                    totalUnit: totalUnit,
-                    unitCmt: 0,
-                    totalPrice: 0,
-                    unitFob: 0,
-                    totalAmount: 0,
-                    userId: userId
-                  },
-                  success: function (data) {
-                    // warningAlert("");
-                    if (data.result == "Something Wrong") {
-                      dangerAlert("Something went wrong");
-                    } else if (data.result == "duplicate") {
-                      dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                    } else {
-                      drawItemTable(data.result);
-                    }
+  let rowList = $("tr.dataRow");
+  let isExist = false;
+  console.log("length=",rowList.length);
+  for(let i=0;i<rowList.length;i++){
+    row = rowList[i];
+    if(row.getAttribute('data-style-id')==styleId && 
+      row.getAttribute('data-item-id') == itemId && row.getAttribute('data-customer-order')==customerOrder && row.getAttribute('data-purchase-order')==purchaseOrder && row.getAttribute('data-color-id') == colorId && row.getAttribute('data-size-group-id') == sizeGroupId){
+        isExist = true;
+        break;
+      }
+  };
+  if(!isExist){
+    if (buyerId != 0) {
+      if (styleId != 0) {
+        if (itemId != 0) {
+          if (factoryId != 0) {
+            if (colorId != 0) {
+              if (sizeGroupId != 0) {
+                if (purchaseOrder != "") {
+                  let sizeListLength = $(".sizeValue").length;
+                  let sizeList = "";
+                  for (let i = 0; i < sizeListLength; i++) {
+                    let quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
+                    let id = $("#sizeId" + i).val().trim();
+                    sizeList += "id=" + id + ",quantity=" + quantity + " ";
+                    totalUnit += Number(quantity);
                   }
-                });
+  
+  
+                  $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: './addItemToBuyerPO',
+                    data: {
+                      autoId: "0",
+                      buyerPOId: buyerPOId,
+                      buyerId: buyerId,
+                      styleId: styleId,
+                      itemId: itemId,
+                      factoryId: factoryId,
+                      colorId: colorId,
+                      customerOrder: customerOrder,
+                      purchaseOrder: purchaseOrder,
+                      shippingMark: shippingMark,
+                      sizeGroupId: sizeGroupId,
+                      sizeListString: sizeList,
+                      totalUnit: totalUnit,
+                      unitCmt: 0,
+                      totalPrice: 0,
+                      unitFob: 0,
+                      totalAmount: 0,
+                      userId: userId
+                    },
+                    success: function (data) {
+                      // warningAlert("");
+                      if (data.result == "Something Wrong") {
+                        dangerAlert("Something went wrong");
+                      } else if (data.result == "duplicate") {
+                        dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                      } else {
+                        drawItemTable(data.result);
+                      }
+                    }
+                  });
+                } else {
+                  alert("Purchase Order Not Set... Please Select Purchase Order");
+                  //warningAlert("Purchase Order Not Set... Please Select Purchase Order");
+                  $("#purchaseOrder").focus();
+                }
               } else {
-                alert("Purchase Order Not Set... Please Select Purchase Order");
-                //warningAlert("Purchase Order Not Set... Please Select Purchase Order");
-                $("#purchaseOrder").focus();
+                alert("Size Group not selected ... Please Select Size group");
+                // warningAlert("Size Group not selected ... Please Select Size group");
+                $("#sizeGroup").focus();
               }
             } else {
-              alert("Size Group not selected ... Please Select Size group");
-              // warningAlert("Size Group not selected ... Please Select Size group");
-              $("#sizeGroup").focus();
+              alert("Color Not Selected... Please Select Color");
+              $("#color").focus();
             }
           } else {
-            alert("Color Not Selected... Please Select Color");
-            $("#color").focus();
+            alert("Factory not selected... Please Select Factory Name");
+            $("#factoryId").focus();
           }
         } else {
-          alert("Factory not selected... Please Select Factory Name");
-          $("#factoryId").focus();
+          alert("Item Type not selected... Please Select Item Type");
+          $("#itemType").focus();
         }
       } else {
-        alert("Item Type not selected... Please Select Item Type");
-        $("#itemType").focus();
+        alert("Style No not selected... Please Select Style No");
+        $("#styleNo").focus();
       }
     } else {
-      alert("Style No not selected... Please Select Style No");
-      $("#styleNo").focus();
+      alert("Buyer Name not selected... Please Select Buyer Name");
+      $("#buyerName").focus();
     }
-  } else {
-    alert("Buyer Name not selected... Please Select Buyer Name");
-    $("#buyerName").focus();
+  }else{
+    warningAlert("This Item Already Exist");
   }
+  
 
 }
 
@@ -602,15 +618,16 @@ function setBuyerPoItemDataForEdit(itemAutoId) {
 function deleteBuyerPoItem(itemAutoId) {
 
   let buyerPoId = $("#buyerPOId").val();
+  let userId = $("#userId").val();
   if (confirm("Are you sure to Delete this item")) {
     $.ajax({
       type: 'GET',
       dataType: 'json',
       url: './deleteBuyerPoItem',
       data: {
-        buyerPoId: buyerPoId,
-        itemAutoId: itemAutoId
-
+        buyerPoNo: buyerPoId,
+        itemAutoId: itemAutoId,
+        userId: userId
       },
       success: function (data) {
         if (data.result == "Something Wrong") {
@@ -712,7 +729,7 @@ function drawItemTable(dataList) {
   let isClosingNeed = false;
   for (let i = 0; i < length; i++) {
     let item = dataList[i];
-
+    console.log(item);
     if (sizeGroupId != item.sizeGroupId) {
       if (isClosingNeed) {
         tables += "</tbody></table> </div></div>";
@@ -746,7 +763,14 @@ function drawItemTable(dataList) {
               <tbody id="dataList">`
       isClosingNeed = true;
     }
-    tables += "<tr id='itemRow-" + item.autoId + "' class='dataRow notChanged' data-auto-id='" + item.autoId + "'><td>" + item.style + "</td><td>" + item.itemName + "</td><td>" + item.colorName + "</td><td>" + item.customerOrder + "</td><td>" + item.purchaseOrder + "</td><td>" + item.shippingMark + "</td><td>" + item.sizeReg + "</td>"
+    tables += `<tr id='itemRow-${item.autoId}' class='dataRow notChanged' data-auto-id='${item.autoId}' data-purchase-order='${item.purchaseOrder}' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-customer-order='${item.customerOrder}' data-color-id='${item.colorId}' data-size-group-id='${item.sizeGroupId}'>
+                  <td>${item.style}</td>
+                  <td>${item.itemName}</td>
+                  <td>${item.colorName}</td>
+                  <td>${item.customerOrder}</td>
+                  <td>${item.purchaseOrder}</td>
+                  <td>${item.shippingMark}</td>
+                  <td>${item.sizeReg}</td>`
     let sizeList = item.sizeList;
     let sizeListLength = sizeList.length;
 

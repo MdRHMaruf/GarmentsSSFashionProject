@@ -148,10 +148,10 @@
 							</div>		
 							<button type="submit" accesskey="S" id="btnSave" name="submit" value="1" class="btn btn-primary btn-sm"  onclick="btnsaveAction()">Save</button>
 
-							<button type="submit" id="btnEdit" name="submit" value="2" class="btn btn-primary btn-sm" onclick="btneditAction()"
-								disabled>Edit</button>
-							<button type="submit" id="btnRefresh"
-								class="btn btn-primary btn-sm" onclick="refreshAction()">Refresh</button>							
+							<button type="submit" id="btnEdit" name="submit" value="2" class="btn btn-success btn-sm" onclick="btneditAction()"
+								style="display: none;">Edit</button>
+							<button type="button" id="btnRefresh"
+								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>							
 							</form>										
 
 

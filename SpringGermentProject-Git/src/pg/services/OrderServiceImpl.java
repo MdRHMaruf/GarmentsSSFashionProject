@@ -218,9 +218,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<BuyerPoItem> getBuyerPOItemList(String buyerPOId) {
+	public List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getBuyerPOItemList(buyerPOId);
+		return orderDAO.getBuyerPOItemList(buyerPOId,userId);
 	}
 
 	@Override

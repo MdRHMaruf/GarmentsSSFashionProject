@@ -36,7 +36,7 @@ String userName=(String)session.getAttribute("userName");
 	</div>
 	<input type="hidden" id="userId" value="<%=userId%>">
 	<input type="hidden" id="fabricsIndentAutoId" value="0">
-	<input type="hidden" id="fabricsIndentId" value="0">
+	<input type="hidden" id="fabricsIndentId" value="New">
 	<input type="hidden" id="indentType" value="newIndent">
 	
 	<div class="card-box m-2">
@@ -371,9 +371,7 @@ String userName=(String)session.getAttribute("userName");
 					<thead>
 						<tr>
 							<th>SL#</th>
-							<th>PO Id</th>
-							<th>Style No</th>
-							<th>Item Name</th>
+							<th>Indent Id</th>
 							<th>Indent Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 						</tr>
@@ -383,9 +381,7 @@ String userName=(String)session.getAttribute("userName");
 							varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
-								<td>${po.purchaseOrder}</td>
-								<td>${po.styleName}</td>
-								<td>${po.itemName}</td>
+								<td>${po.indentId}</td>
 								<td>${po.indentDate}</td>
 								<td><i class="fa fa-search" style='cursor: pointer;'
 									onclick="searchFabricsIndent('${po.indentId}')">
