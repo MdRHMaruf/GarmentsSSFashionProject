@@ -58,7 +58,7 @@ public class PasswordController {
 	public String login(Model m,HttpSession session) {
 		
 	
-		session.invalidate();
+		
 		List<Login> pass=(List<Login>)session.getAttribute("pg_admin");
 		if(pass!=null) {
 			return "redirect:dashboard";
@@ -80,8 +80,7 @@ public class PasswordController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String login(@RequestParam String name,@RequestParam String password,HttpServletRequest request,ModelMap modelmap) throws UserBlockedException	
 	{	
-		HttpSession session=request.getSession();
-		session.invalidate();
+		
 	
 		
 		System.out.println("Log In execute");

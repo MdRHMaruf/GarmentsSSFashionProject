@@ -27,9 +27,7 @@ window.onload = () => {
 			sizesListByGroup = obj.sizeList;
 		}
 	});
-}  
-
-
+}
 
 function refreshAction() {
 	location.reload();
@@ -372,6 +370,24 @@ function searchSampleRequisition(v) {
 	});
 }
 
+
+function printSampleRequisition(sampleReqId) {
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './sampleRequisitionInfo',
+		data: {
+			sampleReqId: sampleReqId
+		},
+		success: function (data) {
+			if (data == "Success") {
+				var url = "printsampleRequisition";
+				window.open(url, '_blank');
+
+			}
+		}
+	});
+}
 function drawItemTable(dataList) {
 
 

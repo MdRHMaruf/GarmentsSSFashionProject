@@ -8,8 +8,8 @@
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>   
         <property name="hibernate.connection.password">Cursor777</property>
-     	<property name="hibernate.connection.url">jdbc:sqlserver://localhost</property>
-     	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://103.127.1.234:1433</property> -->
+     	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://localhost</property> -->
+     	<property name="hibernate.connection.url">jdbc:sqlserver://103.127.1.234:1433</property>
       	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://192.168.0.130:1433</property> -->
         <property name="hibernate.connection.databaseName">SSFashionSpringProject</property>
         <property name="hibernate.connection.username">sa</property>

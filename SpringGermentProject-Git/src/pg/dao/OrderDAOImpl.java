@@ -5122,7 +5122,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sampleCommentId,PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,isnull(ss.sizeName,'') as sizeName,SampleTypeId,isnull(sti.name ,'') as name \r\n" + 
+			String sql="select sampleCommentId,PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,isnull(size,'')as size,isnull(ss.sizeName,'') as sizeName,isnull(SampleTypeId,'')as SampleTypeId,isnull(sti.name ,'') as name  \r\n" + 
 					"from TbSampleCadInfo sci\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on sci.StyleId = sc.StyleId\r\n" + 
@@ -5141,7 +5141,6 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();							
 				dataList.add(new SampleCadAndProduction(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString()));
 			}
-
 
 			tx.commit();
 		}
@@ -5167,7 +5166,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,size,isnull(ss.sizeName,'')as sizeName,sci.SampleTypeId,sti.name as sampleTypeName,isnull(sci.CuttingQty,'') cuttingQty,isnull(sci.CuttingDate,'') cuttingDate, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
+			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,isnull(size,'')as size,isnull(ss.sizeName,'')as sizeName,isnull(sci.SampleTypeId,'')as SampleTypeId,isnull(sti.name,'') as sampleTypeName,isnull(sci.CuttingQty,'') cuttingQty,isnull(sci.CuttingDate,'') cuttingDate, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
 					"from TbSampleCadInfo sci\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on sci.StyleId = sc.StyleId\r\n" + 
@@ -5191,15 +5190,13 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();							
 				sampleCadAndProduction =  new SampleCadAndProduction(element[0].toString(), element[1].toString(),element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), element[12].toString(), element[13].toString(), element[14].toString(), element[15].toString(), element[16].toString(), element[17].toString(), element[18].toString(), element[19].toString(), element[20].toString(), element[21].toString(), element[22].toString(), element[23].toString(), element[24].toString());
 			}
-
-
 			tx.commit();
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
-			}
-			e.printStackTrace();
+			}		
 		}
 		finally {
 			session.close();

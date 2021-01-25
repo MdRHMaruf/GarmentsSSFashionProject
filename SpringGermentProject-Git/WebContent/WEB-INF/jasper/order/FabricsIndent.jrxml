@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f409598-7b6b-4249-a548-0f35c5a855f8">
 	<property name="ireport.zoom" value="1.464100000000032"/>
-	<property name="ireport.x" value="14"/>
+	<property name="ireport.x" value="505"/>
 	<property name="ireport.y" value="95"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.id,(select styleno from TbStyleCreate where styleid=a.styleId) as styleno,(select itemname from tbGermentStyleItem where itemid=a.itemid) as itemname,(select colorname from tbcolors where ColorId=a.itemcolor) as itemcolor,(select ItemName from tbfabricsItem where id=a.fabricsid) as FabricsItemName,(select colorname from tbcolors where ColorId=a.fabricscolor) as fabricscolor,(select name from tbbrands where id=a.brand) as brand,a.width,a.GSM,a.Yard,a.qty,a.dozenqty,a.consumption,a.TotalQty,a.RequireUnitQty,(select unitname from tbunits where Unitid=a.unitId) as unit,(select Signature from TbMerchendiserInfo where MUserId=a.entryby) as Signature  from tbrequiredfabrics a where a.PurchaseOrder='86970' and  a.styleid='1' "]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[$P!{sql}]]>
+		<![CDATA[select ai.id,isnull(sc.StyleNo,'') as styleno,isnull(id.itemname,'') as itemname,isnull(itemC.Colorname,'') as itemcolor,fi.ItemName as FabricsItemName,fabricsC.Colorname as fabricscolor,b.name as brand,ai.width,ai.GSM,ai.Yard,ai.qty,ai.markingWidth,ai.dozenqty,ai.consumption,ai.TotalQty,ai.RequireUnitQty,u.unitname as unit,mi.Signature as Signature
+from tbFabricsIndent ai left join TbStyleCreate sc  on ai.styleId = cast(sc.StyleId as varchar) left join tbItemDescription id  on ai.itemid = cast(id.itemid as varchar) left join tbColors itemC  on ai.itemcolor = cast(itemC.ColorId as varchar)left join TbFabricsItem fi
+on ai.fabricsid = fi.id
+left join tbColors fabricsC
+on ai.fabricscolor = fabricsC.ColorId
+left join tbbrands b
+on ai.brand = b.id
+left join tbunits u
+on ai.unitId = u.Unitid
+left join Tblogin mi
+on ai.entryby = mi.id
+where ai.indentId = '1' order by ai.fabricsid,ai.fabricscolor]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer"/>
 	<field name="styleno" class="java.lang.String"/>
@@ -20,12 +31,13 @@
 	<field name="GSM" class="java.math.BigDecimal"/>
 	<field name="Yard" class="java.math.BigDecimal"/>
 	<field name="qty" class="java.math.BigDecimal"/>
+	<field name="markingWidth" class="java.lang.String"/>
 	<field name="dozenqty" class="java.math.BigDecimal"/>
 	<field name="consumption" class="java.math.BigDecimal"/>
 	<field name="TotalQty" class="java.math.BigDecimal"/>
 	<field name="RequireUnitQty" class="java.math.BigDecimal"/>
 	<field name="unit" class="java.lang.String"/>
-	<field name="Signature" class="java.awt.Image"/>
+	<field name="Signature" class="java.lang.Object"/>
 	<variable name="sl" class="java.lang.Number" calculation="Sum">
 		<variableExpression><![CDATA[1]]></variableExpression>
 	</variable>
@@ -389,6 +401,14 @@
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="155" y="0" width="1" height="14" uuid="ede08906-2613-4c11-84cf-3cf5e7c878f5"/>
 			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="749" y="0" width="50" height="12" uuid="86a06e1f-734c-467d-8226-5551c4c6f961"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{markingWidth}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
