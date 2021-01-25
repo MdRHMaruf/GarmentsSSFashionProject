@@ -312,7 +312,7 @@ function addAction() {
 
   let consumption = $("#consumption").val() == "" ? "0" : $("#consumption").val();
   let unitPrice = $("#unitPrice").val() == "" ? "0" : $("#unitPrice").val();
-  let amount = Number(consumption) * Number(unitPrice);
+  let amount = (Number(consumption) * Number(unitPrice)).toFixed(2);
 
 
   for (let i = 0; i < length; i++) {
