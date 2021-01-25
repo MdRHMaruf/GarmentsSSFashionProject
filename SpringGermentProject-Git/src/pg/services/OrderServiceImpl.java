@@ -706,9 +706,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<SampleCadAndProduction> getSampleComments() {
+	public List<SampleCadAndProduction> getSampleComments(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getSampleComments();
+		return orderDAO.getSampleComments(userId);
 	}
 
 	@Override

@@ -63,7 +63,8 @@ public class SampleCadAndProduction {
 	String buyername;
 	String resultList;
 	String insertSampleCad;
-	
+	String sampleRequistionQty;
+	String sampleReqId;
 	
 	public SampleCadAndProduction(String sampleCommentId, String po,
 			String style, String item, String color, String size, 
@@ -600,6 +601,29 @@ public class SampleCadAndProduction {
 	public void setInsertSampleCad(String insertSampleCad) {
 		this.insertSampleCad = insertSampleCad;
 	}
+
+
+	public String getSampleRequistionQty() {
+		return sampleRequistionQty;
+	}
+
+
+	public void setSampleRequistionQty(String sampleRequistionQty) {
+		this.sampleRequistionQty = sampleRequistionQty;
+	}
+
+
+	public String getSampleReqId() {
+		return sampleReqId;
+	}
+
+
+	public void setSampleReqId(String sampleReqId) {
+		this.sampleReqId = sampleReqId;
+	}
+
+
+
 	
 	
 }

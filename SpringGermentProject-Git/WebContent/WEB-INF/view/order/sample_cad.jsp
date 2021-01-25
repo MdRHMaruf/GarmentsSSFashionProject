@@ -35,11 +35,12 @@ String userName=(String)session.getAttribute("userName");
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="purchaseOrder" value="">
+		<input type="hidden" id="buyerOrderId" value="">
 		<input type="hidden" id="styleId" value="">
 		<input type="hidden" id="itemId" value="">
 		<input type="hidden" id="colorId" value="">
 		<input type="hidden" id="POStatus" value="">
+		<input type="hidden" id="sampleReqId" value="0">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -52,10 +53,16 @@ String userName=(String)session.getAttribute("userName");
 							<header class="d-flex justify-content-between">
 								<h5 class="text-center" style="display: inline;">
 									Sample CAD</h5>
-								<button type="button" class="btn btn-outline-dark btn-sm"
-									data-toggle="modal" data-target="#exampleModal">
-									<i class="fa fa-search"></i>Sample Requisition List
-								</button>
+								<div>								
+									<button type="button" class="btn btn-outline-dark btn-sm"
+										data-toggle="modal" data-target="#exampleModal">
+										<i class="fa fa-search"></i>Sample Requisition List
+									</button>
+									<button type="button" class="btn btn-outline-dark btn-sm"
+										data-toggle="modal" data-target="#sampleCadModal">
+										<i class="fa fa-search"></i>Sample Cad List
+									</button>
+								</div>
 							</header>
 							<hr class="my-1">
 							<div class="row mt-1">
@@ -301,6 +308,63 @@ String userName=(String)session.getAttribute("userName");
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="sampleCadModal" tabindex="-1" role="dialog"
+	aria-labelledby="sampleCadModal" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Requisition"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Sample Cad No</th>
+							<th>Buyer Name</th>
+							<th>Purchase Order</th>
+							<th>Style No</th>
+							<th>Item No</th>
+							<th>Sample Type</th>
+							<th><span>Search</th>
+							<th><span>Print</th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${sampleCadList}" var="po" varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td >${po.sampleCommentId}</td>
+								<td>${po.buyername}</td>
+								<td>${po.purchaseOrder}</td>
+								<td>${po.styleNo}</td>
+								<td>${po.itemName}</td>
+								<td>${po.sampleTypeId}</td>
+								<td><i class="fa fa-search"
+									onclick="searchSampleCad(${po.sampleCommentId})"> </i></td>
+								<td><i class="fa fa-print"
+									onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
 
 				</div>
 			</div>

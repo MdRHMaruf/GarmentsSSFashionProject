@@ -23,6 +23,7 @@ public class SampleRequisitionItem {
 	String instruction="";
 	String sampleDeadline="";
 	String sampleId="";
+	String sampleReqId="";
 	
 	ArrayList<Size> sizeList;
 	
@@ -56,7 +57,8 @@ public class SampleRequisitionItem {
 		
 	}
 	
-	public SampleRequisitionItem(String InchargeId,String MerchendizerId,String Instruction,String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String PurchaseOrder,String SizeGroupId,String UserId){
+	public SampleRequisitionItem(String sampleReqId,String InchargeId,String MerchendizerId,String Instruction,String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String PurchaseOrder,String SizeGroupId,String UserId){
+		this.sampleReqId=sampleReqId;
 		this.inchargeId=InchargeId;
 		this.marchendizerId=MerchendizerId;
 		this.instruction=Instruction;
@@ -207,6 +209,14 @@ public class SampleRequisitionItem {
 
 	public void setColorName(String colorName) {
 		this.colorName = colorName;
+	}
+
+	public String getSampleReqId() {
+		return sampleReqId;
+	}
+
+	public void setSampleReqId(String sampleReqId) {
+		this.sampleReqId = sampleReqId;
 	}
 	
 	

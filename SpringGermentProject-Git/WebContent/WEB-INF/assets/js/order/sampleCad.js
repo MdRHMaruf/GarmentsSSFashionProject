@@ -8,7 +8,7 @@ var size;
 var sample;
 var sampleCommentId;
 
-var sampleCadQty=0;
+var sampleRequistionQty=0;
 
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
@@ -31,19 +31,24 @@ window.onload = () => {
 
 
 
-
+function refreshAction() {
+	location.reload();
+}
 function insertSample(){
 
 	var user=$('#userId').val();
 
 
-	var purchaseOrder=$('#purchaseOrder').val();
+	var buyerOrderId=$('#buyerOrderId').val()==''?"0":$('#buyerOrderId').val();
 	var styleId=$('#styleId').val();
 	var itemId=$('#itemId').val();
 	var colorId=$('#colorId').val();
 	var POStatus=$('#POStatus').val();
 	
-
+	var sampleReqId=$('#sampleReqId').val()==''?"0":$('#sampleReqId').val();
+	
+	console.log("buyerOrderId "+buyerOrderId);
+	console.log("sampleReqId "+sampleReqId);
 
 
 	let patternMakingDate = $("#patternmakingdate").val();
@@ -78,58 +83,66 @@ function insertSample(){
 	var markingdispatch=$('#markingDespatch').val();
 	var markingReceviedBy=$('#markingReceviedBy').val();
 
+	if(sampleReqId!='0'){
+		if(styleId!='0'){
+			if(itemId!='0'){
+				$.ajax({
+					type: 'GET',
+					dataType: 'json',
+					url: './insertSampleCad',
+					data: {
+						user : user,
+						buyerOrderId : buyerOrderId,
+						styleId : styleId,
+						itemId : itemId,	
+						colorId : colorId,		 
+						patternMakingDate : patternMakingDate,
+						patternMakingDespatch : makingDespatch,
+						patternMadingReceived : patternMakingReceivedBy,
 
-	if(styleId!='0'){
-		if(itemId!='0'){
-			$.ajax({
-				type: 'GET',
-				dataType: 'json',
-				url: './insertSampleCad',
-				data: {
-					user : user,
-					purchaseOrder : purchaseOrder,
-					styleId : styleId,
-					itemId : itemId,	
-					colorId : colorId,		 
-					patternMakingDate : patternMakingDate,
-					patternMakingDespatch : makingDespatch,
-					patternMadingReceived : patternMakingReceivedBy,
+						patternCorrectionDate : patterncorrectiondate,
+						patternCorrectionDespatch : patterncorrectiondispatch,
+						PatternCorrectionReceived : correctionReceviedBy,
 
-					patternCorrectionDate : patterncorrectiondate,
-					patternCorrectionDespatch : patterncorrectiondispatch,
-					PatternCorrectionReceived : correctionReceviedBy,
-
-					patternGradingDate : gradingDate,
-					patternGradingDespatch : gradingDespatch,
-					patternGradingReceived : gradingdispatchreceivedby,
+						patternGradingDate : gradingDate,
+						patternGradingDespatch : gradingDespatch,
+						patternGradingReceived : gradingdispatchreceivedby,
 
 
-					patternMarkingDate : markingDate,
-					patternMarkingDespatch : markingdispatch,
-					patternMarkingReceived : markingReceviedBy,
+						patternMarkingDate : markingDate,
+						patternMarkingDespatch : markingdispatch,
+						patternMarkingReceived : markingReceviedBy,
 
-					feedbackComments:feedback,
-					POStatus:POStatus,
-					sampleCadQty:sampleCadQty
+						feedbackComments:feedback,
+						POStatus:POStatus,
+						sampleRequistionQty:sampleRequistionQty,
+						sampleReqId:sampleReqId
 
-				},
-				success: function (data) {
+					},
+					success: function (data) {
 
-						if(data=='success'){
-							alert("Successfully Inserted")
-						}else{
-							alert(" Insert Failed")
-						}
-				}
-			});
+							if(data=='success'){
+								alert("Successfully Inserted");
+								refreshAction();
+							}else{
+								alert(" Insert Failed")
+							}
+					}
+				});
+			}
+			else{
+				alert("Provide Item Name");
+			}
 		}
 		else{
-			alert("Provide Item Name");
+			alert("Provide Style No");
 		}
 	}
 	else{
-		alert("Provide Style No");
+		alert("Provide Sample Requistion No");
 	}
+
+
 
 
 
@@ -295,6 +308,7 @@ function editSmapleCad() {
 
 				if(data=='success'){
 					alert("Successfully Inserted")
+					
 				}else{
 					alert(" Insert Failed")
 				}
@@ -332,7 +346,7 @@ function sampleCadReport(id) {
 		},
 		success: function (data) {
 			if(data=='yes'){
-				var url = "SampleReportView";
+				var url = "SampleCadReportView";
 				window.open(url, '_blank');
 			}
 		}
@@ -395,8 +409,8 @@ function drawItemTable(dataList) {
 				isClosingNeed = true;
 		}
 		
-
-		$('#purchaseOrder').val(item.buyerId);
+		$('#sampleReqId').val(item.sampleReqId);
+		$('#buyerOrderId').val(item.purchaseOrder);
 		$('#styleId').val(item.styleId);
 		$('#itemId').val(item.itemId);
 		$('#colorId').val(item.colorId);
@@ -414,7 +428,7 @@ function drawItemTable(dataList) {
 		//sampleCadQty=0;
 		for (var j = 0; j < sizeListLength; j++) {
 			totalSizeQty = totalSizeQty + parseFloat(sizeList[j].sizeQuantity);
-			sampleCadQty=sampleCadQty+parseFloat(sizeList[j].sizeQuantity);
+			sampleRequistionQty=sampleRequistionQty+parseFloat(sizeList[j].sizeQuantity);
 			tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
 		}
 		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
