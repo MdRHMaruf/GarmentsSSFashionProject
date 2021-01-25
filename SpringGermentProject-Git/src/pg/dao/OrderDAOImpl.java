@@ -1391,7 +1391,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<BuyerPoItem> getBuyerPOItemList(String buyerPOId) {
+	public List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1408,7 +1408,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on bo.ItemId = id.itemid\r\n" + 
 					"left join tbColors c\r\n" + 
 					"on bo.ColorId = c.ColorId\r\n" + 
-					"where BuyerOrderId='"+buyerPOId+"' order by sizeGroupId";
+					"where BuyerOrderId='"+buyerPOId+"' and bo.userId='"+userId+"' order by sizeGroupId";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1420,7 +1420,7 @@ public class OrderDAOImpl implements OrderDAO{
 				sql = "select bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
-						"where bs.linkedAutoId = '"+buyerPoItem.getAutoId()+"' and bs.sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' \r\n" + 
+						"where bs.type='"+SizeValuesType.BUYER_PO.getType()+"' and bs.linkedAutoId = '"+buyerPoItem.getAutoId()+"' and bs.sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' \r\n" + 
 						"order by ss.sortingNo";
 				List<?> list2 = session.createSQLQuery(sql).list();
 				ArrayList<Size> sizeList=new ArrayList<Size>();
@@ -1475,7 +1475,7 @@ public class OrderDAOImpl implements OrderDAO{
 			sql = "select bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 					"join tbStyleSize ss \r\n" + 
 					"on ss.id = bs.sizeId \r\n" + 
-					"where bs.linkedAutoId = '"+buyerPoItem.getAutoId()+"' and bs.sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' \r\n" + 
+					"where bs.linkedAutoId = '"+buyerPoItem.getAutoId()+"' and bs.sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' and bs.type='"+SizeValuesType.BUYER_PO.getType()+"' \r\n" + 
 					"order by ss.sortingNo";
 			List<?> list2 = session.createSQLQuery(sql).list();
 			ArrayList<Size> sizeList=new ArrayList<Size>();
@@ -1514,7 +1514,7 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="delete from  TbBuyerOrderEstimateDetails where autoId='"+itemAutoId+"';";
 			session.createSQLQuery(sql).executeUpdate();
 
-			sql="delete from  tbSizeValues where linkedAutoId='"+itemAutoId+"';";
+			sql="delete from  tbSizeValues where linkedAutoId='"+itemAutoId+"' and type='"+SizeValuesType.BUYER_PO.getType()+"';";
 			session.createSQLQuery(sql).executeUpdate();
 
 			tx.commit();
@@ -1680,7 +1680,7 @@ public class OrderDAOImpl implements OrderDAO{
 				buyerPo= new BuyerPO(element[0].toString(), element[1].toString(), element[3].toString(), element[4].toString(), 0.0, 0.0, 0.0,0.0,0.0, element[5].toString(),element[6].toString(), element[7].toString());
 				buyerPo.setBuyerName(element[2].toString());
 			}
-			buyerPo.setItemList(getBuyerPOItemList(buyerPoNo));
+			buyerPo.setItemList(getBuyerPOItemList(buyerPoNo,buyerPo.getUserId()));
 
 			tx.commit();
 		}

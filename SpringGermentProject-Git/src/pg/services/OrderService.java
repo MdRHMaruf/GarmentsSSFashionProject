@@ -64,7 +64,7 @@ public interface OrderService {
 	//Buyder Po Order
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem);
 	boolean editBuyerPoItem(BuyerPoItem buyerPoItem);
-	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId);
+	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId);
 	BuyerPoItem getBuyerPOItem(String itemAutoId);
 	boolean deleteBuyerPoItem(String itemAutoId);
 	boolean submitBuyerPO(BuyerPO buyerPo);

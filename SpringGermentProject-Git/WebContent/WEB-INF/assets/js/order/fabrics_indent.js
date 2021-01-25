@@ -300,6 +300,16 @@ function addAction() {
   let markingWidth = $("#markingWidth").val();
 
 
+  let isExist = false;
+  indentDataList.each((index, row) => {
+    let id = row.id.slice(4);
+    if ($("#purchaseOrder-" + id).text() == purchaseOrder && row.getAttribute('data-style-id') == styleId && row.getAttribute('data-item-id') == itemId
+      && row.getAttribute('data-item-color-id') == itemColorId && row.getAttribute('data-fabrics-id') == fabricsId && row.getAttribute('data-fabrics-color-id') == fabricsColorId) {
+      isExist = true;
+      break;
+    }
+  })
+
   if (styleId != 0) {
     if (itemId != 0) {
       if (itemColorId != 0) {
@@ -317,17 +327,7 @@ function addAction() {
                     let listRowId = 0;
                     if (length > 0) listRowId = indentDataList[length - 1].id.slice(4);
 
-                    let isExist = false;
-                    indentDataList.each((index,row)=>{
-                      let id = row.id.slice(4);
-                      if($("#purchaseOrder-"+id).text()==purchaseOrder &&row.getAttribute('data-style-id')==styleId && row.getAttribute('data-item-id') == itemId 
-                      && row.getAttribute('data-item-color-id')== itemColorId && row.getAttribute('data-fabrics-id') == fabricsId && row.getAttribute('data-fabrics-color-id') == fabricsColorId){
-                        isExist = true;
-                        break;
-                      }
-                    })
-
-                    if(isExist){
+                    if (isExist) {
                       let row = `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-style-id='${styleId}' data-item-id='${itemId}' data-item-color-id='${itemColorId}' 
                       data-fabrics-id='${fabricsId}' data-quantity='${quantity}' data-dozen-qty='${dozenQuantity}' data-in-percent='${inPercent}' data-total-quantity='${totalQuantity}'
                       data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}' data-marking-width='${markingWidth}'>
@@ -344,12 +344,12 @@ function addAction() {
                                     <td><i class='fa fa-edit' onclick="viewFabricsIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
                                     <td><i class='fa fa-trash' onclick="deleteFabricsIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
                                   </tr>`;
-  
+
                       $("#dataList").append(row);
-                    }else{
+                    } else {
                       warningAlert("This Fabrics Item Already exist...")
                     }
-                    
+
 
                   } else {
                     alert("Please Select Fabrics Color....");
@@ -853,10 +853,10 @@ function refreshAction() {
 
 function fabricIndentReport() {
   let indentId = $("#fabricsIndentId").val();
-  if(indentId != 'New'){
-    let url = "fabricsIndentReportView/"+indentId;
+  if (indentId != 'New') {
+    let url = "fabricsIndentReportView/" + indentId;
     window.open(url, '_blank');
-  } 
+  }
 }
 
 function searchFabricsIndent(indentId) {

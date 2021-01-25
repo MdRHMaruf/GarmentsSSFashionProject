@@ -586,7 +586,7 @@ public class OrderController {
 
 		if(orderService.addBuyerPoItem(buyerPoItem)) {
 			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId());
+			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
 			objmain.put("result",buyerPOItemList);
 		}else {
 			objmain.put("result", "Something Wrong");
@@ -603,7 +603,7 @@ public class OrderController {
 
 		if(orderService.editBuyerPoItem(buyerPoItem)) {
 			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId());
+			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
 			objmain.put("result",buyerPOItemList);
 		}else {
 			objmain.put("result", "Something Wrong");
@@ -613,12 +613,12 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/getBuyerPOItemsList",method=RequestMethod.GET)
-	public @ResponseBody JSONObject getBuyerPOItemsList(String buyerPoNo) {
+	public @ResponseBody JSONObject getBuyerPOItemsList(String buyerPoNo,String userId) {
 		JSONObject objmain = new JSONObject();
 
 
 		JSONArray mainArray = new JSONArray();
-		List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoNo);
+		List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoNo,userId);
 		objmain.put("result",buyerPOItemList);
 
 		return objmain;
@@ -637,12 +637,12 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/deleteBuyerPoItem",method=RequestMethod.GET)
-	public @ResponseBody JSONObject deleteBuyerPoItem(String buyerPoNo,String itemAutoId) {
+	public @ResponseBody JSONObject deleteBuyerPoItem(String buyerPoNo,String itemAutoId,String userId) {
 		JSONObject objmain = new JSONObject();
 
 		if(orderService.deleteBuyerPoItem(itemAutoId)) {
 			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoNo);
+			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoNo,userId);
 			objmain.put("result",buyerPOItemList);
 		}else {
 			objmain.put("result","Something Wrong");
