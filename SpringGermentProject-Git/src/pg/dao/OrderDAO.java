@@ -175,7 +175,7 @@ public interface OrderDAO {
 	
 	public boolean sampleCadInsert(SampleCadAndProduction sample);
 	
-	public List<SampleCadAndProduction> getSampleComments();
+	public List<SampleCadAndProduction> getSampleComments(String userId);
 	
 	public List<SampleCadAndProduction> getSampleDetails(String id);
 	public boolean editSampleCad(SampleCadAndProduction sample);
