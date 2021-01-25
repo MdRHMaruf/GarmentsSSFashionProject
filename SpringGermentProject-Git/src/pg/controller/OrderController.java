@@ -711,10 +711,6 @@ public class OrderController {
 	}
 
 
-
-
-
-
 	// Process multiple file upload action and return a result page to user. 
 	@RequestMapping(value="/save-product/{purpose}/{user}/{buyerName}/{purchaseOrder}", method={RequestMethod.PUT, RequestMethod.POST})
 	public String uploadFileSubmit(

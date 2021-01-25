@@ -67,7 +67,7 @@ String userName=(String)session.getAttribute("userName");
 							<hr class="my-1">
 							<div class="row mt-1">
 
-								<div class="col-sm-3">
+								<div class="col-sm-3 px-1">
 
 									<h5>Pattern Making</h5>
 
@@ -109,7 +109,7 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>
 
-								<div class="col-sm-3">
+								<div class="col-sm-3 px-1">
 
 									<h5>Pattern Correction</h5>
 
@@ -143,9 +143,8 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 								</div>
-								
-								
-								<div class="col-sm-3">
+										
+								<div class="col-sm-3 px-1">
 
 									<h5>Pattern Grading</h5>
 
@@ -180,7 +179,7 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>								
 
-								<div class="col-sm-3">
+								<div class="col-sm-3 px-1">
 
 									<h5>Pattern Marking</h5>
 
@@ -263,7 +262,7 @@ String userName=(String)session.getAttribute("userName");
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="search" type="text" class="form-control"
+					<input id="requisitionSearch" type="text" class="form-control"
 						placeholder="Search Sample Requisition"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -283,8 +282,8 @@ String userName=(String)session.getAttribute("userName");
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Date</th>
-							<th><span>Search</th>
-							<th><span>Print</th>
+							<td><i class="fa fa-search"></i></td>
+							<td><i class="fa fa-print"></i></td>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -294,9 +293,9 @@ String userName=(String)session.getAttribute("userName");
 								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
 								<td>${po.styleNo}</td>
 								<td>${po.sampleDeadline}</td>
-								<td><i class="fa fa-search"
+								<td><i class="fa fa-search" style="cursor:pointer;"
 									onclick="searchSampleRequisition(${po.autoId})"> </i></td>
-								<td><i class="fa fa-print"
+								<td><i class="fa fa-print" style="cursor:pointer;"
 									onclick="printSampleRequisition(${po.autoId})"> </i></td>
 							</tr>
 						</c:forEach>
@@ -315,7 +314,7 @@ String userName=(String)session.getAttribute("userName");
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
-					<input id="search" type="text" class="form-control"
+					<input id="cadSearch" type="text" class="form-control"
 						placeholder="Search Sample Requisition"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -338,8 +337,8 @@ String userName=(String)session.getAttribute("userName");
 							<th>Style No</th>
 							<th>Item No</th>
 							<th>Sample Type</th>
-							<th><span>Search</th>
-							<th><span>Print</th>
+							<td><i class="fa fa-search"></i></td>
+							<td><i class="fa fa-print"></i></td>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -352,9 +351,9 @@ String userName=(String)session.getAttribute("userName");
 								<td>${po.styleNo}</td>
 								<td>${po.itemName}</td>
 								<td>${po.sampleTypeId}</td>
-								<td><i class="fa fa-search"
+								<td><i class="fa fa-search" style="cursor:pointer;"
 									onclick="searchSampleCad(${po.sampleCommentId})"> </i></td>
-								<td><i class="fa fa-print"
+								<td><i class="fa fa-print" style="cursor:pointer;"
 									onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
 							</tr>
 						</c:forEach>

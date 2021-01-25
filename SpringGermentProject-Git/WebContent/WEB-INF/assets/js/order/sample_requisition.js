@@ -296,15 +296,9 @@ function drawItemTable(dataList) {
 			tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
 		}
 		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
-
 	}
 	tables += "</tbody></table> </div></div>";
-
-
-
 	document.getElementById("tableList").innerHTML = tables;
-
-
 }
 
 function successAlert(message) {
