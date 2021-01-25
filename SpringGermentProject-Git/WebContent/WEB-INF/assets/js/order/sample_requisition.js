@@ -249,29 +249,6 @@ function itemSizeAdd() {
 
 }
 
-/*$(document).ready(function(){
-
-	var userId = $("#userId").val();
-	console.log("userId "+userId);
-
-	$.ajax({
-		type: 'POST',
-		dataType: 'json',
-		url: './userWiseNullSampleReqDataList',
-		data: {
-			userId: userId
-		},
-		success: function (data) {
-
-			console.log("data "+data.result.length);
-
-			if (data.result.length>0) {
-				drawItemTable(data.result);
-			} 
-		}
-	});
-});
- */
 
 
 function drawItemTable(dataList) {
@@ -323,20 +300,7 @@ function drawItemTable(dataList) {
 	}
 	tables += "</tbody></table> </div></div>";
 
-	/*	  buyerId=dataList[0].buyerId;
-		  poNoValue=dataList[0].purchaseOrder;
-		  styleValue=dataList[0].styleId;
-		  itemValue=dataList[0].itemId;
-		  colorValue=dataList[0].colorId;
 
-
-		 $('.selectpicker').selectpicker('refresh');
-		 $('#buyerId').val(dataList[0].buyerId).change()*/
-
-	// $('#sampleId').val(dataList[0].sampleId);
-	// $('#instruction').val(dataList[0].instruction);
-	//$('#inchargeId').val(dataList[0].inchargeId);
-	//$('#marchendizerId').val(dataList[0].marchendizerId);
 
 	document.getElementById("tableList").innerHTML = tables;
 

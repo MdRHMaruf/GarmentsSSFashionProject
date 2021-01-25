@@ -35,154 +35,46 @@ String userName=(String)session.getAttribute("userName");
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
+		<input type="hidden" id="purchaseOrder" value="">
+		<input type="hidden" id="styleId" value="">
+		<input type="hidden" id="itemId" value="">
+		<input type="hidden" id="colorId" value="">
+		<input type="hidden" id="POStatus" value="">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<div class="card-box">
 
 					<div class="row">
-						<div class="col-md-5">
-							<div class="row">
-								<div class="col-sm-5 p-0">
-									<label for="purchaseOrder" class="mb-0">Purchase Order</label>
 
-									<select id="purchaseOrder" class="selectpicker form-control"  onchange="poWiseStyleLoad()"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Order</option>
-										<c:forEach items="${poList}" var="po">
-										<option id="purchaseOrder" value="${po}">${po}</option>
-										</c:forEach>
-
-									</select>
-
-								</div>
-
-								<div class="form-check form-check-inline">
-									<input class="form-check-input ml-1" type="radio" name="radio"	id="withPO" value="" checked> 
-									<label class="form-check-label" for="withPO">With PO</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="radio"	id="withOutPO" value=""> 
-									<label	class="form-check-label" for="withOutPO">With Out PO</label>
-								</div>
-
-							</div>
-
-							<div class="row mt-1">
-								<div class="col-sm-5 p-0">
-									<label for="styleNo" class="mb-0">Style No</label>
-									 <select
-										id="styleNo" class="selectpicker form-control" onchange="styleWiseItemLoad()"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Style No</option>
-
-									</select>
-
-								</div>
-							</div>
-
-							<div class="row mt-1">
-
-								<div class="col-sm-5 p-0">
-									<label for="itemName" class="mb-0">Item Name</label> 
-									<select
-										id="itemName" class="selectpicker form-control" onchange="styleItemWiseColorLoad()"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Item Name</option>
-
-									</select>
-
-								</div>
-
-								<div class="col-sm-6 ml-1 p-0">
-									<label for="sampleCommentsNo" class="mb-0">Sample
-										Comment No</label>
-										 <input style=": ; : ;"
-										class="form-control-sm" type="text" id="sampleCommentsNo">
-
-								</div>
-							</div>
-
-							<div class="row mt-1">
-
-								<div class="col-sm-5 p-0">
-									<label for="color" class="mb-0">Color</label> 
-									<select
-										id="itemColor" class="selectpicker form-control" onchange="styleItemWiseColorsizeLoad()"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option id="itemColor">Select Color</option>
-
-									</select>
-
-								</div>
-							</div>
-
-							<div class="row mt-1">
-
-								<div class="col-sm-5 p-0">
-									<label for="size" class="mb-0">Size</label> 
-									<select id="size"
-										class="selectpicker form-control" data-live-search="true" onchange=""
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option id="size">Select Size</option>
-
-									</select>
-
-								</div>
-
-								<div class="col-sm-6 ml-1 p-0">
-									<label for="sampleType" class="mb-0">Sample Type</label>
-									
-									
-									<select id="sampletype" onchange=""
-										class="selectpicker col-md-12 px-0" data-live-search="true"
-											data-style="btn-light btn-sm border-light-gray">
-											<option id="sampletype" value="0">Select Sample</option>
-											<c:forEach items="${sampletype}" var="po">
-												<option id="sampletype" value="${po.id}">${po.name}</option>
-												</c:forEach>
-									</select>
-
-								</div>
-
-							</div>
-
-						</div>
-
-
-
-						<div class="col-md-7">
+						<div class="col-md-12">
 
 							<header class="d-flex justify-content-between">
-								<h5 class="text-center" style="display: inline;">Search
-									Sample Comments</h5>
+								<h5 class="text-center" style="display: inline;">
+									Sample CAD</h5>
 								<button type="button" class="btn btn-outline-dark btn-sm"
 									data-toggle="modal" data-target="#exampleModal">
-									<i class="fa fa-search"></i>
+									<i class="fa fa-search"></i>Sample Requisition List
 								</button>
 							</header>
 							<hr class="my-1">
 							<div class="row mt-1">
 
-								<div class="col-sm-6">
+								<div class="col-sm-3">
 
 									<h5>Pattern Making</h5>
 
 									<div class="row">
-										<label for="makeingDate" class="col-sm-4">Date</label>
-										<div class="col-sm-8">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="makeingDate" class="col-sm-2">Date</label>
+										<div class="col-sm-10">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="patternmakingdate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="makeingdespatch" class="col-sm-4">Dispatch</label>
-										<div class="col-sm-8">
+										<label for="makeingdespatch" class="col-sm-2">Dispatch</label>
+										<div class="col-sm-10">
 											<select id="makeingDespatch"
 												class="selectpicker form-control" data-live-search="false"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
@@ -195,9 +87,9 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 									<div class="row mt-1">
-										<label for="makeingReceivedBy" class="col-sm-4">Recevied
+										<label for="makeingReceivedBy" class="col-sm-2">Recevied
 											By</label>
-										<div class="col-sm-8">
+										<div class="col-sm-10">
 											<input class="form-control-sm" type="text" id="patternmakingreceivedby">
 										</div>
 									</div>
@@ -210,21 +102,21 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>
 
-								<div class="col-sm-6">
+								<div class="col-sm-3">
 
 									<h5>Pattern Correction</h5>
 
 									<div class="row">
-										<label for="correctionDate" class="col-sm-4">Date</label>
-										<div class="col-sm-8">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="correctionDate" class="col-sm-2">Date</label>
+										<div class="col-sm-10">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="patterncorrectiondate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="correctionDate" class="col-sm-4">Dispatch</label>
-										<div class="col-sm-8">
+										<label for="correctionDate" class="col-sm-2">Dispatch</label>
+										<div class="col-sm-10">
 											<select id="patterncorrectiondispatch" class="selectpicker form-control"
 												data-live-search="false"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
@@ -236,34 +128,31 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 									<div class="row mt-1">
-										<label for="correctionReceviedBy" class="col-sm-4">Recevied
+										<label for="correctionReceviedBy" class="col-sm-2">Recevied
 											By</label>
-										<div class="col-sm-8">
+										<div class="col-sm-10">
 											<input class="form-control-sm" type="text" id="correctionReceviedBy">
 										</div>
 									</div>
 
 								</div>
-
-							</div>
-
-							<div class="row">
-
-								<div class="col-sm-6">
+								
+								
+								<div class="col-sm-3">
 
 									<h5>Pattern Grading</h5>
 
 									<div class="row">
-										<label for="gradingDate" class="col-sm-4">Date</label>
-										<div class="col-sm-8">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="gradingDate" class="col-sm-2">Date</label>
+										<div class="col-sm-10">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="gradingDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="gradingDespatch" class="col-sm-4">Despatch</label>
-										<div class="col-sm-8">
+										<label for="gradingDespatch" class="col-sm-2">Despatch</label>
+										<div class="col-sm-10">
 											<select id="gradingDespatch"
 												class="selectpicker form-control" data-live-search="true"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
@@ -275,30 +164,30 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 									<div class="row mt-1">
-										<label for="gradingReceviedBy" class="col-sm-4">Recevied
+										<label for="gradingReceviedBy" class="col-sm-2">Recevied
 											By</label>
-										<div class="col-sm-8">
+										<div class="col-sm-10">
 											<input class="form-control-sm" type="text" id="gradingdispatchreceivedby">
 										</div>
 									</div>
 
-								</div>
+								</div>								
 
-								<div class="col-sm-6">
+								<div class="col-sm-3">
 
 									<h5>Pattern Marking</h5>
 
 									<div class="row">
-										<label for="markingDate" class="col-sm-4">Date</label>
-										<div class="col-sm-8">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="markingDate" class="col-sm-2">Date</label>
+										<div class="col-sm-10">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="markingDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="markingDespatch" class="col-sm-4">Dispatch</label>
-										<div class="col-sm-8">
+										<label for="markingDespatch" class="col-sm-2">Dispatch</label>
+										<div class="col-sm-10">
 											<select id="markingDespatch"
 												class="selectpicker form-control" data-live-search="false"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
@@ -310,9 +199,9 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 									<div class="row mt-1">
-										<label for="markingReceviedBy" class="col-sm-4">Recevied
+										<label for="markingReceviedBy" class="col-sm-2">Recevied
 											By</label>
-										<div class="col-sm-8">
+										<div class="col-sm-10">
 											<input class="form-control-sm" type="text"
 												id="markingReceviedBy">
 										</div>
@@ -321,7 +210,12 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 
 							</div>
-<div class="row mt-1">
+
+						<div id="samplecadtableList">
+						
+						
+						</div>
+						<div class="row mt-1">
 						<div style="width: 55%">
 							<div class="progress">
 								<div id="bar" class="progress-bar" style="width: 0%"></div>
@@ -355,67 +249,57 @@ String userName=(String)session.getAttribute("userName");
 					</div>
 
 
-					<div class="modal fade" id="exampleModal" tabindex="-1"
-						role="dialog" aria-labelledby="exampleModalLabel"
-						aria-hidden="true">
-						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-								<div class="modal-header">
-									<div class="input-group">
-										<input id="search" type="text" class="form-control"
-											placeholder="Search Sample Comments"
-											aria-label="Recipient's username"
-											aria-describedby="basic-addon2">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="fa fa-search"></i></span>
-										</div>
-									</div>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<table class="table table-hover table-bordered table-sm mb-0">
-										<thead>
-											<tr>
-												<th scope="col">#</th>
-												<th scope="col">Buyer</th>
-												<th scope="col">Purchase</th>
-												<th scope="col">Style No</th>												
-												<th scope="col">Item Name</th>
-												<th scope="col">Sample Type</th>
-												<th><span><i class="fa fa-search"></i></span></th>
-												<th><span><i class="fa fa-print"></i></span></th>
-											</tr>
-										</thead>
-										<tbody id="">
-						<c:forEach items="${SampleList}" var="po" varStatus="counter">
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Requisition"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>PO Id</th>
+							<th>Style No</th>
+							<th>Date</th>
+							<th><span>Search</th>
+							<th><span>Print</th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
-								<td> ${po.buyername}</td>
-								<td >${po.purchaseOrder}</td>
-								<td >${po.styleNo}</td>
-								<td >${po.itemName}</td>
-								<td >${po.sampleTypeId}</td>
+								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
+								<td>${po.styleNo}</td>
+								<td>${po.sampleDeadline}</td>
 								<td><i class="fa fa-search"
-									onclick="getSampleDetails(${po.sampleCommentId})">
-								</i>
-								</td>
+									onclick="searchSampleRequisition(${po.autoId})"> </i></td>
 								<td><i class="fa fa-print"
-									onclick="sampleCadReport(${po.sampleCommentId})">
-								</i>
-								</td>
+									onclick="printSampleRequisition(${po.autoId})"> </i></td>
 							</tr>
 						</c:forEach>
-										</tbody>
-									</table>
-								</div>
+					</tbody>
+				</table>
+			</div>
 
-							</div>
-						</div>
-					</div>
-
+		</div>
+	</div>
+</div>
 
 
 				</div>

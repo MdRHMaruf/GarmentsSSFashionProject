@@ -546,9 +546,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<SampleRequisitionItem> getSampleRequisitionList() {
+	public List<SampleRequisitionItem> getSampleRequisitionList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getSampleRequisitionList();
+		return orderDAO.getSampleRequisitionList(userId);
 	}
 
 	@Override

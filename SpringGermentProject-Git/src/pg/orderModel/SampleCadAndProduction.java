@@ -62,7 +62,7 @@ public class SampleCadAndProduction {
 	String POStatus;
 	String buyername;
 	String resultList;
-	
+	String insertSampleCad;
 	
 	
 	public SampleCadAndProduction(String sampleCommentId, String po,
@@ -589,6 +589,16 @@ public class SampleCadAndProduction {
 	}
 	public void setBuyerOrderId(String buyerOrderId) {
 		this.buyerOrderId = buyerOrderId;
+	}
+
+
+	public String getInsertSampleCad() {
+		return insertSampleCad;
+	}
+
+
+	public void setInsertSampleCad(String insertSampleCad) {
+		this.insertSampleCad = insertSampleCad;
 	}
 	
 	

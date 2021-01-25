@@ -4281,7 +4281,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<SampleRequisitionItem> getSampleRequisitionList() {
+	public List<SampleRequisitionItem> getSampleRequisitionList(String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -4290,7 +4290,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.purchaseOrder,a.StyleId,a.Date";
+			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.purchaseOrder,a.StyleId,a.Date";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
@@ -5863,8 +5863,6 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "PurchaseOrder, "
 					+ "ItemId, "
 					+ "ColorId, "
-					+ "Size, "
-					+ "SampleTypeId,"
 					+ " PatternMakingDate, "
 					+ "PatternMakingDespatch,"
 					+ " PatternMakingReceived,"
@@ -5884,8 +5882,6 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "'"+POId(s.getPurchaseOrder())+"',"
 					+ "'"+s.getItemId()+"',"
 					+ "'"+s.getColorId()+"',"
-					+ "'"+s.getSizeid()+"',"
-					+ "'"+s.getSampleTypeId()+"',"
 					+ "'"+s.getPatternMakingDate()+"',"
 					+ "'"+s.getPatternMakingDespatch()+"',"
 					+ "'"+s.getPatternMadingReceived()+"',"
@@ -5937,7 +5933,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.samplecommentid, (select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid) as buyername,(select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder) as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,isnull((select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId),'') as sampleType from TbSampleCadInfo a";
+			String sql="select a.samplecommentid, ISNULL((select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid),'') as buyername,ISNULL((select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder),'') as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,isnull((select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId),'') as sampleType from TbSampleCadInfo a";
 			System.out.println(" check duplicate buyer query ");
 
 			List<?> list = session.createSQLQuery(sql).list();

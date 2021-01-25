@@ -1735,7 +1735,7 @@ public class OrderController {
 		List<Style> styleList= orderService.getStyleList(userId);
 		List<Color> colorList = registerService.getColorList();
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
-		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
+		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<CommonModel> inchargeList = orderService.getInchargeList();
 		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
@@ -2206,10 +2206,10 @@ public class OrderController {
 	public ModelAndView sample_cad(ModelMap map,HttpSession session) {
 
 		
-		
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		
+		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		
 		ModelAndView view = new ModelAndView("order/sample_cad");
 
@@ -2221,6 +2221,7 @@ public class OrderController {
 		view.addObject("poList",poList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("SampleList",Samples);
+		view.addObject("sampleReqList",sampleReqList);
 		
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
