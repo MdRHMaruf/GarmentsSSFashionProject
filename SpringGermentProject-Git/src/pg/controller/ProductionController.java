@@ -86,7 +86,7 @@ public class ProductionController {
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
-		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
+		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<CommonModel> inchargeList = orderService.getInchargeList();
 		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
@@ -152,7 +152,7 @@ public class ProductionController {
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<FabricsItem> fabricsList = registerService.getFabricsItemList();
-		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList();
+		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 		List<ProductionPlan> productionPlanList = productionService.getProductionPlanList();
 

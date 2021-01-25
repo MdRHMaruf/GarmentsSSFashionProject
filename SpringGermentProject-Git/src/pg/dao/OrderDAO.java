@@ -136,7 +136,7 @@ public interface OrderDAO {
 	boolean addItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleRequisitionItem> getSampleRequisitionItemList(String userId);
 	boolean confirmItemToSampleRequisition(SampleRequisitionItem v);
-	List<SampleRequisitionItem> getSampleRequisitionList();
+	List<SampleRequisitionItem> getSampleRequisitionList(String userId);
 	List<SampleRequisitionItem> getSampleRequisitionDetails(String sampleReqId);
 	List<SampleRequisitionItem> getIncomepleteSampleRequisitionItemList(String userId);
 	List<ProductionPlan> getSampleProduction(String sampleCommentId,String operatorId,String date);
