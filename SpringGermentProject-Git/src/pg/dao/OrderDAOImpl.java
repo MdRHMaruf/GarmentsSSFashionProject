@@ -4149,7 +4149,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+			String sql="select ISNULL(srd.sampleReqId,0) as sampleReqId,sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join tbSampleRequisition sr\r\n" + 
 					"					on sr.sampleReqId=srd.sampleReqId\r\n" + 
@@ -4165,7 +4165,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();							
-				dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
 			}
 
 			for (SampleRequisitionItem sampleReqItem : dataList) {
@@ -4329,7 +4329,7 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();							
-				dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				dataList.add(new SampleRequisitionItem(sampleReqId,element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
 			}
 
 			for (SampleRequisitionItem sampleReqItem : dataList) {
@@ -5801,7 +5801,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-	public String POId(String purchaseOrder) {
+	public String POId(String buyerOrderId) {
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -5812,8 +5812,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="SELECT  BuyerOrderId UserId FROM  TbBuyerOrderEstimateDetails where PurchaseOrder='"+purchaseOrder+"'";
-			System.out.println(" check duplicate buyer query ");
+			String sql="SELECT  PurchaseOrder FROM  TbBuyerOrderEstimateDetails where buyerOrderId='"+buyerOrderId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 
@@ -5852,10 +5851,12 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="insert into TbSampleCadInfo  (StyleId, "
+			String sql="insert into TbSampleCadInfo  (sampleReqId,StyleId, "
 					+ "PurchaseOrder, "
+					+ "BuyerOrderId, "
 					+ "ItemId, "
 					+ "ColorId, "
+					+ "totalRequisitionQty, "
 					+ " PatternMakingDate, "
 					+ "PatternMakingDespatch,"
 					+ " PatternMakingReceived,"
@@ -5871,10 +5872,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ " FeedbackComments,"
 					+ " POStatus, "
 					+ "SampleCommentUserId,"
-					+ "entryTime) values('"+s.getStyleId()+"',"
-					+ "'"+POId(s.getPurchaseOrder())+"',"
+					+ "entryTime) values('"+s.getSampleReqId()+"','"+s.getStyleId()+"',"
+					+ "'"+POId(s.getBuyerOrderId())+"',"
+					+ "'"+s.getBuyerOrderId()+"',"
 					+ "'"+s.getItemId()+"',"
 					+ "'"+s.getColorId()+"',"
+					+ "'"+s.getSampleRequistionQty()+"',"
 					+ "'"+s.getPatternMakingDate()+"',"
 					+ "'"+s.getPatternMakingDespatch()+"',"
 					+ "'"+s.getPatternMadingReceived()+"',"
@@ -5915,7 +5918,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<SampleCadAndProduction> getSampleComments() {
+	public List<SampleCadAndProduction> getSampleComments(String userId) {
 		String countryname="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -5926,7 +5929,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.samplecommentid, ISNULL((select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by buyerid),'') as buyername,ISNULL((select PurchaseOrder from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.PurchaseOrder group by PurchaseOrder),'') as po,(select styleno from TbStyleCreate where StyleId=a.StyleId) as styleno,(select b.itemname from tbItemDescription b where b.itemid=a.ItemId) as itemname,isnull((select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId),'') as sampleType from TbSampleCadInfo a";
+			String sql="select a.samplecommentid, ISNULL((select (select name from tbBuyer where id=b.buyerId) from TbBuyerOrderEstimateDetails b where b.BuyerOrderId=a.BuyerOrderID group by buyerid),'') as buyername,a.PurchaseOrder,ISNULL((select styleno from TbStyleCreate where StyleId=a.StyleId),'') as styleno,ISNULL((select b.itemname from tbItemDescription b where b.itemid=a.ItemId),'') as itemname,isnull((select b.Name from TbSampleTypeInfo b where b.AutoId=a.SampleTypeId),'') as sampleType from TbSampleCadInfo a where a.SampleCommentUserId='"+userId+"'\n" + 
+					"";
 			System.out.println(" check duplicate buyer query ");
 
 			List<?> list = session.createSQLQuery(sql).list();

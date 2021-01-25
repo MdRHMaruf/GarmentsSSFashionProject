@@ -2216,11 +2216,12 @@ public class OrderController {
 
 		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
-		List<SampleCadAndProduction>Samples=orderService.getSampleComments();	
-		view.addObject("Samples",Samples);
+		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
+		
+
 		view.addObject("poList",poList);
 		view.addObject("sampletype",sampleList);
-		view.addObject("SampleList",Samples);
+		view.addObject("sampleCadList",sampleCadList);
 		view.addObject("sampleReqList",sampleReqList);
 		
 		map.addAttribute("userId",userId);
@@ -2285,7 +2286,7 @@ public class OrderController {
 
 
 	@ResponseBody
-	@RequestMapping(value = "/SampleReportView",method=RequestMethod.GET)
+	@RequestMapping(value = "/SampleCadReportView",method=RequestMethod.GET)
 	public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
 
 		
