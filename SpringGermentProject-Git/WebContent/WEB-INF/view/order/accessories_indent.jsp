@@ -315,7 +315,7 @@ String userName=(String)session.getAttribute("userName");
 												<select id="unit" class="selectpicker form-control"
 													data-live-search="true"
 													data-style="btn-light btn-sm border-light-gray"
-													onchange="setUnitQty()">
+													onchange="setInPercentAndTotalInPreviewTable(),calculateTotalQtyAndUnitQty(),setUnitQty()">
 
 													<c:forEach items="${unit}" var="unit" varStatus="counter">
 														<option value="${unit.id}">${unit.name}</option>
@@ -332,7 +332,7 @@ String userName=(String)session.getAttribute("userName");
 											<label for="unitQty" class="col-form-label-sm mb-0 py-0"><strong>Unit
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="unitQty"
+										<input type="number" class='form-control-sm' id="unitQty" onkeyup="setTotalByUnitInEditMode()"
 											readonly>
 									</div>
 								</div>
@@ -418,7 +418,7 @@ String userName=(String)session.getAttribute("userName");
 											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
 													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty()">
+										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 							</div>
@@ -455,7 +455,7 @@ String userName=(String)session.getAttribute("userName");
 											<label for="totalQty" class="col-form-label-sm mb-0 py-0"><strong>Total
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="totalQty"
+										<input type="number" class='form-control-sm' id="totalQty" onkeyup="setUnitByTotalInEditMode()"
 											readonly>
 									</div>
 								</div>
@@ -493,13 +493,13 @@ String userName=(String)session.getAttribute("userName");
 										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-primary btn-sm" id="btnEdit"
+										<button class="btn btn-success btn-sm" id="btnEdit"
 											onclick="editAction()">
 											<i class="fa fa-pencil-square"></i> Edit
 										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-primary btn-sm"
+										<button class="btn btn-secondary btn-sm"
 											onclick="refreshAction()">
 											<i class="fa fa-refresh"></i> Refresh
 										</button>
@@ -549,12 +549,12 @@ String userName=(String)session.getAttribute("userName");
 										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">
+										<button class="btn btn-secondary btn-sm">
 											<i class="fa fa-refresh"></i> Refresh
 										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-primary btn-sm">
+										<button class="btn btn-info btn-sm" onclick="printAccessories()">
 											<i class="fas fa-print"></i> Preview
 										</button>
 									</div>
@@ -608,9 +608,9 @@ String userName=(String)session.getAttribute("userName");
 								<td>${list.aiNo}</td>
 								<td>${list.purchaseOrder}</td>
 								<td>${list.indentDate}</td>
-								<td><i class="fa fa-search"
+								<td><i class="fa fa-search" style="cursor:pointer;"
 									onclick="searchAccessoriesIndent('${list.aiNo}')"> </i></td>
-									<td><i class="fa fa-print"
+									<td><i class="fa fa-print" style="cursor:pointer;"
 									onclick="printAccessoriesIndent('${list.aiNo}')"> </i></td>
 							</tr>
 						</c:forEach>

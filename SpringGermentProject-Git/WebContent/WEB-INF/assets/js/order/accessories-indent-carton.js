@@ -1,8 +1,8 @@
-let poId = 0;
-let styleValue = 0;
-let itemValue = 0;
-let colorValue = 0;
-let sizeValue = 0;
+let poIdForSet = 0;
+let styleIdForSet = 0;
+let itemIdForSet = 0;
+let colorIdForSet = 0;
+let sizeIdForSet = 0;
 let find = 0;
 
 
@@ -74,8 +74,8 @@ function loadPoNo(data) {
 	};
 	document.getElementById("purchaseOrder").innerHTML = options;
 	$('#purchaseOrder').selectpicker('refresh');
-	$('#purchaseOrder').val(poId).change();
-	poId = 0;
+	$('#purchaseOrder').val(poIdForSet).change();
+	poIdForSet = 0;
 }
 
 function btnInstallEvent() {
@@ -306,8 +306,8 @@ function LoadSize(data) {
 	};
 	document.getElementById("size").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
-	$('#size').val(sizeValue).change();
-	sizeValue = 0;
+	$('#size').val(sizeIdForSet).change();
+	sizeIdForSet = 0;
 
 }
 
@@ -361,8 +361,8 @@ function loadStyles(data) {
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
 	//conosle.log("style " + stylevalue);
-	$('#styleNo').val(styleValue).change();
-	styleValue = 0;
+	$('#styleNo').val(styleIdForSet).change();
+	styleIdForSet = 0;
 
 }
 
@@ -896,24 +896,27 @@ function viewIndent(autoId, indentType) {
 	let row = $("#row-" + autoId);
   
 	$("#indentAutoId").val(autoId);
-	$("#buyerId").val(row.attr('data-fabrics-id')).change();
-	$("#consumption").val($("#consumption-" + autoId).text());
-	$("#quantity").val(row.attr('data-quantity'));
-	$("#dozen").val(row.attr('data-dozen-qty'));
-	$("#inPercent").val(row.attr('data-in-percent'));
-	$("#percentQuantity").val($("#percentQty-" + autoId).text());
-	$("#total").val(row.attr('data-total-quantity'));
-	$("#unit").val(row.attr('data-unit-id')).change();
-	$("#width").val(row.attr('data-width'));
-	$("#yard").val(row.attr('data-yard'));
-	$("#gsm").val(row.attr('data-gsm'));
-	$("#grandQuantity").val($("#totalQty-" + autoId).text());
-	$("#fabricsColor").val(row.attr('data-fabrics-color-id')).change();
-	$("#brand").val(row.attr('data-brand-id')).change();
-	$("#purchaseOrder").val($("#purchaseOrder-" + autoId).text()).change();
-	console.log(autoId, row.attr('data-fabrics-id'), $("#consumption-" + autoId).text(), row.attr('data-quantity'), $("#dozen-" + autoId).text())
-	console.log(row.attr('data-in-percent'), $("#percentQty-" + autoId).text(), row.attr('data-total-quantity'))
-  
+	
+	poIdForSet = $("#purchaseOrder-" + autoId).text();
+	styleIdForSet = row.attr('data-style-id');
+	itemIdForSet = row.attr('data-item-id');
+	colorIdForSet = row.attr('data-color-id');
+	sizeIdForSet = row.attr('data-size-id');
+	$("#orderQty").val(row.attr('data-order-quantity'));
+	$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
+	$("#ply").val($("#ply-" + autoId).text());
+	$("#type").val(row.attr('data-type'));
+	$("#length1").val($("#length-" + autoId).text());
+	$("#width1").val($("#width-" + autoId).text());
+	$("#height1").val($("#height-" + autoId).text());
+	$("#add1").val(row.attr('data-add1'));
+	$("#add2").val(row.attr('data-add2'));
+	$("#unit").val(row.attr('data-unit-id'));
+	$("#divideBy").val(row.attr('data-divide-by'));
+	$("#cbm").val($("#cbm-" + autoId).text());
+	$("#qty").val($("#totalQty-" + autoId).text());
+	$("#cartonSize").val(row.attr('data-carton-size'));
+	$("#buyerName").val(row.attr('data-buyer-id')).change();
 	$("#btnAdd").hide();
 	$("#btnEdit").show();
 
@@ -921,9 +924,9 @@ function viewIndent(autoId, indentType) {
 	
   }
 function deleteIndent(autoId, indentType) {
-	let indentId = $("#fabricsIndentId").val();
+	let indentId = $("#indentId").val();
   
-	if (confirm("Are You Sure To Delete this fabrics Indent?")) {
+	if (confirm("Are You Sure To Delete this Carton Indent?")) {
 	  if (indentType == 'newIndent') {
 		$("#row-" + autoId).remove();
 	  } else {
@@ -1060,29 +1063,28 @@ function searchIndent(indentId) {
 		data.cartonIndentList.forEach((indent) => {
 			
 		  console.log(indent);
-			row += `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-buyer-id='${buyerId}' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
-		  data-shipping-mark='${shippingMark}' data-size-id='${sizeId}' data-order-quantity='${orderQty}' data-accessories-item-id='${accessoriesItemId}' data-type='${type}' data-add1='${add1}' data-add2='${add2}'   data-unit-id='${unitId}' data-divide-by='${divideBy}'  data-carton-size='${cartonSize}' >
-					  <td id='purchaseOrder-${listRowId}'>${purchaseOrder}</td>
-					  <td id='styleNo-${listRowId}'>${styleNo}</td>
-					  <td id='colorName-${listRowId}'>${colorName}</td>
-					  <td id='accessoriesName-${listRowId}'>${accessoriesName}</td>
-					  <td id='ply-${listRowId}'>${ply}</td>
-					  <td id='length-${listRowId}'>${length1}</td>
-					  <td id='width-${listRowId}'>${width1}</td>
-					  <td id='height-${listRowId}'>${height1}</td>
-					  <td id='unit-${listRowId}'>${unit}</td>
-					  <td id='size-${listRowId}'>${size}</td>
-					  <td id='cbm-${listRowId}'>${cbm}</td>
-					  <td id='totalQty-${listRowId}'>${totalQty}</td>
-					  <td><i class='fa fa-edit' onclick="viewIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
-					  <td><i class='fa fa-trash' onclick="deleteIndent('${listRowId}','newIndent')" style='cursor:pointer;'> </i></td>
-				  </tr>`;
-  
-		 
+		  let id = indent.autoId;
+			row += `<tr id='row-${id}' class='oldIndentRow' data-item-type='oldIndent' data-buyer-id='${indent.buyerId}' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-color-id='${indent.itemColorId}' 
+		  data-shipping-mark='${indent.shippingMark}' data-size-id='${indent.accessoriesSizeId}' data-order-quantity='${indent.orderqty}' data-accessories-item-id='${indent.accessoriesItemId}' data-type='${indent.type}' data-add1='${indent.add1}' data-add2='${indent.add2}'   data-unit-id='${indent.unitId}' data-divide-by='${indent.devideBy}'  data-carton-size='${indent.catronSize}' >
+					  <td id='purchaseOrder-${id}'>${indent.poNo}</td>
+					  <td id='styleNo-${id}'>${indent.style}</td>
+					  <td id='colorName-${id}'>${indent.itemColor}</td>
+					  <td id='accessoriesName-${id}'>${indent.accessoriesItem}</td>
+					  <td id='ply-${id}'>${indent.ply}</td>
+					  <td id='length-${id}'>${parseFloat(indent.length1).toFixed(2)}</td>
+					  <td id='width-${id}'>${parseFloat(indent.width1).toFixed(2)}</td>
+					  <td id='height-${id}'>${parseFloat(indent.height1).toFixed(2)}</td>
+					  <td id='unit-${id}'>${indent.unit}</td>
+					  <td id='size-${id}'>${indent.accessoriesSize}</td>
+					  <td id='cbm-${id}'>${parseFloat(indent.cbm).toFixed(2)}</td>
+					  <td id='totalQty-${id}'>${parseFloat(indent.totalQty).toFixed(2)}</td>
+					  <td><i class='fa fa-edit' onclick="viewIndent('${id}','oldIndent')" style='cursor:pointer;'> </i></td>
+					  <td><i class='fa fa-trash' onclick="deleteIndent('${id}','oldIndent')" style='cursor:pointer;'> </i></td>
+				  </tr>`;		 
 		});
 		$("#dataList").append(row);
-		$("#indentId").text(data.fabricsIndentList[0].indentId);
-		$("#fabricsIndentId").text(data.fabricsIndentList[0].indentId);
+		$("#cartonIndentId").text(data.cartonIndentList[0].indentId);
+		$("#indentId").val(data.cartonIndentList[0].indentId);
 		$("#exampleModal").modal('hide');
 	  }
 	});
@@ -1307,9 +1309,9 @@ function setAccessoriesItemCartonDetails(data) {
 
 
 
-	styleValue = itemList[0].style;
-	itemValue = itemList[0].item;
-	colorValue = itemList[0].itemColor;
+	styleIdForSet = itemList[0].style;
+	itemIdForSet = itemList[0].item;
+	colorIdForSet = itemList[0].itemColor;
 
 
 	$('#purchaseOrder option').map(function () {
