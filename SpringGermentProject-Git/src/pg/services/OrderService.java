@@ -108,7 +108,8 @@ public interface OrderService {
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);
-	boolean editAccessoriesCurton(AccessoriesIndentCarton v);
+	boolean editAccessoriesCarton(AccessoriesIndentCarton v);
+	boolean deleteAccessoriesCarton(String autoId,String indentId);
 
 
 	//Fabrics Indent

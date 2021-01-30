@@ -68,6 +68,7 @@
 		
 		
 		String report="";
+		String jrxmlFile = "";
 		if(type.equalsIgnoreCase("Accessories")) {
 			
 			sql="select 'only' as Taka,b.ShippingMarks, "+
@@ -86,6 +87,7 @@
 					"on a.pono=b.pono   "+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'  "+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
+			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
 			
 		}else if(type.equalsIgnoreCase("Fabrics")) {
 			sql="select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, "+
@@ -101,14 +103,31 @@
 					"join tbFabricsIndent b on a.pono=b.pono "+  
 					"where a.pono='"+poNo+"' and b.supplierid='"+supplierId+"' "+
 					"order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
+			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
 			
 
+		}else if(type.equalsIgnoreCase("curton")){
+			sql=" select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, \r\n"+
+					" (select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,  \r\n"+
+					"  (select colorName from tbColors where ColorId=b.ColorId) as ColorName, \r\n"+
+					"  b.cartonSize as accessoriesSize,isnull((select ss.sizeName from tbStyleSize ss  where ss.id = b.sizeId),'') as size, \r\n"+ 
+					 " (select unitname from tbunits where UnitId=b.UnitId) as UnitName, \r\n"+
+					"  b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+					"  (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,  \r\n"+
+					"  (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
+					"  (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
+					"  (select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,  \r\n"+
+					"  (select Signature from TbMerchendiserInfo where MUserId='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+
+					"  from tbPurchaseOrderSummary a   \r\n"+
+					"  join tbAccessoriesIndentForCarton b on a.pono=b.pono \r\n"+
+					" where a.pono='"+poNo+"' and b.supplierid='"+supplierId+"'  \r\n"+
+					"  order by  b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId asc ";
+			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonPurchaseOrder.jrxml");
 		}
     	
     	System.out.println(sql);
         SpringRootConfig sp=new SpringRootConfig();
         
-       	String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
         InputStream input = new FileInputStream(new File(jrxmlFile));
 
         
