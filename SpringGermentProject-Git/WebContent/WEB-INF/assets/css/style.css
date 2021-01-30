@@ -2843,6 +2843,9 @@ input[type=number] {
 .min-width-60{
   	min-width: 60px; 
 }
+.max-width-60{
+  	max-width: 60px; 
+}
 .min-width-150{
   	min-width: 150px; 
 }

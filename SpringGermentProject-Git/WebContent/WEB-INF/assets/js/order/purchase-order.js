@@ -45,12 +45,7 @@ function typeWiseIndentItemLoad() {
   const purchaseOrder = $("#purchaseOrder").val();
   const styleId = $("#styleNo").val();
   if (type != "0") {
-    if (type == "3") {
-      let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
-      document.getElementById("indentItem").innerHTML = options;
-      $('#indentItem').selectpicker('refresh');
-      $('#indentItem').val(0).change();
-    } else {
+    
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -74,7 +69,7 @@ function typeWiseIndentItemLoad() {
           indentIdForSet = 0;
         }
       });
-    }
+    
 
   } else {
     var options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
@@ -431,6 +426,7 @@ function searchPurchaseOrder(poNo) {
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
 
+        $("#dataList").empty();
         $("#dataList").append(drawDataTable(purchaseOrder.itemList,"checked"));
         $('.tableSelect').selectpicker('refresh');
 
@@ -439,7 +435,6 @@ function searchPurchaseOrder(poNo) {
         $("#btnPOSubmit").prop("disabled", true);
         $("#btnPOEdit").prop("disabled", false);
         $("#btnPreview").prop("disabled", false);
-
 
         $('#searchModal').modal('hide');
 
@@ -488,8 +483,8 @@ function drawDataTable(data , isChecked = "") {
     <td id='grandQty-${autoId}'>${rowData.grandQty}</td>
     <td>${rowData.unit}</td>
     <td id='dollar-${autoId}'>${rowData.dollar}</td>
-    <td><input id='rate-${autoId}' class='form-control-sm min-width-60' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
-    <td id='amount-${autoId}'>${rowData.amount}</td>
+    <td><input id='rate-${autoId}' class='form-control-sm max-width-60' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
+    <td id='amount-${autoId}'>${(rowData.amount).toFixed(2)}</td>
     <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
     </tr>`
    

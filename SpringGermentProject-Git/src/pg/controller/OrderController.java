@@ -375,6 +375,17 @@ public class OrderController {
 
 		return view;
 	}
+	
+	@RequestMapping(value = "/printGroupCostingReport/{costingId}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printGroupCostingReport(ModelMap map,@PathVariable("costingId") String costingId) {
+
+
+		ModelAndView view=new ModelAndView("order/printGroupCostingReport");
+
+		map.addAttribute("costingId", costingId);
+
+		return view;
+	}
 
 	@RequestMapping(value = "/typeWiseParticularLoad",method=RequestMethod.GET)
 	public @ResponseBody JSONObject typeWiseParticularLoad(String type) {
@@ -1477,41 +1488,34 @@ public class OrderController {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/editAccessoriesCurton",method=RequestMethod.POST)
+	@RequestMapping(value = "/editAccessoriesCarton",method=RequestMethod.POST)
 	public JSONObject editAccessoriesCurton(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
-		JSONArray mainarray = new JSONArray();
-		boolean insert= orderService.editAccessoriesCurton(v);
-
-		if(insert) {
-			List<AccessoriesIndentCarton>qty=orderService.getAccessoriesIndentCarton(v.getPoNo(),v.getStyle(),v.getItem(),v.getItemColor());
-
-			for (int i = 0; i < qty.size(); i++) {
-				JSONObject obj=new JSONObject();
-
-				obj.put("autoId", qty.get(i).getAutoid());
-				obj.put("poNo", qty.get(i).getPoNo());
-				obj.put("style", qty.get(i).getStyle());
-				obj.put("itemName", qty.get(i).getItem());
-				obj.put("itemColor", qty.get(i).getItemColor());
-				obj.put("shippingMark", qty.get(i).getShippingMark());
-				obj.put("accessoriesName", qty.get(i).getAccessoriesItem());
-				obj.put("cartonSize", qty.get(i).getAccessoriesSize());
-				obj.put("totalQty", df.format(Double.parseDouble(qty.get(i).getTotalQty())));
-				mainarray.add(obj);
-
-			}
-
-			objmain.put("result", mainarray);
-			System.out.println(" obj main "+objmain);
-
-			return objmain;
+		if(orderService.editAccessoriesCarton(v)) {
+			objmain.put("result","Successful");
+		}else {
+			objmain.put("result", "Something Wrong");
 		}
-		else {
-			return null;
-		}
+		return objmain;
 	}
 
+	@RequestMapping(value = "/deleteCartonIndent",method=RequestMethod.GET)
+	public @ResponseBody JSONObject deleteCartonIndent(String autoId,String indentId) {
+		JSONObject objmain = new JSONObject();
+		
+		objmain.put("result",orderService.deleteAccessoriesCarton(autoId, indentId));
+		return objmain;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/cartonIndentReportView/{indentId}",method=RequestMethod.GET)
+	public ModelAndView cartonIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
+
+		ModelAndView view = new ModelAndView("order/cartonIndentReport");
+		view.addObject("indentId",indentId);
+		return view;
+
+	}
 	@ResponseBody
 	@RequestMapping(value = "/getAllAccessoriesCartonData",method=RequestMethod.POST)
 	public JSONObject getAllAccessoriesCartonData(AccessoriesIndentCarton v) {
@@ -1673,6 +1677,16 @@ public class OrderController {
 		FabricsIndent fabricsIndent = orderService.getFabricsIndentInfo(autoId);
 		objmain.put("fabricsIndent",fabricsIndent);
 		return objmain;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/fabricsIndentReportView/{indentId}",method=RequestMethod.GET)
+	public ModelAndView fabricsIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
+
+		ModelAndView view = new ModelAndView("order/fabricsIndentReport");
+		view.addObject("indentId",indentId);
+		return view;
+
 	}
 
 	@RequestMapping(value = "/getPOWiseStyleLoad",method=RequestMethod.GET)
@@ -2091,15 +2105,7 @@ public class OrderController {
 
 
 
-	@ResponseBody
-	@RequestMapping(value = "/fabricsIndentReportView/{indentId}",method=RequestMethod.GET)
-	public ModelAndView fabricsIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
-
-		ModelAndView view = new ModelAndView("order/fabricsIndentReport");
-		view.addObject("indentId",indentId);
-		return view;
-
-	}
+	
 
 	//Parcel
 	@RequestMapping(value = "/parcel",method=RequestMethod.GET)

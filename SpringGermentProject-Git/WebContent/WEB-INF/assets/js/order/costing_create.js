@@ -188,7 +188,10 @@ function printGroupCosting(){
   });
   console.log("Costing id-",costingId);
   if(costingId.length >0){
-    
+    costingId = costingId.slice(0,-1);
+    let url = `printGroupCostingReport/${costingId}`;
+    window.open(url, '_blank');
+  
   }
 }
 

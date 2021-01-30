@@ -108,7 +108,8 @@ public interface OrderDAO {
 	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
 
 	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);
-	boolean editAccessoriesCurton(AccessoriesIndentCarton v);
+	boolean editAccessoriesCarton(AccessoriesIndentCarton cartonIndent);
+	boolean deleteAccessoriesCarton(String autoId,String indentId);
 	boolean InstallDataAsSameParticular(String userId,String purchaseOrder, String styleId, String itemId, String colorId,
 			String installAccessories, String forAccessories);
 

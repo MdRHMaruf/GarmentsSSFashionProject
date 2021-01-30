@@ -10,33 +10,16 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
 
 <div class="page-wrapper">
-	<div class="alert alert-success alert-dismissible fade show"
-		style="display: none;">
-		<p id="successAlert" class="mb-0">
-			<strong>Success!</strong> Unit Name Save Successfully..
-		</p>
-	</div>
-	<div class="alert alert-warning alert-dismissible fade show"
-		style="display: none;">
-		<p id="warningAlert" class="mb-0">
-			<strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...
-		</p>
-	</div>
-	<div class="alert alert-danger alert-dismissible fade show"
-		style="display: none;">
-		<p id="dangerAlert" class="mb-0">
-			<strong>Wrong!</strong> Something Wrong...
-		</p>
-	</div>
-	<input type="hidden" id="userId" value="<%=userId%>">
-	<input type="hidden" id="poNo" value="0">
+
+	<input type="hidden" id="userId" value="<%=userId%>"> <input
+		type="hidden" id="poNo" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -233,6 +216,25 @@ String userName=(String)session.getAttribute("userName");
 			</div>
 
 		</div>
+		
+		<div class="alert alert-success alert-dismissible fade show"
+			style="display: none;">
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Unit Name Save Successfully..
+			</p>
+		</div>
+		<div class="alert alert-warning alert-dismissible fade show"
+			style="display: none;">
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...
+			</p>
+		</div>
+		<div class="alert alert-danger alert-dismissible fade show"
+			style="display: none;">
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
+		</div>
 		<hr class="my-1">
 		<div class="row mt-1">
 			<div style="overflow: auto; max-height: 300px;"
@@ -361,7 +363,8 @@ String userName=(String)session.getAttribute("userName");
 								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchPurchaseOrder(${po.poNo})"> </i></td>
 								<td><i class="fa fa-print" style="cursor: pointer;"
-									onclick="showPreview('${po.poNo}','${po.supplierId}','${po.type}')"> </i></td>
+									onclick="showPreview('${po.poNo}','${po.supplierId}','${po.type}')">
+								</i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

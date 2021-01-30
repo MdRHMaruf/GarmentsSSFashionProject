@@ -522,9 +522,6 @@ String userName=(String)session.getAttribute("userName");
 				<button id="btnEdit" class="btn btn-success btn-sm"
 					onclick="editAccessoriesCarton()" style="display: none;">Edit</button>
 				<button id="btnFieldRefresh" class="btn btn-secondary btn-sm" onclick='fieldRefresh()'>Refresh</button>
-				
-				<button id="cartonindent" class="btn btn-primary btn-sm"
-					onclick="btnAllCartonIndent()">All Carton Indent</button>
 			</div>
 		</div>
 
@@ -608,7 +605,7 @@ String userName=(String)session.getAttribute("userName");
 							</button>
 						</div>
 						<div class="pr-1">
-							<button id="btnPreview" class="btn btn-info btn-sm" onclick="fabricIndentReport()">
+							<button id="btnPreview" class="btn btn-info btn-sm" onclick="cartonIndentReport()">
 								<i class="fas fa-print"></i> Preview
 							</button>
 						</div>

@@ -425,9 +425,15 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean editAccessoriesCurton(AccessoriesIndentCarton v) {
+	public boolean editAccessoriesCarton(AccessoriesIndentCarton v) {
 		// TODO Auto-generated method stub
-		return orderDAO.editAccessoriesCurton(v);
+		return orderDAO.editAccessoriesCarton(v);
+	}
+	
+	@Override
+	public boolean deleteAccessoriesCarton(String autoId,String indentId){
+		// TODO Auto-generated method stub
+		return orderDAO.deleteAccessoriesCarton(autoId, indentId);
 	}
 
 	@Override
