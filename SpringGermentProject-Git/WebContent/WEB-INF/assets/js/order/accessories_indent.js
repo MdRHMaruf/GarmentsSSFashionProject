@@ -4,7 +4,6 @@ let colorvalue = 0;
 let sizevalue = 0;
 let find = 0;
 
-
 $('#btnSave').show();
 $('#btnEdit').hide();
 
@@ -466,7 +465,7 @@ $("#btnRecyclingData").click(() => {
 								}
 
 								tables += `</tr><tr>
-												<td colspan="5" rowspan="2"></td>
+												<td colspan="5" rowspan="3"></td>
 												<td>(%) Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
@@ -481,7 +480,16 @@ $("#btnRecyclingData").click(() => {
 												<td>Total</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
-										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' onkeyup="setInPercentInPreviewTable('${i}${sizeList[j].sizeId}')" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
+										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' onkeyup="setInPercentInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
+									} else {
+										tables += `<td></td>`;
+									}
+								}
+								tables += `</tr><tr>
+								<td>Unit Qty</td>`
+								for (let j = 0; j < sizeListLength; j++) {
+									if (sizeList[j].sizeQuantity > 0) {
+										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
 									} else {
 										tables += `<td></td>`;
 									}
@@ -540,6 +548,7 @@ $("#btnRecyclingData").click(() => {
 															<th >Order Qty</th>
 															<th >% Qty</th>
 															<th >Total Qty</th>
+															<th >Unit Qty</th>
 														</tr>
 													</thead>
 													<tbody id="orderList" class="orderPreview">`
@@ -556,7 +565,8 @@ $("#btnRecyclingData").click(() => {
 											<td id='shippingMark-${i}'>${item.shippingmark} </td>
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)}</td>
 											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)}</span>) </td>
-											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}')" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
 										</tr>`;
 
 							}
@@ -648,9 +658,7 @@ $("#btnAdd").click(() => {
 							let inPercent = $("#inPercent-" + cellId).text();
 							let percentQty = $("#percentQty-" + cellId).text();
 							let totalQty = $("#totalQty-" + cellId).val();
-
-
-							let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
+							let unitQty = $("#unitQty-" + cellId).val();
 							if (unitQty > 0) {
 
 								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' 
@@ -781,7 +789,8 @@ function editAction() {
 		row.attr('data-percent-qty', percentQty);
 		row.attr('data-total-qty', totalQty);
 		$("#indentUnitQty-" + autoId).text(unitQty);
-
+		$("#unitQty").attr("readonly", true);
+		$("#totalQty").attr("readonly", true);
 		$("#btnAdd").show();
 		$("#btnEdit").hide();
 	} else {
@@ -837,7 +846,8 @@ function editAction() {
 					row.attr('data-percent-qty', percentQty);
 					row.attr('data-total-qty', totalQty);
 					$("#indentUnitQty-" + autoId).text(unitQty);
-
+					$("#unitQty").attr("readonly", true);
+					$("#totalQty").attr("readonly", true);
 					$("#btnAdd").show();
 					$("#btnEdit").hide();
 				}
@@ -903,7 +913,8 @@ function refreshAction() {
 
 	$("#autoId").val("");
 	$("#indentType").val("");
-
+	$("#unitQty").attr("readonly", true);
+	$("#totalQty").attr("readonly", true);
 	$('#btnAdd').show();
 	$('#btnEdit').hide();
 
@@ -1025,6 +1036,8 @@ function setIndentItem(rowId, indentType) {
 	$("#totalQty").val(parseFloat(row.attr('data-total-qty')).toFixed(2));
 	$("#autoId").val(rowId);
 	$("#indentType").val(indentType);
+	$("#unitQty").attr("readonly", false);
+	$("#totalQty").attr("readonly", false);
 	$('#btnAdd').hide();
 	$('#btnEdit').show();
 }
@@ -1040,8 +1053,8 @@ function deleteIndentRow(rowId, indentType) {
 				dataType: 'json',
 				url: './deleteAccessoriesIndent',
 				data: {
-					accessorienIndentId : accessoriesIndentNo,
-					indentAutoId : rowId
+					accessorienIndentId: accessoriesIndentNo,
+					indentAutoId: rowId
 				},
 				success: function (data) {
 					if (data.result != 'something wrong') {
@@ -1197,6 +1210,11 @@ function setInPercentAndTotalInPreviewTable() {
 	let inPercent = $("#inPercent").val();
 	inPercent = parseFloat(inPercent == '' ? 0 : inPercent);
 
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let divideBy = $("#divideBy").val();
+	divideBy = parseFloat(divideBy == '' || divideBy == 0 ? 1 : divideBy);
 
 	let rowList = $(".orderPreviewRow");
 	let length = rowList.length;
@@ -1216,10 +1234,13 @@ function setInPercentAndTotalInPreviewTable() {
 				let percentQty = (totalQty * inPercent) / 100;
 				totalQty = totalQty + percentQty;
 
+				let unitQty = (totalQty / divideBy) / unitValue;
+
 				//conosle.log(cellId,inPercent,percentQty);
 				$("#inPercent-" + cellId).text(inPercent.toFixed(1));
 				$("#percentQty-" + cellId).text(percentQty.toFixed(1));
 				$("#totalQty-" + cellId).val(totalQty.toFixed(1));
+				$("#unitQty-" + cellId).val(unitQty.toFixed(1));
 			})
 
 		} else {
@@ -1228,15 +1249,18 @@ function setInPercentAndTotalInPreviewTable() {
 			let totalQty = (orderQyt * reqPerPcs);
 			let percentQty = (totalQty * inPercent) / 100;
 			totalQty = totalQty + percentQty;
-
+			let unitQty = (totalQty / divideBy) / unitValue;
 
 			$("#inPercent-" + rowId).text(inPercent.toFixed(1));
 			$("#percentQty-" + rowId).text(percentQty.toFixed(1));
 			$("#totalQty-" + rowId).val(totalQty.toFixed(1));
+			$("#unitQty-" + rowId).val(unitQty.toFixed(1));
 		}
 
 	});
 }
+
+
 
 function setInPercentInPreviewTable(id) {
 	let orderQty = parseFloat($("#orderQty-" + id).text());
@@ -1245,13 +1269,90 @@ function setInPercentInPreviewTable(id) {
 	let reqPerPcs = $("#reqPerPcs").val();
 	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let divideBy = $("#divideBy").val();
+	divideBy = parseFloat(divideBy == '' || divideBy == 0 ? 1 : divideBy);
+
 	let totalReqQty = orderQty * reqPerPcs;
 	let percentQty = totalQty - totalReqQty;
 
 	let inPercent = (percentQty * 100) / totalReqQty;
 
+	let unitQty = (totalQty / divideBy) / unitValue;
+
 	$("#inPercent-" + id).text(inPercent.toFixed(1));
 	$("#percentQty-" + id).text(percentQty.toFixed(1));
+	$("#unitQty-" + id).text(unitQty.toFixed(1));
+}
+
+function setTotalByUnitQtyInPreviewTable(id) {
+	let orderQty = parseFloat($("#orderQty-" + id).text());
+	let unitQty = $("#unitQty-" + id).val() == '' ? 0 : $("#unitQty-" + id).val();
+
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let divideBy = $("#divideBy").val();
+	divideBy = parseFloat(divideBy == '' || divideBy == 0 ? 1 : divideBy);
+
+	let totalQty = unitQty * unitValue * divideBy;
+
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let totalReqQty = orderQty * reqPerPcs;
+	let percentQty = totalQty - totalReqQty;
+
+	let inPercent = (percentQty * 100) / totalReqQty;
+	$("#totalQty-" + id).val(totalQty.toFixed(1));
+	$("#inPercent-" + id).text(inPercent.toFixed(1));
+	$("#percentQty-" + id).text(percentQty.toFixed(1));
+}
+
+function calculateTotalQtyAndUnitQty() {
+	let rowList = $(".orderPreviewRow");
+	//let length = rowList.length;
+	let totalQty = 0;
+	let totalUnitQty = 0;
+	let totalOrderQty = 0;
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	rowList.each((index, row) => {
+
+		let rowId = row.id.slice(9);
+		//conosle.log(row);
+		let isSizeRequired = row.getAttribute('data-size-required');
+
+		if (isSizeRequired == "true") {
+			let sizes = $(".sizes-" + rowId);
+			sizes.each((index, td) => {
+				let cellId = td.id.slice(9);
+				//conosle.log(cellId,inPercent,percentQty);
+				totalOrderQty += parseFloat($("#orderQty-" + cellId).text());
+				totalQty += parseFloat($("#totalQty-" + cellId).val());
+				totalUnitQty += parseFloat($("#unitQty-" + cellId).val());
+			})
+
+		} else {
+			totalOrderQty += parseFloat($("#orderQty-" + rowId).text());
+			totalQty += parseFloat($("#totalQty-" + rowId).val());
+			totalUnitQty += parseFloat($("#unitQty-" + rowId).val());
+		}
+
+	});
+	let totalReqQty = totalOrderQty * reqPerPcs;
+	let percentQty = totalQty - totalReqQty;
+
+	if (totalReqQty == 0) totalReqQty = 1;
+	let inPercent = (percentQty * 100) / totalReqQty;
+	
+	$("#inPercent").val(inPercent.toFixed(2));
+	$("#percentQty").val(percentQty.toFixed(2));
+	$("#totalQty").val(totalQty.toFixed(2));
+	$("#unitQty").val(totalUnitQty.toFixed(2));
 }
 
 function requiredperdozen() {
@@ -1326,6 +1427,57 @@ function setTotalOrderQty() {
 	$("#orderQty").val(totalOrderQty.toFixed(1));
 }
 
+function setTotalByUnitInEditMode() {
+	let orderQty = parseFloat($("#orderQty").val());
+	let unitQty = $("#unitQty").val() == '' ? 0 : $("#unitQty").val();
+
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let divideBy = $("#divideBy").val();
+	divideBy = parseFloat(divideBy == '' || divideBy == 0 ? 1 : divideBy);
+
+	let totalQty = unitQty * unitValue * divideBy;
+
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let totalReqQty = orderQty * reqPerPcs;
+	let percentQty = totalQty - totalReqQty;
+
+	
+	let inPercent = (percentQty * 100) / totalReqQty;
+	console.log(totalQty,percentQty,inPercent);
+	$("#totalQty").val(totalQty.toFixed(1));
+	$("#inPercent").val(inPercent.toFixed(1));
+	$("#percentQty").val(percentQty.toFixed(1));
+}
+
+
+function setUnitByTotalInEditMode() {
+	let orderQty = parseFloat($("#orderQty").val());
+	let totalQty = $("#totalQty").val() == '' ? 0 : $("#totalQty").val();
+
+	let reqPerPcs = $("#reqPerPcs").val();
+	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+
+	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+	unitValue = unitValue == 0 ? 1 : unitValue;
+
+	let divideBy = $("#divideBy").val();
+	divideBy = parseFloat(divideBy == '' || divideBy == 0 ? 1 : divideBy);
+
+	let totalReqQty = orderQty * reqPerPcs;
+	let percentQty = totalQty - totalReqQty;
+
+	let inPercent = (percentQty * 100) / totalReqQty;
+
+	let unitQty = (totalQty / divideBy) / unitValue;
+	console.log(unitQty,percentQty,inPercent);
+	$("#inPercent").val(inPercent.toFixed(1));
+	$("#percentQty").val(percentQty.toFixed(1));
+	$("#unitQty").val(unitQty.toFixed(1));
+}
 function setUnitQty() {
 
 	let orderQty = $("#orderQty").val();
@@ -1358,13 +1510,13 @@ function setUnitQty() {
 
 	$("#dozenQty").val(dozenQty);
 	$("#reqPerDozen").val(reqPerDozen);
-	$("#percentQty").val(percentQty);
-	$("#totalQty").val(totalQty);
+	$("#percentQty").val(percentQty.toFixed(2));
+	$("#totalQty").val(totalQty.toFixed(2));
 
 	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
 	unitValue = unitValue == 0 ? 1 : unitValue;
 
-	let unitQty = parseFloat(((totalQty / divideBy) / unitValue));
+	let unitQty = parseFloat(((totalQty / divideBy) / unitValue)).toFixed(2);
 	$("#unitQty").val(unitQty);
 }
 
@@ -1388,6 +1540,10 @@ function searchAccessoriesIndent(accessoriesIndentId) {
 	});
 
 }
+function printAccessories() {
+	printAccessoriesIndent($("#accessoriesIndentId").val());
+}
+
 function printAccessoriesIndent(aiNo) {
 	let url = "printAccessoriesIndent/" + aiNo;
 	window.open(url, '_blank');
@@ -1419,7 +1575,7 @@ function drawAccessoriesIndentListTable(data) {
 										data-accessories-size='${indent.accessoriessize}' data-accessories-item-id='${indent.accessoriesId}' data-accessories-color-id='${indent.accessoriesColorId}' 
 										data-accessories-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}'
 										data-order-qty='${indent.orderqty}' data-dozen-qty='${indent.qtyindozen}' data-req-per-pcs='${indent.reqperpcs}' data-req-per-dozen='${indent.reqperdozen}' data-per-unit='${indent.perunit}' data-total-box='${indent.totalbox}'
-										data-divide-by='${indent.divideby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
+										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
 										<td>${++length}</td>
 										<td id='indentPurchaseOrder-${autoId}'>${indent.purchaseOrder}</td>
 										<td>${indent.styleNo}</td>

@@ -54,30 +54,25 @@
 		Transaction tx=null;
         
 	
-		String Sql="select ai.id,isnull(sc.StyleNo,'') as styleno,isnull(id.itemname,'') as itemname,isnull(itemC.Colorname,'') as itemcolor,fi.ItemName as FabricsItemName,fabricsC.Colorname as fabricscolor,b.name as brand,ai.width,ai.GSM,ai.Yard,ai.qty,ai.markingWidth,ai.dozenqty,ai.consumption,ai.TotalQty,ai.RequireUnitQty,u.unitname as unit,mi.Signature as Signature  \r\n"+  
-				"from tbFabricsIndent ai "+
-				"left join TbStyleCreate sc  "+
-				"on ai.styleId = cast(sc.StyleId as varchar) "+
-				"left join tbItemDescription id  "+
-				"on ai.itemid = cast(id.itemid as varchar) "+
-				"left join tbColors itemC  "+
-				"on ai.itemcolor = cast(itemC.ColorId as varchar)"+
-				"left join TbFabricsItem fi \r\n"+
-				"on ai.fabricsid = fi.id \r\n"+
-				"left join tbColors fabricsC \r\n"+
-				"on ai.fabricscolor = fabricsC.ColorId \r\n"+
-				"left join tbbrands b \r\n"+
-				"on ai.brand = b.id  \r\n"+
+		String Sql="select a.indentId,a.buyerId,a.PurchaseOrder,a.StyleId,sc.StyleNo,a.ItemId,id.itemname,a.ColorId,c.Colorname,a.ShippingMarks,a.sizeId,isnull(ss.sizeName,'')as sizeName,a.accessoriesItemId,ai.itemname as accessoriesName,a.cartonSize,a.Ply,a.type,a.OrderQty,a.Length1,a.Width1,a.Height1,a.Add1,a.Add2,a.UnitId,u.unitname,a.DivideBy,a.cbm,a.Qty,a.IndentPostBy,a.autoId \r\n"+ 
+				"from tbAccessoriesIndentForCarton a  \r\n"+
+				"left join TbStyleCreate sc \r\n"+
+				"on a.styleid = sc.StyleId \r\n"+ 
+				"left join tbItemDescription id \r\n"+
+				"on a.Itemid = id.itemid \r\n"+
+				"left join tbColors c \r\n"+
+				"on a.ColorId = c.ColorId \r\n"+
+				"left join tbStyleSize ss \r\n"+
+				"on a.sizeId = ss.id \r\n"+
+				"left join TbAccessoriesItem ai \r\n"+
+				"on a.accessoriesItemId = ai.itemid \r\n"+
 				"left join tbunits u \r\n"+
-				"on ai.unitId = u.Unitid \r\n"+
-				"left join TbMerchendiserInfo mi \r\n"+
-				"on ai.entryby = mi.MUserId \r\n"+
-				"where ai.indentId = '"+indentId+"' "+
-				"order by ai.fabricsid,ai.fabricscolor";
+				"on a.UnitId = u.Unitid \r\n"+
+				"where a.indentId='"+indentId+"'";
     	System.out.println("Query "+Sql);
     	
         
-		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsIndent.jrxml");
+		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonIndent.jrxml");
         InputStream input = new FileInputStream(new File(jrxmlFile));
 
     	JasperDesign jd=JRXmlLoader.load(input);
