@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -80,9 +81,6 @@ public class PasswordController {
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public String login(@RequestParam String name,@RequestParam String password,HttpServletRequest request,ModelMap modelmap) throws UserBlockedException	
 	{	
-		HttpSession session=request.getSession();
-		session.invalidate();
-	
 		
 		System.out.println("Log In execute");
 		List<Login> lg=passService.login(name, password);
