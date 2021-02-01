@@ -202,6 +202,10 @@ public interface OrderService {
 	public boolean saveFileAccessDetails(CommonModel v);
 	List<CommonModel> getAllFromFileLogDetails(CommonModel v);
 	public boolean addNewPermission (CommonModel v);
+	boolean deleteSampleRequisitionItem(String sapleAutoId);
+	List<SampleRequisitionItem> getSampleRequistionItemData(String itemAutoId);
+	boolean editItemToSampleRequisition(SampleRequisitionItem v);
+	List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId);
 }
 
 

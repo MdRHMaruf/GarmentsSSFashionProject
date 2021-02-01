@@ -14,6 +14,7 @@ public class SampleRequisitionItem {
 	String itemName="";
 	String colorId="";
 	String colorName="";
+	String buyerOrderId="";
 	String purchaseOrder="";
 	String sizeGroupId="";
 	String sizeListString="";
@@ -31,8 +32,9 @@ public class SampleRequisitionItem {
 		
 	}
 	
-	public SampleRequisitionItem(String sampleReqId,String PurchaseOrder,String StyleNo,String StyleId,String SampleDeadline) {
+	public SampleRequisitionItem(String sampleReqId,String BuyerOrderId,String PurchaseOrder,String StyleNo,String StyleId,String SampleDeadline) {
 		this.autoId=sampleReqId;
+		this.buyerOrderId=BuyerOrderId;
 		this.purchaseOrder=PurchaseOrder;
 		this.styleNo=StyleNo;
 		this.styleId=StyleId;
@@ -40,8 +42,8 @@ public class SampleRequisitionItem {
 	}
 	
 	
-	public SampleRequisitionItem(String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String PurchaseOrder,String SizeGroupId,String UserId){
-
+	public SampleRequisitionItem(String SampleReqId,String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String PurchaseOrder,String SizeGroupId,String UserId){
+		this.sampleReqId=SampleReqId;
 		this.sampleId=SampleId;
 		this.buyerId=BuyerId;
 		this.autoId=sampleAutoId;
@@ -57,7 +59,7 @@ public class SampleRequisitionItem {
 		
 	}
 	
-	public SampleRequisitionItem(String sampleReqId,String InchargeId,String MerchendizerId,String Instruction,String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String PurchaseOrder,String SizeGroupId,String UserId){
+	public SampleRequisitionItem(String sampleReqId,String InchargeId,String MerchendizerId,String Instruction,String SampleId,String BuyerId,String sampleAutoId,String StyleId,String StyleNo,String ItemId,String ItemName,String ColorId,String ColorName,String BuyerOrderId,String PurchaseOrder,String SizeGroupId,String UserId){
 		this.sampleReqId=sampleReqId;
 		this.inchargeId=InchargeId;
 		this.marchendizerId=MerchendizerId;
@@ -71,6 +73,7 @@ public class SampleRequisitionItem {
 		this.itemName=ItemName;
 		this.colorId=ColorId;
 		this.colorName=ColorName;
+		this.buyerOrderId=BuyerOrderId;
 		this.purchaseOrder=PurchaseOrder;
 		this.sizeGroupId=SizeGroupId;
 		this.userId=UserId;
@@ -217,6 +220,14 @@ public class SampleRequisitionItem {
 
 	public void setSampleReqId(String sampleReqId) {
 		this.sampleReqId = sampleReqId;
+	}
+
+	public String getBuyerOrderId() {
+		return buyerOrderId;
+	}
+
+	public void setBuyerOrderId(String buyerOrderId) {
+		this.buyerOrderId = buyerOrderId;
 	}
 	
 	

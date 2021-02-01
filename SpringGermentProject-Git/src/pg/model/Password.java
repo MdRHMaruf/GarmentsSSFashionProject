@@ -27,6 +27,7 @@ public class Password {
     String session;
     String factoryId;
     String departmentId;
+    String fullName;
     
     String accesslist;
     
@@ -124,6 +125,12 @@ public class Password {
 	}
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
     
 	
