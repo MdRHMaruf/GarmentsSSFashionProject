@@ -65,13 +65,14 @@ public class PurchaseOrder {
 		this.orderDate = orderDate;
 	}
 	
-	public PurchaseOrder(String poNo,String orderDate, String deliveryDate, String deliveryTo, String orderBy, String billTo,
+	public PurchaseOrder(String poNo,String orderDate, String deliveryDate,String supplierId, String deliveryTo, String orderBy, String billTo,
 			String manualPO, String paymentType, String currency, String note, String subject, List<PurchaseOrderItem>  itemList,
-			String userId) {
+			String poType,String userId) {
 		super();
 		this.poNo = poNo;
 		this.orderDate = orderDate;
 		this.deliveryDate = deliveryDate;
+		this.supplierId = supplierId;
 		this.deliveryTo = deliveryTo;
 		this.orderBy = orderBy;
 		this.billTo = billTo;
@@ -81,6 +82,7 @@ public class PurchaseOrder {
 		this.note = note;
 		this.subject = subject;
 		this.itemList = itemList;
+		this.type = poType;
 		this.userId = userId;
 	}
 	

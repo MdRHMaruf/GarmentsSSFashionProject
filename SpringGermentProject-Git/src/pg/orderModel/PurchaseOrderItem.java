@@ -55,10 +55,11 @@ public class PurchaseOrderItem {
 		this.userId = userId;
 	}
 	
-	public PurchaseOrderItem(String autoId, String styleNo,String type, String indentItemName, String supplierId, double rate,
+	public PurchaseOrderItem(String autoId,String purchaseOrder, String styleNo,String type, String indentItemName, String supplierId, double rate,
 			String dollar, String colorName, String size, double qty, double grandQty, String unit,String currency,boolean isCheck) {
 		super();
 		this.autoId = autoId;
+		this.purchaseOrder = purchaseOrder;
 		this.styleNo = styleNo;
 		this.type = type;
 		this.indentItemName = indentItemName;

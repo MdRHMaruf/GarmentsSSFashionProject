@@ -4435,6 +4435,58 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+	
+	@Override
+	public List<pg.registerModel.AccessoriesItem> getIndentItems(String indentId, String indentType) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<AccessoriesItem> dataList=new ArrayList<AccessoriesItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql = "";
+			if(indentType.equals("Fabrics")) {
+				sql = "select fi.id,fi.ItemName,fi.unitId \r\n" + 
+						"from tbFabricsIndent rf \r\n" + 
+						"left join TbFabricsItem fi \r\n" + 
+						"on rf.fabricsid = fi.id \r\n" + 
+						"where rf.indentId='"+indentId+"' and rf.pono is null group by fi.id,fi.ItemName,fi.unitId";
+			}else if(indentType.equals("Accessories")) {
+				sql = "select a.itemid,a.itemname,a.unitId \r\n" + 
+						"from tbAccessoriesIndent ai \r\n" + 
+						"left join TbAccessoriesItem a \r\n" + 
+						"on ai.accessoriesItemId = a.itemid \r\n" + 
+						"where ai.aiNo='"+indentId+"' and ai.pono is null  group by a.itemid,a.itemname,a.unitId";
+			}else {
+				sql = "select aic.accessoriesItemId,ai.itemname,aic.UnitId\r\n" + 
+						"from tbAccessoriesIndentForCarton aic \r\n" + 
+						"left join TbAccessoriesItem ai \r\n" + 
+						"on aic.accessoriesItemId = ai.itemid\r\n" + 
+						"where aic.indentId = '"+indentId+"' and aic.pono is null group by aic.accessoriesItemId,ai.itemname,aic.UnitId ";
+			}
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new AccessoriesItem(element[0].toString(), element[1].toString(), "",element[2].toString(), ""));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
 
 
 	@Override
@@ -4458,12 +4510,15 @@ public class OrderDAOImpl implements OrderDAO{
 			sql="insert into tbPurchaseOrderSummary "
 					+ " ("
 					+ "poNo,"
+					+ "type,"
 					+ "orderDate,"
 					+ "deliveryDate,"
+					+ "supplierId,"
 					+ "orderby,"
 					+ "billto,"
 					+ "deliveryto,"
 					+ "paymentTerm,"
+					+ "currency,"
 					+ "Note,"
 					+ "Subject,"
 					+ "ManualPo,"
@@ -4472,34 +4527,38 @@ public class OrderDAOImpl implements OrderDAO{
 					+ " values "
 					+ "("
 					+ "'"+poId+"',"
+					+ "'"+purchaseOrder.getType()+"',"
 					+ "'"+purchaseOrder.getOrderDate()+"',"
 					+ "'"+purchaseOrder.getDeliveryDate()+"',"
+					+ "'"+purchaseOrder.getSupplierId()+"',"
 					+ "'"+purchaseOrder.getOrderBy()+"',"
 					+ "'"+purchaseOrder.getBillTo()+"',"
 					+ "'"+purchaseOrder.getDeliveryTo()+"',"
 					+ "'"+purchaseOrder.getPaymentType()+"',"
+					+ "'"+purchaseOrder.getCurrency()+"',"
 					+ "'"+purchaseOrder.getNote()+"',"
 					+ "'"+purchaseOrder.getSubject()+"',"
 					+ "'"+purchaseOrder.getManualPO()+"',"
 					+ "'"+purchaseOrder.getUserId()+"',"
 					+ "CURRENT_TIMESTAMP ) ";
+			System.out.println(sql);
 			session.createSQLQuery(sql).executeUpdate();
 
 			int length = purchaseOrder.getItemList().size();
 			for (PurchaseOrderItem item : purchaseOrder.getItemList()) {
-				if(item.getType().equals("1")) {
+				if(item.getType().equals("Fabrics")) {
 					if(item.isCheck()) {
 						sql="Update tbFabricsIndent set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbFabricsIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}
-				}else if(item.getType().equals("2")) {
+				}else if(item.getType().equals("Accessories")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndent set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbAccessoriesIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
-				}else if(item.getType().equals("3")) {
+				}else if(item.getType().equals("Carton")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndentForCarton set pono='"+poId+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where autoId='"+item.getAutoId()+"'";		
 					}else {
@@ -4544,10 +4603,12 @@ public class OrderDAOImpl implements OrderDAO{
 			sql="update tbPurchaseOrderSummary set "
 					+ "orderDate = '"+purchaseOrder.getOrderDate()+"',"
 					+ "deliveryDate = '"+purchaseOrder.getDeliveryDate()+"',"
+					+ "supplierId = '"+purchaseOrder.getSupplierId()+"',"
 					+ "orderby = '"+purchaseOrder.getOrderBy()+"',"
 					+ "billto = '"+purchaseOrder.getBillTo()+"',"
 					+ "deliveryto = '"+purchaseOrder.getDeliveryTo()+"',"
 					+ "paymentTerm = '"+purchaseOrder.getPaymentType()+"',"
+					+ "currency = '"+purchaseOrder.getCurrency()+"',"
 					+ "Note = '"+purchaseOrder.getNote()+"',"
 					+ "Subject = '"+purchaseOrder.getSubject()+"',"
 					+ "ManualPo = '"+purchaseOrder.getManualPO()+"',"
@@ -4557,20 +4618,20 @@ public class OrderDAOImpl implements OrderDAO{
 
 			int length = purchaseOrder.getItemList().size();
 			for (PurchaseOrderItem item : purchaseOrder.getItemList()) {
-				if(item.getType().equals("1")) {
+				if(item.getType().equals("Fabrics")) {
 					if(item.isCheck()) {
 						sql="Update tbFabricsIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbFabricsIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}
-				}else if(item.getType().equals("2")) {
+				}else if(item.getType().equals("Accessories")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
 						sql="Update tbAccessoriesIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
 
-				}else if(item.getType().equals("3")) {
+				}else if(item.getType().equals("Carton")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndentForCarton set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where autoId='"+item.getAutoId()+"'";		
 					}else {
@@ -4600,7 +4661,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<PurchaseOrder> getPurchaseOrderSummeryList() {
+	public List<PurchaseOrder> getPurchaseOrderSummeryList(String userId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		PurchaseOrder tempPo;
@@ -4610,13 +4671,32 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			String sql;
 
-			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,fi.supplierid,s.name \r\n" + 
+			sql=" select pono,(select convert(varchar,orderDate,25))as orderDate,supplierId,isnull(s.name,'') as supplierName,type from tbPurchaseOrderSummary pos\r\n" + 
+					" left join tbSupplier s \r\n" + 
+					" on pos.supplierId = s.id\r\n" + 
+					" where pos.entryBy = '"+userId+"'\r\n" + 
+					" order by pos.pono desc";
+					
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempPo = new PurchaseOrder(element[0].toString(),element[1].toString());
+				tempPo.setSupplierId(element[2].toString());
+				tempPo.setSupplierName(element[3].toString());
+				tempPo.setType(element[4].toString());
+				dataList.add(tempPo);
+			}
+			
+			/*sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,fi.supplierid,isnull(s.name,'') as suppilerName  \r\n" + 
 					" from tbPurchaseOrderSummary pos\r\n" + 
 					"join tbFabricsIndent fi\r\n" + 
 					" on pos.pono = fi.pono \r\n" + 
 					" left join tbSupplier s\r\n" + 
 					" on fi.supplierid = s.id\r\n" + 
-					" order by pos.pono desc";
+					" where pos.entryBy='"+userId+"' \r\n"+
+					" order by pos.pono desc ";
+					
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -4628,12 +4708,13 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(tempPo);
 			}
 
-			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,ai.supplierid,s.name \r\n" + 
+			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,ai.supplierid,isnull(s.name,'') as suppilerName  \r\n" + 
 					" from tbPurchaseOrderSummary pos\r\n" + 
 					"join tbAccessoriesIndent ai\r\n" + 
 					" on pos.pono = ai.pono \r\n" + 
 					" left join tbSupplier s\r\n" + 
-					" on ai.supplierid = s.id\r\n" + 
+					" on ai.supplierid = s.id\r\n"
+					+ "where pos.entryBy='"+userId+"' \r\n" + 
 					" group by pos.pono,orderDate,ai.supplierid,s.name\r\n" + 
 					" order by pos.pono desc";
 			list = session.createSQLQuery(sql).list();
@@ -4647,12 +4728,13 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(tempPo);
 			}
 
-			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,aif.supplierid,s.name \r\n" + 
+			sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,aif.supplierid,isnull(s.name,'') as suppilerName  \r\n" + 
 					" from tbPurchaseOrderSummary pos\r\n" + 
 					"join tbAccessoriesIndentForCarton aif\r\n" + 
 					" on pos.pono = aif.pono \r\n" + 
 					" left join tbSupplier s\r\n" + 
-					" on aif.supplierid = s.id\r\n" + 
+					" on aif.supplierid = s.id\r\n"
+					+ "where pos.entryBy='"+userId+"' \r\n" + 
 					" group by pos.pono,orderDate,aif.supplierid,s.name\r\n" + 
 					" order by pos.pono desc";
 			list = session.createSQLQuery(sql).list();
@@ -4664,6 +4746,77 @@ public class OrderDAOImpl implements OrderDAO{
 				tempPo.setSupplierName(element[3].toString());
 				tempPo.setType("curton");
 				dataList.add(tempPo);
+			}*/
+
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<CommonModel> getPendingIndentList(String userId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		CommonModel tempCommon;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql;
+
+			sql="select AINo,'Accessories' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndent ai\r\n" + 
+					"where ai.IndentPostBy = '"+userId+"' and ai.pono is null\r\n" + 
+					"group by ai.AINo,ai.IndentDate\r\n" + 
+					"order by ai.AINo desc";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempCommon = new CommonModel();
+				tempCommon.setId(element[0].toString());
+				tempCommon.setIndentType(element[1].toString());
+				tempCommon.setDate(element[2].toString());
+				dataList.add(tempCommon);
+			}
+
+			sql="select fi.indentId,'Fabrics' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbFabricsIndent fi\r\n" + 
+					"where fi.entryby = '"+userId+"' and fi.pono is null\r\n" + 
+					"group by fi.indentId,fi.IndentDate\r\n" + 
+					"order by fi.indentId desc";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempCommon = new CommonModel();
+				tempCommon.setId(element[0].toString());
+				tempCommon.setIndentType(element[1].toString());
+				tempCommon.setDate(element[2].toString());
+				dataList.add(tempCommon);
+			}
+
+			sql="select indentId,'Carton' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndentForCarton ai\r\n" + 
+					"where ai.IndentPostBy = '"+userId+"' and ai.pono is null\r\n" + 
+					"group by ai.indentId,ai.IndentDate\r\n" + 
+					"order by ai.indentId desc";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempCommon = new CommonModel();
+				tempCommon.setId(element[0].toString());
+				tempCommon.setIndentType(element[1].toString());
+				tempCommon.setDate(element[2].toString());
+				dataList.add(tempCommon);
 			}
 
 			tx.commit();
@@ -4681,7 +4834,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public PurchaseOrder getPurchaseOrder(String poNo) {
+	public PurchaseOrder getPurchaseOrder(String poNo,String poType) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		PurchaseOrder purchaseOrder = null;
@@ -4692,95 +4845,8 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql;
 
 
-
-			sql="select fi.id,style.StyleNo,f.ItemName as accessoriesname,fi.supplierId,fi.rate,fi.dolar,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname,isnull(fi.currency,'') as currency\r\n" + 
-					"from tbFabricsIndent fi \r\n" + 
-					"left join TbStyleCreate style\r\n" + 
-					"on fi.styleId = style.StyleId \r\n" + 
-					"left join tbColors c\r\n" + 
-					"on fi.itemcolor = c.ColorId \r\n" + 
-					"left join TbFabricsItem f\r\n" + 
-					"on fi.fabricsid = f.id\r\n" + 
-					"left join tbunits unit\r\n" + 
-					"on fi.UnitId = unit.Unitid\r\n" + 
-					"where fi.poNo='"+poNo+"' and poapproval='1'   order by fi.id";
-
-			List<?> list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"1", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[11].toString(),true));				
-			}
-			sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
-					" from tbAccessoriesIndent ai \r\n" + 
-					" left join TbStyleCreate style\r\n" + 
-					" on ai.styleid = style.StyleId \r\n" + 
-					" left join tbColors c\r\n" + 
-					" on ai.ColorId = c.ColorId \r\n" + 
-					" left join TbAccessoriesItem accItem\r\n" + 
-					" on ai.accessoriesItemId = accItem.itemid\r\n" + 
-					" left join tbunits unit\r\n" + 
-					" on ai.UnitId = unit.Unitid "
-					+ "where ai.poNo='"+poNo+"' and ai.poapproval='1'  order by ai.AccIndentId";
-			list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"2", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
-			}
-
-			sql="select aic.indentId ,style.StyleNo,ai.itemname as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
-					" from tbAccessoriesIndentForCarton aic\n" + 
-					" left join TbStyleCreate style\n" + 
-					" on aic.styleid = style.StyleId \n" + 
-					" left join tbunits unit\n" + 
-					" on aic.UnitId = unit.Unitid \n"
-					+ "left join tbStyleSize ss\r\n" + 
-					"on aic.sizeId = ss.id \r\n" + 
-					" left join TbAccessoriesItem ai\n" + 
-					" on aic.accessoriesItemId = ai.itemid \r\n" + 
-					" where aic.poNo = '"+poNo+"' and  poapproval='1'  order by aic.indentId";
-			list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
-				dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),"3", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
-			}
-
-
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,deliveryto,orderby,billto,ManualPo,paymentTerm,Note,Subject,entryBy from tbPurchaseOrderSummary";
-			list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{
-				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), "0", element[8].toString(), element[9].toString(), dataList, element[10].toString());
-			}
-
-			tx.commit();
-		}
-		catch(Exception e){
-			if (tx != null) {
-				tx.rollback();
-			}
-			e.printStackTrace();
-		}
-		finally {
-			session.close();
-		}
-		return purchaseOrder;
-	}
-
-	@Override
-	public List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem) {
-		Session session=HibernateUtil.openSession();
-		Transaction tx=null;
-		List<PurchaseOrderItem> dataList=new ArrayList<PurchaseOrderItem>();
-		try{
-			tx=session.getTransaction();
-			tx.begin();
-			String sql;
-			if(purchaseOrderItem.getType().equals("1")) {
-				sql="select fi.id,style.StyleNo,f.ItemName as accessoriesname,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
+			if(poType.equalsIgnoreCase("Fabrics")) {
+				sql="select fi.id,fi.purchaseOrder,style.StyleNo,f.ItemName as accessoriesname,fi.supplierId,fi.rate,fi.dolar,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname,isnull(fi.currency,'') as currency\r\n" + 
 						"from tbFabricsIndent fi \r\n" + 
 						"left join TbStyleCreate style\r\n" + 
 						"on fi.styleId = style.StyleId \r\n" + 
@@ -4790,34 +4856,129 @@ public class OrderDAOImpl implements OrderDAO{
 						"on fi.fabricsid = f.id\r\n" + 
 						"left join tbunits unit\r\n" + 
 						"on fi.UnitId = unit.Unitid\r\n" + 
-						"where fi.PurchaseOrder='"+purchaseOrderItem.getPurchaseOrder()+"' and fi.styleid='"+purchaseOrderItem.getStyleId()+"' and fabricsid='"+purchaseOrderItem.getIndentItemId()+"' and (poapproval IS NULL or poapproval='0')  order by fi.id";
+						"where fi.poNo='"+poNo+"' and poapproval='1'   order by fi.id";
 
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),purchaseOrderItem.getType(), element[2].toString(), purchaseOrderItem.getSupplierId(), purchaseOrderItem.getRate(), purchaseOrderItem.getDollar(), element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), Double.valueOf(element[6].toString()), element[7].toString(),"",false));
+					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(), element[2].toString(),"Fabrics", element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), element[6].toString(), element[7].toString(), element[8].toString(), Double.valueOf(element[9].toString()), Double.valueOf(element[10].toString()), element[11].toString(),element[12].toString(),true));				
 				}
-			}else if(purchaseOrderItem.getType().equals("2")) {
-				sql=" select ai.AccIndentId,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName\r\n" + 
+			}
+			if(poType.equalsIgnoreCase("Accessories")) {
+				sql=" select ai.AccIndentId,ai.purchaseOrder,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+						" from tbAccessoriesIndent ai \r\n" + 
+						" left join TbStyleCreate style\r\n" + 
+						" on ai.styleid = style.StyleId \r\n" + 
+						" left join tbColors c\r\n" + 
+						" on ai.ColorId = c.ColorId \r\n" + 
+						" left join TbAccessoriesItem accItem\r\n" + 
+						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
+						" left join tbunits unit\r\n" + 
+						" on ai.UnitId = unit.Unitid "
+						+ "where ai.poNo='"+poNo+"' and ai.poapproval='1'  order by ai.AccIndentId";
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(), element[2].toString(),"Accessories", element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), element[6].toString(), element[7].toString(), element[8].toString(), Double.valueOf(element[9].toString()), Double.valueOf(element[10].toString()), element[11].toString(),element[12].toString(),true));
+				}
+			}
+			if(poType.equalsIgnoreCase("Carton")) {
+				sql="select aic.indentId,aic.purchaseOrder ,style.StyleNo,ai.itemname as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
+						" from tbAccessoriesIndentForCarton aic\n" + 
+						" left join TbStyleCreate style\n" + 
+						" on aic.styleid = style.StyleId \n" + 
+						" left join tbunits unit\n" + 
+						" on aic.UnitId = unit.Unitid \n"
+						+ "left join tbStyleSize ss\r\n" + 
+						"on aic.sizeId = ss.id \r\n" + 
+						" left join TbAccessoriesItem ai\n" + 
+						" on aic.accessoriesItemId = ai.itemid \r\n" + 
+						" where aic.poNo = '"+poNo+"' and  poapproval='1'  order by aic.indentId";
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),"Carton", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
+				}
+			}
+			
+
+
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,Note,Subject,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{
+				Object[] element = (Object[]) iter.next();
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), "0", element[8].toString(), element[9].toString(), element[10].toString(), dataList,poType, element[11].toString());
+			}
+
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+		finally {
+			session.close();
+		}
+		return purchaseOrder;
+	}
+
+	@Override
+	public List<PurchaseOrderItem> getPurchaseOrderItemList(AccessoriesIndent accessoriesIndent) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<PurchaseOrderItem> dataList=new ArrayList<PurchaseOrderItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql;
+			if(accessoriesIndent.getIndentType().equals("Fabrics")) {
+				sql="select fi.id,fi.purchaseOrder,style.StyleNo,f.ItemName as accessoriesname,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
+						"from tbFabricsIndent fi \r\n" + 
+						"left join TbStyleCreate style\r\n" + 
+						"on fi.styleId = style.StyleId \r\n" + 
+						"left join tbColors c\r\n" + 
+						"on fi.itemcolor = c.ColorId \r\n" + 
+						"left join TbFabricsItem f\r\n" + 
+						"on fi.fabricsid = f.id\r\n" + 
+						"left join tbunits unit\r\n" + 
+						"on fi.UnitId = unit.Unitid\r\n" + 
+						"where fi.indentId='"+accessoriesIndent.getAiNo()+"' and fabricsid='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by fi.id";
+
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(),"", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
+				}
+			}else if(accessoriesIndent.getIndentType().equals("Accessories")) {
+				sql=" select ai.AccIndentId,ai.purchaseOrder,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.requireUnitQty,isnull(unit.unitname,'') as unitName\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						" on ai.styleid = cast(style.styleId as varchar) \r\n" + 
 						" left join tbColors c\r\n" + 
 						" on ai.ColorId = cast(c.colorId as varchar) \r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
-						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
+						" on ai.accessoriesItemId = accItem.itemid\r\n"+
+						"left join tbStyleSize ss \r\n"
+						+ "on ai.size = ss.id" + 
 						" left join tbunits unit\r\n" + 
 						" on ai.UnitId = unit.Unitid "
-						+ "where ai.PurchaseOrder='"+purchaseOrderItem.getPurchaseOrder()+"' and ai.styleid='"+purchaseOrderItem.getStyleId()+"' and ai.accessoriesItemId='"+purchaseOrderItem.getIndentItemId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
+						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),purchaseOrderItem.getType(), element[2].toString(), purchaseOrderItem.getSupplierId(), purchaseOrderItem.getRate(), purchaseOrderItem.getDollar(), element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), Double.valueOf(element[6].toString()), element[7].toString(),"",false));
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}else {
-				sql="select aic.autoId ,style.StyleNo,ai.itemname as accessoriesname,c.Colorname as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
+				sql="select aic.autoId,aic.purchaseOrder ,style.StyleNo,ai.itemname as accessoriesname,c.Colorname as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
 						" from tbAccessoriesIndentForCarton aic\r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						"on aic.styleid = style.StyleId \r\n" + 
@@ -4829,12 +4990,12 @@ public class OrderDAOImpl implements OrderDAO{
 						"on aic.sizeId = ss.id\r\n" + 
 						" left join tbunits unit\r\n" + 
 						" on aic.UnitId = unit.Unitid \r\n" + 
-						" where aic.styleid = '"+purchaseOrderItem.getStyleId()+"' and aic.PurchaseOrder = '"+purchaseOrderItem.getPurchaseOrder()+"' and aic.accessoriesItemId = '"+purchaseOrderItem.getIndentItemId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
+						" where aic.indentId = '"+accessoriesIndent.getAiNo()+"' and aic.accessoriesItemId = '"+accessoriesIndent.getAccessoriesId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					dataList.add(new PurchaseOrderItem(element[0].toString(), element[1].toString(),purchaseOrderItem.getType(), element[2].toString(), purchaseOrderItem.getSupplierId(), purchaseOrderItem.getRate(), purchaseOrderItem.getDollar(), element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), Double.valueOf(element[6].toString()), element[7].toString(),"",false));
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(),"", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}
 
