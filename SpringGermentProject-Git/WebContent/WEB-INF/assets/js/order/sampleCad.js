@@ -32,12 +32,98 @@ window.onload = () => {
 function refreshAction() {
 	location.reload();
 }
+
+function searchSampleCad(sampleCommentId,sampleReqId){
+
+	
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		data:{
+			sampleCommentId:sampleCommentId,
+			sampleReqId:sampleReqId
+		},
+		url: './searchSampleCadDetails',
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+			} else {
+				drawItemTable(data.result_sample_requisition);
+				setCadData(data.result_sample_cad);
+			}
+		}
+	});
+}
+
+function setCadData(data){
+	$('#sampleCadModal').modal('hide');
+	
+	var actualPatternmakingdate = new Date(data[0].patternMakingDate); 
+	var patternmakingdate=actualPatternmakingdate.getFullYear() + "-" +('0' + (actualPatternmakingdate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualPatternmakingdate.getDate()).slice(-2) + "T" + ('0' + actualPatternmakingdate.getHours()).slice(-2) + ":" + ('0' + actualPatternmakingdate.getMinutes()).slice(-2);
+	
+	if(data[0].patternMakingDate!=' :00'){
+		$('#patternmakingdate').val(patternmakingdate);
+	} 
+	
+
+	$('#makeingDespatch').val(data[0].patternMakingDespatch);
+	$('#makeingDespatch').selectpicker('refresh');
+	$('#patternmakingreceivedby').val(data[0].patternMakingReceived);
+	
+	
+	var actualPatternCorrectionDate = new Date(data[0].patternCorrectionDate); 
+	var patterncorrectiondate=actualPatternCorrectionDate.getFullYear() + "-" +('0' + (actualPatternCorrectionDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualPatternCorrectionDate.getDate()).slice(-2) + "T" + ('0' + actualPatternCorrectionDate.getHours()).slice(-2) + ":" + ('0' + actualPatternCorrectionDate.getMinutes()).slice(-2);
+	
+	if(data[0].patternCorrectionDate!=' :00'){
+		$('#patterncorrectiondate').val(patterncorrectiondate);
+	} 
+	
+
+	$('#patterncorrectiondispatch').val(data[0].patternCorrectionDespatch);
+	$('#patterncorrectiondispatch').selectpicker('refresh');
+	$('#correctionReceviedBy').val(data[0].patternCorrectionReceived);
+	
+	
+	var actualPatternGradingDate = new Date(data[0].patternGradingDate); 
+	var gradingDate=actualPatternGradingDate.getFullYear() + "-" +('0' + (actualPatternGradingDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualPatternGradingDate.getDate()).slice(-2) + "T" + ('0' + actualPatternGradingDate.getHours()).slice(-2) + ":" + ('0' + actualPatternGradingDate.getMinutes()).slice(-2);
+	
+	if(data[0].patternGradingDate!=' :00'){
+		$('#gradingDate').val(gradingDate);
+	}
+	  
+	
+	$('#gradingDespatch').val(data[0].patternGradingDespatch);
+	$('#gradingDespatch').selectpicker('refresh');
+	$('#gradingdispatchreceivedby').val(data[0].patternGradingReceived);
+	
+	var actualPatternMarkingDate = new Date(data[0].patternMarkingDate); 
+	var markingDate=actualPatternMarkingDate.getFullYear() + "-" +('0' + (actualPatternMarkingDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualPatternMarkingDate.getDate()).slice(-2) + "T" + ('0' + actualPatternMarkingDate.getHours()).slice(-2) + ":" + ('0' + actualPatternMarkingDate.getMinutes()).slice(-2);
+	
+	if(data[0].patternMarkingDate!=' :00'){
+		$('#markingDate').val(markingDate);
+	}
+	  
+	
+	$('#markingDespatch').val(data[0].patternMarkingDespatch);
+	$('#markingDespatch').selectpicker('refresh');
+	$('#markingReceviedBy').val(data[0].patternMarkingReceived);
+	$('#sampleReqId').val(data[0].sampleReqId);
+	$('#sampleCommentId').val(data[0].sampleCadId);
+	$('#sampleCommentsNo').val(data[0].sampleCadId);
+}
+
 function insertSample(){
 
 	var user=$('#userId').val();
 
 
 	var buyerOrderId=$('#buyerOrderId').val()==''?"0":$('#buyerOrderId').val();
+	var purchaseOrder=$('#purchaseOrder').val()==''?"0":$('#purchaseOrder').val();
+	
+	var sampleId=$('#sampleId').val();
+	
 	var styleId=$('#styleId').val();
 	var itemId=$('#itemId').val();
 	var colorId=$('#colorId').val();
@@ -45,8 +131,6 @@ function insertSample(){
 	
 	var sampleReqId=$('#sampleReqId').val()==''?"0":$('#sampleReqId').val();
 	
-	console.log("buyerOrderId "+buyerOrderId);
-	console.log("sampleReqId "+sampleReqId);
 
 
 	let patternMakingDate = $("#patternmakingdate").val();
@@ -91,9 +175,11 @@ function insertSample(){
 					data: {
 						user : user,
 						buyerOrderId : buyerOrderId,
+						purchaseOrder:purchaseOrder,
 						styleId : styleId,
 						itemId : itemId,	
-						colorId : colorId,		 
+						colorId : colorId,	
+						sampleTypeId:sampleId,
 						patternMakingDate : patternMakingDate,
 						patternMakingDespatch : makingDespatch,
 						patternMadingReceived : patternMakingReceivedBy,
@@ -119,12 +205,12 @@ function insertSample(){
 					},
 					success: function (data) {
 
-							if(data=='success'){
+						if(data=='success'){
 								alert("Successfully Inserted");
 								refreshAction();
-							}else{
+						}else{
 								alert(" Insert Failed")
-							}
+						}
 					}
 				});
 			}
@@ -140,11 +226,108 @@ function insertSample(){
 		alert("Provide Sample Requistion No");
 	}
 
+}
+
+
+function editSmapleCad() {
+
+
+	var user=$('#userId').val();
+
+
+	var buyerOrderId=$('#buyerOrderId').val()==''?"0":$('#buyerOrderId').val();
+	var purchaseOrder=$('#purchaseOrder').val()==''?"0":$('#purchaseOrder').val();
+	
+	var sampleId=$('#sampleId').val();
+	
+	var styleId=$('#styleId').val();
+	var itemId=$('#itemId').val();
+	var colorId=$('#colorId').val();
+	var POStatus=$('#POStatus').val();
+	
+	var sampleReqId=$('#sampleReqId').val()==''?"0":$('#sampleReqId').val();
+	var sampleCommentId=$('#sampleCommentId').val()==''?"0":$('#sampleCommentId').val();
+
+
+	let patternMakingDate = $("#patternmakingdate").val();
+	patternMakingDate = patternMakingDate.slice(0, patternMakingDate.indexOf('T')) + " " + patternMakingDate.slice(patternMakingDate.indexOf('T') + 1) + ":00";
+
+
+	var makingDespatch=$('#makeingDespatch').val();
+	var patternMakingReceivedBy=$('#patternmakingreceivedby').val();
+	console.log(" pattern making recevied by "+patternMakingReceivedBy)
+
+	var feedback=$('#feedback').val();
+
+	let patterncorrectiondate = $("#patterncorrectiondate").val();
+	patterncorrectiondate = patterncorrectiondate.slice(0, patterncorrectiondate.indexOf('T')) + " " + patterncorrectiondate.slice(patterncorrectiondate.indexOf('T') + 1) + ":00";
+
+
+	var patterncorrectiondispatch=$('#patterncorrectiondispatch').val();
+	var correctionReceviedBy=$('#correctionReceviedBy').val();
+
+	let gradingDate = $("#gradingDate").val();
+	gradingDate = gradingDate.slice(0, gradingDate.indexOf('T')) + " " + gradingDate.slice(gradingDate.indexOf('T') + 1) + ":00";
 
 
 
+	var gradingDespatch=$('#gradingDespatch').val();
+	var gradingdispatchreceivedby=$('#gradingdispatchreceivedby').val();
+
+	let markingDate = $("#markingDate").val();
+	markingDate = markingDate.slice(0, markingDate.indexOf('T')) + " " + markingDate.slice(markingDate.indexOf('T') + 1) + ":00";
 
 
+	var markingdispatch=$('#markingDespatch').val();
+	var markingReceviedBy=$('#markingReceviedBy').val();
+	
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './editSampleCad',
+			data: {						
+				user : user,
+				buyerOrderId : buyerOrderId,
+				purchaseOrder:purchaseOrder,
+				styleId : styleId,
+				itemId : itemId,	
+				colorId : colorId,	
+				sampleTypeId:sampleId,
+				patternMakingDate : patternMakingDate,
+				patternMakingDespatch : makingDespatch,
+				patternMadingReceived : patternMakingReceivedBy,
+
+				patternCorrectionDate : patterncorrectiondate,
+				patternCorrectionDespatch : patterncorrectiondispatch,
+				PatternCorrectionReceived : correctionReceviedBy,
+
+				patternGradingDate : gradingDate,
+				patternGradingDespatch : gradingDespatch,
+				patternGradingReceived : gradingdispatchreceivedby,
+
+
+				patternMarkingDate : markingDate,
+				patternMarkingDespatch : markingdispatch,
+				patternMarkingReceived : markingReceviedBy,
+
+				feedbackComments:feedback,
+				POStatus:POStatus,
+				sampleRequistionQty:sampleRequistionQty,
+				sampleReqId:sampleReqId,
+				sampleCommentId:sampleCommentId
+
+
+			},
+			success: function (data) {
+
+				if(data=='success'){
+					alert("Successfully Update")
+					
+				}else{
+					alert(" Insert Failed")
+				}
+			}
+		});
 
 }
 
@@ -231,97 +414,6 @@ function setData(data){
 }
 
 
-function editSmapleCad() {
-
-
-	var user=$('#userId').val();
-
-	var withPO=$('#withPO')[0].checked;
-	var withOutPO=$('#withOutPO')[0].checked;
-
-	var purchaseOrder=$('#purchaseOrder').val();
-	var styleId=$('#styleId').val();
-	var itemId=$('#itemName').val();
-	var sampleCommentsNo=$('#sampleCommentsNo').val();
-	var itemColor=$('#itemColor').val();
-	var size=$('#size').val();
-	var sampletype=$('#sampletype').val();
-
-	var patternmakingdate=dateFormatting($('#patternmakingdate').val());
-	var makeingDespatch=$('#makeingDespatch').val();
-	var patternmakingreceivedby=$('#patternmakingreceivedby').val();
-	console.log(" pattern making recevied by "+patternmakingreceivedby)
-
-	var feedback=$('#feedback').val();
-
-	var patterncorrectiondate=dateFormatting($('#patterncorrectiondate').val());
-	var patterncorrectiondispatch=$('#patterncorrectiondispatch').val();
-	var correctionReceviedBy=$('#correctionReceviedBy').val();
-
-	var gradingDate=dateFormatting($('#gradingDate').val());
-	var gradingDespatch=$('#gradingDespatch').val();
-	var gradingdispatchreceivedby=$('#gradingdispatchreceivedby').val();
-
-	var markingDate=dateFormatting($('#markingDate').val());
-	var markingdispatch=$('#markingDespatch').val();
-	var markingReceviedBy=$('#markingReceviedBy').val();
-
-	if (withPO==true) {
-
-
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './editSampleCad',
-			data: {
-				sampleCommentId:sampleCommentId,
-				purchaseOrder:purchaseOrder,
-				styleId:styleId,
-				itemId:itemId,	
-				colorId:colorId,		 
-				sizeid:size,
-
-				patternMakingDate:patternmakingdate,
-				patternMakingDespatch:makeingDespatch,
-				patternMadingReceived:patternmakingreceivedby,
-
-				patternCorrectionDate:patterncorrectiondate,
-				patternCorrectionDespatch:patterncorrectiondispatch,
-				PatternCorrectionReceived:correctionReceviedBy,
-
-				patternGradingDate:gradingDate,
-				patternGradingDespatch:gradingDespatch,
-				patternGradingReceived:gradingdispatchreceivedby,
-
-
-				patternMarkingDate:markingDate,
-				patternMarkingDespatch:markingdispatch,
-				patternMarkingReceived:markingReceviedBy,
-
-				feedbackComments:feedback,
-				POStatus:'1',
-
-			},
-			success: function (data) {
-
-				if(data=='success'){
-					alert("Successfully Inserted")
-					
-				}else{
-					alert(" Insert Failed")
-				}
-			}
-		});
-
-
-
-
-	}else{
-
-	}
-
-
-}
 
 
 function dateFormatting(field){
@@ -353,7 +445,7 @@ function sampleCadReport(id) {
 
 
 function searchSampleRequisition(v) {
-
+	  $('#exampleModal').modal('hide');
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -417,8 +509,6 @@ function drawItemTable(dataList) {
 				tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + sizesListByGroup['groupId' + sizeGroupId][j].sizeName + "</th>";
 			}
 			tables += `<th scope="col">Total Qty</th>
-				<th scope="col"><i class="fa fa-edit"></i></th>
-				<th scope="col"><i class="fa fa-trash"></i></th>
 				</tr>
 				</thead>
 				<tbody id="dataList">`
@@ -426,8 +516,12 @@ function drawItemTable(dataList) {
 		}
 		
 		$('#sampleReqId').val(item.sampleReqId);
-		$('#buyerOrderId').val(item.purchaseOrder);
+		$('#buyerOrderId').val(item.buyerOrderId);
+		$('#purchaseOrder').val(item.purchaseOrder);
 		$('#styleId').val(item.styleId);
+		$('#styleNo').val(item.styleNo);
+		$('#itemName').val(item.itemName);
+		$('#vPurchaseOrder').val(item.purchaseOrder);
 		$('#itemId').val(item.itemId);
 		$('#colorId').val(item.colorId);
 		if(item.buyerId=='0'){
@@ -447,7 +541,7 @@ function drawItemTable(dataList) {
 			sampleRequistionQty=sampleRequistionQty+parseFloat(sizeList[j].sizeQuantity);
 			tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
 		}
-		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td></tr>";
 
 	}
 	tables += "</tbody></table> </div></div>";
