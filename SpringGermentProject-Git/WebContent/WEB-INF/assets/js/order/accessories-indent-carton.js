@@ -846,7 +846,7 @@ function addCartonIndent() {
 									if (ply != '') {
 										if (length1 != 0) {
 											if (width1 != 0) {
-												if (height1 != 0) {
+												
 													let indentDataList = $("#dataList tr");
 													let length = indentDataList.length;
 													let listRowId = 0;
@@ -871,10 +871,7 @@ function addCartonIndent() {
 															</tr>`;
 
 													$("#dataList").append(row);
-												} else {
-													warningAlert("Please Enter Height Value....");
-													$("#height1").focus();
-												}
+												
 											} else {
 												warningAlert("Please Enter Width Value....");
 												$("#width1").focus();

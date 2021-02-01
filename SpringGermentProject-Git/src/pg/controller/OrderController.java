@@ -1927,22 +1927,30 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/purchase-order");
-		List<String> poList = orderService.getPurchaseOrderList(userId);
+		//List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<Factory> factoryList = registerService.getFactoryNameList();
-		List<MerchandiserInfo> merchandiserList = registerService.getMerchandiserList();
+		//List<MerchandiserInfo> merchandiserList = registerService.getMerchandiserList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
-		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderSummeryList();
-		view.addObject("poList",poList);
+		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderSummeryList(userId);
+		List<CommonModel> pendingIndentList = orderService.getPendingIndentList(userId);
+		//view.addObject("poList",poList);
 		view.addObject("factoryList",factoryList);
-		view.addObject("merchendiserList",merchandiserList);
+		//view.addObject("merchendiserList",merchandiserList);
 		view.addObject("supplierList",supplierList);
 		view.addObject("purchaseOrderList",purchaseOrderList);
-		
+		view.addObject("pendingIndentList",pendingIndentList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/getIndentItems",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getIndentItems(String indentId,String indentType) {
+		JSONObject objmain = new JSONObject();
+		List<AccessoriesItem>  itemList = orderService.getIndentItems(indentId, indentType);
+		objmain.put("itemList", itemList);
+		return objmain;
+	}
 	@RequestMapping(value = "/getTypeWiseIndentItems",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getTypeWiseIndentItems(String purchaseOrder,String styleId,String type) {
 		JSONObject objmain = new JSONObject();
@@ -1952,9 +1960,9 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/addIndentItem",method=RequestMethod.GET)
-	public @ResponseBody JSONObject addIndentItem(PurchaseOrderItem purchaseOrderItem) {
+	public @ResponseBody JSONObject addIndentItem(AccessoriesIndent accessoriesIndent) {
 		JSONObject objmain = new JSONObject();
-		List<PurchaseOrderItem> poItemList = orderService.getPurchaseOrderItemList(purchaseOrderItem);
+		List<PurchaseOrderItem> poItemList = orderService.getPurchaseOrderItemList(accessoriesIndent);
 		objmain.put("poItemList", poItemList);
 		return objmain;
 	}
@@ -1982,9 +1990,9 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/searchPurchaseOrder",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchPurchaseOrder(String poNo) {
+	public @ResponseBody JSONObject searchPurchaseOrder(String poNo,String poType) {
 		JSONObject objmain = new JSONObject();
-		PurchaseOrder  purchaseOrder = orderService.getPurchaseOrder(poNo);
+		PurchaseOrder  purchaseOrder = orderService.getPurchaseOrder(poNo,poType);
 		objmain.put("poInfo", purchaseOrder);
 		return objmain;
 	}

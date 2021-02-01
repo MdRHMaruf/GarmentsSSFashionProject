@@ -5,11 +5,13 @@ public class CommonModel {
 	String empCode[];
 	String userId;
 	int type;
+	String indentType;
 	String dept;
 	String id;
 	String name;
 	String qty;
 	String value;
+	String date;
 	
 	public CommonModel() {
 		
@@ -107,5 +109,23 @@ public class CommonModel {
 	public void setType(int type) {
 		this.type = type;
 	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getIndentType() {
+		return indentType;
+	}
+
+	public void setIndentType(String indentType) {
+		this.indentType = indentType;
+	}
+	
+	
 	
 }

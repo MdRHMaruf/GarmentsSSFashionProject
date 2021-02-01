@@ -17,6 +17,7 @@ import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.ParcelModel;
 import pg.proudctionModel.ProductionPlan;
+import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Color;
 import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
@@ -141,11 +142,13 @@ public interface OrderService {
 	
 	//Purchase Order
 	List<pg.registerModel.AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder,String styleId,String type);
+	List<AccessoriesItem> getIndentItems(String indentId,String indentType);
 	boolean submitPurchaseOrder(PurchaseOrder purchaseOrder);
 	boolean editPurchaseOrder(PurchaseOrder purchaseOrder);
-	List<PurchaseOrder> getPurchaseOrderSummeryList();
-	PurchaseOrder getPurchaseOrder(String poNo);
-	List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem);
+	List<PurchaseOrder> getPurchaseOrderSummeryList(String userId);
+	List<CommonModel> getPendingIndentList(String userId);
+	PurchaseOrder getPurchaseOrder(String poNo,String poType);
+	List<PurchaseOrderItem> getPurchaseOrderItemList(AccessoriesIndent accessoriesIndent);
 
 	//File Upload
 	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user,String buyerName, String purchaseOrder);

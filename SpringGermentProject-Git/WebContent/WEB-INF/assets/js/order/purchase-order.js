@@ -3,7 +3,7 @@ let itemIdForSet = 0;
 let indentIdForSet = 0;
 
 
-window.onload = ()=>{
+window.onload = () => {
   document.title = "Purchase Order";
 }
 function poWiseStyleLoad() {
@@ -45,31 +45,31 @@ function typeWiseIndentItemLoad() {
   const purchaseOrder = $("#purchaseOrder").val();
   const styleId = $("#styleNo").val();
   if (type != "0") {
-    
-      $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: './getTypeWiseIndentItems',
-        data: {
-          purchaseOrder: purchaseOrder,
-          styleId: styleId,
-          type: type
-        },
-        success: function (data) {
 
-          const itemList = data.itemList;
-          let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
-          const length = itemList.length;
-          for (var i = 0; i < length; i++) {
-            options += "<option id='indentItem' value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
-          };
-          document.getElementById("indentItem").innerHTML = options;
-          $('#indentItem').selectpicker('refresh');
-          $('#indentItem').val(indentIdForSet).change();
-          indentIdForSet = 0;
-        }
-      });
-    
+    $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      url: './getTypeWiseIndentItems',
+      data: {
+        purchaseOrder: purchaseOrder,
+        styleId: styleId,
+        type: type
+      },
+      success: function (data) {
+
+        const itemList = data.itemList;
+        let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
+        const length = itemList.length;
+        for (var i = 0; i < length; i++) {
+          options += "<option id='indentItem' value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
+        };
+        document.getElementById("indentItem").innerHTML = options;
+        $('#indentItem').selectpicker('refresh');
+        $('#indentItem').val(indentIdForSet).change();
+        indentIdForSet = 0;
+      }
+    });
+
 
   } else {
     var options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
@@ -82,82 +82,67 @@ function typeWiseIndentItemLoad() {
 
 function indentItemAdd() {
 
-  const purchaseOrder = $("#purchaseOrder").val();
-  const styleId = $("#styleNo").val();
-  const type = $("#type").val();
-  const itemId = $("#indentItem").val();
-  const supplierId = $("#supplierName").val();
+  const indentId = $("#indentId").val();
+  const indentType = $("#indentType").val();
+  const indentItemId = $("#indentItem").val();
   const rate = $("#rate").val();
   const dollar = $("#dollar").val();
   const userId = $("#userId").val();
 
 
-  if (purchaseOrder != 0) {
-    if (styleId != 0) {
-      if (type != 0) {
-        if (type == 3 || itemId != 0) {
-          if (supplierId != 0) {
-            if (rate != '') {
-              if (dollar != '') {
-                $.ajax({
-                  type: 'GET',
-                  dataType: 'json',
-                  url: './addIndentItem',
-                  data: {
-                    purchaseOrder: purchaseOrder,
-                    styleId: styleId,
-                    type: type,
-                    indentItemId: itemId,
-                    supplierId: supplierId,
-                    rate: rate,
-                    dollar: dollar,
-                    userId: userId
-                  },
-                  success: function (data) {
-                    if (data.result == "Something Wrong") {
-                      dangerAlert("Something went wrong");
-                    } else if (data.result == "duplicate") {
-                      dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                    } else {
-                      //$("#dataList").empty();
-                      $("#dataList").append(drawDataTable(data.poItemList,"checked"));
-                      $('.tableSelect').selectpicker('refresh');
+  if (indentId != 0) {
+    if (indentType != 0) {
+      if (indentItemId != 0) {
+        if (rate != '') {
+          if (dollar != '') {
+            $.ajax({
+              type: 'GET',
+              dataType: 'json',
+              url: './addIndentItem',
+              data: {
+                aiNo: indentId,
+                indentType: indentType,
+                accessoriesId: indentItemId
+              },
+              success: function (data) {
+                if (data.result == "Something Wrong") {
+                  dangerAlert("Something went wrong");
+                } else if (data.result == "duplicate") {
+                  dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                } else {
+                  //$("#dataList").empty();
+                  $("#dataList").append(drawAddDataTable(data.poItemList, "checked"));
+                  $('.tableSelect').selectpicker('refresh');
 
-                      setSupplierValue(data.poItemList);
-                      //setCurrencyValue(data.poItemList);
+                  //setSupplierValue(data.poItemList);
+                  //setCurrencyValue(data.poItemList);
 
-                    }
-                  }
-                });
-
-              } else {
-                warningAlert("Dollar amount in empty... Please enter dollar amount");
-                $("#dollar").focus();
+                }
               }
-            } else {
-              warningAlert("Rate is empty... Please enter Rate amount");
-              $("#rate").focus();
-            }
+            });
+
           } else {
-            warningAlert("supplierName not selected... Please Select Supplier Name");
-            $("#supplierName").focus();
+            warningAlert("Dollar amount in empty... Please enter dollar amount");
+            $("#dollar").focus();
           }
         } else {
-          warningAlert("indent Item not selected... Please Select Indent Item");
-          $("#indentItem").focus();
+          warningAlert("Rate is empty... Please enter Rate amount");
+          $("#rate").focus();
         }
       } else {
-        warningAlert("Type not selected... Please Select Type");
-        $("#type").focus();
+        warningAlert("Indent Item not selected... Please Select a indent Item");
+        $("#indentItem").focus();
       }
+
     } else {
-      warningAlert("Style No not selected... Please Select Style No");
-      $("#styleNo").focus();
+      warningAlert("Type not selected... Please Search a indent ID..");
+      $("#indentType").focus();
     }
   } else {
-    warningAlert("Purchase order not selected... Please Select Purchase order");
-    $("#purchaseOrder").focus();
+    warningAlert("Indent ID is not selected.... Please Search a indent ID...");
+    $("#indentId").focus();
   }
+
 
 }
 
@@ -172,7 +157,7 @@ function setSupplierValue(dataList) {
 function setCurrencyValue(dataList) {
   const length = dataList.length;
   for (let i = 0; i < length; i++) {
-    console.log("currency",dataList[i].currency);
+    console.log("currency", dataList[i].currency);
     $('#currency-' + dataList[i].autoId).val(dataList[i].currency).change();
   }
 }
@@ -186,10 +171,12 @@ function submitAction() {
   let isChecked = false;
 
   const poNo = $("#poNo").val();
+  const type = $("#indentType").val();
   const orderDate = $("#orderDate").val();
   const deliveryDate = $("#deliveryDate").val();
+  const supplierId = $("#supplierName").val();
   const deliveryTo = $("#deliveryTo").val();
-  const orderBy = $("#orderBy").val();
+  //const orderBy = $("#orderBy").val();
   const billTo = $("#billTo").val();
   const manualPO = $("#manualPO").val();
   const paymentType = $("#paymentType").val();
@@ -202,7 +189,6 @@ function submitAction() {
 
     const id = rowList[i].id.slice(4);
     const type = rowList[i].getAttribute("data-type");
-    const supplierId = $("#supplier-" + id).val();
     const rate = $("#rate-" + id).val();
     const dollar = $("#dollar-" + id).text();
     const amount = $("#amount-" + id).text();
@@ -213,63 +199,80 @@ function submitAction() {
 
   itemList = itemList.slice(0, -1);
 
-
-  if (length > 0) {
-    if (orderDate) {
-      if (paymentType != 0) {
-        if (currency != 0) {
-          if (isChecked) {
-            if (confirm("Are you sure to submit this Purchase Order...")) {
-              $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: './submitPurchaseOrder',
-                data: {
-                  poNo: poNo,
-                  orderDate: orderDate,
-                  deliveryDate: deliveryDate,
-                  deliveryTo: deliveryTo,
-                  orderBy: orderBy,
-                  billTo: billTo,
-                  manualPO: manualPO,
-                  paymentType: paymentType,
-                  currency: currency,
-                  note: note,
-                  subject: subject,
-                  itemListString: itemList,
-                  userId: userId
-                },
-                success: function (data) {
-                  if (data.result == "Something Wrong") {
-                    dangerAlert("Something went wrong");
-                  } else if (data.result == "duplicate") {
-                    dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-                  } else {
-                    alert("Successfully Submit...");
-                    refreshAction();
-                  }
+  if (supplierId != 0) {
+    if (length > 0) {
+      if (orderDate) {
+        if (deliveryDate) {
+          if (deliveryTo != 0) {
+          if (paymentType != 0) {
+            if (currency != 0) {
+              if (isChecked) {
+                if (confirm("Are you sure to submit this Purchase Order...")) {
+                  $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: './submitPurchaseOrder',
+                    data: {
+                      poNo: poNo,
+                      type : type,
+                      orderDate: orderDate,
+                      deliveryDate: deliveryDate,
+                      supplierId : supplierId,
+                      deliveryTo: deliveryTo,
+                      orderBy: userId,
+                      billTo: billTo,
+                      manualPO: manualPO,
+                      paymentType: paymentType,
+                      currency: currency,
+                      note: note,
+                      subject: subject,
+                      itemListString: itemList,
+                      userId: userId
+                    },
+                    success: function (data) {
+                      if (data.result == "Something Wrong") {
+                        dangerAlert("Something went wrong");
+                      } else if (data.result == "duplicate") {
+                        dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+                      } else {
+                        alert("Successfully Submit...");
+                        refreshAction();
+                      }
+                    }
+                  });
                 }
-              });
+              } else {
+                warningAlert("Please Select Any Item Checked..");
+              }
+
+            } else {
+              warningAlert("Please Select Currency..");
+              $("#currency").focus();
             }
           } else {
-            warningAlert("Please Select Any Item Checked..");
+            warningAlert("Please Select Payment Type..");
+            $("#paymentType").focus();
           }
-
         } else {
-          warningAlert("Please Select Currency..");
-          $("#currency").focus();
+          warningAlert("Please Select Delivery To..");
+          $("#deliveryTo").focus();
+        }
+        } else {
+          warningAlert("Please Select Delivery Date..");
+          $("#deliveryDate").focus();
         }
       } else {
-        warningAlert("Please Select Payment Type..");
-        $("#paymentType").focus();
+        warningAlert("Please Select Order Date")
+        $("#orderDate").focus();
       }
     } else {
-      warningAlert("Please Select Order Date")
-      $("#orderDate").focus();
+      warningAlert("Please Enter any indent id");
     }
   } else {
-    warningAlert("Please Enter any indent id");
+    warningAlert("Please Select Supplier Name")
+    $("#supplierName").focus();
   }
+
 }
 
 
@@ -280,11 +283,25 @@ function purchaseOrderEdit() {
   let itemList = "";
   let isChecked = false;
 
+  
+
+  const poNo = $("#poNo").val();
+  const orderDate = $("#orderDate").val();
+  const deliveryDate = $("#deliveryDate").val();
+  const supplierId = $("#supplierName").val();
+  const deliveryTo = $("#deliveryTo").val();
+  const billTo = $("#billTo").val();
+  const manualPO = $("#manualPO").val();
+  const paymentType = $("#paymentType").val();
+  const currency = $("#currency").val();
+  const note = $("#note").val();
+  const subject = $("#subject").val();
+  const userId = $("#userId").val();
+ 
   for (let i = 0; i < length; i++) {
 
     const id = rowList[i].id.slice(4);
     const type = rowList[i].getAttribute("data-type");
-    const supplierId = $("#supplier-" + id).val();
     const rate = $("#rate-" + id).val();
     const dollar = $("#dollar-" + id).text();
     const currency = $("#currency-" + id).val();
@@ -295,20 +312,7 @@ function purchaseOrderEdit() {
   }
 
   itemList = itemList.slice(0, -1);
-
-  const poNo = $("#poNo").val();
-  const orderDate = $("#orderDate").val();
-  const deliveryDate = $("#deliveryDate").val();
-  const deliveryTo = $("#deliveryTo").val();
-  const orderBy = $("#orderBy").val();
-  const billTo = $("#billTo").val();
-  const manualPO = $("#manualPO").val();
-  const paymentType = $("#paymentType").val();
-  const currency = $("#currency").val();
-  const note = $("#note").val();
-  const subject = $("#subject").val();
-  const userId = $("#userId").val();
-
+  
 
   if (length > 0) {
     if (orderDate) {
@@ -324,8 +328,9 @@ function purchaseOrderEdit() {
                   poNo: poNo,
                   orderDate: orderDate,
                   deliveryDate: deliveryDate,
+                  supplierId : supplierId,
                   deliveryTo: deliveryTo,
-                  orderBy: orderBy,
+                  orderBy: userId,
                   billTo: billTo,
                   manualPO: manualPO,
                   paymentType: paymentType,
@@ -367,11 +372,48 @@ function purchaseOrderEdit() {
   }
 }
 
+function searchIndentItem(indentId, indentType) {
 
+  $("#indentId").val(indentId);
+  $("#indentType").val(indentType);
+
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './getIndentItems',
+    data: {
+      indentId: indentId,
+      indentType: indentType
+    },
+    success: function (data) {
+      const itemList = data.itemList;
+      const length = itemList.length;
+      let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
+      for (var i = 0; i < length; i++) {
+        options += "<option id='indentItem' value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
+      };
+      document.getElementById("indentItem").innerHTML = options;
+      $('#indentItem').selectpicker('refresh');
+      $('#indentItem').val(indentIdForSet).change();
+      indentIdForSet = 0;
+    }
+  });
+
+  $("#indentSearchModal").modal('hide');
+}
 
 
 function refreshAction() {
   location.reload();
+
+}
+
+function previewAction(){
+  let poNo = $("#poNo").val();
+  let supplierId = $("#supplierName").val();
+  let poType = $("#poType").val();
+  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType;
+  window.open(url, '_blank');
 
 }
 function showPreview(poNo, supplierId, type) {
@@ -379,9 +421,9 @@ function showPreview(poNo, supplierId, type) {
   var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type;
   window.open(url, '_blank');
 
-
-
 };
+
+
 
 function getOptions(elementId) {
   let options = "";
@@ -391,13 +433,15 @@ function getOptions(elementId) {
   return options;
 };
 
-function searchPurchaseOrder(poNo) {
+function searchPurchaseOrder(poNo,poType) {
+
   $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './searchPurchaseOrder',
     data: {
-      poNo: poNo
+      poNo: poNo,
+      poType : poType
     },
     success: function (data) {
       if (data.poInfo == "Something Wrong") {
@@ -409,32 +453,34 @@ function searchPurchaseOrder(poNo) {
 
         console.log(data.poInfo);
         const purchaseOrder = data.poInfo;
-
+        $("#poNoBadge").text(purchaseOrder.poNo);
         $("#poNo").val(purchaseOrder.poNo);
-
+        $("#poType").val(purchaseOrder.type);
         let date = purchaseOrder.orderDate.split("/");
         $("#orderDate").val(date[2] + "-" + date[1] + "-" + date[0]);
 
         date = purchaseOrder.deliveryDate.split("/");
         $("#deliveryDate").val(date[2] + "-" + date[1] + "-" + date[0]);
 
+        $("#supplierName").val(purchaseOrder.supplierId).change();
         $("#deliveryTo").val(purchaseOrder.deliveryTo).change();
         $("#orderBy").val(purchaseOrder.orderBy).change();
         $("#billTo").val(purchaseOrder.billTo).change();
         $("#manualPO").val(purchaseOrder.manualPO);
         $("#paymentType").val(purchaseOrder.deliveryTo);
+        $("#currency").val(purchaseOrder.currency);
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
 
         $("#dataList").empty();
-        $("#dataList").append(drawDataTable(purchaseOrder.itemList,"checked"));
+        $("#dataList").append(drawDataTable(purchaseOrder.itemList, "checked"));
         $('.tableSelect').selectpicker('refresh');
 
-        setSupplierValue(purchaseOrder.itemList);
-        setCurrencyValue(purchaseOrder.itemList);
-        $("#btnPOSubmit").prop("disabled", true);
-        $("#btnPOEdit").prop("disabled", false);
-        $("#btnPreview").prop("disabled", false);
+        //setSupplierValue(purchaseOrder.itemList);
+        //setCurrencyValue(purchaseOrder.itemList);
+        $("#btnPOSubmit").hide();
+        $("#btnPOEdit").show();
+        $("#btnPreview").show();
 
         $('#searchModal').modal('hide');
 
@@ -458,41 +504,67 @@ function amountCalculation(autoId) {
   const rate = $("#rate-" + autoId).val();
   const grandQty = $("#grandQty-" + autoId).text();
   const amount = rate * grandQty;
-  $("#amount-" + autoId).text(amount);
+  $("#amount-" + autoId).text(amount.toFixed(2));
 }
 
 
-function drawDataTable(data , isChecked = "") {
+function drawDataTable(data, isChecked = "") {
   let rows = "";
   const length = data.length;
-
-  const supplierNameOptions = getOptions("supplierName");
-  const currencyOptions = getOptions("currency");
-  const currencyList = [];
 
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const autoId = rowData.autoId;
     rows += `<tr id='row-${autoId}' data-type='${rowData.type}'>
+    <td>${rowData.purchaseOrder}</td>
     <td>${rowData.styleNo}</td>
     <td>${rowData.indentItemName}</td>
     <td>${rowData.colorName}</td>
     <td>${rowData.size}</td>
-    <td><select id='supplier-${autoId}' class='selectpicker tableSelect' data-live-search='true' data-style='btn-light btn-sm border-light-gray'>${supplierNameOptions}</select></td>
-    <td>${rowData.qty}</td>
     <td id='grandQty-${autoId}'>${rowData.grandQty}</td>
     <td>${rowData.unit}</td>
-    <td id='dollar-${autoId}'>${rowData.dollar}</td>
+    <td id='dollar-${autoId}'>${parseFloat(rowData.dollar).toFixed(2)}</td>
     <td><input id='rate-${autoId}' class='form-control-sm max-width-60' type='number' value=${rowData.rate} onkeyup='amountCalculation(${autoId})'></td>
     <td id='amount-${autoId}'>${(rowData.amount).toFixed(2)}</td>
     <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
     </tr>`
-   
+
   }
 
   return rows;
 }
 
+
+function drawAddDataTable(data, isChecked = "") {
+  let rows = "";
+  const length = data.length;
+
+  let rate = $("#rate").val();
+  let dollar = $("#dollar").val();
+  let amount = 0;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const autoId = rowData.autoId;
+    amount = rate * rowData.grandQty;
+    rows += `<tr id='row-${autoId}' data-type='${rowData.type}'>
+    <td>${rowData.purchaseOrder}</td>
+    <td>${rowData.styleNo}</td>
+    <td>${rowData.indentItemName}</td>
+    <td>${rowData.colorName}</td>
+    <td>${rowData.size}</td>
+    <td id='grandQty-${autoId}'>${rowData.grandQty}</td>
+    <td>${rowData.unit}</td>
+    <td id='dollar-${autoId}'>${dollar}</td>
+    <td><input id='rate-${autoId}' class='form-control-sm max-width-60' type='number' value=${rate} onkeyup='amountCalculation(${autoId})'></td>
+    <td id='amount-${autoId}'>${amount.toFixed(2)}</td>
+    <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
+    </tr>`
+
+  }
+
+  return rows;
+}
 // function drawRowDataTable(rowData, c,supplierName,currency) {
 //   const autoId = rowData.autoId;
 //   supplierName.prop("id","supplier-"+autoId);
