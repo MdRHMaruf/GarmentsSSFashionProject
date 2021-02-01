@@ -264,6 +264,10 @@ function create_user() {
 
 	var active = $('input[name=active]:checked').val();
 	var user = $("#user").val();
+	var fullName = $("#user_title").val();
+	
+	console.log("fullName "+fullName);
+	
 	var userId = $("#userId").val();
 	var pass = $("#password").val();
 	var type = $("#type").val();
@@ -374,6 +378,7 @@ function create_user() {
 				accesslist: valuelist,
 				active: active,
 				user: user,
+				fullName:fullName,
 				userId: userId,
 				password: pass,
 				type: type,

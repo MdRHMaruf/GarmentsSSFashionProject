@@ -2,6 +2,7 @@
 <%@page import="pg.model.Login"%>
 <%@page import="pg.model.Menu"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Base64"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <!DOCTYPE html>
@@ -41,7 +42,12 @@
 <%
 String userId=(String)session.getAttribute("userId");
 String userName=(String)session.getAttribute("userName");
-		List<Menu> list = (List<Menu>) session.getAttribute("menulist");
+List<Menu> list = (List<Menu>) session.getAttribute("menulist");
+		
+byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
+		   userName = new String(decodedBytesUsername);
+		   
+
 %>
 
 <body>
@@ -55,7 +61,8 @@ String userName=(String)session.getAttribute("userName");
             </div>
             <div class="header-right">
                 <div class="page-title-box pull-left">
-                    <h3><%=userName%></h3>
+                    <%-- <h3><%=userName%></h3> --%>
+                    <h3>You are using:>> <span>QUALITY FASHION WEAR LTD (ERP)</span></h3>
                 </div>
                 <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar">
                     <i class="fa fa-bars" aria-hidden="true"></i>

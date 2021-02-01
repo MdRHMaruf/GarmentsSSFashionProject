@@ -574,7 +574,8 @@ function searchBuyerPO(buyerPoNo) {
 // });
 
 function setBuyerPoItemDataForEdit(itemAutoId) {
-  $.ajax({
+ 
+	$.ajax({
     type: 'GET',
     dataType: 'json',
     url: './getBuyerPOItem',

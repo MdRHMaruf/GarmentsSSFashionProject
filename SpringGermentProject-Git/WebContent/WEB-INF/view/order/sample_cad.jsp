@@ -35,12 +35,14 @@ String userName=(String)session.getAttribute("userName");
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="buyerOrderId" value="">
+		<input type="hidden" id="buyerOrderId" value="0">
+		<input type="hidden" id="purchaseOrder" value="0">
 		<input type="hidden" id="styleId" value="">
 		<input type="hidden" id="itemId" value="">
 		<input type="hidden" id="colorId" value="">
 		<input type="hidden" id="POStatus" value="">
 		<input type="hidden" id="sampleReqId" value="0">
+		<input type="hidden" id="sampleCommentId" value="0">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -100,13 +102,8 @@ String userName=(String)session.getAttribute("userName");
 											<input class="form-control-sm" type="text" id="patternmakingreceivedby">
 										</div>
 									</div>
-									<h6>Production Feedback</h6>
-									<div class="row mt-1">
-										<div class="col-sm-12">
-											<textarea rows="2" class="form-control" id="feedback"></textarea>
-										</div>
-									</div>
 
+									
 								</div>
 
 								<div class="col-sm-3 px-1">
@@ -216,6 +213,46 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 
 							</div>
+							
+							<div class="row mt-1">
+									<div class="row">
+										<label for="markingDate" class="col-sm-3">Sample Type</label>
+										<select id="sampleId" class="selectpicker col-md-9"
+											data-live-search="true"
+											data-style="btn-light btn-sm border-light-gray">
+			
+											<option id="sampleId" value="0">Select Sample</option>
+											<c:forEach items="${sampleList}" var="list">
+												<option id="sampleId" value="${list.id}">${list.name}</option>
+											</c:forEach>
+										</select>
+
+									</div>
+									
+									<div class="row mt-1">
+										<label for="markingDate" class="col-sm-1">Feedback</label>
+										<div class="col-sm-12">
+											<textarea rows="2" class="form-control" id="feedback"></textarea>
+										</div>
+
+									</div>
+									
+									<div class="row mt-1">
+										<label for="markingDate" style="width:70px;">Buyer:</label>
+										<input class="form-control" readonly style="width:210px;" type="text" id="buyerName">
+										
+										<label for="markingDate" style="width:70px;">Purchase Order:</label>
+										<input class="form-control" readonly style="width:210px;" type="text" id="vPurchaseOrder">
+									</div>
+									
+									<div class="row mt-1">
+										
+										<label for="markingDate" style="width:70px;">Style No:</label>
+										<input class="form-control" readonly style="width:200px;" type="text" id="styleNo">
+										<label for="markingDate" style="width:70px;">Item Description:</label>
+										<input class="form-control" readonly style="width:250px;" type="text" id="itemName">
+									</div>
+							</div>
 
 						<div id="samplecadtableList">
 						
@@ -249,8 +286,6 @@ String userName=(String)session.getAttribute("userName");
 								onclick="">Refresh</button>
 								
 
-
-
 						</div>
 					</div>
 
@@ -279,6 +314,7 @@ String userName=(String)session.getAttribute("userName");
 					<thead>
 						<tr>
 							<th>SL#</th>
+							<th>Buyer</th>
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Date</th>
@@ -290,6 +326,7 @@ String userName=(String)session.getAttribute("userName");
 						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
+								<td >${po.buyerOrderId}</td>
 								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
 								<td>${po.styleNo}</td>
 								<td>${po.sampleDeadline}</td>
@@ -352,7 +389,7 @@ String userName=(String)session.getAttribute("userName");
 								<td>${po.itemName}</td>
 								<td>${po.sampleTypeId}</td>
 								<td><i class="fa fa-search" style="cursor:pointer;"
-									onclick="searchSampleCad(${po.sampleCommentId})"> </i></td>
+									onclick="searchSampleCad(${po.sampleCommentId},${po.sampleReqId})"> </i></td>
 								<td><i class="fa fa-print" style="cursor:pointer;"
 									onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
 							</tr>

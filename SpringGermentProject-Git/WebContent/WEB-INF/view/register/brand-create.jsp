@@ -6,10 +6,13 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
+<%@page import="java.util.Base64"%>
 <jsp:include page="../include/header.jsp" />
 <%
 	String userId=(String) request.getAttribute("userId");	
 	String userName=(String) request.getAttribute("userName");
+	byte[] decodedBytesUserId = Base64.getDecoder().decode(userId);
+	userId = new String(decodedBytesUserId);
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">

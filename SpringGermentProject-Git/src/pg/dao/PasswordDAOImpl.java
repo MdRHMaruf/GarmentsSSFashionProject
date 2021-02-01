@@ -41,13 +41,13 @@ public class PasswordDAOImpl implements PasswordDAO{
 
 			tx = session.getTransaction();
 			tx.begin();
-			String sql = "select id,type,factoryId,departmentId,username,password from tblogin where username='"+uname+"' and password='"+upwd+"' and active='1'";
+			String sql = "select id,type,factoryId,departmentId,fullname,username,password from tblogin where username='"+uname+"' and password='"+upwd+"' and active='1'";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new Login(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+				query.add(new Login(Integer.parseInt(element[0].toString()),Integer.parseInt(element[1].toString()),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 			}
 
 			tx.commit();
@@ -381,7 +381,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 			tx.begin();
 
 
-			String sql="select organizationName,organizationContact,organizationAddress,organizationLogo from tbOrganizationInfo";
+			String sql="select organizationName,organizationContact,organizationAddress from tbOrganizationInfo";
 			List<?> list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)

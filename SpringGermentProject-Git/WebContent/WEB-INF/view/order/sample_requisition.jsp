@@ -37,7 +37,8 @@ String userName=(String)session.getAttribute("userName");
 		</p>
 	</div>
 	<input type="hidden" id="userId" value="<%=userId%>">
-	<input type="hidden" id="itemAutoId" value="0">
+	<input type="hidden" id="sampleAutoId" value="0">
+	<input type="hidden" id="sampleReqId" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -84,8 +85,7 @@ String userName=(String)session.getAttribute("userName");
 							<select id="purchaseOrder" class="selectpicker col-md-12"
 								onchange="poWiseStyles()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="purchaseOrder" value="0">Select Purchase
-									Order</option>
+								<option id="purchaseOrder" value="0">Select Purchase Order</option>
 							</select>
 						</div>
 
@@ -99,9 +99,9 @@ String userName=(String)session.getAttribute("userName");
 								onchange="styleWiseItemLoad()" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 								<option  value="0">Select Style</option>
-										<c:forEach items="${styleList}" var="style">
-											<option  value="${style.styleId}">${style.styleNo}</option>
-										</c:forEach>
+								<c:forEach items="${styleList}" var="list">
+									<option id="styleNo" value="${list.styleId}">${list.styleNo}</option>
+								</c:forEach>
 							</select>
 						</div>
 
@@ -208,7 +208,7 @@ String userName=(String)session.getAttribute("userName");
 							onclick="itemSizeAdd()">
 							<i class="fa fa-plus-circle"></i> Add
 						</button>
-						<button id="btnEdit" type="button"
+						<button id="btnEditItemSize" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
 							disabled>
 							<i class="fa fa-pencil-square"></i> Edit
@@ -335,6 +335,7 @@ String userName=(String)session.getAttribute("userName");
 					<thead>
 						<tr>
 							<th>SL#</th>
+							<th>Buyer</th>
 							<th>PO Id</th>
 							<th>Style No</th>
 							<th>Date</th>
@@ -346,6 +347,7 @@ String userName=(String)session.getAttribute("userName");
 						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
+								<td >${po.buyerOrderId}</td>
 								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
 								<td>${po.styleNo}</td>
 								<td>${po.sampleDeadline}</td>

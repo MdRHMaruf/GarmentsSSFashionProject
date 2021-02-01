@@ -823,11 +823,35 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAllFromFileLogDetails(v);
 	}
-
+	
 	@Override
 	public boolean addNewPermission(CommonModel v) {
 		// TODO Auto-generated method stub
 		return orderDAO.addNewPermission(v);
+	}
+	
+	@Override
+	public boolean deleteSampleRequisitionItem(String sapleAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.deleteSampleRequisitionItem(sapleAutoId);
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequistionItemData(String itemAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleRequistionItemData(itemAutoId);
+	}
+
+	@Override
+	public boolean editItemToSampleRequisition(SampleRequisitionItem v) {
+		// TODO Auto-generated method stub
+		return orderDAO.editItemToSampleRequisition(v);
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCadDetails(sampleCommentId);
 	}
 
 }

@@ -1,6 +1,7 @@
 package pg.controller;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -58,10 +59,8 @@ public class PasswordController {
 	@RequestMapping(value = {"/","/login"},method=RequestMethod.GET)
 	public String login(Model m,HttpSession session) {
 		
-	
-		
-		List<Login> pass=(List<Login>)session.getAttribute("pg_admin");
-		if(pass!=null) {
+		String userId=(String)session.getAttribute("userId");
+		if(userId!=null) {
 			return "redirect:dashboard";
 		}
 		
@@ -98,40 +97,21 @@ public class PasswordController {
 			//session.put("modulelist", modulelist);
 			modelmap.put("modulelist", modulelist);
 			
-			System.out.println("type "+lg.get(0).getType());
-			
-			if(lg.get(0).getType()==1 || lg.get(0).getType()==2) {
+			if(modulelist.size()>0) {
 
-				if(modulelist.size()>0) {
-
-		
-					modelmap.put("modulelist", modulelist);
-					
-					List<Menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
-					modelmap.put("menulist", menulist);
 				
-					return "redirect:dashboard";
-				}
-				else {
-					return "login";
-				}
-
+				modelmap.put("modulelist", modulelist);
+				
+				List<Menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
+				modelmap.put("menulist", menulist);
+			
+				return "redirect:dashboard";
 			}
 			else {
-				if(modulelist.size()>0) {
-					List<Menu> menulist=passService.getUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
-					modelmap.put("modulelist", modulelist);
-					modelmap.put("pg_admin", lg);
-				
-					return "redirect:dashboard";
-				}
-				else {
-					return "login";
-				}
-
+				return "login";
 			}
-
 			
+
 
 		}
 		else {
@@ -144,8 +124,6 @@ public class PasswordController {
 	@RequestMapping(value = {"dashboard"})
 	public String adminDashboard(ModelMap modelmap,HttpServletRequest request,HttpSession sessionnew) throws UserBlockedException {
 			
-		System.out.println("DuserName "+userName);
-		System.out.println("DpassWord "+passWord);
 		String uname=userName;
 		String pass=passWord;
 
@@ -171,14 +149,12 @@ public class PasswordController {
 			
 				
 				modelmap.put("organization_info", organizationInfo);
-				modelmap.put("pg_admin", lg);
+			
+				sessionlist.add(new SessionBean(sessionValue,Integer.toString(lg.get(0).getId()),lg.get(0).getFullName(),uname,pass));
 				
-				
-				
-				sessionlist.add(new SessionBean(sessionValue,Integer.toString(lg.get(0).getId()),uname,pass));
-				
-				
-				modelmap.put("userName", uname);
+				String encodedUsername = Base64.getEncoder().encodeToString(lg.get(0).getFullName().getBytes());
+			
+				modelmap.put("userName", encodedUsername);
 				modelmap.put("userId", Integer.toString(lg.get(0).getId()));
 				
 
@@ -188,8 +164,11 @@ public class PasswordController {
 			
 			for(int a=0;a<sessionlist.size();a++) {
 				if(sessionValue==sessionlist.get(a).getSessionValue()) {
-					modelmap.put("userName",sessionlist.get(a).getUserName());
-					modelmap.put("userId",  sessionlist.get(a).getUserId());
+					String encodedString = Base64.getEncoder().encodeToString(sessionlist.get(a).getFullName().getBytes());
+					
+					modelmap.put("userName", encodedString);
+					modelmap.put("userId",sessionlist.get(a).getUserId());
+
 				}
 				
 			}
@@ -207,6 +186,8 @@ public class PasswordController {
 	public @ResponseBody String modulewisemenu(@PathVariable ("id") int id,ModelMap modelmap,HttpSession session) {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
+		
+	
 		
 		System.out.println("userId "+userId);
 		List<Menu> menulist=passService.getUserMenu(Integer.parseInt(userId),id);
@@ -251,6 +232,7 @@ public class PasswordController {
 		
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
+		
 		ModelAndView view = new ModelAndView("setting/change_password");
 		
 		map.addAttribute("userId",userId);

@@ -90,6 +90,8 @@ function sizeLoadByGroup() {
 
 function searchSampleRequisition(v) {
 
+	  $('#exampleModal').modal('hide');
+	
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -114,7 +116,11 @@ function confirmAction() {
 	var colorId = $("#colorName").val();
 	var sizeGroupId = $("#sizeGroup").val();
 	var sampleId = $("#sampleId").val();
-	var purchaseOrder = $("#purchaseOrder").val();
+	var buyerOrderId = $("#purchaseOrder").val();
+	var purchaseOrder="";
+	if(buyerOrderId!=0){
+		purchaseOrder=$("#purchaseOrder :selected").text();
+	}
 	var inchargeId = $("#inchargeId").val();
 	var marchendizerId = $("#marchendizerId").val();
 	var instruction = $("#instruction").val();
@@ -141,6 +147,7 @@ function confirmAction() {
 				styleId: styleId,
 				itemId: itemId,
 				colorId: colorId,
+				buyerOrderId:buyerOrderId,
 				purchaseOrder: purchaseOrder,
 				userId: userId,
 				inchargeId: inchargeId,
@@ -166,6 +173,105 @@ function refreshAction() {
 	location.reload();
 }
 
+function itemSizeEdit(){
+	
+	var sampleReqId = $("#sampleReqId").val();
+	var sampleAutoId=$("#sampleAutoId").val();
+	
+	var buyerId = $("#buyerId").val();
+	var styleId = $("#styleNo").val();
+	var itemId = $("#itemName").val();
+	var colorId = $("#colorName").val();
+	var sizeGroupId = $("#sizeGroup").val();
+	var sampleId = $("#sampleId").val();
+	var buyerOrderId = $("#purchaseOrder").val();
+	var purchaseOrder="";
+	if(buyerOrderId!=0){
+		purchaseOrder=$("#purchaseOrder :selected").text();
+	}
+	var inchargeId = $("#inchargeId").val();
+	var instruction = $("#instruction").val();
+	var sampleDeadline = $("#sampleDeadline").val();
+	var sampleId = $("#sampleId").val();
+	var userId = $("#userId").val();
+
+	
+	
+	if(sampleReqId!='0'){
+		if (styleId != 0) {
+			if (itemId != 0) {
+				if (colorId != 0) {
+					if (sizeGroupId != 0) {
+						var sizeListLength = $(".sizeValue").length;
+						var sizeList = "";
+						for (var i = 0; i < sizeListLength; i++) {
+							var quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
+							var id = $("#sizeId" + i).val().trim();
+							sizeList += "id=" + id + ",quantity=" + quantity + " ";
+						}
+
+
+						$.ajax({
+							type: 'POST',
+							dataType: 'json',
+							url: './editItemToSampleRequisition',
+							data: {
+								autoId:sampleAutoId,
+								sampleReqId:sampleReqId,
+								buyerId: buyerId,
+								styleId: styleId,
+								itemId: itemId,
+								colorId: colorId,
+								buyerOrderId:buyerOrderId,
+								purchaseOrder: purchaseOrder,
+								sizeGroupId: sizeGroupId,
+								sizeListString: sizeList,
+								userId: userId,
+								inchargeId: inchargeId,
+								instruction: instruction,
+								sampleDeadline: sampleDeadline,
+								sampleId: sampleId
+							},
+							success: function (data) {
+								if (data.result == "Something Wrong") {
+									dangerAlert("Something went wrong");
+								} else if (data.result == "duplicate") {
+									dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+								} else {
+									alert("Sample Requisition Size Update Successfully");
+									drawItemTable(data.result);
+								}
+							}
+						});
+					} else {
+						alert("Size Group not selected ... Please Select Size group");
+						warningAlert("Size Group not selected ... Please Select Size group");
+						$("#sizeGroup").focus();
+					}
+				} else {
+					alert("Color Not Selected... Please Select Color");
+					warningAlert("Color Not Selected... Please Select Color");
+					$("#color").focus();
+				}
+			} else {
+				alert("Item Type not selected... Please Select Item Type");
+				warningAlert("Item Type not selected... Please Select Item Type");
+				$("#itemType").focus();
+			}
+		} else {
+			alert("Style No not selected... Please Select Style No");
+			warningAlert("Style No not selected... Please Select Style No");
+			$("#styleNo").focus();
+		}
+	}
+	else{
+		alert("Style No not selected... Please Select Style No");
+		warningAlert("Style No not selected... Please Select Style No");
+	}
+	
+
+}
+
 function itemSizeAdd() {
 
 
@@ -175,7 +281,11 @@ function itemSizeAdd() {
 	var colorId = $("#colorName").val();
 	var sizeGroupId = $("#sizeGroup").val();
 	var sampleId = $("#sampleId").val();
-	var purchaseOrder = $("#purchaseOrder").val();
+	var buyerOrderId = $("#purchaseOrder").val();
+	var purchaseOrder="";
+	if(buyerOrderId!=0){
+		purchaseOrder=$("#purchaseOrder :selected").text();
+	}
 	var inchargeId = $("#inchargeId").val();
 	var instruction = $("#instruction").val();
 	var sampleDeadline = $("#sampleDeadline").val();
@@ -206,6 +316,7 @@ function itemSizeAdd() {
 							styleId: styleId,
 							itemId: itemId,
 							colorId: colorId,
+							buyerOrderId:buyerOrderId,
 							purchaseOrder: purchaseOrder,
 							sizeGroupId: sizeGroupId,
 							sizeListString: sizeList,
@@ -295,10 +406,109 @@ function drawItemTable(dataList) {
 			totalSizeQty = totalSizeQty + parseFloat(sizeList[j].sizeQuantity);
 			tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
 		}
-		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setBuyerPoItemDataForEdit(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteBuyerPoItem(" + item.autoId + ")'> </i></td></tr>";
+		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setSampleRequisitionItem(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteSampleRequisitioonItem(" + item.autoId + ","+item.sampleReqId+")'> </i></td></tr>";
 	}
 	tables += "</tbody></table> </div></div>";
 	document.getElementById("tableList").innerHTML = tables;
+}
+
+function deleteSampleRequisitioonItem(sapleAutoId,sampleReqId){
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		data:{
+			sapleAutoId:sapleAutoId,
+			sampleReqId:sampleReqId
+		},
+		url: './deleteSampleRequisitionItem',
+		success: function (data) {
+			if(data.result='Sorry You are already confirm sample requisition'){
+				alert("Sorry You are already confirm sample requisition");
+			}
+			else if(data.result='Something has wrong!!'){
+				alert("Something has wrong!!");
+			}
+			else{
+				alert("Sample Requisition Item Successfully Delete");
+				drawItemTable(data.result);
+			}
+		
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			//alert("Server Error");
+			if (jqXHR.status === 0) {
+				alert('Not connect.\n Verify Network.');
+			} else if (jqXHR.status == 404) {
+				alert('Requested page not found.');
+			} else if (jqXHR.status == 500) {
+				alert('Internal Server Error.');
+			} else if (errorThrown === 'parsererror') {
+				alert('Requested JSON parse failed');
+			} else if (errorThrown === 'timeout') {
+				alert('Time out error');
+			} else if (errorThrown === 'abort') {
+				alert('Ajax request aborted ');
+			} else {
+				alert('Uncaught Error.\n' + jqXHR.responseText);
+			}
+
+		}
+	});
+}
+
+
+function setSampleRequisitionItem(itemAutoId) {
+	 //getBuyerPOItem
+	$.ajax({
+    type: 'POST',
+    dataType: 'json',
+    url: './getSampleRequistionItemData',
+    data: {
+      itemAutoId: itemAutoId
+    },
+    success: function (data) {
+      if (data.result == "Something Wrong") {
+        dangerAlert("Something went wrong");
+      } else if (data.result == "duplicate") {
+        dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
+      } else {
+
+        let item = data.result;
+
+        $("#itemAutoId").val(item[0].autoId);
+        $("#customerOrder").val(item[0].customerOrder);
+        $("#purchaseOrder").val(item[0].purchaseOrder);
+        $("#shippingMark").val(item[0].shippingMark);
+        $("#factory").val(item[0].factoryId).change();
+        $("#color").val(item[0].colorId).change();
+
+        console.log("item.sizeList "+item[0].sizeList);
+        sizeValueListForSet = item[0].sizeList;
+        $("#sizeGroup").val(item[0].sizeGroupId).change();
+
+        $("#itemAutoId").val(itemAutoId);
+        $("#btnAdd").hide();
+        $("#btnEditItemSize").show();
+        
+        $('#btnEditItemSize').prop('disabled', false);
+
+        styleIdForSet = item[0].styleId;
+        itemIdForSet = item[0].itemId;
+        poNoValue=item[0].purchaseOrder;
+        styleValue=item[0].styleId;
+        itemValue=item[0].itemId;
+        colorValue=item[0].colorId;
+        $("#buyerId").val(item[0].buyerId).change();
+        $("#sampleId").val(item[0].sampleId);
+
+        console.log("sampleReqId "+item[0].sampleReqId);
+        
+        $('#sampleReqId').val(item[0].sampleReqId);
+        $('#sampleAutoId').val(item[0].autoId);
+      }
+    }
+  });
+
 }
 
 function successAlert(message) {
@@ -424,10 +634,10 @@ function poWiseStyles() {
 function loadStyles(data) {
 
 	var itemList = data;
-	var options = "<option id='itemType' value='0' selected>Select Style</option>";
+	var options = "<option id='styleNo' value='0' selected>Select Style</option>";
 	var length = itemList.length;
 	for (var i = 0; i < length; i++) {
-		options += "<option id='itemType' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+		options += "<option id='styleNo' value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
 	};
 	document.getElementById("styleNo").innerHTML = options;
 	$('.selectpicker').selectpicker('refresh');
