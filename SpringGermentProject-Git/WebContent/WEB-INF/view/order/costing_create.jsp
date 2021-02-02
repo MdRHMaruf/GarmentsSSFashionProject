@@ -51,11 +51,11 @@ String userName=(String)session.getAttribute("userName");
 					<div class="col-md-12">
 						<button type="button" class="btn btn-outline-dark btn-sm"
 							data-toggle="modal" data-target="#searchModal" title="Search">
-							<i class="fa fa-search"></i>
+							<i class="fa fa-search"></i>Search Costing
 						</button>
 						<button type="button" class="btn btn-outline-dark btn-sm"
 							data-toggle="modal" data-target="#styleModal" title="View Style">
-							<i class="fas fa-tshirt"></i>
+							<i class="fas fa-tshirt"></i> Group Costing
 						</button>
 					</div>
 				</div>
@@ -96,10 +96,10 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-2">
 								<button type="button" class="btn btn-outline-dark btn-sm"
 									onclick="cloneButtonAction()" title="Copy Costing">
-									<i class="fas fa-copy"></i>
+									<i class="fas fa-copy"></i> Copy Costing
 								</button>
 							</div>
 

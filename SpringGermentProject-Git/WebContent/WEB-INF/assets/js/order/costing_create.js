@@ -350,8 +350,8 @@ function addAction() {
                   <td ><i class='fa fa-trash' onclick="deleteCostingItem('${id}','new','${styleId}','${itemId}')" style="cursor:pointer;"></i></td>
                 </tr>`;
               $("#dataList").append(row);
-
-              if(costingNo == "New"){
+              console.log("Costing No=",costingNo);
+              if(costingNo == "new"){
                 let sessionObject = JSON.parse(sessionStorage.getItem("pendingCosting") ? sessionStorage.getItem("pendingCosting") : "{}");
                 let itemList = sessionObject.itemList ? sessionObject.itemList : [];
 
