@@ -36,6 +36,8 @@ function setSampleProductionInfo(sampleCommentId) {
                 dangerAlert("Something went wrong");
             } else {
                 //drawSampleCommentsListSearchTable(data.sampleCommentsList);
+            	
+            	$('#searchModal').modal('hide');
                 const sample = data.sampleProduction;
                 
                 $("#sampleCommentsNo").val(sample.sampleCommentId);
@@ -45,170 +47,125 @@ function setSampleProductionInfo(sampleCommentId) {
                 $("#itemName").val(sample.itemName);
                 $("#color").val(sample.colorName);
                 $("#size").val(sample.size);
-                let date = sample.cuttingDate.split("/");
-                // console.log(date)
-                // $("#cuttingDate").val(date[2] + "-" + date[1] + "-" + date[0]);
-                $("#cuttingDate").val(sample.cuttingDate);
-                $("#cuttingQty").val(sample.cuttingQty);
-                $("#reqQty").val(sample.requisitionQty);
-                $("#printSendDate").val(sample.printSendDate);
-                $("#printReceivedDate").val(sample.printReceivedDate);
-                $("#printReceivedQty").val(sample.printReceivedQty);
-                $("#embroiderySendDate").val(sample.embroiderySendDate);
-                $("#embroideryReceivedDate").val(sample.embroideryReceivedDate);
-                $("#embroideryReceivedQty").val(sample.embroideryReceivedQty);
-                $("#sewingSendDate").val(sample.sewingSendDate);
-                $("#sewingFinishDate").val(sample.sewingFinishDate);
+
+                
+                var actualCuttingDate = new Date(sample.cuttingDate); 
+            	var cuttingDate=actualCuttingDate.getFullYear() + "-" +('0' + (actualCuttingDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualCuttingDate.getDate()).slice(-2) + "T" + ('0' + actualCuttingDate.getHours()).slice(-2) + ":" + ('0' + actualCuttingDate.getMinutes()).slice(-2);
+            	
+            	if(sample.cuttingDate!=' :00'){
+            		$('#cuttingDate').val(cuttingDate);
+            	}
+                
+            	
+                $("#cuttingQty").val(parseFloat(sample.cuttingQty).toFixed(2));
+                $("#reqQty").val(parseFloat(sample.requisitionQty).toFixed(2));
+                
+              	var actualPrintSendDate = new Date(sample.printSendDate); 
+            	var printSendDate=actualPrintSendDate.getFullYear() + "-" +('0' + (actualPrintSendDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualPrintSendDate.getDate()).slice(-2) + "T" + ('0' + actualPrintSendDate.getHours()).slice(-2) + ":" + ('0' + actualPrintSendDate.getMinutes()).slice(-2);
+            	
+            	if(sample.printSendDate!=' :00'){
+            		$('#printSendDate').val(printSendDate);
+            	}
+            	
+            	
+            	var actualprintReceivedDate = new Date(sample.printReceivedDate); 
+            	var printReceivedDate=actualprintReceivedDate.getFullYear() + "-" +('0' + (actualprintReceivedDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualprintReceivedDate.getDate()).slice(-2) + "T" + ('0' + actualprintReceivedDate.getHours()).slice(-2) + ":" + ('0' + actualprintReceivedDate.getMinutes()).slice(-2);
+            	
+            	if(sample.printReceivedDate!=' :00'){
+            		$('#printReceivedDate').val(printReceivedDate);
+            	}
+            	
+            	
+            	 $("#printReceivedQty").val(parseFloat(sample.printReceivedQty).toFixed(2));
+            	 
+               	var actualEmbroiderySendDate = new Date(sample.embroiderySendDate); 
+            	var embroiderySendDate=actualEmbroiderySendDate.getFullYear() + "-" +('0' + (actualEmbroiderySendDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualEmbroiderySendDate.getDate()).slice(-2) + "T" + ('0' + actualEmbroiderySendDate.getHours()).slice(-2) + ":" + ('0' + actualEmbroiderySendDate.getMinutes()).slice(-2);
+            	
+            	if(sample.embroiderySendDate!=' :00'){
+            		$('#embroiderySendDate').val(embroiderySendDate);
+            	
+            	}
+            	
+            	
+             	var actualEmbroideryReceivedDate = new Date(sample.embroideryReceivedDate); 
+            	var embroiderySendDate=actualEmbroideryReceivedDate.getFullYear() + "-" +('0' + (actualEmbroideryReceivedDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualEmbroideryReceivedDate.getDate()).slice(-2) + "T" + ('0' + actualEmbroideryReceivedDate.getHours()).slice(-2) + ":" + ('0' + actualEmbroideryReceivedDate.getMinutes()).slice(-2);
+            	
+            	if(sample.embroideryReceivedDate!=' :00'){
+            		$('#embroideryReceivedDate').val(embroiderySendDate);
+            	
+            	}
+
+             
+                $("#embroideryReceivedQty").val(parseFloat(sample.embroideryReceivedQty).toFixed(2));
+                
+                
+              	var actualSewingSendDate = new Date(sample.sewingSendDate); 
+            	var sewingSendDate=actualSewingSendDate.getFullYear() + "-" +('0' + (actualSewingSendDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualSewingSendDate.getDate()).slice(-2) + "T" + ('0' + actualSewingSendDate.getHours()).slice(-2) + ":" + ('0' + actualSewingSendDate.getMinutes()).slice(-2);
+            	
+            	if(sample.sewingSendDate!=' :00'){
+            		$('#sewingSendDate').val(sewingSendDate);
+            	
+            	}
+              
+
+              	var actualSewingFinishDate = new Date(sample.sewingFinishDate); 
+            	var sewingFinishDate=actualSewingFinishDate.getFullYear() + "-" +('0' + (actualSewingFinishDate.getMonth() + 1)).slice(-2) + "-" + ('0' + actualSewingFinishDate.getDate()).slice(-2) + "T" + ('0' + actualSewingFinishDate.getHours()).slice(-2) + ":" + ('0' + actualSewingFinishDate.getMinutes()).slice(-2);
+            	
+            	if(sample.sewingSendDate!=' :00'){
+            		$('#sewingFinishDate').val(sewingFinishDate);
+            	
+            	}
+
                 $("#operatorName").val(sample.operatorName);
                 $("#quality").val(sample.quality);
-                $('#searchModal').modal('hide');
 
-                for(let i=0;i<data.productionList.length;i++){
-                    const production = data.productionList[i];
-                    console.log(production);
-                    console.log(production.productionType );
-                    if(production.proudctionType == '14'){
-
-                        $("#production-h1").val(production.hour1);
-                        $("#production-h2").val(production.hour2);
-                        $("#production-h3").val(production.hour3);
-                        $("#production-h4").val(production.hour4);
-                        $("#production-h5").val(production.hour5);
-                        $("#production-h6").val(production.hour6);
-                        $("#production-h7").val(production.hour7);
-                        $("#production-h8").val(production.hour8);
-                        $("#production-h9").val(production.hour9);
-                        $("#production-h10").val(production.hour10);
-                        $("#production-h11").val(production.hour11);
-                        $("#production-h12").val(production.hour12);
-                        $("#production-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
-                    }else if(production.proudctionType == '15'){
-                        $("#pass-h1").val(production.hour1);
-                        $("#pass-h2").val(production.hour2);
-                        $("#pass-h3").val(production.hour3);
-                        $("#pass-h4").val(production.hour4);
-                        $("#pass-h5").val(production.hour5);
-                        $("#pass-h6").val(production.hour6);
-                        $("#pass-h7").val(production.hour7);
-                        $("#pass-h8").val(production.hour8);
-                        $("#pass-h9").val(production.hour9);
-                        $("#pass-h10").val(production.hour10);
-                        $("#pass-h11").val(production.hour11);
-                        $("#pass-h12").val(production.hour12);
-                        $("#pass-total").val(Number(production.hour1) + Number(production.hour2) + Number(production.hour3) + Number(production.hour4) + Number(production.hour5) + Number(production.hour6) + Number(production.hour7) + Number(production.hour8) + Number(production.hour9) + Number(production.hour10) + Number(production.hour11) + Number(production.hour12))
-                    }
-                    
-                }
             }
         }
     });
 }
 
-function setTotalQty() {
 
-	let productionQty1 = parseFloat(($("#production-h1").val() == '' ? "0" : $("#production-h1").val()));
-	let productionQty2 = parseFloat(($("#production-h2").val() == '' ? "0" : $("#production-h2").val()));
-	let productionQty3 = parseFloat(($("#production-h3").val() == '' ? "0" : $("#production-h3").val()));
-	let productionQty4 = parseFloat(($("#production-h4").val() == '' ? "0" : $("#production-h4").val()));
-	let productionQty5 = parseFloat(($("#production-h5").val() == '' ? "0" : $("#production-h5").val()));
-	let productionQty6 = parseFloat(($("#production-h6").val() == '' ? "0" : $("#production-h6").val()));
-	let productionQty7 = parseFloat(($("#production-h7").val() == '' ? "0" : $("#production-h7").val()));
-	let productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
-	let productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
-	let productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
-	let productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
-	let productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
-
-	let totalQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
-
-	$("#production-total").val(totalQty);
-
-
-	let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
-	let passQty2 = parseFloat(($("#pass-h2").val() == '' ? "0" : $("#pass-h2").val()));
-	let passQty3 = parseFloat(($("#pass-h3").val() == '' ? "0" : $("#pass-h3").val()));
-	let passQty4 = parseFloat(($("#pass-h4").val() == '' ? "0" : $("#pass-h4").val()));
-	let passQty5 = parseFloat(($("#pass-h5").val() == '' ? "0" : $("#pass-h5").val()));
-	let passQty6 = parseFloat(($("#pass-h6").val() == '' ? "0" : $("#pass-h6").val()));
-	let passQty7 = parseFloat(($("#pass-h7").val() == '' ? "0" : $("#pass-h7").val()));
-	let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
-	let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
-	let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
-	let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
-	let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
-
-	
-
-	totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
-
-    $("#pass-total").val(totalQty);
-
-}
 
 $("#btnPost").click(() => {
-    let productionType = $('#productionType').val();
-    let passType = $('#passType').val();
-    
-    let buyerId = '';
-    let buyerOrderId = '';
-    let styleId = '';
-    let itemId = '';
-    let purchaseOrder = '';
+
     const sampleCommentsId = $("#sampleCommentsId").val();
 
-    const cuttingDate = $("#cuttingDate").val();
+    
+	let cuttingDate = $("#cuttingDate").val();
+	cuttingDate = cuttingDate.slice(0, cuttingDate.indexOf('T')) + " " + cuttingDate.slice(cuttingDate.indexOf('T') + 1) + ":00";
     const cuttingQty = $("#cuttingQty").val();
-    const printSendDate = $("#printSendDate").val();
-    const printReceivedDate = $("#printReceivedDate").val();
+    
+	let printSendDate = $("#printSendDate").val();
+	printSendDate = printSendDate.slice(0, printSendDate.indexOf('T')) + " " + printSendDate.slice(printSendDate.indexOf('T') + 1) + ":00";
+	
+	
+	let printReceivedDate = $("#printReceivedDate").val();
+	printReceivedDate = printReceivedDate.slice(0, printReceivedDate.indexOf('T')) + " " + printReceivedDate.slice(printReceivedDate.indexOf('T') + 1) + ":00";
+	
+ 
     const printReceivedQty = $("#printReceivedQty").val();
-    const embroiderySendDate = $("#embroiderySendDate").val();
-    const embroideryReceivedDate = $("#embroideryReceivedDate").val();
+    
+	let embroiderySendDate = $("#embroiderySendDate").val();
+	embroiderySendDate = embroiderySendDate.slice(0, embroiderySendDate.indexOf('T')) + " " + embroiderySendDate.slice(embroiderySendDate.indexOf('T') + 1) + ":00";
+	
+	let embroideryReceivedDate = $("#embroideryReceivedDate").val();
+	embroideryReceivedDate = embroideryReceivedDate.slice(0, embroideryReceivedDate.indexOf('T')) + " " + embroideryReceivedDate.slice(embroideryReceivedDate.indexOf('T') + 1) + ":00";
+	
+	
     const embroideryReceivedQty = $("#embroideryReceivedQty").val();
-    const sewingSendDate = $("#sewingSendDate").val();
-    const sewingFinishDate = $("#sewingFinishDate").val();
+    
+	let sewingSendDate = $("#sewingSendDate").val();
+	sewingSendDate = sewingSendDate.slice(0, sewingSendDate.indexOf('T')) + " " + sewingSendDate.slice(sewingSendDate.indexOf('T') + 1) + ":00";
+	
+	let sewingFinishDate = $("#sewingFinishDate").val();
+	sewingFinishDate = sewingFinishDate.slice(0, sewingFinishDate.indexOf('T')) + " " + sewingFinishDate.slice(sewingFinishDate.indexOf('T') + 1) + ":00";
+	
+	
     const operatorName = $("#operatorName").val();
     const quality = $("#quality").val();
     const userId = $("#userId").val();
-
-    const productionQty1 = parseFloat(($("#production-h1").val() == '' ? "0" : $("#production-h1").val()));
-    const productionQty2 = parseFloat(($("#production-h2").val() == '' ? "0" : $("#production-h2").val()));
-    const productionQty3 = parseFloat(($("#production-h3").val() == '' ? "0" : $("#production-h3").val()));
-    const productionQty4 = parseFloat(($("#production-h4").val() == '' ? "0" : $("#production-h4").val()));
-    const productionQty5 = parseFloat(($("#production-h5").val() == '' ? "0" : $("#production-h5").val()));
-    const productionQty6 = parseFloat(($("#production-h6").val() == '' ? "0" : $("#production-h6").val()));
-    const productionQty7 = parseFloat(($("#production-h7").val() == '' ? "0" : $("#production-h7").val()));
-    const productionQty8 = parseFloat(($("#production-h8").val() == '' ? "0" : $("#production-h8").val()));
-    const productionQty9 = parseFloat(($("#production-h9").val() == '' ? "0" : $("#production-h9").val()));
-    const productionQty10 = parseFloat(($("#production-h10").val() == '' ? "0" : $("#production-h10").val()));
-    const productionQty11 = parseFloat(($("#production-h11").val() == '' ? "0" : $("#production-h11").val()));
-    const productionQty12 = parseFloat(($("#production-h12").val() == '' ? "0" : $("#production-h12").val()));
-
-    let totalProductionQty = productionQty1 + productionQty2 + productionQty3 + productionQty4 + productionQty5 + productionQty6 + productionQty7 + productionQty8 + productionQty9 + productionQty10 + productionQty11 + productionQty12;
-
-
-    let passQty1 = parseFloat(($("#pass-h1").val() == '' ? "0" : $("#pass-h1").val()));
-    let passQty2 = parseFloat(($("#pass-h2").val() == '' ? "0" : $("#pass-h2").val()));
-    let passQty3 = parseFloat(($("#pass-h3").val() == '' ? "0" : $("#pass-h3").val()));
-    let passQty4 = parseFloat(($("#pass-h4").val() == '' ? "0" : $("#pass-h4").val()));
-    let passQty5 = parseFloat(($("#pass-h5").val() == '' ? "0" : $("#pass-h5").val()));
-    let passQty6 = parseFloat(($("#pass-h6").val() == '' ? "0" : $("#pass-h6").val()));
-    let passQty7 = parseFloat(($("#pass-h7").val() == '' ? "0" : $("#pass-h7").val()));
-    let passQty8 = parseFloat(($("#pass-h8").val() == '' ? "0" : $("#pass-h8").val()));
-    let passQty9 = parseFloat(($("#pass-h9").val() == '' ? "0" : $("#pass-h9").val()));
-    let passQty10 = parseFloat(($("#pass-h10").val() == '' ? "0" : $("#pass-h10").val()));
-    let passQty11 = parseFloat(($("#pass-h11").val() == '' ? "0" : $("#pass-h11").val()));
-    let passQty12 = parseFloat(($("#pass-h12").val() == '' ? "0" : $("#pass-h12").val()));
-
-    let totalQty = passQty1 + passQty2 + passQty3 + passQty4 + passQty5 + passQty6 + passQty7 + passQty8 + passQty9 + passQty10 + passQty11 + passQty12;
-
-    let productionValue = productionType + ":" + productionQty1 + ":" + productionQty2 + ":" + productionQty3 + ":" + productionQty4 + ":" + productionQty5 + ":" + productionQty6 + ":" + productionQty7 + ":" + productionQty8 + ":" + productionQty9 + ":" + productionQty10 + ":" + productionQty11+ ":" + productionQty12;
-	let passValue = passType + ":" + passQty1 + ":" + passQty2 + ":" + passQty3 + ":" + passQty4 + ":" + passQty5 + ":" + passQty6 + ":" + passQty7 + ":" + passQty8 + ":" + passQty9 + ":" + passQty10 + ":" + passQty11 + ":" + passQty12;
-			
-    let resultList = operatorName + "*" + sampleCommentsId + "*" + totalProductionQty + "*" + totalQty  + "*" + productionValue + "*" + passValue ;
     
-
-    console.log(resultList)
-
+    
     if (sampleCommentsId != "") {
         if (confirm("Are you sure to update this Sample Production...")) {
             $.ajax({
@@ -217,11 +174,6 @@ $("#btnPost").click(() => {
                 url: './postSampleProduction',
                 data: {
                     sampleCommentId: sampleCommentsId,
-                    buyerId : buyerId,
-                    buyerOrderId : buyerOrderId,
-                    purchaseOrder : purchaseOrder,
-                    styleId : styleId,
-                    itemId : itemId,
                     cuttingDate: cuttingDate,
                     cuttingQty: cuttingQty,
                     printSendDate: printSendDate,
@@ -236,7 +188,6 @@ $("#btnPost").click(() => {
                     SampleProductionUserIp: '',
                     SampleCommentFlag: '',
                     operatorName: operatorName,
-                    resultList: resultList,
                     quality: quality,
                     userId: userId
                 },
@@ -269,35 +220,6 @@ function showPreview() {
 };
 
 
-function checkProductionChange() {
-
-
-
-
-    let tables = "";
-
-
-    
-        tables += ``;
-
-        //<th scope="col">Edit</th>
-
-   
-
-    tables += 
-    //"<td><button type='button' class='btn btn-sm btn-outline-dark btn-sm'><i class='fa fa-edit'></i></button></td>
-
-
-
-    tables += "</tbody></table> </div></div>";
-    // tables += "</tbody></table> </div></div>";
-    document.getElementById("tableList").innerHTML = tables;
-    // $('.tableSelect').selectpicker('refresh');
-    // dataList.forEach((data) => {
-    // 	$("#employee-" + data.lineId).val(data.employeeId).change();
-    // })
-
-}
 
 function drawSampleCommentsListSearchTable(data) {
     const length = data.length;
@@ -313,7 +235,6 @@ function drawSampleCommentsListSearchTable(data) {
             + "<td id='styleNo'>" + rowData.styleNo + "</td>"
             + "<td id='itemName'>" + rowData.itemName + "</td>"
             + "<td id='colorName'>" + rowData.colorName + "</td>"
-            + "<td id='size'>" + rowData.size + "</td>"
             + "<td id='sampleTypeName'>" + rowData.sampleTypeName + "</td>"
             + "<td ><i class='fa fa-search' style='cursor:pointer' onclick='setSampleProductionInfo(" + id + ")'></td>"
             + "</tr>";

@@ -19,11 +19,12 @@
 <div class="page-wrapper">
 
 	<input type="hidden" id="userId" value="<%=userId%>"> <input
-		type="hidden" id="poNo" value="0">
+		type="hidden" id="poNo" value="0"><input
+		type="hidden" id="poType" value="">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Purchase Order</h5>
+			<h5 class="text-center" style="display: inline;">Purchase Order <span class="badge badge-primary" id='poNoBadge'>New</span></h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#searchModal">
 				<i class="fa fa-search"></i>
@@ -35,27 +36,43 @@
 				<div class="form-group mb-0  row">
 					<label for="orderDate"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Order
-						Date</label> <input id="orderDate" type="date"
+						Date<span style="color:red">*</span></label> <input id="orderDate" type="date"
 						class="col-md-8 form-control-sm">
 
 				</div>
 				<div class="form-group mb-0  row">
 					<label for="deliveryDate"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Delivery
-						Date</label> <input id="deliveryDate" type="date"
+						Date<span style="color:red">*</span></label> <input id="deliveryDate" type="date"
 						class="col-md-8 form-control-sm">
 
 				</div>
-				<div class="form-group mb-0  row">
-					<label for="purchaseOrder"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Purchase
-						Order</label> <select id="purchaseOrder" onchange="poWiseStyleLoad()"
-						class="selectpicker col-md-8 px-0" data-live-search="true"
+
+				<%-- <div class="form-group col-md-3 mb-1  pr-0 pl-1">
+				<label for="supplierName" class="col-form-label-sm my-0 py-0">Supplier Name</label>
+				<div class="row">
+					<select id="supplierName" class="selectpicker col-md-12"
+						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="purchaseOrder" value="0">Select Purchase
-							Order</option>
-						<c:forEach items="${poList}" var="po">
-							<option id="purchaseOrder" value="${po}">${po}</option>
+						<option id="supplierName" value="0">--Select
+							SupplierName--</option>
+						<c:forEach items="${supplierList}" var="supplier">
+							<option id="supplierName" value="${supplier.supplierid}">${supplier.suppliername}</option>
+						</c:forEach>
+					</select>
+				</div>
+
+			</div> --%>
+				<div class="form-group mb-0  row">
+					<label for="supplierName"
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Supplier
+						Name<span style="color:red">*</span></label> <select id="supplierName" class="selectpicker col-md-8 px-0"
+						data-live-search="true"
+						data-style="btn-light btn-sm border-light-gray">
+						<option id="supplierName" value="0">--Select
+							SupplierName--</option>
+						<c:forEach items="${supplierList}" var="supplier">
+							<option id="supplierName" value="${supplier.supplierid}">${supplier.suppliername}</option>
 						</c:forEach>
 					</select>
 
@@ -65,7 +82,7 @@
 				<div class="form-group mb-0  row">
 					<label for="deliveryTo"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Delivery
-						To</label> <select id="deliveryTo" class="selectpicker col-md-9 px-0"
+						To<span style="color:red">*</span></label> <select id="deliveryTo" class="selectpicker col-md-9 px-0"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
 						<option id="deliveryTo" value="0">--- Select ---</option>
@@ -75,9 +92,9 @@
 					</select>
 
 				</div>
-				<div class="form-group mb-0  row">
+				<%-- <div class="form-group mb-0  row">
 					<label for="orderBy"
-						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Order By</label>
+						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Order By<span style="color:red">*</span></label>
 					<select id="orderBy" class="selectpicker col-md-9 px-0"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
@@ -87,7 +104,7 @@
 						</c:forEach>
 					</select>
 
-				</div>
+				</div> --%>
 				<div class="form-group mb-0  row">
 					<label for="billTo"
 						class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Bill To</label>
@@ -113,7 +130,7 @@
 				<div class="form-group mb-0  row">
 					<label for="paymentType"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Payment
-						Type</label> <select id="paymentType"
+						Type<span style="color:red">*</span></label> <select id="paymentType"
 						class="form-control-sm col-md-8 px-0">
 						<option id="paymentType" value="0">Select Payment Type</option>
 						<%
@@ -130,7 +147,7 @@
 				</div>
 				<div class="form-group mb-0  row">
 					<label for="currency"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
+						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency<span style="color:red">*</span></label>
 					<select id="currency" class="form-control-sm col-md-8 px-0">
 						<option value="0">Select Currency</option>
 						<%
@@ -147,7 +164,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-2 pr-0 pl-1">
+			<%-- <div class="col-md-2 pr-0 pl-1">
 				<label for="styleNo" class="col-form-label-sm my-0 py-0">Style
 					No</label> <select id="styleNo" onchange="typeWiseIndentItemLoad()"
 					class="selectpicker col-md-12 px-0" data-live-search="true"
@@ -155,7 +172,7 @@
 					<option id="styleNo" value="0">Select Style</option>
 				</select>
 			</div>
-
+			
 			<div class="col-md-1 pr-0 pl-1">
 				<label for="type" class="col-form-label-sm my-0 py-0">Type</label> <select
 					id="type" onchange="typeWiseIndentItemLoad()"
@@ -165,7 +182,30 @@
 					<option id="type" value="2">Accessories</option>
 					<option id="type" value="3">Curton</option>
 				</select>
+			</div> --%>
+
+
+			<div class='col-md-3 px-1'>
+				<div class="input-group input-group-sm" style="margin-top: 21px;">
+					<input id="indentId" type="text" class="form-control"
+						placeholder="Indent Id"
+						aria-label="input"
+						aria-describedby="button-addon4" readonly="readonly">
+						<input id="indentType" type="text" class="form-control"
+						placeholder="Indent Type"
+						aria-label="input"
+						aria-describedby="button-addon4" readonly="readonly">
+					<div class="input-group-append" id="button-addon4">
+						
+						<button type="button" class="btn btn-outline-dark btn-sm"
+				data-toggle="modal" data-target="#indentSearchModal">
+				<i class="fa fa-search"></i>
+			</button>
+					</div>
+				</div>
 			</div>
+
+
 
 			<div class="col-md-3 pr-0 pl-1">
 				<label for="indentItem" class="col-form-label-sm my-0 py-0">Indent
@@ -176,7 +216,7 @@
 				</select>
 			</div>
 
-			<div class="form-group col-md-3 mb-1  pr-0 pl-1">
+			<%-- <div class="form-group col-md-3 mb-1  pr-0 pl-1">
 				<label for="supplierName" class="col-form-label-sm my-0 py-0">Supplier
 					Name</label>
 				<div class="row">
@@ -191,7 +231,7 @@
 					</select>
 				</div>
 
-			</div>
+			</div> --%>
 
 			<div class="col-md-3 pr-0">
 				<div class="row">
@@ -216,7 +256,7 @@
 			</div>
 
 		</div>
-		
+
 		<div class="alert alert-success alert-dismissible fade show"
 			style="display: none;">
 			<p id="successAlert" class="mb-0">
@@ -243,12 +283,11 @@
 					class="table table-hover table-bordered table-sm mb-0 small-font">
 					<thead class="no-wrap-text">
 						<tr>
+							<th>Buyer PO</th>
 							<th>Style No</th>
 							<th>Item Name</th>
 							<th>Item Color</th>
 							<th>Size</th>
-							<th>Supplier Name</th>
-							<th>Qty</th>
 							<th>Grand Qty</th>
 							<th>Unit</th>
 							<th>Dollar</th>
@@ -258,7 +297,7 @@
 						</tr>
 					</thead>
 					<tbody id="dataList">
-						<c:forEach items="${fabricsIndentList}" var="indent"
+						<%-- <c:forEach items="${fabricsIndentList}" var="indent"
 							varStatus="counter">
 							<tr>
 
@@ -273,7 +312,7 @@
 								<td>${indent.unit}</td>
 								<th><input type="checkbox"></th>
 							</tr>
-						</c:forEach>
+						</c:forEach> --%>
 					</tbody>
 				</table>
 			</div>
@@ -309,13 +348,17 @@
 					<i class="fas fa-save"></i> Submit
 				</button>
 				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="purchaseOrderEdit()"
-					disabled>
+					class="btn btn-success btn-sm ml-1" onclick="purchaseOrderEdit()"
+					style="display:none;">
 					<i class="fa fa-pencil-square"></i> Edit
 				</button>
 				<button id="btnRefresh" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+					class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
+				</button>
+				<button id="btnPreview" type="button"
+					class="btn btn-info btn-sm ml-1" onclick="previewAction()" style="display:none;">
+					<i class="fa fa-print"></i> Preview
 				</button>
 			</div>
 		</div>
@@ -361,10 +404,61 @@
 								<td>${po.orderDate}</td>
 								<td>${po.type}</td>
 								<td><i class="fa fa-search" style="cursor: pointer;"
-									onclick="searchPurchaseOrder(${po.poNo})"> </i></td>
+									onclick="searchPurchaseOrder('${po.poNo}','${po.type}')"> </i></td>
 								<td><i class="fa fa-print" style="cursor: pointer;"
 									onclick="showPreview('${po.poNo}','${po.supplierId}','${po.type}')">
 								</i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="indentSearchModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="indentSearch" type="text" class="form-control"
+						placeholder="Search Purchase Order"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>Indent Id</th>
+							<th>Indent Type</th>
+							<th>Date</th>
+							<th><span><i class="fa fa-search"></i></span></th>
+							
+						</tr>
+					</thead>
+					<tbody id="purchaseOrderList">
+						<c:forEach items="${pendingIndentList}" var="indent"
+							varStatus="counter">
+							<tr id="row-${indent.id}+${indent.type}">
+								<td>${indent.id}</td>
+								<td>${indent.indentType}</td>
+								<td>${indent.date}</td>
+								<td><i class="fa fa-search" style="cursor: pointer;"
+									onclick="searchIndentItem('${indent.id}','${indent.indentType }')"> </i></td>
+								
 							</tr>
 						</c:forEach>
 					</tbody>

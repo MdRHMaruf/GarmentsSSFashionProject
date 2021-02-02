@@ -29,6 +29,7 @@ import pg.registerModel.CourierModel;
 import pg.registerModel.Factory;
 import pg.registerModel.ItemDescription;
 import pg.registerModel.ParticularItem;
+import pg.registerModel.AccessoriesItem;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -564,10 +565,16 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<pg.registerModel.AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder, String styleId,
+	public List<AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder, String styleId,
 			String type) {
 		// TODO Auto-generated method stub
 		return orderDAO.getTypeWiseIndentItems(purchaseOrder, styleId, type);
+	}
+	
+	@Override
+	public List<AccessoriesItem> getIndentItems(String indentId,String indentType) {
+		// TODO Auto-generated method stub
+		return orderDAO.getIndentItems(indentId, indentType);
 	}
 
 
@@ -584,21 +591,26 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<PurchaseOrder> getPurchaseOrderSummeryList() {
+	public List<PurchaseOrder> getPurchaseOrderSummeryList(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPurchaseOrderSummeryList();
+		return orderDAO.getPurchaseOrderSummeryList(userId);
+	}
+	
+	@Override
+	public List<CommonModel> getPendingIndentList(String userId){
+		return orderDAO.getPendingIndentList(userId);
 	}
 
 	@Override
-	public PurchaseOrder getPurchaseOrder(String poNo) {
+	public PurchaseOrder getPurchaseOrder(String poNo,String poType) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPurchaseOrder(poNo);
+		return orderDAO.getPurchaseOrder(poNo,poType);
 	}
 
 	@Override
-	public List<PurchaseOrderItem> getPurchaseOrderItemList(PurchaseOrderItem purchaseOrderItem) {
+	public List<PurchaseOrderItem> getPurchaseOrderItemList(AccessoriesIndent accessoriesIndent) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPurchaseOrderItemList(purchaseOrderItem);
+		return orderDAO.getPurchaseOrderItemList(accessoriesIndent);
 	}
 
 	@Override
@@ -823,11 +835,35 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAllFromFileLogDetails(v);
 	}
-
+	
 	@Override
 	public boolean addNewPermission(CommonModel v) {
 		// TODO Auto-generated method stub
 		return orderDAO.addNewPermission(v);
+	}
+	
+	@Override
+	public boolean deleteSampleRequisitionItem(String sapleAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.deleteSampleRequisitionItem(sapleAutoId);
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequistionItemData(String itemAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleRequistionItemData(itemAutoId);
+	}
+
+	@Override
+	public boolean editItemToSampleRequisition(SampleRequisitionItem v) {
+		// TODO Auto-generated method stub
+		return orderDAO.editItemToSampleRequisition(v);
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCadDetails(sampleCommentId);
 	}
 
 }

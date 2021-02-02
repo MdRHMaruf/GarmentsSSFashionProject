@@ -10,16 +10,17 @@ public class Login implements Serializable{
 	String factoryId;
 	String departmentId;
 	String pass;
+	String fullName;
 	
 	
-	
-	public Login(int id,int type,String factoryId,String departmentId,String user,String pass) {
+	public Login(int id,int type,String factoryId,String departmentId,String FullName,String user,String pass) {
 		this.user = user;
 		this.id = id;
 		this.type = type;
 		this.factoryId = factoryId;
 		this.departmentId = departmentId;
 		this.pass = pass;
+		this.fullName=FullName;
 	}
 	public String getUser() {
 		return user;
@@ -62,6 +63,12 @@ public class Login implements Serializable{
 	}
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
+	}
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	

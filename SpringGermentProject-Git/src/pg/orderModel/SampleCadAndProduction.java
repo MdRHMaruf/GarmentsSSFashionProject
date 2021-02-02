@@ -1,6 +1,7 @@
 package pg.orderModel;
 
 public class SampleCadAndProduction {
+	
 	String user;
 	String autoId;
 	String sampleCommentId;
@@ -24,7 +25,7 @@ public class SampleCadAndProduction {
 	String patternMadingReceived;
 	String patternCorrectionDate;
 	String patternCorrectionDespatch;
-	String PatternCorrectionReceived;
+	String patternCorrectionReceived;
 	String patternGradingDate;
 	String patternGradingDespatch;
 	String patternGradingReceived;
@@ -65,6 +66,8 @@ public class SampleCadAndProduction {
 	String insertSampleCad;
 	String sampleRequistionQty;
 	String sampleReqId;
+	String patternMakingReceived;
+	String sampleCadId;
 	
 	public SampleCadAndProduction(String sampleCommentId, String po,
 			String style, String item, String color, String size, 
@@ -91,7 +94,7 @@ public class SampleCadAndProduction {
 		
 		this.patternCorrectionDate=correctiondate;
 		this.patternCorrectionDespatch=correctiondispatch;
-		this.PatternCorrectionReceived=correctionreceivedby;
+		this.patternCorrectionReceived=correctionreceivedby;
 		
 		
 		this.patternGradingDate=gradingdate;
@@ -108,9 +111,10 @@ public class SampleCadAndProduction {
 	}
 	
 	
-	public SampleCadAndProduction(String sampleCommentId,String buyername,String po,String style,String itemname,String sampletype) {
+	public SampleCadAndProduction(String sampleCommentId,String sampleReqId,String buyername,String po,String style,String itemname,String sampletype) {
 		super();
 		this.sampleCommentId=sampleCommentId;
+		this.sampleReqId=sampleReqId;
 		this.buyername=buyername;
 		this.purchaseOrder=po;
 		this.styleNo=style;
@@ -152,7 +156,7 @@ public class SampleCadAndProduction {
 	
 	
 	public SampleCadAndProduction(String sampleCommentId, String purchaseOrder, String styleId, String styleNo,
-			String itemId, String itemName, String colorId, String colorName, String sizeId, String size,
+			String itemId, String itemName, String colorId, String colorName,
 			String sampleTypeId, String sampleTypeName) {
 		super();
 		this.sampleCommentId = sampleCommentId;
@@ -163,8 +167,6 @@ public class SampleCadAndProduction {
 		this.itemName = itemName;
 		this.colorId = colorId;
 		this.colorName = colorName;
-		this.sizeId = sizeId;
-		this.size = size;
 		this.sampleTypeId = sampleTypeId;
 		this.sampleTypeName = sampleTypeName;
 	}
@@ -172,7 +174,7 @@ public class SampleCadAndProduction {
 
 
 	public SampleCadAndProduction(String sampleCommentId, String purchaseOrder, String styleId, String styleNo,
-			String itemId, String itemName, String colorId, String colorName, String sizeId, String size,
+			String itemId, String itemName, String colorId, String colorName,
 			String sampleTypeId, String sampleTypeName, String cuttingQty, String cuttingDate, String requisitionQty,
 			String printSendDate, String printReceivedDate, String printReceivedQty, String embroiderySendDate,
 			String embroideryReceivedDate, String embroideryReceivedQty, String sewingSendDate,
@@ -186,8 +188,7 @@ public class SampleCadAndProduction {
 		this.itemName = itemName;
 		this.colorId = colorId;
 		this.colorName = colorName;
-		this.sizeId = sizeId;
-		this.size = size;
+
 		this.sampleTypeId = sampleTypeId;
 		this.sampleTypeName = sampleTypeName;
 		this.cuttingQty = cuttingQty;
@@ -205,6 +206,32 @@ public class SampleCadAndProduction {
 		this.quality = quality;
 	}
 
+
+
+	public SampleCadAndProduction(String sampleCadId, String sampleReqId, String FeebackComments, String patternMakingDate, String PatternMakingDespatch,
+			String PatternMakingReceived, String PatternCorrectionDate, String PatternCorrectionDespatch, String PatternCorrectionReceived, String PatternGradingDate, String PatternGradingDespatch,
+			String PatternGradingReceived, String PatternMarkingDate, String PatternMarkingDespatch, String PatternMarkingReceived) {
+		this.sampleCadId=sampleCadId;
+		this.sampleReqId=sampleReqId;
+		this.feedbackComments=FeebackComments;
+		this.patternMakingDate=patternMakingDate;
+		this.patternMakingDespatch=PatternMakingDespatch;
+		this.patternMakingReceived=PatternMakingReceived;
+		
+		this.patternCorrectionDate=PatternCorrectionDate;
+		this.patternCorrectionDespatch=PatternCorrectionDespatch;
+		this.patternCorrectionReceived=PatternCorrectionReceived;
+		
+		this.patternGradingDate=PatternGradingDate;
+		this.patternGradingDespatch=PatternGradingDespatch;
+		this.patternGradingReceived=PatternGradingReceived;
+		
+		this.patternMarkingDate=PatternMarkingDate;
+		this.patternMarkingDespatch=PatternMarkingDespatch;
+		this.patternMarkingReceived=PatternMarkingReceived;
+		
+		
+	}
 
 
 	public String getAutoId() {
@@ -291,12 +318,37 @@ public class SampleCadAndProduction {
 	public void setPatternCorrectionDespatch(String patternCorrectionDespatch) {
 		this.patternCorrectionDespatch = patternCorrectionDespatch;
 	}
+	
 	public String getPatternCorrectionReceived() {
-		return PatternCorrectionReceived;
+		return patternCorrectionReceived;
 	}
+
+
 	public void setPatternCorrectionReceived(String patternCorrectionReceived) {
-		PatternCorrectionReceived = patternCorrectionReceived;
+		this.patternCorrectionReceived = patternCorrectionReceived;
 	}
+
+
+	public String getPatternMakingReceived() {
+		return patternMakingReceived;
+	}
+
+
+	public void setPatternMakingReceived(String patternMakingReceived) {
+		this.patternMakingReceived = patternMakingReceived;
+	}
+
+
+	public String getSampleCadId() {
+		return sampleCadId;
+	}
+
+
+	public void setSampleCadId(String sampleCadId) {
+		this.sampleCadId = sampleCadId;
+	}
+
+
 	public String getPatternGradingDate() {
 		return patternGradingDate;
 	}

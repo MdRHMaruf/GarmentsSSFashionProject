@@ -1744,7 +1744,7 @@ public class OrderController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<Style> styleList= orderService.getStyleList(userId);
 		List<Color> colorList = registerService.getColorList();
-		//List<FactoryModel> factoryList = registerService.getAllFactories();
+		//List<FactoryModel> factoryList = registerSfervice.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<CommonModel> inchargeList = orderService.getInchargeList();
@@ -1808,6 +1808,21 @@ public class OrderController {
 		return objmain;
 	}
 
+	@RequestMapping(value = "/editItemToSampleRequisition",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editItemToSampleRequisition(SampleRequisitionItem v) {
+		JSONObject objmain = new JSONObject();
+
+		if(orderService.editItemToSampleRequisition(v)) {
+			JSONArray mainArray = new JSONArray();
+			List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(v.getSampleReqId());
+			objmain.put("result",sampleList);
+		}else {
+			objmain.put("result", "Something Wrong");
+		}
+
+		return objmain;
+	}
+	
 	@RequestMapping(value = "/userWiseNullSampleReqDataList",method=RequestMethod.POST)
 	public @ResponseBody JSONObject userWiseNullSampleReqDataList(String userId) {
 		JSONObject objmain = new JSONObject();
@@ -1837,10 +1852,47 @@ public class OrderController {
 	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId) {
 		JSONObject objmain = new JSONObject();
-
+		
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(sampleReqId);
 		objmain.put("result",sampleList);
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteSampleRequisitionItem",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteSampleRequisitionItem(String sapleAutoId,String sampleReqId) {
+		JSONObject objmain = new JSONObject();
+		JSONArray mainArray = new JSONArray();
+		
+		System.out.println("sampleReqId "+sampleReqId);
+		
+		if(!sampleReqId.equals("")) {
+			objmain.put("result","Sorry You are already confirm sample requisition");
+		}
+		else {
+			boolean flag=orderService.deleteSampleRequisitionItem(sapleAutoId);
+			if(flag) {
+				List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(sampleReqId);
+				objmain.put("result",sampleList);
+			}
+			else{
+				
+				objmain.put("result","Something has wrong!!");
+			}
+		}
+
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/getSampleRequistionItemData",method=RequestMethod.POST)
+	public @ResponseBody JSONObject getSampleRequistionItemData(String itemAutoId) {
+		JSONObject objmain = new JSONObject();
+		JSONArray mainArray = new JSONArray();
+		List<SampleRequisitionItem> sampleRequistionItemList = orderService.getSampleRequistionItemData(itemAutoId);
+		System.out.println("Size "+sampleRequistionItemList.size());
+		
+		objmain.put("result",sampleRequistionItemList);
 
 		return objmain;
 	}
@@ -1875,22 +1927,30 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 		
 		ModelAndView view = new ModelAndView("order/purchase-order");
-		List<String> poList = orderService.getPurchaseOrderList(userId);
+		//List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<Factory> factoryList = registerService.getFactoryNameList();
-		List<MerchandiserInfo> merchandiserList = registerService.getMerchandiserList();
+		//List<MerchandiserInfo> merchandiserList = registerService.getMerchandiserList();
 		List<SupplierModel> supplierList = registerService.getAllSupplier();
-		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderSummeryList();
-		view.addObject("poList",poList);
+		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderSummeryList(userId);
+		List<CommonModel> pendingIndentList = orderService.getPendingIndentList(userId);
+		//view.addObject("poList",poList);
 		view.addObject("factoryList",factoryList);
-		view.addObject("merchendiserList",merchandiserList);
+		//view.addObject("merchendiserList",merchandiserList);
 		view.addObject("supplierList",supplierList);
 		view.addObject("purchaseOrderList",purchaseOrderList);
-		
+		view.addObject("pendingIndentList",pendingIndentList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/getIndentItems",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getIndentItems(String indentId,String indentType) {
+		JSONObject objmain = new JSONObject();
+		List<AccessoriesItem>  itemList = orderService.getIndentItems(indentId, indentType);
+		objmain.put("itemList", itemList);
+		return objmain;
+	}
 	@RequestMapping(value = "/getTypeWiseIndentItems",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getTypeWiseIndentItems(String purchaseOrder,String styleId,String type) {
 		JSONObject objmain = new JSONObject();
@@ -1900,9 +1960,9 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/addIndentItem",method=RequestMethod.GET)
-	public @ResponseBody JSONObject addIndentItem(PurchaseOrderItem purchaseOrderItem) {
+	public @ResponseBody JSONObject addIndentItem(AccessoriesIndent accessoriesIndent) {
 		JSONObject objmain = new JSONObject();
-		List<PurchaseOrderItem> poItemList = orderService.getPurchaseOrderItemList(purchaseOrderItem);
+		List<PurchaseOrderItem> poItemList = orderService.getPurchaseOrderItemList(accessoriesIndent);
 		objmain.put("poItemList", poItemList);
 		return objmain;
 	}
@@ -1930,9 +1990,9 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/searchPurchaseOrder",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchPurchaseOrder(String poNo) {
+	public @ResponseBody JSONObject searchPurchaseOrder(String poNo,String poType) {
 		JSONObject objmain = new JSONObject();
-		PurchaseOrder  purchaseOrder = orderService.getPurchaseOrder(poNo);
+		PurchaseOrder  purchaseOrder = orderService.getPurchaseOrder(poNo,poType);
 		objmain.put("poInfo", purchaseOrder);
 		return objmain;
 	}
@@ -1981,11 +2041,8 @@ public class OrderController {
 	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
 		JSONObject objmain = new JSONObject();
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
-		System.out.println("it's ok controller");
-		List<ProductionPlan> productionList = orderService.getSampleProduction(sampleCommentId,sampleProduction.getOperatorName(),sampleProduction.getCuttingDate());
-
 		objmain.put("sampleProduction", sampleProduction);
-		objmain.put("productionList", productionList);
+
 		return objmain;
 	}
 
@@ -2210,7 +2267,7 @@ public class OrderController {
 		
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		
 		ModelAndView view = new ModelAndView("order/sample_cad");
@@ -2222,7 +2279,7 @@ public class OrderController {
 		
 
 		view.addObject("poList",poList);
-		view.addObject("sampletype",sampleList);
+		view.addObject("sampleList",sampleList);
 		view.addObject("sampleCadList",sampleCadList);
 		view.addObject("sampleReqList",sampleReqList);
 		
@@ -2233,7 +2290,18 @@ public class OrderController {
 	}
 
 
+	@RequestMapping(value = "/searchSampleCadDetails",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSampleCadDetails(String sampleCommentId,String sampleReqId) {
+		JSONObject objmain = new JSONObject();
+		
+		JSONArray mainArray = new JSONArray();
+		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
+		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
+		objmain.put("result_sample_requisition",sampleRequisitionList);
+		objmain.put("result_sample_cad",sampleCadList);
 
+		return objmain;
+	}
 
 
 	@ResponseBody

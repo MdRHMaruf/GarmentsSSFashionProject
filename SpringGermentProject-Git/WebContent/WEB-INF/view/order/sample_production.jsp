@@ -51,19 +51,8 @@ String userName=(String)session.getAttribute("userName");
 								<div class="col-sm-5 p-0">
 									<label for="purchaseOrder" class="mb-0">Purchase Order</label>
 
-									<input class="form-control-sm" type="text" id="purchaseOrder">
+									<input class="form-control-sm" readonly type="text" id="purchaseOrder">
 
-								</div>
-
-								<div class="form-check form-check-inline">
-									<input class="form-check-input ml-1" type="radio" name="po"
-										id="withPO" value="" checked> <label
-										class="form-check-label" for="withPO">With PO</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="po"
-										id="withOutPO" value=""> <label
-										class="form-check-label" for="withOutPO">With Out PO</label>
 								</div>
 
 							</div>
@@ -71,7 +60,7 @@ String userName=(String)session.getAttribute("userName");
 							<div class="row mt-1">
 								<div class="col-sm-5 p-0">
 									<label for="styleNo" class="mb-0">Style No</label> <input
-										class="form-control-sm" type="text" id="styleNo">
+										class="form-control-sm" readonly type="text" id="styleNo">
 
 								</div>
 							</div>
@@ -80,14 +69,14 @@ String userName=(String)session.getAttribute("userName");
 
 								<div class="col-sm-5 p-0">
 									<label for="itemName" class="mb-0">Item Name</label> <input
-										class="form-control-sm" type="text" id="itemName">
+										class="form-control-sm" readonly type="text" id="itemName">
 
 								</div>
 
 								<div class="col-sm-6 ml-1 p-0">
 									<label for="sampleCommentsNo" class="mb-0">Sample
 										Comment No</label> <input style="background: black; color: white;"
-										class="form-control-sm" type="text" id="sampleCommentsNo"
+										class="form-control-sm" readonly type="text" id="sampleCommentsNo"
 										readonly>
 
 								</div>
@@ -97,7 +86,7 @@ String userName=(String)session.getAttribute("userName");
 
 								<div class="col-sm-5 p-0">
 									<label for="color" class="mb-0">Color</label> <input
-										class="form-control-sm" type="text" id="color">
+										class="form-control-sm" readonly type="text" id="color">
 
 								</div>
 							</div>
@@ -153,6 +142,7 @@ String userName=(String)session.getAttribute("userName");
 									class="btn btn-outline-dark btn-sm" data-toggle="modal"
 									data-target="#searchModal">
 									<i class="fa fa-search"></i>
+									Sample Cad List
 								</button>
 							</header>
 							<hr class="my-1">
@@ -163,26 +153,26 @@ String userName=(String)session.getAttribute("userName");
 									<h5>Print</h5>
 
 									<div class="row">
-										<label for="printSendDate" class="col-sm-5">Send Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="printSendDate" class="col-sm-4">Send Date</label>
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="printSendDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="printReceivedDate" class="col-sm-5">Received
+										<label for="printReceivedDate" class="col-sm-4">Received
 											Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="printReceivedDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="printReceivedQty" class="col-sm-5">Received
+										<label for="printReceivedQty" class="col-sm-4">Received
 											Qty</label>
-										<div class="col-sm-7">
+										<div class="col-sm-8">
 											<input class="form-control-sm" type="text"
 												id="printReceivedQty">
 										</div>
@@ -196,27 +186,27 @@ String userName=(String)session.getAttribute("userName");
 									<h5>Embroidery</h5>
 
 									<div class="row">
-										<label for="embroiderySendDate" class="col-sm-5">Send
+										<label for="embroiderySendDate" class="col-sm-4">Send
 											Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="embroiderySendDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="embroideryReceivedDate" class="col-sm-5">Received
+										<label for="embroideryReceivedDate" class="col-sm-4">Received
 											Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="embroideryReceivedDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="embroideryReceivedQty" class="col-sm-5">Received
+										<label for="embroideryReceivedQty" class="col-sm-4">Received
 											Qty</label>
-										<div class="col-sm-7">
+										<div class="col-sm-8">
 											<input class="form-control-sm" type="text"
 												id="embroideryReceivedQty">
 										</div>
@@ -233,18 +223,18 @@ String userName=(String)session.getAttribute("userName");
 									<h5>Sewing</h5>
 
 									<div class="row">
-										<label for="sewingSendDate" class="col-sm-5">Start Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<label for="sewingSendDate" class="col-sm-4">Start Date</label>
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="sewingSendDate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
-										<label for="sewingFinishDate" class="col-sm-5">Finish
+										<label for="sewingFinishDate" class="col-sm-4">Finish
 											Date</label>
-										<div class="col-sm-7">
-											<input class="form-control-sm col-sm-12" type="date"
+										<div class="col-sm-8">
+											<input class="form-control-sm col-sm-12" type="datetime-local"
 												id="sewingFinishDate">
 										</div>
 									</div>
@@ -410,7 +400,6 @@ String userName=(String)session.getAttribute("userName");
 												<th scope="col">Style No</th>
 												<th scope="col">Item Name</th>
 												<th scope="col">Item Name</th>
-												<th scope="col">Size</th>
 												<th scope="col">Sample Type</th>
 												<th><span><i class="fa fa-search"></i></span></th>
 											</tr>

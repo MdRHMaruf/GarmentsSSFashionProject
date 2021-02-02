@@ -3,24 +3,24 @@
 <%@page import="org.hibernate.Session"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.HashMap"%>
-<%@ page contentType="application/pdf" %>
+<%@ page contentType="application/pdf"%>
 
 <%@ page trimDirectiveWhitespaces="true"%>
 
 
-<%@ page import="net.sf.jasperreports.engine.design.JRDesignQuery" %>
-<%@ page import="net.sf.jasperreports.engine.design.JasperDesign" %>
-<%@ page import="net.sf.jasperreports.engine.xml.JRXmlLoader" %>
+<%@ page import="net.sf.jasperreports.engine.design.JRDesignQuery"%>
+<%@ page import="net.sf.jasperreports.engine.design.JasperDesign"%>
+<%@ page import="net.sf.jasperreports.engine.xml.JRXmlLoader"%>
 
-<%@ page import="net.sf.jasperreports.engine.*" %>
-<%@ page import="java.io.File" %>
-<%@ page import="java.io.FileInputStream" %>
-<%@ page import="java.io.FileNotFoundException" %>
-<%@ page import="java.io.InputStream" %>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="pg.config.*" %>
+<%@ page import="net.sf.jasperreports.engine.*"%>
+<%@ page import="java.io.File"%>
+<%@ page import="java.io.FileInputStream"%>
+<%@ page import="java.io.FileNotFoundException"%>
+<%@ page import="java.io.InputStream"%>
+<%@ page import="java.sql.Connection"%>
+<%@ page import="java.sql.DriverManager"%>
+<%@ page import="java.sql.SQLException"%>
+<%@ page import="pg.config.*"%>
 
 <%
 	System.out.println("report = "+request.getAttribute("poNo"));
@@ -63,65 +63,63 @@
 			map.put("FactoryPhone",element[1].toString());
 			map.put("FactoryAddress",element[2].toString());
 		}
-
-
 		
 		
 		String report="";
 		String jrxmlFile = "";
 		if(type.equalsIgnoreCase("Accessories")) {
 			
-			sql="select 'only' as Taka,b.ShippingMarks, "+
-					"(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, "+
-					"(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem, "+
-					"(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size, "+
-					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName, "+
-					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate, "+
-					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)  "+
-					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, "+
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, "+
-					"(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature, "+
-					"(select Signature from TbMerchendiserInfo where MUserId='1') as MdSignature,b.mdapproval,a.poNo "+ 
-					"from tbPurchaseOrderSummary a  "+
-					"join tbAccessoriesIndent b  "+
-					"on a.pono=b.pono   "+
-					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'  "+
+			sql="select 'only' as Taka,b.ShippingMarks, \r\n"+
+					"(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,  \r\n"+
+					"(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,  \r\n"+
+					"(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,  \r\n"+
+					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
+					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
+					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
+					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
+					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
+					"(select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+ 
+					"from tbPurchaseOrderSummary a   \r\n"+
+					"join tbAccessoriesIndent b   \r\n"+
+					"on a.pono=b.pono    \r\n"+
+					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
 			
 		}else if(type.equalsIgnoreCase("Fabrics")) {
-			sql="select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, "+
-					"(select ItemName from TbFabricsItem where id=b.fabricsid) as AccessorisItem, "+
-					"(select colorName from tbColors where ColorId=b.fabricscolor) as ColorName,'' as accessoriesSize,'' as size, "+
-					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate, "+
-					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy, "+
-					"(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, "+
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, "+
-					"(select Signature from TbMerchendiserInfo where MUserId=b.entryby) as Signature, "+
-					"(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval,a.poNo "+ 
-					"from tbPurchaseOrderSummary a  "+
-					"join tbFabricsIndent b on a.pono=b.pono "+  
-					"where a.pono='"+poNo+"' and b.supplierid='"+supplierId+"' "+
+			sql="select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, \r\n"+
+					"(select ItemName from TbFabricsItem where id=b.fabricsid) as AccessorisItem,  \r\n"+
+					"(select colorName from tbColors where ColorId=b.fabricscolor) as ColorName,'' as accessoriesSize,'' as size,  \r\n"+
+					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,  \r\n"+
+					"(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
+					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
+					"(select Signature from Tblogin where id=b.entryby) as Signature,  \r\n"+
+					"(select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+ 
+					"from tbPurchaseOrderSummary a   \r\n"+
+					"join tbFabricsIndent b on a.pono=b.pono  \r\n"+  
+					"where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'  \r\n"+
 					"order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
-			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
+			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrder.jrxml");
 			
 
-		}else if(type.equalsIgnoreCase("curton")){
-			sql=" select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, \r\n"+
-					" (select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,  \r\n"+
-					"  (select colorName from tbColors where ColorId=b.ColorId) as ColorName, \r\n"+
-					"  b.cartonSize as accessoriesSize,isnull((select ss.sizeName from tbStyleSize ss  where ss.id = b.sizeId),'') as size, \r\n"+ 
-					 " (select unitname from tbunits where UnitId=b.UnitId) as UnitName, \r\n"+
-					"  b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
-					"  (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,  \r\n"+
-					"  (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
-					"  (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
-					"  (select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,  \r\n"+
-					"  (select Signature from TbMerchendiserInfo where MUserId='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+
-					"  from tbPurchaseOrderSummary a   \r\n"+
-					"  join tbAccessoriesIndentForCarton b on a.pono=b.pono \r\n"+
-					" where a.pono='"+poNo+"' and b.supplierid='"+supplierId+"'  \r\n"+
-					"  order by  b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId asc ";
+		}else if(type.equalsIgnoreCase("Carton")){
+			sql="select 'only' as Taka ,b.PurchaseOrder,b.styleid,b.Itemid,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, \r\n"+ 
+					 " (select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,   \r\n"+
+					 "  (select colorName from tbColors where ColorId=b.ColorId) as ColorName,  \r\n"+
+					  " b.cartonSize as accessoriesSize,isnull((select ss.sizeName from tbStyleSize ss  where ss.id = b.sizeId),'') as size, \r\n"+ 
+					 " (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.Ply,b.type,b.Length1,b.Width1,b.Height1,b.cbm,  \r\n"+
+					  " b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
+					  " (select username from Tblogin  where id=a.orderby) OrderBy,   \r\n"+
+					  " (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, \r\n"+  
+					  " (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, \r\n"+  
+					  " (select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
+					  " (select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo \r\n"+  
+					  " from tbPurchaseOrderSummary a    \r\n"+
+					  " join tbAccessoriesIndentForCarton b on a.pono=b.pono \r\n"+ 
+					"  where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'   \r\n"+
+					  " order by  b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId asc";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonPurchaseOrder.jrxml");
 		}
     	

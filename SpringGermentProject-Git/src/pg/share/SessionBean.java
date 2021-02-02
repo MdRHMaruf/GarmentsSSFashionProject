@@ -6,16 +6,17 @@ public class SessionBean {
 	String userId;
 	String userName;
 	String passWord;
-	
+	String fullName;
 	public SessionBean() {
 		
 	}
 	
-	public SessionBean(long SessionValue,String UserId,String Username,String Password) {
+	public SessionBean(long SessionValue,String UserId,String FullName,String Username,String Password) {
 		this.sessionValue=SessionValue;
 		this.userId=UserId;
 		this.userName=Username;
 		this.passWord=Password;
+		this.fullName=FullName;
 	}
 	
 	public String getUserId() {
@@ -45,6 +46,14 @@ public class SessionBean {
 
 	public void setSessionValue(long sessionValue) {
 		this.sessionValue = sessionValue;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 	
 	
