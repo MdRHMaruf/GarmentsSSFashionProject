@@ -1,14 +1,20 @@
 package pg.controller;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
@@ -28,9 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.sun.istack.internal.logging.Logger;
+
 import pg.OrganizationModel.OrganizationInfo;
+import pg.model.CommonModel;
 import pg.model.Menu;
 import pg.model.MenuInfo;
 import pg.model.Module;
@@ -42,6 +53,7 @@ import pg.model.SubMenuInfo;
 import pg.model.UserAccessModule;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.services.RegisterService;
 import pg.services.SettingService;
 
 
@@ -50,10 +62,13 @@ import pg.services.SettingService;
 public class SettingController {
 
 
-
+	private static final String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
 	@Autowired
 	private SettingService settingService;
-	
+	@Autowired
+	private RegisterService registerService;
+
+	boolean fileupload=false;
 
 
 	@RequestMapping(value = "user_management_menu",method=RequestMethod.GET)
@@ -325,6 +340,121 @@ public class SettingController {
 			boolean saveOrganizationName = settingService.editOrganization(v);
 			return "success";
 
+	}
+	
+	
+	@RequestMapping(value = "create_notice",method=RequestMethod.GET)
+	public ModelAndView create_notice(ModelMap map,HttpSession session) {
+		
+		
+		String userName=(String)session.getAttribute("userName");
+		ModelAndView view = new ModelAndView("setting/noticeboard");		
+		map.addAttribute("departments",registerService.getDepartmentList());
+		
+		return view; //JSP - /WEB-INF/view/index.jsp
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/save-notice/{heading}/{departments}/{textbody}/{userid}", method={RequestMethod.PUT, RequestMethod.POST})
+	public String uploadFileSubmit(@PathVariable ("heading") String heading,
+			@PathVariable ("departments") String departments,@PathVariable ("textbody") String textbody, @PathVariable ("userid") String userid,
+			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
+		try
+		{
+
+			
+			
+			
+
+			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+			response.setContentType("text/html");
+
+			String hostname = request.getRemoteHost(); // hostname
+			System.out.println("hostname "+hostname);
+
+			String computerName = null;
+			String remoteAddress = request.getRemoteAddr();
+			InetAddress inetAddress=null;
+
+
+			inetAddress = InetAddress.getByName(remoteAddress);
+			System.out.println("inetAddress: " + inetAddress);
+			computerName = inetAddress.getHostName();
+
+			System.out.println("computerName: " + computerName);
+
+
+			if (computerName.equalsIgnoreCase("localhost")) {
+				computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+			}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+				inetAddress = InetAddress.getLocalHost();
+				computerName=inetAddress.getHostName();
+			}
+			System.out.println("ip : " + inetAddress);
+			System.out.println("computerName: " + computerName);
+
+			//   Date date=new Date();
+
+			
+			String extension="";
+			String uploadFileName="";
+
+			// Get multiple file control names.
+			Iterator<String> it = multipartRequest.getFileNames();
+
+			while(it.hasNext())
+			{
+				String fileControlName = it.next();
+
+				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+
+				 uploadFileName = srcFile.getOriginalFilename();
+
+				System.out.println(" file names "+uploadFileName);
+
+			//	orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
+
+				// Create server side target file path.
+				 extension=uploadFileName.substring(uploadFileName.indexOf(".")+1);
+				System.out.println(" extension "+extension);
+
+
+				//String destFilePath = UPLOAD_FILE_SAVE_FOLDER+heading+"."+extension;
+				
+				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
+				File destFile = new File(destFilePath);
+
+				// Save uploaded file to target.
+				srcFile.transferTo(destFile);
+				fileupload=true;
+				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
+			}
+
+			String filename=uploadFileName;
+			System.out.println(" file name "+filename);
+			
+			
+					
+					// Set message that will be displayed in return page.
+			//  model.addAttribute("message", msgBuf.toString());
+			
+			if (fileupload) {
+				//CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+			//	boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+				boolean savenotice=settingService.savenotice(heading, departments, textbody, filename,userid);
+				fileupload=false;
+			}
+
+		}catch(IOException ex)
+		{
+			ex.printStackTrace();
+		}finally
+		{
+			//return "setting/noticeboard/noticeboard.jsp";
+			return "";
+			
+		}
 	}
 
 

@@ -36,4 +36,7 @@ public interface SettingDAO {
 	public List<OrganizationInfo> getOrganization();
 	public boolean editOrganization(OrganizationInfo v);
 	
+	
+	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid);
+	
 }

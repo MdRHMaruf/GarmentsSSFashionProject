@@ -110,6 +110,13 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.editOrganization(v);
 	}
+
+
+	@Override
+	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid) {
+		// TODO Auto-generated method stub
+		return settDAO.savenotice(heading, departs, textbody, filename, userid);
+	}
 	
 
 }

@@ -85,69 +85,17 @@ String userName=(String)session.getAttribute("userName");
                 </div>
             
                 <div class="row">
-                    <div class=" col-lg-3 col-md-6 col-sm-6 col">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-info">
-                                <i class="icofont-chart-bar-graph"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Revenue</h5>
-                                <h4>998</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-secondary">
-                                <i class="icofont-ui-user"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Users</h5>
-                                <h4>1072</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-primary">
-                                <i class="icofont-files-stack"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Projects</h5>
-                                <h4>72</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget dash-widget5">
-                            <span class="dash-widget-icon text-success">
-                                <i class="icofont-tasks"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Tasks</h5>
-                                <h4>618</h4>
-                            </div>
-                        </div>
-                    </div>
+                
+                	<h4>Notice Board</h4>
+                	
+                		 <div class="row">
+                
+                			
+                	
+                
+                		</div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h4>Line Chart</h4>
-                            </div>
-                            <div id="curve_chart" style="width: 100%; height: 500px"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h4>Pie Chart</h4>
-                            </div>
-                            <div id="donutchart" style="width: 100%; height: 500px"></div>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
