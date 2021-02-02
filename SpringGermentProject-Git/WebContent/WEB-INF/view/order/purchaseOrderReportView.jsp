@@ -114,7 +114,7 @@
 					" on b.fabricsid = cast(fi.id as varchar)  \r\n"+
 					" left join tbColors c  \r\n"+
 					" on b.fabricscolor = cast(c.ColorId as varchar)  \r\n"+
-					" where a.pono='2' and a.supplierid='3'  \r\n"+
+					" where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'  \r\n"+
 					" order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrder.jrxml");
 			
