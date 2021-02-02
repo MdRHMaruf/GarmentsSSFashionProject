@@ -392,10 +392,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Note}.replace( '#', '\n' ).trim()]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="0" y="0" width="44" height="41" uuid="19c1e5b9-408f-4314-bac7-aa78d6baf6e8"/>
-				<imageExpression><![CDATA["D:\\GitReposotory\\GarmentsSSFashionProject\\SpringGermentProject-Git\\WebContent\\WEB-INF\\assets\\images\\logo.jpg"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>
