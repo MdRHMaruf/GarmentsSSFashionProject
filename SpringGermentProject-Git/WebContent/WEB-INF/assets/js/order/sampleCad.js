@@ -112,6 +112,9 @@ function setCadData(data){
 	$('#sampleReqId').val(data[0].sampleReqId);
 	$('#sampleCommentId').val(data[0].sampleCadId);
 	$('#sampleCommentsNo').val(data[0].sampleCadId);
+	
+	$('#save').prop('disabled', true);
+
 }
 
 function insertSample(){

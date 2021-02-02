@@ -5,6 +5,7 @@
 <hibernate-configuration>
 
     <session-factory name="">
+      <!--  (SELECT * FROM OPENROWSET(BULK N'C:\img\1.png', SINGLE_BLOB) as T1) -->
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>   
         <property name="hibernate.connection.password">Cursor777</property>
