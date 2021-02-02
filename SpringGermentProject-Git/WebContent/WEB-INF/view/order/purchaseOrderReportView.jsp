@@ -70,37 +70,52 @@
 		if(type.equalsIgnoreCase("Accessories")) {
 			
 			sql="select 'only' as Taka,b.ShippingMarks, \r\n"+
-					"(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,  \r\n"+
-					"(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,  \r\n"+
-					"(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,  \r\n"+
+					"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
+					" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
+					"ISNULL(c.Colorname,'') as ColorName,b.accessoriesSize,b.size,  \r\n"+
 					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
 					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
 					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
 					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
 					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
-					"(select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+ 
+					"(select Signature from Tblogin where id='9') as MdSignature, \r\n"+
+					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
+					"b.mdapproval,a.poNo  \r\n"+ 
 					"from tbPurchaseOrderSummary a   \r\n"+
 					"join tbAccessoriesIndent b   \r\n"+
 					"on a.pono=b.pono    \r\n"+
+					" left join TbStyleCreate sc  \r\n"+
+					" on b.styleId = cast(sc.StyleId as varchar)  \r\n"+
+					" left join tbAccessoriesItem ai  \r\n"+
+					" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
+					" left join tbColors c  \r\n"+
+					" on b.colorId = cast(c.ColorId as varchar)  \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
 			
 		}else if(type.equalsIgnoreCase("Fabrics")) {
-			sql="select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo, \r\n"+
-					"(select ItemName from TbFabricsItem where id=b.fabricsid) as AccessorisItem,  \r\n"+
-					"(select colorName from tbColors where ColorId=b.fabricscolor) as ColorName,'' as accessoriesSize,'' as size,  \r\n"+
-					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
-					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,  \r\n"+
-					"(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
-					"(select Signature from Tblogin where id=b.entryby) as Signature,  \r\n"+
-					"(select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo  \r\n"+ 
-					"from tbPurchaseOrderSummary a   \r\n"+
-					"join tbFabricsIndent b on a.pono=b.pono  \r\n"+  
-					"where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'  \r\n"+
-					"order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
+			sql="select 'only' as Taka ,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,'' as accessoriesSize,'' as size,    \r\n"+
+				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
+					" (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,    \r\n"+
+					" (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,    \r\n"+
+					" (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+  
+					" (select Signature from Tblogin where id=b.entryby) as Signature,    \r\n"+
+					" (select Signature from Tblogin where id='9') as MdSignature, \r\n"+
+					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
+					" b.mdapproval,a.poNo  \r\n"+  
+					" from tbPurchaseOrderSummary a     \r\n"+
+					" join tbFabricsIndent b   \r\n"+
+					" on a.pono=b.pono    \r\n"+
+					" left join TbStyleCreate sc  \r\n"+
+					" on b.styleId = cast(sc.StyleId as varchar)  \r\n"+
+					" left join TbFabricsItem fi  \r\n"+
+					" on b.fabricsid = cast(fi.id as varchar)  \r\n"+
+					" left join tbColors c  \r\n"+
+					" on b.fabricscolor = cast(c.ColorId as varchar)  \r\n"+
+					" where a.pono='2' and a.supplierid='3'  \r\n"+
+					" order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrder.jrxml");
 			
 

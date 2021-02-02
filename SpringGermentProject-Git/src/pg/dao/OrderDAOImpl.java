@@ -4846,12 +4846,12 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 			if(poType.equalsIgnoreCase("Fabrics")) {
-				sql="select fi.id,fi.purchaseOrder,style.StyleNo,f.ItemName as accessoriesname,fi.supplierId,fi.rate,fi.dolar,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname,isnull(fi.currency,'') as currency\r\n" + 
+				sql="select fi.id,isnull(fi.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'')as styleNo,isnull(f.ItemName,'') as accessoriesname,fi.supplierId,fi.rate,fi.dolar,isnull(c.Colorname,'') as colorName,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname,isnull(fi.currency,'') as currency\r\n" + 
 						"from tbFabricsIndent fi \r\n" + 
 						"left join TbStyleCreate style\r\n" + 
-						"on fi.styleId = style.StyleId \r\n" + 
+						"on fi.styleId = cast(style.StyleId as varchar)\r\n" + 
 						"left join tbColors c\r\n" + 
-						"on fi.itemcolor = c.ColorId \r\n" + 
+						"on fi.itemcolor = cast(c.ColorId as varchar)\r\n" + 
 						"left join TbFabricsItem f\r\n" + 
 						"on fi.fabricsid = f.id\r\n" + 
 						"left join tbunits unit\r\n" + 
@@ -4866,12 +4866,12 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Accessories")) {
-				sql=" select ai.AccIndentId,ai.purchaseOrder,style.StyleNo,accItem.itemname as accessoriesname,ai.supplierId,ai.rate,ai.dolar,c.Colorname as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
-						" on ai.styleid = style.StyleId \r\n" + 
+						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
 						" left join tbColors c\r\n" + 
-						" on ai.ColorId = c.ColorId \r\n" + 
+						" on ai.ColorId = cast(c.ColorId as varchar)\r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
 						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
 						" left join tbunits unit\r\n" + 
@@ -4885,10 +4885,10 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Carton")) {
-				sql="select aic.indentId,aic.purchaseOrder ,style.StyleNo,ai.itemname as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
+				sql="select aic.indentId,isnull(aic.purchaseOrder,'') as purchaseOrder ,isnull(style.StyleNo,'') as styleNo,isnull(ai.itemname,'') as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
 						" from tbAccessoriesIndentForCarton aic\n" + 
 						" left join TbStyleCreate style\n" + 
-						" on aic.styleid = style.StyleId \n" + 
+						" on aic.styleid = cast(style.StyleId as varchar)\n" + 
 						" left join tbunits unit\n" + 
 						" on aic.UnitId = unit.Unitid \n"
 						+ "left join tbStyleSize ss\r\n" + 
@@ -4939,12 +4939,12 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			String sql;
 			if(accessoriesIndent.getIndentType().equals("Fabrics")) {
-				sql="select fi.id,fi.purchaseOrder,style.StyleNo,f.ItemName as accessoriesname,c.Colorname,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
+				sql="select fi.id,isnull(fi.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'')as styleNo,isnull(f.ItemName,'') as accessoriesname,isnull(c.Colorname,'') as colorName,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
 						"from tbFabricsIndent fi \r\n" + 
 						"left join TbStyleCreate style\r\n" + 
-						"on fi.styleId = style.StyleId \r\n" + 
+						"on fi.styleId = cast(style.StyleId as varchar) \r\n" + 
 						"left join tbColors c\r\n" + 
-						"on fi.itemcolor = c.ColorId \r\n" + 
+						"on fi.itemcolor = cast(c.ColorId as varchar)\r\n" + 
 						"left join TbFabricsItem f\r\n" + 
 						"on fi.fabricsid = f.id\r\n" + 
 						"left join tbunits unit\r\n" + 
@@ -4958,7 +4958,7 @@ public class OrderDAOImpl implements OrderDAO{
 					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(),"", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}else if(accessoriesIndent.getIndentType().equals("Accessories")) {
-				sql=" select ai.AccIndentId,ai.purchaseOrder,style.StyleNo,accItem.itemname as accessoriesname,c.Colorname as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.requireUnitQty,isnull(unit.unitname,'') as unitName\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.requireUnitQty,isnull(unit.unitname,'') as unitName\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						" on ai.styleid = cast(style.styleId as varchar) \r\n" + 
@@ -4978,10 +4978,10 @@ public class OrderDAOImpl implements OrderDAO{
 					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}else {
-				sql="select aic.autoId,aic.purchaseOrder ,style.StyleNo,ai.itemname as accessoriesname,c.Colorname as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
+				sql="select aic.autoId,isnull(aic.purchaseOrder,'')as purchaseOrder ,isnull(style.StyleNo,'') as styleNo,isnull(ai.itemname,'') as accessoriesname,isnull(c.Colorname,'') as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
 						" from tbAccessoriesIndentForCarton aic\r\n" + 
 						" left join TbStyleCreate style\r\n" + 
-						"on aic.styleid = style.StyleId \r\n" + 
+						"on aic.styleid = cast(style.StyleId as varchar)\r\n" + 
 						"left join TbAccessoriesItem ai\r\n" + 
 						"on aic.accessoriesItemId = ai.itemid\r\n" + 
 						"left join tbColors c\r\n" + 
