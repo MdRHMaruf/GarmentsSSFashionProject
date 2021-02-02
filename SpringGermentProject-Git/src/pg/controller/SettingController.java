@@ -1,8 +1,11 @@
 package pg.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,7 +23,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +56,7 @@ import pg.model.SubMenuInfo;
 import pg.model.UserAccessModule;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.services.PasswordService;
 import pg.services.RegisterService;
 import pg.services.SettingService;
 
@@ -364,7 +368,7 @@ public class SettingController {
 		{
 
 			
-			
+			int filno=settingService.getMaxNoticeNo();
 			
 
 			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
@@ -422,7 +426,7 @@ public class SettingController {
 
 				//String destFilePath = UPLOAD_FILE_SAVE_FOLDER+heading+"."+extension;
 				
-				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
+				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+filno+"."+extension;
 				File destFile = new File(destFilePath);
 
 				// Save uploaded file to target.
@@ -431,7 +435,7 @@ public class SettingController {
 				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
 			}
 
-			String filename=uploadFileName;
+			String filename=filno+"."+extension;
 			System.out.println(" file name "+filename);
 			
 			
@@ -456,6 +460,87 @@ public class SettingController {
 			
 		}
 	}
+	
+	@RequestMapping(value="/attachmetndownload/{fileName:.+}", method=RequestMethod.POST)
+	public @ResponseBody void downloadfile(HttpServletResponse response,@PathVariable ("fileName") String fileName,HttpServletRequest request) throws IOException {
+		System.out.println(" download controller ");
+
+		Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+		response.setContentType("text/html");
+
+		String hostname = request.getRemoteHost(); // hostname
+		System.out.println("hostname "+hostname);
+
+		String computerName = null;
+		String remoteAddress = request.getRemoteAddr();
+		InetAddress inetAddress=null;
+
+
+		inetAddress = InetAddress.getByName(remoteAddress);
+		System.out.println("inetAddress: " + inetAddress);
+		computerName = inetAddress.getHostName();
+
+		System.out.println("computerName: " + computerName);
+
+
+		if (computerName.equalsIgnoreCase("localhost")) {
+			computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			inetAddress = InetAddress.getLocalHost();
+			computerName=inetAddress.getHostName();
+		}
+		System.out.println("ip : " + inetAddress);
+		System.out.println("computerName: " + computerName);
+
+
+
+
+		try {
+
+
+
+
+			String filePath = UPLOAD_FILE_SAVE_FOLDER+fileName;
+
+			System.out.println(" filename "+fileName);
+
+			try {
+				File file = new File(filePath);
+				System.out.println(" file "+file.length()/(1024*1024));
+				FileInputStream in = new FileInputStream(file);
+				System.out.println(" file in "+in);
+				response.setHeader("Expires", new Date().toGMTString());
+				response.setContentType(URLConnection.guessContentTypeFromStream(in));
+
+				// response.setContentLength(Files.readAllBytes(file.toPath()).length);
+
+				response.setContentLength((int)file.length());
+
+				response.setHeader("Content-Disposition","attachment; filename=\"" + fileName +"\"");
+				response.setHeader("Pragma", "no-cache");
+
+				response.setContentType("application/octet-stream");
+				// FileCopyUtils.copy(in, response.getOutputStream());
+
+
+				IOUtils.copyLarge(in, response.getOutputStream());
+
+
+				//boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
+
+				in.close();
+				response.flushBuffer();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 
 
 }

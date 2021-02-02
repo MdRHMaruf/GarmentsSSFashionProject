@@ -117,6 +117,12 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.savenotice(heading, departs, textbody, filename, userid);
 	}
+
+
+	public int getMaxNoticeNo() {
+		// TODO Auto-generated method stub
+		return settDAO.getMaxNoticeNo();
+	}
 	
 
 }

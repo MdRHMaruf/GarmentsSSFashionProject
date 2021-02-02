@@ -8,32 +8,37 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
+	String body = (String) request.getAttribute("body");
+	String header = (String) request.getAttribute("header");
+	String filename = (String) request.getAttribute("file");
+%>
 
-
-
+<%  
+    String pageName = "previousNotice.jsp";  
 %>
 
 <jsp:include page="include/header.jsp" />
 
-        <div class="page-wrapper">
-            <div class="content container-fluid">
-            	<div class="row card-box">
-            	
-            		<c:forEach items="${modulelist}" var="v" varStatus="counter">
-            			<div class="col-sm-6 col-md-6 col-lg-2" onclick="change_system(${v.id})">
-                        <div class="dash-widget2 dash-widget5 btn">
-                            <span class="dash-widget-icon text-info">
-                               <i class="icofont-navigation-menu"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>${v.modulename}</h5>
-                            </div>
-                        </div>
-                    </div>
-            		</c:forEach>	
-                    <%-- <div class="col-sm-6 col-md-6 col-lg-2">
+<div class="page-wrapper">
+	<div class="content container-fluid">
+		<div class="row card-box">
+
+			<c:forEach items="${modulelist}" var="v" varStatus="counter">
+				<div class="col-sm-6 col-md-6 col-lg-2"
+					onclick="change_system(${v.id})">
+					<div class="dash-widget2 dash-widget5 btn">
+						<span class="dash-widget-icon text-info"> <i
+							class="icofont-navigation-menu"></i>
+						</span>
+						<div class="text-center">
+							<h5>${v.modulename}</h5>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+			<%-- <div class="col-sm-6 col-md-6 col-lg-2">
                         <div class="dash-widget2 dash-widget5">
                             <span class="dash-widget-icon text-info">
                                 <i class="icofont-chart-bar-graph"></i>
@@ -86,24 +91,32 @@ String userName=(String)session.getAttribute("userName");
                             </div>
                         </div>
                     </div> --%>
-                </div>
-            
-                <div class="row">
-                
-                	<h4>Notice Board</h4>
-                	
-                		 <div class="row">
-                
-                			
-                	
-                
-                		</div>
-                </div>
-                
-            </div>
-        </div>
+		</div>
 
-    <script type="text/javascript">
+		<div class="row ">
+			<h4 class="border rounded p-2 bg-success text-white">Notice Board</h4>
+		</div>
+
+		<div class="card-box mt-1 pt-1 pb-0">
+			<div class="row">
+				<h4>Topic: <%=header%></h4>
+			</div>
+			<div class="row">
+				<marquee width="100%" class="ml-2" direction="left" height="50px">
+						<h2><%=body%></h2>
+				</marquee>
+			</div>
+			<div class="row">
+			<button type="button"  id="attachmentlink" data-file=<%=filename%> class="btn btn-link text-success" style="font-weight:bold;font-size:20px;" onclick="redirectPage('<%=pageName%>')">Previous Notice(s)</button>
+				<button type="button" id="attachmentlink" data-file=<%=filename%> class="btn btn-link" onclick="download(this)">Attachment</button>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
 
@@ -145,5 +158,9 @@ String userName=(String)session.getAttribute("userName");
         }
     </script>
 <jsp:include page="include/footer.jsp" />
-<script src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/custom/system_change.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/custom/system_change.js"></script>
+	<script
+	src="${pageContext.request.contextPath}/assets/js/settings/settings.js"></script>

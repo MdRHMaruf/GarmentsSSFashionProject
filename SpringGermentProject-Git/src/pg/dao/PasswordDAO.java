@@ -8,6 +8,7 @@ package pg.dao;
 
 import java.util.List;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Login;
 import pg.model.Menu;
@@ -34,5 +35,7 @@ public interface PasswordDAO {
 	public boolean changePassword(String userId, String userName, String password);
 	
 	public String getUserDepartmentId(String userId);
+	
+	public List<noticeModel> getNotice(String depid,noticeModel nm);
 }
     
