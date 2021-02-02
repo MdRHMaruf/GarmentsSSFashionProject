@@ -8,32 +8,37 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
+	String body = (String) request.getAttribute("body");
+	String header = (String) request.getAttribute("header");
+	String filename = (String) request.getAttribute("file");
+%>
 
-
-
+<%  
+    String pageName = "previousNotice.jsp";  
 %>
 
 <jsp:include page="include/header.jsp" />
 
-        <div class="page-wrapper">
-            <div class="content container-fluid">
-            	<div class="row card-box">
-            	
-            		<c:forEach items="${modulelist}" var="v" varStatus="counter">
-            			<div class="col-sm-6 col-md-6 col-lg-2" onclick="change_system(${v.id})">
-                        <div class="dash-widget2 dash-widget5 btn">
-                            <span class="dash-widget-icon text-info">
-                               <i class="icofont-navigation-menu"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>${v.modulename}</h5>
-                            </div>
-                        </div>
-                    </div>
-            		</c:forEach>	
-                    <%-- <div class="col-sm-6 col-md-6 col-lg-2">
+<div class="page-wrapper">
+	<div class="content container-fluid">
+		<div class="row card-box">
+
+			<c:forEach items="${modulelist}" var="v" varStatus="counter">
+				<div class="col-sm-6 col-md-6 col-lg-2"
+					onclick="change_system(${v.id})">
+					<div class="dash-widget2 dash-widget5 btn">
+						<span class="dash-widget-icon text-info"> <i
+							class="icofont-navigation-menu"></i>
+						</span>
+						<div class="text-center">
+							<h5>${v.modulename}</h5>
+						</div>
+					</div>
+				</div>
+			</c:forEach>
+			<%-- <div class="col-sm-6 col-md-6 col-lg-2">
                         <div class="dash-widget2 dash-widget5">
                             <span class="dash-widget-icon text-info">
                                 <i class="icofont-chart-bar-graph"></i>
@@ -86,76 +91,32 @@ String userName=(String)session.getAttribute("userName");
                             </div>
                         </div>
                     </div> --%>
-                </div>
-            
-                <div class="row">
-                    <div class=" col-lg-3 col-md-6 col-sm-6 col">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-info">
-                                <i class="icofont-chart-bar-graph"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Revenue</h5>
-                                <h4>998</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-secondary">
-                                <i class="icofont-ui-user"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Users</h5>
-                                <h4>1072</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget2 dash-widget5">
-                            <span class="dash-widget-icon text-primary">
-                                <i class="icofont-files-stack"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Projects</h5>
-                                <h4>72</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-6 col-lg-3">
-                        <div class="dash-widget dash-widget5">
-                            <span class="dash-widget-icon text-success">
-                                <i class="icofont-tasks"></i>
-                            </span>
-                            <div class="text-center">
-                                <h5>Tasks</h5>
-                                <h4>618</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h4>Line Chart</h4>
-                            </div>
-                            <div id="curve_chart" style="width: 100%; height: 500px"></div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header bg-info text-white">
-                                <h4>Pie Chart</h4>
-                            </div>
-                            <div id="donutchart" style="width: 100%; height: 500px"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+		</div>
 
-    <script type="text/javascript">
+		<div class="row ">
+			<h4 class="border rounded p-2 bg-success text-white">Notice Board</h4>
+		</div>
+
+		<div class="card-box mt-1 pt-1 pb-0">
+			<div class="row">
+				<h4>Topic: <%=header%></h4>
+			</div>
+			<div class="row">
+				<marquee width="100%" class="ml-2" direction="left" height="50px">
+						<h2><%=body%></h2>
+				</marquee>
+			</div>
+			<div class="row">
+			<button type="button"  id="attachmentlink" data-file=<%=filename%> class="btn btn-link text-success" style="font-weight:bold;font-size:20px;" onclick="redirectPage('<%=pageName%>')">Previous Notice(s)</button>
+				<button type="button" id="attachmentlink" data-file=<%=filename%> class="btn btn-link" onclick="download(this)">Attachment</button>
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<script type="text/javascript">
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawChart);
 
@@ -197,5 +158,9 @@ String userName=(String)session.getAttribute("userName");
         }
     </script>
 <jsp:include page="include/footer.jsp" />
-<script src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/custom/system_change.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/custom/system_change.js"></script>
+	<script
+	src="${pageContext.request.contextPath}/assets/js/settings/settings.js"></script>

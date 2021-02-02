@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.dao.PasswordDAO;
 import pg.exception.UserBlockedException;
@@ -84,5 +85,11 @@ public class PasswordServiceImpl implements PasswordService {
 	public String getUserDepartmentId(String userId) {
 		// TODO Auto-generated method stub
 		return passDAO.getUserDepartmentId(userId);
+	}
+
+	@Override
+	public List<noticeModel> getNotice(String depid,noticeModel nm) {
+		// TODO Auto-generated method stub
+		return passDAO.getNotice(depid, nm);
 	}
 }
