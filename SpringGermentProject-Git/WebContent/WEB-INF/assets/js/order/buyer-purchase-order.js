@@ -638,9 +638,13 @@ function deleteBuyerPoItem(itemAutoId) {
         } else {
           drawItemTable(data.result);
           $('.modal').modal('hide');
-          $("#btnPOSubmit").hide();
-          $("#btnPOEdit").show();
-          $("#btnPreview").prop("disabled", false);
+          let buyerPoId = $("#buyerPOId").val();
+          if(buyerPoId != "0"){
+            $("#btnPOSubmit").hide();
+            $("#btnPOEdit").show();
+            $("#btnPreview").show();
+          }
+          
         }
       }
     });

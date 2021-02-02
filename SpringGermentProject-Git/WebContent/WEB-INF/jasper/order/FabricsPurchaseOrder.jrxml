@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="20" rightMargin="30" topMargin="40" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.3310000000000366"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="348"/>
+	<property name="ireport.y" value="395"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -17,19 +17,26 @@
 	<parameter name="FactoryPhone" class="java.lang.String"/>
 	<parameter name="SupplierContactPerson" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select 'only' as Taka ,' ' as ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,
-(select ItemName from TbFabricsItem where id=b.fabricsid) as AccessorisItem,
-(select colorName from tbColors where ColorId=b.fabricscolor) as ColorName,'' as accessoriesSize,'' as size,
-(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,a.deliveryDate,
+		<![CDATA[select 'only' as Taka ,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,'' as accessoriesSize,'' as size,
+(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,
 (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,
 (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,
 (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,
 (select Signature from Tblogin where id=b.entryby) as Signature,
-(select Signature from Tblogin where id='9') as MdSignature,b.mdapproval,a.poNo
+(select Signature from Tblogin where id='9') as MdSignature,
+(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo,
+b.mdapproval,a.poNo
 from tbPurchaseOrderSummary a
-join tbFabricsIndent b on a.pono=b.pono
-where a.pono='2' and b.supplierid='11'
-order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ]]>
+join tbFabricsIndent b
+on a.pono=b.pono
+left join TbStyleCreate sc
+on b.styleId = cast(sc.StyleId as varchar)
+left join TbFabricsItem fi
+on b.fabricsid = cast(fi.id as varchar)
+left join tbColors c
+on b.fabricscolor = cast(c.ColorId as varchar)
+where a.pono='2' and a.supplierid='3'
+order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 	</queryString>
 	<field name="Taka" class="java.lang.String"/>
 	<field name="ShippingMarks" class="java.lang.String"/>
@@ -57,7 +64,8 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ]]>
 	<field name="Subject" class="java.lang.String"/>
 	<field name="ManualPo" class="java.lang.String"/>
 	<field name="Signature" class="java.lang.Object"/>
-	<field name="MdSignature" class="java.lang.Object"/>
+	<field name="MdSignature" class="java.awt.Image"/>
+	<field name="organizationLogo" class="java.lang.Object"/>
 	<field name="mdapproval" class="java.lang.Integer"/>
 	<field name="poNo" class="java.lang.Integer"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
@@ -406,10 +414,6 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Note}.replace( '#', '\n' ).trim()]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="0" y="0" width="44" height="41" uuid="19c1e5b9-408f-4314-bac7-aa78d6baf6e8"/>
-				<imageExpression><![CDATA["D:\\GitReposotory\\GarmentsSSFashionProject\\SpringGermentProject-Git\\WebContent\\WEB-INF\\assets\\images\\logo.jpg"]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -767,14 +771,14 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ]]>
 				<text><![CDATA[Time]]></text>
 			</staticText>
 			<image scaleImage="FillFrame">
-				<reportElement x="1" y="33" width="120" height="43" uuid="ac84c23f-1835-4a76-a90c-16b4c7ebeebb"/>
+				<reportElement x="1" y="33" width="118" height="43" uuid="ac84c23f-1835-4a76-a90c-16b4c7ebeebb"/>
 				<imageExpression><![CDATA[$F{Signature}]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement x="120" y="32" width="120" height="43" uuid="d41d42e6-9f3b-4a41-8291-1a451f1f8f50">
 					<printWhenExpression><![CDATA[$F{mdapproval}==0?false:true]]></printWhenExpression>
 				</reportElement>
-				<imageExpression><![CDATA[$F{Signature}]]></imageExpression>
+				<imageExpression><![CDATA[$F{MdSignature}]]></imageExpression>
 			</image>
 		</band>
 	</lastPageFooter>
