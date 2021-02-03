@@ -820,7 +820,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			String sql="";
 
-			sql = "select (isnull(max(costingNo),0)+1) as maxId from TbCostingCreate";
+			sql = "select (isnull(max(cast(costingNo as int)),0)+1) as maxId from TbCostingCreate";
 			List<?> list = session.createSQLQuery(sql).list();
 			String costingNo="0";
 			if(list.size()>0) {
@@ -1548,17 +1548,27 @@ public class OrderDAOImpl implements OrderDAO{
 
 			sql = "update TbBuyerOrderEstimateDetails set BuyerOrderId='"+buyerPoId+"' where buyerOrderId='"+buyerPo.getBuyerPoId()+"' and buyerId='"+buyerPo.getBuyerId()+"' and userId='"+buyerPo.getUserId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject itemsObject = (JSONObject)jsonParser.parse(buyerPo.getChangedItemsList());
+			JSONArray itemList = (JSONArray) itemsObject.get("list");
+
+			for(int i=0;i<itemList.size();i++) {
+				JSONObject item = (JSONObject) itemList.get(i);
+				sql="update TbBuyerOrderEstimateDetails set UnitCmt='"+item.get("unitCmt")+"',TotalPrice='"+df.format(item.get("totalPrice"))+"',UnitFob='"+item.get("unitFob")+"',TotalAmount='"+df.format(item.get("totalAmount"))+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+item.get("autoId")+"'";		
+				session.createSQLQuery(sql).executeUpdate();
+			}
 
 			tx.commit();
 			return true;
 		}
 		catch(Exception ee){
-
+			ee.printStackTrace();
 			if (tx != null) {
 				tx.rollback();
 				return false;
 			}
-			ee.printStackTrace();
+			
 		}
 
 		finally {
@@ -6773,12 +6783,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try {
 			boolean frontimgexists=false;
 			boolean backimgexists=false;
-
-
 			String StyleId="";
-
-
-
 			if(!CheckStyleAlreadyExist(buyerId,styleNo,StyleId)) {
 				StyleId=getMaxStyleId();
 				String sql="insert into TbStyleCreate (StyleId,BuyerId,StyleNo,Finished,date,EntryTime,UserId) values('"+StyleId+"','"+buyerId+"','"+styleNo+"','0',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+user+"');";
@@ -6796,10 +6801,8 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 
 
-
-			if(frontimg.getBytes()!=null) {
-
-				byte[] photoBytes = frontimg.getBytes();
+			byte[] photoBytes = frontimg.getBytes();
+			if(photoBytes.length!=0) {		
 
 				String sql1 = "update tbStyleWiseItem set frontpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
 				System.out.println(" frontimage update "+sql1);
@@ -6813,10 +6816,8 @@ public class OrderDAOImpl implements OrderDAO{
 
 			}
 
-			if(backimg.getBytes()!=null) {
-
-
-				byte[] photoBytes = backimg.getBytes();
+			photoBytes = backimg.getBytes();
+			if(photoBytes.length!=0) {
 
 				String sql1 = "update tbStyleWiseItem set backpic = ? where StyleId= '"+StyleId+"' and BuyerId='"+buyerId+"'";
 				System.out.println(" backimage update "+sql1);
