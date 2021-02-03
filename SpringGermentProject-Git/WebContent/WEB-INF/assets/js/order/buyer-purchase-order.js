@@ -380,6 +380,20 @@ function submitAction() {
   let remarks = $("#remarks").val();
   let userId = $("#userId").val();
 
+  let changedItems = {};
+  changedItems['list'] = [];
+  rowList = $("#tableList tr.changed");
+  rowList.each((index , row )=>{
+    let autoId = row.getAttribute('data-auto-id');
+    let item = {
+      autoId : autoId,
+      unitCmt : Number($("#unitCmt" + autoId).val()),
+      totalPrice : Number($("#totalPrice" + autoId).text()),
+      unitFob : Number($("#unitFob" + autoId).val()),
+      totalAmount : Number($("#totalAmount" + autoId).text())
+    }
+    changedItems.list.push(item);
+  });
 
 
   if (buyerId != 0) {
@@ -400,6 +414,7 @@ function submitAction() {
           totalAmount: totalAmount,
           note: note,
           remarks: remarks,
+          changedItemsList : JSON.stringify(changedItems),
           userId: userId
         },
         success: function (data) {

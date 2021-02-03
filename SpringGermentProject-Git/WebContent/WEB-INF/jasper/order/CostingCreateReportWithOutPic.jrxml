@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CostingCreateReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9318d7bd-180d-40bf-964b-74bf5bbf4acb">
-	<property name="ireport.zoom" value="1.7715610000000195"/>
-	<property name="ireport.x" value="525"/>
-	<property name="ireport.y" value="413"/>
+	<property name="ireport.zoom" value="1.3310000000000146"/>
+	<property name="ireport.x" value="246"/>
+	<property name="ireport.y" value="35"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select *,(select frontpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName) )as frontpic,(select backpic from tbStyleWiseItem where styleid='38' and ItemId=(select ItemId from tbItemDescription where ItemName=a.ItemName)) as backpic from funCostingForStyle('38') a order by a.ItemName desc"]]></defaultValueExpression>
 	</parameter>
@@ -19,8 +19,6 @@
 	<field name="consumption" class="java.math.BigDecimal"/>
 	<field name="UnitPrice" class="java.math.BigDecimal"/>
 	<field name="Amount" class="java.math.BigDecimal"/>
-	<field name="frontpic" class="java.awt.Image"/>
-	<field name="backpic" class="java.awt.Image"/>
 	<variable name="GTotal" class="java.math.BigDecimal" resetType="Group" resetGroup="ItemGp" calculation="Sum">
 		<variableExpression><![CDATA[$F{Amount}]]></variableExpression>
 	</variable>
@@ -243,7 +241,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="232" splitType="Stretch">
+		<band height="108" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="4" width="802" height="28" uuid="da286c91-59a6-437b-85b9-6ccbc5b8dd4a"/>
 				<textElement textAlignment="Center">
@@ -279,14 +277,6 @@
 				</textElement>
 				<text><![CDATA[Costing Sheet]]></text>
 			</staticText>
-			<image>
-				<reportElement x="245" y="110" width="150" height="120" uuid="042bf787-5e53-48ed-b276-bda07072230d"/>
-				<imageExpression><![CDATA[$F{frontpic}]]></imageExpression>
-			</image>
-			<image>
-				<reportElement x="400" y="110" width="150" height="120" uuid="17e1fd21-86ba-410c-9737-ed3eb6b99efe"/>
-				<imageExpression><![CDATA[$F{backpic}]]></imageExpression>
-			</image>
 		</band>
 	</title>
 	<pageHeader>

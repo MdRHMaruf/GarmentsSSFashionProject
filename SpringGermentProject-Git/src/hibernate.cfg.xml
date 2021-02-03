@@ -7,17 +7,14 @@
     <session-factory name="">
         <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>   
-
-        <property name="hibernate.connection.password">123456</property>
-
-     	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://localhost</property> -->
+        <property name="hibernate.connection.password">Cursor777</property>
+     	
+     	<property name="hibernate.connection.url">jdbc:sqlserver://localhost</property>
      	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://103.127.1.234:1433</property> -->
-
-      	<property name="hibernate.connection.url">jdbc:sqlserver://192.168.0.238:1433</property>
-        <property name="hibernate.connection.databaseName">SSFashionSpringProject02-02-2021</property>
-
-        <property name="hibernate.connection.username">sa</property>
+      	<!-- <property name="hibernate.connection.url">jdbc:sqlserver://192.168.0.130:1433</property> -->
         
+        <property name="hibernate.connection.databaseName">SSFashionSpringProject</property>
+        <property name="hibernate.connection.username">sa</property>
         <property name="hibernate.current_session_context_class">thread</property>
         <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
         <property name="hibernate.search.autoregister_listeners">false</property>
