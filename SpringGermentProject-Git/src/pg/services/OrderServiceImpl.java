@@ -15,6 +15,7 @@ import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
+import pg.orderModel.FileUpload;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleCadAndProduction;
@@ -632,6 +633,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
+	public List<FileUpload> findfiles(String buyerId, String purchaseOrder, int uploadFileType) {
+		// TODO Auto-generated method stub
+		return orderDAO.findfiles(buyerId, purchaseOrder, uploadFileType);
+	}
+
+	@Override
 	public boolean fileDownload(String fileName, String user, String string, String computerName) {
 		// TODO Auto-generated method stub
 		return orderDAO.fileDownload(fileName, user, string, computerName);
@@ -866,4 +873,5 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getSampleCadDetails(sampleCommentId);
 	}
 
+	
 }

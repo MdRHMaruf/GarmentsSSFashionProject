@@ -164,7 +164,7 @@ String userName=(String)session.getAttribute("userName");
 
 							<div class="input-group mt-2">
 								<div class="custom-file">
-									<input type="file" id="files" multiple>
+									<input type="file" id="files" multiple onchange="onFileSelect()">
 								</div>
 								<div class="input-group-append">
 									<button class="btn btn-sm btn-primary" type="button"

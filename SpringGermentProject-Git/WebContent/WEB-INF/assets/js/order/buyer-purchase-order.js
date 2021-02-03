@@ -1,9 +1,10 @@
+let totalFileLength, totalUploaded, fileCount, filesUploaded, percentage = 0;
 let styleIdForSet = 0;
 let itemIdForSet = 0;
 let sizeValueListForSet = [];
 let sizesListByGroup = JSON;
 
-window.onload = () =>{
+window.onload = () => {
 
   document.title = "Buyer Purchase Order";
   let userId = $("#userId").val();
@@ -146,16 +147,16 @@ function itemSizeAdd() {
 
   let rowList = $("tr.dataRow");
   let isExist = false;
-  console.log("length=",rowList.length);
-  for(let i=0;i<rowList.length;i++){
+  console.log("length=", rowList.length);
+  for (let i = 0; i < rowList.length; i++) {
     row = rowList[i];
-    if(row.getAttribute('data-style-id')==styleId && 
-      row.getAttribute('data-item-id') == itemId && row.getAttribute('data-customer-order')==customerOrder && row.getAttribute('data-purchase-order')==purchaseOrder && row.getAttribute('data-color-id') == colorId && row.getAttribute('data-size-group-id') == sizeGroupId){
-        isExist = true;
-        break;
-      }
+    if (row.getAttribute('data-style-id') == styleId &&
+      row.getAttribute('data-item-id') == itemId && row.getAttribute('data-customer-order') == customerOrder && row.getAttribute('data-purchase-order') == purchaseOrder && row.getAttribute('data-color-id') == colorId && row.getAttribute('data-size-group-id') == sizeGroupId) {
+      isExist = true;
+      break;
+    }
   };
-  if(!isExist){
+  if (!isExist) {
     if (buyerId != 0) {
       if (styleId != 0) {
         if (itemId != 0) {
@@ -171,8 +172,8 @@ function itemSizeAdd() {
                     sizeList += "id=" + id + ",quantity=" + quantity + " ";
                     totalUnit += Number(quantity);
                   }
-  
-  
+
+
                   $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -238,10 +239,10 @@ function itemSizeAdd() {
       alert("Buyer Name not selected... Please Select Buyer Name");
       $("#buyerName").focus();
     }
-  }else{
+  } else {
     warningAlert("This Item Already Exist");
   }
-  
+
 
 }
 
@@ -364,11 +365,11 @@ function submitAction() {
   let unitFob = 0;
   let totalAmount = 0;
 
-  console.log("rowList",rowList);
-  rowList.each((index,row) =>{
+  console.log("rowList", rowList);
+  rowList.each((index, row) => {
     console.log(row);
     let autoId = row.getAttribute('data-auto-id');
-    console.log("auto id=",autoId);
+    console.log("auto id=", autoId);
     totalUnit += Number($("#totalUnit" + autoId).text());
     unitCmt += Number($("#unitCmt" + autoId).val());
     totalPrice += Number($("#totalPrice" + autoId).text());
@@ -383,14 +384,14 @@ function submitAction() {
   let changedItems = {};
   changedItems['list'] = [];
   rowList = $("#tableList tr.changed");
-  rowList.each((index , row )=>{
+  rowList.each((index, row) => {
     let autoId = row.getAttribute('data-auto-id');
     let item = {
-      autoId : autoId,
-      unitCmt : Number($("#unitCmt" + autoId).val()),
-      totalPrice : Number($("#totalPrice" + autoId).text()),
-      unitFob : Number($("#unitFob" + autoId).val()),
-      totalAmount : Number($("#totalAmount" + autoId).text())
+      autoId: autoId,
+      unitCmt: Number($("#unitCmt" + autoId).val()),
+      totalPrice: Number($("#totalPrice" + autoId).text()),
+      unitFob: Number($("#unitFob" + autoId).val()),
+      totalAmount: Number($("#totalAmount" + autoId).text())
     }
     changedItems.list.push(item);
   });
@@ -414,7 +415,7 @@ function submitAction() {
           totalAmount: totalAmount,
           note: note,
           remarks: remarks,
-          changedItemsList : JSON.stringify(changedItems),
+          changedItemsList: JSON.stringify(changedItems),
           userId: userId
         },
         success: function (data) {
@@ -455,7 +456,7 @@ function buyerPoEditAction() {
   let unitFob = 0;
   let totalAmount = 0;
 
-  rowList.each((index , row )=>{
+  rowList.each((index, row) => {
     let autoId = row.getAttribute('data-auto-id');
     totalUnit += Number($("#totalUnit" + autoId).text());
     unitCmt += Number($("#unitCmt" + autoId).val());
@@ -467,14 +468,14 @@ function buyerPoEditAction() {
   let changedItems = {};
   changedItems['list'] = [];
   rowList = $("#tableList tr.changed");
-  rowList.each((index , row )=>{
+  rowList.each((index, row) => {
     let autoId = row.getAttribute('data-auto-id');
     let item = {
-      autoId : autoId,
-      unitCmt : Number($("#unitCmt" + autoId).val()),
-      totalPrice : Number($("#totalPrice" + autoId).text()),
-      unitFob : Number($("#unitFob" + autoId).val()),
-      totalAmount : Number($("#totalAmount" + autoId).text())
+      autoId: autoId,
+      unitCmt: Number($("#unitCmt" + autoId).val()),
+      totalPrice: Number($("#totalPrice" + autoId).text()),
+      unitFob: Number($("#unitFob" + autoId).val()),
+      totalAmount: Number($("#totalAmount" + autoId).text())
     }
     changedItems.list.push(item);
   });
@@ -503,7 +504,7 @@ function buyerPoEditAction() {
           totalAmount: totalAmount,
           note: note,
           remarks: remarks,
-          changedItemsList : JSON.stringify(changedItems),
+          changedItemsList: JSON.stringify(changedItems),
           userId: userId
         },
         success: function (data) {
@@ -589,8 +590,8 @@ function searchBuyerPO(buyerPoNo) {
 // });
 
 function setBuyerPoItemDataForEdit(itemAutoId) {
- 
-	$.ajax({
+
+  $.ajax({
     type: 'GET',
     dataType: 'json',
     url: './getBuyerPOItem',
@@ -654,12 +655,12 @@ function deleteBuyerPoItem(itemAutoId) {
           drawItemTable(data.result);
           $('.modal').modal('hide');
           let buyerPoId = $("#buyerPOId").val();
-          if(buyerPoId != "0"){
+          if (buyerPoId != "0") {
             $("#btnPOSubmit").hide();
             $("#btnPOEdit").show();
             $("#btnPreview").show();
           }
-          
+
         }
       }
     });
@@ -702,10 +703,10 @@ function sizeLoadByGroup() {
   }
   $("#listGroup").html(child);
 
-  $(".sizeValue").each((index,inputText) =>{
-    inputText.addEventListener('keyup',(event)=>{
-      if(event.keyCode == 13) {
-        $("#sizeValue"+(index+1)).focus();
+  $(".sizeValue").each((index, inputText) => {
+    inputText.addEventListener('keyup', (event) => {
+      if (event.keyCode == 13) {
+        $("#sizeValue" + (index + 1)).focus();
       }
     })
   });
@@ -728,7 +729,7 @@ function setData(unitId) {
 
 }
 
-function unitCmtFobTotalChange(autoId){
+function unitCmtFobTotalChange(autoId) {
 
   let totalUnit = Number($("#totalUnit" + autoId).text());
   let unitCmt = Number($("#unitCmt" + autoId).val());
@@ -737,9 +738,9 @@ function unitCmtFobTotalChange(autoId){
   let totalAmount = totalUnit * unitFob;
 
 
-  $("#itemRow-"+autoId).addClass('changed');
-  $("#totalPrice"+autoId).text(totalPrice.toFixed(2));
-  $("#totalAmount"+autoId).text(totalAmount.toFixed(2))
+  $("#itemRow-" + autoId).addClass('changed');
+  $("#totalPrice" + autoId).text(totalPrice.toFixed(2));
+  $("#totalAmount" + autoId).text(totalAmount.toFixed(2))
 }
 
 function drawItemTable(dataList) {
@@ -810,6 +811,145 @@ function drawItemTable(dataList) {
   tables += "</tbody></table> </div></div>";
 
   document.getElementById("tableList").innerHTML = tables;
+}
+
+function uploadNext() {
+
+  totalUploaded = filesUploaded = 0;
+  let i = 0;
+
+  let buyerName = $("#buyerName").val();
+  let purchaseOrder = $("#purchaseOrder").val();
+  //let dept = $('#dept').val();
+  if (buyerName != 0) {
+    if (purchaseOrder != 0) {
+
+      i++;
+      purpose = $("#purpose").val();
+
+      let xhr = new XMLHttpRequest();
+      let fd = new FormData();
+      let file = document.getElementById('files').files[filesUploaded];
+      fd.append("multipartFile", file);
+      xhr.upload.addEventListener("progress", onUploadProgress, false);
+      xhr.addEventListener("load", onUploadComplete, false);
+      xhr.addEventListener("error", onUploadFailed, false);
+
+      let user = $("#userId").val();
+
+      xhr.open("POST", "save-product/" + purpose + "/" + user + "/" + buyerName + "/" + purchaseOrder);
+      debug('uploading ' + file.name);
+      xhr.send(fd);
+      add();
+
+
+    } else {
+      alert("Select Purchase Order");
+    }
+  } else {
+    alert("Select Buyer");
+  }
+}
+
+
+function add(){
+
+	let dept = "0";
+	let userId = $('#userId').val();
+	let empCode=[];
+	$('#receiver :selected').each(function(i, selectedElement) {
+		empCode[i]=$(selectedElement).val();
+		i++;
+	});
+
+	empCode=$('#receiver').val();
+	let type;
+	if(empCode!=''){
+		type=1;
+	}else{
+		type=0;
+	}
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './saveFileAccessDetails',
+		data:{
+			dept:dept,
+			userId:userId,
+			empCode:empCode,
+			type:type,
+		},
+		success: function (data) {
+			/*if(data=="success"){
+				alert("Inserted Successflly");
+			}else{
+				alert("Already Assigned");
+			}*/
+		},
+	});
+}
+
+function onUploadComplete(e) {
+	totalUploaded += document.getElementById('files').files[filesUploaded].size;
+	filesUploaded++;
+	// debug('complete ' + filesUploaded + " of " + fileCount);
+	//  debug('totalUploaded: ' + totalUploaded);
+	if (filesUploaded < fileCount) {
+		uploadNext();
+	} else {
+		let bar = document.getElementById('bar');
+		bar.style.width = '100%';
+		bar.innerHTML = '100% complete';
+		//notification();
+	}
+}
+
+function onUploadProgress(e) {
+	if (e.lengthComputable) {
+		let percentComplete = parseInt((e.loaded + totalUploaded) * 100 / totalFileLength);
+		let bar = document.getElementById('bar');
+		bar.style.width = percentComplete + '%';
+		bar.innerHTML = percentComplete + ' % complete';
+		console.log(" bar prog " + percentComplete)
+
+		percentage = percentComplete;
+
+		console.log(" percentage prog " + percentage)
+	} else {
+		debug('unable to compute');
+	}
+}
+
+function onFileSelect(e) {
+	let bar = document.getElementById('bar');
+	bar.style.width = 0 + '%';
+	bar.innerHTML = 0 + ' % complete';
+
+	let files = e.target.files; // FileList object
+	let output = [];
+	fileCount = files.length;
+	totalFileLength = 0;
+	for (let i = 0; i < fileCount; i++) {
+		let file = files[i];
+		output.push(file.name, ' (', file.size, ' bytes, ', file.lastModifiedDate.toLocaleDateString(), ')');
+		output.push('<br/>');
+		debug('add ' + file.size);
+		totalFileLength += file.size;
+	}
+	// document.getElementById('selectedFiles').innerHTML = output.join('');
+	debug('totalFileLength:' + totalFileLength);
+}
+
+//the Ouchhh !! moments will be captured here
+function onUploadFailed(e) {
+	alert("Error uploading file");
+}
+
+function debug(s) {
+	let debug = document.getElementById('debug');
+	if (debug) {
+		debug.innerHTML = debug.innerHTML + '<br/>' + s;
+	}
 }
 
 function drawDataTable(data) {

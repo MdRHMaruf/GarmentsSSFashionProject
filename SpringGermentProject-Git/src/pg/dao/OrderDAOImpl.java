@@ -5248,6 +5248,51 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
+	public List<pg.orderModel.FileUpload> findfiles(String buyerId, String purchaseOrder, int fileUploadType) {
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FileUpload tempFileUpload = null;
+		List<pg.orderModel.FileUpload> dataList=new ArrayList<pg.orderModel.FileUpload>();
+		int userwiseupload=0;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ufl.AutoId,ufl.FileName,l.fullname from TbUploadFileLogInfo ufl\n" + 
+					"left join Tblogin l\n" + 
+					"on ufl.UploadBy = l.id\n" + 
+					"where buyerid = '1' and purchaseorder = 'PR21-38880'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempFileUpload = new FileUpload();
+				tempFileUpload.setAutoid(element[0].toString());
+				tempFileUpload.setFilename(element[1].toString());
+				tempFileUpload.setUploadby(element[2].toString());
+				dataList.add(tempFileUpload);
+				exists=true;
+			}
+
+	
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
 	public boolean fileDownload(String filename, String user, String ip,String computername) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;

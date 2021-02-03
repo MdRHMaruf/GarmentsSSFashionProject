@@ -49,6 +49,7 @@ import pg.orderModel.BuyerPoItem;
 import pg.orderModel.CheckListModel;
 import pg.orderModel.Costing;
 import pg.orderModel.FabricsIndent;
+import pg.orderModel.FileUpload;
 import pg.orderModel.ParcelModel;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
@@ -639,7 +640,6 @@ public class OrderController {
 	public @ResponseBody JSONObject getBuyerPOItem(String itemAutoId) {
 		JSONObject objmain = new JSONObject();
 
-
 		JSONArray mainArray = new JSONArray();
 		BuyerPoItem buyerPoItem = orderService.getBuyerPOItem(itemAutoId);
 		objmain.put("poItem",buyerPoItem);
@@ -668,9 +668,9 @@ public class OrderController {
 
 		JSONArray mainArray = new JSONArray();
 		BuyerPO buyerPo = orderService.getBuyerPO(buyerPoNo);
-
+		List<FileUpload> fileList = orderService.findfiles(buyerPo.getBuyerId(), buyerPo.getItemList().get(0).getPurchaseOrder(), 1);
 		objmain.put("buyerPO",buyerPo);
-
+		objmain.put("fileList",fileList);
 		return objmain;
 	}
 
@@ -732,8 +732,6 @@ public class OrderController {
 			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
 		try
 		{
-
-
 			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
 			response.setContentType("text/html");
 
@@ -762,9 +760,6 @@ public class OrderController {
 			System.out.println("computerName: " + computerName);
 
 			//   Date date=new Date();
-
-
-
 			// Get multiple file control names.
 			Iterator<String> it = multipartRequest.getFileNames();
 
@@ -786,21 +781,21 @@ public class OrderController {
 				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
 
 				File destFile = new File(destFilePath);
-
 				// Save uploaded file to target.
 				srcFile.transferTo(destFile);
-
+				fileupload = true;
+				if (fileupload) {
+					CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+					boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+					fileupload=false;
+				}
 				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
 			}
 
 			// Set message that will be displayed in return page.
 			//  model.addAttribute("message", msgBuf.toString());
 			
-			if (fileupload) {
-				CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
-				boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
-				fileupload=false;
-			}
+			
 
 		}catch(IOException ex)
 		{
@@ -840,6 +835,7 @@ public class OrderController {
 		}
 
 		objmain.put("result", mainArray);
+	
 		return objmain;
 	}
 

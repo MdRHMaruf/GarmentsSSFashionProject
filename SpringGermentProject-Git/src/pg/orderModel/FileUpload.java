@@ -22,6 +22,12 @@ public class FileUpload {
 	
 	
 	
+	public FileUpload() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public FileUpload(String autoid,String filename, String uploadby, String uplodip, String uploadmachine, String purpose,
 			String uploaddate, String datetime, String downloadby, String downloadip, String downloadmachine,
 			String downloaddate, String downloadtime) {
