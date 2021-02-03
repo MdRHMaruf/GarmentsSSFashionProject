@@ -156,6 +156,7 @@ public interface OrderDAO {
 	//File Upload
 	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user, String buyerName, String purchaseOrder);
 	List<pg.orderModel.FileUpload> findfiles(String start, String end, String user);
+	List<pg.orderModel.FileUpload> findfiles(String buyerId,String purchaseOrder,int uploadFileType);
 	boolean fileDownload(String fileName, String user, String string, String computerName);
 	boolean deletefile(String filename, String id);
 

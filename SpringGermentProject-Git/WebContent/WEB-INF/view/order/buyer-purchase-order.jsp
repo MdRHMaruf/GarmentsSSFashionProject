@@ -1,3 +1,4 @@
+<%@page import="pg.share.PaymentType"%>
 <%@page import="pg.share.Currency"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
@@ -35,9 +36,9 @@ String userName=(String)session.getAttribute("userName");
 			<strong>Wrong!</strong> Something Wrong...
 		</p>
 	</div>
-	<input type="hidden" id="userId" value="<%=userId%>">
-	<input type="hidden" id="buyerPOId" value="0"> <input
-		type="hidden" id="itemAutoId" value="0">
+	<input type="hidden" id="userId" value="<%=userId%>"> <input
+		type="hidden" id="buyerPOId" value="0"> <input type="hidden"
+		id="itemAutoId" value="0">
 
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
@@ -172,8 +173,9 @@ String userName=(String)session.getAttribute("userName");
 									<label for="paymentTerm"
 										class="col-md-6 col-form-label-sm pr-0">Payment Term</label> <select
 										id="paymentTerm" class="form-control-sm col-md-5">
-										<option value="1">TT</option>
-										<option value="2">LC</option>
+										<%for(PaymentType pType:PaymentType.values()){%>
+										<option value="<%=pType.name()%>"><%=pType.name()%></option>
+										<%}%>
 									</select>
 
 								</div>
@@ -184,14 +186,9 @@ String userName=(String)session.getAttribute("userName");
 									<label for="currency" class="col-md-4 col-form-label-sm pr-0">Currency</label>
 									<select id="currency" class="form-control-sm col-md-6">
 										<option value="0">Select Currency</option>
-										<%
-											int length = Currency.values().length;
-											for (int i = 0; i < length; i++) {
-										%>
-										<option value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
-										<%
-											}
-										%>
+										<%for(Currency currency: Currency.values()) {%>
+										<option value="<%=currency.name()%>"><%=currency.name()%></option>
+										<%}%>
 									</select>
 
 								</div>
@@ -282,9 +279,23 @@ String userName=(String)session.getAttribute("userName");
 					</div>
 					<div class="input-group-append">
 						<button class="btn btn-sm btn-primary" type="button"
-							id="uploadButton" value="Upload">Upload</button>
+							id="uploadButton" value="Upload" onclick="uploadNext()">Upload</button>
 					</div>
 				</div>
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>File Name</th>
+							<th>Upload By</th>
+							<th><span><i class='fa fa-download'></i></span></th>
+							<th><span><i class='fa fa-trash'></i></span></th>
+							<th><span><i class='fa fa-edit'></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="fileList">
+
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<div class="row">
@@ -320,6 +331,7 @@ String userName=(String)session.getAttribute("userName");
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
 				</div>
+				
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>
@@ -329,7 +341,7 @@ String userName=(String)session.getAttribute("userName");
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
-							<th>PO Id</th>
+							<th>Order Id</th>
 							<th>Buyer Name</th>
 							<th>Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
