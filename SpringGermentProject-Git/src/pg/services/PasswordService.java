@@ -7,6 +7,7 @@ package pg.services;
 
 import java.util.List;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.Login;
@@ -28,4 +29,6 @@ public interface PasswordService {
 	public List<OrganizationInfo> getOrganizationInfo();
 	public boolean changePassword(String userId, String userName, String password);
 	public String getUserDepartmentId(String userId);
+	
+	public List<noticeModel> getNotice(String depid,noticeModel nm);
 }

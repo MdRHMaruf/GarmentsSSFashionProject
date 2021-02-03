@@ -682,4 +682,78 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 
+
+	@Override
+	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid) {
+		// TODO Auto-generated method stub
+
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String depts[]=departs.split(",");
+			
+			int maxnoticeno=getMaxNoticeNo();
+			
+			for (int i = 0; i < depts.length; i++) {
+				String sql = "insert into tbnotice(noticeno, noticeheader,noticebody, filename, accessabledepartments, entryby, entrytime) values('"+maxnoticeno+"','"+heading+"','"+textbody+"','"+filename+"','"+depts[i]+"','"+userid+"', CURRENT_TIMESTAMP)";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return true;
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	
+	}
+
+
+
+	
+	public int getMaxNoticeNo() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<OrganizationInfo> dataList=new ArrayList<OrganizationInfo>();
+		int maxno=0;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select isnull(max(noticeno),0)+1 as noticeno from tbnotice";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();
+
+				//dataList.add(new OrganizationInfo(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString()));
+				maxno= Integer.parseInt(iter.next().toString());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return maxno;
+	}
+	
+
 }

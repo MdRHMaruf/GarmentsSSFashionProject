@@ -17,6 +17,9 @@ import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itextpdf.awt.geom.gl.Crossing.QuadCurve;
+
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Login;
 import pg.model.Menu;
@@ -418,7 +421,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select departmentId from Tblogin where id='"+userId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -442,5 +446,43 @@ public class PasswordDAOImpl implements PasswordDAO{
 		}
 
 		return depId;
+	}
+
+	@Override
+	public List<noticeModel> getNotice(String depid, noticeModel nm) {
+		String depId=depid;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<noticeModel>query=new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select * from tbnotice where noticeno=(select max(noticeno) from tbnotice) and (accessabledepartments='"+depId+"' or accessabledepartments=0)";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				query.add(new noticeModel(element[2].toString(),element[3].toString(),element[4].toString()));
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return query;
 	}
 }
