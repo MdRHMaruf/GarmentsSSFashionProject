@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
-	<property name="ireport.zoom" value="1.6105100000000103"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="71"/>
+	<property name="ireport.zoom" value="2.5937424601000187"/>
+	<property name="ireport.x" value="1504"/>
+	<property name="ireport.y" value="430"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.itemid,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='4025' group by a.BuyerOrderId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemid,e.itemname,a.sizeGroupId order by a.BuyerOrderId,a.sizeGroupId "]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='6' group by b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId  order by a.BuyerOrderId,a.sizeGroupId "]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
@@ -30,6 +30,11 @@
 	<queryString>
 		<![CDATA[$P!{sql}]]>
 	</queryString>
+	<field name="PaymentTerm" class="java.lang.String"/>
+	<field name="Currency" class="java.lang.String"/>
+	<field name="note" class="java.lang.String"/>
+	<field name="QCFor" class="java.lang.String"/>
+	<field name="remarks" class="java.lang.String"/>
 	<field name="BuyerOrderId" class="java.lang.String"/>
 	<field name="PurchaseOrder" class="java.lang.String"/>
 	<field name="CustomerOrder" class="java.lang.String"/>
@@ -37,7 +42,7 @@
 	<field name="ShippingMarks" class="java.lang.String"/>
 	<field name="SizeReg" class="java.lang.String"/>
 	<field name="StyleNo" class="java.lang.String"/>
-	<field name="itemid" class="java.lang.Integer"/>
+	<field name="ItemId" class="java.lang.Integer"/>
 	<field name="itemname" class="java.lang.String"/>
 	<field name="sizeGroupId" class="java.lang.String"/>
 	<group name="ItemGp">
@@ -76,6 +81,9 @@
 					<reportElement x="64" y="1" width="108" height="13" uuid="b61a7b8c-d8c0-475e-a921-647cea13b96d"/>
 					<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
 				</textField>
+				<line>
+					<reportElement x="794" y="0" width="1" height="14" uuid="398adf16-43df-4c58-a04a-7b45f519cfd6"/>
+				</line>
 			</band>
 		</groupHeader>
 		<groupFooter>
@@ -86,7 +94,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="123" splitType="Stretch">
+		<band height="177" splitType="Stretch">
 			<rectangle>
 				<reportElement x="246" y="3" width="321" height="12" uuid="0f1f66b5-c6dc-44c3-8fe6-ddbdfaff65f3"/>
 			</rectangle>
@@ -116,9 +124,9 @@
 				<reportElement x="267" y="25" width="1" height="78" uuid="b608e64f-2f44-408e-90ef-0f22dc72b8dd"/>
 			</line>
 			<staticText>
-				<reportElement x="47" y="105" width="730" height="15" uuid="2db782dd-f6ba-442c-bb52-335cf6e02e50"/>
+				<reportElement mode="Opaque" x="7" y="156" width="786" height="16" backcolor="#999999" uuid="2db782dd-f6ba-442c-bb52-335cf6e02e50"/>
 				<textElement verticalAlignment="Middle">
-					<font size="8" isBold="true"/>
+					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[*MAKE SURE TO ADVISE FOR INSPECTION WHILE PRODUCTION IS ON FLOOR AND START TO GO OUT/IF LAST MINUTE, YOU'LL PAY THE LAST MINUTE INSPECTION FEES]]></text>
 			</staticText>
@@ -227,6 +235,114 @@
 				</textElement>
 				<textFieldExpression><![CDATA["ADDRESS:"+$P{NotifyAddress}.toUpperCase()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="601" y="106" width="90" height="14" uuid="ffc5f48e-75ca-4e5f-adb8-73425e5441a7"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CUSTOMER ORDER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="601" y="122" width="90" height="14" uuid="ae5efd28-ad33-4a53-9a92-b04abc22ef7e"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PURCHASE ORDER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="601" y="137" width="90" height="14" uuid="dcf55228-e239-4ad1-a668-289f08fac41b"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[SHIPPING MARK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="692" y="106" width="6" height="14" uuid="f005d49f-64b7-41c5-b620-ff7b5a143fbf"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="692" y="122" width="6" height="14" uuid="5c136a63-02d4-430a-a950-75c5458ea166"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="692" y="137" width="6" height="14" uuid="0b4d6f49-a92a-48ae-9d67-bedc21cf13a6"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="701" y="106" width="92" height="14" uuid="2c714471-1d15-4b27-ba00-4068f6890b9a"/>
+				<textFieldExpression><![CDATA[$F{CustomerOrder}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="701" y="121" width="92" height="14" uuid="2f7ea327-8cdf-426a-b1fe-3f2a640bf61b"/>
+				<textFieldExpression><![CDATA[$F{PurchaseOrder}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="701" y="136" width="92" height="14" uuid="5ceba14a-3f71-4067-9468-65cc8eb37a2e"/>
+				<textFieldExpression><![CDATA[$F{ShippingMarks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="106" width="80" height="14" uuid="98f10882-46f2-4c00-ac54-1269aa89b7c6"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PAYMENT TERMS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="137" width="80" height="14" uuid="2b6cd9d9-8077-4205-901e-c415e35224db"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[QC FOR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="122" width="80" height="14" uuid="eb99b9dc-d8b4-44b6-81e0-b1e1e2f481a0"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CURRENCY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="106" width="6" height="14" uuid="a0edda51-6781-4638-824f-0c1c2ee24be3"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="137" width="6" height="14" uuid="33a39e6f-d8cd-4684-ad3c-315370548ffd"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="122" width="6" height="14" uuid="84648acf-8fd0-4ea8-a42c-42ca09143759"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="101" y="105" width="347" height="14" uuid="58499169-db18-440e-aeb8-6250e8c00eca"/>
+				<textFieldExpression><![CDATA[$F{PaymentTerm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="122" width="347" height="14" uuid="f14bbd55-bead-4be8-a19e-1bc7d6bc6aac"/>
+				<textFieldExpression><![CDATA[$F{Currency}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="101" y="137" width="347" height="14" uuid="6369b7a7-fe0c-412b-9fbb-2dc2d236ba94"/>
+				<textFieldExpression><![CDATA[$F{QCFor}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -237,13 +353,10 @@
 	</columnHeader>
 	<detail>
 		<band height="1" splitType="Stretch">
-			<line>
-				<reportElement x="793" y="-15" width="1" height="14" uuid="09fea481-8162-4d73-8274-25e0b418a7ed"/>
-			</line>
 			<subreport>
 				<reportElement x="-14" y="0" width="817" height="1" uuid="3d7f2c00-c502-48d0-b81a-3e674149edbf"/>
 				<subreportParameter name="ItemId">
-					<subreportParameterExpression><![CDATA[$F{itemid}]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$F{ItemId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="BuyerOrderId">
 					<subreportParameterExpression><![CDATA[$F{BuyerOrderId}]]></subreportParameterExpression>

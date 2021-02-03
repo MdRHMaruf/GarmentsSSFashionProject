@@ -74,7 +74,7 @@
 		
 
         
-		Sql="select a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='"+BuyerPoId+"' group by e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId  order by a.BuyerOrderId,a.sizeGroupId ";
+		Sql="select b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='"+BuyerPoId+"' group by b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId  order by a.BuyerOrderId,a.sizeGroupId ";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/BuyerPoReport.jrxml");
