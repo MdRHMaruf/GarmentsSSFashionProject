@@ -5262,7 +5262,7 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="select ufl.AutoId,ufl.FileName,l.fullname from TbUploadFileLogInfo ufl\n" + 
 					"left join Tblogin l\n" + 
 					"on ufl.UploadBy = l.id\n" + 
-					"where buyerid = '1' and purchaseorder = 'PR21-38880'";
+					"where buyerid = '"+buyerId+"' and purchaseorder = '"+purchaseOrder+"'";
 			System.out.println(sql);
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)

@@ -800,10 +800,10 @@ function drawItemTable(dataList) {
       tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
     }
     tables += `<td class='totalUnit' id='totalUnit${item.autoId}'>${item.totalUnit}</td>
-                <td class='unitCmt' ><input id='unitCmt${item.autoId}' class='form-control-sm min-width-60 max-width-100' type='number' value='${item.unitCmt}' onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
-                <td class='totalPrice' id='totalPrice${item.autoId}'>${item.totalPrice}</td>
-                <td class='unitFob'><input id='unitFob${item.autoId}' class='form-control-sm min-width-60 max-width-100' value="${item.unitFob}" onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
-                <td class='totalAmount' id='totalAmount${item.autoId}'>${item.totalAmount}</td>
+                <td class='unitCmt' ><input id='unitCmt${item.autoId}' class='form-control-sm min-width-60 max-width-100' type='number' value='${item.unitCmt.toFixed(2)}' onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
+                <td class='totalPrice' id='totalPrice${item.autoId}'>${item.totalPrice.toFixed(2)}</td>
+                <td class='unitFob'><input id='unitFob${item.autoId}' class='form-control-sm min-width-60 max-width-100' value="${item.unitFob.toFixed(2)}" onkeyup="unitCmtFobTotalChange('${item.autoId}')"></td>
+                <td class='totalAmount' id='totalAmount${item.autoId}'>${item.totalAmount.toFixed(2)}</td>
                 <td><i class='fa fa-edit' onclick="setBuyerPoItemDataForEdit('${item.autoId}')" style='cursor : pointer;'> </i></td>
                 <td><i class='fa fa-trash' onclick="deleteBuyerPoItem('${item.autoId}')" style='cursor : pointer;'> </i></td></tr>`;
 
