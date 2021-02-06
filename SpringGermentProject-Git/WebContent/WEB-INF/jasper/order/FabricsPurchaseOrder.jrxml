@@ -63,7 +63,7 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 	<field name="Note" class="java.lang.String"/>
 	<field name="Subject" class="java.lang.String"/>
 	<field name="ManualPo" class="java.lang.String"/>
-	<field name="Signature" class="java.lang.Object"/>
+	<field name="Signature" class="java.awt.Image"/>
 	<field name="MdSignature" class="java.awt.Image"/>
 	<field name="organizationLogo" class="java.lang.Object"/>
 	<field name="mdapproval" class="java.lang.Integer"/>

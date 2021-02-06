@@ -56,7 +56,7 @@ String userName=(String)session.getAttribute("userName");
 		<div class="row ">
 			<div class="form-group col-md-3 mb-1 px-1">
 				<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
-					Order</label> <select id="purchaseOrder"
+					Order<span style="color:red">*</span></label> <select id="purchaseOrder"
 					class="selectpicker col-md-12 px-0" multiple
 					data-selected-text-format="count > 4" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
@@ -68,7 +68,7 @@ String userName=(String)session.getAttribute("userName");
 			</div>
 			<div class="form-group col-md-3 mb-1 px-1">
 				<label for="styleNo" class="col-form-label-sm mb-0 pb-0">Style
-					No</label> <select id="styleNo" class="selectpicker col-md-12 px-0"
+					No<span style="color:red">*</span></label> <select id="styleNo" class="selectpicker col-md-12 px-0"
 					multiple data-selected-text-format="count > 4"
 					data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
@@ -79,7 +79,7 @@ String userName=(String)session.getAttribute("userName");
 
 			<div class="form-group col-md-4 mb-1 px-1">
 				<label for="itemName" class="col-form-label-sm mb-0 pb-0">Item
-					Name</label> <select id="itemName" class="selectpicker col-md-12 px-0"
+					Name<span style="color:red">*</span></label> <select id="itemName" class="selectpicker col-md-12 px-0"
 					multiple data-selected-text-format="count > 4"
 					data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
@@ -91,7 +91,7 @@ String userName=(String)session.getAttribute("userName");
 
 
 			<div class="form-group col-md-2 mb-1 pl-1">
-				<label for="itemColor" class="col-form-label-sm mb-0 pb-0">Color</label>
+				<label for="itemColor" class="col-form-label-sm mb-0 pb-0">Color<span style="color:red">*</span></label>
 				<select id="itemColor" class="selectpicker col-md-12 px-0" multiple
 					data-selected-text-format="count > 4" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray"
@@ -107,7 +107,7 @@ String userName=(String)session.getAttribute("userName");
 			<div class="col-md-5 pl-1">
 				<div class="form-group mb-0  row">
 					<label for="fabricsItem" class="col-md-3 col-form-label-sm pr-0">Fabrics
-						Item</label> <select id="fabricsItem" class="selectpicker col-md-9 px-0"
+						Item<span style="color:red">*</span></label> <select id="fabricsItem" class="selectpicker col-md-9 px-0"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
 						<option id="fabricsItem" value="0">Select Fabrics Name</option>
@@ -122,7 +122,7 @@ String userName=(String)session.getAttribute("userName");
 			<div class="col-md-2 ml-2">
 				<div class="form-group mb-0 row">
 					<label for="consumption"
-						class="col-md-6 mb-0 px-0 col-form-label-sm">Consumption</label>
+						class="col-md-6 mb-0 px-0 col-form-label-sm">Consumption<span style="color:red">*</span></label>
 					<div class="col-md-6 px-1">
 						<input type="number" onkeyup="totalQuantityCalculate()"
 							class="form-control-sm " id="consumption">
@@ -171,7 +171,7 @@ String userName=(String)session.getAttribute("userName");
 			</div>
 
 			<div class="form-group col-md-2 mb-1  pr-0 pl-1">
-				<label for="unit" class="col-form-label-sm mb-0 pb-0">Unit</label>
+				<label for="unit" class="col-form-label-sm mb-0 pb-0">Unit<span style="color:red">*</span></label>
 				<div class="row">
 					<select id="unit" class="selectpicker col-md-12"
 						data-live-search="true"
@@ -220,7 +220,7 @@ String userName=(String)session.getAttribute("userName");
 			</div>
 
 			<div class="col-sm-2 pr-0 pl-1">
-				<label for="fabricsColor" class="col-form-label-sm mb-0 pb-0">Color</label>
+				<label for="fabricsColor" class="col-form-label-sm mb-0 pb-0">Color<span style="color:red">*</span></label>
 				<div class="row">
 					<select id="fabricsColor" class="selectpicker col-md-12"
 						data-live-search="true"

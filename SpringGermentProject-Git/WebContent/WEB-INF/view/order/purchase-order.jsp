@@ -134,11 +134,11 @@
 						class="form-control-sm col-md-8 px-0">
 						<option id="paymentType" value="0">Select Payment Type</option>
 						<%
-							int length = PaymentType.values().length;
-							for (int i = 0; i < length; i++) {
+							
+							for (PaymentType payment: PaymentType.values()) {
 						%>
 						<option id="paymentType"
-							value="<%=PaymentType.values()[i].getType()%>"><%=PaymentType.values()[i].name()%></option>
+							value="<%=payment.name()%>"><%=payment.name()%></option>
 						<%
 							}
 						%>
@@ -151,10 +151,10 @@
 					<select id="currency" class="form-control-sm col-md-8 px-0">
 						<option value="0">Select Currency</option>
 						<%
-							length = Currency.values().length;
-							for (int i = 0; i < length; i++) {
+							
+							for (Currency currency: Currency.values()) {
 						%>
-						<option value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+						<option value="<%=currency.name()%>"><%=currency.name()%></option>
 						<%
 							}
 						%>
