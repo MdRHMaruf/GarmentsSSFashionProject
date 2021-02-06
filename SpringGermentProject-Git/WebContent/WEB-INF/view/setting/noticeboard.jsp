@@ -19,68 +19,97 @@ String userName=(String)session.getAttribute("userName");
 </script>
 
 <form>
-<div class="page-wrapper">
-	<div class="container-fluid">
+	<div class="page-wrapper">
+		<div class="container-fluid">
 			<div class="card-box">
-				<h4>Create Notice</h4>
-				<div  class="row">
+
+
+				<div class="row">
 					<div class="col-md-8">
-						<label>Notice Heading</label>
-						<input type="hidden" id="userId" value="<%=userId%>">
-						<input type="text" id="heading" class="form-control-sm">
+						<label>Search</label> <select id="searchnotice"
+							class="selectpicker form-control" data-live-search="true"
+							data-style="btn-light btn-sm border-light-gray">
+							<option value="0">Select</option>
+							<c:forEach items="${notices}" var="notices" varStatus="counter">
+								<option id="${counter.count}"
+									data-details="${notices.noticeBody}" value="${notices.id}">${notices.noticeHeader}</option>
+							</c:forEach>
+						</select>
 					</div>
-					
+
 					<div class="col-md-4">
-					<label>For Departments</label>
-							<select
-								id="sectionSearch" class="selectpicker form-control"
-								onchange="" data-live-search="true"
-								data-style="btn-light btn-sm border-secondary form-control-sm"
-								multiple title='Choose Department' data-size="5"
-								data-selected-text-format="count>2" data-actions-box="true" multiple>
-								<c:forEach items="${departments}" var="section" varStatus="counter">
-									<option id='sectionSearch' value="${section.departmentId}">${section.departmentName}</option>
-								</c:forEach>
-							</select>
+						<button class="btn btn-sm btn-primary mt-4" type="button"
+							id="Search" value="Search" onclick="search()">Search</button>
 					</div>
 				</div>
-				
-				
-				<div  class="row">
-					
-					
+
+
+				<h4>Create Notice</h4>
+				<div class="row">
+					<div class="col-md-8">
+						<label>Notice Heading</label> <input type="hidden" id="userId"
+							value="<%=userId%>"> <input type="text" id="heading"
+							class="form-control-sm">
+					</div>
+
+					<div class="col-md-4">
+						<label>For Departments</label> <select id="sectionSearch"
+							class="selectpicker form-control" onchange=""
+							data-live-search="true"
+							data-style="btn-light btn-sm border-secondary form-control-sm"
+							multiple title='Choose Department' data-size="5"
+							data-selected-text-format="count>2" data-actions-box="true"
+							multiple>
+							<c:forEach items="${departments}" var="section"
+								varStatus="counter">
+								<option id='sectionSearch' value="${section.departmentId}">${section.departmentName}</option>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+
+
+				<div class="row">
+
+
 					<div class="col-md-12">
 						<label>Notice Heading</label>
-						<textarea type="text" id="textbody" class="form-control form-control-sm" rows="20" col="5"></textarea>
-						
-							
+						<textarea type="text" id="textbody"
+							class="form-control form-control-sm" rows="20" col="5"></textarea>
+
+
 					</div>
 				</div>
-			
+
 				<div class="row mt-1">
-						<div style="width: 55%">
-							<div class="progress">
-								<div id='bar' class="progress-bar" style="width: 0%"></div>
+					<div class="col-md-6">
+						<div class="progress">
+							<div id='bar' class="progress-bar" style="width: 0%"></div>
+						</div>
+
+						<div class="input-group mt-2">
+							<div class="custom-file">
+								<input type="file" id="files">
 							</div>
 
-							<div class="input-group mt-2">
-								<div class="custom-file">
-									<input type="file" id="files">
-								</div>
-								<div class="input-group-append">
-									<button class="btn btn-sm btn-primary" type="button"
-										id="uploadButton" value="Upload">Save</button>
-								</div>
-							</div>
 						</div>
 					</div>
+					<div class="col-md-6">
+
+						<button class="btn btn-sm btn-primary mt-4" type="button"
+							id="uploadButton" value="Upload">Save</button>
+						<button class="btn btn-sm btn-primary  mt-4" type="button"
+							id="edit" value="" hidden>Edit</button>
+
+					</div>
+				</div>
 			</div>
-	
-	
+
+
+		</div>
+
+
 	</div>
-	
-	
-</div>
 </form>
 
 

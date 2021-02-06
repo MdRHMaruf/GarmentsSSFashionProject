@@ -11,6 +11,13 @@ public class noticeModel {
 		
 	}
 	
+	public noticeModel(String id, String header,String body,String filename) {
+		this.id=id;
+		this.noticeHeader=header;
+		this.noticeBody=body;
+		
+	}
+	
 	
 	public noticeModel(String noticeheader, String body,String filename) {
 		this.noticeHeader=noticeheader;
