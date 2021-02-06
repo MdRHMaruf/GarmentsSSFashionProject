@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MultipleStyleReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="40" bottomMargin="20" uuid="02f90df7-7d06-4ff5-b516-b38fa8d17ff6">
 	<property name="ireport.zoom" value="1.6105100000000103"/>
-	<property name="ireport.x" value="264"/>
+	<property name="ireport.x" value="276"/>
 	<property name="ireport.y" value="129"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select * from funMultipleStyleView()"]]></defaultValueExpression>

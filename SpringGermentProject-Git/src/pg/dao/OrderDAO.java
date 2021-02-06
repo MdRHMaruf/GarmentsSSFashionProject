@@ -55,7 +55,7 @@ public interface OrderDAO {
 	boolean editCosting(Costing costing);
 	boolean deleteCosting(String autoId);
 	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
-	List<Costing> getBuyerWiseCostingList(String buyerId);
+	List<Costing> getBuyerWiseCostingList(String buyerId,String userId);
 	List<Costing> getCostingList(String userId);
 	//Buyer Po Order
 	List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);

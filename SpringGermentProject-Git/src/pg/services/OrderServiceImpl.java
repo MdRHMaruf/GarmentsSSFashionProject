@@ -172,9 +172,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
-	public List<Costing> getBuyerWiseCostingList(String buyerId) {
+	public List<Costing> getBuyerWiseCostingList(String buyerId,String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getBuyerWiseCostingList(buyerId);
+		return orderDAO.getBuyerWiseCostingList(buyerId,userId);
 	}
 
 	@Override

@@ -336,12 +336,12 @@ public class OrderController {
 		return objmain;
 	}
 	
-	@RequestMapping(value = "/buyerWiseCostingSearch",method=RequestMethod.GET)
-	public @ResponseBody JSONObject buyerWiseCostingSearch(String buyerId) {
+	@RequestMapping(value = "/buyerWiseCostingSearch",method=RequestMethod.POST)
+	public @ResponseBody JSONObject buyerWiseCostingSearch(String buyerId,String userId) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
-		List<Costing> costingList = orderService.getBuyerWiseCostingList(buyerId);
+		List<Costing> costingList = orderService.getBuyerWiseCostingList(buyerId,userId);
 		objmain.put("result",costingList);
 		return objmain;
 	}

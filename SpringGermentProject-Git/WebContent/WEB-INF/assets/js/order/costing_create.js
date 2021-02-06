@@ -161,12 +161,14 @@ function loadCostingOnStyleChange() {
 
 function buyerWiseCostingLoad(){
   let buyerId = $("#buyerName").val();
+  let userId = $("#userId").val();
   $.ajax({
-    type: 'GET',
+    type: 'POST',
     dataType: 'json',
     url: './buyerWiseCostingSearch',
     data: {
-      buyerId: buyerId
+      buyerId: buyerId,
+      userId:userId
     },
     success: function (data) {
       $("#groupCostingList").empty();
@@ -189,6 +191,9 @@ function printGroupCosting(){
   console.log("Costing id-",costingId);
   if(costingId.length >0){
     costingId = costingId.slice(0,-1);
+    
+    console.log("costingId "+costingId);
+    
     let url = `printGroupCostingReport/${costingId}`;
     window.open(url, '_blank');
   
