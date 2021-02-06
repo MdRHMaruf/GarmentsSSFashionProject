@@ -551,7 +551,7 @@ function setQty() {
 
 	let qty = orderQty / pcsPerCarton;
 	$("#orderQty").val(orderQty);
-	$("#pcsPerCarton").val(pcsPerCarton);
+	//$("#pcsPerCarton").val(pcsPerCarton);
 	$("#qty").val(qty.toFixed(2));
 }
 function setDivideByValue() {

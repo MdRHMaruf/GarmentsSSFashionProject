@@ -53,7 +53,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="buyerName">Buyer Name</label></span>
+							class='my-0' for="buyerName">Buyer Name<span style="color:red">*</span></label></span>
 					</div>
 					<select id="buyerName" class="form-control selectpicker"
 						aria-label="Sizing example input"
@@ -73,7 +73,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="purchaseOrder">Purchase Order</label></span>
+							class='my-0' for="purchaseOrder">Purchase Order<span style="color:red">*</span></label></span>
 					</div>
 					<select id="purchaseOrder" class="form-control selectpicker"
 						aria-label="Sizing example input"
@@ -106,7 +106,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="styleNo">Style No</label></span>
+							class='my-0' for="styleNo">Style No<span style="color:red">*</span></label></span>
 					</div>
 					<select id="styleNo" class="form-control selectpicker"
 						aria-label="Sizing example input"
@@ -124,7 +124,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="itemName">Item</label></span>
+							class='my-0' for="itemName">Item<span style="color:red">*</span></label></span>
 					</div>
 					<select id="itemName" class="form-control selectpicker"
 						aria-label="Sizing example input"
@@ -140,7 +140,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="colorName">Color</label></span>
+							class='my-0' for="colorName">Color<span style="color:red">*</span></label></span>
 					</div>
 					<select id="colorName" class="form-control selectpicker"
 						aria-label="Sizing example input"
@@ -332,7 +332,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="ply">Ply</label></span>
+							class='my-0' for="ply">Ply<span style="color:red">*</span></label></span>
 					</div>
 					<input id="ply" type="text" class="form-control"
 						aria-label="Sizing example input"
@@ -356,7 +356,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="length1">Length</label></span>
+							class='my-0' for="length1">Length<span style="color:red">*</span></label></span>
 					</div>
 					<input id="length1" type="number" class="form-control"
 						aria-label="Sizing example input"
@@ -367,7 +367,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="width1">Width</label></span>
+							class='my-0' for="width1">Width<span style="color:red">*</span></label></span>
 					</div>
 					<input id="width1" type="number" class="form-control"
 						aria-label="Sizing example input"
@@ -447,7 +447,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="unit">Unit</label></span>
+							class='my-0' for="unit">Unit<span style="color:red">*</span></label></span>
 					</div>
 					<select id="unit" class="form-control-sm"
 						aria-label="Sizing example input"
@@ -466,7 +466,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="divideBy">Divide By</label></span>
+							class='my-0' for="divideBy">Divide By<span style="color:red">*</span></label></span>
 					</div>
 					<input id="divideBy" type="text" class="form-control"
 						aria-label="Sizing example input"
@@ -490,7 +490,7 @@ String userName=(String)session.getAttribute("userName");
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm"><label
-							class='my-0' for="qty">Qty</label></span>
+							class='my-0' for="qty">Qty<span style="color:red">*</span></label></span>
 					</div>
 					<input id="qty" type="text" class="form-control"
 						aria-label="Sizing example input"

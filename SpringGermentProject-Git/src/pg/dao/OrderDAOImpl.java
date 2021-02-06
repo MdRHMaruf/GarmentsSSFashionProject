@@ -4895,7 +4895,7 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Carton")) {
-				sql="select aic.indentId,isnull(aic.purchaseOrder,'') as purchaseOrder ,isnull(style.StyleNo,'') as styleNo,isnull(ai.itemname,'') as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
+				sql="select aic.autoId,isnull(aic.purchaseOrder,'') as purchaseOrder ,isnull(style.StyleNo,'') as styleNo,isnull(ai.itemname,'') as accessoriesname,aic.supplierId,aic.rate,aic.dolar,'' as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname,isnull(aic.currency,'') as currency\n" + 
 						" from tbAccessoriesIndentForCarton aic\n" + 
 						" left join TbStyleCreate style\n" + 
 						" on aic.styleid = cast(style.StyleId as varchar)\n" + 
@@ -4910,7 +4910,7 @@ public class OrderDAOImpl implements OrderDAO{
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),"Carton", element[2].toString(), element[3].toString(), Double.valueOf(element[4].toString()), element[5].toString(), element[6].toString(), element[7].toString(), Double.valueOf(element[8].toString()), Double.valueOf(element[9].toString()), element[10].toString(),element[10].toString(),true));
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),"Carton", element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), element[6].toString(), element[7].toString(), element[8].toString(), Double.valueOf(element[9].toString()), Double.valueOf(element[10].toString()), element[11].toString(),element[12].toString(),true));
 				}
 			}
 			
