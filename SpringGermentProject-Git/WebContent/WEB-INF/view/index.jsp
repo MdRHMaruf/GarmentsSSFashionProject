@@ -107,7 +107,7 @@
 				</marquee>
 			</div>
 			<div class="row">
-			<button type="button"  id="attachmentlink" data-file=<%=filename%> class="btn btn-link text-success" style="font-weight:bold;font-size:20px;" onclick="redirectPage('<%=pageName%>')">Previous Notice(s)</button>
+			<button type="button"  id="attachmentlink"  class="btn btn-link text-success" style="font-weight:bold;font-size:20px;" onclick="redirectPage()">Previous Notice(s)</button>
 				<button type="button" id="attachmentlink" data-file=<%=filename%> class="btn btn-link" onclick="download(this)">Attachment</button>
 			</div>
 

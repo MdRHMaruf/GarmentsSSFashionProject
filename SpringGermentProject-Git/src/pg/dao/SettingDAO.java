@@ -2,6 +2,7 @@ package pg.dao;
 
 import java.util.List;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Menu;
 import pg.model.MenuInfo;
@@ -38,5 +39,6 @@ public interface SettingDAO {
 	
 	public int getMaxNoticeNo();
 	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid);
+	public List<noticeModel>getAllNoitice(String deptid,noticeModel nm);
 	
 }

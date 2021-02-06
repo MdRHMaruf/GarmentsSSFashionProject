@@ -178,7 +178,8 @@ public class PasswordController {
 
 			modelmap.put("userName", encodedUsername);
 			modelmap.put("userId", Integer.toString(lg.get(0).getId()));
-			//modelmap.put("depid", departmentid);
+			
+			modelmap.put("depid", departmentid);
 
 
 
@@ -209,7 +210,7 @@ public class PasswordController {
 
 					modelmap.put("userName", encodedString);
 					modelmap.put("userId",sessionlist.get(a).getUserId());
-
+					modelmap.put("depid", departmentid);
 
 					//modelmap.put("depid", departmentid);
 
@@ -217,13 +218,13 @@ public class PasswordController {
 
 			}
 
-
+					
 
 		}
 		//System.out.println(" body "+body);
 		//modelmap.put("depid", departmentid);
 		//System.out.println(" department id in dashboard "+this.departmentid);
-
+		request.getSession().setAttribute("deptid", departmentid);
 
 		return "index"; //JSP - /WEB-INF/view/index.jsp
 	}

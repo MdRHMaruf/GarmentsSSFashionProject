@@ -19,7 +19,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
+import javax.websocket.Session;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -43,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.sun.istack.internal.logging.Logger;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.CommonModel;
 import pg.model.Menu;
@@ -539,6 +540,33 @@ public class SettingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/previousnoticeopen",method=RequestMethod.POST)
+	public String previousnoticeopen() {
+		
+				
+		return "yes";
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/loadpreviousnotice",method=RequestMethod.GET)
+	public ModelAndView loadpreviousnotice(HttpServletRequest request, noticeModel nm) {
+		
+		System.out.println(" session value "+request.getSession().getAttribute("deptid"));
+		String deptid=request.getSession().getAttribute("deptid").toString();
+		List<noticeModel>noticelist=settingService.getAllNoitice(deptid,nm);
+		
+		ModelAndView view = new ModelAndView("setting/previousNotice");
+		view.addObject("notice",noticelist);
+		
+
+				
+		return view;
+		
 	}
 
 
