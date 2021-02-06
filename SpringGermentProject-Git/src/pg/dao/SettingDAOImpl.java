@@ -7,11 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.management.Query;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import noticeModel.noticeModel;
 import pg.model.Ware;
 import pg.model.WareInfo;
 import pg.OrganizationModel.OrganizationInfo;
@@ -698,7 +701,7 @@ public class SettingDAOImpl implements SettingDAO {
 			int maxnoticeno=getMaxNoticeNo();
 			
 			for (int i = 0; i < depts.length; i++) {
-				String sql = "insert into tbnotice(noticeno, noticeheader,noticebody, filename, accessabledepartments, entryby, entrytime) values('"+maxnoticeno+"','"+heading+"','"+textbody+"','"+filename+"','"+depts[i]+"','"+userid+"', CURRENT_TIMESTAMP)";
+				String sql = "insert into tbnotice(noticeno, noticeheader,noticebody, filenames, accessabledepartments, entryby, entrytime) values('"+maxnoticeno+"','"+heading+"','"+textbody+"','"+filename+"','"+depts[i]+"','"+userid+"', CURRENT_TIMESTAMP)";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -753,6 +756,48 @@ public class SettingDAOImpl implements SettingDAO {
 			session.close();
 		}
 		return maxno;
+	}
+
+
+
+	@Override
+	public List<noticeModel> getAllNoitice(String deptid,noticeModel nm) {
+		
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<noticeModel>query=new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select distinct(noticeno) as id,(noticeheader) as header ,noticebody as body,filenames,CONVERT(varchar,CONVERT(DATE, entrytime))  from tbnotice where  (accessabledepartments='"+deptid+"' or accessabledepartments=0) ";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				query.add(new noticeModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString()));
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return query;
+	
+		
 	}
 	
 

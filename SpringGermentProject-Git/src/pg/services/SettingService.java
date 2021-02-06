@@ -2,6 +2,7 @@ package pg.services;
 
 import java.util.List;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.Menu;
@@ -38,6 +39,7 @@ public interface SettingService{
 	
 	public int getMaxNoticeNo();
 	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid);
+	public List<noticeModel>getAllNoitice(String deptid,noticeModel nm);
 
 
 }

@@ -1,10 +1,11 @@
 package noticeModel;
 
 public class noticeModel {
-	
-	String NoticeHeader;
-	String NoticeBody;
+	String id;
+	String noticeHeader;
+	String noticeBody;
 	String filename;
+	String date;
 	
 	public noticeModel() {
 		
@@ -12,22 +13,32 @@ public class noticeModel {
 	
 	
 	public noticeModel(String noticeheader, String body,String filename) {
-		this.NoticeHeader=noticeheader;
-		this.NoticeBody=body;
+		this.noticeHeader=noticeheader;
+		this.noticeBody=body;
 		this.filename=filename;
 	}
 	
+	
+	public noticeModel(String id,String noticeheader, String body,String filename,String date) {
+		this.id=id;
+		this.noticeHeader=noticeheader;
+		this.noticeBody=body;
+		this.filename=filename;
+		this.date=date;
+		
+	}
+	
 	public String getNoticeHeader() {
-		return NoticeHeader;
+		return noticeHeader;
 	}
 	public void setNoticeHeader(String noticeHeader) {
-		NoticeHeader = noticeHeader;
+		noticeHeader = noticeHeader;
 	}
 	public String getNoticeBody() {
-		return NoticeBody;
+		return noticeBody;
 	}
 	public void setNoticeBody(String noticeBody) {
-		NoticeBody = noticeBody;
+		noticeBody = noticeBody;
 	}
 
 
@@ -38,6 +49,26 @@ public class noticeModel {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public String getDate() {
+		return date;
+	}
+
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 	

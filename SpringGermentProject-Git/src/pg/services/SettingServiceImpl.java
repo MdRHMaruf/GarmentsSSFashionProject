@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.dao.SettingDAO;
 import pg.dao.SettingDAOImpl;
@@ -122,6 +123,13 @@ public class SettingServiceImpl implements SettingService{
 	public int getMaxNoticeNo() {
 		// TODO Auto-generated method stub
 		return settDAO.getMaxNoticeNo();
+	}
+
+
+	@Override
+	public List<noticeModel> getAllNoitice(String deptid,noticeModel nm) {
+		// TODO Auto-generated method stub
+		return settDAO.getAllNoitice( deptid, nm);
 	}
 	
 
