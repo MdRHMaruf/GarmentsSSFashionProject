@@ -21,13 +21,15 @@
 
     try {
 		
-    	String StyleId=(String)request.getAttribute("StyleId");
-    	String ItemId=(String)request.getAttribute("ItemId");
-    	String costingNo=(String)request.getAttribute("costingNo");
+ /*    	String StyleId=(String)request.getAttribute("StyleId");
+    	String ItemId=(String)request.getAttribute("ItemId"); */
+    	String costingNo=(String)request.getAttribute("costingId");
+    	
+    	System.out.println("costingNo "+costingNo);
     	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select * from funMultipleStyleView('9')";
+		String Sql="select * from funMultipleStyleView('"+costingNo+"')";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/MultipleStyleReport.jrxml");

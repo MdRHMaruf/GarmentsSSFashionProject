@@ -1080,7 +1080,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<Costing> getBuyerWiseCostingList(String buyerId) {
+	public List<Costing> getBuyerWiseCostingList(String buyerId,String userId) {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -1098,7 +1098,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on sc.StyleId = styleC.StyleId\n" + 
 					"left join tbItemDescription id\n" + 
 					"on cc.ItemId = id.itemid\n" + 
-					"where sc.BuyerId = '"+buyerId+"' \n" + 
+					"where sc.BuyerId = '"+buyerId+"' and cc.userId='"+userId+"' \n" + 
 					"group by cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
 					"order by cc.costingNo desc";
 			if(buyerId.equals("0")) { 
@@ -1110,7 +1110,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on sc.StyleId = styleC.StyleId\n" + 
 						"left join tbItemDescription id\n" + 
 						"on cc.ItemId = id.itemid\n" + 
-						"where sc.BuyerId != '"+buyerId+"' \n" + 
+						"where  cc.userId='\"+userId+\"' \n" + 
 						"group by cc.costingNo,sc.StyleId,styleC.StyleNo,cc.ItemId,id.itemname\n" + 
 						"order by cc.costingNo desc";
 			}
@@ -1295,8 +1295,8 @@ public class OrderDAOImpl implements OrderDAO{
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				unitCmt = Double.valueOf(element[0].toString());
-				unitFob = Double.valueOf(element[1].toString());
+				unitFob = Double.valueOf(element[0].toString());
+				unitCmt = Double.valueOf(element[1].toString());
 			}
 
 			buyerPoItem.setUnitCmt(unitCmt);

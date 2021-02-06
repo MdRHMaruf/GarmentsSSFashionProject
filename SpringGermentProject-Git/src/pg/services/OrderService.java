@@ -57,7 +57,7 @@ public interface OrderService {
 	public boolean editCosting(Costing costing);
 	public boolean deleteCosting(String autoId);
 	List<Costing> getCostingList(String styleId,String itemId,String costingNo);
-	List<Costing> getBuyerWiseCostingList(String buyerId);
+	List<Costing> getBuyerWiseCostingList(String buyerId,String userId);
 	List<Costing> getCostingList(String userId);
 	public List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
