@@ -48,28 +48,30 @@ transition: 1s;
 					<table class="table table-hover table-bordered table-sm mb-0 ">
 						<thead>
 							<tr>
-								<th style="width:150px;" >Date</th>
+								<th style="width: 150px;">Date</th>
 								<th class="w-2">Notice</th>
-								<th  style="width:150px;">Attachment</th>
+								<th style="width: 150px;">Attachment</th>
 
 							</tr>
 						</thead>
 						<tbody id="poList">
 							<c:forEach items="${notice}" var="no" varStatus="counter">
-								<tr name="tr" id="${counter.count}"
-									data-body="${no.noticeBody}" data-header="${no.noticeHeader}"
-									data-id="${no.id}">
-									<td style="font-size:18px;">${no.date}</td>
+								<tr name="tr" id="${counter.count}" data-body="${no.noticeBody}"
+									data-header="${no.noticeHeader}" data-id="${no.id}">
+									<td style="font-size: 18px;">${no.date}</td>
 									<td class="tablebody">
-									
-									<h6 style="font-size:18px;" id="header-${counter.count}"><b>${no.noticeHeader}</b></h6>
-									<div class="mydiv" id="mydiv-${counter.count}" data-id="${counter.count}" hidden>
 
-											
-											<p style="font-size:25px;" id="bodytext-${counter.count}"></p>
+										<h6 style="font-size: 18px;" id="header-${counter.count}">
+											<b>${no.noticeHeader}</b>
+										</h6>
+										<div class="mydiv" id="mydiv-${counter.count}"
+											data-id="${counter.count}" hidden>
 
-										</div> 
-										</td>
+
+											<p style="font-size: 25px;" id="bodytext-${counter.count}"></p>
+
+										</div>
+									</td>
 									<td><button type="button" id="attachmentlink"
 											data-file="${no.filename}" class="btn btn-link text-center"
 											onclick="download(this)">
