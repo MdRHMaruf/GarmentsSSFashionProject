@@ -186,6 +186,67 @@ function download(v) {
 	}));
 }
 
-function redirectPage(pageName){
-    window.location.href=pageName;
+
+
+
+function redirectPage(){
+   // window.open.href=pageName;
+    
+    
+    $.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './previousnoticeopen',
+		data:{
+			
+		},
+		success: function (data) {
+			if(data=='yes'){
+				var url = "loadpreviousnotice";
+        		window.open(url, '_blank');
+			}
+		},
+	});
 }
+
+var divv="";
+var rowIndex=0;
+$("table tbody tr").mouseover(
+		  function () {
+			  
+			   
+			
+			
+		   // $(this).css("background","yellow");
+		  } ,function () {
+			  var rowIndex = $(this).closest('tr').index()+1;
+			  console.log(" mouse out ")
+			  
+			   var header= $(this).attr('data-header');
+			 console.log("mheader "+header)
+			 $("#header-"+rowIndex).text(header)
+			 
+			var body=$(this).attr('data-body');
+			 $("#bodytext-"+rowIndex).text(body)
+			console.log(" mbody text "+body)
+			
+			
+			var divshowing=$("#mydiv-"+rowIndex);
+			 document.getElementById('mydiv-'+rowIndex).hidden=false;
+			  
+			 // document.getElementById('mydiv-'+rowIndex).hidden=true;
+			 // divv=document.getElementById("mydiv");
+			 // divv.style.removeProperty("transform:rotate(360deg);transition: 1s;");
+			 // document.getElementById("mydiv").style.transform=" rotate(360deg)";
+		   // $(this).css("background","");
+		  }
+		);
+
+$("table tbody tr").mouseout(
+		  function () {
+			  var rowIndex = $(this).closest('tr').index()+1;
+			  console.log(" mouse out "+rowIndex)
+			  document.getElementById("header-"+rowIndex).style.fontWeight = "Bold";
+			  document.getElementById('mydiv-'+rowIndex).hidden=true;
+				 
+		  }); 

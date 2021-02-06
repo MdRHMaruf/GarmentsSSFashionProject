@@ -1,4 +1,3 @@
 /hibernate.cfg.xml
-/.gitignore
-/pg/
 /noticeModel/
+/pg/
