@@ -73,7 +73,7 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="purchaseOrder" class="col-form-label-sm mb-0 py-0">Purchase
-										Order</label>
+										Order<span style="color:red">*</span></label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
@@ -104,7 +104,7 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="styleNo" class="col-form-label-sm mb-0 py-0">Style
-										No</label>
+										No<span style="color:red">*</span></label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkStyleNo" type="checkbox" class="form-check-input">
@@ -130,7 +130,7 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="itemName" class="col-form-label-sm mb-0 py-0">Item
-										Name</label>
+										Name<span style="color:red">*</span></label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkItemName" type="checkbox" class="form-check-input">
@@ -233,7 +233,7 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="accessoriesItem"
-										class="col-form-label-sm mb-0 py-0">Accessories Item</label>
+										class="col-form-label-sm mb-0 py-0">Accessories Item<span style="color:red">*</span></label>
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
@@ -266,7 +266,7 @@ String userName=(String)session.getAttribute("userName");
 										<div class="d-flex justify-content-between">
 											<label for="accessoriesColor"
 												class="col-form-label-sm mb-0 py-0">Accessories
-												Color</label>
+												Color<span style="color:red">*</span></label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
@@ -308,7 +308,7 @@ String userName=(String)session.getAttribute("userName");
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit</label>
+											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit<span style="color:red">*</span></label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
