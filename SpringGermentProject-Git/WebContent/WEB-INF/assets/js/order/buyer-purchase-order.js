@@ -5,6 +5,11 @@ let sizeValueListForSet = [];
 let sizesListByGroup = JSON;
 
 window.onload = () => {
+	
+	
+
+	document.getElementById('files').addEventListener('change', onFileSelect, false);
+	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
 
   document.title = "Buyer Purchase Order";
   let userId = $("#userId").val();
@@ -558,9 +563,140 @@ function searchBuyerPO(buyerPoNo) {
         $("#btnPOSubmit").hide();
         $("#btnPOEdit").show();
         $("#btnPreview").prop("disabled", false);
+        
+        files(data.fileList)
       }
     }
   });
+}
+var rowIdx = 0; 
+function files(data){
+	
+	for (var i = 0; i < data.length; i++) {
+		
+		//console.log(" file name "+data[i].filename)
+		$('#fileList').append(`<tr name="tr"  id="R${++rowIdx}" data-fileid="${data[i].autoid}">				
+				<td id="filename-${rowIdx}" data-filename="${data[i].filename}">${data[i].filename}</td>
+				<td id="R${rowIdx}">${data[i].uploadby}</td>
+				<td id="R${rowIdx}" class="text-center"><i class="fa fa-download" onclick="download(this)"> </i></td>
+				<td id="R${rowIdx}" class="text-center"><i class="fa fa-trash" onclick="del(this)"> </i></td>
+				
+				
+		</tr>`); 
+	}
+	
+}
+
+
+
+function download(a) {
+	 var rowIndex = $(a).closest('tr').index();
+	 var initindex=rowIndex+1
+	 var fileid=$("#filename-"+initindex).text();
+	 
+	 console.log(" file name "+fileid)
+	 
+	 
+	
+
+	var file = fileid;
+	 
+	var user = $("#userId").val();
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "download/" + file + '/' + user);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function () {
+		if (this.status === 200) {
+			var filename = "";
+			var disposition = xhr.getResponseHeader('Content-Disposition');
+			if (disposition && disposition.indexOf('attachment') !== -1) {
+				var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+				var matches = filenameRegex.exec(disposition);
+				if (matches != null && matches[1]) {
+					filename = matches[1].replace(/['"]/g, '');
+				}
+			}
+			var type = xhr.getResponseHeader('Content-Type'); var blob = typeof File === 'function' ? new File([this.response], filename, { type: type }) : new Blob([this.response], { type: type });
+			if (typeof window.navigator.msSaveBlob !== 'undefined') {
+				// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. 
+				// These URLs will no longer resolve as the data backing the URL has been freed."
+				window.navigator.msSaveBlob(blob, filename);
+			} else {
+				var URL = window.URL || window.webkitURL;
+				var downloadUrl = URL.createObjectURL(blob); if (filename) {
+					// use HTML5 a[download] attribute to specify filename
+					var a = document.createElement("a");
+					// safari doesn't support this yet
+					if (typeof a.download === 'undefined') {
+						window.location = downloadUrl;
+					} else {
+						a.href = downloadUrl;
+						a.download = filename;
+						document.body.appendChild(a);
+						a.click();
+					}
+				} else {
+					window.location = downloadUrl;
+				}
+				setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+			}
+		}
+	};
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhr.send($.param({
+
+	}));
+}
+
+
+
+function del(a) {
+
+	var rowIndex = $(a).closest('tr').index();
+	 var initindex=rowIndex+1
+	 
+	 var fileid=$("#R"+initindex).attr("data-fileid");
+	 console.log(" file id "+fileid)
+	 var filename=$("#filename-"+initindex).text();
+	 console.log(" filename "+filename)
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './delete/' + filename+ "/" + fileid,
+		data: {
+
+
+
+		},
+		success: function (data) {
+			if (data == true) {
+				
+				alert("Successfully Deleted")
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			//alert("Server Error");
+			if (jqXHR.status === 0) {
+				alert('Not connect.\n Verify Network.');
+			} else if (jqXHR.status == 404) {
+				alert('Requested page not found.');
+			} else if (jqXHR.status == 500) {
+				alert('Internal Server Error.');
+			} else if (errorThrown === 'parsererror') {
+				alert('Requested JSON parse failed');
+			} else if (errorThrown === 'timeout') {
+				alert('Time out error');
+			} else if (errorThrown === 'abort') {
+				alert('Ajax request aborted ');
+			} else {
+				alert('Uncaught Error.\n' + jqXHR.responseText);
+			}
+
+		}
+	});
+
+
 }
 
 // $("#btnPreview").click(()=>{
@@ -813,44 +949,67 @@ function drawItemTable(dataList) {
   document.getElementById("tableList").innerHTML = tables;
 }
 
+
+/*window.onload = () => {
+	document.title = "File Upload";
+	document.getElementById('files').addEventListener('change', onFileSelect, false);
+	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
+	//document.getElementById('find').addEventListener('click', find1, false);
+}*/
+
+
+
+
 function uploadNext() {
+	
+	var i=0;
 
-  totalUploaded = filesUploaded = 0;
-  let i = 0;
+	var buyerName=$("#buyerName").val();
+	var purchaseOrder=$("#purchaseOrder").val();
+	var dept = $('#dept').val();
+	if(buyerName!=0){
+		if(purchaseOrder!=0){
+			if(dept!=0){
+				
+					i++;
+					purpose = $("#purpose").val();
 
-  let buyerName = $("#buyerName").val();
-  let purchaseOrder = $("#purchaseOrder").val();
-  //let dept = $('#dept').val();
-  if (buyerName != 0) {
-    if (purchaseOrder != 0) {
+					var xhr = new XMLHttpRequest();
+					var fd = new FormData();
+					var file = document.getElementById('files').files[filesUploaded];
+					fd.append("multipartFile", file);
+					xhr.upload.addEventListener("progress", onUploadProgress, false);
+					xhr.addEventListener("load", onUploadComplete, false);
+					xhr.addEventListener("error", onUploadFailed, false);
 
-      i++;
-      purpose = $("#purpose").val();
+					var user = $("#userId").val();
 
-      let xhr = new XMLHttpRequest();
-      let fd = new FormData();
-      let file = document.getElementById('files').files[filesUploaded];
-      fd.append("multipartFile", file);
-      xhr.upload.addEventListener("progress", onUploadProgress, false);
-      xhr.addEventListener("load", onUploadComplete, false);
-      xhr.addEventListener("error", onUploadFailed, false);
-
-      let user = $("#userId").val();
-
-      xhr.open("POST", "save-product/" + purpose + "/" + user + "/" + buyerName + "/" + purchaseOrder);
-      debug('uploading ' + file.name);
-      xhr.send(fd);
-      add();
-
-
-    } else {
-      alert("Select Purchase Order");
-    }
-  } else {
-    alert("Select Buyer");
-  }
+					xhr.open("POST", "save-product/" + purpose + "/" + user+ "/" + buyerName+ "/" + purchaseOrder);
+					debug('uploading ' + file.name);
+					xhr.send(fd);
+					add();
+				
+			}else{
+				alert("Select Department")
+			}
+		}else{
+			alert("Select Purchase Order");
+		}
+	}else{
+		alert("Select Buyer");
+	}
+	/*if(i>0){
+		add();
+	}*/
 }
 
+
+function startUpload() {
+
+	totalUploaded = filesUploaded = 0;
+	uploadNext();
+
+}
 
 function add(){
 

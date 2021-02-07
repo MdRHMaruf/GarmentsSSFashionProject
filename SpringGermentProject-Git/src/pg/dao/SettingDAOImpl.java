@@ -799,6 +799,48 @@ public class SettingDAOImpl implements SettingDAO {
 	
 		
 	}
+
+
+
+	@Override
+	public List<noticeModel> getAllnoticesforSearch() {
+		
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<noticeModel>query=new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select noticeno, noticeheader, noticebody from tbnotice group by noticeno, noticeheader, noticebody";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				query.add(new noticeModel(element[0].toString(),element[1].toString(),element[2].toString(),""));
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return query;
+	
+		
+	}
 	
 
 }

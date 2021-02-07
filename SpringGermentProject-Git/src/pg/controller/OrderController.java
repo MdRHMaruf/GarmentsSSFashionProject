@@ -100,11 +100,11 @@ public class OrderController {
 	//String styleid;
 	//String itemid;
 	String sampleId;
-	
+
 	String empCode[],dept,userId;
 
 	int type;
-	
+
 	boolean fileupload=false;
 
 
@@ -162,7 +162,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/costing_create");
 		List<Unit> unitList= registerService.getUnitList();	
 		List<Style> styleList= orderService.getStyleList(userId);
@@ -174,7 +174,7 @@ public class OrderController {
 		map.addAttribute("buyerList",buyerList);
 		map.addAttribute("particularList",particularList);
 		map.addAttribute("costingList",costingList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -246,8 +246,8 @@ public class OrderController {
 
 		return objmain;
 	}
-	
-	
+
+
 	@RequestMapping(value = "/editCostingNo",method=RequestMethod.POST)
 	public @ResponseBody JSONObject editCostingNo(String costingList) {
 		JSONObject objmain = new JSONObject();
@@ -285,7 +285,7 @@ public class OrderController {
 				temp.setCostingNo(costingNo);
 				list.add(temp);
 			}
-			
+
 			objmain.put("result",orderService.editCostingNo(list));
 			objmain.put("particularList",orderService.getCostingList(styleId, itemId, costingNo));
 		}catch(Exception e) {
@@ -335,7 +335,7 @@ public class OrderController {
 		objmain.put("result",costingList);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/buyerWiseCostingSearch",method=RequestMethod.POST)
 	public @ResponseBody JSONObject buyerWiseCostingSearch(String buyerId,String userId) {
 		JSONObject objmain = new JSONObject();
@@ -376,7 +376,7 @@ public class OrderController {
 
 		return view;
 	}
-	
+
 	@RequestMapping(value = "/printGroupCostingReport/{costingId}",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printGroupCostingReport(ModelMap map,@PathVariable("costingId") String costingId) {
 
@@ -445,7 +445,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/buyer-purchase-order");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
@@ -457,7 +457,7 @@ public class OrderController {
 		view.addObject("factoryList",factoryList);
 		view.addObject("colorList",colorList);
 		view.addObject("buyerPoList",buyerPoList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -519,7 +519,7 @@ public class OrderController {
 		objMain.put("styleList",styleList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getPurchaseOrderAndStyleListByMultipleBuyers",method=RequestMethod.GET)
 	public JSONObject getPurchaseOrderAndStyleListByMultipleBuyers(String buyersId) {
@@ -530,7 +530,7 @@ public class OrderController {
 		objMain.put("buyerPOList",poList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getStyleListByMultiplePurchaseOrder",method=RequestMethod.GET)
 	public JSONObject getStyleListByMultiplePurchaseOrder(String purchaseOrders) {
@@ -548,7 +548,7 @@ public class OrderController {
 		objMain.put("buyerPOList",buyerPOList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getStyleWiseItem",method=RequestMethod.GET)
 	public JSONObject getStyleWiseItem(String styleId) {
@@ -558,7 +558,7 @@ public class OrderController {
 		objMain.put("itemList",itemList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getItemListByMultipleStyleId",method=RequestMethod.GET)
 	public JSONObject getItemListByMultipleStyleId(String styleIdList) {
@@ -568,7 +568,7 @@ public class OrderController {
 		objMain.put("itemList",itemList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getColorAndShippingListByMultipleStyleId",method=RequestMethod.GET)
 	public JSONObject getColorAndShippingListByMultipleStyleId(String purchaseOrders,String styleIdList) {
@@ -579,7 +579,7 @@ public class OrderController {
 		objMain.put("shippingMarkList",shippingMarkList);
 		return objMain; 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getStyleWiseBuyerPO",method=RequestMethod.GET)
 	public JSONObject getStyleWiseBuyerPO(String styleId) {
@@ -669,6 +669,8 @@ public class OrderController {
 		JSONArray mainArray = new JSONArray();
 		BuyerPO buyerPo = orderService.getBuyerPO(buyerPoNo);
 		List<FileUpload> fileList = orderService.findfiles(buyerPo.getBuyerId(), buyerPo.getItemList().get(0).getPurchaseOrder(), 1);
+		
+		
 		objmain.put("buyerPO",buyerPo);
 		objmain.put("fileList",fileList);
 		return objmain;
@@ -711,11 +713,11 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/fileupload");
 		view.addObject("buyer", registerService.getAllBuyers(userId));
 		view.addObject("dept", registerService.getDepartmentList());
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -773,29 +775,42 @@ public class OrderController {
 
 				System.out.println(" file names "+uploadFileName);
 
-				orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
+
 
 				// Create server side target file path.
 
 
 				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
 
-				File destFile = new File(destFilePath);
-				// Save uploaded file to target.
-				srcFile.transferTo(destFile);
-				fileupload = true;
-				if (fileupload) {
+				File existingfile=new File(destFilePath);
+
+				System.out.println(" file exists "+uploadFileName+" "+existingfile.exists());
+
+				if (!existingfile.exists()) {
+					File destFile = new File(destFilePath);
+					// Save uploaded file to target.
+					srcFile.transferTo(destFile);
+					fileupload = true;
+
+					orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
+
 					CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
 					boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
 					fileupload=false;
+				}
+
+
+
+				if (fileupload) {
+
 				}
 				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
 			}
 
 			// Set message that will be displayed in return page.
 			//  model.addAttribute("message", msgBuf.toString());
-			
-			
+
+
 
 		}catch(IOException ex)
 		{
@@ -835,7 +850,7 @@ public class OrderController {
 		}
 
 		objmain.put("result", mainArray);
-	
+
 		return objmain;
 	}
 
@@ -939,10 +954,10 @@ public class OrderController {
 	@RequestMapping(value = "/accessories_indent",method=RequestMethod.GET)
 	public ModelAndView accessories_indent(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
@@ -961,7 +976,7 @@ public class OrderController {
 		view.addObject("brand",brand);
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -1203,7 +1218,7 @@ public class OrderController {
 		objmain.put("dataList",orderService.getAccessoriesRecyclingData(query));
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getAccessoriesRecyclingDataWithSize",method = RequestMethod.GET)
 	public JSONObject getAccessoriesRecyclingDataWithSize(String query,String query2){
@@ -1211,7 +1226,7 @@ public class OrderController {
 		objmain.put("dataList",orderService.getAccessoriesRecyclingDataWithSize(query, query2));
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/insertAccessoriesIndent",method=RequestMethod.POST)
 	public JSONObject insertAccessoriesIndent(AccessoriesIndent v) {
@@ -1331,7 +1346,7 @@ public class OrderController {
 
 		return msg;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/deleteAccessoriesIndent",method=RequestMethod.POST)
 	public String deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId) {
@@ -1443,7 +1458,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
@@ -1453,7 +1468,7 @@ public class OrderController {
 		view.addObject("purchaseorders",purchaseorders);
 		view.addObject("buyerList",buyerList);
 		view.addObject("indentList",indentList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		//view.addObject("unit",unit);
@@ -1462,16 +1477,16 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/confirmCartonIndent",method=RequestMethod.POST)
 	public JSONObject confirmCartonIndent(String cartonIndentId,String cartonItems) {
 		JSONObject objmain = new JSONObject();
-		
-			objmain.put("result", orderService.confirmCartonIndent(cartonIndentId, cartonItems));
 
-			return objmain;
-		
+		objmain.put("result", orderService.confirmCartonIndent(cartonIndentId, cartonItems));
+
+		return objmain;
+
 	}
 
 	@RequestMapping(value = "/searchCartonIndent",method=RequestMethod.GET)
@@ -1481,7 +1496,7 @@ public class OrderController {
 		objmain.put("cartonIndentList",cartonIndentList);
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/saveAccessoriesCurton",method=RequestMethod.POST)
 	public JSONObject saveAccessoriesCurton(AccessoriesIndentCarton v) {
@@ -1533,11 +1548,11 @@ public class OrderController {
 	@RequestMapping(value = "/deleteCartonIndent",method=RequestMethod.GET)
 	public @ResponseBody JSONObject deleteCartonIndent(String autoId,String indentId) {
 		JSONObject objmain = new JSONObject();
-		
+
 		objmain.put("result",orderService.deleteAccessoriesCarton(autoId, indentId));
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/cartonIndentReportView/{indentId}",method=RequestMethod.GET)
 	public ModelAndView cartonIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
@@ -1636,10 +1651,10 @@ public class OrderController {
 	//Fabrics Indent 
 	@RequestMapping(value = "/fabrics_indent",method=RequestMethod.GET)
 	public ModelAndView fabrics_indent(ModelMap map,HttpSession session) {
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-			
+
 		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent(userId);
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 		List<Color> colorList = registerService.getColorList();
@@ -1654,10 +1669,10 @@ public class OrderController {
 		view.addObject("fabricsList",fabricsItemList);
 		view.addObject("colorList",colorList);
 		view.addObject("brandList",brandList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		//view.addObject("unitList",unitList);
 		//view.addObject("fabricsIndentList",fabricsIndentList);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1666,26 +1681,26 @@ public class OrderController {
 	@RequestMapping(value = "/confirmFabricsIndent",method=RequestMethod.POST)
 	public @ResponseBody JSONObject confirmFabricsIndent(String	fabricsIndentId,String fabricsItems) {
 		JSONObject objmain = new JSONObject();
-		
+
 		objmain.put("result",orderService.confirmFabricsIndent(fabricsIndentId, fabricsItems));
-			
+
 		return objmain;
 	}
 
 	@RequestMapping(value = "/editFabricsIndent",method=RequestMethod.POST)
 	public @ResponseBody JSONObject editFabricsIndent(FabricsIndent	fabricsIndent) {
 		JSONObject objmain = new JSONObject();
-	
-			if(orderService.editFabricsIndent(fabricsIndent)) {
-				objmain.put("result","Successful");
-			}else {
-				objmain.put("result", "Something Wrong");
-			}
-		
+
+		if(orderService.editFabricsIndent(fabricsIndent)) {
+			objmain.put("result","Successful");
+		}else {
+			objmain.put("result", "Something Wrong");
+		}
+
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/searchFabricsIndent",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchFabricsIndent(String indentId) {
 		JSONObject objmain = new JSONObject();
@@ -1693,11 +1708,11 @@ public class OrderController {
 		objmain.put("fabricsIndentList",fabricsIndentList);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/deleteFabricsIndent",method=RequestMethod.GET)
 	public @ResponseBody JSONObject deleteFabricsIndent(String autoId,String indentId) {
 		JSONObject objmain = new JSONObject();
-		
+
 		objmain.put("result",orderService.deleteFabricsIndent(autoId, indentId));
 		return objmain;
 	}
@@ -1709,7 +1724,7 @@ public class OrderController {
 		objmain.put("fabricsIndent",fabricsIndent);
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/fabricsIndentReportView/{indentId}",method=RequestMethod.GET)
 	public ModelAndView fabricsIndentReportView(ModelAndView map,@PathVariable("indentId") String indentId) {
@@ -1744,7 +1759,7 @@ public class OrderController {
 		objmain.put("dozenQuantity", orderQty/12);
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/getOrderQtyByMultipleId",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getOrderQtyByMultipleId(String purchaseOrder,String styleId,String itemId,String colorId) {
 		JSONObject objmain = new JSONObject();
@@ -1769,7 +1784,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/sample_requisition");
 		List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
@@ -1790,7 +1805,7 @@ public class OrderController {
 		view.addObject("sampleList",sampleList);
 		view.addObject("inchargeList",inchargeList);
 		view.addObject("merchendizerList",merchendizerList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1802,7 +1817,7 @@ public class OrderController {
 
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
-		
+
 
 		List<Color>items=registerService.getColorList();
 
@@ -1822,7 +1837,7 @@ public class OrderController {
 		return objmain;
 
 	}
-	
+
 	@RequestMapping(value = "/addItemToSampleRequisition",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addItemToSampleRequisition(SampleRequisitionItem v) {
 		JSONObject objmain = new JSONObject();
@@ -1853,19 +1868,19 @@ public class OrderController {
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/userWiseNullSampleReqDataList",method=RequestMethod.POST)
 	public @ResponseBody JSONObject userWiseNullSampleReqDataList(String userId) {
 		JSONObject objmain = new JSONObject();
-		
+
 		System.out.println("SampleIncompleteData");
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleList = orderService.getIncomepleteSampleRequisitionItemList(userId);
 		//List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionItemList(v.getUserId());
 		objmain.put("result",sampleList);
-		
+
 		System.out.println("SampleIncompleteData Size"+sampleList.size());
-		
+
 		return objmain;
 	}
 
@@ -1883,21 +1898,21 @@ public class OrderController {
 	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId) {
 		JSONObject objmain = new JSONObject();
-		
+
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(sampleReqId);
 		objmain.put("result",sampleList);
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/deleteSampleRequisitionItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject deleteSampleRequisitionItem(String sapleAutoId,String sampleReqId) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainArray = new JSONArray();
-		
+
 		System.out.println("sampleReqId "+sampleReqId);
-		
+
 		if(!sampleReqId.equals("")) {
 			objmain.put("result","Sorry You are already confirm sample requisition");
 		}
@@ -1908,21 +1923,21 @@ public class OrderController {
 				objmain.put("result",sampleList);
 			}
 			else{
-				
+
 				objmain.put("result","Something has wrong!!");
 			}
 		}
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/getSampleRequistionItemData",method=RequestMethod.POST)
 	public @ResponseBody JSONObject getSampleRequistionItemData(String itemAutoId) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleRequistionItemList = orderService.getSampleRequistionItemData(itemAutoId);
 		System.out.println("Size "+sampleRequistionItemList.size());
-		
+
 		objmain.put("result",sampleRequistionItemList);
 
 		return objmain;
@@ -1953,10 +1968,10 @@ public class OrderController {
 	@RequestMapping(value = "/purchase_order",method=RequestMethod.GET)
 	public ModelAndView purchase_order(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/purchase-order");
 		//List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<Factory> factoryList = registerService.getFactoryNameList();
@@ -2053,10 +2068,10 @@ public class OrderController {
 		ModelAndView view = new ModelAndView("order/sample_production");
 		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
 		view.addObject("sampleCommentsList",sampleCommentsList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -2109,7 +2124,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/style_create");
 		List<BuyerModel> List= registerService.getAllBuyers(userId);
 		List<ItemDescription> itemList= orderService.getItemDescriptionList();
@@ -2119,7 +2134,7 @@ public class OrderController {
 		map.addAttribute("buyerList",List);
 		map.addAttribute("itemList",itemList);
 		map.addAttribute("styleList",styleList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -2130,15 +2145,15 @@ public class OrderController {
 	public ModelAndView submitFiles(@RequestParam String submit,@RequestParam String styleItemAutoId,@RequestParam String styleid,@RequestParam String buyerId,@RequestParam String hbuyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam MultipartFile frontImage,@RequestParam MultipartFile backImage,HttpSession session,Model map,RedirectAttributes attr) throws IOException, SQLException {
 
 
-		
+
 		String userId=(String)session.getAttribute("userId");
-		
+
 		if (submit.equals("1")) {
-			
+
 			boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontImage,backImage) ;
-			
+
 		}else {
-			
+
 			System.out.println("styleItemAutoId "+styleItemAutoId);
 			System.out.println("buyerId "+buyerId);
 			System.out.println("itemId "+itemId);
@@ -2150,10 +2165,10 @@ public class OrderController {
 			System.out.println("backImage "+backImage);
 			boolean flag=orderService.editStyle(styleItemAutoId, hbuyerId, itemId,styleid, styleNo, size, date, frontImage, backImage);
 		}
-		
+
 		ModelAndView view=new ModelAndView("redirect:style_create");
-		
-		
+
+
 
 		return view;
 	}
@@ -2188,12 +2203,12 @@ public class OrderController {
 	}
 
 
-	
 
 
 
 
-	
+
+
 
 	//Parcel
 	@RequestMapping(value = "/parcel",method=RequestMethod.GET)
@@ -2201,7 +2216,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/parcel");
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -2216,7 +2231,7 @@ public class OrderController {
 		view.addObject("courierList",courierList);
 		view.addObject("unitList",unitList);
 		view.addObject("parcelList",parcelList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -2275,7 +2290,7 @@ public class OrderController {
 	}
 
 
-	
+
 
 
 	@ResponseBody
@@ -2295,25 +2310,25 @@ public class OrderController {
 	@RequestMapping(value = "/sample_cad",method=RequestMethod.GET)
 	public ModelAndView sample_cad(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
-		
+
 		ModelAndView view = new ModelAndView("order/sample_cad");
 
 
 		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
-		
+
 
 		view.addObject("poList",poList);
 		view.addObject("sampleList",sampleList);
 		view.addObject("sampleCadList",sampleCadList);
 		view.addObject("sampleReqList",sampleReqList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -2324,7 +2339,7 @@ public class OrderController {
 	@RequestMapping(value = "/searchSampleCadDetails",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchSampleCadDetails(String sampleCommentId,String sampleReqId) {
 		JSONObject objmain = new JSONObject();
-		
+
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
 		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
@@ -2390,7 +2405,7 @@ public class OrderController {
 	@RequestMapping(value = "/SampleCadReportView",method=RequestMethod.GET)
 	public ModelAndView SampleReportView(ModelAndView map, FabricsIndent p) {
 
-		
+
 		System.out.println(" Open Ooudoor sales report ");	
 		ModelAndView view = new ModelAndView("order/SampleCadReportView");
 
@@ -2405,7 +2420,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/purchase-order-approve-from-md");
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
@@ -2464,7 +2479,7 @@ public class OrderController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("order/accessories-check-list");
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
@@ -2474,13 +2489,13 @@ public class OrderController {
 		view.addObject("sampletype",sampleList);
 		view.addObject("unitList",unitList);
 		view.addObject("parcelList",checkList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/confirmCheckList",method=RequestMethod.POST)
 	public String confirmCheckList(CheckListModel checkList) {
@@ -2532,7 +2547,7 @@ public class OrderController {
 		}
 		return objectMain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/checkListReportView/{id}")
 	public ModelAndView checkListReport(ModelMap map,@PathVariable ("id") String id) {
@@ -2541,14 +2556,14 @@ public class OrderController {
 		return view;
 
 	}
-	
+
 	@RequestMapping(value = "/getImages",method=RequestMethod.GET)
 	public @ResponseBody List<Style> getImages(Style style) {
 		List<Style> images=orderService.images(style);
-		
+
 		System.out.println("front "+images.get(0).getFrontimage());
-		
-		
+
+
 		return images;
 	}
 
@@ -2560,27 +2575,27 @@ public class OrderController {
 
 		return departmentWiseReceiverList;				
 	}
-	
+
 	@RequestMapping(value = "/saveFileAccessDetails", method = RequestMethod.POST)
 	public @ResponseBody String saveFileAccessDetails(
 			@RequestParam (value="empCode[]",  required=false) String [] empCode,
 			@RequestParam (value="dept",  required=false) String dept,
 			@RequestParam (value="type",  required=false) int type,
 			@RequestParam (value="userId",  required=false) String userId) {
-		
+
 		this.empCode=empCode;
 		this.dept=dept;
 		this.type=type;
 		this.userId=userId;
-		
+
 		//CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
-//		boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+		//		boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
 		fileupload=true;
-		
+
 		return "success";
 
 	}
-	
+
 	@RequestMapping(value = "/getIdWiseFileLogDetails", method = RequestMethod.POST)
 	public @ResponseBody List<CommonModel> getAllFromFileLogDetails(CommonModel v) {
 
@@ -2588,7 +2603,7 @@ public class OrderController {
 
 		return AllFromFileLogDetails;
 	}
-	
+
 	@RequestMapping(value = "/addNewPermission", method = RequestMethod.POST)
 	public @ResponseBody String addNewPermission(
 			@RequestParam (value="empCode[]",  required=false) String [] empCode,
@@ -2601,7 +2616,7 @@ public class OrderController {
 		return "success";
 
 	}
-	
+
 	/*@RequestMapping(value = "/setModalData", method = RequestMethod.POST)
 	public @ResponseBody List<CommonModel> setModalData(CommonModel v) {
 
