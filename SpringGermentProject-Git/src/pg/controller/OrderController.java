@@ -1401,6 +1401,41 @@ public class OrderController {
 		return objmain;
 
 	}
+	
+	//zipper_indent
+	@RequestMapping(value = "/zipper_indent",method=RequestMethod.GET)
+	public ModelAndView zipper_indent(ModelMap map,HttpSession session) {
+
+		
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		
+		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+
+		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
+		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
+
+		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent(userId);
+
+		//List<commonModel>unit=orderService.Unit();
+		List<CommonModel>brand=orderService.Brands();
+		List<CommonModel>color=orderService.AllColors();
+		ModelAndView view = new ModelAndView("order/zipper_indent");
+		view.addObject("purchaseorders",purchaseorders);
+		view.addObject("accessories",accessoriesitem);
+		view.addObject("buyerList",buyerList);
+		view.addObject("brand",brand);
+		view.addObject("color",color);
+		view.addObject("listAccPostedData",listAccPostedData);
+		
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		//view.addObject("listAccPending",listAccPending);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
 
 	//accessories_indent_curton 
 	@RequestMapping(value = "/accessories_indent_curton",method=RequestMethod.GET)

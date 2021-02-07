@@ -72,7 +72,7 @@
 			sql="select 'only' as Taka,b.ShippingMarks, \r\n"+
 					"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
 					" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
-					"ISNULL(c.Colorname,'') as ColorName,b.accessoriesSize,b.size,  \r\n"+
+					"ISNULL(c.Colorname,'') as ColorName,b.accessoriesSize,ss.sizeName as size, \r\n"+
 					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
 					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
@@ -91,6 +91,8 @@
 					" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
 					" left join tbColors c  \r\n"+
 					" on b.colorId = cast(c.ColorId as varchar)  \r\n"+
+					"left join tbStyleSize ss \r\n"+
+ 					"on b.size = ss.id \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
