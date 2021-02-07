@@ -209,6 +209,20 @@ function redirectPage(){
 	});
 }
 
+
+function search(){
+	  if ($("#searchnotice").val()!=0) {
+		  var body=  $("#searchnotice").find('option:selected').attr("data-details");
+		  var header= $("#searchnotice option:selected").text();
+		  console.log(" body "+body)
+		  $("#heading").val(header)
+		  $("#textbody").val(body)
+		  document.getElementById('edit').hidden=false;
+		  document.getElementById('uploadButton').hidden=true;
+	}
+	
+}
+
 var divv="";
 var rowIndex=0;
 $("table tbody tr").mouseover(

@@ -355,6 +355,8 @@ public class SettingController {
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("setting/noticeboard");		
 		map.addAttribute("departments",registerService.getDepartmentList());
+		System.out.println(" body "+settingService.getAllnoticesforSearch().get(0).getNoticeBody());
+		map.addAttribute("notices",settingService.getAllnoticesforSearch());
 		
 		return view; //JSP - /WEB-INF/view/index.jsp
 		

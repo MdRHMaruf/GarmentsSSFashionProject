@@ -41,4 +41,6 @@ public interface SettingDAO {
 	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid);
 	public List<noticeModel>getAllNoitice(String deptid,noticeModel nm);
 	
+	public List<noticeModel>getAllnoticesforSearch();
+	
 }

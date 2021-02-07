@@ -5082,6 +5082,7 @@ public class OrderDAOImpl implements OrderDAO{
 	@Override
 	public boolean fileUpload(String Filename, String pcname, String ipaddress,String purpose,String user,String buyerName, String purchaseOrder) {
 		Session session=HibernateUtil.openSession();
+		boolean fileinsert=false;
 		Transaction tx=null;
 		try{
 			tx=session.getTransaction();
@@ -5091,7 +5092,7 @@ public class OrderDAOImpl implements OrderDAO{
 				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime, buyerid, purchaseorder) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP,'"+buyerName+"','"+purchaseOrder+"')";
 				session.createSQLQuery(sql).executeUpdate();
 				tx.commit();
-				return true;
+				fileinsert= true;
 			}
 		}
 		catch(Exception ee){
@@ -5106,8 +5107,8 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
-
-		return false;
+		session.close();
+		return fileinsert;
 	}
 
 
