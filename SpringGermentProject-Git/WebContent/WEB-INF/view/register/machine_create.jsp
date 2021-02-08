@@ -9,7 +9,8 @@
 <jsp:include page="../include/header.jsp" />
 
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+	String userId = (String) request.getAttribute("userId");
+	String userName = (String) request.getAttribute("userName");
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">
@@ -32,7 +33,7 @@
 				<strong>Wrong!</strong> Something Wrong...
 			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+		<input type="hidden" id="userId" value="<%=userId%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -45,16 +46,17 @@
 									<b>Machine Create</b>
 								</h2>
 							</div>
-							
+
 							<hr class="mb-1 mt-1">
 
 							<div class="form-group mb-1">
-								<label for="name" class="mb-0">Name</label> <%-- <select id="name"
+								<label for="name" class="mb-0">Name</label>
+								<%-- <select id="name"
 									class="selectpicker form-control" data-live-search="true"
 									data-style="btn-light btn-sm border-secondary form-control-sm">
 									<option>Select Machnine</option> --%>
-									<input class="form-control-sm" type="text" id="name">
-									<%-- <c:forEach items="${shift}" var="shift" varStatus="counter">
+								<input class="form-control-sm" type="text" id="name">
+								<%-- <c:forEach items="${shift}" var="shift" varStatus="counter">
 										<option id='shift' value="${shift.shiftSl}">${shift.shiftName}</option>
 										<option id='shiftName' value="${shift.shiftSl}">${shift.shiftName}</option>
 									</c:forEach> --%>
@@ -69,58 +71,52 @@
 									class="form-control-sm" id="modelNo" name="text">
 							</div>
 
-															
+
 							<div class="form-group">
 								<label for="motor" class="mb-0">Motor</label> <input type="text"
-									class="form-control-sm" id="motor" name="text">
-									
-										<label for="department" class="mb-0">Factory</label>
-										 <select
-										id="factoryId" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm" onchange="factoryWiseLine()">
-											<option value="0">Select Factory</option>
-											<c:forEach items="${factorylist}" var="factory"
-												varStatus="counter">
-												<option id='factoryId' value="${factory.factoryId}">${factory.factoryName}</option>
-											</c:forEach>
-		
-										</select>
+									class="form-control-sm" id="motor" name="text"> <label
+									for="department" class="mb-0">Factory</label> <select
+									id="factoryId" class="selectpicker form-control"
+									data-live-search="true"
+									data-style="btn-light btn-sm border-secondary form-control-sm"
+									onchange="factoryWiseLine()">
+									<option value="0">Select Factory</option>
+									<c:forEach items="${factorylist}" var="factory"
+										varStatus="counter">
+										<option id='factoryId' value="${factory.factoryId}">${factory.factoryName}</option>
+									</c:forEach>
+
+								</select> <label for="department" class="mb-0">Department</label> <select
+									id="departmentId" class="selectpicker form-control"
+									data-live-search="true"
+									data-style="btn-light btn-sm border-secondary form-control-sm"
+									onchange="departmentWiseLine()">
+									<option>Select Department</option>
 
 
-																	
-									<label for="department" class="mb-0">Department</label> <select
-										id="departmentId" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm" onchange="departmentWiseLine()">
-										<option>Select Department</option>
-											
-										
-									</select>
-								
-								<label for="employee" class="mb-0">Employee</label>
-								<select id="employee"
-									class="selectpicker form-control" data-live-search="true"
+								</select> <label for="employee" class="mb-0">Employee</label> <select
+									id="employee" class="selectpicker form-control"
+									data-live-search="true"
 									data-style="btn-light btn-sm border-secondary form-control-sm">
 									<option>Select Employee</option>
 
-									<c:forEach items="${employee}" var="employee" varStatus="counter">
+									<c:forEach items="${employee}" var="employee"
+										varStatus="counter">
 										<option id='employee' value="${employee.employeeId}">${employee.employeeName}</option>
 									</c:forEach>
 
+								</select> <label for="LineId" class="mb-0">Line</label> <select
+									id="lineId" class="selectpicker form-control"
+									data-live-search="true"
+									data-style="btn-light btn-sm border-secondary form-control-sm">
+
+
+
+
 								</select>
-									<label for="LineId" class="mb-0">Line</label> <select
-										id="lineId" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-		
-
-
-
-									</select>								
 							</div>
-							
-							
+
+
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
@@ -182,4 +178,5 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-<script src="${pageContext.request.contextPath}/assets/js/register/machine_create.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/register/machine_create.js"></script>
