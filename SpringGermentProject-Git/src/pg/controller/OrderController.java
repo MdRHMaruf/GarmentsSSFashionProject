@@ -1895,13 +1895,15 @@ public class OrderController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId) {
+	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}/{user}",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId,@PathVariable ("user") String user) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(sampleReqId);
+		List<FileUpload>filelist=orderService.findsamplecadfiles(user, sampleReqId);
 		objmain.put("result",sampleList);
+		objmain.put("files",filelist);
 
 		return objmain;
 	}
@@ -2624,5 +2626,202 @@ public class OrderController {
 
 		return setModalData;
 	}*/
+	
+	
+	
+	@RequestMapping(value="/save-samplecad/{samplecadid}/{user}", method={RequestMethod.PUT, RequestMethod.POST})
+	public String uploadSampleFileSubmit(
+			@PathVariable ("samplecadid") String samplecadid,
+			@PathVariable ("user") String user,
+			
+			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
+		
+		String filelocation="E:/uploadspringfiles/samplecadfiles/";
+		try
+		{
+			
+			
+			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+			response.setContentType("text/html");
+
+			String hostname = request.getRemoteHost(); // hostname
+			System.out.println("hostname "+hostname);
+
+			String computerName = null;
+			String remoteAddress = request.getRemoteAddr();
+			InetAddress inetAddress=null;
+
+
+			inetAddress = InetAddress.getByName(remoteAddress);
+			System.out.println("inetAddress: " + inetAddress);
+			computerName = inetAddress.getHostName();
+
+			System.out.println("computerName: " + computerName);
+
+
+			if (computerName.equalsIgnoreCase("localhost")) {
+				computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+			}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+				inetAddress = InetAddress.getLocalHost();
+				computerName=inetAddress.getHostName();
+			}
+			System.out.println("ip : " + inetAddress);
+			System.out.println("computerName: " + computerName);
+
+			//   Date date=new Date();
+			// Get multiple file control names.
+			Iterator<String> it = multipartRequest.getFileNames();
+
+			while(it.hasNext())
+			{
+				String fileControlName = it.next();
+
+				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+
+				String uploadFileName = srcFile.getOriginalFilename();
+
+				System.out.println(" file names "+uploadFileName);
+
+
+
+				// Create server side target file path.
+
+
+				String destFilePath = filelocation+uploadFileName;
+
+				File existingfile=new File(destFilePath);
+
+				System.out.println(" file exists "+uploadFileName+" "+existingfile.exists());
+
+				if (!existingfile.exists()) {
+					File destFile = new File(destFilePath);
+					// Save uploaded file to target.
+					srcFile.transferTo(destFile);
+					fileupload = true;
+						System.out.println(" sample id "+samplecadid);
+					orderService.samplecadfileupload(samplecadid, uploadFileName, user, inetAddress.toString());
+
+				//	CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+					//boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+					//fileupload=false;
+				}
+
+
+
+				if (fileupload) {
+
+				}
+				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
+			}
+
+			// Set message that will be displayed in return page.
+			//  model.addAttribute("message", msgBuf.toString());
+
+
+
+		}catch(IOException ex)
+		{
+			ex.printStackTrace();
+		}finally
+		{
+			return "upload_file_result";
+		}
+	}
+	
+	
+	
+	@RequestMapping(value="/download-samplecad/{fileName:.+}/{user}", method=RequestMethod.POST)
+	public @ResponseBody void downloadsamplecad(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
+		System.out.println(" download controller ");
+
+		Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+		response.setContentType("text/html");
+
+		String hostname = request.getRemoteHost(); // hostname
+		System.out.println("hostname "+hostname);
+
+		String computerName = null;
+		String remoteAddress = request.getRemoteAddr();
+		InetAddress inetAddress=null;
+
+
+		inetAddress = InetAddress.getByName(remoteAddress);
+		System.out.println("inetAddress: " + inetAddress);
+		computerName = inetAddress.getHostName();
+
+		System.out.println("computerName: " + computerName);
+
+
+		if (computerName.equalsIgnoreCase("localhost")) {
+			computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			inetAddress = InetAddress.getLocalHost();
+			computerName=inetAddress.getHostName();
+		}
+		System.out.println("ip : " + inetAddress);
+		System.out.println("computerName: " + computerName);
+
+
+
+
+		try {
+
+
+			String filelocation="E:/uploadspringfiles/samplecadfiles/";
+
+			String filePath = filelocation+fileName;
+
+			System.out.println(" filename "+fileName);
+
+			try {
+				File file = new File(filePath);
+				System.out.println(" file "+file.length()/(1024*1024));
+				FileInputStream in = new FileInputStream(file);
+				System.out.println(" file in "+in);
+				response.setHeader("Expires", new Date().toGMTString());
+				response.setContentType(URLConnection.guessContentTypeFromStream(in));
+
+				// response.setContentLength(Files.readAllBytes(file.toPath()).length);
+
+				response.setContentLength((int)file.length());
+
+				response.setHeader("Content-Disposition","attachment; filename=\"" + fileName +"\"");
+				response.setHeader("Pragma", "no-cache");
+
+				response.setContentType("application/octet-stream");
+				// FileCopyUtils.copy(in, response.getOutputStream());
+
+
+				IOUtils.copyLarge(in, response.getOutputStream());
+
+
+				//boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
+
+				in.close();
+				response.flushBuffer();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	@RequestMapping(value = "/deletesamplecadfile/{filename:.+}/{id}",method=RequestMethod.POST)
+	public @ResponseBody boolean deletesamplecadfile(@PathVariable ("filename") String filename,@PathVariable ("id") String id) {
+
+		boolean delete=orderService.deletesamplefile(filename,id);
+		String filelocation="E:/uploadspringfiles/samplecadfiles/";
+		if (delete) {
+			File file=new File(filelocation+filename);
+			file.delete();
+		}
+
+		return delete;
+	}
 }
 

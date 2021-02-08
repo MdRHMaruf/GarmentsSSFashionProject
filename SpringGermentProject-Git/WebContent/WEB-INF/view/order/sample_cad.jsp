@@ -8,8 +8,8 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -34,15 +34,14 @@ String userName=(String)session.getAttribute("userName");
 				<strong>Wrong!</strong> Something Wrong...
 			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="buyerOrderId" value="0">
-		<input type="hidden" id="purchaseOrder" value="0">
-		<input type="hidden" id="styleId" value="">
-		<input type="hidden" id="itemId" value="">
-		<input type="hidden" id="colorId" value="">
-		<input type="hidden" id="POStatus" value="">
-		<input type="hidden" id="sampleReqId" value="0">
-		<input type="hidden" id="sampleCommentId" value="0">
+		<input type="hidden" id="userId" value="<%=userId%>"> <input
+			type="hidden" id="buyerOrderId" value="0"> <input
+			type="hidden" id="purchaseOrder" value="0"> <input
+			type="hidden" id="styleId" value=""> <input type="hidden"
+			id="itemId" value=""> <input type="hidden" id="colorId"
+			value=""> <input type="hidden" id="POStatus" value="">
+		<input type="hidden" id="sampleReqId" value="0"> <input
+			type="hidden" id="sampleCommentId" value="0">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -53,9 +52,8 @@ String userName=(String)session.getAttribute("userName");
 						<div class="col-md-12">
 
 							<header class="d-flex justify-content-between">
-								<h5 class="text-center" style="display: inline;">
-									Sample CAD</h5>
-								<div>								
+								<h5 class="text-center" style="display: inline;">Sample CAD</h5>
+								<div>
 									<button type="button" class="btn btn-outline-dark btn-sm"
 										data-toggle="modal" data-target="#exampleModal">
 										<i class="fa fa-search"></i>Sample Requisition List
@@ -76,8 +74,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="row">
 										<label for="makeingDate" class="col-sm-2">Date</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm col-sm-12" type="datetime-local"
-												id="patternmakingdate">
+											<input class="form-control-sm col-sm-12"
+												type="datetime-local" id="patternmakingdate">
 										</div>
 									</div>
 
@@ -87,7 +85,7 @@ String userName=(String)session.getAttribute("userName");
 											<select id="makeingDespatch"
 												class="selectpicker form-control" data-live-search="false"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
-												
+
 												<option value='1'>NO</option>
 												<option value='2'>Yes</option>
 
@@ -99,11 +97,12 @@ String userName=(String)session.getAttribute("userName");
 										<label for="makeingReceivedBy" class="col-sm-2">Recevied
 											By</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm" type="text" id="patternmakingreceivedby">
+											<input class="form-control-sm" type="text"
+												id="patternmakingreceivedby">
 										</div>
 									</div>
 
-									
+
 								</div>
 
 								<div class="col-sm-3 px-1">
@@ -113,16 +112,16 @@ String userName=(String)session.getAttribute("userName");
 									<div class="row">
 										<label for="correctionDate" class="col-sm-2">Date</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm col-sm-12" type="datetime-local"
-												id="patterncorrectiondate">
+											<input class="form-control-sm col-sm-12"
+												type="datetime-local" id="patterncorrectiondate">
 										</div>
 									</div>
 
 									<div class="row mt-1">
 										<label for="correctionDate" class="col-sm-2">Dispatch</label>
 										<div class="col-sm-10">
-											<select id="patterncorrectiondispatch" class="selectpicker form-control"
-												data-live-search="false"
+											<select id="patterncorrectiondispatch"
+												class="selectpicker form-control" data-live-search="false"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
 												<option value='1'>NO</option>
 												<option value='2'>Yes</option>
@@ -135,12 +134,13 @@ String userName=(String)session.getAttribute("userName");
 										<label for="correctionReceviedBy" class="col-sm-2">Recevied
 											By</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm" type="text" id="correctionReceviedBy">
+											<input class="form-control-sm" type="text"
+												id="correctionReceviedBy">
 										</div>
 									</div>
 
 								</div>
-										
+
 								<div class="col-sm-3 px-1">
 
 									<h5>Pattern Grading</h5>
@@ -148,8 +148,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="row">
 										<label for="gradingDate" class="col-sm-2">Date</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm col-sm-12" type="datetime-local"
-												id="gradingDate">
+											<input class="form-control-sm col-sm-12"
+												type="datetime-local" id="gradingDate">
 										</div>
 									</div>
 
@@ -170,11 +170,12 @@ String userName=(String)session.getAttribute("userName");
 										<label for="gradingReceviedBy" class="col-sm-2">Recevied
 											By</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm" type="text" id="gradingdispatchreceivedby">
+											<input class="form-control-sm" type="text"
+												id="gradingdispatchreceivedby">
 										</div>
 									</div>
 
-								</div>								
+								</div>
 
 								<div class="col-sm-3 px-1">
 
@@ -183,8 +184,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="row">
 										<label for="markingDate" class="col-sm-2">Date</label>
 										<div class="col-sm-10">
-											<input class="form-control-sm col-sm-12" type="datetime-local"
-												id="markingDate">
+											<input class="form-control-sm col-sm-12"
+												type="datetime-local" id="markingDate">
 										</div>
 									</div>
 
@@ -213,194 +214,221 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 
 							</div>
-							
+
 							<div class="row mt-1">
-									<div class="row">
-										<label for="markingDate" class="col-sm-3">Sample Type</label>
-										<select id="sampleId" class="selectpicker col-md-9"
-											data-live-search="true"
-											data-style="btn-light btn-sm border-light-gray">
-			
-											<option id="sampleId" value="0">Select Sample</option>
-											<c:forEach items="${sampleList}" var="list">
-												<option id="sampleId" value="${list.id}">${list.name}</option>
-											</c:forEach>
-										</select>
+								<div class="row">
+									<label for="markingDate" class="col-sm-3">Sample Type</label> <select
+										id="sampleId" class="selectpicker col-md-9"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-light-gray">
 
+										<option id="sampleId" value="0">Select Sample</option>
+										<c:forEach items="${sampleList}" var="list">
+											<option id="sampleId" value="${list.id}">${list.name}</option>
+										</c:forEach>
+									</select>
+
+								</div>
+
+								<div class="row mt-1">
+									<label for="markingDate" class="col-sm-1">Feedback</label>
+									<div class="col-sm-12">
+										<textarea rows="2" class="form-control" id="feedback"></textarea>
 									</div>
-									
-									<div class="row mt-1">
-										<label for="markingDate" class="col-sm-1">Feedback</label>
-										<div class="col-sm-12">
-											<textarea rows="2" class="form-control" id="feedback"></textarea>
+
+								</div>
+
+								<div class="row mt-1">
+									<label for="markingDate" style="width: 70px;">Buyer:</label> <input
+										class="form-control" readonly style="width: 210px;"
+										type="text" id="buyerName"> <label for="markingDate"
+										style="width: 70px;">Purchase Order:</label> <input
+										class="form-control" readonly style="width: 210px;"
+										type="text" id="vPurchaseOrder">
+								</div>
+
+								<div class="row mt-1">
+
+									<label for="markingDate" style="width: 70px;">Style No:</label>
+									<input class="form-control" readonly style="width: 200px;"
+										type="text" id="styleNo"> <label for="markingDate"
+										style="width: 70px;">Item Description:</label> <input
+										class="form-control" readonly style="width: 250px;"
+										type="text" id="itemName">
+								</div>
+							</div>
+
+							<div id="samplecadtableList"></div>
+							<div class="row mt-1">
+								<div class="col-md-6">
+									<div class="progress">
+										<div id="bar" class="progress-bar" style="width: 0%"></div>
+									</div>
+
+									<div class="input-group mt-2">
+										<div class="custom-file">
+											<input type="file" id="files" multiple="">
 										</div>
-
+										<div class="input-group-append">
+											<button class="btn btn-sm btn-primary" type="button"
+												id="uploadButton" value="Upload">Upload</button>
+										</div>
 									</div>
-									
-									<div class="row mt-1">
-										<label for="markingDate" style="width:70px;">Buyer:</label>
-										<input class="form-control" readonly style="width:210px;" type="text" id="buyerName">
-										
-										<label for="markingDate" style="width:70px;">Purchase Order:</label>
-										<input class="form-control" readonly style="width:210px;" type="text" id="vPurchaseOrder">
-									</div>
-									
-									<div class="row mt-1">
-										
-										<label for="markingDate" style="width:70px;">Style No:</label>
-										<input class="form-control" readonly style="width:200px;" type="text" id="styleNo">
-										<label for="markingDate" style="width:70px;">Item Description:</label>
-										<input class="form-control" readonly style="width:250px;" type="text" id="itemName">
-									</div>
-							</div>
-
-						<div id="samplecadtableList">
-						
-						
-						</div>
-						<div class="row mt-1">
-						<div style="width: 55%">
-							<div class="progress">
-								<div id="bar" class="progress-bar" style="width: 0%"></div>
-							</div>
-
-							<div class="input-group mt-2">
-								<div class="custom-file">
-									<input type="file" id="files" multiple="">
 								</div>
-								<div class="input-group-append">
-									<button class="btn btn-sm btn-primary" type="button" id="uploadButton" value="Upload">Upload</button>
+
+								<div class="col-md-6">
+
+									<table class="table table-hover table-bordered table-sm mb-0">
+										<thead>
+											<tr>
+												<th>File Name</th>
+												<th>Upload By</th>
+												<th><span><i class='fa fa-download'></i></span></th>
+												<th><span><i class='fa fa-trash'></i></span></th>
+												<th><span><i class='fa fa-edit'></i></span></th>
+											</tr>
+										</thead>
+										<tbody id="fileList">
+
+										</tbody>
+									</table>
 								</div>
 							</div>
-						</div>
-					</div>
 						</div>
 
 					</div>
 
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">
-							<button type="button" id="save" onclick="insertSample()" class="btn btn-warning btn-sm"	onclick="">Save</button>
-							<button type="button" id="edit" class="btn btn-warning btn-sm"	onclick="editSmapleCad()">Edit</button>
+							<button type="button" id="save" onclick="insertSample()"
+								class="btn btn-warning btn-sm" onclick="">Save</button>
+							<button type="button" id="edit" class="btn btn-warning btn-sm"
+								onclick="editSmapleCad()">Edit</button>
 							<button type="button" id="btnRefresh" class="btn btn-dark btn-sm"
 								onclick="">Refresh</button>
-								
+
 
 						</div>
 					</div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<div class="input-group">
-					<input id="requisitionSearch" type="text" class="form-control"
-						placeholder="Search Sample Requisition"
-						aria-label="Recipient's username" aria-describedby="basic-addon2">
-					<div class="input-group-append">
-						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1"
+						role="dialog" aria-labelledby="exampleModalLabel"
+						aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<div class="input-group">
+										<input id="requisitionSearch" type="text" class="form-control"
+											placeholder="Search Sample Requisition"
+											aria-label="Recipient's username"
+											aria-describedby="basic-addon2">
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="fa fa-search"></i></span>
+										</div>
+									</div>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<table class="table table-hover table-bordered table-sm mb-0">
+										<thead>
+											<tr>
+												<th>SL#</th>
+												<th>Buyer</th>
+												<th>PO Id</th>
+												<th>Style No</th>
+												<th>Date</th>
+												<td><i class="fa fa-search"></i></td>
+												<td><i class="fa fa-print"></i></td>
+											</tr>
+										</thead>
+										<tbody id="poList">
+											<c:forEach items="${sampleReqList}" var="po"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td>${po.buyerOrderId}</td>
+													<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
+													<td>${po.styleNo}</td>
+													<td>${po.sampleDeadline}</td>
+													<td><i class="fa fa-search" style="cursor: pointer;"
+														onclick="searchSampleRequisition(${po.autoId})"> </i></td>
+													<td><i class="fa fa-print" style="cursor: pointer;"
+														onclick="printSampleRequisition(${po.autoId})"> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
 					</div>
-				</div>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead>
-						<tr>
-							<th>SL#</th>
-							<th>Buyer</th>
-							<th>PO Id</th>
-							<th>Style No</th>
-							<th>Date</th>
-							<td><i class="fa fa-search"></i></td>
-							<td><i class="fa fa-print"></i></td>
-						</tr>
-					</thead>
-					<tbody id="poList">
-						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
-							<tr>
-								<td>${counter.count}</td>
-								<td >${po.buyerOrderId}</td>
-								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
-								<td>${po.styleNo}</td>
-								<td>${po.sampleDeadline}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
-									onclick="searchSampleRequisition(${po.autoId})"> </i></td>
-								<td><i class="fa fa-print" style="cursor:pointer;"
-									onclick="printSampleRequisition(${po.autoId})"> </i></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
 
-		</div>
-	</div>
-</div>
+					<!-- Modal -->
+					<div class="modal fade" id="sampleCadModal" tabindex="-1"
+						role="dialog" aria-labelledby="sampleCadModal" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+									<div class="input-group">
+										<input id="cadSearch" type="text" class="form-control"
+											placeholder="Search Sample Requisition"
+											aria-label="Recipient's username"
+											aria-describedby="basic-addon2">
+										<div class="input-group-append">
+											<span class="input-group-text"><i class="fa fa-search"></i></span>
+										</div>
+									</div>
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<table class="table table-hover table-bordered table-sm mb-0">
+										<thead>
+											<tr>
+												<th>SL#</th>
+												<th>Sample Cad No</th>
+												<th>Buyer Name</th>
+												<th>Purchase Order</th>
+												<th>Style No</th>
+												<th>Item No</th>
+												<th>Sample Type</th>
+												<td><i class="fa fa-search"></i></td>
+												<td><i class="fa fa-print"></i></td>
+											</tr>
+										</thead>
+										<tbody id="poList">
+											<c:forEach items="${sampleCadList}" var="po"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td>${po.sampleCommentId}</td>
+													<td>${po.buyername}</td>
+													<td>${po.purchaseOrder}</td>
+													<td>${po.styleNo}</td>
+													<td>${po.itemName}</td>
+													<td>${po.sampleTypeId}</td>
+													<td><i class="fa fa-search" style="cursor: pointer;"
+														onclick="searchSampleCad(${po.sampleCommentId},${po.sampleReqId})">
+													</i></td>
+													<td><i class="fa fa-print" style="cursor: pointer;"
+														onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
 
-<!-- Modal -->
-<div class="modal fade" id="sampleCadModal" tabindex="-1" role="dialog"
-	aria-labelledby="sampleCadModal" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header">
-				<div class="input-group">
-					<input id="cadSearch" type="text" class="form-control"
-						placeholder="Search Sample Requisition"
-						aria-label="Recipient's username" aria-describedby="basic-addon2">
-					<div class="input-group-append">
-						<span class="input-group-text"><i class="fa fa-search"></i></span>
+							</div>
+						</div>
 					</div>
-				</div>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<table class="table table-hover table-bordered table-sm mb-0">
-					<thead>
-						<tr>
-							<th>SL#</th>
-							<th>Sample Cad No</th>
-							<th>Buyer Name</th>
-							<th>Purchase Order</th>
-							<th>Style No</th>
-							<th>Item No</th>
-							<th>Sample Type</th>
-							<td><i class="fa fa-search"></i></td>
-							<td><i class="fa fa-print"></i></td>
-						</tr>
-					</thead>
-					<tbody id="poList">
-						<c:forEach items="${sampleCadList}" var="po" varStatus="counter">
-							<tr>
-								<td>${counter.count}</td>
-								<td >${po.sampleCommentId}</td>
-								<td>${po.buyername}</td>
-								<td>${po.purchaseOrder}</td>
-								<td>${po.styleNo}</td>
-								<td>${po.itemName}</td>
-								<td>${po.sampleTypeId}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
-									onclick="searchSampleCad(${po.sampleCommentId},${po.sampleReqId})"> </i></td>
-								<td><i class="fa fa-print" style="cursor:pointer;"
-									onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
-							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-			</div>
-
-		</div>
-	</div>
-</div>
 
 				</div>
 			</div>
@@ -409,4 +437,5 @@ String userName=(String)session.getAttribute("userName");
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-<script src="${pageContext.request.contextPath}/assets/js/order/sampleCad.js"></script>
+<script
+	src="${pageContext.request.contextPath}/assets/js/order/sampleCad.js"></script>

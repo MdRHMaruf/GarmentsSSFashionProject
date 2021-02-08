@@ -4344,7 +4344,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,srd.buyerOrderId,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,isnull(srd.buyerOrderId,''),srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join tbSampleRequisition sr\r\n" + 
 					"					on sr.sampleReqId=srd.sampleReqId\r\n" + 
@@ -7060,6 +7060,153 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 		return dataList;
+	}
+
+
+
+	@Override
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+		Session session=HibernateUtil.openSession();
+		boolean fileinsert=false;
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if (!duplicatesampleFile(user, filename)) {
+				String sql="insert into tbsamplecadfiles ( samplecadid, filename, uploadedmachinip, entryby, entrytime) values "
+						+ "('"+smaplecadid+"','"+filename+"','"+uploadedpcip+"','"+user+"',CURRENT_TIMESTAMP)";
+				session.createSQLQuery(sql).executeUpdate();
+				tx.commit();
+				fileinsert= true;
+			}
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		session.close();
+		return fileinsert;
+	}
+	
+	
+	public boolean duplicatesampleFile(String user, String filename) {
+
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from tbsamplecadfiles where FileName like '"+filename+"' and entryby='"+user+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();							
+				//dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				exists=true;
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return exists;
+
+
+	}
+
+	@Override
+	public List<FileUpload> findsamplecadfiles(String userid, String samplereqid) {
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FileUpload tempFileUpload = null;
+		List<pg.orderModel.FileUpload> dataList=new ArrayList<pg.orderModel.FileUpload>();
+		int userwiseupload=0;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.id, a.filename, (select fullname from Tblogin where id=a.entryby) as username from tbsamplecadfiles a where entryby='"+userid+"' and samplecadid='"+samplereqid+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempFileUpload = new FileUpload();
+				tempFileUpload.setAutoid(element[0].toString());
+				tempFileUpload.setFilename(element[1].toString());
+				tempFileUpload.setUploadby(element[2].toString());
+				dataList.add(tempFileUpload);
+				exists=true;
+			}
+
+	
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean deletesamplefile(String filename, String id) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="";
+			sql="delete from tbsamplecadfiles where id='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+			return true;
+		}
+
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
 	}
 
 
