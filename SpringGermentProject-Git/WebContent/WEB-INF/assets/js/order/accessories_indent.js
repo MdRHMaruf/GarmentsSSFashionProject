@@ -401,7 +401,7 @@ $("#btnRecyclingData").click(() => {
 								left join tbColors c
 								on boed.ColorId = c.ColorId
 								left join tbSizeValues sv
-								on boed.autoId = sv.linkedAutoId and sv.type = 1
+								on boed.autoId = sv.linkedAutoId and sv.type = 1 and boed.sizeGroupId = sv.sizeGroupId 
 								left join tbStyleSize ss
 								on sv.sizeId = ss.id 
 								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
@@ -679,7 +679,7 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
 								$("#dataList").append(newRow);
-
+								
 							}
 
 						})
@@ -719,8 +719,10 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
 						$("#dataList").append(newRow);
+						
 					}
 				});
+				successAlert("Added To Temporary List... You should Confirm...");
 			} else {
 				warningAlert("Unit not Selected.....Please Select Unit");
 				$("#unit").focus();
