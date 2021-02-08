@@ -10,7 +10,7 @@ $('#btnEdit').hide();
 let unitList = {};
 
 window.onload = () => {
-	document.title = "Accessories Indent";
+	document.title = "Zipper Indent";
 
 	$.ajax({
 		type: 'GET',
@@ -38,7 +38,7 @@ window.onload = () => {
 
 function buyerWiseStyleLoad() {
 	let buyerId = $("#buyerName").val();
-
+	
 	// alert("buyerId "+buyerId);
 	if (buyerId != 0) {
 		$.ajax({
@@ -73,11 +73,12 @@ function buyerWiseStyleLoad() {
 }
 $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#buyerName").val().length > 0) {
-		let buyerIdList = '';
-		$("#buyerName").val().forEach(id => {
-			buyerIdList += `'${id}',`;
-		});
-		buyerIdList = buyerIdList.slice(0, -1);
+		let buyerIdList = $("#buyerName").val();
+		buyerIdList = `'${buyerIdList}'`;
+		// $("#buyerName").val().forEach(id => {
+		// 	buyerIdList += `'${id}',`;
+		// });
+		//buyerIdList = buyerIdList.slice(0, -1);
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -86,7 +87,7 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 				buyersId: buyerIdList
 			},
 			success: function (data) {
-				let options = "";
+				let options = "<option value='0'>Select Purchase Order</option>";
 				let buyerPoList = data.buyerPOList;
 				let length = buyerPoList.length;
 				for (let i = 0; i < length; i++) {
@@ -96,7 +97,7 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 				$("#purchaseOrder").html(options);
 				$('#purchaseOrder').selectpicker('refresh');
 
-				options = "";
+				options = "<option value='0'>Select Style</option>";
 				let styleList = data.styleList;
 
 				length = styleList.length;
@@ -118,11 +119,12 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 
 $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#purchaseOrder").val().length > 0) {
-		let poList = '';
-		$("#purchaseOrder").val().forEach(po => {
-			poList += `'${po}',`;
-		});
-		poList = poList.slice(0, -1);
+		let poList = $("#purchaseOrder").val();
+		poList += `'${poList}',`;
+		// $("#purchaseOrder").val().forEach(po => {
+		// 	poList += `'${po}',`;
+		// });
+		//poList = poList.slice(0, -1);
 		let selectedStyleId = $("#styleNo").val();
 		$.ajax({
 			type: 'GET',
@@ -132,7 +134,7 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
 				purchaseOrders: poList
 			},
 			success: function (data) {
-				let options = "";
+				let options = "<option value='0'>Select Style</option>";
 
 				let styleList = data.styleList;
 
@@ -151,19 +153,20 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
 
 $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#styleNo").val().length > 0) {
-		let styleIdList = '';
-		$("#styleNo").val().forEach(id => {
-			styleIdList += `'${id}',`;
-		});
-		styleIdList = styleIdList.slice(0, -1);
+		let styleIdList = $("#styleNo").val();
+		styleIdList += `'${styleIdList}',`;
+		// $("#styleNo").val().forEach(id => {
+		// 	styleIdList += `'${id}',`;
+		// });
+		//styleIdList = styleIdList.slice(0, -1);
 
 		if ($("#purchaseOrder").val().length > 0) {
 
-			let poList = '';
-			$("#purchaseOrder").val().forEach(id => {
-				poList += `'${id}',`;
-			});
-			poList = poList.slice(0, -1);
+			let poList = $("#purchaseOrder").val();
+			// $("#purchaseOrder").val().forEach(id => {
+			// 	poList += `'${id}',`;
+			// });
+			// poList = poList.slice(0, -1);
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -173,7 +176,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					styleIdList: styleIdList
 				},
 				success: function (data) {
-					let options = "";
+					let options = "<option value='0'>Select Color</option>";
 					let colorList = data.colorList;
 					length = colorList.length;
 					for (let i = 0; i < length; i++) {
@@ -182,7 +185,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					$("#color").html(options);
 					$('#color').selectpicker('refresh');
 
-					options = "";
+					options = "<option value='0'>Select Purchase Order</option>";
 					let shippingMarkList = data.shippingMarkList;
 					length = shippingMarkList.length;
 					for (let i = 0; i < length; i++) {
@@ -202,7 +205,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					styleIdList: styleIdList
 				},
 				success: function (data) {
-					let options = "";
+					let options = "<option value='0'>Select Style</option>";
 					let buyerPoList = data.buyerPOList;
 					let length = buyerPoList.length;
 					for (let i = 0; i < length; i++) {
@@ -224,7 +227,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 				styleIdList: styleIdList
 			},
 			success: function (data) {
-				let options = "";
+				let options = "<option value='0'>Select Item</option>";
 				let itemList = data.itemList;
 				let length = itemList.length;
 				for (let i = 0; i < length; i++) {
@@ -401,7 +404,7 @@ $("#btnRecyclingData").click(() => {
 								left join tbColors c
 								on boed.ColorId = c.ColorId
 								left join tbSizeValues sv
-								on boed.autoId = sv.linkedAutoId and sv.type = 1 and boed.sizeGroupId = sv.sizeGroupId 
+								on boed.autoId = sv.linkedAutoId and sv.type = 1
 								left join tbStyleSize ss
 								on sv.sizeId = ss.id 
 								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
@@ -410,7 +413,7 @@ $("#btnRecyclingData").click(() => {
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
-						url: './getAccessoriesRecyclingDataWithSize',
+						url: './getZipperRecyclingDataWithSize',
 						data: {
 							query: query,
 							query2: query2
@@ -528,7 +531,7 @@ $("#btnRecyclingData").click(() => {
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
-						url: './getAccessoriesRecyclingData',
+						url: './getZipperRecyclingData',
 						data: {
 							query: query
 						},
@@ -600,24 +603,24 @@ $("#btnAdd").click(() => {
 	let length = rowList.length;
 
 	if (length > 0) {
-		let accessoriesItemId = $("#accessoriesItem").val();
-		let accessoriesItemName = $("#accessoriesItem option:selected").text();
+		let zipperItemId = $("#zipperItem").val();
+		let zipperItemName = $("#zipperItem option:selected").text();
 
-		let accessoriesSize = $("#accessoriesSize").val();
-		let accessoriesColorId = $("#accessoriesColor").val();
-		let accessoriesBrandId = $("#brand").val();
+		let zipperSize = $("#zipperSize").val();
+		let zipperColorId = $("#zipperColor").val();
+		let zipperBrandId = $("#brand").val();
 		let unitId = $("#unit").val();
 		let unitQty = $("#unitQty").val();
 
 		let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
 		unitValue = unitValue == 0 ? 1 : unitValue;
 
-		let accessoriesDataList = $("#dataList tr");
-		length = accessoriesDataList.length;
+		let zipperDataList = $("#dataList tr");
+		length = zipperDataList.length;
 		let listRowId = 0;
-		if (length > 0) listRowId = accessoriesDataList[length - 1].id.slice(13);
+		if (length > 0) listRowId = zipperDataList[length - 1].id.slice(13);
 
-		if (accessoriesItemId != 0) {
+		if (zipperItemId != 0) {
 			if (unitId != 0) {
 
 				rowList.each((index, row) => {
@@ -662,8 +665,8 @@ $("#btnAdd").click(() => {
 							if (unitQty > 0) {
 
 								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' 
-										data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
-										data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
+										data-zipper-size='${zipperSize}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
 										<td>${++length}</td>
@@ -672,14 +675,14 @@ $("#btnAdd").click(() => {
 										<td>${itemName}</td>
 										<td>${color}</td>
 										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
-										<td id='indentAccessoriesName-${listRowId}'>${accessoriesItemName}</td>
+										<td id='indentZipperName-${listRowId}'>${zipperItemName}</td>
 										<td>${sizeName}</td>
 										<td id='indentUnitQty-${listRowId}'>${unitQty}</td>
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
 								$("#dataList").append(newRow);
-								
+
 							}
 
 						})
@@ -702,8 +705,8 @@ $("#btnAdd").click(() => {
 
 
 						let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
-										data-size-id='' data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
-										data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
+										data-size-id='' data-zipper-size='${zipperSize}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
 										<td>${++length}</td>
@@ -712,24 +715,22 @@ $("#btnAdd").click(() => {
 										<td>${itemName}</td>
 										<td>${color}</td>
 										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
-										<td id='indentAccessoriesName-${listRowId}'>${accessoriesItemName}</td>
+										<td id='indentZipperName-${listRowId}'>${zipperItemName}</td>
 										<td></td>
 										<td id='indentUnitQty-${listRowId}'>${unitQty}</td>
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
 						$("#dataList").append(newRow);
-						
 					}
 				});
-				successAlert("Added To Temporary List... You should Confirm...");
 			} else {
 				warningAlert("Unit not Selected.....Please Select Unit");
 				$("#unit").focus();
 			}
 		} else {
-			warningAlert("Accessories Item Not Selected.....Please Select accessories Item");
-			$("#accessoriesItem").focus();
+			warningAlert("Zipper Item Not Selected.....Please Select zipper Item");
+			$("#zipperItem").focus();
 		}
 	} else {
 		warningAlert("Please Recycling your data");
@@ -740,12 +741,12 @@ function editAction() {
 	let autoId = $("#autoId").val();
 	let indentType = $("#indentType").val();
 
-	let accessoriesItemId = $("#accessoriesItem").val();
-	let accessoriesItemName = $("#accessoriesItem option:selected").text();
+	let zipperItemId = $("#zipperItem").val();
+	let zipperItemName = $("#zipperItem option:selected").text();
 
-	let accessoriesSize = $("#accessoriesSize").val();
-	let accessoriesColorId = $("#accessoriesColor").val();
-	let accessoriesBrandId = $("#brand").val();
+	let zipperSize = $("#zipperSize").val();
+	let zipperColorId = $("#zipperColor").val();
+	let zipperBrandId = $("#brand").val();
 	let unitId = $("#unit").val();
 
 
@@ -773,11 +774,11 @@ function editAction() {
 
 		let row = $("#newIndentRow-" + autoId);
 
-		row.attr('data-accessories-item-id', accessoriesItemId);
-		$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
-		row.attr('data-accessories-size', accessoriesSize);
-		row.attr('data-accessories-color-id', accessoriesColorId);
-		row.attr('data-accessories-brand-id', accessoriesBrandId);
+		row.attr('data-zipper-item-id', zipperItemId);
+		$("#indentZipperName-" + autoId).text(zipperItemName);
+		row.attr('data-zipper-size', zipperSize);
+		row.attr('data-zipper-color-id', zipperColorId);
+		row.attr('data-zipper-brand-id', zipperBrandId);
 		row.attr('data-unit-id', unitId);
 
 		row.attr('data-order-qty', orderQty);
@@ -797,19 +798,19 @@ function editAction() {
 		$("#btnEdit").hide();
 	} else {
 
-		let accessoriesIndentNo = $("#accessoriesIndentId").val();
+		let zipperIndentNo = $("#zipperIndentId").val();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
-			url: './editAccessoriesIndent',
+			url: './editZipperIndent',
 			data: {
 				autoid: autoId,
-				aiNo: accessoriesIndentNo,
-				accessoriesId: accessoriesItemId,
-				accessoriesname: accessoriesItemName,
-				accessoriessize: accessoriesSize,
-				accessoriesColorId: accessoriesColorId,
-				indentBrandId: accessoriesBrandId,
+				aiNo: zipperIndentNo,
+				zipperId: zipperItemId,
+				zippername: zipperItemName,
+				zippersize: zipperSize,
+				zipperColorId: zipperColorId,
+				indentBrandId: zipperBrandId,
 				orderqty: orderQty,
 				qtyindozen: dozenQty,
 				reqperpcs: reqPerPcs,
@@ -830,11 +831,11 @@ function editAction() {
 				if (data == 'successfull') {
 					let row = $("#oldIndentRow-" + autoId);
 
-					row.attr('data-accessories-item-id', accessoriesItemId);
-					$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
-					row.attr('data-accessories-size', accessoriesSize);
-					row.attr('data-accessories-color-id', accessoriesColorId);
-					row.attr('data-accessories-brand-id', accessoriesBrandId);
+					row.attr('data-zipper-item-id', zipperItemId);
+					$("#indentZipperName-" + autoId).text(zipperItemName);
+					row.attr('data-zipper-size', zipperSize);
+					row.attr('data-zipper-color-id', zipperColorId);
+					row.attr('data-zipper-brand-id', zipperBrandId);
 					row.attr('data-unit-id', unitId);
 
 					row.attr('data-order-qty', orderQty);
@@ -892,9 +893,9 @@ function refreshAction() {
 	$("#checkColor").prop('checked', false);
 	$("#checkShippingMark").prop('checked', false);
 
-	$("#accessoriesItem").val(0).change();
-	$("#accessoriesSize").val("");
-	$("#accessoriesColor").val(0).change();
+	$("#zipperItem").val(0).change();
+	$("#zipperSize").val("");
+	$("#zipperColor").val(0).change();
 	$("#brand").val(0).change();
 	$("#unit").val(0).change();
 	$("#unitQty").val(0);
@@ -925,18 +926,18 @@ function refreshAction() {
 
 function confirmAction() {
 	let userId = $("#userId").val();
-	let accessoriesIndentId = $("#accessoriesIndentId").val();
+	let zipperIndentId = $("#zipperIndentId").val();
 
 	let rowList = $("#dataList tr");
 	let length = rowList.length;
 
 
 	if (length > 0) {
-		if (confirm("Are you Confirm to Save This Accessories Indent?")) {
+		if (confirm("Are you Confirm to Save This Zipper Indent?")) {
 			newIndentList = $("tr.newIndentRow");
 
-			let accessoriesItems = {};
-			accessoriesItems['list'] = [];
+			let zipperItems = {};
+			zipperItems['list'] = [];
 
 			newIndentList.each((index, indentRow) => {
 				let id = indentRow.id.slice(13);
@@ -948,10 +949,10 @@ function confirmAction() {
 					colorId: indentRow.getAttribute('data-color-id'),
 					shippingMark: $("#indentShippingMark-" + id).text(),
 					sizeId: indentRow.getAttribute('data-size-id'),
-					accessoriesItemId: indentRow.getAttribute('data-accessories-item-id'),
-					accessoriesSize: indentRow.getAttribute('data-accessories-size'),
-					accessoriesColorId: indentRow.getAttribute('data-accessories-color-id'),
-					accessoriesBrandId: indentRow.getAttribute('data-accessories-brand-id'),
+					zipperItemId: indentRow.getAttribute('data-zipper-item-id'),
+					zipperSize: indentRow.getAttribute('data-zipper-size'),
+					zipperColorId: indentRow.getAttribute('data-zipper-color-id'),
+					zipperBrandId: indentRow.getAttribute('data-zipper-brand-id'),
 					orderQty: indentRow.getAttribute('data-order-qty'),
 					dozenQty: indentRow.getAttribute('data-dozen-qty'),
 					reqPerPcs: indentRow.getAttribute('data-req-per-pcs'),
@@ -967,22 +968,22 @@ function confirmAction() {
 					userId: userId
 				}
 
-				accessoriesItems.list.push(indent);
+				zipperItems.list.push(indent);
 			})
 
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
-				url: './confirmAccessoriesIndent',
+				url: './confirmZipperIndent',
 				data: {
-					accessoriesIndentId: accessoriesIndentId,
-					accessoriesItems: JSON.stringify(accessoriesItems),
+					zipperIndentId: zipperIndentId,
+					zipperItems: JSON.stringify(zipperItems),
 				},
 				success: function (data) {
 					if (data.result != 'something wrong') {
-						$("#accessoriesIndentId").val(data.result);
-						$("#accessoriesId").text(data.result);
-						alert("Accessories Save Successfully;")
+						$("#zipperIndentId").val(data.result);
+						$("#zipperId").text(data.result);
+						alert("Zipper Save Successfully;")
 					} else {
 						alert("Incomplete...Something Wrong");
 					}
@@ -1020,10 +1021,10 @@ function setIndentItem(rowId, indentType) {
 
 	let row = $(`#${indentType}-${rowId}`);
 
-	$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
-	$("#accessoriesSize").val(row.attr('data-accessories-size'));
-	$("#accessoriesColor").val(row.attr('data-accessories-color-id')).change();
-	$("#brand").val(row.attr('data-accessories-brand-id')).change();
+	$("#zipperItem").val(row.attr('data-zipper-item-id')).change();
+	$("#zipperSize").val(row.attr('data-zipper-size'));
+	$("#zipperColor").val(row.attr('data-zipper-color-id')).change();
+	$("#brand").val(row.attr('data-zipper-brand-id')).change();
 	$("#unit").val(row.attr('data-unit-id')).change();
 	$("#unitQty").val(parseFloat($("#indentUnitQty-" + rowId).text()).toFixed(2));
 	$("#orderQty").val(parseFloat(row.attr('data-order-qty')).toFixed(2));
@@ -1045,22 +1046,22 @@ function setIndentItem(rowId, indentType) {
 }
 
 function deleteIndentRow(rowId, indentType) {
-	if (confirm("Are you sure to Delete this Accessories?")) {
+	if (confirm("Are you sure to Delete this Zipper?")) {
 		if (indentType == 'newIndentRow') {
 			$("#newIndentRow-" + rowId).remove();
 		} else {
-			let accessoriesIndentNo = $("#accessoriesIndentId").val();
+			let zipperIndentNo = $("#zipperIndentId").val();
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
-				url: './deleteAccessoriesIndent',
+				url: './deleteZipperIndent',
 				data: {
-					accessorienIndentId: accessoriesIndentNo,
+					accessorienIndentId: zipperIndentNo,
 					indentAutoId: rowId
 				},
 				success: function (data) {
 					if (data.result != 'something wrong') {
-						alert("Accessories Indent Item Delete Successfully..");
+						alert("Zipper Indent Item Delete Successfully..");
 						$("#oldIndentRow-" + rowId).remove();
 					} else {
 						alert("Incomplete...Something Wrong");
@@ -1103,9 +1104,9 @@ function saveEvent() {
 	let itemColor = $("#colorName").val();
 	let ShippingMark = $("#shippingmark").val();
 
-	let accessoriesItem = $("#accessoriesItem").val();
+	let zipperItem = $("#zipperItem").val();
 
-	let accessoriesSize = $("#accessoriesSize").val();
+	let zipperSize = $("#zipperSize").val();
 	let size = $("#size").val();
 
 	let orderqty = $("#orderQty").val();
@@ -1125,7 +1126,7 @@ function saveEvent() {
 	let unit = $("#unit").val();
 	let unitQty = $("#unitQty").val();
 	let brand = $("#brand").val();
-	let accessoriescolor = $("#color").val();
+	let zippercolor = $("#color").val();
 
 	if (POno == 0) {
 		alert("Select Purchase Order No")
@@ -1133,8 +1134,8 @@ function saveEvent() {
 		alert("Select Style No")
 	} else if (item == 0) {
 		alert("Select Item Name")
-	} else if (accessoriesItem == 0) {
-		alert("Select accessories Item name")
+	} else if (zipperItem == 0) {
+		alert("Select zipper Item name")
 	} else {
 
 		//conosle.log("style " + style)
@@ -1143,15 +1144,15 @@ function saveEvent() {
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
-				url: './insertAccessoriesIndent',
+				url: './insertZipperIndent',
 				data: {
 					po: POno,
 					style: style,
 					itemname: item,
 					itemcolor: itemColor,
 					shippingmark: ShippingMark,
-					accessoriesname: accessoriesItem,
-					accessoriessize: accessoriesSize,
+					zippername: zipperItem,
+					zippersize: zipperSize,
 					size: size,
 					orderqty: orderqty,
 					qtyindozen: qtyindozen,
@@ -1166,12 +1167,12 @@ function saveEvent() {
 					unit: unit,
 					unitQty: unitQty,
 					brand: brand,
-					accessoriescolor: accessoriescolor
+					zippercolor: zippercolor
 				},
 				success: function (data) {
 
 					$("#dataList").empty();
-					$("#dataList").append(AccessoriesDataShowInTable(data.result));
+					$("#dataList").append(ZipperDataShowInTable(data.result));
 
 
 				},
@@ -1523,43 +1524,43 @@ function setUnitQty() {
 }
 
 
-function searchAccessoriesIndent(accessoriesIndentId) {
+function searchZipperIndent(zipperIndentId) {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './getAccessoriesIndentList',
+		url: './getZipperIndentList',
 		data: {
-			accessoriesIndentId: accessoriesIndentId
+			zipperIndentId: zipperIndentId
 		},
 		success: function (data) {
 
-			$("#accessoriesId").text(data.result[0].aiNo);
-			$("#accessoriesIndentId").val(data.result[0].aiNo);
-			drawAccessoriesIndentListTable(data.result);
+			$("#zipperId").text(data.result[0].aiNo);
+			$("#zipperIndentId").val(data.result[0].aiNo);
+			drawZipperIndentListTable(data.result);
 
 			$("#exampleModal").modal('hide');
 		}
 	});
 
 }
-function printAccessories() {
-	printAccessoriesIndent($("#accessoriesIndentId").val());
+function printZipper() {
+	printZipperIndent($("#zipperIndentId").val());
 }
 
-function printAccessoriesIndent(aiNo) {
-	let url = "printAccessoriesIndent/" + aiNo;
+function printZipperIndent(aiNo) {
+	let url = "printZipperIndent/" + aiNo;
 	window.open(url, '_blank');
 
 	// $.ajax({
 	// 	type: 'GET',
 	// 	dataType: 'json',
-	// 	url: './accessoriesIndentInfo',
+	// 	url: './zipperIndentInfo',
 	// 	data: {
 	// 		aiNo: aiNo
 	// 	},
 	// 	success: function (data) {
 	// 		if (data == "Success") {
-	// 			let url = "printAccessoriesIndent";
+	// 			let url = "printZipperIndent";
 	// 			window.open(url, '_blank');
 
 	// 		}
@@ -1568,14 +1569,14 @@ function printAccessoriesIndent(aiNo) {
 
 }
 
-function drawAccessoriesIndentListTable(data) {
+function drawZipperIndentListTable(data) {
 	let oldRows = '';
 	let length = $("#dataList tr").length;
 	data.forEach((indent) => {
 		let autoId = indent.autoid;
 		oldRows += `<tr id='oldIndentRow-${autoId}' class='oldIndentRow' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-color-id='${indent.itemColorId}' data-size-id='${indent.size}' 
-										data-accessories-size='${indent.accessoriessize}' data-accessories-item-id='${indent.accessoriesId}' data-accessories-color-id='${indent.accessoriesColorId}' 
-										data-accessories-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}'
+										data-zipper-size='${indent.zippersize}' data-zipper-item-id='${indent.zipperId}' data-zipper-color-id='${indent.zipperColorId}' 
+										data-zipper-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}'
 										data-order-qty='${indent.orderqty}' data-dozen-qty='${indent.qtyindozen}' data-req-per-pcs='${indent.reqperpcs}' data-req-per-dozen='${indent.reqperdozen}' data-per-unit='${indent.perunit}' data-total-box='${indent.totalbox}'
 										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
 										<td>${++length}</td>
@@ -1584,7 +1585,7 @@ function drawAccessoriesIndentListTable(data) {
 										<td>${indent.itemname}</td>
 										<td>${indent.itemcolor}</td>
 										<td id='indentShippingMark-${autoId}'>${indent.shippingmark}</td>
-										<td id='indentAccessoriesName-${autoId}'>${indent.accessoriesName}</td>
+										<td id='indentZipperName-${autoId}'>${indent.zipperName}</td>
 										<td>${indent.sizeName}</td>
 										<td id='indentUnitQty-${autoId}'>${parseFloat(indent.requiredUnitQty).toFixed(2)}</td>
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${autoId}','oldIndentRow')" style='cursor:pointer;'></i></td>
@@ -1602,15 +1603,15 @@ function btnInstallEvent() {
 	let styleId = $("#styleNo").val();
 	let itemId = $("#itemName").val();
 	let colorId = $("#colorName").val();
-	let installAccessories = $("#sameAsAccessories").val();
-	let forAccessories = $("#accessoriesItem").val();
+	let installZipper = $("#sameAsZipper").val();
+	let forZipper = $("#zipperItem").val();
 
 	if (purchaseOrder != '') {
 		if (styleId != '0') {
 			if (itemId != '0') {
 				if (colorId != '0') {
-					if (installAccessories != '0') {
-						if (forAccessories != '0') {
+					if (installZipper != '0') {
+						if (forZipper != '0') {
 							$.ajax({
 								type: 'POST',
 								dataType: 'json',
@@ -1621,13 +1622,13 @@ function btnInstallEvent() {
 									styleId: styleId,
 									itemId: itemId,
 									colorId: colorId,
-									installAccessories: installAccessories,
-									forAccessories: forAccessories
+									installZipper: installZipper,
+									forZipper: forZipper
 								},
 								success: function (data) {
 
 									$("#dataList").empty();
-									$("#dataList").append(AccessoriesDataShowInTable(data.result));
+									$("#dataList").append(ZipperDataShowInTable(data.result));
 
 								},
 								error: function (jqXHR, textStatus, errorThrown) {
@@ -1652,11 +1653,11 @@ function btnInstallEvent() {
 							});
 						}
 						else {
-							alert("Provide Accessories Name");
+							alert("Provide Zipper Name");
 						}
 					}
 					else {
-						alert("Provide Accessories Name");
+						alert("Provide Zipper Name");
 					}
 
 				}

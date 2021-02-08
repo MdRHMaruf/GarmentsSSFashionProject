@@ -918,6 +918,7 @@ function totalQuantityCalculate() {
     $("#width").val("0");
     $("#width").prop("disabled", false);
     $("#yard").prop("disabled", false);
+    $("#gsm").prop("disabled", false);
     $("#yard").val($("#consumption").val());
     //$("#gsm").prop("disabled", false);
     //$("#width").prop("disabled", false);
@@ -927,6 +928,7 @@ function totalQuantityCalculate() {
     $("#width").val("0");
     $("#width").prop("disabled", true);
     $("#yard").prop("disabled", true);
+    $("#gsm").prop("disabled", true);
     $("#yard").val("0");
     //$("#gsm").prop("disabled", true);
     //$("#width").prop("disabled", true);
