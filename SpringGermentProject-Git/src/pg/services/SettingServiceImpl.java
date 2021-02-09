@@ -131,6 +131,13 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.getAllNoitice( deptid, nm);
 	}
+
+
+	@Override
+	public List<noticeModel> getAllnoticesforSearch() {
+		// TODO Auto-generated method stub
+		return settDAO.getAllnoticesforSearch();
+	}
 	
 
 }

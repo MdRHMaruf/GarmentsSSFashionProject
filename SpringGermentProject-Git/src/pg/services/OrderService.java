@@ -102,6 +102,8 @@ public interface OrderService {
 	boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId);
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent(String userId);
+	
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems);
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
@@ -210,6 +212,12 @@ public interface OrderService {
 	List<SampleRequisitionItem> getSampleRequistionItemData(String itemAutoId);
 	boolean editItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId);
+	
+	boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip);
+	
+	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
+	boolean deletesamplefile(String filename, String id);
+	
 }
 
 

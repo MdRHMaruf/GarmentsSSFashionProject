@@ -11,31 +11,14 @@
 
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
 
 <div class="page-wrapper">
-	<div class="alert alert-success alert-dismissible fade show"
-		style="display: none;">
-		<p id="successAlert" class="mb-0">
-			<strong>Success!</strong> Unit Name Save Successfully..
-		</p>
-	</div>
-	<div class="alert alert-warning alert-dismissible fade show"
-		style="display: none;">
-		<p id="warningAlert" class="mb-0">
-			<strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...
-		</p>
-	</div>
-	<div class="alert alert-danger alert-dismissible fade show"
-		style="display: none;">
-		<p id="dangerAlert" class="mb-0">
-			<strong>Wrong!</strong> Something Wrong...
-		</p>
-	</div>
+
 	<input type="hidden" id="userId" value="<%=userId%>"> <input
 		type="hidden" id="buyerPOId" value="0"> <input type="hidden"
 		id="itemAutoId" value="0">
@@ -55,7 +38,8 @@ String userName=(String)session.getAttribute("userName");
 				<div class="row">
 					<div class="form-group col-md-4 mb-1" style="padding-right: 1px;">
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0">Buyer
-							Name:</label>
+							Name<span style="color: red">*</span>
+						</label>
 						<div class="row">
 							<select id="buyerName" class="selectpicker col-md-12"
 								onchange="buyerWiseStyleLoad()" data-live-search="true"
@@ -72,7 +56,8 @@ String userName=(String)session.getAttribute("userName");
 					<div class="form-group col-md-4 mb-1"
 						style="padding-left: 1px; padding-right: 1px;">
 						<label for="styleNo" class="col-form-label-sm mb-0 pb-0">Style
-							No:</label>
+							No<span style="color: red">*</span>
+						</label>
 						<div class="row">
 							<select id="styleNo" class="selectpicker col-md-12"
 								onchange="styleWiseItemLoad()" data-live-search="true"
@@ -84,7 +69,8 @@ String userName=(String)session.getAttribute("userName");
 					</div>
 					<div class="form-group col-md-4 mb-1" style="padding-left: 1px;">
 						<label for="itemType" class="col-form-label-sm mb-0 pb-0">Item
-							Type:</label>
+							Type<span style="color: red">*</span>
+						</label>
 						<div class="row">
 							<select id="itemType" class="selectpicker col-md-12"
 								data-live-search="true"
@@ -95,8 +81,43 @@ String userName=(String)session.getAttribute("userName");
 
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-md-7">
+				<div class="row mt-1">
+					<div class='col-md-4 px-1'>
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class='my-0' for="factory">Factory<span
+										style="color: red">*</span></label></span>
+							</div>
+							<select id="factory" class="form-control selectpicker"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray form-control-sm">
+								<option value="0">Select Factory</option>
+								<c:forEach items="${factoryList}" var="factory">
+									<option value="${factory.factoryid}">${factory.factoryname}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<div class='col-md-4 px-1'>
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class='my-0' for="color">Color<span style="color: red">*</span></label></span>
+							</div>
+							<select id="color" class="form-control selectpicker"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray form-control-sm">
+								<option value="0">Select Color</option>
+								<c:forEach items="${colorList}" var="color">
+									<option value="${color.colorId}">${color.colorName}</option>
+								</c:forEach>
+							</select>
+						</div>
+					</div>
+					<%-- <div class="col-md-7">
 						<div class="form-group mb-0  row">
 							<label for="factory" class="col-md-2 col-form-label-sm pr-0 pb-0">Factory</label>
 
@@ -111,15 +132,14 @@ String userName=(String)session.getAttribute("userName");
 							</select>
 
 						</div>
-					</div>
+					</div> --%>
 
-					<div class="col-md-5">
+					<%-- <div class="col-md-5">
 
 						<div class="form-group mb-0 row">
-							<label for="color" class="col-md-2 col-form-label-sm pr-0 pb-0">Color</label>
-
-							<select id="color" class="selectpicker col-md-10"
-								data-live-search="true"
+							<label for="color" class="col-md-2 col-form-label-sm pr-0 pb-0">Color<span
+								style="color: red">*</span></label> <select id="color"
+								class="selectpicker col-md-10" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 
 								<option value="0">Select Color</option>
@@ -128,14 +148,41 @@ String userName=(String)session.getAttribute("userName");
 								</c:forEach>
 							</select>
 						</div>
+					</div> --%>
+				</div>
+				<div class="row mt-1">
+					<div class="col-md-4 px-1">
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class="my-0" for="customerOrder">Customer Order<span
+										style="color: red">*</span></label></span>
+							</div>
+							<input id="customerOrder" type="text" class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm">
+						</div>
+					</div>
+					<div class="col-md-4 px-1">
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class="my-0" for="purchaseOrder">Purchase Order<span
+										style="color: red">*</span></label></span>
+							</div>
+							<input id="purchaseOrder" type="text" class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm">
+						</div>
 					</div>
 				</div>
-				<div class="row">
+				<%-- <div class="row">
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="customerOrder "
 								class="col-md-4 col-form-label-sm pr-0 pb-0">Customer
-								Order</label>
+								Order<span style="color: red">*</span>
+							</label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control-sm" id="customerOrder">
 							</div>
@@ -147,7 +194,8 @@ String userName=(String)session.getAttribute("userName");
 						<div class="form-group mb-0 row">
 							<label for="purchaseOrder"
 								class="col-md-4 col-form-label-sm pr-0 pb-0">Purchase
-								Order</label>
+								Order<span style="color: red">*</span>
+							</label>
 							<div class="col-md-8">
 								<input type="text" class="form-control-sm" id="purchaseOrder">
 							</div>
@@ -155,15 +203,45 @@ String userName=(String)session.getAttribute("userName");
 
 
 					</div>
-				</div>
-
-				<div class="form-group row mb-0">
-					<label for="shippingMark" class="col-sm-2 col-form-label-sm pr-0">Shipping
-						mark</label>
-					<div class="col-sm-10">
-						<input type="text" class="form-control-sm" id="shippingMark">
+				</div> --%>
+				<div class="row mt-1">
+					<div class="col-md-4 px-1">
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class="my-0" for="shippingMark">Shipping Mark</label></span>
+							</div>
+							<input id="shippingMark" type="text" class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm">
+						</div>
+					</div>
+					<div class="col-md-4 px-1">
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class="my-0" for="shipmentDate">Shipment Date<span
+										style="color: red">*</span></label></span>
+							</div>
+							<input id="shipmentDate" type="date" class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm">
+						</div>
+					</div>
+					<div class="col-md-4 px-1">
+						<div class="input-group input-group-sm mb-1">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroup-sizing-sm"><label
+									class="my-0" for="inspectionDate">Inspection Date<span
+										style="color: red">*</span></label></span>
+							</div>
+							<input id="inspectionDate" type="date" class="form-control"
+								aria-label="Sizing example input"
+								aria-describedby="inputGroup-sizing-sm">
+						</div>
 					</div>
 				</div>
+
 
 				<div class="row ">
 					<div class="col-md-8">
@@ -173,9 +251,13 @@ String userName=(String)session.getAttribute("userName");
 									<label for="paymentTerm"
 										class="col-md-6 col-form-label-sm pr-0">Payment Term</label> <select
 										id="paymentTerm" class="form-control-sm col-md-5">
-										<%for(PaymentType pType:PaymentType.values()){%>
+										<%
+											for (PaymentType pType : PaymentType.values()) {
+										%>
 										<option value="<%=pType.name()%>"><%=pType.name()%></option>
-										<%}%>
+										<%
+											}
+										%>
 									</select>
 
 								</div>
@@ -186,9 +268,13 @@ String userName=(String)session.getAttribute("userName");
 									<label for="currency" class="col-md-4 col-form-label-sm pr-0">Currency</label>
 									<select id="currency" class="form-control-sm col-md-6">
 										<option value="0">Select Currency</option>
-										<%for(Currency currency: Currency.values()) {%>
+										<%
+											for (Currency currency : Currency.values()) {
+										%>
 										<option value="<%=currency.name()%>"><%=currency.name()%></option>
-										<%}%>
+										<%
+											}
+										%>
 									</select>
 
 								</div>
@@ -240,6 +326,24 @@ String userName=(String)session.getAttribute("userName");
 
 
 			</div>
+		</div>
+		<div class="alert alert-success alert-dismissible fade show"
+			style="display: none;">
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Unit Name Save Successfully..
+			</p>
+		</div>
+		<div class="alert alert-warning alert-dismissible fade show"
+			style="display: none;">
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...
+			</p>
+		</div>
+		<div class="alert alert-danger alert-dismissible fade show"
+			style="display: none;">
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
 		</div>
 		<div id="tableList"></div>
 
@@ -331,7 +435,7 @@ String userName=(String)session.getAttribute("userName");
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
 				</div>
-				
+
 				<button type="button" class="close" data-dismiss="modal"
 					aria-label="Close">
 					<span aria-hidden="true">&times;</span>

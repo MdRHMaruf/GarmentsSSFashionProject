@@ -11,8 +11,6 @@
 <%
 	String userId=(String) request.getAttribute("userId");	
 	String userName=(String) request.getAttribute("userName");
-	byte[] decodedBytesUserId = Base64.getDecoder().decode(userId);
-	userId = new String(decodedBytesUserId);
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">

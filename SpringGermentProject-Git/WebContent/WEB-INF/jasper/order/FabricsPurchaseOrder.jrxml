@@ -770,7 +770,7 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
-			<image scaleImage="FillFrame">
+			<image scaleImage="FillFrame" onErrorType="Blank">
 				<reportElement x="1" y="33" width="118" height="43" uuid="ac84c23f-1835-4a76-a90c-16b4c7ebeebb"/>
 				<imageExpression><![CDATA[$F{Signature}]]></imageExpression>
 			</image>

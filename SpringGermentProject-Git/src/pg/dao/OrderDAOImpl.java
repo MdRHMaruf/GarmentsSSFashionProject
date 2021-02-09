@@ -1534,8 +1534,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="insert into TbBuyerOrderEstimateSummary (BuyerId,Period,PaymentTerm,Incoterm,Currency,QCFor,TotalUnit,UnitCmt,TotalPrice,UnitFob,TotalAmount,note,remarks,EntryTime,UserId) "
-					+ "values('"+buyerPo.getBuyerId()+"','','"+buyerPo.getPaymentTerm()+"','','"+buyerPo.getCurrency()+"','','"+buyerPo.getTotalUnit()+"','"+buyerPo.getUnitCmt()+"','"+buyerPo.getTotalPrice()+"','"+buyerPo.getUnitFob()+"','"+buyerPo.getTotalAmount()+"','"+buyerPo.getNote()+"','"+buyerPo.getRemarks()+"',CURRENT_TIMESTAMP,'"+buyerPo.getUserId()+"');";
+			String sql="insert into TbBuyerOrderEstimateSummary (BuyerId,Period,PaymentTerm,Incoterm,Currency,QCFor,TotalUnit,UnitCmt,TotalPrice,UnitFob,TotalAmount,shipmentDate,inspectionDate,note,remarks,EntryTime,UserId) "
+					+ "values('"+buyerPo.getBuyerId()+"','','"+buyerPo.getPaymentTerm()+"','','"+buyerPo.getCurrency()+"','','"+buyerPo.getTotalUnit()+"','"+buyerPo.getUnitCmt()+"','"+buyerPo.getTotalPrice()+"','"+buyerPo.getUnitFob()+"','"+buyerPo.getTotalAmount()+"','"+buyerPo.getShipmentDate()+"','"+buyerPo.getInspectionDate()+"','"+buyerPo.getNote()+"','"+buyerPo.getRemarks()+"',CURRENT_TIMESTAMP,'"+buyerPo.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
 			String buyerPoId ="";
@@ -1587,7 +1587,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="update TbBuyerOrderEstimateSummary set BuyerId='"+buyerPo.getBuyerId()+"',Period='',PaymentTerm='"+buyerPo.getPaymentTerm()+"',Incoterm='',Currency='"+buyerPo.getCurrency()+"',QCFor='',TotalUnit='"+buyerPo.getTotalUnit()+"',UnitCmt='"+buyerPo.getUnitCmt()+"',TotalPrice='"+buyerPo.getTotalPrice()+"',UnitFob='"+buyerPo.getUnitFob()+"',TotalAmount='"+buyerPo.getTotalAmount()+"',note='"+buyerPo.getNote()+"',remarks='"+buyerPo.getRemarks()+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+buyerPo.getBuyerPoId()+"'";		
+			String sql="update TbBuyerOrderEstimateSummary set BuyerId='"+buyerPo.getBuyerId()+"',Period='',PaymentTerm='"+buyerPo.getPaymentTerm()+"',Incoterm='',Currency='"+buyerPo.getCurrency()+"',QCFor='',TotalUnit='"+buyerPo.getTotalUnit()+"',UnitCmt='"+buyerPo.getUnitCmt()+"',TotalPrice='"+buyerPo.getTotalPrice()+"',UnitFob='"+buyerPo.getUnitFob()+"',TotalAmount='"+buyerPo.getTotalAmount()+"',shipmentDate='"+buyerPo.getShipmentDate()+"',inspectionDate='"+buyerPo.getInspectionDate()+"',note='"+buyerPo.getNote()+"',remarks='"+buyerPo.getRemarks()+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+buyerPo.getBuyerPoId()+"'";		
 			session.createSQLQuery(sql).executeUpdate();
 
 
@@ -1666,7 +1666,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select autoId,BuyerId,b.name,PaymentTerm,Currency,note,remarks,bos.UserId\r\n" + 
+			String sql="select autoId,BuyerId,b.name,PaymentTerm,Currency,note,remarks,bos.UserId,(SELECT CONVERT(varchar, shipmentDate, 25)) as shipmentDate,(SELECT CONVERT(varchar, inspectionDate, 25)) as inspectionDate\r\n" + 
 					"from TbBuyerOrderEstimateSummary bos\r\n" + 
 					"join tbBuyer b\r\n" + 
 					"on bos.BuyerId = b.id\r\n" + 
@@ -1678,6 +1678,8 @@ public class OrderDAOImpl implements OrderDAO{
 
 				buyerPo= new BuyerPO(element[0].toString(), element[1].toString(), element[3].toString(), element[4].toString(), 0.0, 0.0, 0.0,0.0,0.0, element[5].toString(),element[6].toString(), element[7].toString());
 				buyerPo.setBuyerName(element[2].toString());
+				buyerPo.setShipmentDate(element[8].toString());
+				buyerPo.setInspectionDate(element[9].toString());
 			}
 			buyerPo.setItemList(getBuyerPOItemList(buyerPoNo,buyerPo.getUserId()));
 
@@ -2920,6 +2922,72 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 
 			return accessoriesIndentId;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "something wrong";
+
+	}
+	
+	
+	@Override
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CommonModel> query=new ArrayList<CommonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			if(zipperIndentId.equals("New")) {
+				String sql="select (isnull(max(AINo),0)+1) as maxId from tbZipperIndent";
+				List<?> list = session.createSQLQuery(sql).list();
+				if(list.size()>0) {		
+					zipperIndentId = list.get(0).toString();
+				}
+			}
+
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(zipperItems);
+			JSONObject indentObject = (JSONObject)jsonParser.parse(zipperItems);
+			JSONArray indentList = (JSONArray) indentObject.get("list");
+
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="insert into tbZipperIndent (AINo,styleid, PurchaseOrder, "
+						+ "Itemid, ColorId, "
+						+ "ShippingMarks, accessoriesItemId, "
+						+ "accessoriesSize,sizeGroupId, "
+						+ "size, PerUnit, TotalBox,"
+						+ " OrderQty, QtyInDozen, "
+						+ "ReqPerPices, ReqPerDoz, "
+						+ "DividedBy, PercentageExtra, "
+						+ "PercentageExtraQty, TotalQty, "
+						+ "UnitId, RequireUnitQty, "
+						+ "IndentColorId, IndentBrandId, IndentDate, "
+						+ " IndentTime, IndentPostBy) values('"+zipperIndentId+"','"+indent.get("styleId")+"','"+indent.get("purchaseOrder")+"','"+indent.get("itemId")+"',"
+						+ "'"+indent.get("colorId")+"','"+indent.get("shippingMark")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"',"
+						+ "'"+indent.get("sizeGroupId")+"','"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
+						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
+						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
+
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+
+			return zipperIndentId;
 		}
 		catch(Exception e){
 			e.printStackTrace();
@@ -4344,7 +4412,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,srd.buyerOrderId,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,isnull(srd.buyerOrderId,''),srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join tbSampleRequisition sr\r\n" + 
 					"					on sr.sampleReqId=srd.sampleReqId\r\n" + 
@@ -4916,12 +4984,12 @@ public class OrderDAOImpl implements OrderDAO{
 			
 
 
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,Note,Subject,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{
 				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), "0", element[8].toString(), element[9].toString(), element[10].toString(), dataList,poType, element[11].toString());
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[12].toString());
 			}
 
 			tx.commit();
@@ -5082,6 +5150,7 @@ public class OrderDAOImpl implements OrderDAO{
 	@Override
 	public boolean fileUpload(String Filename, String pcname, String ipaddress,String purpose,String user,String buyerName, String purchaseOrder) {
 		Session session=HibernateUtil.openSession();
+		boolean fileinsert=false;
 		Transaction tx=null;
 		try{
 			tx=session.getTransaction();
@@ -5091,7 +5160,7 @@ public class OrderDAOImpl implements OrderDAO{
 				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime, buyerid, purchaseorder) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP,'"+buyerName+"','"+purchaseOrder+"')";
 				session.createSQLQuery(sql).executeUpdate();
 				tx.commit();
-				return true;
+				fileinsert= true;
 			}
 		}
 		catch(Exception ee){
@@ -5106,8 +5175,8 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
-
-		return false;
+		session.close();
+		return fileinsert;
 	}
 
 
@@ -7059,6 +7128,153 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 		return dataList;
+	}
+
+
+
+	@Override
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+		Session session=HibernateUtil.openSession();
+		boolean fileinsert=false;
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if (!duplicatesampleFile(user, filename)) {
+				String sql="insert into tbsamplecadfiles ( samplecadid, filename, uploadedmachinip, entryby, entrytime) values "
+						+ "('"+smaplecadid+"','"+filename+"','"+uploadedpcip+"','"+user+"',CURRENT_TIMESTAMP)";
+				session.createSQLQuery(sql).executeUpdate();
+				tx.commit();
+				fileinsert= true;
+			}
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		session.close();
+		return fileinsert;
+	}
+	
+	
+	public boolean duplicatesampleFile(String user, String filename) {
+
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from tbsamplecadfiles where FileName like '"+filename+"' and entryby='"+user+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();							
+				//dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				exists=true;
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return exists;
+
+
+	}
+
+	@Override
+	public List<FileUpload> findsamplecadfiles(String userid, String samplereqid) {
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		FileUpload tempFileUpload = null;
+		List<pg.orderModel.FileUpload> dataList=new ArrayList<pg.orderModel.FileUpload>();
+		int userwiseupload=0;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.id, a.filename, (select fullname from Tblogin where id=a.entryby) as username from tbsamplecadfiles a where entryby='"+userid+"' and samplecadid='"+samplereqid+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				tempFileUpload = new FileUpload();
+				tempFileUpload.setAutoid(element[0].toString());
+				tempFileUpload.setFilename(element[1].toString());
+				tempFileUpload.setUploadby(element[2].toString());
+				dataList.add(tempFileUpload);
+				exists=true;
+			}
+
+	
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean deletesamplefile(String filename, String id) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="";
+			sql="delete from tbsamplecadfiles where id='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			tx.commit();
+			return true;
+		}
+
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
 	}
 
 

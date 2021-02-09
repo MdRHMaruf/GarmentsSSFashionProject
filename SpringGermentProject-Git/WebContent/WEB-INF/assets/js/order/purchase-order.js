@@ -193,7 +193,7 @@ function submitAction() {
     const dollar = $("#dollar-" + id).text();
     const amount = $("#amount-" + id).text();
     const checked = $("#check-" + id).prop('checked');
-    if (checked) isChecked = checked;
+    if (!isChecked) isChecked = checked;
     itemList += `autoId : ${id},type : ${type},supplierId : ${supplierId},rate : ${rate},dollar : ${dollar},currency : ${currency},amount : ${amount},checked : ${checked} #`;
   }
 
@@ -467,7 +467,7 @@ function searchPurchaseOrder(poNo,poType) {
         $("#orderBy").val(purchaseOrder.orderBy).change();
         $("#billTo").val(purchaseOrder.billTo).change();
         $("#manualPO").val(purchaseOrder.manualPO);
-        $("#paymentType").val(purchaseOrder.deliveryTo);
+        $("#paymentType").val(purchaseOrder.paymentType);
         $("#currency").val(purchaseOrder.currency);
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
@@ -507,6 +507,11 @@ function amountCalculation(autoId) {
   $("#amount-" + autoId).text(amount.toFixed(2));
 }
 
+function deleteIndentItem(rowId){
+  if(confirm("Are you Sure to delete this indent item from purchase Order")){
+    $("#row-"+rowId).remove();
+  }
+}
 
 function drawDataTable(data, isChecked = "") {
   let rows = "";
@@ -559,6 +564,7 @@ function drawAddDataTable(data, isChecked = "") {
     <td><input id='rate-${autoId}' class='form-control-sm max-width-60' type='number' value=${rate} onkeyup='amountCalculation(${autoId})'></td>
     <td id='amount-${autoId}'>${amount.toFixed(2)}</td>
     <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
+    <td><i class='fa fa-trash' onclick="deleteIndentItem('${autoId}')" style='cursor:pointer;'> </i></td>
     </tr>`
 
   }

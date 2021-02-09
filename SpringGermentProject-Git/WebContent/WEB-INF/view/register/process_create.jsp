@@ -8,23 +8,32 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+	String userId = (String) request.getAttribute("userId");
+	String userName = (String) request.getAttribute("userName");
+	//List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
 			style="display: none;">
-			<p id="successAlert" class="mb-0"><strong>Success!</strong> Sample Type Name Save Successfully..</p>
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Sample Type Name Save Successfully..
+			</p>
 		</div>
 		<div class="alert alert-warning alert-dismissible fade show"
 			style="display: none;">
-			<p id="warningAlert" class="mb-0"><strong>Warning!</strong> Sample Type Name Empty.Please Enter Sample Type Name...</p>
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Sample Type Name Empty.Please Enter Sample
+				Type Name...
+			</p>
 		</div>
 		<div class="alert alert-danger alert-dismissible fade show"
 			style="display: none;">
-			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="processId" value="0">
 
 		<div class="row">
@@ -41,14 +50,14 @@
 							<hr>
 
 							<div class="form-group">
-								<label for="sampleTypeName">Process Name:</label> <input type="text"
-									class="form-control" id="processName" name="text">
+								<label for="sampleTypeName">Process Name:</label> <input
+									type="text" class="form-control" id="processName" name="text">
 							</div>
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
-								style="display: none;">Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
+								onclick="editAction()" style="display: none;">Edit</button>
 							<button type="button" id="btnRefresh"
 								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 
@@ -65,31 +74,34 @@
 								</div>
 							</div>
 							<hr>
-							<div class="row" >
-								<div class="col-sm-12 col-md-12 col-lg-12" style="overflow: auto; max-height: 600px;">
-								<table class="table table-hover table-bordered table-sm" >
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Process Name</th>
-										<th scope="col">edit</th>
-									</tr>
-								</thead>
-								<tbody id="dataList">
-									<c:forEach items="${processlist}" var="list"
-													varStatus="counter">
-										<tr>
-											<td>${counter.count}</td>
-											<td id='processName${list.processId}'>${list.processName}</td>
-											<td><i class="fa fa-edit" onclick="setData(${list.processId})" style="cursor: pointer;"> </i></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12"
+									style="overflow: auto; max-height: 600px;">
+									<table class="table table-hover table-bordered table-sm">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Process Name</th>
+												<th scope="col">edit</th>
+											</tr>
+										</thead>
+										<tbody id="dataList">
+											<c:forEach items="${processlist}" var="list"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td id='processName${list.processId}'>${list.processName}</td>
+													<td><i class="fa fa-edit"
+														onclick="setData(${list.processId})"
+														style="cursor: pointer;"> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
 								</div>
-								
+
 							</div>
-							
+
 						</div>
 					</div>
 

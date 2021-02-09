@@ -402,6 +402,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
+		// TODO Auto-generated method stub
+		return orderDAO.confirmZipperIndent(zipperIndentId, zipperItems);
+	}
+	
+	@Override
 	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
 		// TODO Auto-generated method stub
 		return orderDAO.confirmCartonIndent(cartonIndentId, cartonItems);
@@ -872,6 +878,28 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getSampleCadDetails(sampleCommentId);
 	}
+
+	@Override
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+		// TODO Auto-generated method stub
+		return orderDAO.samplecadfileupload(smaplecadid, filename, user, uploadedpcip);
+	}
+
+	@Override
+	public List<FileUpload> findsamplecadfiles(String userid, String samplereqid) {
+		// TODO Auto-generated method stub
+		return orderDAO.findsamplecadfiles(userid, samplereqid);
+	}
+
+	@Override
+	public boolean deletesamplefile(String filename, String id) {
+		// TODO Auto-generated method stub
+		return orderDAO.deletesamplefile(filename, id);
+	}
+
+	
+
+
 
 	
 }

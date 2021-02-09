@@ -132,13 +132,12 @@
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Payment
 						Type<span style="color:red">*</span></label> <select id="paymentType"
 						class="form-control-sm col-md-8 px-0">
-						<option id="paymentType" value="0">Select Payment Type</option>
+						<option value="0">Select Payment Type</option>
 						<%
 							
 							for (PaymentType payment: PaymentType.values()) {
 						%>
-						<option id="paymentType"
-							value="<%=payment.name()%>"><%=payment.name()%></option>
+						<option value="<%=payment.name()%>"><%=payment.name()%></option>
 						<%
 							}
 						%>

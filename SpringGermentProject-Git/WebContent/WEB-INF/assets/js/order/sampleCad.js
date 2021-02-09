@@ -15,7 +15,14 @@ var sizesListByGroup = JSON;
 
 
 window.onload = () => {
+	
+	
+	
 	document.title = "Sample Cad";
+	
+	document.getElementById('files').addEventListener('change', onFileSelect, false);
+	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
+	//document.getElementById('find').addEventListener('click', find1, false);
 
 	$.ajax({
 		type: 'GET',
@@ -448,11 +455,13 @@ function sampleCadReport(id) {
 
 
 function searchSampleRequisition(v) {
+	
+	var user = $("#userId").val();
 	  $('#exampleModal').modal('hide');
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './searchSampleRequisition/' + v,
+		url: './searchSampleRequisition/' + v+"/"+user,
 		success: function (data) {
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
@@ -460,9 +469,31 @@ function searchSampleRequisition(v) {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawItemTable(data.result);
+				 files(data.files)
 			}
 		}
 	});
+}
+
+
+var rowIdx = 0; 
+function files(data){
+	
+	$('#fileList').empty();
+	
+	for (var i = 0; i < data.length; i++) {
+		
+		//console.log(" file name "+data[i].filename)
+		$('#fileList').append(`<tr name="tr"  id="R${++rowIdx}" data-fileid="${data[i].autoid}">				
+				<td id="filename-${rowIdx}" data-filename="${data[i].filename}">${data[i].filename}</td>
+				<td id="R${rowIdx}">${data[i].uploadby}</td>
+				<td id="R${rowIdx}" class="text-center"><i class="fa fa-download" onclick="download(this)"> </i></td>
+				<td id="R${rowIdx}" class="text-center"><i class="fa fa-trash" onclick="del(this)"> </i></td>
+				
+				
+		</tr>`); 
+	}
+	
 }
 
 
@@ -552,6 +583,235 @@ function drawItemTable(dataList) {
 
 
 	document.getElementById("samplecadtableList").innerHTML = tables;
+
+
+}
+
+
+
+
+
+
+
+//To log everything on console
+function debug(s) {
+	var debug = document.getElementById('debug');
+	if (debug) {
+		debug.innerHTML = debug.innerHTML + '<br/>' + s;
+	}
+}
+
+//Will be called when upload is completed
+function onUploadComplete(e) {
+	totalUploaded += document.getElementById('files').files[filesUploaded].size;
+	filesUploaded++;
+	// debug('complete ' + filesUploaded + " of " + fileCount);
+	//  debug('totalUploaded: ' + totalUploaded);
+	if (filesUploaded < fileCount) {
+		uploadNext();
+	} else {
+		var bar = document.getElementById('bar');
+		bar.style.width = '100%';
+		bar.innerHTML = '100% complete';
+		//notification();
+	}
+}
+
+function notification() {
+	if (percentage == 100) {
+		alert("Files Uploaded")
+	}
+}
+
+//Will be called when user select the files in file control
+function onFileSelect(e) {
+	var bar = document.getElementById('bar');
+	bar.style.width = 0 + '%';
+	bar.innerHTML = 0 + ' % complete';
+
+	var files = e.target.files; // FileList object
+	var output = [];
+	fileCount = files.length;
+	totalFileLength = 0;
+	for (var i = 0; i < fileCount; i++) {
+		var file = files[i];
+		output.push(file.name, ' (', file.size, ' bytes, ', file.lastModifiedDate.toLocaleDateString(), ')');
+		output.push('<br/>');
+		debug('add ' + file.size);
+		totalFileLength += file.size;
+	}
+	// document.getElementById('selectedFiles').innerHTML = output.join('');
+	debug('totalFileLength:' + totalFileLength);
+}
+
+//This will continueously update the progress bar
+function onUploadProgress(e) {
+	if (e.lengthComputable) {
+		var percentComplete = parseInt((e.loaded + totalUploaded) * 100 / totalFileLength);
+		var bar = document.getElementById('bar');
+		bar.style.width = percentComplete + '%';
+		bar.innerHTML = percentComplete + ' % complete';
+		console.log(" bar prog " + percentComplete)
+
+		percentage = percentComplete;
+
+		console.log(" percentage prog " + percentage)
+	} else {
+		debug('unable to compute');
+	}
+}
+
+//the Ouchhh !! moments will be captured here
+function onUploadFailed(e) {
+	alert("Error uploading file");
+}
+
+//Pick the next file in queue and upload it to remote server
+function uploadNext() {
+	
+	var i=0;
+
+
+					i++;
+					purpose = $("#purpose").val();
+
+					var xhr = new XMLHttpRequest();
+					var fd = new FormData();
+					var file = document.getElementById('files').files[filesUploaded];
+					fd.append("multipartFile", file);
+					xhr.upload.addEventListener("progress", onUploadProgress, false);
+					xhr.addEventListener("load", onUploadComplete, false);
+					xhr.addEventListener("error", onUploadFailed, false);
+
+					var user = $("#userId").val();
+					var samplecadid=$("#sampleReqId").val();
+					console.log(" sample id "+samplecadid)
+
+					xhr.open("POST", "save-samplecad/" + samplecadid + "/" + user);
+					debug('uploading ' + file.name);
+					xhr.send(fd);
+					
+				
+}
+
+//Let's begin the upload process
+
+function startUpload() {
+
+	totalUploaded = filesUploaded = 0;
+	uploadNext();
+
+}
+
+
+
+function download(a) {
+	var rowIndex = $(a).closest('tr').index();
+	var initindex=rowIndex+1
+	var fileid=$("#filename-"+initindex).text();
+
+	console.log(" file name "+fileid)
+
+
+
+
+	var file = fileid;
+
+	var user = $("#userId").val();
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "download-samplecad/" + file + '/' + user);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function () {
+		if (this.status === 200) {
+			var filename = "";
+			var disposition = xhr.getResponseHeader('Content-Disposition');
+			if (disposition && disposition.indexOf('attachment') !== -1) {
+				var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+				var matches = filenameRegex.exec(disposition);
+				if (matches != null && matches[1]) {
+					filename = matches[1].replace(/['"]/g, '');
+				}
+			}
+			var type = xhr.getResponseHeader('Content-Type'); var blob = typeof File === 'function' ? new File([this.response], filename, { type: type }) : new Blob([this.response], { type: type });
+			if (typeof window.navigator.msSaveBlob !== 'undefined') {
+				// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. 
+				// These URLs will no longer resolve as the data backing the URL has been freed."
+				window.navigator.msSaveBlob(blob, filename);
+			} else {
+				var URL = window.URL || window.webkitURL;
+				var downloadUrl = URL.createObjectURL(blob); if (filename) {
+					// use HTML5 a[download] attribute to specify filename
+					var a = document.createElement("a");
+					// safari doesn't support this yet
+					if (typeof a.download === 'undefined') {
+						window.location = downloadUrl;
+					} else {
+						a.href = downloadUrl;
+						a.download = filename;
+						document.body.appendChild(a);
+						a.click();
+					}
+				} else {
+					window.location = downloadUrl;
+				}
+				setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+			}
+		}
+	};
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhr.send($.param({
+
+	}));
+}
+
+
+
+
+function del(a) {
+
+	var rowIndex = $(a).closest('tr').index();
+	var initindex=rowIndex+1
+
+	var fileid=$("#R"+initindex).attr("data-fileid");
+	console.log(" file id "+fileid)
+	var filename=$("#filename-"+initindex).text();
+	console.log(" filename "+filename)
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deletesamplecadfile/' + filename+ '/' + fileid,
+		data: {
+
+
+
+		},
+		success: function (data) {
+			if (data == true) {
+
+				alert("Successfully Deleted")
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			//alert("Server Error");
+			if (jqXHR.status === 0) {
+				alert('Not connect.\n Verify Network.');
+			} else if (jqXHR.status == 404) {
+				alert('Requested page not found.');
+			} else if (jqXHR.status == 500) {
+				alert('Internal Server Error.');
+			} else if (errorThrown === 'parsererror') {
+				alert('Requested JSON parse failed');
+			} else if (errorThrown === 'timeout') {
+				alert('Time out error');
+			} else if (errorThrown === 'abort') {
+				alert('Ajax request aborted ');
+			} else {
+				alert('Uncaught Error.\n' + jqXHR.responseText);
+			}
+
+		}
+	});
 
 
 }
