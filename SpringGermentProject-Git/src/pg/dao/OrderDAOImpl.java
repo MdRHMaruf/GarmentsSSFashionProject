@@ -1534,8 +1534,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="insert into TbBuyerOrderEstimateSummary (BuyerId,Period,PaymentTerm,Incoterm,Currency,QCFor,TotalUnit,UnitCmt,TotalPrice,UnitFob,TotalAmount,note,remarks,EntryTime,UserId) "
-					+ "values('"+buyerPo.getBuyerId()+"','','"+buyerPo.getPaymentTerm()+"','','"+buyerPo.getCurrency()+"','','"+buyerPo.getTotalUnit()+"','"+buyerPo.getUnitCmt()+"','"+buyerPo.getTotalPrice()+"','"+buyerPo.getUnitFob()+"','"+buyerPo.getTotalAmount()+"','"+buyerPo.getNote()+"','"+buyerPo.getRemarks()+"',CURRENT_TIMESTAMP,'"+buyerPo.getUserId()+"');";
+			String sql="insert into TbBuyerOrderEstimateSummary (BuyerId,Period,PaymentTerm,Incoterm,Currency,QCFor,TotalUnit,UnitCmt,TotalPrice,UnitFob,TotalAmount,shipmentDate,inspectionDate,note,remarks,EntryTime,UserId) "
+					+ "values('"+buyerPo.getBuyerId()+"','','"+buyerPo.getPaymentTerm()+"','','"+buyerPo.getCurrency()+"','','"+buyerPo.getTotalUnit()+"','"+buyerPo.getUnitCmt()+"','"+buyerPo.getTotalPrice()+"','"+buyerPo.getUnitFob()+"','"+buyerPo.getTotalAmount()+"','"+buyerPo.getShipmentDate()+"','"+buyerPo.getInspectionDate()+"','"+buyerPo.getNote()+"','"+buyerPo.getRemarks()+"',CURRENT_TIMESTAMP,'"+buyerPo.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
 			String buyerPoId ="";
@@ -1587,7 +1587,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="update TbBuyerOrderEstimateSummary set BuyerId='"+buyerPo.getBuyerId()+"',Period='',PaymentTerm='"+buyerPo.getPaymentTerm()+"',Incoterm='',Currency='"+buyerPo.getCurrency()+"',QCFor='',TotalUnit='"+buyerPo.getTotalUnit()+"',UnitCmt='"+buyerPo.getUnitCmt()+"',TotalPrice='"+buyerPo.getTotalPrice()+"',UnitFob='"+buyerPo.getUnitFob()+"',TotalAmount='"+buyerPo.getTotalAmount()+"',note='"+buyerPo.getNote()+"',remarks='"+buyerPo.getRemarks()+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+buyerPo.getBuyerPoId()+"'";		
+			String sql="update TbBuyerOrderEstimateSummary set BuyerId='"+buyerPo.getBuyerId()+"',Period='',PaymentTerm='"+buyerPo.getPaymentTerm()+"',Incoterm='',Currency='"+buyerPo.getCurrency()+"',QCFor='',TotalUnit='"+buyerPo.getTotalUnit()+"',UnitCmt='"+buyerPo.getUnitCmt()+"',TotalPrice='"+buyerPo.getTotalPrice()+"',UnitFob='"+buyerPo.getUnitFob()+"',TotalAmount='"+buyerPo.getTotalAmount()+"',shipmentDate='"+buyerPo.getShipmentDate()+"',inspectionDate='"+buyerPo.getInspectionDate()+"',note='"+buyerPo.getNote()+"',remarks='"+buyerPo.getRemarks()+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+buyerPo.getBuyerPoId()+"'";		
 			session.createSQLQuery(sql).executeUpdate();
 
 
@@ -1666,7 +1666,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select autoId,BuyerId,b.name,PaymentTerm,Currency,note,remarks,bos.UserId\r\n" + 
+			String sql="select autoId,BuyerId,b.name,PaymentTerm,Currency,note,remarks,bos.UserId,(SELECT CONVERT(varchar, shipmentDate, 25)) as shipmentDate,(SELECT CONVERT(varchar, inspectionDate, 25)) as inspectionDate\r\n" + 
 					"from TbBuyerOrderEstimateSummary bos\r\n" + 
 					"join tbBuyer b\r\n" + 
 					"on bos.BuyerId = b.id\r\n" + 
@@ -1678,6 +1678,8 @@ public class OrderDAOImpl implements OrderDAO{
 
 				buyerPo= new BuyerPO(element[0].toString(), element[1].toString(), element[3].toString(), element[4].toString(), 0.0, 0.0, 0.0,0.0,0.0, element[5].toString(),element[6].toString(), element[7].toString());
 				buyerPo.setBuyerName(element[2].toString());
+				buyerPo.setShipmentDate(element[8].toString());
+				buyerPo.setInspectionDate(element[9].toString());
 			}
 			buyerPo.setItemList(getBuyerPOItemList(buyerPoNo,buyerPo.getUserId()));
 
@@ -2920,6 +2922,72 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.commit();
 
 			return accessoriesIndentId;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "something wrong";
+
+	}
+	
+	
+	@Override
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CommonModel> query=new ArrayList<CommonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			if(zipperIndentId.equals("New")) {
+				String sql="select (isnull(max(AINo),0)+1) as maxId from tbZipperIndent";
+				List<?> list = session.createSQLQuery(sql).list();
+				if(list.size()>0) {		
+					zipperIndentId = list.get(0).toString();
+				}
+			}
+
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(zipperItems);
+			JSONObject indentObject = (JSONObject)jsonParser.parse(zipperItems);
+			JSONArray indentList = (JSONArray) indentObject.get("list");
+
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="insert into tbZipperIndent (AINo,styleid, PurchaseOrder, "
+						+ "Itemid, ColorId, "
+						+ "ShippingMarks, accessoriesItemId, "
+						+ "accessoriesSize,sizeGroupId, "
+						+ "size, PerUnit, TotalBox,"
+						+ " OrderQty, QtyInDozen, "
+						+ "ReqPerPices, ReqPerDoz, "
+						+ "DividedBy, PercentageExtra, "
+						+ "PercentageExtraQty, TotalQty, "
+						+ "UnitId, RequireUnitQty, "
+						+ "IndentColorId, IndentBrandId, IndentDate, "
+						+ " IndentTime, IndentPostBy) values('"+zipperIndentId+"','"+indent.get("styleId")+"','"+indent.get("purchaseOrder")+"','"+indent.get("itemId")+"',"
+						+ "'"+indent.get("colorId")+"','"+indent.get("shippingMark")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"',"
+						+ "'"+indent.get("sizeGroupId")+"','"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
+						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
+						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
+
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+
+			return zipperIndentId;
 		}
 		catch(Exception e){
 			e.printStackTrace();

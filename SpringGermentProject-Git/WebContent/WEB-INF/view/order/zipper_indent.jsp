@@ -159,10 +159,10 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
-										<select id="color" class="selectpicker w-100" data-live-search="true"
+										<select id="color" class="selectpicker w-100" multiple
+											data-selected-text-format="count > 4" data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
-
 										</select>
 										<button class="btn btn-sm btn-primary" type="button"
 											onclick="refreshColorList()">
@@ -208,7 +208,7 @@ String userName=(String)session.getAttribute("userName");
 											<div class="form-check-inline">
 												<label class="form-check-label"> <input
 													id="checkSizeRequired" type="checkbox"
-													class="form-check-input" value=""><strong>Size
+													class="form-check-input" value="" checked><strong>Size
 														Required</strong></label>
 											</div>
 										</div>
@@ -235,7 +235,7 @@ String userName=(String)session.getAttribute("userName");
 											data-style="btn-light btn-sm border-light-gray"
 											aria-describedby="findButton">
 											<option value="0">Select Item</option>
-											<c:forEach items="${zipper}" var="acc"
+											<c:forEach items="${accessories}" var="acc"
 												varStatus="counter">
 												<option value="${acc.id}">${acc.name}</option>
 											</c:forEach>
@@ -249,7 +249,7 @@ String userName=(String)session.getAttribute("userName");
 									<label for="zipperSize"
 										class="col-form-label-sm mb-0 py-0">Zipper Size</label>
 								</div>
-								<input type="text" class='form-control-sm' id="zipperSize">
+								<input type="text" class='form-control-sm' id="zipperSize" onkeyup="lengthValueSet()">
 							</div>
 
 							<div class="row">
@@ -517,9 +517,10 @@ String userName=(String)session.getAttribute("userName");
 										<th>Item Name</th>
 										<th>Color Name</th>
 										<th>Shipping Marks</th>
-										<th>Accssories Name</th>
+										<th>Zipper Name</th>
 										<th>Size</th>
 										<th>Total Required</th>
+										<th>Length</th>
 										<th><i class="fa fa-edit"></i></th>
 										<th><i class="fa fa-trash"></i></th>
 									</tr>

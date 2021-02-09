@@ -102,6 +102,8 @@ public interface OrderService {
 	boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId);
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent(String userId);
+	
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems);
 
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);

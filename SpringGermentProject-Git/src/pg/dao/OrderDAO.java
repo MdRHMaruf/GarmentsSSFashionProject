@@ -102,6 +102,10 @@ public interface OrderDAO {
 	public String confirmAccessoriesIndent(String accessoriesIndentId, String accessoriesItems);
 	List<AccessoriesIndent> getPostedAccessoriesIndent(String userId);
 
+	//Zipper Indent
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems);
+	
+	
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
 	String confirmCartonIndent(String cartonIndentId,String cartonItems);
