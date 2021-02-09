@@ -14,6 +14,8 @@ public class BuyerPO {
 	double totalPrice;
 	double unitFob;
 	double totalAmount;
+	String shipmentDate;
+	String inspectionDate;
 	String note;
 	String remarks;
 	String date;
@@ -150,6 +152,22 @@ public class BuyerPO {
 
 	public void setChangedItemsList(String changedItemsList) {
 		this.changedItemsList = changedItemsList;
+	}
+
+	public String getShipmentDate() {
+		return shipmentDate;
+	}
+
+	public void setShipmentDate(String shipmentDate) {
+		this.shipmentDate = shipmentDate;
+	}
+
+	public String getInspectionDate() {
+		return inspectionDate;
+	}
+
+	public void setInspectionDate(String inspectionDate) {
+		this.inspectionDate = inspectionDate;
 	}
 	
 }

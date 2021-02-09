@@ -1451,6 +1451,17 @@ public class OrderController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/confirmZipperIndent",method=RequestMethod.POST)
+	public JSONObject confirmZipperIndent(String zipperIndentId,String zipperItems) {
+		JSONObject objmain = new JSONObject();
+
+		String result = orderService.confirmZipperIndent(zipperIndentId,zipperItems);
+		objmain.put("result", result);
+
+		return objmain;
+	}
 
 	//accessories_indent_curton 
 	@RequestMapping(value = "/accessories_indent_curton",method=RequestMethod.GET)

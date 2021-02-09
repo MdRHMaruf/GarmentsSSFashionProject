@@ -71,7 +71,7 @@ function buyerWiseStyleLoad() {
 	}
 
 }
-$('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+$('#buyerName').on('change', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#buyerName").val().length > 0) {
 		let buyerIdList = $("#buyerName").val();
 		buyerIdList = `'${buyerIdList}'`;
@@ -117,10 +117,10 @@ $('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
 	}
 });
 
-$('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+$('#purchaseOrder').on('change', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#purchaseOrder").val().length > 0) {
 		let poList = $("#purchaseOrder").val();
-		poList += `'${poList}',`;
+		poList = `'${poList}'`;
 		// $("#purchaseOrder").val().forEach(po => {
 		// 	poList += `'${po}',`;
 		// });
@@ -151,10 +151,10 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
 	}
 });
 
-$('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+$('#styleNo').on('change', function (e, clickedIndex, isSelected, previousValue) {
 	if ($("#styleNo").val().length > 0) {
 		let styleIdList = $("#styleNo").val();
-		styleIdList += `'${styleIdList}',`;
+		styleIdList = `'${styleIdList}'`;
 		// $("#styleNo").val().forEach(id => {
 		// 	styleIdList += `'${id}',`;
 		// });
@@ -163,6 +163,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 		if ($("#purchaseOrder").val().length > 0) {
 
 			let poList = $("#purchaseOrder").val();
+			poList = `'${poList}'`;
 			// $("#purchaseOrder").val().forEach(id => {
 			// 	poList += `'${id}',`;
 			// });
@@ -176,7 +177,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					styleIdList: styleIdList
 				},
 				success: function (data) {
-					let options = "<option value='0'>Select Color</option>";
+					let options = "";
 					let colorList = data.colorList;
 					length = colorList.length;
 					for (let i = 0; i < length; i++) {
@@ -185,7 +186,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					$("#color").html(options);
 					$('#color').selectpicker('refresh');
 
-					options = "<option value='0'>Select Purchase Order</option>";
+					options = "";
 					let shippingMarkList = data.shippingMarkList;
 					length = shippingMarkList.length;
 					for (let i = 0; i < length; i++) {
@@ -300,23 +301,23 @@ $("#btnRecyclingData").click(() => {
 		if (stylesId.length > 0) {
 			if (itemsId.length > 0) {
 
-				purchaseOrdersId = '';
-				$("#purchaseOrder").val().forEach(id => {
-					purchaseOrdersId += `'${id}',`;
-				});
-				purchaseOrdersId = purchaseOrdersId.slice(0, -1);
+				purchaseOrdersId = `'${purchaseOrdersId}'`;
+				// $("#purchaseOrder").val().forEach(id => {
+				// 	purchaseOrdersId += `'${id}',`;
+				// });
+				//purchaseOrdersId = purchaseOrdersId.slice(0, -1);
 
-				stylesId = '';
-				$("#styleNo").val().forEach(id => {
-					stylesId += `'${id}',`;
-				});
-				stylesId = stylesId.slice(0, -1);
+				stylesId = `'${stylesId}'`;
+				// $("#styleNo").val().forEach(id => {
+				// 	stylesId += `'${id}',`;
+				// });
+				// stylesId = stylesId.slice(0, -1);
 
-				itemsId = '';
-				$("#itemName").val().forEach(id => {
-					itemsId += `'${id}',`;
-				});
-				itemsId = itemsId.slice(0, -1);
+				itemsId = `'${itemsId}'`;
+				// $("#itemName").val().forEach(id => {
+				// 	itemsId += `'${id}',`;
+				// });
+				// itemsId = itemsId.slice(0, -1);
 
 				let queryPurchaseOrder = ` boed.purchaseOrder in (${purchaseOrdersId}) `;
 				let queryStylesId = ` and boed.styleId in (${stylesId}) `;
@@ -404,7 +405,7 @@ $("#btnRecyclingData").click(() => {
 								left join tbColors c
 								on boed.ColorId = c.ColorId
 								left join tbSizeValues sv
-								on boed.autoId = sv.linkedAutoId and sv.type = 1
+								on boed.autoId = sv.linkedAutoId and sv.type = 1 and boed.sizeGroupId = sv.sizeGroupId 
 								left join tbStyleSize ss
 								on sv.sizeId = ss.id 
 								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
@@ -413,7 +414,7 @@ $("#btnRecyclingData").click(() => {
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
-						url: './getZipperRecyclingDataWithSize',
+						url: './getAccessoriesRecyclingDataWithSize',
 						data: {
 							query: query,
 							query2: query2
@@ -468,7 +469,7 @@ $("#btnRecyclingData").click(() => {
 								}
 
 								tables += `</tr><tr>
-												<td colspan="5" rowspan="3"></td>
+												<td colspan="5" rowspan="4"></td>
 												<td>(%) Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
@@ -493,6 +494,16 @@ $("#btnRecyclingData").click(() => {
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
 										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
+									} else {
+										tables += `<td></td>`;
+									}
+								}
+
+								tables += `</tr><tr>
+								<td>Size</td>`
+								for (let j = 0; j < sizeListLength; j++) {
+									if (sizeList[j].sizeQuantity > 0) {
+										tables += `<td><input id='length-${i}${sizeList[j].sizeId}' class='length form-control-sm max-width-100 min-width-60 unitQty-${i}' type='text' /></td>`;
 									} else {
 										tables += `<td></td>`;
 									}
@@ -531,7 +542,7 @@ $("#btnRecyclingData").click(() => {
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
-						url: './getZipperRecyclingData',
+						url: './getAccessoriesRecyclingData',
 						data: {
 							query: query
 						},
@@ -606,7 +617,7 @@ $("#btnAdd").click(() => {
 		let zipperItemId = $("#zipperItem").val();
 		let zipperItemName = $("#zipperItem option:selected").text();
 
-		let zipperSize = $("#zipperSize").val();
+		
 		let zipperColorId = $("#zipperColor").val();
 		let zipperBrandId = $("#brand").val();
 		let unitId = $("#unit").val();
@@ -650,10 +661,6 @@ $("#btnAdd").click(() => {
 							reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 							let reqPerDozen = parseFloat((orderQty * reqPerPcs) / 12).toFixed(2);
 
-
-
-
-
 							let perUnit = $("#perUnit").val();
 							let totalBox = $("#totalBox").val();
 							let divideBy = $("#divideBy").val();
@@ -662,10 +669,11 @@ $("#btnAdd").click(() => {
 							let percentQty = $("#percentQty-" + cellId).text();
 							let totalQty = $("#totalQty-" + cellId).val();
 							let unitQty = $("#unitQty-" + cellId).val();
+							let lengthValue = $("#length-"+cellId).val();
 							if (unitQty > 0) {
 
-								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-id='${sizeId}' 
-										data-zipper-size='${zipperSize}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-group-id='${sizeGroupId}' data-size-id='${sizeId}' 
+										data-zipper-size='${lengthValue}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
 										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
@@ -678,6 +686,7 @@ $("#btnAdd").click(() => {
 										<td id='indentZipperName-${listRowId}'>${zipperItemName}</td>
 										<td>${sizeName}</td>
 										<td id='indentUnitQty-${listRowId}'>${unitQty}</td>
+										<td id='length-${listRowId}'>${lengthValue}</td>
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
@@ -704,8 +713,8 @@ $("#btnAdd").click(() => {
 						let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
 
 
-						let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
-										data-size-id='' data-zipper-size='${zipperSize}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+						let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-size-group-id='${sizeGroupId}' data-color-id='${colorId}' 
+										data-size-id='' data-zipper-size='${zipperLength}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
 										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
@@ -948,6 +957,7 @@ function confirmAction() {
 					itemId: indentRow.getAttribute('data-item-id'),
 					colorId: indentRow.getAttribute('data-color-id'),
 					shippingMark: $("#indentShippingMark-" + id).text(),
+					sizeGroupId: indentRow.getAttribute('data-size-group-id'),
 					sizeId: indentRow.getAttribute('data-size-id'),
 					zipperItemId: indentRow.getAttribute('data-zipper-item-id'),
 					zipperSize: indentRow.getAttribute('data-zipper-size'),
@@ -1202,7 +1212,9 @@ function saveEvent() {
 	}
 }
 
-
+function lengthValueSet(){
+	$(".length").val($("#zipperSize").val());
+}
 
 
 function setInPercentAndTotalInPreviewTable() {

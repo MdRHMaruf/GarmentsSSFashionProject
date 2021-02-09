@@ -156,7 +156,7 @@ function itemSizeAdd() {
 	for (let i = 0; i < rowList.length; i++) {
 		row = rowList[i];
 		if (row.getAttribute('data-style-id') == styleId &&
-				row.getAttribute('data-item-id') == itemId && row.getAttribute('data-customer-order') == customerOrder && row.getAttribute('data-purchase-order') == purchaseOrder && row.getAttribute('data-color-id') == colorId && row.getAttribute('data-size-group-id') == sizeGroupId) {
+			row.getAttribute('data-item-id') == itemId && row.getAttribute('data-customer-order') == customerOrder && row.getAttribute('data-purchase-order') == purchaseOrder && row.getAttribute('data-color-id') == colorId && row.getAttribute('data-size-group-id') == sizeGroupId) {
 			isExist = true;
 			break;
 		}
@@ -359,6 +359,8 @@ function itemSizeEdit() {
 function submitAction() {
 	let buyerPoId = $("#buyerPOId").val();
 	let buyerId = $("#buyerName").val();
+	let shipmentDate = $("#shipmentDate").val();
+	let inspectionDate = $("#inspectionDate").val();
 	let paymentTerm = $("#paymentTerm").val();
 	let currency = $("#currency").val();
 	let totalRow = $("#tableList tr");
@@ -392,11 +394,11 @@ function submitAction() {
 	rowList.each((index, row) => {
 		let autoId = row.getAttribute('data-auto-id');
 		let item = {
-				autoId: autoId,
-				unitCmt: Number($("#unitCmt" + autoId).val()),
-				totalPrice: Number($("#totalPrice" + autoId).text()),
-				unitFob: Number($("#unitFob" + autoId).val()),
-				totalAmount: Number($("#totalAmount" + autoId).text())
+			autoId: autoId,
+			unitCmt: Number($("#unitCmt" + autoId).val()),
+			totalPrice: Number($("#totalPrice" + autoId).text()),
+			unitFob: Number($("#unitFob" + autoId).val()),
+			totalAmount: Number($("#totalAmount" + autoId).text())
 		}
 		changedItems.list.push(item);
 	});
@@ -404,42 +406,52 @@ function submitAction() {
 
 	if (buyerId != 0) {
 		if (totalRow.length != 0) {
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: './submitBuyerPO',
-				data: {
-					buyerPoId: buyerPoId,
-					buyerId: buyerId,
-					paymentTerm: paymentTerm,
-					currency: currency,
-					totalUnit: totalUnit,
-					unitCmt: unitCmt,
-					totalPrice: totalPrice,
-					unitFob: unitFob,
-					totalAmount: totalAmount,
-					note: note,
-					remarks: remarks,
-					changedItemsList: JSON.stringify(changedItems),
-					userId: userId
-				},
-				success: function (data) {
-					if (data.result == "Something Wrong") {
-						dangerAlert("Something went wrong");
-					} else if (data.result == "duplicate") {
-						dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
-					} else {
-						successAlert("Buyer Purchase Order Save Successfully");
-						refreshAction();
-					}
+			if (shipmentDate) {
+				if (inspectionDate) {
+					$.ajax({
+						type: 'POST',
+						dataType: 'json',
+						url: './submitBuyerPO',
+						data: {
+							buyerPoId: buyerPoId,
+							buyerId: buyerId,
+							paymentTerm: paymentTerm,
+							currency: currency,
+							totalUnit: totalUnit,
+							unitCmt: unitCmt,
+							totalPrice: totalPrice,
+							unitFob: unitFob,
+							totalAmount: totalAmount,
+							shipmentDate: shipmentDate,
+							inspectionDate : inspectionDate,
+							note: note,
+							remarks: remarks,
+							changedItemsList: JSON.stringify(changedItems),
+							userId: userId
+						},
+						success: function (data) {
+							if (data.result == "Something Wrong") {
+								dangerAlert("Something went wrong");
+							} else if (data.result == "duplicate") {
+								dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
+							} else {
+								successAlert("Buyer Purchase Order Save Successfully");
+								refreshAction();
+							}
+						}
+					});
+				} else {
+					warningAlert("Inspection Date Not Selected... Please Select Inspection Date");
+					$("#inspectionDate").focus();
 				}
-			});
+			} else {
+				warningAlert("Shipment Date Not Selected... Please Select Shipment Date");
+				$("#shipmentDate").focus();
+			}
 		}
 		else {
 			alert("At first Add Size Wise Buyer Order Estimate");
 		}
-
-
 	} else {
 		alert("Buyer Name not selected... Please Select Buyer Name");
 		$("#buyerName").focus();
@@ -451,6 +463,8 @@ function buyerPoEditAction() {
 
 	let buyerPoId = $("#buyerPOId").val();
 	let buyerId = $("#buyerName").val();
+	let shipmentDate = $("#shipmentDate").val();
+	let inspectionDate = $("#inspectionDate").val();
 	let paymentTerm = $("#paymentTerm").val();
 	let currency = $("#currency").val();
 	let rowList = $("#tableList tr.dataRow");
@@ -476,11 +490,11 @@ function buyerPoEditAction() {
 	rowList.each((index, row) => {
 		let autoId = row.getAttribute('data-auto-id');
 		let item = {
-				autoId: autoId,
-				unitCmt: Number($("#unitCmt" + autoId).val()),
-				totalPrice: Number($("#totalPrice" + autoId).text()),
-				unitFob: Number($("#unitFob" + autoId).val()),
-				totalAmount: Number($("#totalAmount" + autoId).text())
+			autoId: autoId,
+			unitCmt: Number($("#unitCmt" + autoId).val()),
+			totalPrice: Number($("#totalPrice" + autoId).text()),
+			unitFob: Number($("#unitFob" + autoId).val()),
+			totalAmount: Number($("#totalAmount" + autoId).text())
 		}
 		changedItems.list.push(item);
 	});
@@ -492,36 +506,47 @@ function buyerPoEditAction() {
 	console.log("Edit function call");
 	if (buyerPoId != "0") {
 		if (buyerId != 0) {
-
-			$.ajax({
-				type: 'POST',
-				dataType: 'json',
-				url: './editBuyerPO',
-				data: {
-					buyerPoId: buyerPoId,
-					buyerId: buyerId,
-					paymentTerm: paymentTerm,
-					currency: currency,
-					totalUnit: totalUnit,
-					unitCmt: unitCmt,
-					totalPrice: totalPrice,
-					unitFob: unitFob,
-					totalAmount: totalAmount,
-					note: note,
-					remarks: remarks,
-					changedItemsList: JSON.stringify(changedItems),
-					userId: userId
-				},
-				success: function (data) {
-					if (data.result == "Something Wrong") {
-						dangerAlert("Something went wrong");
-					} else if (data.result == "duplicate") {
-						dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
-					} else {
-						successAlert("Buyer Purchase Order Edit Successfully");
-					}
+			if (shipmentDate) {
+				if (inspectionDate) {
+					$.ajax({
+						type: 'POST',
+						dataType: 'json',
+						url: './editBuyerPO',
+						data: {
+							buyerPoId: buyerPoId,
+							buyerId: buyerId,
+							paymentTerm: paymentTerm,
+							currency: currency,
+							totalUnit: totalUnit,
+							unitCmt: unitCmt,
+							totalPrice: totalPrice,
+							unitFob: unitFob,
+							totalAmount: totalAmount,
+							shipmentDate: shipmentDate,
+							inspectionDate : inspectionDate,
+							note: note,
+							remarks: remarks,
+							changedItemsList: JSON.stringify(changedItems),
+							userId: userId
+						},
+						success: function (data) {
+							if (data.result == "Something Wrong") {
+								dangerAlert("Something went wrong");
+							} else if (data.result == "duplicate") {
+								dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
+							} else {
+								successAlert("Buyer Purchase Order Edit Successfully");
+							}
+						}
+					});
+				} else {
+					warningAlert("Inspection Date Not Selected... Please Select Inspection Date");
+					$("#inspectionDate").focus();
 				}
-			});
+			} else {
+				warningAlert("Shipment Date Not Selected... Please Select Shipment Date");
+				$("#shipmentDate").focus();
+			}
 		} else {
 			alert("Buyer Name not selected... Please Select Buyer Name");
 			$("#buyerName").focus();
@@ -553,6 +578,8 @@ function searchBuyerPO(buyerPoNo) {
 				console.log(buyerPo);
 				$("#buyerPOId").val(buyerPo.buyerPoId);
 				$("#buyerName").val(buyerPo.buyerId).change();
+				$("#shipmentDate").val(buyerPo.shipmentDate);
+				$("#inspectionDate").val(buyerPo.inspectionDate);
 				$("#paymentTerm").val(buyerPo.paymentTerm).change();
 				$("#currency").val(buyerPo.currency).change();
 				$("#note").val(buyerPo.note);
@@ -569,8 +596,8 @@ function searchBuyerPO(buyerPoNo) {
 		}
 	});
 }
-var rowIdx = 0; 
-function files(data){
+var rowIdx = 0;
+function files(data) {
 
 	for (var i = 0; i < data.length; i++) {
 
@@ -582,7 +609,7 @@ function files(data){
 				<td id="R${rowIdx}" class="text-center"><i class="fa fa-trash" onclick="del(this)"> </i></td>
 
 
-		</tr>`); 
+		</tr>`);
 	}
 
 }
@@ -591,10 +618,10 @@ function files(data){
 
 function download(a) {
 	var rowIndex = $(a).closest('tr').index();
-	var initindex=rowIndex+1
-	var fileid=$("#filename-"+initindex).text();
+	var initindex = rowIndex + 1
+	var fileid = $("#filename-" + initindex).text();
 
-	console.log(" file name "+fileid)
+	console.log(" file name " + fileid)
 
 
 
@@ -654,16 +681,16 @@ function download(a) {
 function del(a) {
 
 	var rowIndex = $(a).closest('tr').index();
-	var initindex=rowIndex+1
+	var initindex = rowIndex + 1
 
-	var fileid=$("#R"+initindex).attr("data-fileid");
-	console.log(" file id "+fileid)
-	var filename=$("#filename-"+initindex).text();
-	console.log(" filename "+filename)
+	var fileid = $("#R" + initindex).attr("data-fileid");
+	console.log(" file id " + fileid)
+	var filename = $("#filename-" + initindex).text();
+	console.log(" filename " + filename)
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: './delete/' + filename+ "/" + fileid,
+		url: './delete/' + filename + "/" + fileid,
 		data: {
 
 
@@ -904,7 +931,7 @@ function drawItemTable(dataList) {
 				<th scope="col">Purchase Order</th>
 				<th scope="col">Shipping Mark</th>
 				<th scope="col">Sizes Reg-Tall-N/A</th>`
-				let sizeListLength = sizesListByGroup['groupId' + sizeGroupId].length;
+			let sizeListLength = sizesListByGroup['groupId' + sizeGroupId].length;
 			for (let j = 0; j < sizeListLength; j++) {
 				tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + sizesListByGroup['groupId' + sizeGroupId][j].sizeName + "</th>";
 			}
@@ -918,7 +945,7 @@ function drawItemTable(dataList) {
 				</tr>
 				</thead>
 				<tbody id="dataList">`
-				isClosingNeed = true;
+			isClosingNeed = true;
 		}
 		tables += `<tr id='itemRow-${item.autoId}' class='dataRow notChanged' data-auto-id='${item.autoId}' data-purchase-order='${item.purchaseOrder}' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-customer-order='${item.customerOrder}' data-color-id='${item.colorId}' data-size-group-id='${item.sizeGroupId}'>
 			<td>${item.style}</td>
@@ -928,7 +955,7 @@ function drawItemTable(dataList) {
 			<td>${item.purchaseOrder}</td>
 			<td>${item.shippingMark}</td>
 			<td>${item.sizeReg}</td>`
-			let sizeList = item.sizeList;
+		let sizeList = item.sizeList;
 		let sizeListLength = sizeList.length;
 
 		for (let j = 0; j < sizeListLength; j++) {
@@ -962,14 +989,14 @@ function drawItemTable(dataList) {
 
 function uploadNext() {
 
-	var i=0;
+	var i = 0;
 
-	var buyerName=$("#buyerName").val();
-	var purchaseOrder=$("#purchaseOrder").val();
+	var buyerName = $("#buyerName").val();
+	var purchaseOrder = $("#purchaseOrder").val();
 	var dept = $('#dept').val();
-	if(buyerName!=0){
-		if(purchaseOrder!=0){
-			if(dept!=0){
+	if (buyerName != 0) {
+		if (purchaseOrder != 0) {
+			if (dept != 0) {
 
 				i++;
 				purpose = $("#purpose").val();
@@ -984,18 +1011,18 @@ function uploadNext() {
 
 				var user = $("#userId").val();
 
-				xhr.open("POST", "save-product/" + purpose + "/" + user+ "/" + buyerName+ "/" + purchaseOrder);
+				xhr.open("POST", "save-product/" + purpose + "/" + user + "/" + buyerName + "/" + purchaseOrder);
 				debug('uploading ' + file.name);
 				xhr.send(fd);
 				add();
 
-			}else{
+			} else {
 				alert("Select Department")
 			}
-		}else{
+		} else {
 			alert("Select Purchase Order");
 		}
-	}else{
+	} else {
 		alert("Select Buyer");
 	}
 	/*if(i>0){
@@ -1011,32 +1038,32 @@ function startUpload() {
 
 }
 
-function add(){
+function add() {
 
 	let dept = "0";
 	let userId = $('#userId').val();
-	let empCode=[];
-	$('#receiver :selected').each(function(i, selectedElement) {
-		empCode[i]=$(selectedElement).val();
+	let empCode = [];
+	$('#receiver :selected').each(function (i, selectedElement) {
+		empCode[i] = $(selectedElement).val();
 		i++;
 	});
 
-	empCode=$('#receiver').val();
+	empCode = $('#receiver').val();
 	let type;
-	if(empCode!=''){
-		type=1;
-	}else{
-		type=0;
+	if (empCode != '') {
+		type = 1;
+	} else {
+		type = 0;
 	}
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: './saveFileAccessDetails',
-		data:{
-			dept:dept,
-			userId:userId,
-			empCode:empCode,
-			type:type,
+		data: {
+			dept: dept,
+			userId: userId,
+			empCode: empCode,
+			type: type,
 		},
 		success: function (data) {
 			/*if(data=="success"){

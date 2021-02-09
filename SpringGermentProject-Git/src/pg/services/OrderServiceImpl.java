@@ -402,6 +402,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 	
 	@Override
+	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
+		// TODO Auto-generated method stub
+		return orderDAO.confirmZipperIndent(zipperIndentId, zipperItems);
+	}
+	
+	@Override
 	public String confirmCartonIndent(String cartonIndentId,String cartonItems) {
 		// TODO Auto-generated method stub
 		return orderDAO.confirmCartonIndent(cartonIndentId, cartonItems);
@@ -890,6 +896,8 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.deletesamplefile(filename, id);
 	}
+
+	
 
 
 
