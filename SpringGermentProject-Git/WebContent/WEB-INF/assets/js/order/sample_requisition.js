@@ -90,12 +90,12 @@ function sizeLoadByGroup() {
 
 function searchSampleRequisition(v) {
 
-	  $('#exampleModal').modal('hide');
-	
+	  
+	let userId= $("#userId").val();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './searchSampleRequisition/' + v,
+		url: './searchSampleRequisition/' + v+"/"+userId,
 		success: function (data) {
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
@@ -103,6 +103,7 @@ function searchSampleRequisition(v) {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawItemTable(data.result);
+				$('#exampleModal').modal('hide');
 			}
 		}
 	});

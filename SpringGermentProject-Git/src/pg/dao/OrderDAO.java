@@ -104,7 +104,10 @@ public interface OrderDAO {
 
 	//Zipper Indent
 	public String confirmZipperIndent(String zipperIndentId, String zipperItems);
-	
+	List<AccessoriesIndent> getPostedZipperIndent(String userId);
+	List<AccessoriesIndent> getZipperIndentItemList(String zipperIndentId);
+	boolean deleteZipperIndent(String zipperIndentId,String indentAutoId);
+	boolean editZipperIndent(AccessoriesIndent v);
 	
 	//Accessories Carton
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
