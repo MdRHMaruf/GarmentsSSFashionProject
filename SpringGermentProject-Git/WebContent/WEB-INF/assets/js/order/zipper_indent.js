@@ -11,7 +11,6 @@ let unitList = {};
 
 window.onload = () => {
 	document.title = "Zipper Indent";
-
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -19,19 +18,11 @@ window.onload = () => {
 		data: {},
 		success: function (data) {
 			unitList = {};
-
-			$("#unit").empty();
-			$("#unit").append("<option value='0'>Select Unit</option>");
 			data.unitList.forEach(unit => {
 				unitList[unit.unitId] = unit;
-				$("#unit").append(`<option value='${unit.unitId}'>${unit.unitName}</option>`);
 			});
-
-			$('#unit').selectpicker('refresh');
-			$('#unit').val('0').change();
 		}
 	});
-
 
 }
 
@@ -145,7 +136,7 @@ $('#purchaseOrder').on('change', function (e, clickedIndex, isSelected, previous
 				$("#styleNo").html(options);
 				$('#styleNo').selectpicker('refresh');
 				$("#styleNo").selectpicker('val', selectedStyleId).change();
-
+				selectedStyleId = 0;
 			}
 		});
 	}
@@ -500,7 +491,7 @@ $("#btnRecyclingData").click(() => {
 								}
 
 								tables += `</tr><tr>
-								<td>Size</td>`
+								<td>Length</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
 										tables += `<td><input id='length-${i}${sizeList[j].sizeId}' class='length form-control-sm max-width-100 min-width-60 unitQty-${i}' type='text' /></td>`;
@@ -616,7 +607,7 @@ $("#btnAdd").click(() => {
 	if (length > 0) {
 		let zipperItemId = $("#zipperItem").val();
 		let zipperItemName = $("#zipperItem option:selected").text();
-
+		let lengthUnitId = $("#lengthUnit").val();
 		
 		let zipperColorId = $("#zipperColor").val();
 		let zipperBrandId = $("#brand").val();
@@ -673,7 +664,7 @@ $("#btnAdd").click(() => {
 							if (unitQty > 0) {
 
 								let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-group-id='${sizeGroupId}' data-size-id='${sizeId}' 
-										data-zipper-size='${lengthValue}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+										data-zipper-size='${lengthValue}' data-length-unit-id='${lengthUnitId}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
 										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
@@ -714,7 +705,7 @@ $("#btnAdd").click(() => {
 
 
 						let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-size-group-id='${sizeGroupId}' data-color-id='${colorId}' 
-										data-size-id='' data-zipper-size='${zipperLength}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
+										data-size-id='' data-length-unit-id='${lengthUnitId}' data-zipper-size='${zipperLength}' data-zipper-item-id='${zipperItemId}' data-zipper-color-id='${zipperColorId}' 
 										data-zipper-brand-id='${zipperBrandId}' data-unit-id='${unitId}'
 										data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
@@ -752,7 +743,7 @@ function editAction() {
 
 	let zipperItemId = $("#zipperItem").val();
 	let zipperItemName = $("#zipperItem option:selected").text();
-
+	let lengthUnitId = $("#lengthUnit").val();
 	let zipperSize = $("#zipperSize").val();
 	let zipperColorId = $("#zipperColor").val();
 	let zipperBrandId = $("#brand").val();
@@ -789,7 +780,7 @@ function editAction() {
 		row.attr('data-zipper-color-id', zipperColorId);
 		row.attr('data-zipper-brand-id', zipperBrandId);
 		row.attr('data-unit-id', unitId);
-
+		row.attr('data-length-unit-id', lengthUnitId);
 		row.attr('data-order-qty', orderQty);
 		row.attr('data-dozen-qty', dozenQty);
 		row.attr('data-req-per-pcs', reqPerPcs);
@@ -801,8 +792,10 @@ function editAction() {
 		row.attr('data-percent-qty', percentQty);
 		row.attr('data-total-qty', totalQty);
 		$("#indentUnitQty-" + autoId).text(unitQty);
+		$("#length-"+autoId).text(zipperSize);
 		$("#unitQty").attr("readonly", true);
 		$("#totalQty").attr("readonly", true);
+		
 		$("#btnAdd").show();
 		$("#btnEdit").hide();
 	} else {
@@ -815,10 +808,10 @@ function editAction() {
 			data: {
 				autoid: autoId,
 				aiNo: zipperIndentNo,
-				zipperId: zipperItemId,
-				zippername: zipperItemName,
-				zippersize: zipperSize,
-				zipperColorId: zipperColorId,
+				accessoriesId: zipperItemId,
+				accessoriesname: zipperItemName,
+				accessoriessize: zipperSize,
+				accessoriesColorId: zipperColorId,
 				indentBrandId: zipperBrandId,
 				orderqty: orderQty,
 				qtyindozen: dozenQty,
@@ -831,6 +824,7 @@ function editAction() {
 				percentqty: percentQty,
 				totalqty: totalQty,
 				unitId: unitId,
+				lengthUnitId: lengthUnitId,
 				grandqty: unitQty,
 				user: userId
 			},
@@ -846,7 +840,7 @@ function editAction() {
 					row.attr('data-zipper-color-id', zipperColorId);
 					row.attr('data-zipper-brand-id', zipperBrandId);
 					row.attr('data-unit-id', unitId);
-
+					row.attr('data-length-unit-id', lengthUnitId);
 					row.attr('data-order-qty', orderQty);
 					row.attr('data-dozen-qty', dozenQty);
 					row.attr('data-req-per-pcs', reqPerPcs);
@@ -858,6 +852,7 @@ function editAction() {
 					row.attr('data-percent-qty', percentQty);
 					row.attr('data-total-qty', totalQty);
 					$("#indentUnitQty-" + autoId).text(unitQty);
+					$("#length-"+autoId).text(zipperSize);
 					$("#unitQty").attr("readonly", true);
 					$("#totalQty").attr("readonly", true);
 					$("#btnAdd").show();
@@ -959,10 +954,10 @@ function confirmAction() {
 					shippingMark: $("#indentShippingMark-" + id).text(),
 					sizeGroupId: indentRow.getAttribute('data-size-group-id'),
 					sizeId: indentRow.getAttribute('data-size-id'),
-					zipperItemId: indentRow.getAttribute('data-zipper-item-id'),
-					zipperSize: indentRow.getAttribute('data-zipper-size'),
-					zipperColorId: indentRow.getAttribute('data-zipper-color-id'),
-					zipperBrandId: indentRow.getAttribute('data-zipper-brand-id'),
+					accessoriesItemId: indentRow.getAttribute('data-zipper-item-id'),
+					accessoriesSize: indentRow.getAttribute('data-zipper-size'),
+					accessoriesColorId: indentRow.getAttribute('data-zipper-color-id'),
+					accessoriesBrandId: indentRow.getAttribute('data-zipper-brand-id'),
 					orderQty: indentRow.getAttribute('data-order-qty'),
 					dozenQty: indentRow.getAttribute('data-dozen-qty'),
 					reqPerPcs: indentRow.getAttribute('data-req-per-pcs'),
@@ -974,6 +969,7 @@ function confirmAction() {
 					percentQty: indentRow.getAttribute('data-percent-qty'),
 					totalQty: indentRow.getAttribute('data-total-qty'),
 					unitId: indentRow.getAttribute('data-unit-id'),
+					lengthUnitId: indentRow.getAttribute('data-length-unit-id'),
 					unitQty: $("#indentUnitQty-" + id).text(),
 					userId: userId
 				}
@@ -1035,6 +1031,7 @@ function setIndentItem(rowId, indentType) {
 	$("#zipperSize").val(row.attr('data-zipper-size'));
 	$("#zipperColor").val(row.attr('data-zipper-color-id')).change();
 	$("#brand").val(row.attr('data-zipper-brand-id')).change();
+	$("#lengthUnit").val(row.attr('data-length-unit-id')).change();
 	$("#unit").val(row.attr('data-unit-id')).change();
 	$("#unitQty").val(parseFloat($("#indentUnitQty-" + rowId).text()).toFixed(2));
 	$("#orderQty").val(parseFloat(row.attr('data-order-qty')).toFixed(2));
@@ -1066,7 +1063,7 @@ function deleteIndentRow(rowId, indentType) {
 				dataType: 'json',
 				url: './deleteZipperIndent',
 				data: {
-					accessorienIndentId: zipperIndentNo,
+					zipperIndentId: zipperIndentNo,
 					indentAutoId: rowId
 				},
 				success: function (data) {
@@ -1587,8 +1584,8 @@ function drawZipperIndentListTable(data) {
 	data.forEach((indent) => {
 		let autoId = indent.autoid;
 		oldRows += `<tr id='oldIndentRow-${autoId}' class='oldIndentRow' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-color-id='${indent.itemColorId}' data-size-id='${indent.size}' 
-										data-zipper-size='${indent.zippersize}' data-zipper-item-id='${indent.zipperId}' data-zipper-color-id='${indent.zipperColorId}' 
-										data-zipper-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}'
+										data-zipper-size='${indent.accessoriessize}' data-zipper-item-id='${indent.accessoriesId}' data-zipper-color-id='${indent.accessoriesColorId}' 
+										data-zipper-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}' data-length-unit-id='${indent.lengthUnitId}' 
 										data-order-qty='${indent.orderqty}' data-dozen-qty='${indent.qtyindozen}' data-req-per-pcs='${indent.reqperpcs}' data-req-per-dozen='${indent.reqperdozen}' data-per-unit='${indent.perunit}' data-total-box='${indent.totalbox}'
 										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
 										<td>${++length}</td>
@@ -1597,9 +1594,10 @@ function drawZipperIndentListTable(data) {
 										<td>${indent.itemname}</td>
 										<td>${indent.itemcolor}</td>
 										<td id='indentShippingMark-${autoId}'>${indent.shippingmark}</td>
-										<td id='indentZipperName-${autoId}'>${indent.zipperName}</td>
+										<td id='indentZipperName-${autoId}'>${indent.accessoriesName}</td>
 										<td>${indent.sizeName}</td>
 										<td id='indentUnitQty-${autoId}'>${parseFloat(indent.requiredUnitQty).toFixed(2)}</td>
+										<td id='length-${autoId}'>${indent.accessoriessize}</td>
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${autoId}','oldIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${autoId}','oldIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`

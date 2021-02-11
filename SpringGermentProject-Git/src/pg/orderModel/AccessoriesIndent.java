@@ -47,6 +47,7 @@ public class AccessoriesIndent {
 	String sizeGroupId;
 	String indentDate;
 	String indentType;
+	String lengthUnitId;
 	ArrayList<Size> sizeList;
 	public AccessoriesIndent() {
 		
@@ -402,6 +403,12 @@ public class AccessoriesIndent {
 	}
 	public void setIndentType(String indentType) {
 		this.indentType = indentType;
+	}
+	public String getLengthUnitId() {
+		return lengthUnitId;
+	}
+	public void setLengthUnitId(String lengthUnitId) {
+		this.lengthUnitId = lengthUnitId;
 	}
 
 }

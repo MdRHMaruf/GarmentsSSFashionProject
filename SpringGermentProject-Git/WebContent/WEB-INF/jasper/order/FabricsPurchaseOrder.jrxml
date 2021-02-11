@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="20" rightMargin="30" topMargin="40" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.3310000000000366"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="395"/>
+	<property name="ireport.x" value="92"/>
+	<property name="ireport.y" value="433"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -18,25 +18,25 @@
 	<parameter name="SupplierContactPerson" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select 'only' as Taka ,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,'' as accessoriesSize,'' as size,
-(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,
-(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,
-(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,
-(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,
-(select Signature from Tblogin where id=b.entryby) as Signature,
-(select Signature from Tblogin where id='9') as MdSignature,
-(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo,
-b.mdapproval,a.poNo
-from tbPurchaseOrderSummary a
-join tbFabricsIndent b
-on a.pono=b.pono
-left join TbStyleCreate sc
-on b.styleId = cast(sc.StyleId as varchar)
-left join TbFabricsItem fi
-on b.fabricsid = cast(fi.id as varchar)
-left join tbColors c
-on b.fabricscolor = cast(c.ColorId as varchar)
-where a.pono='2' and a.supplierid='3'
-order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
+ (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,
+ (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,
+ (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,
+ (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,
+ (select Signature from Tblogin where id=b.entryby) as Signature,
+ (select Signature from Tblogin where id='9') as MdSignature,
+ (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo,
+ b.mdapproval,a.poNo
+ from tbPurchaseOrderSummary a
+ join tbFabricsIndent b
+ on a.pono=b.pono
+ left join TbStyleCreate sc
+ on b.styleId = cast(sc.StyleId as varchar)
+ left join TbFabricsItem fi
+ on b.fabricsid = cast(fi.id as varchar)
+ left join tbColors c
+ on b.fabricscolor = cast(c.ColorId as varchar)
+ where a.pono='3' and a.supplierid='7'
+ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 	</queryString>
 	<field name="Taka" class="java.lang.String"/>
 	<field name="ShippingMarks" class="java.lang.String"/>
@@ -64,8 +64,8 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 	<field name="Subject" class="java.lang.String"/>
 	<field name="ManualPo" class="java.lang.String"/>
 	<field name="Signature" class="java.awt.Image"/>
-	<field name="MdSignature" class="java.awt.Image"/>
-	<field name="organizationLogo" class="java.lang.Object"/>
+	<field name="MdSignature" class="java.lang.Object"/>
+	<field name="organizationLogo" class="java.awt.Image"/>
 	<field name="mdapproval" class="java.lang.Integer"/>
 	<field name="poNo" class="java.lang.Integer"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
@@ -98,7 +98,7 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="266" splitType="Stretch">
+		<band height="279" splitType="Stretch">
 			<staticText>
 				<reportElement x="357" y="6" width="187" height="19" uuid="65e40f0b-7e98-4d71-9a61-fba171b2ea74"/>
 				<box leftPadding="0">
@@ -408,12 +408,16 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 				<reportElement x="356" y="138" width="1" height="24" uuid="b69ab052-5769-4a12-85b8-90b372327d14"/>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="198" width="255" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
+				<reportElement stretchType="RelativeToBandHeight" x="3" y="266" width="536" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
 				<textElement>
-					<font size="7"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Note}.replace( '#', '\n' ).trim()]]></textFieldExpression>
 			</textField>
+			<image scaleImage="FillFrame">
+				<reportElement x="0" y="0" width="46" height="50" uuid="6d023e65-1c74-420b-b267-ea3cac46247a"/>
+				<imageExpression><![CDATA[$F{organizationLogo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -669,6 +673,20 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 				</textElement>
 				<text><![CDATA[Time]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="300" y="3" width="80" height="11" uuid="9577e6ee-75b2-4246-b6f0-43a6b7605bfa"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="380" y="3" width="40" height="11" uuid="869accd7-9945-4959-832a-66a9be1c358d"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<lastPageFooter>
@@ -780,6 +798,20 @@ order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc]]>
 				</reportElement>
 				<imageExpression><![CDATA[$F{MdSignature}]]></imageExpression>
 			</image>
+			<textField>
+				<reportElement x="309" y="85" width="80" height="11" uuid="2ed0f1ba-2585-42d7-acac-0cb6ac68e2b8"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="389" y="85" width="40" height="11" uuid="533eb7cf-b2ca-41a1-9198-3385ed967001"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>

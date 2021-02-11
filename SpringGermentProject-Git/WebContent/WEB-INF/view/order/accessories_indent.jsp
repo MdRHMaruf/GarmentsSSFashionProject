@@ -316,9 +316,9 @@ String userName=(String)session.getAttribute("userName");
 													data-live-search="true"
 													data-style="btn-light btn-sm border-light-gray"
 													onchange="setInPercentAndTotalInPreviewTable(),calculateTotalQtyAndUnitQty(),setUnitQty()">
-
-													<c:forEach items="${unit}" var="unit" varStatus="counter">
-														<option value="${unit.id}">${unit.name}</option>
+													<option value="0">Select Unit</option>
+													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+														<option value="${unit.unitId}">${unit.unitName}</option>
 													</c:forEach>
 												</select>
 											</div>

@@ -19,16 +19,9 @@ window.onload = () => {
 		data: {},
 		success: function (data) {
 			unitList = {};
-
-			$("#unit").empty();
-			$("#unit").append("<option value='0'>Select Unit</option>");
 			data.unitList.forEach(unit => {
 				unitList[unit.unitId] = unit;
-				$("#unit").append(`<option value='${unit.unitId}'>${unit.unitName}</option>`);
 			});
-
-			$('#unit').selectpicker('refresh');
-			$('#unit').val('0').change();
 		}
 	});
 
@@ -1055,7 +1048,7 @@ function deleteIndentRow(rowId, indentType) {
 				dataType: 'json',
 				url: './deleteAccessoriesIndent',
 				data: {
-					accessorienIndentId: accessoriesIndentNo,
+					accessoriesIndentId: accessoriesIndentNo,
 					indentAutoId: rowId
 				},
 				success: function (data) {

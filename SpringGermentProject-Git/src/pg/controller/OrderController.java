@@ -974,6 +974,7 @@ public class OrderController {
 		view.addObject("accessories",accessoriesitem);
 		view.addObject("buyerList",buyerList);
 		view.addObject("brand",brand);
+		view.addObject("unitList",registerService.getUnitList());
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
 
@@ -1349,9 +1350,9 @@ public class OrderController {
 
 	@ResponseBody
 	@RequestMapping(value = "/deleteAccessoriesIndent",method=RequestMethod.POST)
-	public String deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId) {
+	public String deleteAccessoriesIndent(String accessoriesIndentId,String indentAutoId) {
 		String msg= "something wrong";
-		boolean update= orderService.deleteAccessoriesIndent(accessorienIndentId, indentAutoId);
+		boolean update= orderService.deleteAccessoriesIndent(accessoriesIndentId, indentAutoId);
 		if(update) {
 			msg="successfull";
 		}
@@ -1431,7 +1432,7 @@ public class OrderController {
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
 
-		List<AccessoriesIndent>listAccPostedData=orderService.getPostedAccessoriesIndent(userId);
+		List<AccessoriesIndent>listAccPostedData=orderService.getPostedZipperIndent(userId);
 
 		//List<commonModel>unit=orderService.Unit();
 		List<CommonModel>brand=orderService.Brands();
@@ -1441,6 +1442,7 @@ public class OrderController {
 		view.addObject("accessories",accessoriesitem);
 		view.addObject("buyerList",buyerList);
 		view.addObject("brand",brand);
+		view.addObject("unitList",registerService.getUnitList());
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
 		
@@ -1461,6 +1463,44 @@ public class OrderController {
 		objmain.put("result", result);
 
 		return objmain;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getZipperIndentList",method=RequestMethod.GET)
+	public JSONObject getZipperIndentList(String zipperIndentId) {
+		JSONObject objmain = new JSONObject();
+		//JSONArray mainarray = new JSONArray();
+
+		List<AccessoriesIndent>list=orderService.getZipperIndentItemList(zipperIndentId);
+
+		objmain.put("result", list);
+
+		return objmain;
+
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/editZipperIndent",method=RequestMethod.POST)
+	public String editZipperIndent(AccessoriesIndent v) {
+		String msg= "something wrong";
+		boolean update= orderService.editZipperIndent(v);
+		if(update) {
+			msg="successfull";
+		}
+
+
+		return msg;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteZipperIndent",method=RequestMethod.POST)
+	public String deleteZipperIndent(String zipperIndentId,String indentAutoId) {
+		String msg= "something wrong";
+		boolean update= orderService.deleteZipperIndent(zipperIndentId, indentAutoId);
+		if(update) {
+			msg="successfull";
+		}
+		return msg;
 	}
 
 	//accessories_indent_curton 

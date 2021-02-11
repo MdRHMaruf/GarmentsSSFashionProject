@@ -396,6 +396,24 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
+	public List<AccessoriesIndent> getZipperIndentItemList(String zipperIndentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getZipperIndentItemList(zipperIndentId);
+	}
+	
+	@Override
+	public boolean editZipperIndent(AccessoriesIndent v) {
+		// TODO Auto-generated method stub
+		return orderDAO.editZipperIndent(v);
+	}
+	
+	@Override
+	public boolean deleteZipperIndent(String zipperIndentId, String indentAutoId) {
+		// TODO Auto-generated method stub
+		return orderDAO.deleteZipperIndent(zipperIndentId, indentAutoId);
+	}
+	
+	@Override
 	public boolean saveAccessoriesCurton(AccessoriesIndentCarton v) {
 		// TODO Auto-generated method stub
 		return orderDAO.saveAccessoriesCurton(v);
@@ -405,6 +423,12 @@ public class OrderServiceImpl implements OrderService{
 	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
 		// TODO Auto-generated method stub
 		return orderDAO.confirmZipperIndent(zipperIndentId, zipperItems);
+	}
+	
+	@Override
+	public List<AccessoriesIndent> getPostedZipperIndent(String userId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getPostedZipperIndent(userId);
 	}
 	
 	@Override
@@ -898,8 +922,5 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	
-
-
-
 	
 }
