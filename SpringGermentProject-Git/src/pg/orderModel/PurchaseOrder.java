@@ -16,6 +16,7 @@ public class PurchaseOrder {
 	String currency;
 	String note;
 	String subject;
+	String body;
 	String itemListString;
 	List<PurchaseOrderItem> itemList;
 	String userId;
@@ -241,12 +242,17 @@ public class PurchaseOrder {
 	public void setStyleId(String styleId) {
 		this.styleId = styleId;
 	}
-
 	public String getStyleNo() {
 		return styleNo;
 	}
 	public void setStyleNo(String styleNo) {
 		this.styleNo = styleNo;
+	}
+	public String getBody() {
+		return body;
+	}
+	public void setBody(String body) {
+		this.body = body;
 	}
 
 

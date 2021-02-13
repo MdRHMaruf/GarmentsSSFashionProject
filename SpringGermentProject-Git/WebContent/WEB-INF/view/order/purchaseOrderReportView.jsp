@@ -77,7 +77,7 @@
 					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
 					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+
+					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+
 					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
 					"(select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
@@ -107,7 +107,7 @@
 					"b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) \r\n"+   
 					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+  
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, \r\n"+  
+					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
 					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
 					"(select Signature from Tblogin where id='9') as MdSignature,  \r\n"+
 					 "(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+ 
@@ -126,7 +126,7 @@
 					"left join tbStyleSize ss  \r\n"+
 					"on b.size = ss.id \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
-					"group by a.pono,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
+					"group by a.pono,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
 			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");
 			
@@ -135,7 +135,7 @@
 				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
 					" (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,    \r\n"+
 					" (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,    \r\n"+
-					" (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,  \r\n"+  
+					" (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+  
 					" (select Signature from Tblogin where id=b.entryby) as Signature,    \r\n"+
 					" (select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
@@ -163,7 +163,7 @@
 					  " b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
 					  " (select username from Tblogin  where id=a.orderby) OrderBy,   \r\n"+
 					  " (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, \r\n"+  
-					  " (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo, \r\n"+  
+					  " (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
 					  " (select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
 					  " (select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					  " (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+

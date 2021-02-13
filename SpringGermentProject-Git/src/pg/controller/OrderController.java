@@ -2047,7 +2047,9 @@ public class OrderController {
 	public @ResponseBody JSONObject getIndentItems(String indentId,String indentType) {
 		JSONObject objmain = new JSONObject();
 		List<AccessoriesItem>  itemList = orderService.getIndentItems(indentId, indentType);
+		List<Style>  styleList = orderService.getIndentStyles(indentId, indentType);
 		objmain.put("itemList", itemList);
+		objmain.put("styleList", styleList);
 		return objmain;
 	}
 	@RequestMapping(value = "/getTypeWiseIndentItems",method=RequestMethod.GET)
@@ -2061,7 +2063,11 @@ public class OrderController {
 	@RequestMapping(value = "/addIndentItem",method=RequestMethod.GET)
 	public @ResponseBody JSONObject addIndentItem(AccessoriesIndent accessoriesIndent) {
 		JSONObject objmain = new JSONObject();
-		List<PurchaseOrderItem> poItemList = orderService.getPurchaseOrderItemList(accessoriesIndent);
+		List<PurchaseOrderItem> poItemList;
+		if(accessoriesIndent.getStyleId().equals("0"))
+			poItemList = orderService.getPurchaseOrderItemList(accessoriesIndent);
+		else
+			poItemList = orderService.getPurchaseOrderItemListByStyleId(accessoriesIndent);
 		objmain.put("poItemList", poItemList);
 		return objmain;
 	}

@@ -4792,6 +4792,68 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
+	
+	@Override
+	public List<Style> getIndentStyles(String indentId, String indentType) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Style> dataList=new ArrayList<Style>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql = "";
+			if(indentType.equals("Fabrics")) {
+				sql = "select rf.styleId,sc.StyleNo \r\n" + 
+						"from tbFabricsIndent rf \r\n" + 
+						"left join TbStyleCreate sc  \r\n" + 
+						"on rf.styleId = cast(sc.StyleId as varchar) \r\n" + 
+						"where rf.indentId='"+indentId+"' and rf.pono is null \r\n"
+						+ "group by rf.styleId,sc.StyleNo";
+			}else if(indentType.equals("Accessories")) {
+				sql = "select ai.styleId,sc.StyleNo \r\n" + 
+						"from tbAccessoriesIndent ai \r\n" + 
+						"left join TbStyleCreate sc  \r\n" + 
+						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
+						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
+						+ "group by ai.styleId,sc.StyleNo";
+			}else if(indentType.equals("Zipper And Others")) {
+				sql = "select ai.styleId,sc.StyleNo \r\n" + 
+						"from tbZipperIndent ai \r\n" + 
+						"left join TbStyleCreate sc  \r\n" + 
+						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
+						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
+						+ " group by ai.styleId,sc.StyleNo";
+			}else {
+				sql = "select aic.styleId,sc.StyleNo\r\n" + 
+						"from tbAccessoriesIndentForCarton aic \r\n" + 
+						"left join TbStyleCreate sc  \r\n" + 
+						"on aic.styleId = cast(sc.StyleId as varchar) \r\n" + 
+						"where aic.indentId = '"+indentId+"' and aic.pono is null \r\n"
+						+ "group by aic.styleId,sc.StyleNo ";
+			}
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new Style(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
 
 
 	@Override
@@ -4826,6 +4888,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "currency,"
 					+ "Note,"
 					+ "Subject,"
+					+ "body,"
 					+ "ManualPo,"
 					+ "entryBy,"
 					+ "entryTime) "
@@ -4843,6 +4906,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "'"+purchaseOrder.getCurrency()+"',"
 					+ "'"+purchaseOrder.getNote()+"',"
 					+ "'"+purchaseOrder.getSubject()+"',"
+					+ "'"+purchaseOrder.getBody()+"',"
 					+ "'"+purchaseOrder.getManualPO()+"',"
 					+ "'"+purchaseOrder.getUserId()+"',"
 					+ "CURRENT_TIMESTAMP ) ";
@@ -4922,6 +4986,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "currency = '"+purchaseOrder.getCurrency()+"',"
 					+ "Note = '"+purchaseOrder.getNote()+"',"
 					+ "Subject = '"+purchaseOrder.getSubject()+"',"
+					+ "body = '"+purchaseOrder.getBody()+"',"
 					+ "ManualPo = '"+purchaseOrder.getManualPO()+"',"
 					+ "entryBy = '"+purchaseOrder.getUserId()+"',"
 					+ "entryTime = CURRENT_TIMESTAMP where poNo= '"+purchaseOrder.getPoNo()+"'";
@@ -5199,12 +5264,14 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Accessories")) {
-				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
 						" left join tbColors c\r\n" + 
 						" on ai.ColorId = cast(c.ColorId as varchar)\r\n" + 
+						 "left join tbStyleSize ss \r\n"
+						+ "on ai.size = ss.id \r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
 						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
 						" left join tbunits unit\r\n" + 
@@ -5218,12 +5285,14 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Zipper And Others")) {
-				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,ai.size,ai.OrderQty,ai.TotalQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.totalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 						" from tbZipperIndent ai \r\n" + 
 						" left join TbStyleCreate style\r\n" + 
 						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
 						" left join tbColors c\r\n" + 
-						" on ai.ColorId = cast(c.ColorId as varchar)\r\n" + 
+						" on ai.ColorId = cast(c.ColorId as varchar)\r\n"
+						+ "left join tbStyleSize ss \r\n"
+						+ "on ai.size = ss.id \r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
 						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
 						" left join tbunits unit\r\n" + 
@@ -5258,12 +5327,13 @@ public class OrderDAOImpl implements OrderDAO{
 			
 
 
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{
 				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[12].toString());
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[13].toString());
+				purchaseOrder.setBody(element[12].toString());
 			}
 
 			tx.commit();
@@ -5364,6 +5434,111 @@ public class OrderDAOImpl implements OrderDAO{
 						" left join tbunits unit\r\n" + 
 						" on aic.UnitId = unit.Unitid \r\n" + 
 						" where aic.indentId = '"+accessoriesIndent.getAiNo()+"' and aic.accessoriesItemId = '"+accessoriesIndent.getAccessoriesId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(),"", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
+				}
+			}
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	@Override
+	public List<PurchaseOrderItem> getPurchaseOrderItemListByStyleId(AccessoriesIndent accessoriesIndent) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<PurchaseOrderItem> dataList=new ArrayList<PurchaseOrderItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql;
+			if(accessoriesIndent.getIndentType().equals("Fabrics")) {
+				sql="select fi.id,isnull(fi.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'')as styleNo,isnull(f.ItemName,'') as accessoriesname,isnull(c.Colorname,'') as colorName,'' as size,fi.TotalQty,fi.RequireUnitQty, unit.unitname\r\n" + 
+						"from tbFabricsIndent fi \r\n" + 
+						"left join TbStyleCreate style\r\n" + 
+						"on fi.styleId = cast(style.StyleId as varchar) \r\n" + 
+						"left join tbColors c\r\n" + 
+						"on fi.itemcolor = cast(c.ColorId as varchar)\r\n" + 
+						"left join TbFabricsItem f\r\n" + 
+						"on fi.fabricsid = f.id\r\n" + 
+						"left join tbunits unit\r\n" + 
+						"on fi.UnitId = unit.Unitid\r\n" + 
+						"where fi.indentId='"+accessoriesIndent.getAiNo()+"' and fi.styleId='"+accessoriesIndent.getStyleId()+"' and fabricsid='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by fi.id";
+
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(),"", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
+				}
+			}else if(accessoriesIndent.getIndentType().equals("Accessories")) {
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.requireUnitQty,isnull(unit.unitname,'') as unitName\r\n" + 
+						" from tbAccessoriesIndent ai \r\n" + 
+						" left join TbStyleCreate style\r\n" + 
+						" on ai.styleid = cast(style.styleId as varchar) \r\n" + 
+						" left join tbColors c\r\n" + 
+						" on ai.ColorId = cast(c.colorId as varchar) \r\n" + 
+						" left join TbAccessoriesItem accItem\r\n" + 
+						" on ai.accessoriesItemId = accItem.itemid\r\n"+
+						"left join tbStyleSize ss \r\n"
+						+ "on ai.size = ss.id" + 
+						" left join tbunits unit\r\n" + 
+						" on ai.UnitId = unit.Unitid "
+						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId='"+accessoriesIndent.getStyleId()+"' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
+				}
+			}else if(accessoriesIndent.getIndentType().equals("Zipper And Others")) {
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.requireUnitQty,isnull(unit.unitname,'') as unitName\r\n" + 
+						" from tbZipperIndent ai \r\n" + 
+						" left join TbStyleCreate style\r\n" + 
+						" on ai.styleid = cast(style.styleId as varchar) \r\n" + 
+						" left join tbColors c\r\n" + 
+						" on ai.ColorId = cast(c.colorId as varchar) \r\n" + 
+						" left join TbAccessoriesItem accItem\r\n" + 
+						" on ai.accessoriesItemId = accItem.itemid\r\n"+
+						"left join tbStyleSize ss \r\n"
+						+ "on ai.size = ss.id" + 
+						" left join tbunits unit\r\n" + 
+						" on ai.UnitId = unit.Unitid "
+						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId='"+accessoriesIndent.getStyleId()+"' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					
+					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
+				}
+			}else {
+				sql="select aic.autoId,isnull(aic.purchaseOrder,'')as purchaseOrder ,isnull(style.StyleNo,'') as styleNo,isnull(ai.itemname,'') as accessoriesname,isnull(c.Colorname,'') as color,isnull(ss.sizeName,'') as sizeName,aic.OrderQty,aic.Qty,unit.unitname\r\n" + 
+						" from tbAccessoriesIndentForCarton aic\r\n" + 
+						" left join TbStyleCreate style\r\n" + 
+						"on aic.styleid = cast(style.StyleId as varchar)\r\n" + 
+						"left join TbAccessoriesItem ai\r\n" + 
+						"on aic.accessoriesItemId = ai.itemid\r\n" + 
+						"left join tbColors c\r\n" + 
+						"on aic.ColorId = c.ColorId\r\n" + 
+						"left join tbStyleSize ss\r\n" + 
+						"on aic.sizeId = ss.id\r\n" + 
+						" left join tbunits unit\r\n" + 
+						" on aic.UnitId = unit.Unitid \r\n" + 
+						" where aic.indentId = '"+accessoriesIndent.getAiNo()+"'  and aic.styleId='"+accessoriesIndent.getStyleId()+"' and aic.accessoriesItemId = '"+accessoriesIndent.getAccessoriesId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	

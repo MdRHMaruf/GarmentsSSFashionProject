@@ -24,7 +24,7 @@ window.onload = () => {
 			});
 		}
 	});
-
+	$("#dataTable").DataTable();
 
 }
 
@@ -1564,6 +1564,7 @@ function printAccessoriesIndent(aiNo) {
 function drawAccessoriesIndentListTable(data) {
 	let oldRows = '';
 	let length = $("#dataList tr").length;
+	$('#dataTable').dataTable().fnDestroy();
 	data.forEach((indent) => {
 		let autoId = indent.autoid;
 		oldRows += `<tr id='oldIndentRow-${autoId}' class='oldIndentRow' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-color-id='${indent.itemColorId}' data-size-id='${indent.size}' 
@@ -1587,6 +1588,10 @@ function drawAccessoriesIndentListTable(data) {
 	});
 	$("#dataList").empty();
 	$("#dataList").append(oldRows);
+	$('#dataTable').DataTable(({ 
+		"destroy": true, 
+	}));
+	
 }
 
 function btnInstallEvent() {
