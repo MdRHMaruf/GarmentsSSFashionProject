@@ -83,6 +83,7 @@ function typeWiseIndentItemLoad() {
 function indentItemAdd() {
 
   const indentId = $("#indentId").val();
+  const styleId = $("#styleNo").val();
   const indentType = $("#indentType").val();
   const indentItemId = $("#indentItem").val();
   const rate = $("#rate").val();
@@ -101,6 +102,7 @@ function indentItemAdd() {
               url: './addIndentItem',
               data: {
                 aiNo: indentId,
+                styleId: styleId,
                 indentType: indentType,
                 accessoriesId: indentItemId
               },
@@ -181,8 +183,9 @@ function submitAction() {
   const manualPO = $("#manualPO").val();
   const paymentType = $("#paymentType").val();
   const currency = $("#currency").val();
-  const note = $("#note").val();
   const subject = $("#subject").val();
+  const body = $("#body").val();
+  const note = $("#note").val();
   const userId = $("#userId").val();
 
   for (let i = 0; i < length; i++) {
@@ -206,6 +209,12 @@ function submitAction() {
           if (deliveryTo != 0) {
           if (paymentType != 0) {
             if (currency != 0) {
+              if(body != ''){
+
+              }else{
+                warningAlert("Please Enter ..");
+                $("#body").focus();
+              }
               if (isChecked) {
                 if (confirm("Are you sure to submit this Purchase Order...")) {
                   $.ajax({
@@ -226,6 +235,7 @@ function submitAction() {
                       currency: currency,
                       note: note,
                       subject: subject,
+                      body: body,
                       itemListString: itemList,
                       userId: userId
                     },
@@ -296,6 +306,7 @@ function purchaseOrderEdit() {
   const currency = $("#currency").val();
   const note = $("#note").val();
   const subject = $("#subject").val();
+  const body = $("#body").val();
   const userId = $("#userId").val();
  
   for (let i = 0; i < length; i++) {
@@ -336,6 +347,7 @@ function purchaseOrderEdit() {
                   paymentType: paymentType,
                   currency: currency,
                   note: note,
+                  body: body,
                   subject: subject,
                   itemListString: itemList,
                   userId: userId
@@ -387,14 +399,26 @@ function searchIndentItem(indentId, indentType) {
     },
     success: function (data) {
       const itemList = data.itemList;
-      const length = itemList.length;
-      let options = "<option id='indentItem' value='0' selected>--Select Indent Item--</option>";
+      let length = itemList.length;
+      let options = "<option value='0' selected>--Select Indent Item--</option>";
       for (var i = 0; i < length; i++) {
-        options += "<option id='indentItem' value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
+        options += "<option value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
       };
       document.getElementById("indentItem").innerHTML = options;
       $('#indentItem').selectpicker('refresh');
       $('#indentItem').val(indentIdForSet).change();
+      indentIdForSet = 0;
+
+
+      const styleList = data.styleList;
+      length = styleList.length;
+      options = "<option value='0'>--Select Style--</option>";
+      for (var i = 0; i < length; i++) {
+        options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+      };
+      document.getElementById("styleNo").innerHTML = options;
+      $('#styleNo').selectpicker('refresh');
+      $('#styleNo').val(indentIdForSet).change();
       indentIdForSet = 0;
     }
   });
@@ -471,7 +495,7 @@ function searchPurchaseOrder(poNo,poType) {
         $("#currency").val(purchaseOrder.currency);
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
-
+        $("#body").val(purchaseOrder.body);
         $("#dataList").empty();
         $("#dataList").append(drawDataTable(purchaseOrder.itemList, "checked"));
         $('.tableSelect').selectpicker('refresh');
@@ -565,7 +589,7 @@ function drawAddDataTable(data, isChecked = "") {
     <td id='amount-${autoId}'>${amount.toFixed(2)}</td>
     <td><input type='checkbox' class='check' id='check-${autoId}' ${isChecked}></td>
     <td><i class='fa fa-trash' onclick="deleteIndentItem('${autoId}')" style='cursor:pointer;'> </i></td>
-    </tr>`
+    </tr>`;
 
   }
 

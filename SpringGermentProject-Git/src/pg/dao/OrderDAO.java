@@ -153,12 +153,14 @@ public interface OrderDAO {
 	//Purchase Order
 	List<AccessoriesItem> getTypeWiseIndentItems(String purchaseOrder,String styleId,String type);
 	List<AccessoriesItem> getIndentItems(String indentId,String indentType);
+	List<Style> getIndentStyles(String indentId,String indentType);
 	boolean submitPurchaseOrder(PurchaseOrder purchaseOrder);
 	boolean editPurchaseOrder(PurchaseOrder purchaseOrder);
 	List<PurchaseOrder> getPurchaseOrderSummeryList(String userId);
 	List<CommonModel> getPendingIndentList(String userId);
 	PurchaseOrder getPurchaseOrder(String poNo,String poType);
 	List<PurchaseOrderItem> getPurchaseOrderItemList(AccessoriesIndent accessoriesIndent);
+	List<PurchaseOrderItem> getPurchaseOrderItemListByStyleId(AccessoriesIndent accessoriesIndent);
 
 	//File Upload
 	boolean fileUpload(String uploadFileName, String computerName, String string, String purpose, String user, String buyerName, String purchaseOrder);

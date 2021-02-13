@@ -513,8 +513,8 @@ String userName=(String)session.getAttribute("userName");
 
 					<div class="row mt-1">
 						<div style="overflow: auto; max-height: 550px;"
-							class="col-sm-12 p-0 table-responsive">
-							<table
+							class="col-sm-12 p-0 ">
+							<table id="dataTable"
 								class="table table-hover table-bordered table-sm mb-0 small-font">
 								<thead>
 									<tr>
@@ -621,12 +621,11 @@ String userName=(String)session.getAttribute("userName");
 		</div>
 	</div>
 </div>
-<%-- <script>
-				$('.bsdatepicker').datepicker({
 
-				});
-			</script> --%>
 <jsp:include page="../include/footer.jsp" />
-
+<script
+	src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+	<script
+	src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/assets/js/order/accessories_indent.js"></script>

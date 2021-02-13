@@ -607,6 +607,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getIndentItems(indentId, indentType);
 	}
+	
+	@Override
+	public List<Style> getIndentStyles(String indentId,String indentType) {
+		// TODO Auto-generated method stub
+		return orderDAO.getIndentStyles(indentId, indentType);
+	}
 
 
 	@Override
@@ -642,6 +648,12 @@ public class OrderServiceImpl implements OrderService{
 	public List<PurchaseOrderItem> getPurchaseOrderItemList(AccessoriesIndent accessoriesIndent) {
 		// TODO Auto-generated method stub
 		return orderDAO.getPurchaseOrderItemList(accessoriesIndent);
+	}
+	
+	@Override
+	public List<PurchaseOrderItem> getPurchaseOrderItemListByStyleId(AccessoriesIndent accessoriesIndent) {
+		// TODO Auto-generated method stub
+		return orderDAO.getPurchaseOrderItemListByStyleId(accessoriesIndent);
 	}
 
 	@Override
