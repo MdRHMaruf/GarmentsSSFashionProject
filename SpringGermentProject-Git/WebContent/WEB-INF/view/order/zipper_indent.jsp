@@ -8,8 +8,8 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -54,7 +54,8 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
-										<select id="buyerName" class="selectpicker w-100" data-live-search="true"
+										<select id="buyerName" class="selectpicker w-100"
+											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray">
 											<option value='0'>Select Buyer Name</option>
 											<c:forEach items="${buyerList}" var="buyer">
@@ -72,7 +73,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="purchaseOrder" class="col-form-label-sm mb-0 py-0">Purchase
-										Order<span style="color:red">*</span></label>
+										Order<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
@@ -82,7 +84,8 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
-										<select id="purchaseOrder" class="selectpicker w-100" data-live-search="true"
+										<select id="purchaseOrder" class="selectpicker w-100"
+											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray">
 											<option value='0'>Select Purchase Order</option>
 											<c:forEach items="${purchaseorders}" var="acc"
@@ -102,7 +105,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="styleNo" class="col-form-label-sm mb-0 py-0">Style
-										No<span style="color:red">*</span></label>
+										No<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkStyleNo" type="checkbox" class="form-check-input">
@@ -112,7 +116,8 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
-										<select id="styleNo" class="selectpicker w-100" data-live-search="true"
+										<select id="styleNo" class="selectpicker w-100"
+											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray">
 										</select>
 										<button class="btn btn-sm btn-primary" type="button"
@@ -126,7 +131,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="itemName" class="col-form-label-sm mb-0 py-0">Item
-										Name<span style="color:red">*</span></label>
+										Name<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkItemName" type="checkbox" class="form-check-input">
@@ -136,7 +142,8 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
-										<select id="itemName" class="selectpicker w-100" data-live-search="true"
+										<select id="itemName" class="selectpicker w-100"
+											data-live-search="true"
 											data-style="btn-light btn-sm border-light-gray">
 										</select>
 										<button class="btn btn-sm btn-primary" type="button"
@@ -225,8 +232,9 @@ String userName=(String)session.getAttribute("userName");
 							<div class="form-group  mb-1"
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
-									<label for="zipperItem"
-										class="col-form-label-sm mb-0 py-0">Zipper Item<span style="color:red">*</span></label>
+									<label for="zipperItem" class="col-form-label-sm mb-0 py-0">Zipper
+										Item<span style="color: red">*</span>
+									</label>
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
@@ -243,13 +251,38 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 								</div>
 							</div>
-							<div class="form-group  mb-1"
-								style="padding-left: 1px; padding-right: 1px;">
-								<div class="d-flex justify-content-between">
-									<label for="zipperSize"
-										class="col-form-label-sm mb-0 py-0">Zipper Size</label>
+							<div class="row">
+								<div class="col-md-6 pr-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-between">
+											<label for="zipperSize" class="col-form-label-sm mb-0 py-0">Zipper
+												Size</label>
+										</div>
+										<input type="text" class='form-control-sm' id="zipperSize"
+											onkeyup="lengthValueSet()">
+									</div>
 								</div>
-								<input type="text" class='form-control-sm' id="zipperSize" onkeyup="lengthValueSet()">
+								<div class="col-md-6 pl-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-between">
+											<label for="lengthUnit" class="col-form-label-sm mb-0 py-0">Length Unit</label>
+										</div>
+										<div class="row">
+											<div class="col-md-12">
+												<select id="lengthUnit" class="selectpicker form-control"
+													data-live-search="true"
+													data-style="btn-light btn-sm border-light-gray">
+													<option value="0">Select Unit</option>
+													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+														<option value="${unit.unitId}">${unit.unitName}</option>
+													</c:forEach>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 
 							<div class="row">
@@ -257,14 +290,14 @@ String userName=(String)session.getAttribute("userName");
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="zipperColor"
-												class="col-form-label-sm mb-0 py-0">Zipper
-												Color<span style="color:red">*</span></label>
+											<label for="zipperColor" class="col-form-label-sm mb-0 py-0">Zipper
+												Color<span style="color: red">*</span>
+											</label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
-												<select id="zipperColor"
-													class="selectpicker form-control" data-live-search="true"
+												<select id="zipperColor" class="selectpicker form-control"
+													data-live-search="true"
 													data-style="btn-light btn-sm border-light-gray">
 													<option value="0">Select Color</option>
 													<c:forEach items="${color}" var="color" varStatus="counter">
@@ -301,7 +334,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit<span style="color:red">*</span></label>
+											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit<span
+												style="color: red">*</span></label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
@@ -309,9 +343,9 @@ String userName=(String)session.getAttribute("userName");
 													data-live-search="true"
 													data-style="btn-light btn-sm border-light-gray"
 													onchange="setInPercentAndTotalInPreviewTable(),calculateTotalQtyAndUnitQty(),setUnitQty()">
-
-													<c:forEach items="${unit}" var="unit" varStatus="counter">
-														<option value="${unit.id}">${unit.name}</option>
+													<option value="0">Select Unit</option>
+													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+														<option value="${unit.unitId}">${unit.unitName}</option>
 													</c:forEach>
 												</select>
 											</div>
@@ -325,8 +359,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="unitQty" class="col-form-label-sm mb-0 py-0"><strong>Unit
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="unitQty" onkeyup="setTotalByUnitInEditMode()"
-											readonly>
+										<input type="number" class='form-control-sm' id="unitQty"
+											onkeyup="setTotalByUnitInEditMode()" readonly>
 									</div>
 								</div>
 							</div>
@@ -411,7 +445,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
 													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="divideBy"
+											onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 							</div>
@@ -448,8 +483,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="totalQty" class="col-form-label-sm mb-0 py-0"><strong>Total
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="totalQty" onkeyup="setUnitByTotalInEditMode()"
-											readonly>
+										<input type="number" class='form-control-sm' id="totalQty"
+											onkeyup="setUnitByTotalInEditMode()" readonly>
 									</div>
 								</div>
 							</div>
@@ -589,7 +624,7 @@ String userName=(String)session.getAttribute("userName");
 							<th>SL#</th>
 							<th>Indent No</th>
 							<th>Purchase Order</th>
-							<th>Indent Date</th>						
+							<th>Indent Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
@@ -602,9 +637,9 @@ String userName=(String)session.getAttribute("userName");
 								<td>${list.aiNo}</td>
 								<td>${list.purchaseOrder}</td>
 								<td>${list.indentDate}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
+								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchZipperIndent('${list.aiNo}')"> </i></td>
-									<td><i class="fa fa-print" style="cursor:pointer;"
+								<td><i class="fa fa-print" style="cursor: pointer;"
 									onclick="printZipperIndent('${list.aiNo}')"> </i></td>
 							</tr>
 						</c:forEach>
