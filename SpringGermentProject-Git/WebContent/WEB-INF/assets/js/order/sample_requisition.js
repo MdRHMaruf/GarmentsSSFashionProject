@@ -91,11 +91,17 @@ function sizeLoadByGroup() {
 function searchSampleRequisition(v) {
 
 	  $('#exampleModal').modal('hide');
+	var user = $("#userId").val();
+	var sampleReqId = v;
 	
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		dataType: 'json',
-		url: './searchSampleRequisition/' + v,
+		url: './searchSampleRequisition',
+		data:{
+			sampleReqId:sampleReqId,
+			user:user
+		},
 		success: function (data) {
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");

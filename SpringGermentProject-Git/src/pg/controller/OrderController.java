@@ -1906,8 +1906,8 @@ public class OrderController {
 		return msg;
 	}
 
-	@RequestMapping(value = "/searchSampleRequisition/{sampleReqId}/{user}",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchSampleRequisition(@PathVariable ("sampleReqId") String sampleReqId,@PathVariable ("user") String user) {
+	@RequestMapping(value = "/searchSampleRequisition",method=RequestMethod.POST)
+	public @ResponseBody JSONObject searchSampleRequisition(String sampleReqId,String user) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
