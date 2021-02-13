@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="10" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
-	<property name="ireport.zoom" value="1.464100000000018"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="1.771561000000022"/>
+	<property name="ireport.x" value="27"/>
+	<property name="ireport.y" value="400"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select (select organizationLogo from tbOrganizationInfo where organizationId='1') as OrgLogo,b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId,sum(a.TotalUnit) as TotalUnit  from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='2' group by b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId   order by a.BuyerOrderId,a.sizeGroupId"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select (select organizationLogo from tbOrganizationInfo where organizationId='1') as OrgLogo,b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId,sum(a.TotalUnit) as TotalUnit,sum(a.TotalPrice) as TotalCmt,sum(a.TotalAmount) as TotalAmount from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='4' group by b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId   order by a.BuyerOrderId,a.sizeGroupId"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
@@ -31,7 +31,7 @@
 		<![CDATA[$P!{sql}]]>
 	</queryString>
 	<field name="OrgLogo" class="java.awt.Image"/>
-	<field name="shipmentDate" class="java.util.Date"/>
+	<field name="shipmentDate" class="java.lang.String"/>
 	<field name="PaymentTerm" class="java.lang.String"/>
 	<field name="Currency" class="java.lang.String"/>
 	<field name="note" class="java.lang.String"/>
@@ -48,8 +48,18 @@
 	<field name="itemname" class="java.lang.String"/>
 	<field name="sizeGroupId" class="java.lang.String"/>
 	<field name="TotalUnit" class="java.math.BigDecimal"/>
+	<field name="TotalCmt" class="java.math.BigDecimal"/>
+	<field name="TotalAmount" class="java.math.BigDecimal"/>
 	<variable name="totalUnit" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{TotalUnit}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalCmt" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{TotalCmt}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="totalFob" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{TotalAmount}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<group name="ItemGp">
@@ -399,56 +409,113 @@
 		<band splitType="Stretch"/>
 	</columnFooter>
 	<lastPageFooter>
-		<band height="31">
+		<band height="22">
 			<staticText>
-				<reportElement x="7" y="15" width="57" height="12" uuid="1d96f1f4-7a2a-45c0-9d76-7ac56586fe65"/>
+				<reportElement x="7" y="4" width="57" height="12" uuid="1d96f1f4-7a2a-45c0-9d76-7ac56586fe65"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REMARKS]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="7" y="2" width="57" height="12" uuid="23ef0890-b928-41b7-9352-545634e0bffb"/>
-				<textElement>
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[TOTAL QTY]]></text>
-			</staticText>
-			<textField pattern="#,##0.00">
-				<reportElement x="70" y="2" width="97" height="13" uuid="312fa585-58f3-4b0d-acd3-e3329d96a7bb"/>
-				<box>
-					<pen lineStyle="Double"/>
-					<topPen lineStyle="Double"/>
-					<leftPen lineStyle="Double"/>
-					<bottomPen lineWidth="3.0" lineStyle="Double"/>
-					<rightPen lineStyle="Double"/>
-				</box>
-				<textElement>
-					<font isItalic="false" isUnderline="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$V{totalUnit}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="65" y="15" width="5" height="12" uuid="2abda86c-0cef-4dd2-a6e8-a341cbeecc65"/>
-				<textElement>
-					<font size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="65" y="2" width="5" height="12" uuid="15e97f4c-ff5c-41d8-a94a-8900f7e01939"/>
+				<reportElement x="65" y="4" width="5" height="12" uuid="2abda86c-0cef-4dd2-a6e8-a341cbeecc65"/>
 				<textElement>
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="70" y="15" width="726" height="13" uuid="5fa59e25-6896-45a7-8efa-2677381797b0"/>
+				<reportElement x="71" y="4" width="726" height="13" uuid="5fa59e25-6896-45a7-8efa-2677381797b0"/>
 				<textFieldExpression><![CDATA[$F{note}]]></textFieldExpression>
 			</textField>
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band splitType="Stretch"/>
+		<band height="46" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="73" y="15" width="62" height="12" uuid="6d924685-b3bd-4ba8-9922-e770dbdf88ad"/>
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="9" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalCmt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="73" y="29" width="62" height="12" uuid="773e8115-1952-417d-b07f-874e5ee762bb"/>
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="9" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalFob}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="1" width="5" height="12" uuid="92efcc59-2cc5-4500-aeee-1d5136ab1a72"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="15" width="5" height="12" uuid="9614fb3e-6553-4a59-8b50-e30da04dea56"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="15" width="57" height="12" uuid="dbe19776-6e03-4026-a984-4c7ca12020e3"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL CMT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="29" width="5" height="12" uuid="142bb5f9-ff7b-485a-b609-7fa37b6867c4"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="29" width="57" height="12" uuid="ac197c29-d44e-4b39-b350-221b0c68da18"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL FOB]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="73" y="1" width="62" height="12" uuid="dce8cedc-4dcb-4147-ae5f-54c29b6ec0bf"/>
+				<box>
+					<pen lineStyle="Double"/>
+					<topPen lineStyle="Double"/>
+					<leftPen lineStyle="Double"/>
+					<bottomPen lineWidth="1.0" lineStyle="Double"/>
+					<rightPen lineStyle="Double"/>
+				</box>
+				<textElement>
+					<font size="9" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalUnit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="1" width="57" height="12" uuid="414aa6c5-cbe8-46ed-a866-649a34722e2e"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL QTY]]></text>
+			</staticText>
+		</band>
 	</summary>
 </jasperReport>

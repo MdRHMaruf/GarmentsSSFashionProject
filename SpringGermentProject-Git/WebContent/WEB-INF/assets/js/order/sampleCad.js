@@ -457,11 +457,16 @@ function sampleCadReport(id) {
 function searchSampleRequisition(v) {
 	
 	var user = $("#userId").val();
+	var sampleReqId = v;
 	  $('#exampleModal').modal('hide');
 	$.ajax({
-		type: 'GET',
+		type: 'POST',
 		dataType: 'json',
-		url: './searchSampleRequisition/' + v+"/"+user,
+		url: './searchSampleRequisition',
+		data:{
+			sampleReqId:sampleReqId,
+			user:user
+		},
 		success: function (data) {
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
