@@ -167,7 +167,6 @@ function masterStyleAddAction() {
                             <td><input type="number" id='masterUnitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${unitPrice}"/></td>
                             <td id='masterAmount-${id}'>${amount}</td>
                             <td ><i class='fa fa-trash' onclick="deleteMasterStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
-                            <td ><i class='fas fa-dolly-flatbed' onclick="shippedAction('${id}')" style="cursor:pointer;" title="Shipped"></i></td>
                           </tr>`;
 
                 $("#masterStyleList").append(row);
@@ -372,6 +371,226 @@ function masterSubmitAction() {
 
 }
 
+function masterEditAction(){
+  let rowList = $("#masterStyleList .edited-row");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.masterNewStyle");
+    length = rowList.length;
+
+    let styleList = '';
+
+    let masterLCNo = $("#masterLCNo").val();
+    let buyerId = $("#masterBuyerName").val();
+    let sendBankId = $("#masterSendBankName").val();
+    let receiveBankId = $("#masterReceiveBankName").val();
+    let beneficiaryBankId = $("#beneficiaryBankName").val();
+    let throughBankId = $("#throughBankName").val();
+    let date = $("#masterDate").val();
+    let totalValue = $("#masterTotalValue").val();
+    let currencyId = $("#masterCurrency").val();
+    let shipmentDate = $("#masterShipmentDate").val();
+    let expiryDate = $("#masterExpiryDate").val();
+    let remarks = $("#masterRemarks").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (buyerId != '0') {
+        if (sendBankId != '0') {
+          if (receiveBankId != '0') {
+            if (currencyId != '0') {
+              for (let i = 0; i < length; i++) {
+                const newRow = rowList[i];
+                const id = newRow.id.slice(10);
+
+                const item = {
+                  buyerId: newRow.getAttribute('data-buyer-id'),
+                  styleId: newRow.getAttribute('data-style-id'),
+                  itemId: newRow.getAttribute('data-item-id'),
+                  purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                  quantity: $("#masterQuantity-" + id).val(),
+                  unitPrice: $("#masterUnitPrice-" + id).val(),
+                  amount: $("#masterAmount-" + id).text(),
+                  userId: userId
+                }
+
+                styleItems.list.push(item);
+              }
+              if (confirm("Are you sure to confirm..")) {
+                $.ajax({
+                  type: 'POST',
+                  dataType: 'json',
+                  url: './masterLCEdit',
+                  data: {
+                    masterLCNo: masterLCNo,
+                    buyerId: buyerId,
+                    senderBankId: sendBankId,
+                    receiverBankId: receiveBankId,
+                    beneficiaryBankId: beneficiaryBankId,
+                    throughBankId: throughBankId,
+                    date: date,
+                    totalValue: totalValue,
+                    currencyId: currencyId,
+                    shipmentDate: shipmentDate,
+                    expiryDate: expiryDate,
+                    remarks: remarks,
+                    userId: userId,
+                    amendmentNo: '0',
+                    amendmentDate: date,
+                    styleList: JSON.stringify(styleItems),
+                  },
+                  success: function (data) {
+                    if (data.result == 'success') {
+                      alert("Successfully Submitted");
+                      drawMasterLCAmendmentList(data.amendmentList);
+                    } else {
+                      alert("Master LC Insertion Failed")
+                    }
+                  }
+                });
+
+              }
+            } else {
+              warningAlert("Please Select Currency...");
+              $("#masterCurrency").focus();
+            }
+          } else {
+            warningAlert("Please Select Receive Bank Name...");
+            $("#masterReceiveBankName").focus();
+          }
+        } else {
+          warningAlert("Please Select Send Bank Name...");
+          $("#masterSendBankName").focus();
+        }
+      } else {
+        warningAlert("Please Select Buyer Name...");
+        $("#masterBuyerName").focus();
+      }
+    } else {
+      warningAlert("Please Enter Master LC No...");
+      $("#masterLCNo").focus();
+    }
+  } else {
+    warningAlert("Please Enter Any Style Item...");
+  }
+}
+
+
+function masterAmendmentAction() {
+  let rowList = $("#masterStyleList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.masterNewStyle");
+    length = rowList.length;
+
+    let styleList = '';
+
+    let masterLCNo = $("#masterLCNo").val();
+    let buyerId = $("#masterBuyerName").val();
+    let sendBankId = $("#masterSendBankName").val();
+    let receiveBankId = $("#masterReceiveBankName").val();
+    let beneficiaryBankId = $("#beneficiaryBankName").val();
+    let throughBankId = $("#throughBankName").val();
+    let date = $("#masterDate").val();
+    let totalValue = $("#masterTotalValue").val();
+    let currencyId = $("#masterCurrency").val();
+    let shipmentDate = $("#masterShipmentDate").val();
+    let expiryDate = $("#masterExpiryDate").val();
+    let remarks = $("#masterRemarks").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (buyerId != '0') {
+        if (sendBankId != '0') {
+          if (receiveBankId != '0') {
+            if (currencyId != '0') {
+              for (let i = 0; i < length; i++) {
+                const newRow = rowList[i];
+                const id = newRow.id.slice(10);
+
+                const item = {
+                  buyerId: newRow.getAttribute('data-buyer-id'),
+                  styleId: newRow.getAttribute('data-style-id'),
+                  itemId: newRow.getAttribute('data-item-id'),
+                  purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                  quantity: $("#masterQuantity-" + id).val(),
+                  unitPrice: $("#masterUnitPrice-" + id).val(),
+                  amount: $("#masterAmount-" + id).text(),
+                  userId: userId
+                }
+
+                styleItems.list.push(item);
+              }
+              if (confirm("Are you sure to confirm..")) {
+                $.ajax({
+                  type: 'POST',
+                  dataType: 'json',
+                  url: './masterLCAmendment',
+                  data: {
+                    masterLCNo: masterLCNo,
+                    buyerId: buyerId,
+                    senderBankId: sendBankId,
+                    receiverBankId: receiveBankId,
+                    beneficiaryBankId: beneficiaryBankId,
+                    throughBankId: throughBankId,
+                    date: date,
+                    totalValue: totalValue,
+                    currencyId: currencyId,
+                    shipmentDate: shipmentDate,
+                    expiryDate: expiryDate,
+                    remarks: remarks,
+                    userId: userId,
+                    amendmentNo: '0',
+                    amendmentDate: date,
+                    styleList: JSON.stringify(styleItems),
+                  },
+                  success: function (data) {
+                    if (data.result == 'success') {
+                      alert("Successfully Submitted");
+                      drawMasterLCAmendmentList(data.amendmentList);
+                    } else {
+                      alert("Master LC Insertion Failed")
+                    }
+                  }
+                });
+
+              }
+            } else {
+              warningAlert("Please Select Currency...");
+              $("#masterCurrency").focus();
+            }
+          } else {
+            warningAlert("Please Select Receive Bank Name...");
+            $("#masterReceiveBankName").focus();
+          }
+        } else {
+          warningAlert("Please Select Send Bank Name...");
+          $("#masterSendBankName").focus();
+        }
+      } else {
+        warningAlert("Please Select Buyer Name...");
+        $("#masterBuyerName").focus();
+      }
+    } else {
+      warningAlert("Please Enter Master LC No...");
+      $("#masterLCNo").focus();
+    }
+  } else {
+    warningAlert("Please Enter Any Style Item...");
+  }
+
+}
+
+function refreshAction(){
+  location.reload();
+}
+
 function drawMasterLCAmendmentList(data) {
   let rows = "";
   const length = data.length;
@@ -404,7 +623,6 @@ function drawMasterLCStyleList(data) {
               <td><input type="number" id='masterUnitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${rowData.unitPrice}"/></td>
               <td id='masterAmount-${id}'>${rowData.amount}</td>
               <td ><i class='fa fa-trash' onclick="deleteMasterStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
-              <td ><i class='fas fa-dolly-flatbed' onclick="shippedAction('${id}')" style="cursor:pointer;" title="Shipped"></i></td>
             </tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
@@ -510,10 +728,13 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
       $("#masterExpiryDate").val(masterLCInfo.expiryDate);
       $("#remarks").val(masterLCInfo.remarks);
-
       drawMasterLCStyleList(masterLCStyles);
       drawMasterLCAmendmentList(data.amendmentList);
 
+      $("#masterSubmitBtn").hide();
+      $("#masterAmendmentBtn").show();
+      $("#masterEditBtn").show();
+      $("#masterPreviewBtn").show();
     }
   });
 
@@ -585,7 +806,7 @@ function setAmendmentInfo(amendmentNo) {
                           <td><input type="number" id='unitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${style.unitPrice}"/></td>
                           <td id='amount-${id}'>${style.amount}</td>
                           <td ><i class='fa fa-trash' onclick="deleteStyle('${id}','new')" style="cursor:pointer;"></i></td>
-                          <td ><i class='fas fa-dolly-flatbed' onclick="shippedAction('${id}')" style="cursor:pointer;"></i></td>
+                          
 												</tr>`;
     $("#masterStyleList").append(row);
   })

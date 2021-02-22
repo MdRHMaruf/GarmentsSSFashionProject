@@ -470,7 +470,7 @@ $("#btnRecyclingData").click(() => {
 								}
 
 								tables += `</tr><tr>
-												<td>Total</td>`
+												<td>Total(Pcs)</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
 										tables += `<td><input id='totalQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 total-${i} sizeGroup-${item.sizeGroupId}' type='number' onkeyup="setInPercentInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
@@ -671,7 +671,12 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-								$("#dataList").append(newRow);
+									$('#dataTable').dataTable().fnDestroy();
+									$("#dataList").append(newRow);
+									$('#dataTable').DataTable(({ 
+										"destroy": true, 
+									}));
+									
 								
 							}
 
@@ -711,7 +716,11 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-						$("#dataList").append(newRow);
+									$('#dataTable').dataTable().fnDestroy();
+									$("#dataList").append(newRow);
+									$('#dataTable').DataTable(({ 
+										"destroy": true, 
+									}));
 						
 					}
 				});
@@ -1279,7 +1288,7 @@ function setInPercentInPreviewTable(id) {
 
 	$("#inPercent-" + id).text(inPercent.toFixed(1));
 	$("#percentQty-" + id).text(percentQty.toFixed(1));
-	$("#unitQty-" + id).text(unitQty.toFixed(1));
+	$("#unitQty-" + id).val(unitQty.toFixed(1));
 }
 
 function setTotalByUnitQtyInPreviewTable(id) {

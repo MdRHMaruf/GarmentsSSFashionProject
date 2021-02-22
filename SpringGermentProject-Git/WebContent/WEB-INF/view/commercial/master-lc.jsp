@@ -10,9 +10,9 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
-String departmentId=(String)session.getAttribute("departmentId");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
+	String departmentId = (String) session.getAttribute("departmentId");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -36,467 +36,208 @@ String departmentId=(String)session.getAttribute("departmentId");
 			<strong>Wrong!</strong> Something Wrong...
 		</p>
 	</div>
-	<input type="hidden" id="userId" value="<%=userId%>">
-	<input type="hidden" id="departmentId"
-		value="<%=departmentId%>"> <input type="hidden"
-		id="poNo" value="0"> <input type="hidden" id="indentId"
-		value="0"> <input type="hidden" id="styleId" value="0">
-	<input type="hidden" id="styleItemId" value="0"> <input
-		type="hidden" id="itemColorId" value="0"> <input type="hidden"
-		id="fabricsColorId" value="0"> <input type="hidden"
-		id="fabricsId" value="0"> <input type="hidden" id="unitId"
-		value="0"> <input type="hidden" id="fabricsRate" value="0">
+	<input type="hidden" id="userId" value="<%=userId%>"> <input
+		type="hidden" id="departmentId" value="<%=departmentId%>"> <input
+		type="hidden" id="poNo" value="0"> <input type="hidden"
+		id="indentId" value="0"> <input type="hidden" id="styleId"
+		value="0"> <input type="hidden" id="styleItemId" value="0">
+	<input type="hidden" id="itemColorId" value="0"> <input
+		type="hidden" id="fabricsColorId" value="0"> <input
+		type="hidden" id="fabricsId" value="0"> <input type="hidden"
+		id="unitId" value="0"> <input type="hidden" id="fabricsRate"
+		value="0">
+
 
 	<div class="card-box">
-		<header class="d-flex justify-content-between">
-			<h5 class="text-center" style="display: inline;">Master L/C</h5>
-		</header>
-		<hr class="my-1">
-		<div class="row">
-			<div class="col-md-4">
-				<div class="form-group mb-0  row">
-					<label for="masterLCNo"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">L/C No</label>
-					<div class="input-group col-md-8 px-0">
-						<div class="input-group-append">
-							<input id="masterLCNo" type="text" class=" form-control-sm">
-							<button id="newLCBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm">
-								<i class="fa fa-file-text-o"></i>
-							</button>
-							<button id="findLCBtn" type="button"
-								class="btn btn-outline-dark btn-sm form-control-sm"
-								data-toggle="modal" data-target="#searchModal">
-								<i class="fa fa-search"></i>
-							</button>
-
-						</div>
-					</div>
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="masterBuyerName"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Buyer
-						Name</label> <select id="masterBuyerName" onchange="buyerWiseStyleLoad()"
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option value="0">Select Buyer</option>
-						<c:forEach items="${buyerList}" var="buyer">
-							<option value="${buyer.buyerid}">${buyer.buyername}</option>
-						</c:forEach>
-					</select>
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="masterSendBankName"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Send
-						Bank</label> <select id="masterSendBankName" onchange=""
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option value="0">Select Bank</option>
-						<option value="1">Bangladesh Bank</option>
-						<option value="2">Bank of china</option>
-						<option value="3">Agrani Bank</option>
-						<option value="4">Asia Bank</option>
-						<option value="5">UCC Bank</option>
-					</select>
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="masterReceiveBankName"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Receive
-						Bank</label> <select id="masterReceiveBankName" onchange=""
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option value="0">Select Bank</option>
-						<option value="1">Bangladesh Bank</option>
-						<option value="2">Bank of china</option>
-						<option value="3">Agrani Bank</option>
-						<option value="4">Asia Bank</option>
-						<option value="5">UCC Bank</option>
-					</select>
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="beneficiaryBankName"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Beneficiary
-						Bank</label> <select id="beneficiaryBankName" onchange=""
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option value="0">Select Bank</option>
-						<option value="1">Bangladesh Bank</option>
-						<option value="2">Bank of china</option>
-						<option value="3">Agrani Bank</option>
-						<option value="4">Asia Bank</option>
-						<option value="5">UCC Bank</option>
-					</select>
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="throughBankName"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Through
-						Bank</label> <select id="throughBankName" onchange=""
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option value="0">Select Bank</option>
-						<option value="1">Bangladesh Bank</option>
-						<option value="2">Bank of china</option>
-						<option value="3">Agrani Bank</option>
-						<option value="4">Asia Bank</option>
-						<option value="5">UCC Bank</option>
-					</select>
-				</div>
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<a class="nav-link active" id="nav-master-tab" data-toggle="tab"
+					href="#nav-master" role="tab" aria-controls="nav-master"
+					aria-selected="true">Master LC</a> <a class="nav-link"
+					id="nav-import-tab" data-toggle="tab" href="#nav-import" role="tab"
+					aria-controls="nav-import" aria-selected="false">Import/Local
+					LC</a> <a class="nav-link" id="nav-export-tab" data-toggle="tab"
+					href="#nav-export" role="tab" aria-controls="nav-export"
+					aria-selected="false">Export</a>
 			</div>
-			<div class="col-md-3">
-				<div class="form-group mb-0  row">
-					<label for="masterDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date</label> <input
-						id="masterDate" type="date" class="col-md-8 form-control-sm">
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="masterTotalValue"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Total
-						Value</label> <input id="masterTotalValue" type="text"
-						class="col-md-8 form-control-sm" value="0" readonly>
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="masterCurrency"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
-					<select id="masterCurrency" onchange=""
-						class="selectpicker col-md-8 px-0" data-live-search="true"
-						data-style="btn-light btn-sm border-light-gray">
-						<option id="currency" value="0">Select Currency</option>
-						<%
-							int length = Currency.values().length;
-							for (int i = 0; i < length; i++) {
-						%>
-						<option id="currency" value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
-						<%
-							}
-						%>
-					</select>
-				</div>
-				<div class="form-group mb-0  row">
-					<label for="masterShipmentDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipment
-						Date</label> <input id="masterShipmentDate" type="date"
-						class="col-md-8 form-control-sm">
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="masterExpiryDate"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Expiry
-						Date</label> <input id="masterExpiryDate" type="date"
-						class="col-md-8 form-control-sm">
-				</div>
-
-				<div class="form-group mb-0  row">
-					<label for="masterRemarks"
-						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Remarks</label>
-					<textarea id="masterRemarks" type="text"
-						class="col-md-8 form-control"></textarea>
-				</div>
-
-
-			</div>
-
-			<div class="col-md-3 ml-2">
-				<div class="row">
-					<table
-						class="table table-hover table-bordered table-sm mb-0 small-font">
-						<thead class="no-wrap-text">
-							<tr>
-								<th>Amendment No</th>
-								<th>Amendment Date</th>
-							</tr>
-						</thead>
-						<tbody id="masterAmendmentList">
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-2 pr-0 pl-1">
-				<label for="masterStyleNo" class="col-form-label-sm my-0 py-0">Style
-					No</label> <select id="masterStyleNo"
-					onchange="styleWiseItemLoad(),styleWiseBuyerPOLoad()"
-					class="selectpicker col-md-12 px-0" data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray">
-					<option value="0">Select Style</option>
-				</select>
-			</div>
-
-			<div class="col-md-3 pr-0 pl-1">
-				<label for="masterItemName" class="col-form-label-sm my-0 py-0">style
-					Item Description</label> <select id="masterItemName"
-					class="selectpicker col-md-12 px-0" data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray">
-					<option value="0">--Select Indent Item--</option>
-				</select>
-			</div>
-
-			<div class="col-md-2 pr-0 pl-1">
-				<label for="masterPurchaseOrder" class="col-form-label-sm my-0 py-0">Purchase
-					Order</label> <select id="masterPurchaseOrder"
-					onchange="styleWiseItemLoad()" class="selectpicker col-md-12 px-0"
-					data-live-search="true"
-					data-style="btn-light btn-sm border-light-gray">
-					<option value="0">Select Style</option>
-				</select>
-			</div>
-
-			<div class="col-md-3 pr-0">
-				<div class="row">
-					<div class="col-md-4 pr-0 pl-1">
-						<label for="masterQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
-						<input id="masterQuantity" type="number"
-							class="form-control-sm pr-0 pl-1">
-					</div>
-					<div class="col-md-4 pr-0 pl-1">
-						<label for="masterUnitPrice" class="col-form-label-sm my-0 py-0">Unit
-							Price</label> <input id="masterUnitPrice" type="number"
-							class="form-control-sm pr-0 pl-1">
-					</div>
-					<div class="col-md-4 pr-0 pl-1">
-
-						<button id="masterAddBtn" type="button"
-							style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
-							onclick="masterStyleAddAction()">
-							<i class="fa fa-plus-circle"></i> Add
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<hr class="my-1">
-		<div class="row mt-1">
-			<div style="overflow: auto; max-height: 300px;"
-				class="col-sm-12 px-1 table-responsive">
-				<table
-					class="table table-hover table-bordered table-sm mb-0 small-font">
-					<thead class="no-wrap-text">
-						<tr>
-							<th>Style No</th>
-							<th>P/O No</th>
-							<th>Quantity</th>
-							<th>Unit Price</th>
-							<th>Amount</th>
-						</tr>
-					</thead>
-					<tbody id="masterStyleList">
-
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="row mt-1">
-			<div class="col-md-12 d-flex justify-content-end">
-				<button id="masterSubmitBtn" type="button"
-					class="btn btn-primary btn-sm" onclick="masterSubmitAction()">
-					<i class="fas fa-save"></i> Submit
-				</button>
-				<button id="masterAmendmentBtn" type="button"
-					class="btn btn-primary btn-sm" onclick="masterAmendmentAction()"
-					hidden="true">
-					<i class="fas fa-save"></i> Amendment
-				</button>
-				<button id="masterEditBtn" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="masterEditAction()"
-					hidden="true">
-					<i class="fa fa-pencil-square"></i> Edit
-				</button>
-				<button id="masterRefreshBtn" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
-					<i class="fa fa-refresh"></i> Refresh
-				</button>
-				<button id="masterPreviewBtn" type="button"
-					class="btn btn-primary btn-sm ml-1" hidden="true">
-					<i class="fa fa-print"></i> Preview
-				</button>
-			</div>
-		</div>
-		<div class="row mt-1">
-			<fieldset
-				style="border: 1px solid #e0e0e0; padding: 10px; width: 100%;">
-				<legend>Export</legend>
+		</nav>
+		<div class="tab-content" id="nav-tabContent">
+			<div class="tab-pane fade show active" id="nav-master"
+				role="tabpanel" aria-labelledby="nav-master-tab">
 				<div class="row">
 					<div class="col-md-4">
-
 						<div class="form-group mb-0  row">
-							<label for="exportMasterLcNo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
-								LC</label> <input id="exportMasterLcNo" type="text"
-								class="col-md-8 form-control-sm" readonly>
+							<label for="masterLCNo"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">L/C No</label>
+							<div class="input-group col-md-8 px-0">
+								<div class="input-group-append">
+									<input id="masterLCNo" type="text" class=" form-control-sm">
+									<button id="findLCBtn" type="button"
+										class="btn btn-outline-dark btn-sm form-control-sm"
+										data-toggle="modal" data-target="#searchModal">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
 						</div>
-
 						<div class="form-group mb-0  row">
-							<label for="exportBuyerName"
+							<label for="masterBuyerName"
 								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Buyer
-								Name</label> <input id="exportBuyerName" type="text"
-								class="col-md-8 form-control-sm" readonly>
-						</div>
-
-						<div class="form-group mb-0  row">
-							<label for="exportNotifyTo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Notify
-								To</label> <select id="exportNotifyTo"
+								Name</label> <select id="masterBuyerName"
+								onchange="buyerWiseStyleLoad()"
 								class="selectpicker col-md-8 px-0" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 								<option value="0">Select Buyer</option>
-								<c:forEach items="${notifyList}" var="notify">
-									<option value="${notify.notifyId}">${notify.notifyName}</option>
+								<c:forEach items="${buyerList}" var="buyer">
+									<option value="${buyer.buyerid}">${buyer.buyername}</option>
 								</c:forEach>
 							</select>
 						</div>
-
-						<table
-							class="table table-hover table-bordered table-sm mb-0 small-font">
-							<thead class="no-wrap-text">
-								<tr>
-									<th>Invoice No</th>
-									<th>Shipment Mark</th>
-									<th>Shipment Date</th>
-								</tr>
-							</thead>
-							<tbody id="exportShipmentList">
-
-							</tbody>
-						</table>
-					</div>
-
-					<div class="col-md-6">
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportInvoiceNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Invoice
-										No</label> <input id="exportInvoiceNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportInvoiceDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportInvoiceDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
+						<div class="form-group mb-0  row">
+							<label for="masterSendBankName"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Send
+								Bank</label> <select id="masterSendBankName" onchange=""
+								class="selectpicker col-md-8 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option value="0">Select Bank</option>
+								<option value="1">Bangladesh Bank</option>
+								<option value="2">Bank of china</option>
+								<option value="3">Agrani Bank</option>
+								<option value="4">Asia Bank</option>
+								<option value="5">UCC Bank</option>
+							</select>
 						</div>
 
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportConractNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Contract
-										No</label> <input id="cxportContractNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportContractDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportContractDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
+						<div class="form-group mb-0  row">
+							<label for="masterReceiveBankName"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Receive
+								Bank</label> <select id="masterReceiveBankName" onchange=""
+								class="selectpicker col-md-8 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option value="0">Select Bank</option>
+								<option value="1">Bangladesh Bank</option>
+								<option value="2">Bank of china</option>
+								<option value="3">Agrani Bank</option>
+								<option value="4">Asia Bank</option>
+								<option value="5">UCC Bank</option>
+							</select>
 						</div>
 
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportExpNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Exp
-										No</label> <input id="exportExpNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportExpDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportExpDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
+						<div class="form-group mb-0  row">
+							<label for="beneficiaryBankName"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Beneficiary
+								Bank</label> <select id="beneficiaryBankName" onchange=""
+								class="selectpicker col-md-8 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option value="0">Select Bank</option>
+								<option value="1">Bangladesh Bank</option>
+								<option value="2">Bank of china</option>
+								<option value="3">Agrani Bank</option>
+								<option value="4">Asia Bank</option>
+								<option value="5">UCC Bank</option>
+							</select>
 						</div>
 
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportBillEntryNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
-										Entry No</label> <input id="exportBilEntrylNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportBillEntryDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportBillEntryDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportBLNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">B/L
-										No</label> <input id="exportBLNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportBLDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportBLDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportShippingMark"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipping
-										Mark</label> <input id="exportShippingMark" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="exportShippingDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="exportShippingDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
+						<div class="form-group mb-0  row">
+							<label for="throughBankName"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Through
+								Bank</label> <select id="throughBankName" onchange=""
+								class="selectpicker col-md-8 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option value="0">Select Bank</option>
+								<option value="1">Bangladesh Bank</option>
+								<option value="2">Bank of china</option>
+								<option value="3">Agrani Bank</option>
+								<option value="4">Asia Bank</option>
+								<option value="5">UCC Bank</option>
+							</select>
 						</div>
 					</div>
+					<div class="col-md-3">
+						<div class="form-group mb-0  row">
+							<label for="masterDate"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date</label> <input
+								id="masterDate" type="date" class="col-md-8 form-control-sm">
+						</div>
+						<div class="form-group mb-0  row">
+							<label for="masterTotalValue"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Total
+								Value</label> <input id="masterTotalValue" type="text"
+								class="col-md-8 form-control-sm" value="0" readonly>
+						</div>
+
+						<div class="form-group mb-0  row">
+							<label for="masterCurrency"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Currency</label>
+							<select id="masterCurrency" onchange=""
+								class="selectpicker col-md-8 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="currency" value="0">Select Currency</option>
+								<%
+									int length = Currency.values().length;
+									for (int i = 0; i < length; i++) {
+								%>
+								<option id="currency"
+									value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+								<%
+									}
+								%>
+							</select>
+						</div>
+						<div class="form-group mb-0  row">
+							<label for="masterShipmentDate"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipment
+								Date</label> <input id="masterShipmentDate" type="date"
+								class="col-md-8 form-control-sm">
+						</div>
+
+						<div class="form-group mb-0  row">
+							<label for="masterExpiryDate"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Expiry
+								Date</label> <input id="masterExpiryDate" type="date"
+								class="col-md-8 form-control-sm">
+						</div>
+
+						<div class="form-group mb-0  row">
+							<label for="masterRemarks"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Remarks</label>
+							<textarea id="masterRemarks" type="text"
+								class="col-md-8 form-control"></textarea>
+						</div>
 
 
+					</div>
+
+					<div class="col-md-3 ml-2">
+						<div class="row">
+							<table
+								class="table table-hover table-bordered table-sm mb-0 small-font">
+								<thead class="no-wrap-text">
+									<tr>
+										<th>Amendment No</th>
+										<th>Amendment Date</th>
+									</tr>
+								</thead>
+								<tbody id="masterAmendmentList">
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
-
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
-						<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad()"
+						<label for="masterStyleNo" class="col-form-label-sm my-0 py-0">Style
+							No</label> <select id="masterStyleNo"
+							onchange="styleWiseItemLoad(),styleWiseBuyerPOLoad()"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
-							<option id="styleNo" value="0">Select Style</option>
+							<option value="0">Select Style</option>
 						</select>
 					</div>
 
 					<div class="col-md-3 pr-0 pl-1">
-						<label for="exportItemName" class="col-form-label-sm my-0 py-0">style
-							Item Description</label> <select id="exportItemName"
+						<label for="masterItemName" class="col-form-label-sm my-0 py-0">style
+							Item Description</label> <select id="masterItemName"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">--Select Indent Item--</option>
@@ -504,36 +245,32 @@ String departmentId=(String)session.getAttribute("departmentId");
 					</div>
 
 					<div class="col-md-2 pr-0 pl-1">
-						<label for="exportPurchaseOrder"
+						<label for="masterPurchaseOrder"
 							class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
-							id="exportPurchaseOrder" onchange="styleWiseItemLoad()"
+							id="masterPurchaseOrder" onchange="styleWiseItemLoad()"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
-							<option id="styleNo" value="0">Select Style</option>
+							<option value="0">Select Style</option>
 						</select>
 					</div>
 
-					<div class="col-md-4 pr-0">
+					<div class="col-md-3 pr-0">
 						<div class="row">
 							<div class="col-md-4 pr-0 pl-1">
-								<label for="exportQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
-								<input id="exportQuantity" type="number"
+								<label for="masterQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
+								<input id="masterQuantity" type="number"
 									class="form-control-sm pr-0 pl-1">
 							</div>
 							<div class="col-md-4 pr-0 pl-1">
-								<label for="exportUnitPrice" class="col-form-label-sm my-0 py-0">Unit
-									Price</label> <input id="exportUnitPrice" type="number"
+								<label for="masterUnitPrice" class="col-form-label-sm my-0 py-0">Unit
+									Price</label> <input id="masterUnitPrice" type="number"
 									class="form-control-sm pr-0 pl-1">
 							</div>
-							<div class="col-md-2 pr-0 pl-1">
-								<label for="exportCtnsQty" class="col-form-label-sm my-0 py-0">Ctns
-									Qty</label> <input id="exportCtnsQty" type="number"
-									class="form-control-sm pr-0 pl-1">
-							</div>
-							<div class="col-md-2 pr-0 pl-1">
+							<div class="col-md-4 pr-0 pl-1">
+
 								<button id="masterAddBtn" type="button"
 									style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
-									onclick="styleAddAction()">
+									onclick="masterStyleAddAction()">
 									<i class="fa fa-plus-circle"></i> Add
 								</button>
 							</div>
@@ -553,12 +290,9 @@ String departmentId=(String)session.getAttribute("departmentId");
 									<th>Quantity</th>
 									<th>Unit Price</th>
 									<th>Amount</th>
-									<th>CuttonQty</th>
-									<th>Edit</th>
-									<th>Delete</th>
 								</tr>
 							</thead>
-							<tbody id="exportStyleList">
+							<tbody id="masterStyleList">
 
 							</tbody>
 						</table>
@@ -567,32 +301,33 @@ String departmentId=(String)session.getAttribute("departmentId");
 
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
-						<button id="exportSubmitButton" type="button"
-							class="btn btn-primary btn-sm" onclick="submitAction()">
+						<button id="masterSubmitBtn" type="button"
+							class="btn btn-primary btn-sm" onclick="masterSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
-						<button id="exportEditButton" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-							disabled>
+						<button id="masterAmendmentBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="masterAmendmentAction()"
+							style="display: none">
+							<i class="fas fa-save"></i> Amendment
+						</button>
+						<button id="masterEditBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="masterEditAction()"
+							style="display: none">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
-						<button id="btnRefresh" type="button"
+						<button id="masterRefreshBtn" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
-						<button id="btnPreview" type="button"
-							class="btn btn-primary btn-sm ml-1" disabled>
+						<button id="masterPreviewBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" style="display: none">
 							<i class="fa fa-print"></i> Preview
 						</button>
 					</div>
 				</div>
-			</fieldset>
-		</div>
-
-		<div class="row mt-1">
-			<fieldset
-				style="border: 1px solid #e0e0e0; padding: 10px; width: 100%;">
-				<legend>Import / Local L/C</legend>
+			</div>
+			<div class="tab-pane fade" id="nav-import" role="tabpanel"
+				aria-labelledby="nav-import-tab">
 				<div class="row">
 					<div class="col-md-7">
 						<div class="row">
@@ -604,7 +339,17 @@ String departmentId=(String)session.getAttribute("departmentId");
 										class="col-md-8 form-control-sm">
 								</div>
 							</div>
-
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="importLcType"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Import LC Type</label>
+										<select id="importLcType" class="col-md-8 form-control-sm">
+											<option value="1">Invoice</option>
+											<option value="2">BTB LC</option>
+											<option value="3">TT LC</option>
+										</select>
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-6">
@@ -625,43 +370,7 @@ String departmentId=(String)session.getAttribute("departmentId");
 							</div>
 						</div>
 
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="importBTBLcNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">BTB
-										LC No</label> <input id="importBTBLcNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="importBTBLcDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="importBTBLcDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="importTTNo"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">TT
-										LC No</label> <input id="importTTNo" type="text"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group mb-0  row">
-									<label for="importTTDate"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="importTTDate" type="date"
-										class="col-md-8 form-control-sm">
-								</div>
-							</div>
-						</div>
+						
 
 						<div class="row">
 							<div class="col-md-6">
@@ -1267,7 +976,277 @@ String departmentId=(String)session.getAttribute("departmentId");
 						</button>
 					</div>
 				</div>
-			</fieldset>
+			</div>
+			<div class="tab-pane fade" id="nav-export" role="tabpanel"
+				aria-labelledby="nav-export-tab">
+					<div class="row">
+						<div class="col-md-4">
+
+							<div class="form-group mb-0  row">
+								<label for="exportMasterLcNo"
+									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
+									LC</label> <input id="exportMasterLcNo" type="text"
+									class="col-md-8 form-control-sm" readonly>
+							</div>
+
+							<div class="form-group mb-0  row">
+								<label for="exportBuyerName"
+									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Buyer
+									Name</label> <input id="exportBuyerName" type="text"
+									class="col-md-8 form-control-sm" readonly>
+							</div>
+
+							<div class="form-group mb-0  row">
+								<label for="exportNotifyTo"
+									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Notify
+									To</label> <select id="exportNotifyTo"
+									class="selectpicker col-md-8 px-0" data-live-search="true"
+									data-style="btn-light btn-sm border-light-gray">
+									<option value="0">Select Buyer</option>
+									<c:forEach items="${notifyList}" var="notify">
+										<option value="${notify.notifyId}">${notify.notifyName}</option>
+									</c:forEach>
+								</select>
+							</div>
+
+							<table
+								class="table table-hover table-bordered table-sm mb-0 small-font">
+								<thead class="no-wrap-text">
+									<tr>
+										<th>Invoice No</th>
+										<th>Shipment Mark</th>
+										<th>Shipment Date</th>
+									</tr>
+								</thead>
+								<tbody id="exportShipmentList">
+
+								</tbody>
+							</table>
+						</div>
+
+						<div class="col-md-6">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportInvoiceNo"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Invoice
+											No</label> <input id="exportInvoiceNo" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportInvoiceDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportInvoiceDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportConractNo"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Contract
+											No</label> <input id="cxportContractNo" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportContractDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportContractDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportExpNo"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Exp
+											No</label> <input id="exportExpNo" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportExpDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportExpDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportBillEntryNo"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
+											Entry No</label> <input id="exportBilEntrylNo" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportBillEntryDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportBillEntryDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportBLNo"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">B/L
+											No</label> <input id="exportBLNo" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportBLDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportBLDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportShippingMark"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipping
+											Mark</label> <input id="exportShippingMark" type="text"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group mb-0  row">
+										<label for="exportShippingDate"
+											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+										<input id="exportShippingDate" type="date"
+											class="col-md-8 form-control-sm">
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-2 pr-0 pl-1">
+							<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
+								No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad()"
+								class="selectpicker col-md-12 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="styleNo" value="0">Select Style</option>
+							</select>
+						</div>
+
+						<div class="col-md-3 pr-0 pl-1">
+							<label for="exportItemName" class="col-form-label-sm my-0 py-0">style
+								Item Description</label> <select id="exportItemName"
+								class="selectpicker col-md-12 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option value="0">--Select Indent Item--</option>
+							</select>
+						</div>
+
+						<div class="col-md-2 pr-0 pl-1">
+							<label for="exportPurchaseOrder"
+								class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
+								id="exportPurchaseOrder" onchange="styleWiseItemLoad()"
+								class="selectpicker col-md-12 px-0" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="styleNo" value="0">Select Style</option>
+							</select>
+						</div>
+
+						<div class="col-md-4 pr-0">
+							<div class="row">
+								<div class="col-md-4 pr-0 pl-1">
+									<label for="exportQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
+									<input id="exportQuantity" type="number"
+										class="form-control-sm pr-0 pl-1">
+								</div>
+								<div class="col-md-4 pr-0 pl-1">
+									<label for="exportUnitPrice"
+										class="col-form-label-sm my-0 py-0">Unit Price</label> <input
+										id="exportUnitPrice" type="number"
+										class="form-control-sm pr-0 pl-1">
+								</div>
+								<div class="col-md-2 pr-0 pl-1">
+									<label for="exportCtnsQty" class="col-form-label-sm my-0 py-0">Ctns
+										Qty</label> <input id="exportCtnsQty" type="number"
+										class="form-control-sm pr-0 pl-1">
+								</div>
+								<div class="col-md-2 pr-0 pl-1">
+									<button id="masterAddBtn" type="button"
+										style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
+										onclick="styleAddAction()">
+										<i class="fa fa-plus-circle"></i> Add
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr class="my-1">
+					<div class="row mt-1">
+						<div style="overflow: auto; max-height: 300px;"
+							class="col-sm-12 px-1 table-responsive">
+							<table
+								class="table table-hover table-bordered table-sm mb-0 small-font">
+								<thead class="no-wrap-text">
+									<tr>
+										<th>Style No</th>
+										<th>P/O No</th>
+										<th>Quantity</th>
+										<th>Unit Price</th>
+										<th>Amount</th>
+										<th>CuttonQty</th>
+										<th>Edit</th>
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody id="exportStyleList">
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+					<div class="row mt-1">
+						<div class="col-md-12 d-flex justify-content-end">
+							<button id="exportSubmitButton" type="button"
+								class="btn btn-primary btn-sm" onclick="submitAction()">
+								<i class="fas fa-save"></i> Submit
+							</button>
+							<button id="exportEditButton" type="button"
+								class="btn btn-primary btn-sm ml-1" onclick="editAction()"
+								disabled>
+								<i class="fa fa-pencil-square"></i> Edit
+							</button>
+							<button id="btnRefresh" type="button"
+								class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+								<i class="fa fa-refresh"></i> Refresh
+							</button>
+							<button id="btnPreview" type="button"
+								class="btn btn-primary btn-sm ml-1" disabled>
+								<i class="fa fa-print"></i> Preview
+							</button>
+						</div>
+					</div>
+			</div>
 		</div>
 	</div>
 </div>
