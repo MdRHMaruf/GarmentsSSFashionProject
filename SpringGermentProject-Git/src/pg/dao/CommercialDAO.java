@@ -13,6 +13,8 @@ public interface CommercialDAO {
 	
 	
 	public boolean masterLCSubmit(MasterLC masterLC);
+	public String masterLCEdit(MasterLC masterLC);
+	public String masterLCAmendment(MasterLC masterLC);
 	public List<MasterLC> getMasterLCAmendmentList(String masterLCNo,String buyerId);
 	public List<MasterLC> getMasterLCList();
 	public MasterLC getMasterLCInfo(String masterLCNo,String buyerId,String amendmentNo);

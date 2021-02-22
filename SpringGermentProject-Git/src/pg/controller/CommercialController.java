@@ -96,9 +96,32 @@ public class CommercialController {
 		}else {
 			objmain.put("result", "something wrong");
 		}
-
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/masterLCEdit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject masterLCEdit(MasterLC masterLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.masterLCEdit(masterLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getMasterLCAmendmentList(masterLC.getMasterLCNo(), masterLC.getBuyerId()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/masterLCAmendment",method=RequestMethod.POST)
+	public @ResponseBody JSONObject masterLCAmendment(MasterLC masterLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.masterLCAmendment(masterLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getMasterLCAmendmentList(masterLC.getMasterLCNo(), masterLC.getBuyerId()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}	
 	
 	@RequestMapping(value = "/searchMasterLC",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchMasterLC(String masterLCNo,String buyerId,String amendmentNo) {

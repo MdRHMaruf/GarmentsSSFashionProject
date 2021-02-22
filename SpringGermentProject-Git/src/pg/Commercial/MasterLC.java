@@ -18,6 +18,7 @@ public class MasterLC {
 	String remarks;
 	String userId;
 	String styleList;
+	String editedStyleList;
 	String amendmentNo;
 	String amendmentDate;
 	
@@ -165,6 +166,17 @@ public class MasterLC {
 		this.amendmentDate = amendmentDate;
 	}
 	
+	
+	public String getEditedStyleList() {
+		return editedStyleList;
+	}
+
+	public void setEditedStyleList(String editedStyleList) {
+		this.editedStyleList = editedStyleList;
+	}
+
+
+
 	public class StyleInfo{
 		String autoId;
 		String styleId;
@@ -254,9 +266,7 @@ public class MasterLC {
 		}
 		public void setAmount(String amount) {
 			this.amount = amount;
-		}
-		
-		
+		}	
 	}
 	
 }

@@ -512,7 +512,7 @@ String userName=(String)session.getAttribute("userName");
 
 
 					<div class="row mt-1">
-						<div style="overflow: auto; max-height: 550px;"
+						<div style="overflow: auto;"
 							class="col-sm-12 p-0 ">
 							<table id="dataTable"
 								class="table table-hover table-bordered table-sm mb-0 small-font">

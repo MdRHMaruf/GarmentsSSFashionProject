@@ -4807,28 +4807,28 @@ public class OrderDAOImpl implements OrderDAO{
 			if(indentType.equals("Fabrics")) {
 				sql = "select rf.styleId,sc.StyleNo \r\n" + 
 						"from tbFabricsIndent rf \r\n" + 
-						"left join TbStyleCreate sc  \r\n" + 
+						"join TbStyleCreate sc  \r\n" + 
 						"on rf.styleId = cast(sc.StyleId as varchar) \r\n" + 
 						"where rf.indentId='"+indentId+"' and rf.pono is null \r\n"
 						+ "group by rf.styleId,sc.StyleNo";
 			}else if(indentType.equals("Accessories")) {
 				sql = "select ai.styleId,sc.StyleNo \r\n" + 
 						"from tbAccessoriesIndent ai \r\n" + 
-						"left join TbStyleCreate sc  \r\n" + 
+						"join TbStyleCreate sc  \r\n" + 
 						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
 						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
 						+ "group by ai.styleId,sc.StyleNo";
 			}else if(indentType.equals("Zipper And Others")) {
 				sql = "select ai.styleId,sc.StyleNo \r\n" + 
 						"from tbZipperIndent ai \r\n" + 
-						"left join TbStyleCreate sc  \r\n" + 
+						"join TbStyleCreate sc  \r\n" + 
 						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
 						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
 						+ " group by ai.styleId,sc.StyleNo";
 			}else {
 				sql = "select aic.styleId,sc.StyleNo\r\n" + 
 						"from tbAccessoriesIndentForCarton aic \r\n" + 
-						"left join TbStyleCreate sc  \r\n" + 
+						"join TbStyleCreate sc  \r\n" + 
 						"on aic.styleId = cast(sc.StyleId as varchar) \r\n" + 
 						"where aic.indentId = '"+indentId+"' and aic.pono is null \r\n"
 						+ "group by aic.styleId,sc.StyleNo ";

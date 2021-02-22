@@ -22,6 +22,18 @@ public class CommercialServiceImpl implements CommercialService{
 	}
 	
 	@Override
+	public String masterLCEdit(MasterLC masterLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.masterLCEdit(masterLC);
+	}
+	
+	@Override
+	public String masterLCAmendment(MasterLC masterLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.masterLCAmendment(masterLC);
+	}
+	
+	@Override
 	public List<MasterLC> getMasterLCAmendmentList(String masterLCNo, String buyerId) {
 		// TODO Auto-generated method stub
 		return commercialDao.getMasterLCAmendmentList(masterLCNo, buyerId);
