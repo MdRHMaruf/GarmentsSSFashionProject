@@ -4603,7 +4603,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
+			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
@@ -4633,7 +4633,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,isnull(srd.buyerOrderId,''),srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,ISNULL(c.Colorname,'') as colorName,isnull(srd.buyerOrderId,'') as buyerOrderId,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join tbSampleRequisition sr\r\n" + 
 					"					on sr.sampleReqId=srd.sampleReqId\r\n" + 
@@ -5570,7 +5570,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ISNULL(srd.sampleReqId,0) as sampleReqId,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,c.Colorname,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+			String sql="select ISNULL(srd.sampleReqId,0) as sampleReqId,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,ISNULL(c.Colorname,''),srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join TbStyleCreate sc\r\n" + 
 					"					on srd.StyleId = sc.StyleId\r\n" + 
