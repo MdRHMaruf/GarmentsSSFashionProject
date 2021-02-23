@@ -302,7 +302,6 @@ function itemSizeAdd() {
 
 	if (styleId != 0) {
 		if (itemId != 0) {
-			if (colorId != 0) {
 				if (sizeGroupId != 0) {
 					var sizeListLength = $(".sizeValue").length;
 					var sizeList = "";
@@ -348,11 +347,6 @@ function itemSizeAdd() {
 					warningAlert("Size Group not selected ... Please Select Size group");
 					$("#sizeGroup").focus();
 				}
-			} else {
-				alert("Color Not Selected... Please Select Color");
-				warningAlert("Color Not Selected... Please Select Color");
-				$("#color").focus();
-			}
 		} else {
 			alert("Item Type not selected... Please Select Item Type");
 			warningAlert("Item Type not selected... Please Select Item Type");
