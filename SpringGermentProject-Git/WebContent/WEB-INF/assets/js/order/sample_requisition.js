@@ -10,6 +10,26 @@ var find = 0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
+function previewSampleCad(){
+	var date=$('#sampleSearchDate').val();
+	var userId=$('#userId').val();
+	if(date!=null){
+		var url = `printDateWiseSampleRequsition/${date}@${userId}`;
+		window.open(url, '_blank');
+	}
+}
+
+function previewSampleRequsition(){
+	
+	var date=$('#sampleSearchDate').val();
+	var userId=$('#userId').val();
+	if(date!=null){
+		var url = `printDateWiseSamplCad/${date}@${userId}`;
+		window.open(url, '_blank');
+	}
+
+}
+
 function printSampleRequisition(sampleReqId) {
 	$.ajax({
 		type: 'GET',
@@ -302,7 +322,6 @@ function itemSizeAdd() {
 
 	if (styleId != 0) {
 		if (itemId != 0) {
-			if (colorId != 0) {
 				if (sizeGroupId != 0) {
 					var sizeListLength = $(".sizeValue").length;
 					var sizeList = "";
@@ -348,11 +367,6 @@ function itemSizeAdd() {
 					warningAlert("Size Group not selected ... Please Select Size group");
 					$("#sizeGroup").focus();
 				}
-			} else {
-				alert("Color Not Selected... Please Select Color");
-				warningAlert("Color Not Selected... Please Select Color");
-				$("#color").focus();
-			}
 		} else {
 			alert("Item Type not selected... Please Select Item Type");
 			warningAlert("Item Type not selected... Please Select Item Type");
@@ -797,4 +811,20 @@ function loadItemsWiseColor(data) {
 	colorValue = 0;
 
 }
+
+
+
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#datalist tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});
+
 

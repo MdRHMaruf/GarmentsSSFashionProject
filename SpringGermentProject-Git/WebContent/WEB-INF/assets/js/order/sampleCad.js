@@ -14,6 +14,7 @@ var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
 
+
 window.onload = () => {
 	
 	
@@ -435,6 +436,20 @@ function dateFormatting(field){
 
 
 
+function previewSampleRequsition(){
+	
+	var date=$('#sampleSearchDate').val();
+	var userId=$('#userId').val();
+	if(date!=''){
+		var url = `printDateWiseSampleRequsition/${date}@${userId}`;
+		window.open(url, '_blank');
+	}
+	else{
+		alert("Provide Date");
+	}
+	
+}
+
 function sampleCadReport(id) {
 
 	$.ajax({
@@ -820,3 +835,30 @@ function del(a) {
 
 
 }
+
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#datalist tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});
+
+
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#sampleCadList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});
