@@ -54,7 +54,7 @@ String userName=(String)session.getAttribute("userName");
 
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
-				<i class="fa fa-search"></i>
+				<i class="fa fa-search">Sample Requisition List</i>
 			</button>
 		</header>
 		<hr class="my-1">
@@ -316,8 +316,21 @@ String userName=(String)session.getAttribute("userName");
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
+			
+			
+		
 			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Sample Requisition List</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			
+
+			
 				<div class="input-group">
+
 					<input id="search" type="text" class="form-control"
 						placeholder="Search Sample Requisition"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -325,11 +338,16 @@ String userName=(String)session.getAttribute("userName");
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
 				</div>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
+
+				<div class="input-group">
+					<label class="col-sm-1">Date</label>
+					<div class="col-sm-8 eventInsForm_Ledger">
+						<input class="form-control-sm" id='sampleSearchDate' type="date">
+						<button type="button" class="btn btn-primary" onclick="previewSampleRequsition()" >Preview</button>
+					</div>
+				</div>
+			
+			
 			<div class="modal-body">
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
@@ -343,7 +361,7 @@ String userName=(String)session.getAttribute("userName");
 							<th><span>Print</th>
 						</tr>
 					</thead>
-					<tbody id="poList">
+					<tbody id="datalist">
 						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
 							<tr>
 								<td>${counter.count}</td>
