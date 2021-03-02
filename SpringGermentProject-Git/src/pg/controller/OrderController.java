@@ -2004,6 +2004,19 @@ public class OrderController {
 	}
 
 
+	@RequestMapping(value = "/printDateWiseSampleRequsition/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printDateWiseSampleRequsition(ModelMap map,@PathVariable ("idList") String idList) {
+		
+		ModelAndView view=new ModelAndView("order/printDateWiseSampleRequsition");
+		
+		String id[] = idList.split("@");
+		map.addAttribute("date", id[0]);
+		map.addAttribute("userId", id[1]);
+		
+		return view;
+	}
+	
+	
 	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
 
@@ -2467,6 +2480,19 @@ public class OrderController {
 
 		System.out.println(" Open Ooudoor sales report ");	
 		ModelAndView view = new ModelAndView("order/SampleCadReportView");
+
+		view.addObject("id",sampleId);					
+
+		return view;			
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/printDateWiseSamplCad",method=RequestMethod.GET)
+	public ModelAndView printDateWiseSamplCad(ModelAndView map, FabricsIndent p) {
+
+
+		System.out.println(" Open Ooudoor sales report ");	
+		ModelAndView view = new ModelAndView("order/printDateWiseSamplCad");
 
 		view.addObject("id",sampleId);					
 

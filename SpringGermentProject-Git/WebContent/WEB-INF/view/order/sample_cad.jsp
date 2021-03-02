@@ -317,55 +317,71 @@
 						role="dialog" aria-labelledby="exampleModalLabel"
 						aria-hidden="true">
 						<div class="modal-dialog modal-lg">
-							<div class="modal-content">
-								<div class="modal-header">
-									<div class="input-group">
-										<input id="requisitionSearch" type="text" class="form-control"
-											placeholder="Search Sample Requisition"
-											aria-label="Recipient's username"
-											aria-describedby="basic-addon2">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="fa fa-search"></i></span>
-										</div>
-									</div>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<table class="table table-hover table-bordered table-sm mb-0">
-										<thead>
-											<tr>
-												<th>SL#</th>
-												<th>Buyer</th>
-												<th>PO Id</th>
-												<th>Style No</th>
-												<th>Date</th>
-												<td><i class="fa fa-search"></i></td>
-												<td><i class="fa fa-print"></i></td>
-											</tr>
-										</thead>
-										<tbody id="poList">
-											<c:forEach items="${sampleReqList}" var="po"
-												varStatus="counter">
-												<tr>
-													<td>${counter.count}</td>
-													<td>${po.buyerOrderId}</td>
-													<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
-													<td>${po.styleNo}</td>
-													<td>${po.sampleDeadline}</td>
-													<td><i class="fa fa-search" style="cursor: pointer;"
-														onclick="searchSampleRequisition(${po.autoId})"> </i></td>
-													<td><i class="fa fa-print" style="cursor: pointer;"
-														onclick="printSampleRequisition(${po.autoId})"> </i></td>
-												</tr>
-											</c:forEach>
-										</tbody>
-									</table>
-								</div>
+			<div class="modal-content">
+			
+			
+		
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Sample Requisition List</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			
 
-							</div>
+			
+				<div class="input-group">
+
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Requisition"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label class="col-sm-1">Date</label>
+					<div class="col-sm-8 eventInsForm_Ledger">
+						<input class="form-control-sm" id='sampleSearchDate' type="date">
+						<button type="button" class="btn btn-primary" onclick="previewSampleRequsition()" >Preview</button>
+					</div>
+				</div>
+			
+			
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Buyer</th>
+							<th>PO Id</th>
+							<th>Style No</th>
+							<th>Date</th>
+							<th><span>Search</th>
+							<th><span>Print</th>
+						</tr>
+					</thead>
+					<tbody id="datalist">
+						<c:forEach items="${sampleReqList}" var="po" varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td >${po.buyerOrderId}</td>
+								<td id='buyerName${po.purchaseOrder}'>${po.purchaseOrder}</td>
+								<td>${po.styleNo}</td>
+								<td>${po.sampleDeadline}</td>
+								<td><i class="fa fa-search"
+									onclick="searchSampleRequisition(${po.autoId})"> </i></td>
+								<td><i class="fa fa-print"
+									onclick="printSampleRequisition(${po.autoId})"> </i></td>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
 						</div>
 					</div>
 
@@ -374,21 +390,34 @@
 						role="dialog" aria-labelledby="sampleCadModal" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
-								<div class="modal-header">
-									<div class="input-group">
-										<input id="cadSearch" type="text" class="form-control"
-											placeholder="Search Sample Requisition"
-											aria-label="Recipient's username"
-											aria-describedby="basic-addon2">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="fa fa-search"></i></span>
-										</div>
-									</div>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
+	<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Sample Cad List</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			
+
+			
+				<div class="input-group">
+
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Cad"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label class="col-sm-1">Date</label>
+					<div class="col-sm-8 eventInsForm_Ledger">
+						<input class="form-control-sm" id='sampleSearchDate' type="date">
+						<button type="button" class="btn btn-primary" onclick="previewSampleCad()" >Preview</button>
+					</div>
+				</div>
+			
 								<div class="modal-body">
 									<table class="table table-hover table-bordered table-sm mb-0">
 										<thead>
@@ -404,7 +433,7 @@
 												<td><i class="fa fa-print"></i></td>
 											</tr>
 										</thead>
-										<tbody id="poList">
+										<tbody id="sampleCadList">
 											<c:forEach items="${sampleCadList}" var="po"
 												varStatus="counter">
 												<tr>

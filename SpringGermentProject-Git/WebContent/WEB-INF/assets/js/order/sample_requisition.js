@@ -10,6 +10,26 @@ var find = 0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
+function previewSampleCad(){
+	var date=$('#sampleSearchDate').val();
+	var userId=$('#userId').val();
+	if(date!=null){
+		var url = `printDateWiseSampleRequsition/${date}@${userId}`;
+		window.open(url, '_blank');
+	}
+}
+
+function previewSampleRequsition(){
+	
+	var date=$('#sampleSearchDate').val();
+	var userId=$('#userId').val();
+	if(date!=null){
+		var url = `printDateWiseSamplCad/${date}@${userId}`;
+		window.open(url, '_blank');
+	}
+
+}
+
 function printSampleRequisition(sampleReqId) {
 	$.ajax({
 		type: 'GET',
@@ -791,4 +811,20 @@ function loadItemsWiseColor(data) {
 	colorValue = 0;
 
 }
+
+
+
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		var value = $(this).val().toLowerCase();
+		$("#datalist tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});
+
 
