@@ -24,7 +24,7 @@ window.onload = () => {
 			});
 		}
 	});
-	$("#dataTable").DataTable();
+	//$("#dataTable").DataTable();
 
 }
 
@@ -671,11 +671,11 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-									$('#dataTable').dataTable().fnDestroy();
+									//$('#dataTable').dataTable().fnDestroy();
 									$("#dataList").append(newRow);
-									$('#dataTable').DataTable(({ 
-										"destroy": true, 
-									}));
+									// $('#dataTable').DataTable(({ 
+									// 	"destroy": true, 
+									// }));
 									
 								
 							}
@@ -716,11 +716,11 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-									$('#dataTable').dataTable().fnDestroy();
+									//$('#dataTable').dataTable().fnDestroy();
 									$("#dataList").append(newRow);
-									$('#dataTable').DataTable(({ 
-										"destroy": true, 
-									}));
+									// $('#dataTable').DataTable(({ 
+									// 	"destroy": true, 
+									// }));
 						
 					}
 				});
@@ -1573,7 +1573,7 @@ function printAccessoriesIndent(aiNo) {
 function drawAccessoriesIndentListTable(data) {
 	let oldRows = '';
 	let length = $("#dataList tr").length;
-	$('#dataTable').dataTable().fnDestroy();
+	//$('#dataTable').dataTable().fnDestroy();
 	data.forEach((indent) => {
 		let autoId = indent.autoid;
 		oldRows += `<tr id='oldIndentRow-${autoId}' class='oldIndentRow' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-color-id='${indent.itemColorId}' data-size-id='${indent.size}' 
@@ -1597,9 +1597,9 @@ function drawAccessoriesIndentListTable(data) {
 	});
 	$("#dataList").empty();
 	$("#dataList").append(oldRows);
-	$('#dataTable').DataTable(({ 
-		"destroy": true, 
-	}));
+	// $('#dataTable').DataTable(({ 
+	// 	"destroy": true, 
+	// }));
 	
 }
 

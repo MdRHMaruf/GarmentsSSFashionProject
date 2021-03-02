@@ -73,10 +73,9 @@
 					</label> <select id="supplierName" class="selectpicker col-md-8 px-0"
 						data-live-search="true"
 						data-style="btn-light btn-sm border-light-gray">
-						<option id="supplierName" value="0">--Select
-							SupplierName--</option>
+						<option value="0">--Select SupplierName--</option>
 						<c:forEach items="${supplierList}" var="supplier">
-							<option id="supplierName" value="${supplier.supplierid}">${supplier.suppliername}</option>
+							<option value="${supplier.supplierid}">${supplier.suppliername}</option>
 						</c:forEach>
 					</select>
 
@@ -383,6 +382,21 @@
 							style="display: none;">
 							<i class="fa fa-print"></i> Preview
 						</button>
+
+						<div class="btn-group ml-1" role="group"
+							aria-label="Button group with nested dropdown">
+							<button type="button" class="btn btn-sm btn-info" onclick="previewAction()"><i class="fa fa-print"></i> Preview</button>
+							<div class="btn-group" role="group">
+								<button id="btnGroupDrop1" type="button"
+									class="btn btn-sm btn-info dropdown-toggle"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false"></button>
+								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper Preview</a> <a
+										class="dropdown-item" onclick="generalPreviewAction()" href="#">General Preview</a>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 

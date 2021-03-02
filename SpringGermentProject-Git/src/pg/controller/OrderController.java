@@ -2110,9 +2110,20 @@ public class OrderController {
 		map.addAttribute("poNo",poNo);
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
-
+		map.addAttribute("previewType","");
 		return view;
+	}
+	
+	@RequestMapping(value="/getPurchaseOrderGeneralReport/{poNo}/{supplierId}/{type}")
+	public @ResponseBody ModelAndView getPurchaseOrderGeneralReport(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
 
+		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
+		System.out.println("null test"+poNo+" "+supplierId+" "+type);
+		map.addAttribute("poNo",poNo);
+		map.addAttribute("supplierId",supplierId);
+		map.addAttribute("type",type);
+		map.addAttribute("previewType","general");
+		return view;
 	}
 
 
@@ -2202,33 +2213,13 @@ public class OrderController {
 	@ResponseBody
 	@RequestMapping(value = "/submitStyleFiles", method = RequestMethod.POST)
 	public ModelAndView submitFiles(@RequestParam String submit,@RequestParam String styleItemAutoId,@RequestParam String styleid,@RequestParam String buyerId,@RequestParam String hbuyerId,@RequestParam String itemId,@RequestParam String styleNo,@RequestParam String size,@RequestParam String date,@RequestParam MultipartFile frontImage,@RequestParam MultipartFile backImage,HttpSession session,Model map,RedirectAttributes attr) throws IOException, SQLException {
-
-
-
 		String userId=(String)session.getAttribute("userId");
-
 		if (submit.equals("1")) {
-
 			boolean flag=orderService.SaveStyleCreate(userId,buyerId,itemId,styleNo,size,date,frontImage,backImage) ;
-
 		}else {
-
-			System.out.println("styleItemAutoId "+styleItemAutoId);
-			System.out.println("buyerId "+buyerId);
-			System.out.println("itemId "+itemId);
-			System.out.println("styleid "+styleid);
-			System.out.println("styleNo "+styleNo);
-			System.out.println("size "+size);
-			System.out.println("date "+date);
-			System.out.println("frontImage "+frontImage);
-			System.out.println("backImage "+backImage);
 			boolean flag=orderService.editStyle(styleItemAutoId, hbuyerId, itemId,styleid, styleNo, size, date, frontImage, backImage);
 		}
-
 		ModelAndView view=new ModelAndView("redirect:style_create");
-
-
-
 		return view;
 	}
 

@@ -15,6 +15,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Repository;
 
+import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
 import pg.Commercial.deedOfContacts;
@@ -85,16 +86,16 @@ public class CommercialDAOImpl implements CommercialDAO{
 			tx=session.getTransaction();
 			tx.begin();
 			
-			String sql="insert into tbMasterLC (masterLCNo,amendmentNo,amendmentDate,buyerId,senderBankId,receiverBankId,beneficiaryBankId,throughBankId,date,totalValue,currency,shipmentDate,expiryDate,remarks,entryTime,userId) "
-					+ "values('"+masterLC.getMasterLCNo()+"','"+masterLC.getAmendmentNo()+"','"+masterLC.getAmendmentDate()+"','"+masterLC.getBuyerId()+"','"+masterLC.getSenderBankId()+"','"+masterLC.getReceiverBankId()+"','"+masterLC.getBeneficiaryBankId()+"','"+masterLC.getThroughBankId()+"','"+masterLC.getDate()+"','"+masterLC.getTotalValue()+"','"+masterLC.getCurrencyId()+"','"+masterLC.getShipmentDate()+"','"+masterLC.getExpiryDate()+"','"+masterLC.getRemarks()+"',CURRENT_TIMESTAMP,'"+masterLC.getUserId()+"')";
+			String sql="update tbMasterLC set senderBankId='"+masterLC.getSenderBankId()+"',receiverBankId='"+masterLC.getReceiverBankId()+"',beneficiaryBankId='"+masterLC.getBeneficiaryBankId()+"',throughBankId='"+masterLC.getThroughBankId()+"',totalValue='"+masterLC.getTotalValue()+"',currency='"+masterLC.getCurrencyId()+"',shipmentDate='"+masterLC.getShipmentDate()+"',expiryDate='"+masterLC.getExpiryDate()+"',remarks='"+masterLC.getRemarks()+"' "
+					+ " where masterLcNo='"+masterLC.getMasterLCNo()+"' and amendmentNo='"+masterLC.getAmendmentNo()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 
-			sql = "select isnull(max(autoid),0) as maxId from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
+			/*String sql = "select isnull(max(autoid),0) as maxId from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			String masterLCId="0";
 			if(list.size()>0) {
 				masterLCId = list.get(0).toString();
-			}
+			}*/
 			
 			JSONParser jsonParser = new JSONParser();
 			JSONObject styleObject = (JSONObject)jsonParser.parse(masterLC.getStyleList());
@@ -103,12 +104,21 @@ public class CommercialDAOImpl implements CommercialDAO{
 			for(int i=0;i<styleList.size();i++) {
 				JSONObject style = (JSONObject) styleList.get(i);
 				sql="insert into tbMasterLCDetails (masterLCId,amendmentNo,styleId,styleItemId,purchaseOrderId,quantity,unitPrice,amount,entryTime,userId) \r\n" + 
-						"values ('"+masterLCId+"','"+masterLC.getAmendmentNo()+"','"+style.get("styleId")+"','"+style.get("itemId")+"','"+style.get("purchaseOrderId")+"','"+style.get("quantity")+"','"+style.get("unitPrice")+"','"+style.get("amount")+"',CURRENT_TIMESTAMP,'"+style.get("userId")+"');";
+						"values ('"+masterLC.getAutoId()+"','"+masterLC.getAmendmentNo()+"','"+style.get("styleId")+"','"+style.get("itemId")+"','"+style.get("purchaseOrderId")+"','"+style.get("quantity")+"','"+style.get("unitPrice")+"','"+style.get("amount")+"',CURRENT_TIMESTAMP,'"+style.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			styleObject = (JSONObject)jsonParser.parse(masterLC.getEditedStyleList());
+			styleList = (JSONArray) styleObject.get("list");
+			
+			for(int i=0;i<styleList.size();i++) {
+				JSONObject style = (JSONObject) styleList.get(i);
+				sql="update tbMasterLCDetails set quantity='"+style.get("quantity")+"',unitPrice='"+style.get("unitPrice")+"',amount='"+style.get("amount")+"' where autoId = '"+style.get("autoId")+"' " ;
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			
 			tx.commit();
-			return "";
+			return "success";
 
 		}
 		catch(Exception ee){
@@ -196,7 +206,7 @@ public class CommercialDAOImpl implements CommercialDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql=" select autoId,masterLCNo,amendmentNo,convert(varchar,amendmentDate,25) as amendmentDate from tbMasterLC where masterLCNo='"+masterLCNo+"' and buyerId = '"+buyerId+"'";
+			String sql=" select autoId,masterLCNo,buyerId,amendmentNo,convert(varchar,amendmentDate,25) as amendmentDate from tbMasterLC where masterLCNo='"+masterLCNo+"' and buyerId = '"+buyerId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -204,7 +214,7 @@ public class CommercialDAOImpl implements CommercialDAO{
 
 				Object[] element = (Object[]) iter.next();
 
-				dataList.add(new MasterLC(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				dataList.add(new MasterLC(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString()));
 			}
 			tx.commit();
 		}
@@ -237,7 +247,7 @@ public class CommercialDAOImpl implements CommercialDAO{
 					"from tbMasterLC mlc\r\n" + 
 					"left join tbBuyer b\r\n" + 
 					"on mlc.buyerId = b.id\r\n" + 
-					"group by mlc.masterLCNo,mlc.buyerId,mlc.amendmentNo,mlc.date,b.name";
+					"group by mlc.masterLCNo,mlc.buyerId,mlc.date,b.name";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -348,6 +358,257 @@ public class CommercialDAOImpl implements CommercialDAO{
 				//tempMasterLc = new StyleInfo(autoId, styleId, styleNo, itemId, itemName, purchaseOrderId, purchaseOrder, quantity, unitPrice, amount);
 				
 				dataList.add(tempStyleInfo);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+	
+	
+	@Override
+	public boolean importLCSubmit(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="insert into tbimportLC (masterLCNo,invoiceNo,invoiceType,invoiceDate,amendmentNo,amendmentDate,senderBankId,receiverBankId,supplierId,draftAt,maturityDate,proformaInvoiceNo,proformaInvoiceDate,entryTime,entryBy)\r\n" + 
+					"values ('"+importLC.getMasterLCNo()+"','"+importLC.getInvoiceNo()+"','"+importLC.getImportLCType()+"','"+importLC.getInvoiceDate()+"','"+importLC.getAmendmentNo()+"','"+importLC.getAmendmentDate()+"','"+importLC.getSenderBank()+"','"+importLC.getReceiverBank()+"','"+importLC.getSupplierId()+"','"+importLC.getDraftAt()+"','"+importLC.getMaturityDate()+"','"+importLC.getProformaInvoiceNo()+"','"+importLC.getProformaInvoiceDate()+"',CURRENT_TIMESTAMP,'"+importLC.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+
+			sql = "select isnull(max(autoid),0) as maxId from tbimportLC where invoiceNo='"+importLC.getInvoiceNo()+"' and masterLCNo='"+importLC.getMasterLCNo()+"' ";
+			List<?> list = session.createSQLQuery(sql).list();
+			String importLCId="0";
+			if(list.size()>0) {
+				importLCId = list.get(0).toString();
+			}
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject itemObject = (JSONObject)jsonParser.parse(importLC.getItemList());
+			JSONArray itemList = (JSONArray) itemObject.get("list");
+			
+			for(int i=0;i<itemList.size();i++) {
+				JSONObject item = (JSONObject) itemList.get(i);
+				sql="insert into tbImportLCDetails (importInvoiceAutoId,importInvoiceNo,anendmentNo,styleId,poNo,accessoriesItemId,accessoriesItemType,colorId,size,unitId,width,gsm,totalQty,price,totalValue,entryTime,entryBy)\r\n" + 
+						"values ('"+importLCId+"','"+importLC.getInvoiceNo()+"','"+importLC.getAmendmentNo()+"','"+item.get("styleId")+"','"+item.get("poNo")+"','"+item.get("accessoriesItemId")+"','"+item.get("accessoriesItemType")+"','"+item.get("colorId")+"','"+item.get("size")+"','"+item.get("unitId")+"','"+item.get("width")+"','"+item.get("gsm")+"','"+item.get("totalQty")+"','"+item.get("price")+"','"+item.get("totalValue")+"',CURRENT_TIMESTAMP,'"+importLC.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			tx.commit();
+			return true;
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+	
+	@Override
+	public String importLCEdit(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			/*String sql="update tbMasterLC set senderBankId='"+masterLC.getSenderBankId()+"',receiverBankId='"+masterLC.getReceiverBankId()+"',beneficiaryBankId='"+masterLC.getBeneficiaryBankId()+"',throughBankId='"+masterLC.getThroughBankId()+"',totalValue='"+masterLC.getTotalValue()+"',currency='"+masterLC.getCurrencyId()+"',shipmentDate='"+masterLC.getShipmentDate()+"',expiryDate='"+masterLC.getExpiryDate()+"',remarks='"+masterLC.getRemarks()+"' "
+					+ " where masterLcNo='"+masterLC.getMasterLCNo()+"' and amendmentNo='"+masterLC.getAmendmentNo()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+
+			String sql = "select isnull(max(autoid),0) as maxId from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			String masterLCId="0";
+			if(list.size()>0) {
+				masterLCId = list.get(0).toString();
+			}
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject styleObject = (JSONObject)jsonParser.parse(masterLC.getStyleList());
+			JSONArray styleList = (JSONArray) styleObject.get("list");
+			
+			for(int i=0;i<styleList.size();i++) {
+				JSONObject style = (JSONObject) styleList.get(i);
+				sql="insert into tbMasterLCDetails (masterLCId,amendmentNo,styleId,styleItemId,purchaseOrderId,quantity,unitPrice,amount,entryTime,userId) \r\n" + 
+						"values ('"+masterLC.getAutoId()+"','"+masterLC.getAmendmentNo()+"','"+style.get("styleId")+"','"+style.get("itemId")+"','"+style.get("purchaseOrderId")+"','"+style.get("quantity")+"','"+style.get("unitPrice")+"','"+style.get("amount")+"',CURRENT_TIMESTAMP,'"+style.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			styleObject = (JSONObject)jsonParser.parse(masterLC.getEditedStyleList());
+			styleList = (JSONArray) styleObject.get("list");
+			
+			for(int i=0;i<styleList.size();i++) {
+				JSONObject style = (JSONObject) styleList.get(i);
+				sql="update tbMasterLCDetails set quantity='"+style.get("quantity")+"',unitPrice='"+style.get("unitPrice")+"',amount='"+style.get("amount")+"' where autoId = '"+style.get("autoId")+"' " ;
+				session.createSQLQuery(sql).executeUpdate();
+			}*/
+			
+			tx.commit();
+			return "success";
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return null;
+	}
+	
+	@Override
+	public String importLCAmendment(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			
+			/*String sql = "select (isnull(max(amendmentNo),0))+1 as maxAmendmentNo from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			String amendtmentNo="0";
+			if(list.size()>0){
+				amendtmentNo = list.get(0).toString();
+			}
+			
+			
+			 sql="insert into tbMasterLC (masterLCNo,amendmentNo,amendmentDate,buyerId,senderBankId,receiverBankId,beneficiaryBankId,throughBankId,date,totalValue,currency,shipmentDate,expiryDate,remarks,entryTime,userId) "
+					+ "values('"+masterLC.getMasterLCNo()+"','"+amendtmentNo+"','"+masterLC.getAmendmentDate()+"','"+masterLC.getBuyerId()+"','"+masterLC.getSenderBankId()+"','"+masterLC.getReceiverBankId()+"','"+masterLC.getBeneficiaryBankId()+"','"+masterLC.getThroughBankId()+"','"+masterLC.getDate()+"','"+masterLC.getTotalValue()+"','"+masterLC.getCurrencyId()+"','"+masterLC.getShipmentDate()+"','"+masterLC.getExpiryDate()+"','"+masterLC.getRemarks()+"',CURRENT_TIMESTAMP,'"+masterLC.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+
+			sql = "select isnull(max(autoid),0) as maxId from tbMasterLC where masterLCNo='"+masterLC.getMasterLCNo()+"' and buyerId = '"+masterLC.getBuyerId()+"'";
+			list = session.createSQLQuery(sql).list();
+			String masterLCId="0";
+			if(list.size()>0){
+				masterLCId = list.get(0).toString();
+			}
+			
+			JSONParser jsonParser = new JSONParser();
+			JSONObject styleObject = (JSONObject)jsonParser.parse(masterLC.getStyleList());
+			JSONArray styleList = (JSONArray) styleObject.get("list");
+			
+			for(int i=0;i<styleList.size();i++) {
+				JSONObject style = (JSONObject) styleList.get(i);
+				sql="insert into tbMasterLCDetails (masterLCId,amendmentNo,styleId,styleItemId,purchaseOrderId,quantity,unitPrice,amount,entryTime,userId) \r\n" + 
+						"values ('"+masterLCId+"','"+amendtmentNo+"','"+style.get("styleId")+"','"+style.get("itemId")+"','"+style.get("purchaseOrderId")+"','"+style.get("quantity")+"','"+style.get("unitPrice")+"','"+style.get("amount")+"',CURRENT_TIMESTAMP,'"+style.get("userId")+"');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			*/
+			tx.commit();
+			return "success";
+
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "success";
+	}
+	
+	@Override
+	public List<ImportLC> getImportLCAmendmentList(String masterLCNo, String invoiceNo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ImportLC> dataList=new ArrayList<ImportLC>();
+		ImportLC tempImport = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select autoId,amendmentNo,amendmentDate from tbImportLC where masterLCNo='"+masterLCNo+"' and invoiceNo = '"+invoiceNo+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				tempImport = new ImportLC();
+				tempImport.setAutoId(element[0].toString());
+				tempImport.setAmendmentNo(element[1].toString());
+				tempImport.setAmendmentDate(element[2].toString());
+				dataList.add(tempImport);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	
+
+	@Override
+	public List<ImportLC> getImportLCList(String masterLCNo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<ImportLC> dataList=new ArrayList<ImportLC>();
+		ImportLC tempImport = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select ilc.masterLCNo,ilc.invoiceNo,max(ilc.amendmentNo) as maxAmendmentNo,convert(varchar,ilc.invoiceDate,25)as lcDate \r\n" + 
+					"					from tbImportLC ilc\r\n" + 
+					"					where ilc.masterLCNo = '"+masterLCNo+"'\r\n" + 
+					"					group by ilc.masterLCNo,ilc.invoiceNo,ilc.invoiceDate ";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+				tempImport = new ImportLC();
+				tempImport.setMasterLCNo(element[0].toString());
+				tempImport.setInvoiceNo(element[1].toString());
+				tempImport.setAmendmentNo(element[2].toString());
+				tempImport.setInvoiceDate(element[3].toString());
+				dataList.add(tempImport);
 			}
 			tx.commit();
 		}

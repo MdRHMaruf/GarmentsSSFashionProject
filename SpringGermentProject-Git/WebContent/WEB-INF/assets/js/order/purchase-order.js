@@ -438,7 +438,14 @@ function previewAction(){
   let poType = $("#poType").val();
   var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType;
   window.open(url, '_blank');
+}
 
+function generalPreviewAction(){
+  let poNo = $("#poNo").val();
+  let supplierId = $("#supplierName").val();
+  let poType = $("#poType").val();
+  var url = "getPurchaseOrderGeneralReport/" + poNo + "/" + supplierId + "/" + poType;
+  window.open(url, '_blank');
 }
 function showPreview(poNo, supplierId, type) {
 

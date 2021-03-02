@@ -26,9 +26,10 @@ public class MasterLC {
 		super();
 	}
 	
-	public MasterLC(String autoId,String masterLCNo,String amendmentNo,String amendmentDate) {
+	public MasterLC(String autoId,String masterLCNo,String buyerId,String amendmentNo,String amendmentDate) {
 		this.autoId = autoId;
 		this.masterLCNo = masterLCNo;
+		this.buyerId  = buyerId;
 		this.amendmentNo = amendmentNo;
 		this.amendmentDate = amendmentDate;
 	}

@@ -2,9 +2,23 @@
 let styleIdForSet = "0";
 let itemIdForSet = "0";
 let poIdForSet = "0";
+let unitList = {};
 
 window.onload = () => {
   document.title = "Master L/C";
+
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './getUnitList',
+    data: {},
+    success: function (data) {
+      unitList = {};
+      data.unitList.forEach(unit => {
+        unitList[unit.unitId] = unit;
+      });
+    }
+  });
 }
 
 // Master LC Part
@@ -29,7 +43,11 @@ function buyerWiseStyleLoad() {
           options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
         };
         $("#masterStyleNo").html(options);
+        $("#importStyleNo").html(options);
+        $("#billStyleNo").html(options);
         $('#masterStyleNo').selectpicker('refresh');
+        $('#importStyleNo').selectpicker('refresh');
+        $('#billStyleNo').selectpicker('refresh');
         $('#masterStyleNo').val(styleIdForSet).change();
         styleIdForSet = 0;
 
@@ -38,14 +56,20 @@ function buyerWiseStyleLoad() {
   } else {
     let options = "<option value='0' selected>Select Style</option>";
     $("#masterStyleNo").html(options);
+    $("#importStyleNo").html(options);
+    $("#billStyleNo").html(options);
     $('#masterStyleNo').selectpicker('refresh');
+    $('#importStyleNo').selectpicker('refresh');
+    $('#billStyleNo').selectpicker('refresh');
     $('#masterStyleNo').val("0").change();
   }
 
 }
 
-function styleWiseBuyerPOLoad() {
-  let styleId = $("#masterStyleNo").val();
+function styleWiseBuyerPOLoad(styleInput) {
+  let styleId = styleInput.value;
+
+  console.log("id=", styleInput.id, " styleId=", styleId);
 
   if (styleId != 0) {
     $.ajax({
@@ -63,17 +87,38 @@ function styleWiseBuyerPOLoad() {
         for (let i = 0; i < length; i++) {
           options += "<option value='" + poList[i].id + "'>" + poList[i].name + "</option>";
         };
-        document.getElementById("masterPurchaseOrder").innerHTML = options;
-        $('#masterPurchaseOrder').selectpicker('refresh');
-        $("#masterPurchaseOrder").val(poIdForSet).change();
+        if (styleInput.id == "masterStyleNo") {
+          $("#masterPurchaseOrder").html(options);
+          $('#masterPurchaseOrder').selectpicker('refresh');
+          $("#masterPurchaseOrder").val(poIdForSet).change();
+        } else if (styleInput.id == "importStyleNo") {
+          $("#importPurchaseOrder").html(options);
+          $('#importPurchaseOrder').selectpicker('refresh');
+          $("#importPurchaseOrder").val(poIdForSet).change();
+        } else if (styleInput.id == "billStyleNo") {
+          $("#billPurchaseOrder").html(options);
+          $('#billPurchaseOrder').selectpicker('refresh');
+          $("#billPurchaseOrder").val(poIdForSet).change();
+        }
+
         poIdForSet = 0;
       }
     });
   } else {
     let options = "<option value='0' selected>Select Buyer PO</option>";
-    $("#masterPurchaseOrder").html(options);
-    $('#masterPurchaseOrder').selectpicker('refresh');
-    $('#masterPurchaseOrder').val(poIdForSet).change();
+    if (styleInput.id == "masterStyleNo") {
+      $("#masterPurchaseOrder").html(options);
+      $('#masterPurchaseOrder').selectpicker('refresh');
+      $("#masterPurchaseOrder").val(poIdForSet).change();
+    } else if (styleInput.id == "importStyleNo") {
+      $("#importPurchaseOrder").html(options);
+      $('#importPurchaseOrder').selectpicker('refresh');
+      $("#importPurchaseOrder").val(poIdForSet).change();
+    } else if (styleInput.id == "billStyleNo") {
+      $("#billPurchaseOrder").html(options);
+      $('#billPurchaseOrder').selectpicker('refresh');
+      $("#billPurchaseOrder").val(poIdForSet).change();
+    }
     poIdForSet = 0;
   }
 }
@@ -114,7 +159,39 @@ function styleWiseItemLoad() {
 
 }
 
+function itemTypeChangeAction() {
+  let type = $("#importItemType").val();
+  if (type != 0) {
+    $.ajax({
+      type: 'GET',
+      dataType: 'json',
+      url: './getTypeWiseItems',
+      data: {
+        type: type
+      },
+      success: function (data) {
+        console.log(data.result);
+        let itemList = data.result;
+        let options = "<option value='0' selected>Select Item Name</option>";
+        let length = itemList.length;
+        for (let i = 0; i < length; i++) {
+          options += "<option value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+        };
+        $("#importFabricsAccessoriesItem").html(options);
+        $('#importFabricsAccessoriesItem').selectpicker('refresh');
+        $("#importFabricsAccessoriesItem").prop("selectedIndex", 0).change();
+        itemIdForSet = 0;
+      }
+    });
+  } else {
+    let options = "<option value='0' selected>Select Item Type</option>";
+    $("#importFabricsAccessoriesItem").html(options);
+    $('#importFabricsAccessoriesItem').selectpicker('refresh');
+    $('#importFabricsAccessoriesItem').val(itemIdForSet).change();
+    itemIdForSet = 0;
+  }
 
+}
 
 function masterStyleAddAction() {
 
@@ -337,6 +414,7 @@ function masterSubmitAction() {
                   success: function (data) {
                     if (data.result == 'success') {
                       alert("Successfully Submitted");
+                      $("#masterAmendmentList").empty();
                       drawMasterLCAmendmentList(data.amendmentList);
                     } else {
                       alert("Master LC Insertion Failed")
@@ -371,17 +449,16 @@ function masterSubmitAction() {
 
 }
 
-function masterEditAction(){
-  let rowList = $("#masterStyleList .edited-row");
+function masterEditAction() {
+  let rowList = $("#masterStyleList tr");
   let length = rowList.length;
 
   if (length > 0) {
     rowList = $("tr.masterNewStyle");
     length = rowList.length;
-
-    let styleList = '';
-
+    let masterLCAutoId = $("#masterLCAutoId").val();
     let masterLCNo = $("#masterLCNo").val();
+    let amendmentNo = $("#masterAmendmentNo").val();
     let buyerId = $("#masterBuyerName").val();
     let sendBankId = $("#masterSendBankName").val();
     let receiveBankId = $("#masterReceiveBankName").val();
@@ -396,6 +473,9 @@ function masterEditAction(){
     let userId = $("#userId").val();
     let styleItems = {};
     styleItems['list'] = [];
+
+    let editedStyleItems = {};
+    editedStyleItems['list'] = [];
 
     if (masterLCNo != '') {
       if (buyerId != '0') {
@@ -419,12 +499,35 @@ function masterEditAction(){
 
                 styleItems.list.push(item);
               }
+
+              let editedRowList = $("tr.editedRow");
+              length = editedRowList.length;
+
+              for (let i = 0; i < length; i++) {
+                const editedRow = editedRowList[i];
+                const id = editedRow.id.slice(10);
+
+                const item = {
+                  autoId: editedRow.getAttribute('data-auto-id'),
+                  buyerId: editedRow.getAttribute('data-buyer-id'),
+                  styleId: editedRow.getAttribute('data-style-id'),
+                  itemId: editedRow.getAttribute('data-item-id'),
+                  purchaseOrderId: editedRow.getAttribute('data-purchase-order-id'),
+                  quantity: $("#masterQuantity-" + id).val(),
+                  unitPrice: $("#masterUnitPrice-" + id).val(),
+                  amount: $("#masterAmount-" + id).text(),
+                  userId: userId
+                }
+
+                editedStyleItems.list.push(item);
+              }
               if (confirm("Are you sure to confirm..")) {
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
                   url: './masterLCEdit',
                   data: {
+                    autoId: masterLCAutoId,
                     masterLCNo: masterLCNo,
                     buyerId: buyerId,
                     senderBankId: sendBankId,
@@ -438,13 +541,15 @@ function masterEditAction(){
                     expiryDate: expiryDate,
                     remarks: remarks,
                     userId: userId,
-                    amendmentNo: '0',
+                    amendmentNo: amendmentNo,
                     amendmentDate: date,
                     styleList: JSON.stringify(styleItems),
+                    editedStyleList: JSON.stringify(editedStyleItems)
                   },
                   success: function (data) {
                     if (data.result == 'success') {
                       alert("Successfully Submitted");
+                      $("#masterAmendmentList").empty();
                       drawMasterLCAmendmentList(data.amendmentList);
                     } else {
                       alert("Master LC Insertion Failed")
@@ -484,9 +589,6 @@ function masterAmendmentAction() {
   let length = rowList.length;
 
   if (length > 0) {
-    rowList = $("tr.masterNewStyle");
-    length = rowList.length;
-
     let styleList = '';
 
     let masterLCNo = $("#masterLCNo").val();
@@ -553,6 +655,7 @@ function masterAmendmentAction() {
                   success: function (data) {
                     if (data.result == 'success') {
                       alert("Successfully Submitted");
+                      $("#masterAmendmentList").empty();
                       drawMasterLCAmendmentList(data.amendmentList);
                     } else {
                       alert("Master LC Insertion Failed")
@@ -587,7 +690,7 @@ function masterAmendmentAction() {
 
 }
 
-function refreshAction(){
+function refreshAction() {
   location.reload();
 }
 
@@ -598,7 +701,7 @@ function drawMasterLCAmendmentList(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}'>
+    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchMasterLc('${rowData.masterLCNo}','${rowData.buyerId}','${rowData.amendmentNo}')" style='cursor:pointer;'>
 					<td id='masterAmendmentNo-${id}'>${rowData.amendmentNo}</td>
 					<td id='masterAmendmentDate-${id}'>${rowData.amendmentDate}</td>
 				</tr>`;
@@ -609,6 +712,7 @@ function drawMasterLCAmendmentList(data) {
 
 }
 
+
 function drawMasterLCStyleList(data) {
   let rows = "";
   const length = data.length;
@@ -616,17 +720,58 @@ function drawMasterLCStyleList(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='masterRow-${id}' class='masterOldStyle' data-type='oldStyle' data-master-lc-no='${rowData.masterLCNo}' data-buyer-id='${rowData.buyerId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-purchase-order-id='${rowData.purchaseOrderId}' >
+    rows += `<tr id='masterRow-${id}' class='masterOldStyle' data-auto-id='${rowData.autoId}' data-type='oldStyle' data-master-lc-no='${rowData.masterLCNo}' data-buyer-id='${rowData.buyerId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-purchase-order-id='${rowData.purchaseOrderId}' >
               <td id='masterStyleNo-${id}'>${rowData.styleNo}</td>
               <td id='masterPurchaseOrder-${id}'>${rowData.purchaseOrder}</td>
-              <td><input type="number" id='masterQuantity-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${rowData.quantity}"/></td>
-              <td><input type="number" id='masterUnitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${rowData.unitPrice}"/></td>
-              <td id='masterAmount-${id}'>${rowData.amount}</td>
+              <td><input type="number" id='masterQuantity-${id}' class="form-control-sm max-width-100" onkeyup="editedMasterRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.quantity).toFixed(2)}"/></td>
+              <td><input type="number" id='masterUnitPrice-${id}' class="form-control-sm max-width-100" onkeyup="editedMasterRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.unitPrice).toFixed(2)}"/></td>
+              <td id='masterAmount-${id}'>${Number(rowData.amount).toFixed(2)}</td>
               <td ><i class='fa fa-trash' onclick="deleteMasterStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
             </tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
   $("#masterStyleList").append(rows);
+}
+
+
+function drawImportLCAmendmentList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchMasterLc('${rowData.masterLCNo}','${rowData.buyerId}','${rowData.amendmentNo}')" style='cursor:pointer;'>
+					<td id='masterAmendmentNo-${id}'>${rowData.amendmentNo}</td>
+					<td id='masterAmendmentDate-${id}'>${rowData.amendmentDate}</td>
+				</tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+
+  $("#importAmendmentList").append(rows);
+
+}
+
+function drawImportInvoiceList(data) {
+  let rows = "";
+  const length = data.length;
+  console.log("drawing  data = ",data);
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = i;
+    rows += `<tr id='importAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchImportInvoiceLc('${rowData.masterLCNo}','${rowData.invoiceNo}','${rowData.amendmentNo}')" style='cursor:pointer;'>
+					<td id='importAmendmentNo-${id}'>${rowData.invoiceNo}</td>
+					<td id='importAmendmentDate-${id}'>${rowData.invoiceDate}</td>
+				</tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  console.log("rows=",rows);
+  $("#importInvoiceList").append(rows);
+
+}
+
+function editedMasterRow(rowId) {
+  $("#masterRow-" + rowId).addClass('editedRow');
 }
 
 function shippedAction(styleAutoId) {
@@ -715,8 +860,11 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       console.log(data)
       const masterLCInfo = data.masterLCInfo;
       const masterLCStyles = data.masterLCStyles;
-
+      $("#masterLCAutoId").val(masterLCInfo.autoId);
       $("#masterLCNo").val(masterLCInfo.masterLCNo);
+      $("#masterLCNo").prop('readonly', true);
+      $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
+      $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
       $("#masterBuyerName").val(masterLCInfo.buyerId).change();
       $("#masterSendBankName").val(masterLCInfo.senderBankId).change();
       $("#masterReceiveBankName").val(masterLCInfo.receiverBankId).change();
@@ -728,8 +876,12 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
       $("#masterExpiryDate").val(masterLCInfo.expiryDate);
       $("#remarks").val(masterLCInfo.remarks);
+      $("#masterStyleList").empty();
       drawMasterLCStyleList(masterLCStyles);
+      $("#masterAmendmentList").empty();
       drawMasterLCAmendmentList(data.amendmentList);
+      $("#importInvoiceList").empty();
+      drawImportInvoiceList(data.importInvoiceList);
 
       $("#masterSubmitBtn").hide();
       $("#masterAmendmentBtn").show();
@@ -738,37 +890,57 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
     }
   });
 
-
-
-  // $("#buyerName").val(masterLc.buyerId).change();
-  // $("#sendBankName").val(masterLc.sendBankId).change();
-  // $("#receiveBankName").val(masterLc.receiveBankId).change();
-  // $("#beneficiaryBankName").val(masterLc.beneficiaryBankId).change();
-  // $("#throughBankName").val(masterLc.throughBankId).change();
-  // $("#date").val(masterLc.date);
-  // $("#totalValue").val(masterLc.totalValue);
-  // $("#maturityDate").val(masterLc.maturityDate);
-  // $("#remarks").val(masterLc.remarks);
-
-  // $("#amendmentList").empty();
-  // masterLc.amendmentList.forEach(amendment => {
-  //   let row = `<tr>
-  //                 <td style="cursor:pointer;" onclick='setAmendmentInfo(${amendment.amendmentNo})'>${amendment.amendmentNo}</td>
-  //                 <td>${amendment.amendmentDate}</td>
-  //               </tr>`
-  //   $("#amendmentList").append(row);
-  // });
-
-  // $("#shipmentList").empty();
-  // masterLc.shippingList.forEach(shipping => {
-  //   let row = `<tr>
-  //                 <td style="cursor:pointer;" onclick='setShippingInfo(${shipping.shippingNo})'>${shipping.shippingMark}</td>
-  //                 <td>${shipping.exportShippingDate}</td>
-  //               </tr>`
-  //   $("#shipmentList").append(row);
-  // })
-
   $("#searchModal").modal('hide');
+}
+
+
+function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
+
+  //const masterLc = fakeData.masterLcList[autoId];
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './searchImportLCInvoice',
+    data: {
+      masterLCNo: masterLCNo,
+      invoiceNo: invoiceNo,
+      amendmentNo: amendmentNo
+    },
+    success: function (data) {
+      console.log(data)
+      const masterLCInfo = data.masterLCInfo;
+      const masterLCStyles = data.masterLCStyles;
+      $("#masterLCAutoId").val(masterLCInfo.autoId);
+      $("#masterLCNo").val(masterLCInfo.masterLCNo);
+      $("#masterLCNo").prop('readonly', true);
+      $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
+      $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
+      $("#masterBuyerName").val(masterLCInfo.buyerId).change();
+      $("#masterSendBankName").val(masterLCInfo.senderBankId).change();
+      $("#masterReceiveBankName").val(masterLCInfo.receiverBankId).change();
+      $("#beneficiaryBankName").val(masterLCInfo.beneficiaryBankId).change();
+      $("#throughBankName").val(masterLCInfo.throughBankId).change();
+      $("#masterDate").val(masterLCInfo.date);
+      $("#masterTotalValue").val(masterLCInfo.totalValue);
+      $("#masterCurrency").val(masterLCInfo.currencyId);
+      $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
+      $("#masterExpiryDate").val(masterLCInfo.expiryDate);
+      $("#remarks").val(masterLCInfo.remarks);
+      $("#masterStyleList").empty();
+      drawMasterLCStyleList(masterLCStyles);
+      $("#masterAmendmentList").empty();
+      drawMasterLCAmendmentList(data.amendmentList);
+      $("#importInvoiceList").empty();
+      drawImportInvoiceList(data.importInvoiceList);
+
+      $("#importSubmitButton").hide();
+      $("#importEditButton").show();
+      $("#masterEditBtn").show();
+      $("#masterPreviewBtn").show();
+    }
+  });
+
+ 
 }
 
 function setShippingInfo(shippingNo) {
@@ -823,9 +995,184 @@ function totalValueCount() {
 }
 
 function setAmount(id) {
-  $("#masterAmount-" + id).text(parseFloat($("#masterQuantity-" + id).val()) * parseFloat($("#masterUnitPrice-" + id).val()));
+  $("#masterAmount-" + id).text((parseFloat($("#masterQuantity-" + id).val()) * parseFloat($("#masterUnitPrice-" + id).val())).toFixed(2));
 }
 
+function importItemAddAction() {
+  let styleNo = $("#importStyleNo option:selected").text();
+  let styleId = $("#importStyleNo").val();
+  let purchaseOrderId = $("#importPurchaseOrder").val();
+  let purchaseOrder = $("#importPurchaseOrder option:selected").text();
+  let itemType = $("#importItemType").val();
+  let accessoriesItemId = $("#importFabricsAccessoriesItem").val();
+  let accessoriesItemName = $("#importFabricsAccessoriesItem option:selected").text();
+  let colorId = $("#importColor").val();
+  let color = $("#importColor option:selected").text();
+  let size = $("#importSize").val();
+  let unitId = $("#importUnit").val();
+  let unit = $("#importUnit option:selected").text();
+  let width = $("#importWidth").val();
+  let gsm = $("#importGSM").val();
+  let totalQty = $("#importTotalQty").val();
+  let price = $("#importPrice").val();
+  let totalValue = $("#importTotalValue").val();
+  const id = length;
+  if (styleId != '0') {
+    if (purchaseOrderId != '0') {
+      if (accessoriesItemId != '0') {
+        if (unitId != '0') {
+          let row = `<tr id='importRow-${id}' data-style-id='${styleId}' data-purchase-order-id='${purchaseOrderId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
+                        <td>${styleNo}</td>
+                        <td id='importPoNo-'>${purchaseOrder}</td>
+                        <td>${accessoriesItemName}</td>
+                        <td>${color}</td>
+                        <td id='importSize-${id}'>${size}</td>
+                        <td id='importUnit-${id}'>${unit}</td>
+                        <td id='importWidth-${id}'>${width}</td>
+                        <td id='importGsm-${id}'>${gsm}</td>
+                        <td id='importTotalQty-${id}'>${totalQty}</td>
+                        <td id='importPrice-${id}'>${price}</td>
+                        <td id='importTotalValue-${id}'>${totalValue}</td>
+                    </tr>`;
+
+          $("#importItemList").append(row);
+        } else {
+          alert("Please Select Unit");
+          $("#importUnit").focus();
+        }
+      } else {
+        alert("Please Select Fabrics/Accessories Item");
+        $("#importFabricsAccessoriesItem").focus();
+      }
+    } else {
+      alert("Please Select Purchase Order");
+      $("#importPurchaseOrder").focus();
+    }
+  } else {
+    alert("Please Select Style No");
+    $("#importStyleNo").focus();
+  }
+
+}
+
+
+function importSubmitAction() {
+
+
+  let rowList = $("#importItemList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+
+    let masterLCNo = $("#importMasterLcNo").val();
+    let lcType = $("#importLCType").val();
+    let invoiceNo = $("#importInvoiceNo").val();
+    let date = $("#importInvoiceDate").val();
+    let senderBankId = $("#importSenderBankName").val();
+    let receiverBankId = $("#importReceiverBankName").val();
+    let supplierId = $("#importSupplierName").val();
+    let draftAt = $("#importDraftAt").val();
+    let maturityDate = $("#importMaturityDate").val();
+    let proformaInvoiceNo = $("#importProformaInvoiceNo").val();
+    let proformaInvoiceDate = $("#importProformaInvoiceDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (invoiceNo != '') {
+        if (senderBankId != '0') {
+          if (receiverBankId != '0') {
+
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(10);
+
+              const item = {
+                styleId: newRow.getAttribute('data-style-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                poNo: $("#importPoNo-"+id).text(),
+                accessoriesItemType: newRow.getAttribute('data-item-type'),
+                accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
+                colorId: newRow.getAttribute('data-color-id'),
+                unitId: newRow.getAttribute('data-unit-id'),
+                size: $("#importSize-" + id).text(),
+                width: $("#importWidth-" + id).text(),
+                gsm: $("#importGSM-" + id).text(),
+                totalQty: $("#importTotalQty-" + id).text(),
+                price: $("#importPrice-" + id).text(),
+                totalValue: $("#importTotalValue-" + id).text(),
+                userId: userId
+              }
+              styleItems.list.push(item);
+            }
+            if (confirm("Are you sure to confirm..")) {
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './importLCSubmit',
+                data: {
+                  masterLCNo: masterLCNo,
+                  importLCType: lcType,
+                  invoiceNo: invoiceNo,
+                  invoiceDate: date,
+                  senderBank: senderBankId,
+                  receiverBank: receiverBankId,
+                  supplierId: supplierId,
+                  draftAt: draftAt,
+                  maturityDate: maturityDate,
+                  proformaInvoiceNo: proformaInvoiceNo,
+                  proformaInvoiceDate: proformaInvoiceDate,
+                  userId: userId,
+                  amendmentNo: '0',
+                  amendmentDate: date,
+                  itemList: JSON.stringify(styleItems),
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#importAmendmentList").empty();
+                    drawImportLCAmendmentList(data.amendmentList);
+                  } else {
+                    alert("Import LC Insertion Failed")
+                  }
+                }
+              });
+
+            }
+
+          } else {
+            warningAlert("Please Select Receiver Bank Name...");
+            $("#importReceiverBankName").focus();
+          }
+        } else {
+          warningAlert("Please Select Sender Bank Name...");
+          $("#importSenderBankName").focus();
+        }
+      } else {
+        warningAlert("Please Enter Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      warningAlert("Please Enter Master LC No...");
+      $("#importMasterLCNo").focus();
+    }
+  } else {
+    alert("Please Entry Any Accessories/Fabrics Item...");
+    //warningAlert("Please Enter Any Item...");
+  }
+
+}
+
+function importItemTotalValueCalculate(){
+  let totalQty = $("#importTotalQty").val()==''?0:$("#importTotalQty").val();
+  let price = $("#importPrice").val()==''?0:$("#importPrice").val();
+
+  let totalValue = totalQty * price;
+
+  $("#importTotalValue").val(Number(totalValue).toFixed(2));
+}
 
 function successAlert(message) {
   let element = $(".alert");

@@ -27,6 +27,7 @@
 	String poNo = request.getAttribute("poNo").toString();
 	String supplierId = request.getAttribute("supplierId").toString();
 	String type = request.getAttribute("type").toString();
+	String previewType = request.getAttribute("previewType").toString();
 	
     try {
 
@@ -90,7 +91,7 @@
 					" left join tbAccessoriesItem ai  \r\n"+
 					" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
 					" left join tbColors c  \r\n"+
-					" on b.colorId = cast(c.ColorId as varchar)  \r\n"+
+					" on b.IndentColorId = cast(c.ColorId as varchar)  \r\n"+
 					"left join tbStyleSize ss \r\n"+
  					"on b.size = ss.id \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
@@ -122,14 +123,19 @@
 					" left join tbAccessoriesItem ai   \r\n"+
 					" on b.accessoriesItemId = cast(ai.itemId as varchar) \r\n"+  
 					 "left join tbColors c   \r\n"+
-					 "on b.colorId = cast(c.ColorId as varchar) \r\n"+  
+					 "on b.IndentColorId = cast(c.ColorId as varchar) \r\n"+  
 					"left join tbStyleSize ss  \r\n"+
 					"on b.size = ss.id \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"group by a.pono,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
-			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");
 			
+			if(previewType.equalsIgnoreCase("general")){
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperGeneralPurchaseOrderView.jrxml");
+			}else{
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");	
+			}
+				
 		}else if(type.equalsIgnoreCase("Fabrics")) {
 			sql="select 'only' as Taka ,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,'' as accessoriesSize,'' as size,    \r\n"+
 				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
