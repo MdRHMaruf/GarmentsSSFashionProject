@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
-	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.zoom" value="2.5937424601000036"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="482"/>
+	<property name="ireport.y" value="593"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -496,37 +496,31 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="319" y="0" width="1" height="11" uuid="39f7756c-3885-4323-bfc7-d89d125d618b"/>
+				<reportElement x="339" y="0" width="1" height="11" uuid="39f7756c-3885-4323-bfc7-d89d125d618b"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="346" y="0" width="1" height="11" uuid="7e63b023-2f82-4bb0-9ff4-013cbcdd36f3"/>
+				<reportElement x="372" y="0" width="1" height="11" uuid="7e63b023-2f82-4bb0-9ff4-013cbcdd36f3"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="462" y="0" width="1" height="11" uuid="6dc3d5ad-7536-4886-a7c8-473815ab7881"/>
+				<reportElement x="455" y="0" width="1" height="11" uuid="6dc3d5ad-7536-4886-a7c8-473815ab7881"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="379" y="0" width="1" height="11" uuid="8df36d6b-6b0f-4d0d-b6ae-228c3afe6c30"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement x="137" y="0" width="1" height="11" uuid="b5d85110-ddd1-4451-9b9c-800860718e82"/>
+				<reportElement x="156" y="0" width="1" height="11" uuid="b5d85110-ddd1-4451-9b9c-800860718e82"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="1" y="0" width="139" height="11" uuid="b217508a-75f5-4bbd-97d4-f7c1bc499848"/>
+				<reportElement x="1" y="0" width="154" height="11" uuid="b217508a-75f5-4bbd-97d4-f7c1bc499848"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -534,21 +528,21 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[ITEM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="319" y="0" width="29" height="11" uuid="72722684-dd74-41f8-aada-730c2aa21a04"/>
+				<reportElement x="339" y="0" width="33" height="11" uuid="72722684-dd74-41f8-aada-730c2aa21a04"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[SIZE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="421" y="0" width="43" height="11" uuid="98643143-ff91-493f-8d15-8f0db28b78c4"/>
+				<reportElement x="408" y="0" width="46" height="11" uuid="98643143-ff91-493f-8d15-8f0db28b78c4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[GRAND QTY]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="462" y="0" width="37" height="11" uuid="84b853c9-31fd-4daf-99f9-03afe9ddfacd"/>
+				<reportElement x="456" y="0" width="36" height="11" uuid="84b853c9-31fd-4daf-99f9-03afe9ddfacd"/>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -556,13 +550,13 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[U/  Price]]></text>
 			</staticText>
 			<line>
-				<reportElement x="499" y="0" width="1" height="11" uuid="9dc228c2-c175-4d39-935d-04d915a23cf8"/>
+				<reportElement x="492" y="0" width="1" height="11" uuid="9dc228c2-c175-4d39-935d-04d915a23cf8"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="499" y="0" width="41" height="11" uuid="d2f61d67-d662-4edd-8a4f-08d385c1cb64"/>
+				<reportElement x="493" y="0" width="47" height="11" uuid="d2f61d67-d662-4edd-8a4f-08d385c1cb64"/>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -570,46 +564,39 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[Amount]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="346" y="0" width="35" height="11" uuid="0265c360-e192-4467-92be-cb9033495739"/>
+				<reportElement x="373" y="0" width="34" height="11" uuid="0265c360-e192-4467-92be-cb9033495739"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[UNIT]]></text>
 			</staticText>
 			<line>
-				<reportElement x="421" y="0" width="1" height="11" uuid="1f56aa62-dca5-4829-95b8-cc0cd86ec80e"/>
+				<reportElement x="407" y="0" width="1" height="11" uuid="1f56aa62-dca5-4829-95b8-cc0cd86ec80e"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement x="380" y="0" width="43" height="11" uuid="4aa8151b-146d-40a8-967b-d0f188261f40"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true"/>
-				</textElement>
-				<text><![CDATA[QTY (PCS)]]></text>
-			</staticText>
 			<line>
-				<reportElement x="245" y="0" width="1" height="11" uuid="a2853371-9b3d-4534-b6db-7afa6c60641e"/>
+				<reportElement x="267" y="0" width="1" height="11" uuid="a2853371-9b3d-4534-b6db-7afa6c60641e"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="246" y="0" width="75" height="11" uuid="a8436eb3-db22-4320-8deb-80cb07c975cf"/>
+				<reportElement x="268" y="0" width="71" height="11" uuid="a8436eb3-db22-4320-8deb-80cb07c975cf"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
 				<text><![CDATA[MEASUREMENT SIZE]]></text>
 			</staticText>
 			<line>
-				<reportElement x="192" y="0" width="1" height="11" uuid="c1f84cea-a55d-49f6-a4ab-98cd99ceedc1"/>
+				<reportElement x="209" y="0" width="1" height="11" uuid="c1f84cea-a55d-49f6-a4ab-98cd99ceedc1"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="138" y="0" width="58" height="11" uuid="6353cb68-b1e1-415c-b4c9-c9512b96f4e1"/>
+				<reportElement x="155" y="0" width="54" height="11" uuid="6353cb68-b1e1-415c-b4c9-c9512b96f4e1"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -617,7 +604,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[COLOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="193" y="0" width="54" height="11" uuid="0437d7bb-bf32-4283-b537-3350e656f3da"/>
+				<reportElement x="210" y="0" width="57" height="11" uuid="0437d7bb-bf32-4283-b537-3350e656f3da"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -629,25 +616,19 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 	<detail>
 		<band height="10" splitType="Stretch">
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="379" y="0" width="1" height="10" uuid="b64fe624-c7b7-4bfe-856d-62dc0449befe"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
-			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="10" uuid="2d8dbd36-6670-4c21-9e38-1795342f4d9c"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="137" y="0" width="1" height="10" uuid="eabdccfd-ea1a-4479-9989-01cdfe7919f3"/>
+				<reportElement stretchType="RelativeToBandHeight" x="155" y="0" width="1" height="10" uuid="eabdccfd-ea1a-4479-9989-01cdfe7919f3"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="462" y="0" width="1" height="10" uuid="3394acc9-35e4-4431-9c4a-865ba66b11e2"/>
+				<reportElement stretchType="RelativeToBandHeight" x="455" y="0" width="1" height="10" uuid="3394acc9-35e4-4431-9c4a-865ba66b11e2"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -665,25 +646,25 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="346" y="0" width="1" height="10" uuid="a992ecdd-6f6e-40e6-8418-c233611f5818"/>
+				<reportElement stretchType="RelativeToBandHeight" x="372" y="0" width="1" height="10" uuid="a992ecdd-6f6e-40e6-8418-c233611f5818"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="319" y="0" width="1" height="10" uuid="1a82c98f-fff4-4ce8-a5ee-5fe778ca9abd"/>
+				<reportElement stretchType="RelativeToBandHeight" x="339" y="0" width="1" height="10" uuid="1a82c98f-fff4-4ce8-a5ee-5fe778ca9abd"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="499" y="0" width="1" height="10" uuid="e26b758e-1c60-4b9b-936e-a5f336e6a58e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="492" y="0" width="1" height="10" uuid="e26b758e-1c60-4b9b-936e-a5f336e6a58e"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="2" y="0" width="136" height="9" uuid="eb140845-9581-4e2c-b757-a3cedef723ce"/>
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="2" y="0" width="153" height="9" uuid="eb140845-9581-4e2c-b757-a3cedef723ce"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
@@ -691,14 +672,14 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$F{AccessorisItem}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="320" y="0" width="26" height="9" uuid="90c05a4d-d437-49b5-b818-7e126238ab34"/>
+				<reportElement x="340" y="0" width="32" height="9" uuid="90c05a4d-d437-49b5-b818-7e126238ab34"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{size}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="463" y="0" width="28" height="9" uuid="68f29a45-56a3-43d1-9f1d-a8bd565c6dfa"/>
+				<reportElement x="456" y="0" width="28" height="9" uuid="68f29a45-56a3-43d1-9f1d-a8bd565c6dfa"/>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
@@ -706,7 +687,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$F{rate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="500" y="0" width="36" height="9" uuid="754e10ee-723b-4831-a85c-65a6c373801a"/>
+				<reportElement x="493" y="0" width="43" height="9" uuid="754e10ee-723b-4831-a85c-65a6c373801a"/>
 				<box rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>
@@ -714,34 +695,26 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="347" y="0" width="32" height="9" uuid="76a3d209-9819-4c58-a6b7-cfa897916e49"/>
+				<reportElement x="372" y="0" width="35" height="9" uuid="76a3d209-9819-4c58-a6b7-cfa897916e49"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{UnitName}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="421" y="0" width="1" height="10" uuid="a2448ee1-d8bf-4e2d-8f5c-402263cccc3e"/>
+				<reportElement stretchType="RelativeToBandHeight" x="407" y="0" width="1" height="10" uuid="a2448ee1-d8bf-4e2d-8f5c-402263cccc3e"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="381" y="0" width="40" height="9" uuid="a1bb1a3f-3cdc-4cc2-b069-8fd9f752dd78"/>
-				<box rightPadding="5"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
-					<font size="7"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{TotalQty}]]></textFieldExpression>
-			</textField>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="245" y="0" width="1" height="10" uuid="dfe790de-d11c-4a23-b1c1-6cca76c10b62"/>
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="0" width="1" height="10" uuid="dfe790de-d11c-4a23-b1c1-6cca76c10b62"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="246" y="0" width="72" height="9" uuid="fea48790-4eac-405d-8063-295c3a3a52f5"/>
+				<reportElement isPrintRepeatedValues="false" x="268" y="0" width="71" height="9" uuid="fea48790-4eac-405d-8063-295c3a3a52f5"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
@@ -749,13 +722,13 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$F{accessoriesSize}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="192" y="0" width="1" height="10" uuid="666442d3-9e91-481f-b87f-5d9cba5065d4"/>
+				<reportElement stretchType="RelativeToBandHeight" x="209" y="0" width="1" height="10" uuid="666442d3-9e91-481f-b87f-5d9cba5065d4"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="139" y="0" width="53" height="9" uuid="51e6cc3c-ba55-4811-9c74-dbb4e0191dc3"/>
+				<reportElement isPrintRepeatedValues="false" x="156" y="0" width="53" height="9" uuid="51e6cc3c-ba55-4811-9c74-dbb4e0191dc3"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>
@@ -763,7 +736,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$F{ColorName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="491" y="0" width="5" height="9" uuid="afb3852d-114f-480d-af85-097b89a170c8">
+				<reportElement x="484" y="0" width="5" height="9" uuid="afb3852d-114f-480d-af85-097b89a170c8">
 					<printWhenExpression><![CDATA[$F{currency}.equals("USD")?true:false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -781,7 +754,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[$]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="422" y="0" width="40" height="9" uuid="a712d65c-492d-4c63-b3ac-d23c164e72ef"/>
+				<reportElement x="408" y="0" width="46" height="9" uuid="a712d65c-492d-4c63-b3ac-d23c164e72ef"/>
 				<box rightPadding="5"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="7"/>

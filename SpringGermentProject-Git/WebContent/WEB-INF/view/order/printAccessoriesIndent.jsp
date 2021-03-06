@@ -28,7 +28,7 @@
         SpringRootConfig sp=new SpringRootConfig();
         
 		String Sql="select ai.AINo,ai.PurchaseOrder,ai.ShippingMarks,isnull(sc.StyleNo,'')as StyleNo,ISNULL(id.itemname,'') as ItemName,ISNULL(c.colorName,'')as Color, "+
-				"ISNULL(b.name,'') as BrandName,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ISNULL(ss.sizeName,'') as SizeName,ISNULL(u.unitname,'') as UnitName,ai.TotalQty "+
+				"ISNULL(b.name,'') as BrandName,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ISNULL(ss.sizeName,'') as SizeName,ISNULL(u.unitname,'') as UnitName,ai.TotalQty,ai.RequireUnitQty "+
 				"from tbAccessoriesIndent ai  "+
 				"left join TbStyleCreate sc "+
 				"on ai.styleid = cast(sc.StyleId as varchar) "+

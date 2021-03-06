@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.6500000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="223"/>
+	<property name="ireport.y" value="367"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -592,7 +592,7 @@
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="499" y="-1" width="1" height="15" uuid="e26b758e-1c60-4b9b-936e-a5f336e6a58e"/>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="320" y="1" width="26" height="12" uuid="90c05a4d-d437-49b5-b818-7e126238ab34"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
@@ -673,21 +673,21 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{RequireUnitQty}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
 				<reportElement x="228" y="1" width="28" height="12" uuid="6df02432-e4eb-485d-8820-b138c2ad39e0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Length1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
 				<reportElement x="258" y="1" width="28" height="12" uuid="79695dc4-0163-4e39-9725-d22a2112db71"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Width1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00;-###0.00">
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
 				<reportElement x="289" y="1" width="28" height="12" uuid="11dfe82c-30db-4ed8-8fa6-b6c16bfafa05"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
@@ -807,7 +807,7 @@
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement x="120" y="29" width="120" height="43" uuid="d41d42e6-9f3b-4a41-8291-1a451f1f8f50">
-					<printWhenExpression><![CDATA[$F{mdapproval}==0?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{mdapproval}==1?true:false]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$F{MdSignature}]]></imageExpression>
 			</image>

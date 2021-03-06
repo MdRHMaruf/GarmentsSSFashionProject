@@ -20,7 +20,6 @@ function previewSampleRequsition(){
 }
 
 
-
 function printSampleRequisition(sampleReqId) {
 	$.ajax({
 		type: 'GET',

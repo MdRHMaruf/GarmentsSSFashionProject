@@ -51,7 +51,8 @@ import pg.share.StateStatus;
 @Repository
 public class OrderDAOImpl implements OrderDAO{
 
-	DecimalFormat df = new DecimalFormat("#00");
+	
+	DecimalFormat df2 = new DecimalFormat("#.00");
 	@Override
 	public List<ItemDescription> getItemDescriptionList() {
 		// TODO Auto-generated method stub
@@ -1305,7 +1306,7 @@ public class OrderDAOImpl implements OrderDAO{
 			buyerPoItem.setTotalAmount(buyerPoItem.getTotalUnit()*buyerPoItem.getUnitFob());
 
 			sql="insert into TbBuyerOrderEstimateDetails (buyerId,BuyerOrderId,CustomerOrder,PurchaseOrder,ShippingMarks,FactoryId,StyleId,ItemId,ColorId,SizeReg,sizeGroupId,TotalUnit,UnitCmt,TotalPrice,UnitFob,TotalAmount,EntryTime,UserId) "
-					+ "values('"+buyerPoItem.getBuyerId()+"','"+buyerPoItem.getBuyerPOId()+"','"+buyerPoItem.getCustomerOrder()+"','"+buyerPoItem.getPurchaseOrder()+"','"+buyerPoItem.getShippingMark()+"','"+buyerPoItem.getFactoryId()+"','"+buyerPoItem.getStyleId()+"','"+buyerPoItem.getItemId()+"','"+buyerPoItem.getColorId()+"','','"+buyerPoItem.getSizeGroupId()+"','"+buyerPoItem.getTotalUnit()+"','"+buyerPoItem.getUnitCmt()+"','"+df.format(buyerPoItem.getTotalPrice())+"','"+buyerPoItem.getUnitFob()+"','"+df.format(buyerPoItem.getTotalAmount())+"',CURRENT_TIMESTAMP,'"+buyerPoItem.getUserId()+"');";
+					+ "values('"+buyerPoItem.getBuyerId()+"','"+buyerPoItem.getBuyerPOId()+"','"+buyerPoItem.getCustomerOrder()+"','"+buyerPoItem.getPurchaseOrder()+"','"+buyerPoItem.getShippingMark()+"','"+buyerPoItem.getFactoryId()+"','"+buyerPoItem.getStyleId()+"','"+buyerPoItem.getItemId()+"','"+buyerPoItem.getColorId()+"','','"+buyerPoItem.getSizeGroupId()+"','"+buyerPoItem.getTotalUnit()+"','"+buyerPoItem.getUnitCmt()+"','"+df2.format(buyerPoItem.getTotalPrice())+"','"+buyerPoItem.getUnitFob()+"','"+df2.format(buyerPoItem.getTotalAmount())+"',CURRENT_TIMESTAMP,'"+buyerPoItem.getUserId()+"');";
 			session.createSQLQuery(sql).executeUpdate();
 
 			String itemAutoId ="";
@@ -1349,7 +1350,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="update TbBuyerOrderEstimateDetails set buyerId='"+buyerPoItem.getBuyerId()+"',BuyerOrderId='"+buyerPoItem.getBuyerPOId()+"',CustomerOrder='"+buyerPoItem.getCustomerOrder()+"',PurchaseOrder='"+buyerPoItem.getPurchaseOrder()+"',ShippingMarks='"+buyerPoItem.getShippingMark()+"',FactoryId='"+buyerPoItem.getFactoryId()+"',StyleId='"+buyerPoItem.getStyleId()+"',ItemId='"+buyerPoItem.getItemId()+"',ColorId='"+buyerPoItem.getColorId()+"',SizeReg='',sizeGroupId='"+buyerPoItem.getSizeGroupId()+"',TotalUnit='"+buyerPoItem.getTotalUnit()+"',UnitCmt='"+buyerPoItem.getUnitCmt()+"',TotalPrice='"+df.format(buyerPoItem.getTotalPrice())+"',UnitFob='"+buyerPoItem.getUnitFob()+"',TotalAmount='"+df.format(buyerPoItem.getTotalAmount())+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPoItem.getUserId()+"' where autoId='"+buyerPoItem.getAutoId()+"'";		
+			String sql="update TbBuyerOrderEstimateDetails set buyerId='"+buyerPoItem.getBuyerId()+"',BuyerOrderId='"+buyerPoItem.getBuyerPOId()+"',CustomerOrder='"+buyerPoItem.getCustomerOrder()+"',PurchaseOrder='"+buyerPoItem.getPurchaseOrder()+"',ShippingMarks='"+buyerPoItem.getShippingMark()+"',FactoryId='"+buyerPoItem.getFactoryId()+"',StyleId='"+buyerPoItem.getStyleId()+"',ItemId='"+buyerPoItem.getItemId()+"',ColorId='"+buyerPoItem.getColorId()+"',SizeReg='',sizeGroupId='"+buyerPoItem.getSizeGroupId()+"',TotalUnit='"+buyerPoItem.getTotalUnit()+"',UnitCmt='"+buyerPoItem.getUnitCmt()+"',TotalPrice='"+df2.format(buyerPoItem.getTotalPrice())+"',UnitFob='"+buyerPoItem.getUnitFob()+"',TotalAmount='"+df2.format(buyerPoItem.getTotalAmount())+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPoItem.getUserId()+"' where autoId='"+buyerPoItem.getAutoId()+"'";		
 			session.createSQLQuery(sql).executeUpdate();
 
 			sql = "delete from tbSizeValues where LinkedAutoId='"+buyerPoItem.getAutoId()+"'";
@@ -1555,7 +1556,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			for(int i=0;i<itemList.size();i++) {
 				JSONObject item = (JSONObject) itemList.get(i);
-				sql="update TbBuyerOrderEstimateDetails set UnitCmt='"+item.get("unitCmt")+"',TotalPrice='"+df.format(item.get("totalPrice"))+"',UnitFob='"+item.get("unitFob")+"',TotalAmount='"+df.format(item.get("totalAmount"))+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+item.get("autoId")+"'";		
+				sql="update TbBuyerOrderEstimateDetails set UnitCmt='"+item.get("unitCmt")+"',TotalPrice='"+df2.format(item.get("totalPrice"))+"',UnitFob='"+item.get("unitFob")+"',TotalAmount='"+df2.format(item.get("totalAmount"))+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+item.get("autoId")+"'";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -1598,7 +1599,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			for(int i=0;i<itemList.size();i++) {
 				JSONObject item = (JSONObject) itemList.get(i);
-				sql="update TbBuyerOrderEstimateDetails set UnitCmt='"+item.get("unitCmt")+"',TotalPrice='"+df.format(item.get("totalPrice"))+"',UnitFob='"+item.get("unitFob")+"',TotalAmount='"+df.format(item.get("totalAmount"))+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+item.get("autoId")+"'";		
+				sql="update TbBuyerOrderEstimateDetails set UnitCmt='"+item.get("unitCmt")+"',TotalPrice='"+df2.format(item.get("totalPrice"))+"',UnitFob='"+item.get("unitFob")+"',TotalAmount='"+df2.format(item.get("totalAmount"))+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+buyerPo.getUserId()+"' where autoId='"+item.get("autoId")+"'";		
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -5476,7 +5477,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on fi.fabricsid = f.id\r\n" + 
 						"left join tbunits unit\r\n" + 
 						"on fi.UnitId = unit.Unitid\r\n" + 
-						"where fi.indentId='"+accessoriesIndent.getAiNo()+"' and fi.styleId='"+accessoriesIndent.getStyleId()+"' and fabricsid='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by fi.id";
+						"where fi.indentId='"+accessoriesIndent.getAiNo()+"' and fi.styleId like '%"+accessoriesIndent.getStyleId()+"%' and fabricsid='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by fi.id";
 
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -5497,7 +5498,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "on ai.size = ss.id" + 
 						" left join tbunits unit\r\n" + 
 						" on ai.UnitId = unit.Unitid "
-						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId='"+accessoriesIndent.getStyleId()+"' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
+						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId like '%"+accessoriesIndent.getStyleId()+"%' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
@@ -5517,7 +5518,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "on ai.size = ss.id" + 
 						" left join tbunits unit\r\n" + 
 						" on ai.UnitId = unit.Unitid "
-						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId='"+accessoriesIndent.getStyleId()+"' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
+						+ "where ai.aiNo='"+accessoriesIndent.getAiNo()+"'  and ai.styleId like '%"+accessoriesIndent.getStyleId()+"%' and ai.accessoriesItemId='"+accessoriesIndent.getAccessoriesId()+"' and (poapproval IS NULL or poapproval='0')  order by ai.AccIndentId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
@@ -5538,7 +5539,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on aic.sizeId = ss.id\r\n" + 
 						" left join tbunits unit\r\n" + 
 						" on aic.UnitId = unit.Unitid \r\n" + 
-						" where aic.indentId = '"+accessoriesIndent.getAiNo()+"'  and aic.styleId='"+accessoriesIndent.getStyleId()+"' and aic.accessoriesItemId = '"+accessoriesIndent.getAccessoriesId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
+						" where aic.indentId = '"+accessoriesIndent.getAiNo()+"'  and aic.styleId like '%"+accessoriesIndent.getStyleId()+"%' and aic.accessoriesItemId = '"+accessoriesIndent.getAccessoriesId()+"' and aic.poapproval IS NULL or poapproval='0'  order by aic.autoId";
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
