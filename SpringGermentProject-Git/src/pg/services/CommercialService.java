@@ -2,6 +2,7 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.springframework.stereotype.Service;
 
 import pg.Commercial.ImportLC;
@@ -25,6 +26,8 @@ public interface CommercialService {
 	public String importLCAmendment(ImportLC importLC);
 	public List<ImportLC> getImportLCAmendmentList(String masterLCNo,String invoiceNo);
 	public List<ImportLC> getImportLCList(String masterLCNo);
+	public ImportLC getImportLCInfo(String masterLCNo, String invoiceNo, String amendmentNo);
+	public JSONArray getImportInvoiceItems(String importInvoiceAutoId);
 	
 	public boolean insertDeedOfContact(deedOfContacts deedcontact);
 	

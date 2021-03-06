@@ -752,10 +752,27 @@ function drawImportLCAmendmentList(data) {
 
 }
 
+function drawImportUDList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchMasterLc('${rowData.masterLCNo}','${rowData.buyerId}','${rowData.amendmentNo}')" style='cursor:pointer;'>
+					<td id='masterAmendmentNo-${id}'>${rowData.amendmentNo}</td>
+					<td id='masterAmendmentDate-${id}'>${rowData.amendmentDate}</td>
+				</tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+
+  $("#importUDList").append(rows);
+
+}
+
 function drawImportInvoiceList(data) {
   let rows = "";
   const length = data.length;
-  console.log("drawing  data = ",data);
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = i;
@@ -765,10 +782,37 @@ function drawImportInvoiceList(data) {
 				</tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
-  console.log("rows=",rows);
   $("#importInvoiceList").append(rows);
 
 }
+
+function drawImportItemList(data) {
+  let rows = "";
+  const length = data.length;
+  
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows  += `<tr id='importRow-${id}' data-style-id='${rowData.styleId}' data-purchase-order-id='${rowData.poNo}' data-item-type='${rowData.accessoriesItemType}' data-accessories-item-id='${rowData.accessoriesItemId}' data-color-id='${rowData.colorId}' data-unit-id='${rowData.unitId}'>
+                        <td>${rowData.styleNo}</td>
+                        <td id='importPoNo-${id}'>${rowData.poNo}</td>
+                        <td>${rowData.accessoriesItemName}</td>
+                        <td>${rowData.colorName}</td>
+                        <td id='importSize-${id}'>${rowData.size}</td>
+                        <td id='importUnit-${id}'>${rowData.unitName}</td>
+                        <td id='importWidth-${id}'>${rowData.width}</td>
+                        <td id='importGsm-${id}'>${rowData.gsm}</td>
+                        <td id='importTotalQty-${id}'>${rowData.totalQty}</td>
+                        <td id='importPrice-${id}'>${rowData.price}</td>
+                        <td id='importTotalValue-${id}'>${rowData.totalValue}</td>
+                    </tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  $("#importItemList").append(rows);
+
+}
+
+ 
 
 function editedMasterRow(rowId) {
   $("#masterRow-" + rowId).addClass('editedRow');
@@ -908,35 +952,30 @@ function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
     },
     success: function (data) {
       console.log(data)
-      const masterLCInfo = data.masterLCInfo;
-      const masterLCStyles = data.masterLCStyles;
-      $("#masterLCAutoId").val(masterLCInfo.autoId);
-      $("#masterLCNo").val(masterLCInfo.masterLCNo);
-      $("#masterLCNo").prop('readonly', true);
-      $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
-      $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
-      $("#masterBuyerName").val(masterLCInfo.buyerId).change();
-      $("#masterSendBankName").val(masterLCInfo.senderBankId).change();
-      $("#masterReceiveBankName").val(masterLCInfo.receiverBankId).change();
-      $("#beneficiaryBankName").val(masterLCInfo.beneficiaryBankId).change();
-      $("#throughBankName").val(masterLCInfo.throughBankId).change();
-      $("#masterDate").val(masterLCInfo.date);
-      $("#masterTotalValue").val(masterLCInfo.totalValue);
-      $("#masterCurrency").val(masterLCInfo.currencyId);
-      $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
-      $("#masterExpiryDate").val(masterLCInfo.expiryDate);
-      $("#remarks").val(masterLCInfo.remarks);
-      $("#masterStyleList").empty();
-      drawMasterLCStyleList(masterLCStyles);
-      $("#masterAmendmentList").empty();
-      drawMasterLCAmendmentList(data.amendmentList);
-      $("#importInvoiceList").empty();
-      drawImportInvoiceList(data.importInvoiceList);
+      const importLCInfo = data.importLCInfo;
+      const importLCItems = data.masterLCStyles;
+      $("#importLCAutoId").val(importLCInfo.autoId);
+      $("#importInvoiceNo").val(importLCInfo.invoiceNo);
+      $("#importLcType").val(importLCInfo.importLCType);
+      $("#importInvoiceDate").val(importLCInfo.invoiceDate);
+      $("#importSenderBankName").val(importLCInfo.senderBank).change();
+      $("#importReceiverBankName").val(importLCInfo.receiverBank).change();
+      $("#importSupplierName").val(importLCInfo.supplierId).change();
+      $("#importDraftAt").val(importLCInfo.draftAt);
+      $("#importMaturityDate").val(importLCInfo.maturityDate);
+      $("#importProformaInvoiceNo").val(importLCInfo.proformaInvoiceNo);
+      $("#importProformaInvoiceDate").val(importLCInfo.proformaInvoiceDate);
+      $("#importAmendmentList").empty();
+      drawImportLCAmendmentList(data.amendmentList);
+      $("#importUDList").empty();
+      drawImportUDList(data.importUDist);
+      $("#importItemList").empty();
+      drawImportItemList(data.importItemList);
 
       $("#importSubmitButton").hide();
+      $("#importAmendmentButton").show();
       $("#importEditButton").show();
-      $("#masterEditBtn").show();
-      $("#masterPreviewBtn").show();
+      $("#importPreviewBtn").show();
     }
   });
 

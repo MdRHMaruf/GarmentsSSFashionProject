@@ -432,11 +432,12 @@ function refreshAction() {
 
 }
 
-function previewAction(){
+function previewAction(previewType = "general"){
+  
   let poNo = $("#poNo").val();
   let supplierId = $("#supplierName").val();
   let poType = $("#poType").val();
-  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType;
+  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType +"/"+ previewType;
   window.open(url, '_blank');
 }
 
@@ -512,6 +513,7 @@ function searchPurchaseOrder(poNo,poType) {
         $("#btnPOSubmit").hide();
         $("#btnPOEdit").show();
         $("#btnPreview").show();
+        //$("#btnPreviewOption").show();
 
         $('#searchModal').modal('hide');
 

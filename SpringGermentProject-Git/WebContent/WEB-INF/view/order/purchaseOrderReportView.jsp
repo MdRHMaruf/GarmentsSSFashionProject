@@ -96,43 +96,79 @@
  					"on b.size = ss.id \r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
-			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
+			if(previewType.equalsIgnoreCase("withoutPcs")){
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcs.jrxml");
+			}else{
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
+			}
+			
 			
 		}else if(type.equalsIgnoreCase("Zipper And Others")) {
 			
-			sql="select (select dbo.number((select sum(amount) from tbZipperIndent where pono=a.pono),b.dolar)) as Taka,b.ShippingMarks,b.styleId,  \r\n"+
-					"isnull(sc.StyleNo,'') as StyleNo,b.itemId,id.itemname as itemDescription,  \r\n"+
-					 "b.accessoriesItemId,isnull(ai.ItemName,'') as AccessorisItem,b.colorId, \r\n"+  
-					"ISNULL(c.Colorname,'') as ColorName,b.SizeGroupId, \r\n"+
-					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName, \r\n"+  
-					"b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
-					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) \r\n"+   
-					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+  
-					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
-					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
-					"(select Signature from Tblogin where id='9') as MdSignature,  \r\n"+
-					 "(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+ 
-					"b.mdapproval,a.poNo ,count(a.poNo) as cnt  \r\n"+
-					"from tbPurchaseOrderSummary a    \r\n"+
-					"join tbZipperIndent b    \r\n"+
-					"on a.pono=b.pono     \r\n"+
-					" left join TbStyleCreate sc \r\n"+  
-					" on b.styleId = cast(sc.StyleId as varchar) \r\n"+
-					"left join tbItemDescription id \r\n"+
- 					"on b.Itemid = cast(id.itemid as varchar) \r\n"+  
-					" left join tbAccessoriesItem ai   \r\n"+
-					" on b.accessoriesItemId = cast(ai.itemId as varchar) \r\n"+  
-					 "left join tbColors c   \r\n"+
-					 "on b.IndentColorId = cast(c.ColorId as varchar) \r\n"+  
-					"left join tbStyleSize ss  \r\n"+
-					"on b.size = ss.id \r\n"+
-					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
-					"group by a.pono,b.dolar,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
-					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
 			
 			if(previewType.equalsIgnoreCase("general")){
+				
+				sql="select (select dbo.number((select sum(amount) from tbZipperIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,b.ShippingMarks,b.PurchaseOrder, \r\n"+
+						"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
+						" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
+						"ISNULL(c.Colorname,'') as ColorName,b.accessoriesSize,ss.sizeName as size, \r\n"+
+						"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
+						"(select unitname from tbunits where UnitId=b.lengthUnitId) as lengthUnitName, \r\n"+
+						"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+						"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
+						"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
+						"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+
+						"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
+						"(select Signature from Tblogin where id='9') as MdSignature, \r\n"+
+						" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
+						"b.mdapproval,a.poNo  \r\n"+ 
+						"from tbPurchaseOrderSummary a   \r\n"+
+						"join tbZipperIndent b   \r\n"+
+						"on a.pono=b.pono    \r\n"+
+						" left join TbStyleCreate sc  \r\n"+
+						" on b.styleId = cast(sc.StyleId as varchar)  \r\n"+
+						" left join tbAccessoriesItem ai  \r\n"+
+						" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
+						" left join tbColors c  \r\n"+
+						" on b.IndentColorId = cast(c.ColorId as varchar)  \r\n"+
+						"left join tbStyleSize ss \r\n"+
+	 					"on b.size = ss.id \r\n"+
+						"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
+						"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
 				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperGeneralPurchaseOrderView.jrxml");
 			}else{
+				
+				sql="select (select dbo.number((select sum(amount) from tbZipperIndent where pono=a.pono),b.dolar)) as Taka,b.ShippingMarks,b.styleId,  \r\n"+
+						"isnull(sc.StyleNo,'') as StyleNo,b.itemId,id.itemname as itemDescription,  \r\n"+
+						 "b.accessoriesItemId,isnull(ai.ItemName,'') as AccessorisItem,b.colorId, \r\n"+  
+						"ISNULL(c.Colorname,'') as ColorName,b.SizeGroupId, \r\n"+
+						"(select unitname from tbunits where UnitId=b.UnitId) as UnitName, \r\n"+  
+						"b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
+						"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) \r\n"+   
+						"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+  
+						"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
+						"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
+						"(select Signature from Tblogin where id='9') as MdSignature,  \r\n"+
+						 "(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+ 
+						"b.mdapproval,a.poNo ,count(a.poNo) as cnt,b.dolar  \r\n"+
+						"from tbPurchaseOrderSummary a    \r\n"+
+						"join tbZipperIndent b    \r\n"+
+						"on a.pono=b.pono     \r\n"+
+						" left join TbStyleCreate sc \r\n"+  
+						" on b.styleId = cast(sc.StyleId as varchar) \r\n"+
+						"left join tbItemDescription id \r\n"+
+	 					"on b.Itemid = cast(id.itemid as varchar) \r\n"+  
+						" left join tbAccessoriesItem ai   \r\n"+
+						" on b.accessoriesItemId = cast(ai.itemId as varchar) \r\n"+  
+						 "left join tbColors c   \r\n"+
+						 "on b.IndentColorId = cast(c.ColorId as varchar) \r\n"+  
+						"left join tbStyleSize ss  \r\n"+
+						"on b.size = ss.id \r\n"+
+						"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
+						"group by a.pono,b.dolar,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
+						"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
+				
+				
 				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");	
 			}
 				

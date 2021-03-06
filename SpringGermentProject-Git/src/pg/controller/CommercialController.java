@@ -194,16 +194,18 @@ public class CommercialController {
 	@RequestMapping(value = "/searchImportLCInvoice",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchImportLCInvoice(String masterLCNo,String invoiceNo,String amendmentNo) {
 		JSONObject objmain = new JSONObject();
-
-		JSONArray itemList = new JSONArray();
 		//MasterLC masterLCInfo = commercialService.getMasterLCInfo(masterLCNo, buyerId, amendmentNo);
 		// = commercialService.getImportLCStyles(masterLCNo, invoiceNo, amendmentNo);
 		List<ImportLC> ammendmentList = commercialService.getImportLCAmendmentList(masterLCNo, invoiceNo);
-		List<ImportLC> importInvoiceList = commercialService.getImportLCList(masterLCNo);
+		ImportLC importLC = commercialService.getImportLCInfo(masterLCNo, invoiceNo, amendmentNo);
+		JSONArray itemList = commercialService.getImportInvoiceItems(importLC.getAutoId());
+		
 		//objmain.put("masterLCInfo",masterLCInfo);
 		//sobjmain.put("masterLCStyles", masterLCStyles);
 		objmain.put("amendmentList", ammendmentList);
-		objmain.put("importInvoiceList", importInvoiceList);
+		objmain.put("importLCInfo", importLC);
+		objmain.put("importItemList", itemList);
+		objmain.put("importUDList","");
 		return objmain;
 	}
 	

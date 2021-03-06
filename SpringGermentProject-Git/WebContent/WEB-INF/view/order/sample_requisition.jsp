@@ -46,8 +46,8 @@ String userName=(String)session.getAttribute("userName");
 				<h5 class="text-center" style="display: inline;">Sample
 					Requisition</h5>
 					<div class="col-sm-12">
-						<input name="active" value="1" type="radio" checked>
-											With PO <input name="active" value="0" type="radio">Without PO
+						<input name="active" id="checkWithPo" value="1" type="radio" checked>
+											<label for="checkWithPo">With PO</label> <input name="active" id="checkWithoutPo" value="0" type="radio"><label for="checkWithoutPo">Without PO</label>
 					</div>
 
 			</div>

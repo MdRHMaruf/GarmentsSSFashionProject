@@ -28,6 +28,42 @@ window.onload = () => {
 
 }
 
+function styleListLoadByMultiplePurchaseOrder(){
+	if ($("#purchaseOrder").val().length > 0) {
+		let poList = '';
+		$("#purchaseOrder").val().forEach(po => {
+			poList += `'${po}',`;
+		});
+		poList = poList.slice(0, -1);
+		let selectedStyleId = $("#styleNo").val();
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getStyleListByMultiplePurchaseOrder',
+			data: {
+				purchaseOrders: poList
+			},
+			success: function (data) {
+				let options = "";
+
+				let styleList = data.styleList;
+
+				length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('#styleNo').selectpicker('refresh');
+				$("#styleNo").selectpicker('val', selectedStyleId).change();
+
+				resolveFunction()
+			}
+		});
+	}
+}
+let setPromise = new Promise(function(resolveFunction,reject){
+	
+});
 
 function buyerWiseStyleLoad() {
 	let buyerId = $("#buyerName").val();
@@ -571,8 +607,8 @@ $("#btnRecyclingData").click(() => {
 						}
 					});
 				}
-
-
+				$('#btnAdd').show();
+				$('#btnEdit').hide();
 
 			} else {
 				warningAlert("Please Select Any Item Name");
@@ -774,7 +810,7 @@ function editAction() {
 	if (indentType == 'newIndentRow') {
 
 		let row = $("#newIndentRow-" + autoId);
-
+		successAlert("Edit Successfully....");
 		row.attr('data-accessories-item-id', accessoriesItemId);
 		$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
 		row.attr('data-accessories-size', accessoriesSize);
@@ -828,10 +864,10 @@ function editAction() {
 			},
 			success: function (data) {
 
-				alert(data);
+				
 				if (data == 'successfull') {
 					let row = $("#oldIndentRow-" + autoId);
-
+					successAlert("Edit Successfully....");
 					row.attr('data-accessories-item-id', accessoriesItemId);
 					$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
 					row.attr('data-accessories-size', accessoriesSize);
@@ -854,6 +890,8 @@ function editAction() {
 					$("#totalQty").attr("readonly", true);
 					$("#btnAdd").show();
 					$("#btnEdit").hide();
+				}else{
+					alert(data);
 				}
 
 			},
@@ -1021,6 +1059,9 @@ function confirmAction() {
 function setIndentItem(rowId, indentType) {
 
 	let row = $(`#${indentType}-${rowId}`);
+	let poArray = $("#indentPurchaseOrder-"+rowId).text().trim().split(',');
+	console.log("array",poArray);
+	$("#purchaseOrder").selectpicker('val',poArray);
 
 	$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
 	$("#accessoriesSize").val(row.attr('data-accessories-size'));
@@ -1044,6 +1085,10 @@ function setIndentItem(rowId, indentType) {
 	$("#totalQty").attr("readonly", false);
 	$('#btnAdd').hide();
 	$('#btnEdit').show();
+
+	$('html, body').animate({
+		scrollTop: $("html,body").offset().top
+	}, 400)
 }
 
 function deleteIndentRow(rowId, indentType) {
@@ -2287,3 +2332,12 @@ function dangerAlert(message) {
 		element.toggle('fade');
 	}, 2500);
 }
+
+$(document).ready(function () {
+	$("#accessoriesIndentListSearch").on("keyup", function () {
+		let value = $(this).val().toLowerCase();
+		$("#dataList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});

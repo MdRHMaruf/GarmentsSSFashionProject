@@ -377,23 +377,25 @@
 							class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
-						<button id="btnPreview" type="button"
+						<!-- <button id="btnPreview" type="button"
 							class="btn btn-info btn-sm ml-1" onclick="previewAction()"
 							style="display: none;">
 							<i class="fa fa-print"></i> Preview
-						</button>
+						</button> -->
 
-						<div class="btn-group ml-1" role="group"
-							aria-label="Button group with nested dropdown">
-							<button type="button" class="btn btn-sm btn-info" onclick="previewAction()"><i class="fa fa-print"></i> Preview</button>
+						<div class="btn-group ml-1" role="group" id="btnPreview"
+							aria-label="Button group with nested dropdown" style="display: none;">
+							<button type="button" class="btn btn-sm btn-info" onclick="previewAction('primary')"><i class="fa fa-print"></i> Preview</button>
 							<div class="btn-group" role="group">
 								<button id="btnGroupDrop1" type="button"
 									class="btn btn-sm btn-info dropdown-toggle"
 									data-toggle="dropdown" aria-haspopup="true"
 									aria-expanded="false"></button>
 								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+									<a class="dropdown-item" onclick="previewAction('withPcs')" href="#">With Pcs</a>
+									<a class="dropdown-item" onclick="previewAction('withOutPcs')" href="#">Without Pcs</a>
 									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper Preview</a> <a
-										class="dropdown-item" onclick="generalPreviewAction()" href="#">General Preview</a>
+										class="dropdown-item" onclick="previewAction('general')" href="#">General Preview</a>
 								</div>
 							</div>
 						</div>

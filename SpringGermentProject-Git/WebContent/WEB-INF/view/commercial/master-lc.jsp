@@ -46,7 +46,8 @@
 		type="hidden" id="fabricsId" value="0"> <input type="hidden"
 		id="unitId" value="0"> <input type="hidden" id="fabricsRate"
 		value="0"> <input type="hidden" id="masterLCAutoId" value="0">
-	<input type="hidden" id='masterAmendmentNo'>
+	<input type="hidden" id='masterAmendmentNo'> <input type="hidden" id="importLCAutoId" value="0">
+	<input type="hidden" id='importAmendmentNo'>
 
 
 	<div class="card-box">
@@ -677,12 +678,15 @@
 							class="btn btn-primary btn-sm" onclick="importSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
+						<button id="importAmendmentButton" type="button" class="btn btn-primary btn-sm ml-1" onclick="masterAmendmentAction()" style="">
+							<i class="fas fa-save"></i> Amendment
+						</button>
 						<button id="importEditButton" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="importEditAction()"
 							style="display: none;">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
-						<button id="importRepreshBtn" type="button"
+						<button id="importRefreshBtn" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
