@@ -2,9 +2,11 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
 import pg.Commercial.deedOfContacts;
@@ -57,6 +59,49 @@ public class CommercialServiceImpl implements CommercialService{
 		// TODO Auto-generated method stub
 		return commercialDao.getMasterLCStyles(masterLCNo, buyerId, amendmentNo);
 	}
+	
+	@Override
+	public boolean importLCSubmit(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.importLCSubmit(importLC);
+	}
+	
+	@Override
+	public String importLCEdit(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.importLCEdit(importLC);
+	}
+	
+	@Override
+	public String importLCAmendment(ImportLC importLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.importLCAmendment(importLC);
+	}
+	
+	@Override
+	public List<ImportLC> getImportLCAmendmentList(String masterLCNo, String invoiceNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getImportLCAmendmentList(masterLCNo, invoiceNo);
+	}
+
+	@Override
+	public List<ImportLC> getImportLCList(String masterLCNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getImportLCList(masterLCNo);
+	}
+	
+
+	@Override
+	public ImportLC getImportLCInfo(String masterLCNo, String invoiceNo, String amendmentNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getImportLCInfo(masterLCNo, invoiceNo, amendmentNo);
+	}
+	
+	@Override
+	public JSONArray getImportInvoiceItems(String importInvoiceAutoId) {
+		// TODO Auto-generated method stub
+		return commercialDao.getImportInvoiceItems(importInvoiceAutoId);
+	}
 
 	@Override
 	public boolean insertDeedOfContact(deedOfContacts deedcontact) {
@@ -75,6 +120,11 @@ public class CommercialServiceImpl implements CommercialService{
 		// TODO Auto-generated method stub
 		return commercialDao.deedOfContractDetails( id);
 	}
+
+	
+
+
+	
 
 
 }

@@ -89,8 +89,7 @@ String userName=(String)session.getAttribute("userName");
 											aria-describedby="findButton">
 											<c:forEach items="${purchaseorders}" var="acc"
 												varStatus="counter">
-												<option name="purchaseOrder" id='purchaseOrder'
-													value="${acc.name}">${acc.name}</option>
+												<option value="${acc.name}">${acc.name}</option>
 											</c:forEach>
 										</select>
 										<button class="btn btn-sm btn-primary" type="button"
@@ -485,7 +484,10 @@ String userName=(String)session.getAttribute("userName");
 					<div id="tableList"></div>
 					<div class="row mt-1">
 						<div class="col-md-12">
-							<div class="d-flex justify-content-end">
+							<div class="d-flex justify-content-between">
+							<div class="w-25"> 
+									<input id="accessoriesIndentListSearch" type="text" class="form-control-sm" placeholder="Search Here Anything....">
+								</div>
 								<div class="row">
 									<div class="ml-auto pr-1">
 										<button class="btn btn-primary btn-sm " id="btnAdd">
@@ -506,6 +508,7 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 								</div>
+								
 							</div>
 						</div>
 					</div>

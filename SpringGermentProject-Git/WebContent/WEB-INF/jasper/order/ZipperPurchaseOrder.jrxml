@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.6105100000000427"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="269"/>
+	<property name="ireport.x" value="299"/>
+	<property name="ireport.y" value="511"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -79,6 +79,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 	<field name="poNo" class="java.lang.Integer"/>
 	<field name="cnt" class="java.lang.Integer"/>
 	<field name="body" class="java.lang.String"/>
+	<field name="dolar" class="java.lang.Double"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
@@ -603,7 +604,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement x="120" y="32" width="120" height="43" uuid="d41d42e6-9f3b-4a41-8291-1a451f1f8f50">
-					<printWhenExpression><![CDATA[$F{mdapproval}==0?false:true]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{mdapproval}==1?true:false]]></printWhenExpression>
 				</reportElement>
 				<imageExpression><![CDATA[$F{MdSignature}]]></imageExpression>
 			</image>
@@ -624,15 +625,15 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="29" splitType="Stretch">
+		<band height="42" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="0" width="1" height="29" uuid="f83dbd21-5cff-4219-b3c5-e68239c505ab"/>
+				<reportElement x="0" y="0" width="1" height="42" uuid="f83dbd21-5cff-4219-b3c5-e68239c505ab"/>
 			</line>
 			<line>
-				<reportElement x="544" y="0" width="1" height="29" uuid="f95b2d83-d034-42f5-80a5-07a147b49b20"/>
+				<reportElement x="544" y="0" width="1" height="41" uuid="f95b2d83-d034-42f5-80a5-07a147b49b20"/>
 			</line>
 			<staticText>
-				<reportElement x="4" y="15" width="59" height="13" uuid="c145e3b1-720d-4a4d-afe2-62e16ef2c7f6"/>
+				<reportElement x="4" y="28" width="59" height="13" uuid="c145e3b1-720d-4a4d-afe2-62e16ef2c7f6"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -649,10 +650,10 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<text><![CDATA[G. TOTAL=]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="28" width="544" height="1" uuid="b7c450fd-f255-4670-a52c-39c11e811933"/>
+				<reportElement x="0" y="41" width="544" height="1" uuid="b7c450fd-f255-4670-a52c-39c11e811933"/>
 			</line>
 			<textField pattern="#,##0.00">
-				<reportElement x="103" y="-1" width="66" height="13" uuid="e4d16269-b488-45c2-ac6c-8b9d296c479c"/>
+				<reportElement x="422" y="-1" width="66" height="13" uuid="e4d16269-b488-45c2-ac6c-8b9d296c479c"/>
 				<box rightPadding="2">
 					<bottomPen lineWidth="2.0" lineStyle="Double"/>
 				</box>
@@ -662,7 +663,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$V{grossamount}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="58" y="15" width="435" height="13" uuid="a6962e0e-2933-4f28-b349-c006b708f8d9"/>
+				<reportElement x="58" y="28" width="435" height="13" uuid="a6962e0e-2933-4f28-b349-c006b708f8d9"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -672,7 +673,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<reportElement x="1" y="0" width="544" height="1" uuid="e2c0f791-b634-45d7-9eba-9a4f5787f5b2"/>
 			</line>
 			<staticText>
-				<reportElement x="171" y="0" width="5" height="14" uuid="fa9ddc4f-635c-4513-8b44-b632b40b0d1c">
+				<reportElement x="490" y="0" width="5" height="14" uuid="fa9ddc4f-635c-4513-8b44-b632b40b0d1c">
 					<printWhenExpression><![CDATA[$F{currency}.equals("USD")?true:false]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
@@ -680,6 +681,26 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
+			<line>
+				<reportElement x="0" y="27" width="545" height="1" uuid="02efe6a6-ff7e-4b06-afde-3e3485b2421b"/>
+			</line>
+			<staticText>
+				<reportElement x="4" y="14" width="99" height="13" uuid="b8ac04bc-4b80-4abe-9a60-87d890fc7010"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[G. TOTAL=]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="13" width="66" height="13" uuid="9f61351c-c699-4ecd-8639-da141f1ddd2b"/>
+				<box rightPadding="2">
+					<bottomPen lineWidth="2.0" lineStyle="Double"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{grossamount} * $F{dolar}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>

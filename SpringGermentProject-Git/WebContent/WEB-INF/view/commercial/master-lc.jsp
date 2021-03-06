@@ -45,7 +45,9 @@
 		type="hidden" id="fabricsColorId" value="0"> <input
 		type="hidden" id="fabricsId" value="0"> <input type="hidden"
 		id="unitId" value="0"> <input type="hidden" id="fabricsRate"
-		value="0">
+		value="0"> <input type="hidden" id="masterLCAutoId" value="0">
+	<input type="hidden" id='masterAmendmentNo'> <input type="hidden" id="importLCAutoId" value="0">
+	<input type="hidden" id='importAmendmentNo'>
 
 
 	<div class="card-box">
@@ -174,11 +176,9 @@
 								data-style="btn-light btn-sm border-light-gray">
 								<option id="currency" value="0">Select Currency</option>
 								<%
-									int length = Currency.values().length;
-									for (int i = 0; i < length; i++) {
+									for (Currency currency : Currency.values()) {
 								%>
-								<option id="currency"
-									value="<%=Currency.values()[i].getType()%>"><%=Currency.values()[i].name()%></option>
+								<option id="currency" value="<%=currency.name()%>"><%=currency.name()%></option>
 								<%
 									}
 								%>
@@ -228,7 +228,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="masterStyleNo" class="col-form-label-sm my-0 py-0">Style
 							No</label> <select id="masterStyleNo"
-							onchange="styleWiseItemLoad(),styleWiseBuyerPOLoad()"
+							onchange="styleWiseItemLoad(),styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">Select Style</option>
@@ -306,8 +306,8 @@
 							<i class="fas fa-save"></i> Submit
 						</button>
 						<button id="masterAmendmentBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="masterAmendmentAction()"
-							style="display: none">
+							class="btn btn-primary btn-sm ml-1"
+							onclick="masterAmendmentAction()" style="display: none">
 							<i class="fas fa-save"></i> Amendment
 						</button>
 						<button id="masterEditBtn" type="button"
@@ -336,18 +336,19 @@
 									<label for="importMasterLcNo"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
 										LC No</label> <input id="importMasterLcNo" type="text"
-										class="col-md-8 form-control-sm">
+										class="col-md-8 form-control-sm" readonly>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group mb-0  row">
 									<label for="importLcType"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Import LC Type</label>
-										<select id="importLcType" class="col-md-8 form-control-sm">
-											<option value="1">Invoice</option>
-											<option value="2">BTB LC</option>
-											<option value="3">TT LC</option>
-										</select>
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Import
+										LC Type</label> <select id="importLcType"
+										class="col-md-8 form-control-sm">
+										<option value="1">Invoice</option>
+										<option value="2">BTB LC</option>
+										<option value="3">TT LC</option>
+									</select>
 								</div>
 							</div>
 						</div>
@@ -370,7 +371,7 @@
 							</div>
 						</div>
 
-						
+
 
 						<div class="row">
 							<div class="col-md-6">
@@ -417,9 +418,9 @@
 										Name</label> <select id="importSupplierName"
 										class="selectpicker col-md-8 px-0" data-live-search="true"
 										data-style="btn-light btn-sm border-light-gray">
-										<option value="0">Select Buyer</option>
+										<option value="0">--Select SupplierName--</option>
 										<c:forEach items="${supplierList}" var="supplier">
-											<option value="${supplier.buyerid}">${supplier.buyername}</option>
+											<option value="${supplier.supplierid}">${supplier.suppliername}</option>
 										</c:forEach>
 									</select>
 								</div>
@@ -475,10 +476,9 @@
 								<tr>
 									<th>Invoice No</th>
 									<th>Invoice Date</th>
-
 								</tr>
 							</thead>
-							<tbody id="importIvoiceList">
+							<tbody id="importInvoiceList">
 
 							</tbody>
 						</table>
@@ -488,7 +488,6 @@
 								<tr>
 									<th>Amendment No</th>
 									<th>Amendment Date</th>
-
 								</tr>
 							</thead>
 							<tbody id="importAmendmentList">
@@ -498,30 +497,36 @@
 
 						<div class="row">
 							<div class="col-md-12">
-								<div class="form-group mb-0  row">
-									<label for="importUDNo"
-										class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">UD
-										No:</label> <input id="importUDNo" type="text"
-										class="col-md-8 form-control-sm">
+								<div class="row">
+									<div class="col-md-12 pr-1">
+										<div class="input-group input-group-sm mb-1">
+											<div class="input-group-prepend">
+												<span class="input-group-text" id="inputGroup-sizing-sm"><label
+													class="my-0" for="importUDNo">UD No:<span
+														style="color: red">*</span></label></span>
+											</div>
+											<input id="importUDNo" type="text" class="form-control"
+												aria-label="Sizing example input"
+												aria-describedby="inputGroup-sizing-sm"
+												onkeyup="setTotalQtyForCarton()"> <input
+												id="importUdDate" type="date" class="form-control"
+												aria-label="Sizing example input"
+												aria-describedby="inputGroup-sizing-sm"
+												onkeyup="setTotalQtyForCarton()">
+											<button id="importUDAdd" type="button"
+												class="btn btn-primary btn-sm"
+												aria-label="Sizing example input"
+												aria-describedby="inputGroup-sizing-sm">Add</button>
+										</div>
+									</div>
+								</div>
 
-								</div>
-								<div class="form-group mb-0  row">
-									<label for="importUDDate"
-										class="col-md-3 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-									<input id="importUdDate" type="date"
-										class="col-md-7 form-control-sm">
-									<button id="importUDAdd" type="button"
-										class="btn btn-primary btn-sm">
-										<i class="fa fa-plus-circle"></i> Add
-									</button>
-								</div>
 								<table
 									class="table table-hover table-bordered table-sm mb-2 small-font">
 									<thead class="no-wrap-text">
 										<tr>
 											<th>UD No</th>
 											<th>UD Date</th>
-
 										</tr>
 									</thead>
 									<tbody id="importUDList">
@@ -535,7 +540,7 @@
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="importStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="importStyleNo" onchange="styleWiseItemLoad()"
+							No</label> <select id="importStyleNo" onchange="styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -547,7 +552,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="importPurchaseOrder"
 							class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
-							id="importPurchaseOrder" onchange="styleWiseItemLoad()"
+							id="importPurchaseOrder" onchange=""
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -557,7 +562,7 @@
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importItemType" class="col-form-label-sm my-0 py-0">Item
 							Type</label> <select id="importItemType"
-							class="col-md-12 form-control-sm px-0">
+							class="col-md-12 form-control-sm px-0" onchange='itemTypeChangeAction()'>
 							<option value="0">--Select Item Type--</option>
 							<option value="1">Fabrics</option>
 							<option value="2">Accessories</option>
@@ -580,23 +585,26 @@
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">--Select Color--</option>
+							<c:forEach items="${colorList}" var="color">
+									<option value="${color.colorId}">${color.colorName}</option>
+								</c:forEach>
 						</select>
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importSize" class="col-form-label-sm my-0 py-0">Size</label>
-						<select id="importSize" class="selectpicker col-md-12 px-0"
-							data-live-search="true"
-							data-style="btn-light btn-sm border-light-gray">
-							<option value="0">--Select Size--</option>
-						</select>
+						<input id="importSize" type="text"
+							class="form-control-sm pr-0 pl-1">
 					</div>
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importUnit" class="col-form-label-sm my-0 py-0">Unit</label>
 						<select id="importUnit" class="selectpicker col-md-12 px-0"
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
-							<option value="0">--Select Size--</option>
+							<option value="0">Select Unit</option>
+													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+														<option value="${unit.unitId}">${unit.unitName}</option>
+													</c:forEach>
 						</select>
 					</div>
 
@@ -614,24 +622,24 @@
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importTotalQty" class="col-form-label-sm my-0 py-0">Total
 							Qty</label> <input id="importTotalQty" type="number"
-							class="form-control-sm pr-0 pl-1">
+							class="form-control-sm pr-0 pl-1" onkeyup="importItemTotalValueCalculate()">
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importPrice" class="col-form-label-sm my-0 py-0">Price</label>
 						<input id="importPrice" type="number"
-							class="form-control-sm pr-0 pl-1">
+							class="form-control-sm pr-0 pl-1" onkeyup="importItemTotalValueCalculate()">
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importTotalValue" class="col-form-label-sm my-0 py-0">Total
 							Value</label> <input id="importTotalValue" type="number"
-							class="form-control-sm pr-0 pl-1">
+							class="form-control-sm pr-0 pl-1" readonly>
 					</div>
 					<div class="col-md-1 pr-0 pl-1">
 						<button id="masterAddBtn" type="button"
 							style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
-							onclick="styleAddAction()">
+							onclick="importItemAddAction()">
 							<i class="fa fa-plus-circle"></i> Add
 						</button>
 					</div>
@@ -667,20 +675,23 @@
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
 						<button id="importSubmitButton" type="button"
-							class="btn btn-primary btn-sm" onclick="submitAction()">
+							class="btn btn-primary btn-sm" onclick="importSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
+						<button id="importAmendmentButton" type="button" class="btn btn-primary btn-sm ml-1" onclick="masterAmendmentAction()" style="">
+							<i class="fas fa-save"></i> Amendment
+						</button>
 						<button id="importEditButton" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-							disabled>
+							class="btn btn-primary btn-sm ml-1" onclick="importEditAction()"
+							style="display: none;">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
-						<button id="importRepreshBtn" type="button"
+						<button id="importRefreshBtn" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
 						<button id="importPreviewBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" disabled>
+							class="btn btn-primary btn-sm ml-1" onclick="importPreviewAction()" style="display: none;">
 							<i class="fa fa-print"></i> Preview
 						</button>
 					</div>
@@ -746,8 +757,8 @@
 				</div>
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
-						<label for="importStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="importStyleNo" onchange="styleWiseItemLoad()"
+						<label for="billStyleNo" class="col-form-label-sm my-0 py-0">Style
+							No</label> <select id="billStyleNo" onchange="styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -782,6 +793,9 @@
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">--Select Color--</option>
+							<c:forEach items="${colorList}" var="color">
+									<option value="${color.colorId}">${color.colorName}</option>
+								</c:forEach>
 						</select>
 					</div>
 
@@ -798,7 +812,10 @@
 						<select id="billUnit" class="selectpicker col-md-12 px-0"
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
-							<option value="0">--Select Size--</option>
+							<option value="0">Select Unit</option>
+													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+														<option value="${unit.unitId}">${unit.unitName}</option>
+													</c:forEach>
 						</select>
 					</div>
 
@@ -830,11 +847,7 @@
 							Value</label> <input id="billTotalValue" type="number"
 							class="form-control-sm pr-0 pl-1">
 					</div>
-					<div class="col-md-1 pr-0 pl-1">
-						<label for="billCuttonQty" class="col-form-label-sm my-0 py-0">Total
-							Value</label> <input id="billCuttonQty" type="number"
-							class="form-control-sm pr-0 pl-1">
-					</div>
+					
 					<div class="col-md-1 pr-0 pl-1">
 						<button id="bollAddBtn" type="button" style="margin-top: 1.3rem;"
 							class="btn btn-primary btn-sm" onclick="styleAddAction()">
@@ -979,273 +992,272 @@
 			</div>
 			<div class="tab-pane fade" id="nav-export" role="tabpanel"
 				aria-labelledby="nav-export-tab">
-					<div class="row">
-						<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-4">
 
-							<div class="form-group mb-0  row">
-								<label for="exportMasterLcNo"
-									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
-									LC</label> <input id="exportMasterLcNo" type="text"
-									class="col-md-8 form-control-sm" readonly>
-							</div>
-
-							<div class="form-group mb-0  row">
-								<label for="exportBuyerName"
-									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Buyer
-									Name</label> <input id="exportBuyerName" type="text"
-									class="col-md-8 form-control-sm" readonly>
-							</div>
-
-							<div class="form-group mb-0  row">
-								<label for="exportNotifyTo"
-									class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Notify
-									To</label> <select id="exportNotifyTo"
-									class="selectpicker col-md-8 px-0" data-live-search="true"
-									data-style="btn-light btn-sm border-light-gray">
-									<option value="0">Select Buyer</option>
-									<c:forEach items="${notifyList}" var="notify">
-										<option value="${notify.notifyId}">${notify.notifyName}</option>
-									</c:forEach>
-								</select>
-							</div>
-
-							<table
-								class="table table-hover table-bordered table-sm mb-0 small-font">
-								<thead class="no-wrap-text">
-									<tr>
-										<th>Invoice No</th>
-										<th>Shipment Mark</th>
-										<th>Shipment Date</th>
-									</tr>
-								</thead>
-								<tbody id="exportShipmentList">
-
-								</tbody>
-							</table>
+						<div class="form-group mb-0  row">
+							<label for="exportMasterLcNo"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
+								LC</label> <input id="exportMasterLcNo" type="text"
+								class="col-md-8 form-control-sm" readonly>
 						</div>
 
-						<div class="col-md-6">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportInvoiceNo"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Invoice
-											No</label> <input id="exportInvoiceNo" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportInvoiceDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportInvoiceDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportConractNo"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Contract
-											No</label> <input id="cxportContractNo" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportContractDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportContractDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportExpNo"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Exp
-											No</label> <input id="exportExpNo" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportExpDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportExpDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportBillEntryNo"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
-											Entry No</label> <input id="exportBilEntrylNo" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportBillEntryDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportBillEntryDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportBLNo"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">B/L
-											No</label> <input id="exportBLNo" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportBLDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportBLDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportShippingMark"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipping
-											Mark</label> <input id="exportShippingMark" type="text"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group mb-0  row">
-										<label for="exportShippingDate"
-											class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
-										<input id="exportShippingDate" type="date"
-											class="col-md-8 form-control-sm">
-									</div>
-								</div>
-							</div>
+						<div class="form-group mb-0  row">
+							<label for="exportBuyerName"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Buyer
+								Name</label> <input id="exportBuyerName" type="text"
+								class="col-md-8 form-control-sm" readonly>
 						</div>
 
-
-					</div>
-
-					<div class="row">
-						<div class="col-md-2 pr-0 pl-1">
-							<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
-								No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad()"
-								class="selectpicker col-md-12 px-0" data-live-search="true"
+						<div class="form-group mb-0  row">
+							<label for="exportNotifyTo"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Notify
+								To</label> <select id="exportNotifyTo"
+								class="selectpicker col-md-8 px-0" data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleNo" value="0">Select Style</option>
+								<option value="0">Select Buyer</option>
+								<c:forEach items="${notifyList}" var="notify">
+									<option value="${notify.notifyId}">${notify.notifyName}</option>
+								</c:forEach>
 							</select>
 						</div>
 
-						<div class="col-md-3 pr-0 pl-1">
-							<label for="exportItemName" class="col-form-label-sm my-0 py-0">style
-								Item Description</label> <select id="exportItemName"
-								class="selectpicker col-md-12 px-0" data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option value="0">--Select Indent Item--</option>
-							</select>
+						<table
+							class="table table-hover table-bordered table-sm mb-0 small-font">
+							<thead class="no-wrap-text">
+								<tr>
+									<th>Invoice No</th>
+									<th>Shipment Mark</th>
+									<th>Shipment Date</th>
+								</tr>
+							</thead>
+							<tbody id="exportShipmentList">
+
+							</tbody>
+						</table>
+					</div>
+
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportInvoiceNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Invoice
+										No</label> <input id="exportInvoiceNo" type="text"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportInvoiceDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportInvoiceDate" type="date"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
 						</div>
 
-						<div class="col-md-2 pr-0 pl-1">
-							<label for="exportPurchaseOrder"
-								class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
-								id="exportPurchaseOrder" onchange="styleWiseItemLoad()"
-								class="selectpicker col-md-12 px-0" data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option id="styleNo" value="0">Select Style</option>
-							</select>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportConractNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Contract
+										No</label> <input id="cxportContractNo" type="text"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportContractDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportContractDate" type="date"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
 						</div>
 
-						<div class="col-md-4 pr-0">
-							<div class="row">
-								<div class="col-md-4 pr-0 pl-1">
-									<label for="exportQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
-									<input id="exportQuantity" type="number"
-										class="form-control-sm pr-0 pl-1">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportExpNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Exp
+										No</label> <input id="exportExpNo" type="text"
+										class="col-md-8 form-control-sm">
 								</div>
-								<div class="col-md-4 pr-0 pl-1">
-									<label for="exportUnitPrice"
-										class="col-form-label-sm my-0 py-0">Unit Price</label> <input
-										id="exportUnitPrice" type="number"
-										class="form-control-sm pr-0 pl-1">
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportExpDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportExpDate" type="date"
+										class="col-md-8 form-control-sm">
 								</div>
-								<div class="col-md-2 pr-0 pl-1">
-									<label for="exportCtnsQty" class="col-form-label-sm my-0 py-0">Ctns
-										Qty</label> <input id="exportCtnsQty" type="number"
-										class="form-control-sm pr-0 pl-1">
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportBillEntryNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
+										Entry No</label> <input id="exportBilEntrylNo" type="text"
+										class="col-md-8 form-control-sm">
 								</div>
-								<div class="col-md-2 pr-0 pl-1">
-									<button id="masterAddBtn" type="button"
-										style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
-										onclick="styleAddAction()">
-										<i class="fa fa-plus-circle"></i> Add
-									</button>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportBillEntryDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportBillEntryDate" type="date"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportBLNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">B/L
+										No</label> <input id="exportBLNo" type="text"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportBLDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportBLDate" type="date"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportShippingMark"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipping
+										Mark</label> <input id="exportShippingMark" type="text"
+										class="col-md-8 form-control-sm">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="exportShippingDate"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+									<input id="exportShippingDate" type="date"
+										class="col-md-8 form-control-sm">
 								</div>
 							</div>
 						</div>
 					</div>
-					<hr class="my-1">
-					<div class="row mt-1">
-						<div style="overflow: auto; max-height: 300px;"
-							class="col-sm-12 px-1 table-responsive">
-							<table
-								class="table table-hover table-bordered table-sm mb-0 small-font">
-								<thead class="no-wrap-text">
-									<tr>
-										<th>Style No</th>
-										<th>P/O No</th>
-										<th>Quantity</th>
-										<th>Unit Price</th>
-										<th>Amount</th>
-										<th>CuttonQty</th>
-										<th>Edit</th>
-										<th>Delete</th>
-									</tr>
-								</thead>
-								<tbody id="exportStyleList">
 
-								</tbody>
-							</table>
-						</div>
+
+				</div>
+
+				<div class="row">
+					<div class="col-md-2 pr-0 pl-1">
+						<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
+							No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad()"
+							class="selectpicker col-md-12 px-0" data-live-search="true"
+							data-style="btn-light btn-sm border-light-gray">
+							<option id="styleNo" value="0">Select Style</option>
+						</select>
 					</div>
 
-					<div class="row mt-1">
-						<div class="col-md-12 d-flex justify-content-end">
-							<button id="exportSubmitButton" type="button"
-								class="btn btn-primary btn-sm" onclick="submitAction()">
-								<i class="fas fa-save"></i> Submit
-							</button>
-							<button id="exportEditButton" type="button"
-								class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-								disabled>
-								<i class="fa fa-pencil-square"></i> Edit
-							</button>
-							<button id="btnRefresh" type="button"
-								class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
-								<i class="fa fa-refresh"></i> Refresh
-							</button>
-							<button id="btnPreview" type="button"
-								class="btn btn-primary btn-sm ml-1" disabled>
-								<i class="fa fa-print"></i> Preview
-							</button>
+					<div class="col-md-3 pr-0 pl-1">
+						<label for="exportItemName" class="col-form-label-sm my-0 py-0">style
+							Item Description</label> <select id="exportItemName"
+							class="selectpicker col-md-12 px-0" data-live-search="true"
+							data-style="btn-light btn-sm border-light-gray">
+							<option value="0">--Select Indent Item--</option>
+						</select>
+					</div>
+
+					<div class="col-md-2 pr-0 pl-1">
+						<label for="exportPurchaseOrder"
+							class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
+							id="exportPurchaseOrder" onchange="styleWiseItemLoad()"
+							class="selectpicker col-md-12 px-0" data-live-search="true"
+							data-style="btn-light btn-sm border-light-gray">
+							<option id="styleNo" value="0">Select Style</option>
+						</select>
+					</div>
+
+					<div class="col-md-4 pr-0">
+						<div class="row">
+							<div class="col-md-4 pr-0 pl-1">
+								<label for="exportQuantity" class="col-form-label-sm my-0 py-0">Quantity</label>
+								<input id="exportQuantity" type="number"
+									class="form-control-sm pr-0 pl-1">
+							</div>
+							<div class="col-md-4 pr-0 pl-1">
+								<label for="exportUnitPrice" class="col-form-label-sm my-0 py-0">Unit
+									Price</label> <input id="exportUnitPrice" type="number"
+									class="form-control-sm pr-0 pl-1">
+							</div>
+							<div class="col-md-2 pr-0 pl-1">
+								<label for="exportCtnsQty" class="col-form-label-sm my-0 py-0">Ctns
+									Qty</label> <input id="exportCtnsQty" type="number"
+									class="form-control-sm pr-0 pl-1">
+							</div>
+							<div class="col-md-2 pr-0 pl-1">
+								<button id="masterAddBtn" type="button"
+									style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
+									onclick="styleAddAction()">
+									<i class="fa fa-plus-circle"></i> Add
+								</button>
+							</div>
 						</div>
 					</div>
+				</div>
+				<hr class="my-1">
+				<div class="row mt-1">
+					<div style="overflow: auto; max-height: 300px;"
+						class="col-sm-12 px-1 table-responsive">
+						<table
+							class="table table-hover table-bordered table-sm mb-0 small-font">
+							<thead class="no-wrap-text">
+								<tr>
+									<th>Style No</th>
+									<th>P/O No</th>
+									<th>Quantity</th>
+									<th>Unit Price</th>
+									<th>Amount</th>
+									<th>CuttonQty</th>
+									<th>Edit</th>
+									<th>Delete</th>
+								</tr>
+							</thead>
+							<tbody id="exportStyleList">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="row mt-1">
+					<div class="col-md-12 d-flex justify-content-end">
+						<button id="exportSubmitButton" type="button"
+							class="btn btn-primary btn-sm" onclick="submitAction()">
+							<i class="fas fa-save"></i> Submit
+						</button>
+						<button id="exportEditButton" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="editAction()"
+							disabled>
+							<i class="fa fa-pencil-square"></i> Edit
+						</button>
+						<button id="btnRefresh" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+							<i class="fa fa-refresh"></i> Refresh
+						</button>
+						<button id="btnPreview" type="button"
+							class="btn btn-primary btn-sm ml-1" disabled>
+							<i class="fa fa-print"></i> Preview
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccessoriesIndent" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2b2a924-bedf-466f-811f-a9906dcece05">
 	<property name="ireport.zoom" value="1.2100000000000009"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="352"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.AINo,a.PurchaseOrder,a.ShippingMarks,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName,(select colorName from tbColors where ColorId=a.ColorId) as Color,ISNULL((select name from tbbrands where id=a.IndentBrandId),'') as BrandName,(select ItemName from TbAccessoriesItem where Itemid=a.accessoriesItemId) as AccessoriesName,a.accessoriesSize,(select SizeName from tbStyleSize where id=a.size) as SizeName,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.TotalQty,(select Signature from TbMerchendiserInfo where MUserId=a.IndentPostBy) as Signatur from tbAccessoriesIndent a where AiNo ='4' order by a.ColorId,a.accessoriesItemId,a.size"]]></defaultValueExpression>
 	</parameter>
@@ -21,6 +21,7 @@
 	<field name="SizeName" class="java.lang.String"/>
 	<field name="UnitName" class="java.lang.String"/>
 	<field name="TotalQty" class="java.math.BigDecimal"/>
+	<field name="RequireUnitQty" class="java.lang.Double"/>
 	<variable name="sl" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -276,7 +277,7 @@
 				<textElement textAlignment="Right">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{TotalQty}/12]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{RequireUnitQty}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="752" y="0" width="50" height="13" uuid="7353d923-2a93-4b64-bea1-2c80f0445f01"/>

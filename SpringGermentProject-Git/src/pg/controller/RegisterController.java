@@ -328,9 +328,6 @@ public class RegisterController {
 			array.add(buyerdetails.get(i).getAccountname());
 			array.add(buyerdetails.get(i).getSwiftcode());
 			array.add(buyerdetails.get(i).getBankcountry());
-
-
-
 		}
 
 

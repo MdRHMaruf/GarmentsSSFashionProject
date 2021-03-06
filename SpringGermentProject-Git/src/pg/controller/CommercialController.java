@@ -17,11 +17,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
 import pg.Commercial.deedOfContacts;
+
 import pg.orderModel.FabricsIndent;
+import pg.registerModel.AccessoriesItem;
 import pg.registerModel.BuyerModel;
+import pg.registerModel.Color;
+import pg.registerModel.FabricsItem;
+import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.CommercialService;
 import pg.services.OrderService;
@@ -76,13 +82,18 @@ public class CommercialController {
 		
 		ModelAndView view = new ModelAndView("commercial/master-lc");
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
+		List<SupplierModel> supplierList =  registerService.getAllSupplier();
 		List<MasterLC> masterLCList= commercialService.getMasterLCList();
+		List<Color> colorList = registerService.getColorList();
 		view.addObject("buyerList",buyerList);
 		view.addObject("masterLCList",masterLCList);
-		
+		view.addObject("supplierList",supplierList);
+		view.addObject("colorList",colorList);
+		view.addObject("unitList",registerService.getUnitList());
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		map.addAttribute("departmentId",departmentId);
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -123,6 +134,8 @@ public class CommercialController {
 		return objmain;
 	}	
 	
+	
+	
 	@RequestMapping(value = "/searchMasterLC",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchMasterLC(String masterLCNo,String buyerId,String amendmentNo) {
 		JSONObject objmain = new JSONObject();
@@ -131,12 +144,71 @@ public class CommercialController {
 		MasterLC masterLCInfo = commercialService.getMasterLCInfo(masterLCNo, buyerId, amendmentNo);
 		List<StyleInfo> masterLCStyles = commercialService.getMasterLCStyles(masterLCNo, buyerId, amendmentNo);
 		List<MasterLC> ammendmentList = commercialService.getMasterLCAmendmentList(masterLCNo, buyerId);
+		List<ImportLC> importInvoiceList = commercialService.getImportLCList(masterLCNo);
 		objmain.put("masterLCInfo",masterLCInfo);
 		objmain.put("masterLCStyles", masterLCStyles);
 		objmain.put("amendmentList", ammendmentList);
+		objmain.put("importInvoiceList", importInvoiceList);
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/getTypeWiseItems",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getTypeWiseItems(String type) {
+		JSONObject objmain = new JSONObject();
+		JSONArray mainArray = new JSONArray();
+		
+		if(type.equals("1")) {
+			for(FabricsItem item:  registerService.getFabricsItemList()) {
+				JSONObject object = new JSONObject();
+				object.put("id", item.getFabricsItemId());
+				object.put("name", item.getFabricsItemName());
+				mainArray.add(object);
+			}
+			objmain.put("result",mainArray);
+		}else if(type.equals("2")) {
+			for(AccessoriesItem item:  registerService.getAccessoriesItemList()) {
+				JSONObject object = new JSONObject();
+				object.put("id", item.getAccessoriesItemId());
+				object.put("name", item.getAccessoriesItemName());
+				mainArray.add(object);
+			}
+			objmain.put("result",mainArray);
+		}
+		return objmain;
+	}
+	
+	
+	@RequestMapping(value = "/importLCSubmit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject importLCSubmit(ImportLC importLC) {
+		JSONObject objmain = new JSONObject();
 
+		if(commercialService.importLCSubmit(importLC)) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getImportLCAmendmentList(importLC.getMasterLCNo(), importLC.getInvoiceNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchImportLCInvoice",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchImportLCInvoice(String masterLCNo,String invoiceNo,String amendmentNo) {
+		JSONObject objmain = new JSONObject();
+		//MasterLC masterLCInfo = commercialService.getMasterLCInfo(masterLCNo, buyerId, amendmentNo);
+		// = commercialService.getImportLCStyles(masterLCNo, invoiceNo, amendmentNo);
+		List<ImportLC> ammendmentList = commercialService.getImportLCAmendmentList(masterLCNo, invoiceNo);
+		ImportLC importLC = commercialService.getImportLCInfo(masterLCNo, invoiceNo, amendmentNo);
+		JSONArray itemList = commercialService.getImportInvoiceItems(importLC.getAutoId());
+		
+		//objmain.put("masterLCInfo",masterLCInfo);
+		//sobjmain.put("masterLCStyles", masterLCStyles);
+		objmain.put("amendmentList", ammendmentList);
+		objmain.put("importLCInfo", importLC);
+		objmain.put("importItemList", itemList);
+		objmain.put("importUDList","");
+		return objmain;
+	}
+	
 	@RequestMapping(value = "deed_of_contact")
 	public ModelAndView deed_of_contact(ModelMap map,HttpSession session) {
 
