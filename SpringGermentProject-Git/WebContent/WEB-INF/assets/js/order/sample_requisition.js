@@ -10,7 +10,7 @@ var find = 0;
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
-function previewSampleCad(){
+function previewSampleRequsition(){
 	var date=$('#sampleSearchDate').val();
 	var userId=$('#userId').val();
 	if(date!=null){
@@ -19,16 +19,7 @@ function previewSampleCad(){
 	}
 }
 
-function previewSampleRequsition(){
-	
-	var date=$('#sampleSearchDate').val();
-	var userId=$('#userId').val();
-	if(date!=null){
-		var url = `printDateWiseSamplCad/${date}@${userId}`;
-		window.open(url, '_blank');
-	}
 
-}
 
 function printSampleRequisition(sampleReqId) {
 	$.ajax({
