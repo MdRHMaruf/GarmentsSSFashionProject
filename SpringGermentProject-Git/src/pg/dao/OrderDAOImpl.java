@@ -2811,7 +2811,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 
-			String sql="update tbAccessoriesIndent set  accessoriesItemId='"+ai.getAccessoriesId()+"',accessoriesSize='"+ai.getAccessoriessize()+"',indentColorId='"+ai.getAccessoriesColorId()+"',indentBrandId='"+ai.getIndentBrandId()+"',unitId='"+ai.getUnitId()+"',PerUnit='"+ai.getPerunit()+"',TotalBox='"+ai.getTotalbox()+"',OrderQty='"+ai.getOrderqty()+"',QtyInDozen='"+ai.getQtyindozen()+"',"
+			String sql="update tbAccessoriesIndent set  purchaseOrder='"+ai.getPurchaseOrder()+"',styleId='"+ai.getStyleId()+"',itemId='"+ai.getItemId()+"',colorId='"+ai.getItemColorId()+"',shippingMarks='"+ai.getShippingmark()+"',accessoriesItemId='"+ai.getAccessoriesId()+"',accessoriesSize='"+ai.getAccessoriessize()+"',indentColorId='"+ai.getAccessoriesColorId()+"',indentBrandId='"+ai.getIndentBrandId()+"',unitId='"+ai.getUnitId()+"',PerUnit='"+ai.getPerunit()+"',TotalBox='"+ai.getTotalbox()+"',OrderQty='"+ai.getOrderqty()+"',QtyInDozen='"+ai.getQtyindozen()+"',"
 					+ "ReqPerPices='"+ai.getReqperpcs()+"',ReqPerDoz='"+ai.getReqperdozen()+"',DividedBy='"+ai.getDividedby()+"',PercentageExtra='"+ai.getExtrainpercent()+"',PercentageExtraQty='"+ai.getPercentqty()+"',"
 					+ "TotalQty='"+ai.getTotalqty()+"',RequireUnitQty='"+ai.getGrandqty()+"',IndentDate=GETDATE(),IndentTime=GETDATE(),IndentPostBy='"+ai.getUser()+"' where AccIndentId='"+ai.getAutoid()+"' and aino='"+ai.getAiNo()+"'";
 
@@ -4752,27 +4752,27 @@ public class OrderDAOImpl implements OrderDAO{
 						"from tbFabricsIndent rf \r\n" + 
 						"left join TbFabricsItem fi \r\n" + 
 						"on rf.fabricsid = fi.id \r\n" + 
-						"where rf.indentId='"+indentId+"' and rf.pono is null group by fi.id,fi.ItemName,fi.unitId";
+						"where rf.indentId='"+indentId+"' and (rf.pono is null or rf.pono = '0') group by fi.id,fi.ItemName,fi.unitId";
 			}else if(indentType.equals("Accessories")) {
 				sql = "select a.itemid,a.itemname,a.unitId \r\n" + 
 						"from tbAccessoriesIndent ai \r\n" + 
 						"left join TbAccessoriesItem a \r\n" + 
 						"on ai.accessoriesItemId = a.itemid \r\n" + 
-						"where ai.aiNo='"+indentId+"' and ai.pono is null  group by a.itemid,a.itemname,a.unitId";
+						"where ai.aiNo='"+indentId+"' and (ai.pono is null or ai.pono = '0')  group by a.itemid,a.itemname,a.unitId";
 			}else if(indentType.equals("Zipper And Others")) {
 				sql = "select a.itemid,a.itemname,a.unitId \r\n" + 
 						"from tbZipperIndent ai \r\n" + 
 						"left join TbAccessoriesItem a \r\n" + 
 						"on ai.accessoriesItemId = a.itemid \r\n" + 
-						"where ai.aiNo='"+indentId+"' and ai.pono is null  group by a.itemid,a.itemname,a.unitId";
+						"where ai.aiNo='"+indentId+"' and (ai.pono is null or ai.pono = '0')  group by a.itemid,a.itemname,a.unitId";
 			}else {
 				sql = "select aic.accessoriesItemId,ai.itemname,aic.UnitId\r\n" + 
 						"from tbAccessoriesIndentForCarton aic \r\n" + 
 						"left join TbAccessoriesItem ai \r\n" + 
 						"on aic.accessoriesItemId = ai.itemid\r\n" + 
-						"where aic.indentId = '"+indentId+"' and aic.pono is null group by aic.accessoriesItemId,ai.itemname,aic.UnitId ";
+						"where aic.indentId = '"+indentId+"' and (aic.pono is null or aic.pono = '0') group by aic.accessoriesItemId,ai.itemname,aic.UnitId ";
 			}
-
+			
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -4810,28 +4810,28 @@ public class OrderDAOImpl implements OrderDAO{
 						"from tbFabricsIndent rf \r\n" + 
 						"join TbStyleCreate sc  \r\n" + 
 						"on rf.styleId = cast(sc.StyleId as varchar) \r\n" + 
-						"where rf.indentId='"+indentId+"' and rf.pono is null \r\n"
+						"where rf.indentId='"+indentId+"' and (rf.pono is null or rf.pono = '0') \r\n"
 						+ "group by rf.styleId,sc.StyleNo";
 			}else if(indentType.equals("Accessories")) {
 				sql = "select ai.styleId,sc.StyleNo \r\n" + 
 						"from tbAccessoriesIndent ai \r\n" + 
 						"join TbStyleCreate sc  \r\n" + 
 						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
-						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
+						"where ai.aiNo='"+indentId+"' and (ai.pono is null or ai.pono = '0')  \r\n"
 						+ "group by ai.styleId,sc.StyleNo";
 			}else if(indentType.equals("Zipper And Others")) {
 				sql = "select ai.styleId,sc.StyleNo \r\n" + 
 						"from tbZipperIndent ai \r\n" + 
 						"join TbStyleCreate sc  \r\n" + 
 						"on ai.styleId = cast(sc.StyleId as varchar) \r\n" + 
-						"where ai.aiNo='"+indentId+"' and ai.pono is null  \r\n"
+						"where ai.aiNo='"+indentId+"' and (ai.pono is null or ai.pono= '0') \r\n"
 						+ " group by ai.styleId,sc.StyleNo";
 			}else {
 				sql = "select aic.styleId,sc.StyleNo\r\n" + 
 						"from tbAccessoriesIndentForCarton aic \r\n" + 
 						"join TbStyleCreate sc  \r\n" + 
 						"on aic.styleId = cast(sc.StyleId as varchar) \r\n" + 
-						"where aic.indentId = '"+indentId+"' and aic.pono is null \r\n"
+						"where aic.indentId = '"+indentId+"' and (aic.pono is null or aic.pono = '0') \r\n"
 						+ "group by aic.styleId,sc.StyleNo ";
 			}
 
@@ -4999,27 +4999,27 @@ public class OrderDAOImpl implements OrderDAO{
 					if(item.isCheck()) {
 						sql="Update tbFabricsIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}else {
-						sql="Update tbFabricsIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
+						sql="Update tbFabricsIndent set poNo='0',poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where id='"+item.getAutoId()+"'";		
 					}
 				}else if(item.getType().equals("Accessories")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
-						sql="Update tbAccessoriesIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
+						sql="Update tbAccessoriesIndent set poNo='0',poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
 
 				}else if(item.getType().equals("Zipper And Others")) {
 					if(item.isCheck()) {
 						sql="Update tbZipperIndent set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}else {
-						sql="Update tbZipperIndent set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
+						sql="Update tbZipperIndent set poNo='0',poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where AccIndentId='"+item.getAutoId()+"'";		
 					}
 
 				}else if(item.getType().equals("Carton")) {
 					if(item.isCheck()) {
 						sql="Update tbAccessoriesIndentForCarton set pono='"+purchaseOrder.getPoNo()+"',poapproval='1',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where autoId='"+item.getAutoId()+"'";		
 					}else {
-						sql="Update tbAccessoriesIndentForCarton set poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where autoId='"+item.getAutoId()+"'";		
+						sql="Update tbAccessoriesIndentForCarton set poNo='0',poapproval='0',supplierid='"+item.getSupplierId()+"',dolar='"+item.getDollar()+"',rate='"+item.getRate()+"',amount='"+item.getAmount()+"',currency='"+item.getCurrency()+"',poManual='"+purchaseOrder.getManualPO()+"' where autoId='"+item.getAutoId()+"'";		
 					}
 				}
 				session.createSQLQuery(sql).executeUpdate();
@@ -5159,7 +5159,7 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql;
 
 			sql="select AINo,'Accessories' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndent ai\r\n" + 
-					"where ai.IndentPostBy = '"+userId+"' and ai.pono is null\r\n" + 
+					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0) \r\n" + 
 					"group by ai.AINo,ai.IndentDate\r\n" + 
 					"order by ai.AINo desc";
 			List<?> list = session.createSQLQuery(sql).list();
@@ -5174,7 +5174,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 			
 			sql="select AINo,'Zipper And Others' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbZipperIndent ai\r\n" + 
-					"where ai.IndentPostBy = '"+userId+"' and ai.pono is null\r\n" + 
+					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0)\r\n" + 
 					"group by ai.AINo,ai.IndentDate\r\n" + 
 					"order by ai.AINo desc";
 			list = session.createSQLQuery(sql).list();
@@ -5189,7 +5189,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 
 			sql="select fi.indentId,'Fabrics' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbFabricsIndent fi\r\n" + 
-					"where fi.entryby = '"+userId+"' and fi.pono is null\r\n" + 
+					"where fi.entryby = '"+userId+"' and (fi.pono is null or fi.pono = 0)\r\n" + 
 					"group by fi.indentId,fi.IndentDate\r\n" + 
 					"order by fi.indentId desc";
 			list = session.createSQLQuery(sql).list();
@@ -5204,7 +5204,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 
 			sql="select indentId,'Carton' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndentForCarton ai\r\n" + 
-					"where ai.IndentPostBy = '"+userId+"' and ai.pono is null\r\n" + 
+					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0)\r\n" + 
 					"group by ai.indentId,ai.IndentDate\r\n" + 
 					"order by ai.indentId desc";
 			list = session.createSQLQuery(sql).list();

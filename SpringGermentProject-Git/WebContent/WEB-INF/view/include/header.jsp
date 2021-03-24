@@ -9,103 +9,141 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <link rel="shortcut icon" type="image/x-icon" href="${pageContext.request.contextPath}/assets/images/favicon.png">
-    <title>Admin</title>
-    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/font-awesome-4.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/icofont.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/fullcalendar.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/dataTables.bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/select2.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/jquery-ui.css">
-   	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-select.css">
-   	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-select.min.css">
-   	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/bootstrap-table-expandable.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=0">
+<link rel="shortcut icon" type="image/x-icon"
+	href="${pageContext.request.contextPath}/assets/images/favicon.png">
+<title>Admin</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700"
+	rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/font-awesome-4.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/icofont.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/fullcalendar.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/select2.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/bootstrap-select.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/bootstrap-select.min.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/bootstrap-table-expandable.css">
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/assets/css/style.css">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-    <!--[if lt IE 9]>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+<!--[if lt IE 9]>
     <script src="assets/js/html5shiv.min.js"></script>
     <script src="assets/js/respond.min.js"></script>
     <![endif]-->
 
 
-    <!--Load the AJAX API-->
-    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/google-chart.js"></script>
-
+<!--Load the AJAX API-->
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/js/google-chart.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/assets/js/include/header.js"></script>
 </head>
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
-List<Menu> list = (List<Menu>) session.getAttribute("menulist");
-		
-byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
-		   userName = new String(decodedBytesUsername);
-		   
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
+	List<Menu> list = (List<Menu>) session.getAttribute("menulist");
 
+	byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
+	userName = new String(decodedBytesUsername);
 %>
 
 <body>
-<div class="main-wrapper slide-nav">
-    <div class="header">
-        <div class="container-fluid">
-            <div class="header-left">
-                <a id="toggle-menu" href="#sidebar" class="logo">
-                    <i class="icofont-navigation-menu"></i>
-                </a>
-            </div>
-            <div class="header-right">
-                <div class="page-title-box pull-left">
-                    <%-- <h3><%=userName%></h3> --%>
-                    <h3>You are using:>> <span>QUALITY FASHION WEAR LTD (ERP)</span></h3>
-                </div>
-                <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar">
-                    <i class="fa fa-bars" aria-hidden="true"></i>
-                </a>
-                <ul class="nav navbar-nav navbar-right user-menu pull-right">
-                    <div class="dropdown">
-                        <a class="dropdown-toggle" href="#" role="button" id="profileLinkDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span><i class="far fa-user"></i></span> <%=userName%>
-                        </a>
+	<div class="main-wrapper slide-nav">
+		<div class="header">
+			<div class="container-fluid">
+				<div class="header-left">
+					<a id="toggle-menu" href="#sidebar" class="logo"> <i
+						class="icofont-navigation-menu"></i>
+					</a>
+				</div>
+				<div class="header-right">
+					<div class="page-title-box pull-left">
+						<%-- <h3><%=userName%></h3> --%>
+						<h3>
+							You are using:>> <span>QUALITY FASHION WEAR LTD (ERP)</span>
+						</h3>
+					</div>
+					<!-- <a id="mobile_btn" class="mobile_btn pull-left" href="#sidebar">
+						<i class="fa fa-bars" aria-hidden="true"></i>
+					</a> -->
 
-                        <div class="dropdown-menu" aria-labelledby="profileLinkDropdown">
-     
-                            <li><a href="${url_login}">Profile</a></li>
-                            					<s:url var="url_login"
-									value="/loginout" />
-						<li><a href="${url_login}">Logout</a></li>
-                        </div>
-                    </div>
+					<ul class="dropdown">
 
-                </ul>
+						<i class="fas fa-bell dropdown-toggle" id="notificationDropdown"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
+							id="notificationCount" class="badge badge-info">0</span></i>
+						<div id="notificationList" class="dropdown-menu"
+							aria-labelledby="notificationDropdown">
 
-                <div class="dropdown mobile-user-menu pull-right">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
-                    <ul class="dropdown-menu pull-right">
-                        <li><a href="login.php">Logout</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar opened" id="sidebar">
-        <div class="sidebar-inner slimscroll">
-            <div id="sidebar-menu" class="sidebar-menu">
-                <ul>
-                    <li>
-                        <a href="dashboard"><i class="icofont-dashboard"></i> Dashboard</a>
-                    </li>
-                    
-                    
-                    
-                    
-                    <%
+							<li style="cursor: pointer;"><p>Mr.Shahinur Rahman
+									Created New Buyer PO Time-2021-02-16</p></li>
+
+							<li style="cursor: pointer;"><p>Mr.Bablu Created New
+									Purchase Order PO-324 Time-2021-02-16</p></li>
+						</div>
+					</ul>
+					<ul class="nav navbar-nav navbar-right user-menu pull-right">
+						<div class="dropdown">
+							<a class="dropdown-toggle" href="#" role="button"
+								id="profileLinkDropdown" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false"> <span><i
+									class="far fa-user"></i></span> <%=userName%>
+							</a>
+
+							<div class="dropdown-menu" aria-labelledby="profileLinkDropdown">
+
+								<li><a href="${url_login}">Profile</a></li>
+								<s:url var="url_login" value="/loginout" />
+								<li><a href="${url_login}">Logout</a></li>
+							</div>
+						</div>
+					</ul>
+
+
+					<div class="dropdown mobile-user-menu pull-right">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"
+							aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+						<ul class="dropdown-menu pull-right">
+							<li><a href="login.php">Logout</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="sidebar opened" id="sidebar">
+			<div class="sidebar-inner slimscroll">
+				<div id="sidebar-menu" class="sidebar-menu">
+					<ul>
+						<li><a href="dashboard"><i class="icofont-dashboard"></i>
+								Dashboard</a></li>
+
+
+
+
+						<%
 							//List<menu> list = (List<menu>) session.getAttribute("menulist");
 							int i = 0;
 							String head = "";
@@ -113,10 +151,11 @@ byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
 							for (int a = 0; a < list.size(); a++) {
 								head = list.get(a).getName().toString();
 						%>
-                    <li class="submenu">
-                        <a href="#"><i class="icofont-code"></i><span> <%=head%></span> <span class="menu-arrow"><i class="icofont-simple-right"></i></span></a>
-                        <ul class="list-unstyled" style="display: none;">
-                        <%
+						<li class="submenu"><a href="#"><i class="icofont-code"></i><span>
+									<%=head%></span> <span class="menu-arrow"><i
+									class="icofont-simple-right"></i></span></a>
+							<ul class="list-unstyled" style="display: none;">
+								<%
 									if (head.equals(list.get(a).getName().toString())) {
 											for (int b = a; b < list.size(); b++) {
 												if (!list.get(b).getName().toString().equals(head)) {
@@ -125,22 +164,21 @@ byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
 												}
 								%>
 								<s:url var="url_form" value="<%=list.get(a).getLinks()%>" />
-                            <li><a href="${url_form}"><%=list.get(a).getSub()%></a></li>
-                            <%
+								<li><a href="${url_form}"><%=list.get(a).getSub()%></a></li>
+								<%
 									a++;
 											}
 										}
 								%>
-                        </ul>
-                    </li>
-                   
-                   <%
+							</ul></li>
+
+						<%
 							}
 						%>
-                   
-                   
-                   
-                    <%-- <li class="submenu">
+
+
+
+						<%-- <li class="submenu">
                         <a href="#"><i class="icofont-code"></i><span> Components</span> <span class="menu-arrow"><i class="icofont-simple-right"></i></span></a>
                         <ul class="list-unstyled" style="display: none;">
                             <li><a href="uikit">UI Kit</a></li>
@@ -171,7 +209,7 @@ byte[] decodedBytesUsername = Base64.getDecoder().decode(userName);
                         </ul>
                     </li>
                      --%>
-                </ul>
-            </div>
-        </div>
-    </div>
+					</ul>
+				</div>
+			</div>
+		</div>

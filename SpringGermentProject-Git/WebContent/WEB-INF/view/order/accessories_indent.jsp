@@ -222,6 +222,7 @@ String userName=(String)session.getAttribute("userName");
 											id="btnRecyclingData">
 											<i class="fa fa-recycle"></i> Recycling Data
 										</button>
+										<h6 id="sizeHeading">Size: <span id="size-name"></span></h6>
 									</div>
 								</div>
 							</div>
@@ -265,7 +266,7 @@ String userName=(String)session.getAttribute("userName");
 										<div class="d-flex justify-content-between">
 											<label for="accessoriesColor"
 												class="col-form-label-sm mb-0 py-0">Accessories
-												Color<span style="color:red">*</span></label>
+												Color</label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">

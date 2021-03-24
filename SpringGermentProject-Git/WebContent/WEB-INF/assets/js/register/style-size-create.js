@@ -1,7 +1,8 @@
 
-window.onload = ()=>{
+window.onload = () => {
   document.title = "Style Size Create";
-  
+
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -21,9 +22,10 @@ window.onload = ()=>{
           }
         });
       });
+      $("#loader").hide();
     }
   });
-} 
+}
 let sizeGroup = [];
 
 function saveAction() {
@@ -35,6 +37,7 @@ function saveAction() {
 
   if (sizeGroupId != '0') {
     if (sizeName != '') {
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -59,6 +62,7 @@ function saveAction() {
             $("#dataList").append(drawDataTable(data.result));
 
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -79,7 +83,7 @@ function editAction() {
 
   if (sizeGroupId != '0') {
     if (sizeName != '') {
-
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -104,6 +108,7 @@ function editAction() {
             $("#dataList").append(drawDataTable(data.result));
 
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -120,6 +125,7 @@ function groupSaveAction() {
   let userId = $("#userId").val();
 
   if (groupName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -144,6 +150,7 @@ function groupSaveAction() {
           $("#groupTableList").append(drawGroupTable(data.result));
 
         }
+        $("#loader").hide();
       }
     });
   } else {
@@ -160,6 +167,7 @@ function groupEditAction() {
 
   if (groupId != '0') {
     if (groupName != '0') {
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -183,9 +191,9 @@ function groupEditAction() {
             $("#groupTableList").empty();
             $("#groupTableList").append(drawGroupTable(data.result));
             $("#btnGroupSave").show();
-  $("#btnGroupEdit").hide();
-
+            $("#btnGroupEdit").hide();
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -196,7 +204,7 @@ function groupEditAction() {
   }
 }
 
-function groupModalCloseAction(){
+function groupModalCloseAction() {
   $("groupId").val("");
   $("#btnGroupSave").show();
   $("#btnGroupEdit").hide();

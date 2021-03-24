@@ -13,6 +13,7 @@ function saveAction() {
   if (fabricsItemName != '') {
     if (unitId != '0') {
       if(confirm("Are you sure to Save this Item?")){
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -36,6 +37,7 @@ function saveAction() {
               $("#dataList").append(drawDataTable(data.result));
   
             }
+            $("#loader").hide();
           }
         });
       }
@@ -60,6 +62,7 @@ function editAction() {
 
   if (fabricsItemName != '') {
     if (unitId != '0') {
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -83,6 +86,7 @@ function editAction() {
             $("#dataList").append(drawDataTable(data.result));
 
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -118,6 +122,7 @@ function unitAddAction() {
     if (unitId != '0') {
       if (unitQty != '' && Number(unitQty) > 0) {
         if(confirm("Are you sure to Add this Unit with Quantity '"+ unitQty +"'?")){
+          $("#loader").show();
           $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -137,6 +142,7 @@ function unitAddAction() {
               } else {
                 drawUnitTable(data.result);
               }
+              $("#loader").hide();
             }
           });
         }
@@ -158,7 +164,7 @@ function unitAddAction() {
 }
 function setData(fabricsItemId) {
 
-
+  $("#loader").show();
   $.ajax({
     type: 'POST',
     dataType: 'json',
@@ -181,6 +187,7 @@ function setData(fabricsItemId) {
         $("#btnSave").hide();
         $("#btnEdit").show();
       }
+      $("#loader").hide();
     }
   });
 

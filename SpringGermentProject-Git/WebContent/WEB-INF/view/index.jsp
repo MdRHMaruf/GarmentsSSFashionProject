@@ -21,6 +21,7 @@
 
 <jsp:include page="include/header.jsp" />
 
+<input type="hidden" id="userId" value="<%=userId%>"/>
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="row card-box">

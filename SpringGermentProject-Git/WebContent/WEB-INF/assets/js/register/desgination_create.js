@@ -12,6 +12,7 @@ function saveAction() {
   let userId = $("#userId").val();
 
   if (departmentName != '' & designation != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -35,6 +36,7 @@ function saveAction() {
          // $("#designationList").append(drawDataTable(data.result));
 			allDesignation();
         }
+        $("#loader").hide();
       }
     });
   } else {
@@ -50,6 +52,7 @@ function editAction() {
   let userId = $("#userId").val();
 
   if (departmentName != '' & designation != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -73,6 +76,7 @@ function editAction() {
          /* $("#designationList").append(drawDataTable(data.result));*/
 			allDesignation();
         }
+        $("#loader").hide();
       }
     });
   } else {
@@ -86,6 +90,7 @@ function refreshAction() {
 }
 
 function allDesignation(){
+  $("#loader").show();
 	 $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -95,6 +100,8 @@ function allDesignation(){
      success: function (data) {
 			$("#designationList").empty();
   			patchdata(data.result);
+
+        $("#loader").hide();
       }
     });	
 }

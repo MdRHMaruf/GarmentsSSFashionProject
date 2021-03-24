@@ -1,3 +1,6 @@
+    <div style="display:none" class="loading-overlay is-active" id="loader">
+  <span class="fas fa-spinner fa-3x fa-spin"></span>
+</div>
     </div>
     <div class="sidebar-overlay" data-reff=""></div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/common.js"></script>

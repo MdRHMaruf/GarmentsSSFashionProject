@@ -5,14 +5,12 @@ let sizeValueListForSet = [];
 let sizesListByGroup = JSON;
 
 window.onload = () => {
-
-
-
 	document.getElementById('files').addEventListener('change', onFileSelect, false);
 	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
 
 	document.title = "Buyer Purchase Order";
 	let userId = $("#userId").val();
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -40,14 +38,14 @@ window.onload = () => {
 			} else {
 				drawItemTable(data.result);
 			}
+			$("#loader").hide();
 		}
 	});
 };
 
 
 function printBuyerPO(buyerPoId) {
-
-
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -61,6 +59,7 @@ function printBuyerPO(buyerPoId) {
 				window.open(url, '_blank');
 
 			}
+			$("#loader").hide();
 		}
 	});
 }
@@ -70,6 +69,7 @@ function buyerWiseStyleLoad() {
 
 	// alert("buyerId "+buyerId);
 	if (buyerId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -89,7 +89,7 @@ function buyerWiseStyleLoad() {
 				$('.selectpicker').selectpicker('refresh');
 				$('#styleNo').val(styleIdForSet).change();
 				styleIdForSet = 0;
-
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -104,6 +104,7 @@ function styleWiseItemLoad() {
 	let styleId = $("#styleNo").val();
 
 	if (styleId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -123,6 +124,7 @@ function styleWiseItemLoad() {
 				$('.selectpicker').selectpicker('refresh');
 				$('#itemType').val(itemIdForSet).change();
 				itemIdForSet = 0;
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -178,7 +180,7 @@ function itemSizeAdd() {
 										totalUnit += Number(quantity);
 									}
 
-
+									$("#loader").show();
 									$.ajax({
 										type: 'POST',
 										dataType: 'json',
@@ -212,6 +214,7 @@ function itemSizeAdd() {
 											} else {
 												drawItemTable(data.result);
 											}
+											$("#loader").hide();
 										}
 									});
 								} else {
@@ -290,7 +293,7 @@ function itemSizeEdit() {
 								}
 								totalPrice = totalUnit * unitCmt;
 								totalAmount = totalUnit * unitFob;
-
+								$("#loader").show();
 								$.ajax({
 									type: 'POST',
 									dataType: 'json',
@@ -323,6 +326,7 @@ function itemSizeEdit() {
 										} else {
 											drawItemTable(data.result);
 										}
+										$("#loader").hide();
 									}
 								});
 							} else {
@@ -408,6 +412,7 @@ function submitAction() {
 		if (totalRow.length != 0) {
 			if (shipmentDate) {
 				if (inspectionDate) {
+					$("#loader").show();
 					$.ajax({
 						type: 'POST',
 						dataType: 'json',
@@ -438,6 +443,7 @@ function submitAction() {
 								successAlert("Buyer Purchase Order Save Successfully");
 								refreshAction();
 							}
+							$("#loader").hide();
 						}
 					});
 				} else {
@@ -508,6 +514,7 @@ function buyerPoEditAction() {
 		if (buyerId != 0) {
 			if (shipmentDate) {
 				if (inspectionDate) {
+					$("#loader").show();
 					$.ajax({
 						type: 'POST',
 						dataType: 'json',
@@ -537,6 +544,7 @@ function buyerPoEditAction() {
 							} else {
 								successAlert("Buyer Purchase Order Edit Successfully");
 							}
+							$("#loader").hide();
 						}
 					});
 				} else {
@@ -559,7 +567,7 @@ function buyerPoEditAction() {
 }
 
 function searchBuyerPO(buyerPoNo) {
-
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -592,6 +600,7 @@ function searchBuyerPO(buyerPoNo) {
 				$("#btnPreview").prop("disabled", false);
 
 				files(data.fileList)
+				$("#loader").hide();
 			}
 		}
 	});
@@ -687,20 +696,18 @@ function del(a) {
 	console.log(" file id " + fileid)
 	var filename = $("#filename-" + initindex).text();
 	console.log(" filename " + filename)
+	$("#loader").show();
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
 		url: './delete/' + filename + "/" + fileid,
 		data: {
-
-
-
 		},
 		success: function (data) {
 			if (data == true) {
-
 				alert("Successfully Deleted")
 			}
+			$("#loader").hide();
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			//alert("Server Error");
@@ -726,34 +733,9 @@ function del(a) {
 
 }
 
-//$("#btnPreview").click(()=>{
-
-//const buyerPoNo = $("#buyerPOId").val();
-
-//$.ajax({
-//type: 'GET',
-//dataType: 'json',
-//url: './getBuyerPO',
-//data: {
-//buyerPoNo: buyerPoNo
-//},
-//success: function (data) {
-//if (data.buyerPO == "Something Wrong") {
-//dangerAlert("Something went wrong");
-//} else if (data.buyerPO == "duplicate") {
-//dangerAlert("Duplicate Unit Name..This Unit Name Already Exist")
-//} else {
-
-//let buyerPo = data.buyerPO;
-//console.log(buyerPo);
-//alert(buyerPoNo);
-//}
-//}
-//});
-//});
 
 function setBuyerPoItemDataForEdit(itemAutoId) {
-
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -787,7 +769,7 @@ function setBuyerPoItemDataForEdit(itemAutoId) {
 				styleIdForSet = item.styleId;
 				itemIdForSet = item.itemId;
 				$("#buyerName").val(item.buyerId).change();
-
+				$("#loader").hide();
 
 			}
 		}
@@ -800,6 +782,7 @@ function deleteBuyerPoItem(itemAutoId) {
 	let buyerPoId = $("#buyerPOId").val();
 	let userId = $("#userId").val();
 	if (confirm("Are you sure to Delete this item")) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -825,6 +808,7 @@ function deleteBuyerPoItem(itemAutoId) {
 					}
 
 				}
+				$("#loader").hide();
 			}
 		});
 	}
@@ -1055,6 +1039,7 @@ function add() {
 	} else {
 		type = 0;
 	}
+	$("#loader").show();
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
@@ -1066,11 +1051,7 @@ function add() {
 			type: type,
 		},
 		success: function (data) {
-			/*if(data=="success"){
-				alert("Inserted Successflly");
-			}else{
-				alert("Already Assigned");
-			}*/
+			$("#loader").hide();
 		},
 	});
 }
