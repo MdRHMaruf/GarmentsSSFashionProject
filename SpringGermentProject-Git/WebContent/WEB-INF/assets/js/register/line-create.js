@@ -7,7 +7,7 @@ window.onload = ()=>{
 let departmentsByFactoryId  = JSON;
 let departmentIdForSet = 0;
 function loadData(){
-  
+  $("#loader").show();
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -16,6 +16,7 @@ function loadData(){
         success: function (obj) {
           departmentsByFactoryId = [];
           departmentsByFactoryId = obj.departmentList;
+          $("#loader").hide();
         }
     });
 }
@@ -30,6 +31,7 @@ function saveAction() {
   if (factoryId != '0') {
     if (departmentId != '0') {
       if (lineName != '') {
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -53,6 +55,7 @@ function saveAction() {
               $("#dataList").append(drawDataTable(data.result));
 
             }
+            $("#loader").hide();
           }
         });
       } else {
@@ -77,7 +80,7 @@ function editAction() {
   if (factoryId != '0') {
     if (departmentId != '0') {
       if (lineName != '') {
-
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -101,6 +104,7 @@ function editAction() {
               $("#dataList").append(drawDataTable(data.result));
 
             }
+            $("#loader").hide();
           }
         });
       } else {

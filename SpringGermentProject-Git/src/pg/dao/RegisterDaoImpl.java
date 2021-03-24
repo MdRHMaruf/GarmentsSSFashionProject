@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.Bank;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
@@ -25,6 +26,7 @@ import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
 import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.Notifyer;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
@@ -474,12 +476,7 @@ public class RegisterDaoImpl implements RegisterDao{
 				Buyers.add(new BuyerModel(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[7].toString(),element[8].toString(),element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
 
 			}
-
-
-
 			tx.commit();
-
-
 		}
 		catch(Exception e){
 
@@ -495,9 +492,176 @@ public class RegisterDaoImpl implements RegisterDao{
 		return Buyers;
 	}
 
+	@Override
+	public boolean saveNotifyer(Notifyer notifyer) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="insert into tbNotifyer(buyerId,notifyName,notifyAddress,country,telephone,email,entryTime,entryBy)\r\n" + 
+					"values('"+notifyer.getBuyerId()+"','"+notifyer.getName()+"','"+notifyer.getAddress()+"','"+notifyer.getCountry()+"','"+notifyer.getTelephone()+"','"+notifyer.getEmail()+"',CURRENT_TIMESTAMP,'"+notifyer.getUserId()+"')";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+
+			return true;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean editNotifyer(Notifyer notifyer) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update tbNotifyer set buyerId='"+notifyer.getBuyerId()+"',notifyName='"+notifyer.getName()+"',notifyAddress='"+notifyer.getAddress()+"',country='"+notifyer.getCountry()+"',telephone='"+notifyer.getTelephone()+"',email='"+notifyer.getEmail()+"' where id='"+notifyer.getId()+"'";
+
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+
+			return true;
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public Notifyer getNotifyerInfo(String id) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		Notifyer notifyer=null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select n.id,n.buyerId,notifyName,notifyAddress,country,telephone,email,entryBy from tbnotifyer n where n.id='"+id+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				notifyer = new Notifyer(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return notifyer;
+	}
+
+	@Override
+	public List<Notifyer> getNotifyerList() {
+		// TODO Auto-generated method stub
+		
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<Notifyer> notifyers=new ArrayList<>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select n.id,n.buyerId,notifyName,notifyAddress,country,telephone,email,entryBy from tbnotifyer n";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				notifyers.add(new Notifyer(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString()));
+			}
+			tx.commit();
+
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return notifyers;
+	}
+
+	@Override
+	public List<Notifyer> getNotifyerListByBuyerId(String buyerId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Notifyer> notifyers=new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="select n.id,n.buyerId,notifyName,notifyAddress,country,telephone,email,entryBy from tbnotifyer n where n.buyerId='"+buyerId+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				notifyers.add(new Notifyer(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString()));
+			}
+			tx.commit();
+
+
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		return notifyers;
+	}
+
 
 	//Supplier create
-
 	@Override
 	public String maxSupplierId() {
 		// TODO Auto-generated method stub
@@ -3073,7 +3237,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<Department> getFactoryWiseDepartment(String factoryId) {
 		Session session=HibernateUtil.openSession();
@@ -3090,7 +3254,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			{	
 
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Department(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
@@ -3479,7 +3643,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			{	
 
 				Object[] element = (Object[]) iter.next();
-				
+
 				dataList.add(new Line(element[0].toString(),element[1].toString(),element[2].toString()));
 			}
 			tx.commit();
@@ -3495,7 +3659,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public boolean isLineExist(Line line) {
 		// TODO Auto-generated method stub
@@ -4368,7 +4532,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean saveProcess(ProcessInfo v) {
 		// TODO Auto-generated method stub
@@ -4456,6 +4620,31 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return false;
 	}
+
+	@Override
+	public boolean saveBank(Bank bank) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editBank(Bank bank) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Bank getBankInfo(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Bank> getBankList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 

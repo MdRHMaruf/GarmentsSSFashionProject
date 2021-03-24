@@ -4,6 +4,7 @@ import java.util.List;
 
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.Bank;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
@@ -20,6 +21,7 @@ import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
 import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.Notifyer;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
@@ -43,6 +45,12 @@ public interface RegisterService {
 	public boolean editBuyer(BuyerModel buyer);
 	public List<BuyerModel> getAllBuyers(String userId);
 	
+	//Notify Create
+		public boolean saveNotifyer(Notifyer notifyer);
+		public boolean editNotifyer(Notifyer notifyer);
+		public Notifyer getNotifyerInfo(String id);
+		public List<Notifyer> getNotifyerList();
+		public List<Notifyer> getNotifyerListByBuyerId(String buyerId);
 	
 	//Supplier Create
 	public String maxSupplierId();
@@ -219,7 +227,11 @@ public interface RegisterService {
 		public boolean editProcess(ProcessInfo v);
 	
 		
-	
+		//Bank Create
+				public boolean saveBank(Bank bank);
+				public boolean editBank(Bank bank);
+				public Bank getBankInfo(String id);
+				public List<Bank> getBankList();
 
 
 }

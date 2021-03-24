@@ -11,6 +11,8 @@ import javax.management.Query;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -840,6 +842,64 @@ public class SettingDAOImpl implements SettingDAO {
 		return query;
 	
 		
+	}
+
+
+
+	@Override
+	public JSONArray getNotificationList(String targetId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		JSONArray array=new JSONArray();
+		JSONObject object;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select n.id,l.username,n.subject,n.type,n.notificationContent,n.issueLinkId,nt.targetUserId,nt.targetSeen,n.createdTime  \r\n" + 
+					"from tbNotificationTargets nt\r\n" + 
+					"join tbNotification n\r\n" + 
+					"on nt.notificationId = n.id\r\n"
+					+ "left join Tblogin l\r\n" + 
+					"on n.createdBy = l.id\r\n" + 
+					"where nt.targetUserId= '"+2+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				object = new JSONObject();
+				object.put("notificationId", element[0].toString());
+				object.put("createdBy", element[1].toString());
+				object.put("subject", element[2].toString());
+				object.put("type", element[3].toString());
+				object.put("content", element[4].toString());
+				object.put("issueLinkId", element[5].toString());
+				object.put("targetUserId", element[6].toString());
+				object.put("targetSeen", element[7].toString());
+				object.put("createdTime", element[8].toString());
+				array.add(object);
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return array;
+
 	}
 	
 

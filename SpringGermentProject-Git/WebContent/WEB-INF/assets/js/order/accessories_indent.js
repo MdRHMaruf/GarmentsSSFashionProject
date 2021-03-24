@@ -11,7 +11,7 @@ let unitList = {};
 
 window.onload = () => {
 	document.title = "Accessories Indent";
-
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -22,171 +22,89 @@ window.onload = () => {
 			data.unitList.forEach(unit => {
 				unitList[unit.unitId] = unit;
 			});
+			$("#loader").hide();
 		}
 	});
 	//$("#dataTable").DataTable();
 
 }
 
-function styleListLoadByMultiplePurchaseOrder(){
-	if ($("#purchaseOrder").val().length > 0) {
-		let poList = '';
-		$("#purchaseOrder").val().forEach(po => {
-			poList += `'${po}',`;
-		});
-		poList = poList.slice(0, -1);
-		let selectedStyleId = $("#styleNo").val();
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './getStyleListByMultiplePurchaseOrder',
-			data: {
-				purchaseOrders: poList
-			},
-			success: function (data) {
-				let options = "";
-
-				let styleList = data.styleList;
-
-				length = styleList.length;
-				for (let i = 0; i < length; i++) {
-					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
-				};
-				$("#styleNo").html(options);
-				$('#styleNo').selectpicker('refresh');
-				$("#styleNo").selectpicker('val', selectedStyleId).change();
-
-				resolveFunction()
-			}
-		});
-	}
-}
-let setPromise = new Promise(function(resolveFunction,reject){
-	
-});
-
-function buyerWiseStyleLoad() {
-	let buyerId = $("#buyerName").val();
-
-	// alert("buyerId "+buyerId);
-	if (buyerId != 0) {
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './getBuyerWiseStylesItem',
-			data: {
-				buyerId: buyerId
-			},
-			success: function (data) {
-
-				let styleList = data.styleList;
-				let options = "<option  value='0' selected>Select Style</option>";
-				let length = styleList.length;
-				for (let i = 0; i < length; i++) {
-					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
-				};
-				$("#styleNo").html(options);
-				$('.selectpicker').selectpicker('refresh');
-				$('#styleNo').val(styleIdForSet).change();
-				styleIdForSet = 0;
-
-			}
-		});
-	} else {
-		let options = "<option value='0' selected>Select Style</option>";
-		$("#styleNo").html(options);
-		$('#styleNo').selectpicker('refresh');
-		$('#styleNo').val("0").change();
-	}
-
-}
-$('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-	if ($("#buyerName").val().length > 0) {
-		let buyerIdList = '';
-		$("#buyerName").val().forEach(id => {
-			buyerIdList += `'${id}',`;
-		});
-		buyerIdList = buyerIdList.slice(0, -1);
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './getPurchaseOrderAndStyleListByMultipleBuyers',
-			data: {
-				buyersId: buyerIdList
-			},
-			success: function (data) {
-				let options = "";
-				let buyerPoList = data.buyerPOList;
-				let length = buyerPoList.length;
-				for (let i = 0; i < length; i++) {
-					options += "<option value='" + buyerPoList[i].name + "'>" + buyerPoList[i].name + "</option>";
-				};
-
-				$("#purchaseOrder").html(options);
-				$('#purchaseOrder').selectpicker('refresh');
-
-				options = "";
-				let styleList = data.styleList;
-
-				length = styleList.length;
-				for (let i = 0; i < length; i++) {
-					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
-				};
-				$("#styleNo").html(options);
-				$('#styleNo').selectpicker('refresh');
-
-			}
-		});
-	} else {
-		$("#purchaseOrder").empty();
-		$("#purchaseOrder").selectpicker('refresh');
-		$("#styleNo").empty();
-		$("#styleNo").selectpicker('refresh');
-	}
-});
-
-$('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-	if ($("#purchaseOrder").val().length > 0) {
-		let poList = '';
-		$("#purchaseOrder").val().forEach(po => {
-			poList += `'${po}',`;
-		});
-		poList = poList.slice(0, -1);
-		let selectedStyleId = $("#styleNo").val();
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './getStyleListByMultiplePurchaseOrder',
-			data: {
-				purchaseOrders: poList
-			},
-			success: function (data) {
-				let options = "";
-
-				let styleList = data.styleList;
-
-				length = styleList.length;
-				for (let i = 0; i < length; i++) {
-					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
-				};
-				$("#styleNo").html(options);
-				$('#styleNo').selectpicker('refresh');
-				$("#styleNo").selectpicker('val', selectedStyleId).change();
-
-			}
-		});
-	}
-});
-
-$('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
-	if ($("#styleNo").val().length > 0) {
-		let styleIdList = '';
-		$("#styleNo").val().forEach(id => {
-			styleIdList += `'${id}',`;
-		});
-		styleIdList = styleIdList.slice(0, -1);
-
+const styleListLoadByMultiplePurchaseOrder = function () {
+	return new Promise((resolve, reject) => {
 		if ($("#purchaseOrder").val().length > 0) {
+			let poList = '';
+			$("#purchaseOrder").val().forEach(po => {
+				poList += `'${po}',`;
+			});
+			poList = poList.slice(0, -1);
+			let selectedStyleId = $("#styleNo").val();
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './getStyleListByMultiplePurchaseOrder',
+				data: {
+					purchaseOrders: poList
+				},
+				success: function (data) {
+					let options = "";
+
+					let styleList = data.styleList;
+
+					length = styleList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+					};
+					$("#styleNo").html(options);
+					$('#styleNo').selectpicker('refresh');
+					$("#styleNo").selectpicker('val', selectedStyleId).change();
+					console.log("style load function");
+					resolve();			
+				}
+			});
+		}
+	});
+
+};
+const itemNameLoadByMultipleStyleId = function () {
+	return new Promise((resolve, reject) => {
+		if ($("#styleNo").val().length > 0) {
+			let styleIdList = '';
+			$("#styleNo").val().forEach(id => {
+				styleIdList += `'${id}',`;
+			});
+			styleIdList = styleIdList.slice(0, -1);
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './getItemListByMultipleStyleId',
+				data: {
+					styleIdList: styleIdList
+				},
+				success: function (data) {
+					let options = "";
+					let itemList = data.itemList;
+					let length = itemList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
+					};
+
+					$("#itemName").html(options);
+					$("#itemName").selectpicker('refresh');
+					$('#itemName').selectpicker('selectAll');
+					resolve();
+				}
+			});
+		}
+	})
+}
+const colorAndShippingListByMultipleStyleId = function () {
+	return new Promise((resolve, reject) => {
+		if ($("#styleNo").val().length > 0 && $("#purchaseOrder").val().length > 0) {
+			let styleIdList = '';
+			$("#styleNo").val().forEach(id => {
+				styleIdList += `'${id}',`;
+			});
+			styleIdList = styleIdList.slice(0, -1);
 
 			let poList = '';
 			$("#purchaseOrder").val().forEach(id => {
@@ -219,10 +137,181 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 					};
 					$("#shippingMark").html(options);
 					$('#shippingMark').selectpicker('refresh');
+					console.log("color shipping mark load function");
+					resolve()
+				}
+			});
+		}
+	});
 
+}
+
+
+function buyerWiseStyleLoad() {
+	let buyerId = $("#buyerName").val();
+
+	// alert("buyerId "+buyerId);
+	
+	if (buyerId != 0) {
+		$("#loader").show();
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getBuyerWiseStylesItem',
+			data: {
+				buyerId: buyerId
+			},
+			success: function (data) {
+
+				let styleList = data.styleList;
+				let options = "<option  value='0' selected>Select Style</option>";
+				let length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('.selectpicker').selectpicker('refresh');
+				$('#styleNo').val(styleIdForSet).change();
+				styleIdForSet = 0;
+				$("#loader").hide();
+			}
+		});
+	} else {
+		let options = "<option value='0' selected>Select Style</option>";
+		$("#styleNo").html(options);
+		$('#styleNo').selectpicker('refresh');
+		$('#styleNo').val("0").change();
+	}
+
+}
+$('#buyerName').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if ($("#buyerName").val().length > 0) {
+		let buyerIdList = '';
+		$("#buyerName").val().forEach(id => {
+			buyerIdList += `'${id}',`;
+		});
+		buyerIdList = buyerIdList.slice(0, -1);
+		$("#loader").show();
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getPurchaseOrderAndStyleListByMultipleBuyers',
+			data: {
+				buyersId: buyerIdList
+			},
+			success: function (data) {
+				let options = "";
+				let buyerPoList = data.buyerPOList;
+				let length = buyerPoList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + buyerPoList[i].name + "'>" + buyerPoList[i].name + "</option>";
+				};
+
+				$("#purchaseOrder").html(options);
+				$('#purchaseOrder').selectpicker('refresh');
+
+				options = "";
+				let styleList = data.styleList;
+
+				length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('#styleNo').selectpicker('refresh');
+				$("#loader").hide();
+			}
+		});
+	} else {
+		$("#purchaseOrder").empty();
+		$("#purchaseOrder").selectpicker('refresh');
+		$("#styleNo").empty();
+		$("#styleNo").selectpicker('refresh');
+	}
+});
+
+$('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+
+	if ($("#purchaseOrder").val().length > 0) {
+		let poList = '';
+		$("#purchaseOrder").val().forEach(po => {
+			poList += `'${po}',`;
+		});
+		poList = poList.slice(0, -1);
+		let selectedStyleId = $("#styleNo").val();
+		$("#loader").show();
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getStyleListByMultiplePurchaseOrder',
+			data: {
+				purchaseOrders: poList
+			},
+			success: function (data) {
+				let options = "";
+
+				let styleList = data.styleList;
+
+				length = styleList.length;
+				for (let i = 0; i < length; i++) {
+					options += "<option value='" + styleList[i].styleId + "'>" + styleList[i].styleNo + "</option>";
+				};
+				$("#styleNo").html(options);
+				$('#styleNo').selectpicker('refresh');
+				$("#styleNo").selectpicker('val', selectedStyleId).change();
+				$("#loader").hide();
+			}
+		});
+	}
+});
+
+$('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previousValue) {
+	if ($("#styleNo").val().length > 0) {
+		let styleIdList = '';
+		$("#styleNo").val().forEach(id => {
+			styleIdList += `'${id}',`;
+		});
+		styleIdList = styleIdList.slice(0, -1);
+
+		if ($("#purchaseOrder").val().length > 0) {
+
+			let poList = '';
+			$("#purchaseOrder").val().forEach(id => {
+				poList += `'${id}',`;
+			});
+			poList = poList.slice(0, -1);
+			$("#loader").show();
+			$.ajax({
+				type: 'GET',
+				dataType: 'json',
+				url: './getColorAndShippingListByMultipleStyleId',
+				data: {
+					purchaseOrders: poList,
+					styleIdList: styleIdList
+				},
+				success: function (data) {
+					let options = "";
+					let colorList = data.colorList;
+					length = colorList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + colorList[i].colorId + "'>" + colorList[i].colorName + "</option>";
+					};
+					$("#color").html(options);
+					$('#color').selectpicker('refresh');
+
+					options = "";
+					let shippingMarkList = data.shippingMarkList;
+					length = shippingMarkList.length;
+					for (let i = 0; i < length; i++) {
+						options += "<option value='" + shippingMarkList[i] + "'>" + shippingMarkList[i] + "</option>";
+					};
+					$("#shippingMark").html(options);
+					$('#shippingMark').selectpicker('refresh');
+					$("#loader").hide();
 				}
 			});
 		} else {
+			$("#loader").show();
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -240,11 +329,11 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 
 					$("#purchaseOrder").html(options);
 					$('#purchaseOrder').selectpicker('refresh');
-
+					$("#loader").hide();
 				}
 			});
 		}
-
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -263,7 +352,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
 				$("#itemName").html(options);
 				$("#itemName").selectpicker('refresh');
 				$('#itemName').selectpicker('selectAll');
-
+				$("#loader").hide();
 			}
 		});
 	}
@@ -436,6 +525,7 @@ $("#btnRecyclingData").click(() => {
 								where ${queryPurchaseOrder + " " + queryStylesId + " " + queryItemsId + " " + queryColorsId + " " + queryShippingMarks} and boed.sizeGroupId = 'SIZEGROUPID'
 								group by ${groupBy} boed.sizeGroupId,ss.sortingNo,ss.id,ss.sizeName
 								order by boed.sizeGroupId, ${groupBy} ss.sortingNo`;
+					$("#loader").show();
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
@@ -531,7 +621,7 @@ $("#btnRecyclingData").click(() => {
 							$("#tableList").append(tables);
 							setTotalOrderQty();
 							setUnitQty();
-
+							$("#loader").hide();
 						}
 					});
 				} else {
@@ -553,7 +643,7 @@ $("#btnRecyclingData").click(() => {
 						query += `group by ${groupBy} 
 							 order by ${groupBy}`;
 					}
-
+					$("#loader").show();
 					$.ajax({
 						type: 'GET',
 						dataType: 'json',
@@ -604,6 +694,7 @@ $("#btnRecyclingData").click(() => {
 							$("#tableList").append(tables);
 							setTotalOrderQty();
 							setUnitQty();
+							$("#loader").hide();
 						}
 					});
 				}
@@ -697,9 +788,9 @@ $("#btnAdd").click(() => {
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
 										<td>${++length}</td>
 										<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
-										<td>${styleNo}</td>
-										<td>${itemName}</td>
-										<td>${color}</td>
+										<td id='indentStyleNo-${listRowId}'>${styleNo}</td>
+										<td id='indentItemName-${listRowId}'>${itemName}</td>
+										<td id='indentColor-${listRowId}'>${color}</td>
 										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
 										<td id='indentAccessoriesName-${listRowId}'>${accessoriesItemName}</td>
 										<td>${sizeName}</td>
@@ -707,13 +798,13 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-									//$('#dataTable').dataTable().fnDestroy();
-									$("#dataList").append(newRow);
-									// $('#dataTable').DataTable(({ 
-									// 	"destroy": true, 
-									// }));
-									
-								
+								//$('#dataTable').dataTable().fnDestroy();
+								$("#dataList").append(newRow);
+								// $('#dataTable').DataTable(({ 
+								// 	"destroy": true, 
+								// }));
+
+
 							}
 
 						})
@@ -742,9 +833,9 @@ $("#btnAdd").click(() => {
 										data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
 										<td>${++length}</td>
 										<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
-										<td>${styleNo}</td>
-										<td>${itemName}</td>
-										<td>${color}</td>
+										<td id='indentStyleNo-${listRowId}'>${styleNo}</td>
+										<td id='indentItemName-${listRowId}'>${itemName}</td>
+										<td id='indentColor-${listRowId}'>${color}</td>
 										<td id='indentShippingMark-${listRowId}'>${shippingMark}</td>
 										<td id='indentAccessoriesName-${listRowId}'>${accessoriesItemName}</td>
 										<td></td>
@@ -752,12 +843,12 @@ $("#btnAdd").click(() => {
 										<td ><i class="fa fa-edit" onclick="setIndentItem('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 										<td ><i class="fa fa-trash" onclick="deleteIndentRow('${listRowId}','newIndentRow')" style='cursor:pointer;'></i></td>
 									</tr>`
-									//$('#dataTable').dataTable().fnDestroy();
-									$("#dataList").append(newRow);
-									// $('#dataTable').DataTable(({ 
-									// 	"destroy": true, 
-									// }));
-						
+						//$('#dataTable').dataTable().fnDestroy();
+						$("#dataList").append(newRow);
+						// $('#dataTable').DataTable(({ 
+						// 	"destroy": true, 
+						// }));
+
 					}
 				});
 				successAlert("Added To Temporary List... You should Confirm...");
@@ -778,96 +869,104 @@ function editAction() {
 	let autoId = $("#autoId").val();
 	let indentType = $("#indentType").val();
 
-	let accessoriesItemId = $("#accessoriesItem").val();
-	let accessoriesItemName = $("#accessoriesItem option:selected").text();
+	let purchaseOrdersId = $("#purchaseOrder").val();
+	let stylesId = $("#styleNo").val();
+	let itemsId = $("#itemName").val();
+	let colorsId = $("#color").val();
+	let shippingMarks = $("#shippingMark").val();
 
-	let accessoriesSize = $("#accessoriesSize").val();
-	let accessoriesColorId = $("#accessoriesColor").val();
-	let accessoriesBrandId = $("#brand").val();
-	let unitId = $("#unit").val();
+	if (purchaseOrdersId.length > 0) {
+		if (stylesId.length > 0) {
+			if (itemsId.length > 0) {
+				purchaseOrdersId = '';
+				$("#purchaseOrder").val().forEach(id => {
+					purchaseOrdersId += `${id},`;
+				});
+				purchaseOrdersId = purchaseOrdersId.slice(0, -1);
+				
+				stylesId = '';
+				$("#styleNo").val().forEach(id => {
+					stylesId += `${id},`;
+				});
+				stylesId = stylesId.slice(0, -1);
+				let styleText = $('#styleNo').find('option:selected').map(function() {
+					return $(this).text();
+				}).get().join(',');
+				
+				itemsId = '';
+				$("#itemName").val().forEach(id => {
+					itemsId += `${id},`;
+				});
+				itemsId = itemsId.slice(0, -1);
 
+				let itemText = $('#itemName').find('option:selected').map(function() {
+					return $(this).text();
+				}).get().join(',');
+				
 
-
-
-	let orderQty = $("#orderQty").val();
-	let dozenQty = parseFloat(orderQty / 12).toFixed(2);
-	let reqPerPcs = $("#reqPerPcs").val();
-	reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
-	let reqPerDozen = parseFloat(12 * reqPerPcs).toFixed(2);
-	let perUnit = $("#perUnit").val();
-	let totalBox = $("#totalBox").val();
-	let divideBy = $("#divideBy").val();
-	divideBy = parseFloat((divideBy == 0 || divideBy == '') ? 1 : divideBy);
-	let inPercent = $("#inPercent").val();
-	let percentQty = $("#percentQty").val();
-	let totalQty = $("#totalQty").val();
-
-	let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
-	unitValue = unitValue == 0 ? 1 : unitValue;
-	let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
-
-	let userId = $("#userId").val();
-	if (indentType == 'newIndentRow') {
-
-		let row = $("#newIndentRow-" + autoId);
-		successAlert("Edit Successfully....");
-		row.attr('data-accessories-item-id', accessoriesItemId);
-		$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
-		row.attr('data-accessories-size', accessoriesSize);
-		row.attr('data-accessories-color-id', accessoriesColorId);
-		row.attr('data-accessories-brand-id', accessoriesBrandId);
-		row.attr('data-unit-id', unitId);
-
-		row.attr('data-order-qty', orderQty);
-		row.attr('data-dozen-qty', dozenQty);
-		row.attr('data-req-per-pcs', reqPerPcs);
-		row.attr('data-req-per-dozen', reqPerDozen);
-		row.attr('data-per-unit', perUnit);
-		row.attr('data-total-box', totalBox);
-		row.attr('data-divide-by', divideBy);
-		row.attr('data-in-percent', inPercent);
-		row.attr('data-percent-qty', percentQty);
-		row.attr('data-total-qty', totalQty);
-		$("#indentUnitQty-" + autoId).text(unitQty);
-		$("#unitQty").attr("readonly", true);
-		$("#totalQty").attr("readonly", true);
-		$("#btnAdd").show();
-		$("#btnEdit").hide();
-	} else {
-
-		let accessoriesIndentNo = $("#accessoriesIndentId").val();
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './editAccessoriesIndent',
-			data: {
-				autoid: autoId,
-				aiNo: accessoriesIndentNo,
-				accessoriesId: accessoriesItemId,
-				accessoriesname: accessoriesItemName,
-				accessoriessize: accessoriesSize,
-				accessoriesColorId: accessoriesColorId,
-				indentBrandId: accessoriesBrandId,
-				orderqty: orderQty,
-				qtyindozen: dozenQty,
-				reqperpcs: reqPerPcs,
-				reqperdozen: reqPerDozen,
-				perunit: perUnit,
-				totalbox: totalBox,
-				dividedby: divideBy,
-				extrainpercent: inPercent,
-				percentqty: percentQty,
-				totalqty: totalQty,
-				unitId: unitId,
-				grandqty: unitQty,
-				user: userId
-			},
-			success: function (data) {
+				let colorText='';
+				if (colorsId.length > 0) {
+					colorsId = '';
+					$("#color").val().forEach(id => {
+						colorsId += `${id},`;
+					});
+					colorsId = colorsId.slice(0, -1);
+					colorText = $('#color').find('option:selected').map(function() {
+						return $(this).text();
+					}).get().join(',');
+				}else{
+					colorsId = '';
+				}
 
 				
-				if (data == 'successfull') {
-					let row = $("#oldIndentRow-" + autoId);
+				if (shippingMarks.length > 0) {
+					shippingMarks = '';
+					$("#shippingMark").val().forEach(id => {
+						shippingMarks += `${id},`;
+					});
+					shippingMarks = shippingMarks.slice(0, -1);
+				}else{
+					shippingMarks = '';
+				}
+
+				let accessoriesItemId = $("#accessoriesItem").val();
+				let accessoriesItemName = $("#accessoriesItem option:selected").text();
+
+				let accessoriesSize = $("#accessoriesSize").val();
+				let accessoriesColorId = $("#accessoriesColor").val();
+				let accessoriesBrandId = $("#brand").val();
+				let unitId = $("#unit").val();
+
+				let orderQty = $("#orderQty").val();
+				let dozenQty = parseFloat(orderQty / 12).toFixed(2);
+				let reqPerPcs = $("#reqPerPcs").val();
+				reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
+				let reqPerDozen = parseFloat(12 * reqPerPcs).toFixed(2);
+				let perUnit = $("#perUnit").val();
+				let totalBox = $("#totalBox").val();
+				let divideBy = $("#divideBy").val();
+				divideBy = parseFloat((divideBy == 0 || divideBy == '') ? 1 : divideBy);
+				let inPercent = $("#inPercent").val();
+				let percentQty = $("#percentQty").val();
+				let totalQty = $("#totalQty").val();
+
+				let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
+				unitValue = unitValue == 0 ? 1 : unitValue;
+				let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
+
+				let userId = $("#userId").val();
+				if (indentType == 'newIndentRow') {
+
+					let row = $("#newIndentRow-" + autoId);
 					successAlert("Edit Successfully....");
+					$("#indentPurchaseOrder-" + autoId).text(purchaseOrdersId);
+					row.attr('data-style-id', stylesId);
+					row.attr('data-item-id', itemsId);
+					row.attr('data-color-id', colorsId);
+					$("#indentStyleNo-" + autoId).text(styleText);
+					$("#indentItemName-" + autoId).text(itemText);
+					$("#indentColor-" + autoId).text(colorText);
+					$("#indentShippingMark-" + autoId).text(shippingMarks);
 					row.attr('data-accessories-item-id', accessoriesItemId);
 					$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
 					row.attr('data-accessories-size', accessoriesSize);
@@ -890,32 +989,119 @@ function editAction() {
 					$("#totalQty").attr("readonly", true);
 					$("#btnAdd").show();
 					$("#btnEdit").hide();
-				}else{
-					alert(data);
-				}
-
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
 				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
+
+					let accessoriesIndentNo = $("#accessoriesIndentId").val();
+					$("#loader").show();
+					$.ajax({
+						type: 'POST',
+						dataType: 'json',
+						url: './editAccessoriesIndent',
+						data: {
+							autoid: autoId,
+							purchaseOrder: purchaseOrdersId,
+							styleId : stylesId,
+							itemId : itemsId,
+							itemColorId : colorsId,
+							shippingmark : shippingMarks,
+							aiNo: accessoriesIndentNo,
+							accessoriesId: accessoriesItemId,
+							accessoriesname: accessoriesItemName,
+							accessoriessize: accessoriesSize,
+							accessoriesColorId: accessoriesColorId,
+							indentBrandId: accessoriesBrandId,
+							orderqty: orderQty,
+							qtyindozen: dozenQty,
+							reqperpcs: reqPerPcs,
+							reqperdozen: reqPerDozen,
+							perunit: perUnit,
+							totalbox: totalBox,
+							dividedby: divideBy,
+							extrainpercent: inPercent,
+							percentqty: percentQty,
+							totalqty: totalQty,
+							unitId: unitId,
+							grandqty: unitQty,
+							user: userId
+						},
+						success: function (data) {
+
+
+							if (data == 'successfull') {
+								let row = $("#oldIndentRow-" + autoId);
+								successAlert("Edit Successfully....");
+								$("#indentPurchaseOrder-" + autoId).text(purchaseOrdersId);
+								row.attr('data-style-id', stylesId);
+								row.attr('data-item-id', itemsId);
+								row.attr('data-color-id', colorsId);
+								$("#indentStyleNo-" + autoId).text(styleText);
+								$("#indentItemName-" + autoId).text(itemText);
+								$("#indentColor-" + autoId).text(colorText);
+								$("#indentShippingMark-" + autoId).text(shippingMarks);
+								row.attr('data-accessories-item-id', accessoriesItemId);
+								$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
+								row.attr('data-accessories-size', accessoriesSize);
+								row.attr('data-accessories-color-id', accessoriesColorId);
+								row.attr('data-accessories-brand-id', accessoriesBrandId);
+								row.attr('data-unit-id', unitId);
+
+								row.attr('data-order-qty', orderQty);
+								row.attr('data-dozen-qty', dozenQty);
+								row.attr('data-req-per-pcs', reqPerPcs);
+								row.attr('data-req-per-dozen', reqPerDozen);
+								row.attr('data-per-unit', perUnit);
+								row.attr('data-total-box', totalBox);
+								row.attr('data-divide-by', divideBy);
+								row.attr('data-in-percent', inPercent);
+								row.attr('data-percent-qty', percentQty);
+								row.attr('data-total-qty', totalQty);
+								$("#indentUnitQty-" + autoId).text(unitQty);
+								$("#unitQty").attr("readonly", true);
+								$("#totalQty").attr("readonly", true);
+								$("#btnAdd").show();
+								$("#btnEdit").hide();
+							} else {
+								alert(data);
+							}
+							$("#loader").hide();
+
+						},
+						error: function (jqXHR, textStatus, errorThrown) {
+							//alert("Server Error");
+							if (jqXHR.status === 0) {
+								alert('Not connect.\n Verify Network.');
+							} else if (jqXHR.status == 404) {
+								alert('Requested page not found.');
+							} else if (jqXHR.status == 500) {
+								alert('Internal Server Error.');
+							} else if (errorThrown === 'parsererror') {
+								alert('Requested JSON parse failed');
+							} else if (errorThrown === 'timeout') {
+								alert('Time out error');
+							} else if (errorThrown === 'abort') {
+								alert('Ajax request aborted ');
+							} else {
+								alert('Uncaught Error.\n' + jqXHR.responseText);
+							}
+
+						}
+					});
 				}
 
+			} else {
+				warningAlert("Please Select Any Item Name");
+				$("#itemName").focus();
 			}
-		});
+		} else {
+			warningAlert("Please Select Any Style NO");
+			$("#styleNo").focus();
+		}
+	} else {
+		warningAlert("Please Select Any Purchase Order");
+		$("#purchaseOrder").focus();
 	}
+
+
 }
 
 function refreshAction() {
@@ -1009,7 +1195,7 @@ function confirmAction() {
 
 				accessoriesItems.list.push(indent);
 			})
-
+			$("#loader").show();
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -1026,7 +1212,7 @@ function confirmAction() {
 					} else {
 						alert("Incomplete...Something Wrong");
 					}
-
+					$("#loader").hide();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");
@@ -1059,9 +1245,14 @@ function confirmAction() {
 function setIndentItem(rowId, indentType) {
 
 	let row = $(`#${indentType}-${rowId}`);
-	let poArray = $("#indentPurchaseOrder-"+rowId).text().trim().split(',');
-	console.log("array",poArray);
-	$("#purchaseOrder").selectpicker('val',poArray);
+	let poArray = $("#indentPurchaseOrder-" + rowId).text().trim().split(',');
+	console.log("array", poArray);
+	$("#purchaseOrder").selectpicker('val', poArray);
+
+	let styleIdList = row.attr('data-style-id').trim().split(',');
+	let itemIdList = row.attr('data-item-id').trim().split(',');
+	let colorIdList = row.attr('data-color-id').trim().split(',');
+	let shippingMarkList = $("#indentShippingMark-" + rowId).text().trim().split(',');
 
 	$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
 	$("#accessoriesSize").val(row.attr('data-accessories-size'));
@@ -1089,6 +1280,20 @@ function setIndentItem(rowId, indentType) {
 	$('html, body').animate({
 		scrollTop: $("html,body").offset().top
 	}, 400)
+
+	styleListLoadByMultiplePurchaseOrder().then(() => {
+		console.log("style id", styleIdList)
+		$("#styleNo").selectpicker('val', styleIdList);
+		itemNameLoadByMultipleStyleId().then(() => {
+			$("#itemName").selectpicker('val', itemIdList);
+			colorAndShippingListByMultipleStyleId().then(() => {
+				console.log("Color id", colorIdList)
+				$("#color").selectpicker('val', colorIdList);
+				$("#shippingMark").selectpicker('val', shippingMarkList);
+			});
+		});
+	});
+
 }
 
 function deleteIndentRow(rowId, indentType) {
@@ -1097,6 +1302,7 @@ function deleteIndentRow(rowId, indentType) {
 			$("#newIndentRow-" + rowId).remove();
 		} else {
 			let accessoriesIndentNo = $("#accessoriesIndentId").val();
+			$("#loader").show();
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -1112,7 +1318,7 @@ function deleteIndentRow(rowId, indentType) {
 					} else {
 						alert("Incomplete...Something Wrong");
 					}
-
+					$("#loader").hide();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");
@@ -1186,7 +1392,7 @@ function saveEvent() {
 
 		//conosle.log("style " + style)
 		if (style != 0) {
-
+			$("#loader").show();
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -1220,7 +1426,7 @@ function saveEvent() {
 					$("#dataList").empty();
 					$("#dataList").append(AccessoriesDataShowInTable(data.result));
 
-
+					$("#loader").hide();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");
@@ -1397,7 +1603,7 @@ function calculateTotalQtyAndUnitQty() {
 
 	if (totalReqQty == 0) totalReqQty = 1;
 	let inPercent = (percentQty * 100) / totalReqQty;
-	
+
 	$("#inPercent").val(inPercent.toFixed(2));
 	$("#percentQty").val(percentQty.toFixed(2));
 	$("#totalQty").val(totalQty.toFixed(2));
@@ -1494,9 +1700,9 @@ function setTotalByUnitInEditMode() {
 	let totalReqQty = orderQty * reqPerPcs;
 	let percentQty = totalQty - totalReqQty;
 
-	
+
 	let inPercent = (percentQty * 100) / totalReqQty;
-	console.log(totalQty,percentQty,inPercent);
+	console.log(totalQty, percentQty, inPercent);
 	$("#totalQty").val(totalQty.toFixed(1));
 	$("#inPercent").val(inPercent.toFixed(1));
 	$("#percentQty").val(percentQty.toFixed(1));
@@ -1522,7 +1728,7 @@ function setUnitByTotalInEditMode() {
 	let inPercent = (percentQty * 100) / totalReqQty;
 
 	let unitQty = (totalQty / divideBy) / unitValue;
-	console.log(unitQty,percentQty,inPercent);
+	console.log(unitQty, percentQty, inPercent);
 	$("#inPercent").val(inPercent.toFixed(1));
 	$("#percentQty").val(percentQty.toFixed(1));
 	$("#unitQty").val(unitQty.toFixed(1));
@@ -1628,9 +1834,9 @@ function drawAccessoriesIndentListTable(data) {
 										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
 										<td>${++length}</td>
 										<td id='indentPurchaseOrder-${autoId}'>${indent.purchaseOrder}</td>
-										<td>${indent.styleNo}</td>
-										<td>${indent.itemname}</td>
-										<td>${indent.itemcolor}</td>
+										<td id='indentStyleNo-${autoId}'>${indent.styleNo}</td>
+										<td id='indentItemName-${autoId}'>${indent.itemname}</td>
+										<td id='indentColor-${autoId}'>${indent.itemcolor}</td>
 										<td id='indentShippingMark-${autoId}'>${indent.shippingmark}</td>
 										<td id='indentAccessoriesName-${autoId}'>${indent.accessoriesName}</td>
 										<td>${indent.sizeName}</td>
@@ -1645,7 +1851,7 @@ function drawAccessoriesIndentListTable(data) {
 	// $('#dataTable').DataTable(({ 
 	// 	"destroy": true, 
 	// }));
-	
+
 }
 
 function btnInstallEvent() {
@@ -1923,382 +2129,6 @@ function LoadSize(data) {
 
 }
 
-/*
-function poWiseStyles() {
-
-
-	let po = $("#purchaseOrder").val();
-
-	//conosle.log("po " + po)
-	if (po != 0) {
-
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './poWiseStyles/' + po,
-			data: {
-
-			},
-			success: function (data) {
-				//conosle.log("dt " + data.result)
-				loadStyles(data.result);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-	}
-}
-
-
-function loadStyles(data) {
-	////conosle.log("dtt "+data[0].id);
-	let itemList = data;
-	let options = "<option  value='0' selected>Select Style</option>";
-	let length = itemList.length;
-	for (let i = 0; i < length; i++) {
-		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
-	};
-	document.getElementById("styleNo").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	//conosle.log("style " + stylevalue);
-	$('#styleNo').val(stylevalue).change();
-	stylevalue = 0;
-
-}
-
-
-
-function styleWiseItems() {
-
-
-	let buyerorderid = $("#purchaseOrder").val();
-	let style = $("#styleNo").val();
-
-
-	if (style != 0 && buyerorderid != '0') {
-
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './stylewiseitems',
-			data: {
-				buyerorderid: buyerorderid,
-				style: style
-
-			},
-			success: function (data) {
-
-				loatItems(data.result);
-
-
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-
-
-	}
-
-
-
-}
-
-
-function loatItems(data) {
-
-	let itemList = data;
-	let options = "<option  value='0' selected>Select Item Type</option>";
-	let length = itemList.length;
-	for (let i = 0; i < length; i++) {
-		options += "<option   value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
-	};
-	document.getElementById("itemName").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#itemName').val(itemvalue).change();
-	itemvalue = 0;
-
-}
-*/
-
-/*
-function styleItemsWiseColor() {
-	let buyerorderid = $("#purchaseOrder").val();
-	let style = $("#styleNo").val();
-	let item = $('#itemName').val();
-	if (item != '0') {
-		$.ajax({
-			type: 'GET',
-			dataType: 'json',
-			url: './styleItemsWiseColor/',
-			data: {
-				buyerorderid: buyerorderid,
-				style: style,
-				item: item
-			},
-			success: function (data) {
-				loatItemsWiseColor(data.result);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-	}
-
-}
-
-
-
-function loatItemsWiseColor(data) {
-
-	let itemList = data;
-	let options = "<option id='colorName' value='0' selected>Select Color Type</option>";
-	let length = itemList.length;
-	for (let i = 0; i < length; i++) {
-		options += "<option id='colorName'  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
-	};
-	document.getElementById("colorName").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#colorName').val(colorvalue).change();
-	colorvalue = 0;
-
-}
-*/
-/*
-function shipping() {
-	let checkvalue = $("#shippingCheck").is(':checked') ? 'checked' : 'unchecked';
-	if (checkvalue == 'checked') {
-		$("#shippingmark").attr('disabled', false);
-	} else {
-		$("#shippingmark").attr('disabled', true);
-	}
-	let po = $("#purchaseOrder").val();
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-	//conosle.log("Po " + po + " style " + style + " item " + item)
-	if (po != '' && style != '' && item != '') {
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './shippingMark/' + po + '/' + style + '/' + item,
-			data: {
-			},
-			success: function (data) {
-				loadShppingMarks(data);
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-	}
-
-}
-*/
-/*
-function loadShppingMarks(data) {
-	let itemList = data;
-	let options = "<option  value='0' selected>Select Item Type</option>";
-	let length = itemList.length;
-	for (let i = 0; i < length; i++) {
-		options += "<option  value='" + i + "'>" + itemList[i].name + "</option>";
-	};
-	document.getElementById("shippingmark").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#shippingmark').val("0").change();
-}
-
-
-
-
-
-
-function sizeRequiredBoxaction() {
-	let itemList = "";
-	let options = "<option  value='0' selected>Select Item Type</option>";
-	document.getElementById("size").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#size').val("0").change();
-}
-*/
-
-/*
-function itemWiseColor() {
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-
-	//conosle.log("style " + style)
-	if (style != 0) {
-
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './itemWiseColor/' + style + '/' + item,
-			data: {
-			},
-			success: function (data) {
-				LoadColors(data.color);
-				//itemWiseSize();
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-
-
-	}
-
-}
-
-
-function LoadColors(data) {
-	//conosle.log(" colors ")
-	let itemList = data;
-	let options = "<option  value='0' selected>Select Item Color</option>";
-	let length = itemList.length;
-	for (let i = 0; i < length; i++) {
-		options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
-	};
-	document.getElementById("itemcolor").innerHTML = options;
-	$('.selectpicker').selectpicker('refresh');
-	$('#itemcolor').val("0").change();
-}
-
-function SizeWiseQty() {
-
-
-	let style = $("#styleNo").val();
-	let item = $("#itemName").val();
-	let size = $("#size").val();
-	let color = 0;
-	color = $("#colorName").val();
-
-	let type = 1;
-
-	if (color == 0) {
-		type = 1;
-	} else {
-		type = 2;
-	}
-
-
-	//conosle.log("style " + style)
-	if (style != 0) {
-
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './SizeWiseQty/' + style + '/' + item + '/' + size + '/' + color + '/' + type,
-			data: {
-			},
-			success: function (data) {
-				setOrder(data.size)
-			},
-			error: function (jqXHR, textStatus, errorThrown) {
-				//alert("Server Error");
-				if (jqXHR.status === 0) {
-					alert('Not connect.\n Verify Network.');
-				} else if (jqXHR.status == 404) {
-					alert('Requested page not found.');
-				} else if (jqXHR.status == 500) {
-					alert('Internal Server Error.');
-				} else if (errorThrown === 'parsererror') {
-					alert('Requested JSON parse failed');
-				} else if (errorThrown === 'timeout') {
-					alert('Time out error');
-				} else if (errorThrown === 'abort') {
-					alert('Ajax request aborted ');
-				} else {
-					alert('Uncaught Error.\n' + jqXHR.responseText);
-				}
-
-			}
-		});
-
-
-	}
-
-}*/
 
 function successAlert(message) {
 	let element = $(".alert");

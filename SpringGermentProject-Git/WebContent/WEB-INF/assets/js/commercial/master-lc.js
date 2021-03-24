@@ -44,10 +44,12 @@ function buyerWiseStyleLoad() {
         };
         $("#masterStyleNo").html(options);
         $("#importStyleNo").html(options);
+        $("#exportStyleNo").html(options);
         $("#billStyleNo").html(options);
         $('#masterStyleNo').selectpicker('refresh');
         $('#importStyleNo').selectpicker('refresh');
         $('#billStyleNo').selectpicker('refresh');
+        $('#exportStyleNo').selectpicker('refresh');
         $('#masterStyleNo').val(styleIdForSet).change();
         styleIdForSet = 0;
 
@@ -58,9 +60,11 @@ function buyerWiseStyleLoad() {
     $("#masterStyleNo").html(options);
     $("#importStyleNo").html(options);
     $("#billStyleNo").html(options);
+    $("#exportStyleNo").html(options);
     $('#masterStyleNo').selectpicker('refresh');
     $('#importStyleNo').selectpicker('refresh');
     $('#billStyleNo').selectpicker('refresh');
+    $('#exportStyleNo').selectpicker('refresh');
     $('#masterStyleNo').val("0").change();
   }
 
@@ -68,8 +72,6 @@ function buyerWiseStyleLoad() {
 
 function styleWiseBuyerPOLoad(styleInput) {
   let styleId = styleInput.value;
-
-  console.log("id=", styleInput.id, " styleId=", styleId);
 
   if (styleId != 0) {
     $.ajax({
@@ -99,6 +101,10 @@ function styleWiseBuyerPOLoad(styleInput) {
           $("#billPurchaseOrder").html(options);
           $('#billPurchaseOrder').selectpicker('refresh');
           $("#billPurchaseOrder").val(poIdForSet).change();
+        } else if (styleInput.id == "exportStyleNo") {
+          $("#exportPurchaseOrder").html(options);
+          $('#exportPurchaseOrder').selectpicker('refresh');
+          $("#exportPurchaseOrder").val(poIdForSet).change();
         }
 
         poIdForSet = 0;
@@ -118,14 +124,18 @@ function styleWiseBuyerPOLoad(styleInput) {
       $("#billPurchaseOrder").html(options);
       $('#billPurchaseOrder').selectpicker('refresh');
       $("#billPurchaseOrder").val(poIdForSet).change();
+    } else if (styleInput.id == "exportStyleNo") {
+      $("#exportPurchaseOrder").html(options);
+      $('#exportPurchaseOrder').selectpicker('refresh');
+      $("#exportPurchaseOrder").val(poIdForSet).change();
     }
     poIdForSet = 0;
   }
 }
 
 
-function styleWiseItemLoad() {
-  let styleId = $("#masterStyleNo").val();
+function styleWiseItemLoad(styleInput) {
+  let styleId = styleInput.value;
 
   if (styleId != 0) {
     $.ajax({
@@ -143,17 +153,29 @@ function styleWiseItemLoad() {
         for (let i = 0; i < length; i++) {
           options += "<option value='" + itemList[i].itemId + "'>" + itemList[i].itemName + "</option>";
         };
-        document.getElementById("masterItemName").innerHTML = options;
-        $('#masterItemName').selectpicker('refresh');
-        $("#masterItemName").prop("selectedIndex", 1).change();
+        if (styleInput.id == "masterStyleNo") {
+          $("#masterItemName").html(options);
+          $('#masterItemName').selectpicker('refresh');
+          $("#masterItemName").prop("selectedIndex", 1).change();
+        } else if (styleInput.id == "exportStyleNo") {
+          $("#exportItemName").html(options);
+          $('#exportItemName').selectpicker('refresh');
+          $("#exportItemName").prop("selectedIndex", 1).change();
+        }
         itemIdForSet = 0;
       }
     });
   } else {
     let options = "<option value='0' selected>Select Item Type</option>";
-    $("#masterItemName").html(options);
-    $('#masterItemName').selectpicker('refresh');
-    $('#masterItemName').val(itemIdForSet).change();
+    if (styleInput.id == "masterStyleNo") {
+      $("#masterItemName").html(options);
+      $('#masterItemName').selectpicker('refresh');
+      $("#masterItemName").prop("selectedIndex", 1).change();
+    } else if (styleInput.id == "exportStyleNo") {
+      $("#exportItemName").html(options);
+      $('#exportItemName').selectpicker('refresh');
+      $("#exportItemName").prop("selectedIndex", 1).change();
+    }
     itemIdForSet = 0;
   }
 
@@ -162,6 +184,7 @@ function styleWiseItemLoad() {
 function itemTypeChangeAction() {
   let type = $("#importItemType").val();
   if (type != 0) {
+
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -170,7 +193,6 @@ function itemTypeChangeAction() {
         type: type
       },
       success: function (data) {
-        console.log(data.result);
         let itemList = data.result;
         let options = "<option value='0' selected>Select Item Name</option>";
         let length = itemList.length;
@@ -181,6 +203,7 @@ function itemTypeChangeAction() {
         $('#importFabricsAccessoriesItem').selectpicker('refresh');
         $("#importFabricsAccessoriesItem").prop("selectedIndex", 0).change();
         itemIdForSet = 0;
+
       }
     });
   } else {
@@ -258,36 +281,37 @@ function masterStyleAddAction() {
 
                 sessionStorage.setItem("pendingMasterLcStyleItem", JSON.stringify(sessionObject));
               } else {
-                warningAlert("Empty Unit Price ... Please Select Unit Price");
+                alert("Empty Unit Price ... Please Select Unit Price");
                 $("#masterUnitPrice").focus();
               }
             } else {
-              warningAlert("Empty Quantity ... Please Enter Quantity");
+              alert("Empty Quantity ... Please Enter Quantity");
               $("#masterQuantity").focus();
             }
           } else {
-            warningAlert("Purchase Order selected... Please Select Purchase Order");
+            alert("Purchase Order selected... Please Select Purchase Order");
             $("#masterPurchaseOrder").focus();
           }
         } else {
-          warningAlert("Item Name not selected... Please Select Item Name");
+          alert("Item Name not selected... Please Select Item Name");
           $("#masterItemName").focus();
         }
       } else {
-        warningAlert("Style No not selected... Please Select Style No");
+        alert("Style No not selected... Please Select Style No");
         $("#masterStyleNo").focus();
       }
 
     } else {
-      warningAlert("Buyer not selected... Please Select Buyer Name");
+      alert("Buyer not selected... Please Select Buyer Name");
       $("#masterBuyerName").focus();
     }
   } else {
-    warningAlert("Master LC No not entered... Please Enter Master LC No");
+    alert("Master LC No not entered... Please Enter Master LC No");
     $("#masterLCNo").focus();
   }
 
 }
+
 
 
 function deleteMasterStyle(autoId, rowType) {
@@ -302,6 +326,7 @@ function deleteMasterStyle(autoId, rowType) {
 
       $("#masterRow-" + autoId).remove();
     } else {
+      $("#loader").show();
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -332,6 +357,60 @@ function deleteMasterStyle(autoId, rowType) {
               }
             }
           }
+          $("#loader").hide();
+        }
+      });
+    }
+    totalValueCount();
+  }
+
+}
+
+
+function deleteExportStyle(autoId, rowType) {
+  if (confirm("Are you sure to Delete this Style?")) {
+    if (rowType == 'new') {
+      const buyerId = $("#exportRow-" + autoId).attr("data-buyer-id");
+      const exportLCNo = $("#exportRow-" + autoId).attr("data-export-lc-no");
+      const pendingExportLcStyleItem = JSON.parse(sessionStorage.getItem("pendingExportLcStyleItem"));
+      const newItemList = pendingExportLcStyleItem.itemList.filter(item => item.buyerId != buyerId && item.exportLCNo != exportLCNo);
+      pendingExportLcStyleItem.itemList = newItemList;
+      sessionStorage.setItem("pendingExportLcStyleItem", JSON.stringify(pendingExportLcStyleItem));
+
+      $("#exportRow-" + autoId).remove();
+    } else {
+      $("#loader").show();
+      $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './deleteExportLcStyle',
+        data: {
+          autoId: autoId,
+          styleId: styleId,
+          itemId: itemId
+        },
+        success: function (data) {
+          if (data.result == "Something Wrong") {
+            dangerAlert("Something went wrong");
+          } else if (data.result == "duplicate") {
+            dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+          } else {
+
+            let costingList = data.result;
+            // if (costingList.size > 0) {
+            //   itemIdForSet = costingList[0].itemId;
+            //   $("#styleName").val(costingList[0].styleId).change();
+            // }
+            $("#exportStyleList").empty();
+            drawItemDataTable(costingList);
+            if (sessionStorage.getItem("pendingExportLcStyleItem")) {
+              const pendingExportLcStyleItem = JSON.parse(sessionStorage.getItem("pendingExportLcStyleItem"));
+              if (styleId == pendingExportLcStyleItem.styleId && itemId == pendingExportLcStyleItem.itemId) {
+                drawSessionDataTable(pendingExportLcStyleItem.itemList);
+              }
+            }
+          }
+          $("#loader").hide();
         }
       });
     }
@@ -389,6 +468,7 @@ function masterSubmitAction() {
                 styleItems.list.push(item);
               }
               if (confirm("Are you sure to confirm..")) {
+                $("#loader").show();
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
@@ -419,32 +499,33 @@ function masterSubmitAction() {
                     } else {
                       alert("Master LC Insertion Failed")
                     }
+                    $("#loader").hide();
                   }
                 });
 
               }
             } else {
-              warningAlert("Please Select Currency...");
+              alert("Please Select Currency...");
               $("#masterCurrency").focus();
             }
           } else {
-            warningAlert("Please Select Receive Bank Name...");
+            alert("Please Select Receive Bank Name...");
             $("#masterReceiveBankName").focus();
           }
         } else {
-          warningAlert("Please Select Send Bank Name...");
+          alert("Please Select Send Bank Name...");
           $("#masterSendBankName").focus();
         }
       } else {
-        warningAlert("Please Select Buyer Name...");
+        alert("Please Select Buyer Name...");
         $("#masterBuyerName").focus();
       }
     } else {
-      warningAlert("Please Enter Master LC No...");
+      alert("Please Enter Master LC No...");
       $("#masterLCNo").focus();
     }
   } else {
-    warningAlert("Please Enter Any Style Item...");
+    alert("Please Enter Any Style Item...");
   }
 
 }
@@ -500,7 +581,7 @@ function masterEditAction() {
                 styleItems.list.push(item);
               }
 
-              let editedRowList = $("tr.editedRow");
+              let editedRowList = $("#masterStyleList tr.editedRow");
               length = editedRowList.length;
 
               for (let i = 0; i < length; i++) {
@@ -522,6 +603,7 @@ function masterEditAction() {
                 editedStyleItems.list.push(item);
               }
               if (confirm("Are you sure to confirm..")) {
+                $("#loader").show();
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
@@ -554,32 +636,33 @@ function masterEditAction() {
                     } else {
                       alert("Master LC Insertion Failed")
                     }
+                    $("#loader").hide();
                   }
                 });
 
               }
             } else {
-              warningAlert("Please Select Currency...");
+              alert("Please Select Currency...");
               $("#masterCurrency").focus();
             }
           } else {
-            warningAlert("Please Select Receive Bank Name...");
+            alert("Please Select Receive Bank Name...");
             $("#masterReceiveBankName").focus();
           }
         } else {
-          warningAlert("Please Select Send Bank Name...");
+          alert("Please Select Send Bank Name...");
           $("#masterSendBankName").focus();
         }
       } else {
-        warningAlert("Please Select Buyer Name...");
+        alert("Please Select Buyer Name...");
         $("#masterBuyerName").focus();
       }
     } else {
-      warningAlert("Please Enter Master LC No...");
+      alert("Please Enter Master LC No...");
       $("#masterLCNo").focus();
     }
   } else {
-    warningAlert("Please Enter Any Style Item...");
+    alert("Please Enter Any Style Item...");
   }
 }
 
@@ -630,6 +713,7 @@ function masterAmendmentAction() {
                 styleItems.list.push(item);
               }
               if (confirm("Are you sure to confirm..")) {
+                $("#loader").show();
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
@@ -660,38 +744,524 @@ function masterAmendmentAction() {
                     } else {
                       alert("Master LC Insertion Failed")
                     }
+                    $("#loader").hide();
                   }
                 });
 
               }
             } else {
-              warningAlert("Please Select Currency...");
+              alert("Please Select Currency...");
               $("#masterCurrency").focus();
             }
           } else {
-            warningAlert("Please Select Receive Bank Name...");
+            alert("Please Select Receive Bank Name...");
             $("#masterReceiveBankName").focus();
           }
         } else {
-          warningAlert("Please Select Send Bank Name...");
+          alert("Please Select Send Bank Name...");
           $("#masterSendBankName").focus();
         }
       } else {
-        warningAlert("Please Select Buyer Name...");
+        alert("Please Select Buyer Name...");
         $("#masterBuyerName").focus();
       }
     } else {
-      warningAlert("Please Enter Master LC No...");
+      alert("Please Enter Master LC No...");
       $("#masterLCNo").focus();
     }
   } else {
-    warningAlert("Please Enter Any Style Item...");
+    alert("Please Enter Any Style Item...");
   }
 
 }
 
+function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
+
+  //const masterLc = fakeData.masterLcList[autoId];
+  $("#loader").show();
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './searchMasterLC',
+    data: {
+      masterLCNo: masterLCNo,
+      buyerId: buyerId,
+      amendmentNo: amendmentNo
+    },
+    success: function (data) {
+      console.log(data)
+      const masterLCInfo = data.masterLCInfo;
+      const masterLCStyles = data.masterLCStyles;
+      $("#masterLCAutoId").val(masterLCInfo.autoId);
+      $("#masterLCNo").val(masterLCInfo.masterLCNo);
+      $("#masterLCNo").prop('readonly', true);
+      $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
+      $("#exportMasterLcNo").val(masterLCInfo.masterLCNo);
+      $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
+      $("#masterBuyerName").val(masterLCInfo.buyerId).change();
+      let buyerName = $("#masterBuyerName option:selected").text();
+      $("#exportBuyerName").val(buyerName);
+      $("#masterSendBankName").val(masterLCInfo.senderBankId).change();
+      $("#masterReceiveBankName").val(masterLCInfo.receiverBankId).change();
+      $("#beneficiaryBankName").val(masterLCInfo.beneficiaryBankId).change();
+      $("#throughBankName").val(masterLCInfo.throughBankId).change();
+      $("#masterDate").val(masterLCInfo.date);
+      $("#masterTotalValue").val(masterLCInfo.totalValue);
+      $("#masterCurrency").val(masterLCInfo.currencyId);
+      $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
+      $("#masterExpiryDate").val(masterLCInfo.expiryDate);
+      $("#remarks").val(masterLCInfo.remarks);
+      console.log("notifierList",data.notifyerList);
+      $("#exportNotifyTo").empty();
+      loadNotifyer(data.notifyerList);
+      $("#masterStyleList").empty();
+      drawMasterLCStyleList(masterLCStyles);
+      $("#masterAmendmentList").empty();
+      drawMasterLCAmendmentList(data.amendmentList);
+      $("#importInvoiceList").empty();
+      drawImportInvoiceList(data.importInvoiceList);
+      $("#exportShipmentList").empty();
+      drawExportLCInvoiceList(data.exportInvoiceList);
+      $("#masterSubmitBtn").hide();
+      $("#masterAmendmentBtn").show();
+      $("#masterEditBtn").show();
+      $("#masterPreviewBtn").show();
+      $("#loader").hide();
+    }
+  });
+
+  $("#searchModal").modal('hide');
+}
+
+
+function loadNotifyer(data){
+  let options = '';
+  data.forEach((notify,index)=>{
+    options += `<option id='${notify.id}'>${notify.name}</option>`;
+  });
+  $("#exportNotifyTo").append(options);
+  $("#exportNotifyTo").selectpicker('refresh');
+}
+
 function refreshAction() {
   location.reload();
+}
+
+
+function exportStyleAddAction() {
+
+  const rowList = $("#exportStyleList tr");
+  const length = rowList.length;
+
+  let masterLCNo = $("#masterLCNo").val();
+  let buyerName = $("#masterBuyerName option:selected").text();
+  let buyerId = $("#masterBuyerName").val();
+  let styleNo = $("#exportStyleNo option:selected").text();
+  let styleId = $("#exportStyleNo").val();
+  let itemName = $("#exportItemName option:selected").text();
+  let itemId = $("#exportItemName").val();
+  let purchaseOrder = $("#exportPurchaseOrder option:selected").text();
+  let purchaseOrderId = $("#exportPurchaseOrder").val();
+  let quantity = $("#exportQuantity").val() == "" ? 0 : $("#exportQuantity").val();
+  let unitPrice = $("#exportUnitPrice").val() == "" ? 0 : $("#exportUnitPrice").val();
+  let amount = parseFloat(quantity) * parseFloat(unitPrice);
+  let cartonQty = $("#exportCartonQty").val() == "" ? 0 : $("#exportCartonQty").val();
+
+
+  let sessionObject = JSON.parse(sessionStorage.getItem("pendingExportLcStyleItem") ? sessionStorage.getItem("pendingExportLcStyleItem") : "{}");
+  let itemList = sessionObject.itemList ? sessionObject.itemList : [];
+
+  if (masterLCNo != '') {
+    if (buyerId != 0) {
+      if (styleId != 0) {
+        if (itemId != 0) {
+          if (purchaseOrderId != 0) {
+            if (quantity != 0) {
+              if (unitPrice != 0) {
+                const id = length;
+                itemList.push({
+                  "autoId": id,
+                  "buyerId": buyerId,
+                  "buyerName": buyerName,
+                  "styleId": styleId,
+                  "styleNo": styleNo,
+                  "itemId": itemId,
+                  "itemName": itemName,
+                  "purchaseOrderId": purchaseOrderId,
+                  "purchaseOrder": purchaseOrder,
+                  "quantity": quantity,
+                  "unitPrice": unitPrice,
+                  "amount": amount,
+                  "cartonQty": cartonQty
+                });
+                let row = `<tr id='exportRow-${id}' class='exportNewStyle' data-type='newStyle' data-master-lc-no='${masterLCNo}' data-buyer-id='${buyerId}' data-style-id='${styleId}' data-item-id='${itemId}' data-purchase-order-id='${purchaseOrderId}' >
+                            <td id='exportStyleNo-${id}'>${styleNo}</td>
+                            <td id='exportPurchaseOrder-${id}'>${purchaseOrder}</td>
+                            <td><input type="number" id='exportQuantity-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${quantity}"/></td>
+                            <td><input type="number" id='exportUnitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setAmount(${id}),totalValueCount()" value="${unitPrice}"/></td>
+                            <td id='exportAmount-${id}'>${amount}</td>
+                            <td><input type="number" id='exportCartonQty-${id}' class="form-control-sm max-width-100"  value="${cartonQty}"/></td>
+                            <td ><i class='fa fa-trash' onclick="deleteExportStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
+                          </tr>`;
+
+                $("#exportStyleList").append(row);
+
+                totalValueCount();
+
+                sessionObject = {
+                  "buyerId": buyerId,
+                  "masterLCNo": masterLCNo,
+                  "itemList": itemList
+                }
+
+                sessionStorage.setItem("pendingExportLcStyleItem", JSON.stringify(sessionObject));
+              } else {
+                alert("Empty Unit Price ... Please Select Unit Price");
+                $("#exportUnitPrice").focus();
+              }
+            } else {
+              alert("Empty Quantity ... Please Enter Quantity");
+              $("#exportQuantity").focus();
+            }
+          } else {
+            alert("Purchase Order selected... Please Select Purchase Order");
+            $("#exportPurchaseOrder").focus();
+          }
+        } else {
+          alert("Item Name not selected... Please Select Item Name");
+          $("#exportItemName").focus();
+        }
+      } else {
+        alert("Style No not selected... Please Select Style No");
+        $("#exportStyleNo").focus();
+      }
+
+    } else {
+      alert("Buyer not selected... Please Select Buyer Name");
+      $("#exportBuyerName").focus();
+    }
+  } else {
+    alert("Export LC No not entered... Please Enter Export LC No");
+    $("#masterLCNo").focus();
+  }
+
+}
+
+function exportSubmitAction() {
+  let rowList = $("#exportStyleList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.exportNewStyle");
+    length = rowList.length;
+
+    let styleList = '';
+
+    let masterLCNo = $("#masterLCNo").val();
+    let buyerId = $("#masterBuyerName").val();
+    let notifyTo = $("#exportNotifyTo").val();
+    let exportInvoiceNo = $("#exportInvoiceNo").val();
+    let exportInvoiceDate = $("#exportInvoiceDate").val();
+    let exportContractNo = $("#exportContractNo").val();
+    let exportContractDate = $("#exportContractDate").val();
+    let expNo = $("#exportExpNo").val();
+    let expDate = $("#exportExpDate").val();
+    let billEntryNo = $("#exportBillEntryNo").val();
+    let billEntryDate = $("#exportBillEntryDate").val();
+    let blNo = $("#exportBLNo").val();
+    let blDate = $("#exportBLDate").val();
+    let shippingMark = $("#exportShippingMark").val();
+    let shippingDate = $("#exportShippingDate").val();
+
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (buyerId != '0') {
+        if (exportInvoiceNo != '') {
+          if (exportInvoiceDate) {
+
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(10);
+
+              const item = {
+                buyerId: newRow.getAttribute('data-buyer-id'),
+                styleId: newRow.getAttribute('data-style-id'),
+                itemId: newRow.getAttribute('data-item-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                quantity: $("#exportQuantity-" + id).val(),
+                unitPrice: $("#exportUnitPrice-" + id).val(),
+                amount: $("#exportAmount-" + id).text(),
+                cartonQty: $("#exportCartonQty-" + id).val(),
+                userId: userId
+              }
+
+              styleItems.list.push(item);
+            }
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './exportLCSubmit',
+                data: {
+                  masterLCNo: masterLCNo,
+                  buyerId: buyerId,
+                  notifyTo: notifyTo,
+                  invoiceNo: exportInvoiceNo,
+                  invoiceDate: exportInvoiceDate,
+                  contractNo: exportContractNo,
+                  contractDate: exportContractDate,
+                  expNo: expNo,
+                  expDate: expDate,
+                  billEntryNo: billEntryNo,
+                  billEntryDate: billEntryDate,
+                  blNo: blNo,
+                  blDate: blDate,
+                  shippingMark: shippingMark,
+                  shippingDate: shippingDate,
+                  userId: userId,
+                  styleList: JSON.stringify(styleItems),
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#exportShipmentList").empty();
+                    drawExportLCInvoiceList(data.exportInvoiceList);
+                  } else {
+                    alert("Export LC Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Export Invoice Date...");
+            $("#exportInvoiceDate").focus();
+          }
+        } else {
+          alert("Please Enter Invoice No...");
+          $("#exportInvoiceNo").focus();
+        }
+      } else {
+        alert("Please Select Buyer Name...");
+        $("#exportBuyerName").focus();
+      }
+    } else {
+      alert("Please Enter Export LC No...");
+      $("#exportLCNo").focus();
+    }
+  } else {
+    alert("Please Enter Any Style Item...");
+  }
+
+}
+
+
+function searchExportLc(masterLCNo, invoiceNO) {
+
+  //const exportLc = fakeData.exportLcList[autoId];
+  $("#loader").show();
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './searchExportLC',
+    data: {
+      masterLCNo: masterLCNo,
+      invoiceNo: invoiceNO
+    },
+    success: function (data) {
+      console.log(data)
+      const exportLCInfo = data.exportLCInfo;
+      const exportLCStyles = data.exportLCStyles;
+      $("#exportLCAutoId").val(exportLCInfo.autoId);
+      $("#exportInvoiceNo").val(exportLCInfo.invoiceNo);
+      $("#exportInvoiceDate").val(exportLCInfo.invoiceDate);
+      $("#exportContractNo").val(exportLCStyles.contractNo);
+      $("#exportContractDate").val(exportLCStyles.contractDate);
+
+      $("#exportExpNo").val(exportLCInfo.expNo);
+      $("#exportExpDate").val(exportLCInfo.expDate);
+      $("#exportBillEntryNo").val(exportLCInfo.billEntryNo);
+      $("#exportBillEntryDate").val(exportLCInfo.billEntryDate);
+      $("#exportBLNo").val(exportLCInfo.blNo);
+      $("#exportBLDate").val(exportLCInfo.blDate);
+      $("#exportShippingMark").val(exportLCInfo.shippingMark);
+      $("#exportShippingDate").val(exportLCInfo.shippingDate);
+
+      $("#exportStyleList").empty();
+      drawExportLCStyleList(exportLCStyles);
+
+      $("#exportSubmitBtn").hide();
+      $("#exportAmendmentBtn").show();
+      $("#exportEditBtn").show();
+      $("#exportPreviewBtn").show();
+      $("#loader").hide();
+    }
+  });
+
+  $("#searchModal").modal('hide');
+}
+
+function exportEditAction() {
+  let rowList = $("#exportStyleList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.exportNewStyle");
+    length = rowList.length;
+
+    let styleList = '';
+    let autoId = $("#exportLCAutoId").val();
+    let masterLCNo = $("#masterLCNo").val();
+    let buyerId = $("#masterBuyerName").val();
+    let notifyTo = $("#exportNotifyTo").val();
+    let exportInvoiceNo = $("#exportInvoiceNo").val();
+    let exportInvoiceDate = $("#exportInvoiceDate").val();
+    let exportContractNo = $("#exportContractNo").val();
+    let exportContractDate = $("#exportContractDate").val();
+    let expNo = $("#exportExpNo").val();
+    let expDate = $("#exportExpDate").val();
+    let billEntryNo = $("#exportBillEntryNo").val();
+    let billEntryDate = $("#exportBillEntryDate").val();
+    let blNo = $("#exportBLNo").val();
+    let blDate = $("#exportBLDate").val();
+    let shippingMark = $("#exportShippingMark").val();
+    let shippingDate = $("#exportShippingDate").val();
+
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    let editedStyleItems = {};
+    editedStyleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (buyerId != '0') {
+        if (exportInvoiceNo != '') {
+          if (exportInvoiceDate) {
+
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(10);
+
+              const item = {
+                buyerId: newRow.getAttribute('data-buyer-id'),
+                styleId: newRow.getAttribute('data-style-id'),
+                itemId: newRow.getAttribute('data-item-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                quantity: $("#exportQuantity-" + id).val(),
+                unitPrice: $("#exportUnitPrice-" + id).val(),
+                amount: $("#exportAmount-" + id).text(),
+                cartonQty: $("#exportCartonQty-" + id).text(),
+                userId: userId
+              }
+
+              styleItems.list.push(item);
+            }
+
+            let editedRowList = $("#exportStyleList tr.editedRow");
+            length = editedRowList.length;
+
+            for (let i = 0; i < length; i++) {
+              const editedRow = editedRowList[i];
+              const id = editedRow.id.slice(10);
+
+              const item = {
+                buyerId: newRow.getAttribute('data-buyer-id'),
+                styleId: newRow.getAttribute('data-style-id'),
+                itemId: newRow.getAttribute('data-item-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                quantity: $("#exportQuantity-" + id).val(),
+                unitPrice: $("#exportUnitPrice-" + id).val(),
+                amount: $("#exportAmount-" + id).text(),
+                cartonQty: $("#exportCartonQty-" + id).text(),
+                userId: userId
+              }
+
+              editedStyleItems.list.push(item);
+            }
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './exportLCEdit',
+                data: {
+                  autoId: autoId,
+                  masterLCNo: masterLCNo,
+                  buyerId: buyerId,
+                  notifyTo: notifyTo,
+                  invoiceNo: exportInvoiceNo,
+                  invoiceDate: exportInvoiceDate,
+                  contractNo: exportContractNo,
+                  contractDate: exportContractDate,
+                  expNo: expNo,
+                  expDate: expDate,
+                  billEntryNo: billEntryNo,
+                  billEntryDate: billEntryDate,
+                  blNo: blNo,
+                  blDate: blDate,
+                  shippingMark: shippingMark,
+                  shippingDate: shippingDate,
+                  userId: userId,
+                  styleList: JSON.stringify(styleItems),
+                  editedStyleList: JSON.stringify(editedStyleItems)
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Edited");
+                    //$("#exportShipmentList").empty();
+                    //drawExportLCInvoiceList(data.exportInvoiceList);
+                  } else {
+                    alert("Export LC Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Export Invoice Date...");
+            $("#exportInvoiceDate").focus();
+          }
+        } else {
+          alert("Please Enter Invoice No...");
+          $("#exportInvoiceNo").focus();
+        }
+      } else {
+        alert("Please Select Buyer Name...");
+        $("#exportBuyerName").focus();
+      }
+    } else {
+      alert("Please Enter Export LC No...");
+      $("#exportLCNo").focus();
+    }
+  } else {
+    alert("Please Enter Any Style Item...");
+  }
+
+}
+
+function exportRefreshAction() {
+  $("#exportNotifyTo").val(0);
+  $("#exportInvoiceNo").val('');
+  $("#exportContractNo").val('');
+  $("#exportExpNo").val('');
+  $("#exportBillEntryNo").val();
+  $("#exportBLNo").val();
+  $("#exportShippingMark").val();
+  $("#exportStyleList").empty();
+
+  $("#exportSubmitBtn").show();
+  $("#exportAmendmentBtn").hide();
+  $("#exportEditBtn").hide();
+  $("#exportPreviewBtn").hide();
 }
 
 function drawMasterLCAmendmentList(data) {
@@ -709,6 +1279,26 @@ function drawMasterLCAmendmentList(data) {
   }
 
   $("#masterAmendmentList").append(rows);
+
+}
+
+
+function drawExportLCInvoiceList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='exportInvoiceRow-${id}'  data-amendment-auto-id='${id}' onclick="searchExportLc('${rowData.masterLCNo}','${rowData.invoiceNo}')" style='cursor:pointer;'>
+					<td id='exportInvoiceNo-${id}'>${rowData.invoiceNo}</td>
+					<td id='exportShippingMark-${id}'>${rowData.shippingMark}</td>
+          <td id='exportShippingDate-${id}'>${rowData.shippingDate}</td>
+				</tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+
+  $("#exportShipmentList").append(rows);
 
 }
 
@@ -734,6 +1324,29 @@ function drawMasterLCStyleList(data) {
 }
 
 
+
+function drawExportLCStyleList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='exportRow-${id}' class='exportOldStyle' data-auto-id='${rowData.autoId}' data-type='oldStyle' data-export-lc-no='${rowData.exportLCNo}' data-buyer-id='${rowData.buyerId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-purchase-order-id='${rowData.purchaseOrderId}' >
+              <td id='exportStyleNo-${id}'>${rowData.styleNo}</td>
+              <td id='exportPurchaseOrder-${id}'>${rowData.purchaseOrder}</td>
+              <td><input type="number" id='exportQuantity-${id}' class="form-control-sm max-width-100" onkeyup="editedExportRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.quantity).toFixed(2)}"/></td>
+              <td><input type="number" id='exportUnitPrice-${id}' class="form-control-sm max-width-100" onkeyup="editedExportRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.unitPrice).toFixed(2)}"/></td>
+              <td id='exportAmount-${id}'>${Number(rowData.amount).toFixed(2)}</td>
+              <td><input type="number" id='exportCartonQty-${id}' class="form-control-sm max-width-60" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.cartonQty).toFixed(0)}"/></td>
+              <td ><i class='fa fa-trash' onclick="deleteExportStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
+            </tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  $("#exportStyleList").append(rows);
+}
+
+
 function drawImportLCAmendmentList(data) {
   let rows = "";
   const length = data.length;
@@ -741,9 +1354,9 @@ function drawImportLCAmendmentList(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchMasterLc('${rowData.masterLCNo}','${rowData.buyerId}','${rowData.amendmentNo}')" style='cursor:pointer;'>
-					<td id='masterAmendmentNo-${id}'>${rowData.amendmentNo}</td>
-					<td id='masterAmendmentDate-${id}'>${rowData.amendmentDate}</td>
+    rows += `<tr id='importAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchImportInvoiceLc('${rowData.masterLCNo}','${rowData.invoiceNo}','${rowData.amendmentNo}')" style='cursor:pointer;'>
+					<td id='importAmendmentNo-${id}'>${rowData.amendmentNo}</td>
+					<td id='importAmendmentDate-${id}'>${rowData.amendmentDate}</td>
 				</tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
@@ -759,9 +1372,9 @@ function drawImportUDList(data) {
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='masterAmendmentRow-${id}'  data-amendment-auto-id='${id}' onclick="searchMasterLc('${rowData.masterLCNo}','${rowData.buyerId}','${rowData.amendmentNo}')" style='cursor:pointer;'>
-					<td id='masterAmendmentNo-${id}'>${rowData.amendmentNo}</td>
-					<td id='masterAmendmentDate-${id}'>${rowData.amendmentDate}</td>
+    rows += `<tr id='udRow-${id}'  data-import-auto-id='${id}' style='cursor:pointer;'>
+					<td id='importUDNo-${id}'>${rowData.udNo}</td>
+					<td id='importUDDate-${id}'>${rowData.udDate}</td>
 				</tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
@@ -789,30 +1402,77 @@ function drawImportInvoiceList(data) {
 function drawImportItemList(data) {
   let rows = "";
   const length = data.length;
-  
+
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows  += `<tr id='importRow-${id}' data-style-id='${rowData.styleId}' data-purchase-order-id='${rowData.poNo}' data-item-type='${rowData.accessoriesItemType}' data-accessories-item-id='${rowData.accessoriesItemId}' data-color-id='${rowData.colorId}' data-unit-id='${rowData.unitId}'>
-                        <td>${rowData.styleNo}</td>
-                        <td id='importPoNo-${id}'>${rowData.poNo}</td>
-                        <td>${rowData.accessoriesItemName}</td>
-                        <td>${rowData.colorName}</td>
-                        <td id='importSize-${id}'>${rowData.size}</td>
-                        <td id='importUnit-${id}'>${rowData.unitName}</td>
-                        <td id='importWidth-${id}'>${rowData.width}</td>
-                        <td id='importGsm-${id}'>${rowData.gsm}</td>
-                        <td id='importTotalQty-${id}'>${rowData.totalQty}</td>
-                        <td id='importPrice-${id}'>${rowData.price}</td>
-                        <td id='importTotalValue-${id}'>${rowData.totalValue}</td>
-                    </tr>`;
+    rows += `<tr id='importRow-${id}' data-style-id='${rowData.styleId}' data-purchase-order-id='${rowData.poNo}' data-item-type='${rowData.accessoriesItemType}' data-accessories-item-id='${rowData.accessoriesItemId}' data-color-id='${rowData.colorId}' data-unit-id='${rowData.unitId}'>
+    <td id='importStyleNo-${id}'>${rowData.styleNo}</td>
+    <td id='importPoNo-${id}'>${rowData.poNo}</td>
+    <td id='importAccessoriesName-${id}'>${rowData.accessoriesName}</td>
+    <td id='importColor-${id}'>${rowData.colorName}</td>
+    <td id='importSize-${id}'>${rowData.size}</td>
+    <td id='importUnit-${id}'>${rowData.unitName}</td>
+    <td id='importWidth-${id}'>${Number(rowData.width).toFixed(2)}</td>
+    <td id='importGsm-${id}'>${Number(rowData.gsm).toFixed(2)}</td>
+    <td id='importTotalQty-${id}'>${Number(rowData.totalQty).toFixed(2)}</td>
+    <td id='importPrice-${id}'>${Number(rowData.price).toFixed(2)}</td>
+    <td id='importTotalValue-${id}'>${Number(rowData.totalValue).toFixed(2)}</td>
+    <td><i class="fa fa-trash" onclick="deleteImportItem('${id}','old')" style="cursor:pointer;" title="Delete"></i></td>
+    <td><i class="fa fa-sign-in" aria-hidden="true" style="cursor:pointer;" onclick="entryAction('${id}')"></i></td>
+</tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
   $("#importItemList").append(rows);
 
 }
 
- 
+function drawBillItemList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = rowData.autoId;
+    rows += `<tr id='billItemRow-${id}' data-style-id='${rowData.styleId}' data-purchase-order-id='${rowData.poNo}' data-item-type='${rowData.accessoriesItemType}' data-accessories-item-id='${rowData.accessoriesItemId}' data-color-id='${rowData.colorId}' data-unit-id='${rowData.unitId}'>
+                        <td id='billStyleNo-${id}'>${rowData.styleNo}</td>
+                        <td id='billPoNo-${id}'>${rowData.poNo}</td>
+                        <td id='billAccessoriesName-${id}'>${rowData.accessoriesName}</td>
+                        <td id='billColor-${id}'>${rowData.colorName}</td>
+                        <td id='billSize-${id}'>${rowData.size}</td>
+                        <td id='billUnit-${id}'>${rowData.unitName}</td>
+                        <td id='billWidth-${id}'>${rowData.width}</td>
+                        <td id='billGsm-${id}'>${rowData.gsm}</td>
+                        <td><input id='billTotalQty-${id}' type="number" class='from-control-sm max-width-60' value='${rowData.totalQty}'/></td>
+                        <td><input id='billCartonQty-${id}' type="number" class='form-control-sm max-width-60' value='${rowData.price}'/></td>
+                        <td><input id='billPrice-${id}' type="number" class='from-control-sm max-width-60' value='${rowData.price}'</td>
+                        <td id='billTotalValue-${id}'>${rowData.totalValue}</td>
+                        <td><i class="fa fa-trash" onclick="deleteImportItem('${id}','old')" style="cursor:pointer;" title="Delete"></i></td>
+                        <td><i class="fa fa-sign-in" aria-hidden="true" style="cursor:pointer;" onclick="entryAction('${id}')"></i></td>
+                    </tr>`;
+
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  $("#billItemList").append(rows);
+
+}
+
+function drawBillEntryList(data) {
+  let rows = "";
+  const length = data.length;
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    const id = i;
+    rows += `<tr id='billRow-${id}'  data-bill-auto-id='${id}' onclick="searchBillOfEntry('${rowData.masterLCNo}','${rowData.invoiceNo}','${rowData.billEntryNo}')" style='cursor:pointer;'>
+					<td id='billEntryNo-${id}'>${rowData.billEntryNo}</td>
+					<td id='billEntryDate-${id}'>${rowData.billEntryDate}</td>
+				</tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  $("#billOfEntryList").append(rows);
+}
+
+
 
 function editedMasterRow(rowId) {
   $("#masterRow-" + rowId).addClass('editedRow');
@@ -845,16 +1505,73 @@ function shippedAction(styleAutoId) {
   }
 }
 
+function entryAction(rowId) {
+  const rowList = $("#billItemList tr");
+  let id = rowList.length + 1;
+  let accessoriesItemId = $("#importRow-" + rowId).attr("data-accessories-item-id");
+  let existId = 0;
+  for (let i = 0; i < id - 1; i++) {
+    if (rowList[i].getAttribute('data-accessories-item-id') == accessoriesItemId) {
+      existId = rowList[i].id.slice(rowList[i].id.indexOf('-') + 1);
+      break;
+    }
+  }
 
-function deleteShippedStyle(autoId, rowType) {
+  if (existId != 0) {
+    console.log("existId-", existId);
+
+    $("#billTotalQty-" + existId).val($("#importTotalQty-" + rowId).val());
+  } else {
+    id = rowId;
+    let importRow = $("#importRow-" + id);
+    let styleId = importRow.attr('data-style-id');
+    let poId = importRow.attr('data-purchase-order');
+    let itemType = importRow.attr('data-item-type');
+    let accessoriesItemId = importRow.attr('data-accessories-item-id');
+    let colorId = importRow.attr('data-color-id');
+    let unitId = importRow.attr('data-unit-id');
+    let styleNo = $("#importStyleNo-" + id).text();
+    let poNo = $("#importPoNo-" + id).text();
+    let accessoriesName = $("#importAccessoriesName-" + id).text();
+    let colorName = $("#importColor-" + id).text();
+    let size = $("#importSize-" + id).text();
+    let unit = $("#importUnit-" + id).text();
+    let width = Number($("#importWidth-" + id).text().trim()==''?0:$("#importWidth-" + id).text().trim()).toFixed(2);
+    let gsm =  Number($("#importGsm-" + id).text().trim() == ''?0:$("#importGsm-" + id).text().trim()).toFixed(2);
+    let totalQty = Number($("#importTotalQty-" + id).text().trim() == ''?0:$("#importTotalQty-" + id).text().trim()).toFixed(2);
+    let price = Number($("#importPrice-" + id).text().trim() == ''?0:$("#importPrice-" + id).text().trim()).toFixed(2);
+    let totalValue = Number($("#importTotalValue-" + id).text().trim() == ''?0:$("#importTotalValue-" + id).text().trim()).toFixed(2);
+
+    let row = `<tr id='billItemRow-${id}' class='newRow' data-style-id='${styleId}' data-purchase-order-id='${poId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
+                  <td>${styleNo}</td>
+                  <td id='billPoNo-${id}'>${poNo}</td>
+                  <td>${accessoriesName}</td>
+                  <td>${colorName}</td>
+                  <td id='billSize-${id}'>${size}</td>
+                  <td id='billUnit-${id}'>${unit}</td>
+                  <td id='billWidth-${id}'>${width}</td>
+                  <td id='billGsm-${id}'>${gsm}</td>
+                  <td><input id='billTotalQty-${id}' class='form-control-sm max-width-60' value = '${totalQty}' ></td>
+                  <td><input id="billCartonQty-${id}" type='number' class='form-control-sm max-width-60'></td>
+                  <td><input id='billPrice-${id}' class='form-control-sm max-width-60' value='${price}'></td>
+                  <td id='billTotalValue-${id}'>${totalValue}</td>
+                  <td><i class="fa fa-trash" onclick="deleteImportItem('${id}','old')" style="cursor:pointer;" title="Delete"></i></td>
+              </tr>`;
+    $("#billItemList").append(row);
+  }
+}
+
+
+function deleteImportItem(autoId, rowType) {
   if (confirm("Are you sure to Delete this Shipped Style?")) {
     if (rowType == 'new') {
-      $("#shippingStyleRow-" + autoId).remove();
+      $("#importRow-" + autoId).remove();
     } else {
+      $("#loader").show();
       $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: './deleteMasterLcShippedStyle',
+        url: './deleteImportItem',
         data: {
           autoId: autoId,
           styleId: styleId,
@@ -881,6 +1598,7 @@ function deleteShippedStyle(autoId, rowType) {
               }
             }
           }
+          $("#loader").hide();
         }
       });
     }
@@ -888,59 +1606,11 @@ function deleteShippedStyle(autoId, rowType) {
   }
 }
 
-function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
-
-  //const masterLc = fakeData.masterLcList[autoId];
-  $.ajax({
-    type: 'GET',
-    dataType: 'json',
-    url: './searchMasterLC',
-    data: {
-      masterLCNo: masterLCNo,
-      buyerId: buyerId,
-      amendmentNo: amendmentNo
-    },
-    success: function (data) {
-      console.log(data)
-      const masterLCInfo = data.masterLCInfo;
-      const masterLCStyles = data.masterLCStyles;
-      $("#masterLCAutoId").val(masterLCInfo.autoId);
-      $("#masterLCNo").val(masterLCInfo.masterLCNo);
-      $("#masterLCNo").prop('readonly', true);
-      $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
-      $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
-      $("#masterBuyerName").val(masterLCInfo.buyerId).change();
-      $("#masterSendBankName").val(masterLCInfo.senderBankId).change();
-      $("#masterReceiveBankName").val(masterLCInfo.receiverBankId).change();
-      $("#beneficiaryBankName").val(masterLCInfo.beneficiaryBankId).change();
-      $("#throughBankName").val(masterLCInfo.throughBankId).change();
-      $("#masterDate").val(masterLCInfo.date);
-      $("#masterTotalValue").val(masterLCInfo.totalValue);
-      $("#masterCurrency").val(masterLCInfo.currencyId);
-      $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
-      $("#masterExpiryDate").val(masterLCInfo.expiryDate);
-      $("#remarks").val(masterLCInfo.remarks);
-      $("#masterStyleList").empty();
-      drawMasterLCStyleList(masterLCStyles);
-      $("#masterAmendmentList").empty();
-      drawMasterLCAmendmentList(data.amendmentList);
-      $("#importInvoiceList").empty();
-      drawImportInvoiceList(data.importInvoiceList);
-
-      $("#masterSubmitBtn").hide();
-      $("#masterAmendmentBtn").show();
-      $("#masterEditBtn").show();
-      $("#masterPreviewBtn").show();
-    }
-  });
-
-  $("#searchModal").modal('hide');
-}
-
 
 function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
 
   //const masterLc = fakeData.masterLcList[autoId];
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -956,7 +1626,9 @@ function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
       const importLCItems = data.masterLCStyles;
       $("#importLCAutoId").val(importLCInfo.autoId);
       $("#importInvoiceNo").val(importLCInfo.invoiceNo);
-      $("#importLcType").val(importLCInfo.importLCType);
+      $("#billOfEntryInvoiceNo").val(importLCInfo.invoiceNo);
+      $("#billOfEntryInvoiceDate").val(importLCInfo.invoiceDate);
+      $("#importLCType").val(importLCInfo.importLCType);
       $("#importInvoiceDate").val(importLCInfo.invoiceDate);
       $("#importSenderBankName").val(importLCInfo.senderBank).change();
       $("#importReceiverBankName").val(importLCInfo.receiverBank).change();
@@ -965,21 +1637,70 @@ function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
       $("#importMaturityDate").val(importLCInfo.maturityDate);
       $("#importProformaInvoiceNo").val(importLCInfo.proformaInvoiceNo);
       $("#importProformaInvoiceDate").val(importLCInfo.proformaInvoiceDate);
+
+      $("#importAmendmentNo").val(amendmentNo);
       $("#importAmendmentList").empty();
       drawImportLCAmendmentList(data.amendmentList);
       $("#importUDList").empty();
-      drawImportUDList(data.importUDist);
+      drawImportUDList(data.importUDList);
       $("#importItemList").empty();
       drawImportItemList(data.importItemList);
+      $("#billOfEntryList").empty();
+      drawBillEntryList(data.billEntryList);
 
       $("#importSubmitButton").hide();
       $("#importAmendmentButton").show();
       $("#importEditButton").show();
       $("#importPreviewBtn").show();
+      $("#loader").hide();
     }
   });
 
- 
+
+}
+
+
+function searchBillOfEntry(masterLCNo, invoiceNo, billNo) {
+
+  //const masterLc = fakeData.masterLcList[autoId];
+  $("#loader").show();
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './searchBillOfEntry',
+    data: {
+      masterLCNo: masterLCNo,
+      invoiceNo: invoiceNo,
+      billNo: billNo
+    },
+    success: function (data) {
+      console.log(data)
+
+      let billOfEntry = data.billOfEntry;
+      $("#billOfEntryAutoId").val(billOfEntry.autoId);
+      $("#billOfEntryNo").val(billOfEntry.billEntryNo);
+      $("#billOfEntryDate").val(billOfEntry.billEntryDate);
+      $("#billBillNo").val(billOfEntry.billNo);
+      $("#billShippedOnBoardDate").val(billOfEntry.shippedOnBoardDate);
+      $("#billTelexReleaseDate").val(billOfEntry.telexReleaseDate);
+      $("#billContainerNo").val(billOfEntry.containerNo);
+      $("#billVesselNo").val(billOfEntry.vesselNo);
+      $("#billDocumentReceiveDate").val(billOfEntry.documentReceiveDate);
+      $("#billEtaDate").val(billOfEntry.etaDate);
+      $("#billStuffingDate").val(billOfEntry.stuffingDate);
+      $("#billClearingDate").val(billOfEntry.clearingDate);
+
+      $("#billItemList").empty();
+      drawBillItemList(data.itemList);
+
+      $("#billSubmitButton").hide();
+      $("#billEditButton").show();
+      $("#billPreviewBtn").show();
+      $("#loader").hide();
+    }
+  });
+
+
 }
 
 function setShippingInfo(shippingNo) {
@@ -1038,6 +1759,10 @@ function setAmount(id) {
 }
 
 function importItemAddAction() {
+
+  const rowList = $("#importItemList tr");
+  const length = rowList.length;
+
   let styleNo = $("#importStyleNo option:selected").text();
   let styleId = $("#importStyleNo").val();
   let purchaseOrderId = $("#importPurchaseOrder").val();
@@ -1060,11 +1785,11 @@ function importItemAddAction() {
     if (purchaseOrderId != '0') {
       if (accessoriesItemId != '0') {
         if (unitId != '0') {
-          let row = `<tr id='importRow-${id}' data-style-id='${styleId}' data-purchase-order-id='${purchaseOrderId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
-                        <td>${styleNo}</td>
-                        <td id='importPoNo-'>${purchaseOrder}</td>
-                        <td>${accessoriesItemName}</td>
-                        <td>${color}</td>
+          let row = `<tr id='importRow-${id}' class='newRow' data-style-id='${styleId}' data-purchase-order-id='${purchaseOrderId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
+                        <td id='importStyleNo-${id}'>${styleNo}</td>
+                        <td id='importPoNo-${id}'>${purchaseOrder}</td>
+                        <td id='importAccessoriesName-${id}'>${accessoriesItemName}</td>
+                        <td id='importColor-${id}'>${color}</td>
                         <td id='importSize-${id}'>${size}</td>
                         <td id='importUnit-${id}'>${unit}</td>
                         <td id='importWidth-${id}'>${width}</td>
@@ -1072,6 +1797,7 @@ function importItemAddAction() {
                         <td id='importTotalQty-${id}'>${totalQty}</td>
                         <td id='importPrice-${id}'>${price}</td>
                         <td id='importTotalValue-${id}'>${totalValue}</td>
+                        <td ><i class='fa fa-trash' onclick="deleteImportItem('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
                     </tr>`;
 
           $("#importItemList").append(row);
@@ -1131,7 +1857,7 @@ function importSubmitAction() {
               const item = {
                 styleId: newRow.getAttribute('data-style-id'),
                 purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
-                poNo: $("#importPoNo-"+id).text(),
+                poNo: $("#importPoNo-" + id).text(),
                 accessoriesItemType: newRow.getAttribute('data-item-type'),
                 accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
                 colorId: newRow.getAttribute('data-color-id'),
@@ -1147,10 +1873,267 @@ function importSubmitAction() {
               styleItems.list.push(item);
             }
             if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
               $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: './importLCSubmit',
+                data: {
+                  masterLCNo: masterLCNo,
+                  importLCType: lcType,
+                  invoiceNo: invoiceNo,
+                  invoiceDate: date,
+                  senderBank: senderBankId,
+                  receiverBank: receiverBankId,
+                  supplierId: supplierId,
+                  draftAt: draftAt,
+                  maturityDate: maturityDate,
+                  proformaInvoiceNo: proformaInvoiceNo,
+                  proformaInvoiceDate: proformaInvoiceDate,
+                  userId: userId,
+                  amendmentNo: '0',
+                  amendmentDate: date,
+                  itemList: JSON.stringify(styleItems),
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#importInvoiceList").empty();
+                    drawImportInvoiceList(data.importInvoiceList);
+                    $("#importAmendmentList").empty();
+                    drawImportLCAmendmentList(data.amendmentList);
+                  } else {
+                    alert("Import LC Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Receiver Bank Name...");
+            $("#importReceiverBankName").focus();
+          }
+        } else {
+          alert("Please Select Sender Bank Name...");
+          $("#importSenderBankName").focus();
+        }
+      } else {
+        alert("Please Enter Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#importMasterLCNo").focus();
+    }
+  } else {
+    alert("Please Entry Any Accessories/Fabrics Item...");
+    //alert("Please Enter Any Item...");
+  }
+
+}
+
+function importEditAction() {
+
+
+  let rowList = $("#importItemList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+
+    let importLCAutoId = $("#importLCAutoId").val();
+    let masterLCNo = $("#importMasterLcNo").val();
+    let lcType = $("#importLCType").val();
+    let invoiceNo = $("#importInvoiceNo").val();
+    let amendmentNo = $("#importAmendmentNo").val();
+    let date = $("#importInvoiceDate").val();
+    let senderBankId = $("#importSenderBankName").val();
+    let receiverBankId = $("#importReceiverBankName").val();
+    let supplierId = $("#importSupplierName").val();
+    let draftAt = $("#importDraftAt").val();
+    let maturityDate = $("#importMaturityDate").val();
+    let proformaInvoiceNo = $("#importProformaInvoiceNo").val();
+    let proformaInvoiceDate = $("#importProformaInvoiceDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+    let editedItems = {};
+    editedItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (invoiceNo != '') {
+        if (senderBankId != '0') {
+          if (receiverBankId != '0') {
+
+            let rowList = $("#importItemList tr.newRow");
+            let length = rowList.length;
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(10);
+
+              const item = {
+                styleId: newRow.getAttribute('data-style-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                poNo: $("#importPoNo-" + id).text(),
+                accessoriesItemType: newRow.getAttribute('data-item-type'),
+                accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
+                colorId: newRow.getAttribute('data-color-id'),
+                unitId: newRow.getAttribute('data-unit-id'),
+                size: $("#importSize-" + id).text(),
+                width: $("#importWidth-" + id).text(),
+                gsm: $("#importGSM-" + id).text(),
+                totalQty: $("#importTotalQty-" + id).text(),
+                price: $("#importPrice-" + id).text(),
+                totalValue: $("#importTotalValue-" + id).text(),
+                userId: userId
+              }
+              styleItems.list.push(item);
+            }
+
+            let editedRowList = $("#importItemList tr.editedRow");
+            length = editedRowList.length;
+
+            for (let i = 0; i < length; i++) {
+              const editedRow = editedRowList[i];
+              const id = editedRow.id.slice(10);
+
+              const item = {
+                autoId: editedRow.getAttribute('data-auto-id'),
+                styleId: editedRow.getAttribute('data-style-id'),
+                itemId: editedRow.getAttribute('data-accessories-item-id'),
+                purchaseOrderId: editedRow.getAttribute('data-purchase-order-id'),
+                quantity: $("#importTotalQty-" + id).val(),
+                price: $("#importPrice-" + id).val(),
+                totalValue: $("#importTotalValue-" + id).text(),
+                userId: userId
+              }
+
+              editedItems.list.push(item);
+            }
+
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './importLCEdit',
+                data: {
+                  autoId: importLCAutoId,
+                  masterLCNo: masterLCNo,
+                  importLCType: lcType,
+                  invoiceNo: invoiceNo,
+                  invoiceDate: date,
+                  senderBank: senderBankId,
+                  receiverBank: receiverBankId,
+                  supplierId: supplierId,
+                  draftAt: draftAt,
+                  maturityDate: maturityDate,
+                  proformaInvoiceNo: proformaInvoiceNo,
+                  proformaInvoiceDate: proformaInvoiceDate,
+                  userId: userId,
+                  amendmentNo: amendmentNo,
+                  amendmentDate: date,
+                  itemList: JSON.stringify(styleItems),
+                  editedItemList: JSON.stringify(editedItems)
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#importAmendmentList").empty();
+                    drawImportLCAmendmentList(data.amendmentList);
+                  } else {
+                    alert("Import LC Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Receiver Bank Name...");
+            $("#importReceiverBankName").focus();
+          }
+        } else {
+          alert("Please Select Sender Bank Name...");
+          $("#importSenderBankName").focus();
+        }
+      } else {
+        alert("Please Enter Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#importMasterLCNo").focus();
+    }
+  } else {
+    alert("Please Entry Any Accessories/Fabrics Item...");
+    //alert("Please Enter Any Item...");
+  }
+
+}
+
+
+function importAmendmentAction() {
+
+
+  let rowList = $("#importItemList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+
+    let masterLCNo = $("#importMasterLcNo").val();
+    let lcType = $("#importLCType").val();
+    let invoiceNo = $("#importInvoiceNo").val();
+    let date = $("#importInvoiceDate").val();
+    let senderBankId = $("#importSenderBankName").val();
+    let receiverBankId = $("#importReceiverBankName").val();
+    let supplierId = $("#importSupplierName").val();
+    let draftAt = $("#importDraftAt").val();
+    let maturityDate = $("#importMaturityDate").val();
+    let proformaInvoiceNo = $("#importProformaInvoiceNo").val();
+    let proformaInvoiceDate = $("#importProformaInvoiceDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (invoiceNo != '') {
+        if (senderBankId != '0') {
+          if (receiverBankId != '0') {
+
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(10);
+
+              const item = {
+                styleId: newRow.getAttribute('data-style-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                poNo: $("#importPoNo-" + id).text(),
+                accessoriesItemType: newRow.getAttribute('data-item-type'),
+                accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
+                colorId: newRow.getAttribute('data-color-id'),
+                unitId: newRow.getAttribute('data-unit-id'),
+                size: $("#importSize-" + id).text(),
+                width: $("#importWidth-" + id).text(),
+                gsm: $("#importGSM-" + id).text(),
+                totalQty: $("#importTotalQty-" + id).text(),
+                price: $("#importPrice-" + id).text(),
+                totalValue: $("#importTotalValue-" + id).text(),
+                userId: userId
+              }
+              styleItems.list.push(item);
+            }
+
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './importLCAmendment',
                 data: {
                   masterLCNo: masterLCNo,
                   importLCType: lcType,
@@ -1176,41 +2159,391 @@ function importSubmitAction() {
                   } else {
                     alert("Import LC Insertion Failed")
                   }
+                  $("#loader").hide();
                 }
               });
 
             }
 
           } else {
-            warningAlert("Please Select Receiver Bank Name...");
+            alert("Please Select Receiver Bank Name...");
             $("#importReceiverBankName").focus();
           }
         } else {
-          warningAlert("Please Select Sender Bank Name...");
+          alert("Please Select Sender Bank Name...");
           $("#importSenderBankName").focus();
         }
       } else {
-        warningAlert("Please Enter Invoice No...");
+        alert("Please Enter Invoice No...");
         $("#importInvoiceNo").focus();
       }
     } else {
-      warningAlert("Please Enter Master LC No...");
+      alert("Please Enter Master LC No...");
       $("#importMasterLCNo").focus();
     }
   } else {
     alert("Please Entry Any Accessories/Fabrics Item...");
-    //warningAlert("Please Enter Any Item...");
+    //alert("Please Enter Any Item...");
   }
 
 }
 
-function importItemTotalValueCalculate(){
-  let totalQty = $("#importTotalQty").val()==''?0:$("#importTotalQty").val();
-  let price = $("#importPrice").val()==''?0:$("#importPrice").val();
+function importUDAddAction() {
+
+  let importUDNo = $("#importUDNo").val();
+  let importUdDate = $("#importUdDate").val();
+  let importInvoiceNo = $("#importInvoiceNo").val();
+  let importLCAutoId = $("#importLCAutoId").val();
+  let userId = $("#userId").val();
+  if (importUDNo != '') {
+    if (importUdDate != '') {
+      if (importInvoiceNo != '') {
+        $("#loader").show();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: './importInvoiceUDAdd',
+          data: {
+            udInfo: JSON.stringify({
+              importUDNo: importUDNo,
+              importUdDate: importUdDate,
+              importInvoiceNo: importInvoiceNo,
+              importLCAutoId: importLCAutoId,
+              userId: userId
+            })
+          },
+          success: function (data) {
+            if (data.result == 'success') {
+              alert("Successfully Submitted");
+              $("#importUDList").empty();
+              console.log(data.udList);
+              drawImportUDList(data.udList);
+            } else {
+              alert("Import LC Insertion Failed")
+            }
+            $("#loader").hide();
+          }
+        });
+      } else {
+        alert("Please Entry Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      alert("Please Select UD Date...");
+      $("#importUdDate").focus();
+    }
+  } else {
+    alert("Please Entry UD No...");
+    $("#importUDNo").focus();
+  }
+}
+
+function importItemTotalValueCalculate() {
+  let totalQty = $("#importTotalQty").val() == '' ? 0 : $("#importTotalQty").val();
+  let price = $("#importPrice").val() == '' ? 0 : $("#importPrice").val();
 
   let totalValue = totalQty * price;
 
   $("#importTotalValue").val(Number(totalValue).toFixed(2));
+}
+
+
+function importRefreshAction() {
+
+
+  $("#importInvoiceNo").val();
+  $("#importSenderBankName").val(0).change();
+  $("#importReceiverBankName").val(0).change();
+  $("#importSupplierName").val(0).change();
+  $("#importDraftAt").val('');
+  $("#importProformaInvoiceNo").val();
+
+  $("#importItemList").empty();
+
+  $("#importSubmitButton").show();
+  $("#importAmendmentButton").show();
+  $("#importEditButton").hide();
+  $("#importPreviewBtn").hide();
+}
+
+function billSubmitAction() {
+
+
+  let rowList = $("#billItemList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+
+    let masterLCNo = $("#importMasterLcNo").val();
+    let invoiceNo = $("#importInvoiceNo").val();
+    let billOfEntryNo = $("#billOfEntryNo").val();
+    let billOfEntryDate = $("#billOfEntryDate").val();
+    let billNo = $("#billBillNo").val();
+    let shippedOnBoardDate = $("#billShippedOnBoardDate").val();
+    let telexReleaseDate = $("#billTelexReleaseDate").val();
+    let containerNo = $("#billContainerNo").val();
+    let vesselNo = $("#billVesselNo").val();
+    let documentReceiveDate = $("#billDocumentReceiveDate").val();
+    let etaDate = $("#billEtaDate").val();
+    let stuffingDate = $("#billStuffingDate").val();
+    let clearingDate = $("#billClearingDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (invoiceNo != '') {
+        if (billOfEntryNo) {
+          if (billOfEntryDate) {
+
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(12);
+
+              const item = {
+                billEntryNo: billOfEntryNo,
+                styleId: newRow.getAttribute('data-style-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                poNo: $("#billPoNo-" + id).text(),
+                accessoriesItemType: newRow.getAttribute('data-item-type'),
+                accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
+                colorId: newRow.getAttribute('data-color-id'),
+                unitId: newRow.getAttribute('data-unit-id'),
+                size: $("#billSize-" + id).text(),
+                width: $("#billWidth-" + id).text(),
+                gsm: $("#billGSM-" + id).text(),
+                totalQty: $("#billTotalQty-" + id).val(),
+                cartonQty: $("#billCartonQty-" + id).val() == '' ? 0 : $("#billCartonQty-" + id).val(),
+                price: $("#billPrice-" + id).val(),
+                totalValue: $("#billTotalValue-" + id).text(),
+                userId: userId
+              }
+              styleItems.list.push(item);
+              console.log("id", id);
+            }
+            console.log("style items", styleItems);
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './billOfEntrySubmit',
+                data: {
+                  masterLCNo: masterLCNo,
+                  invoiceNo: invoiceNo,
+                  billEntryNo: billOfEntryNo,
+                  billEntryDate: billOfEntryDate,
+                  billNo: billNo,
+                  telexReleaseDate: telexReleaseDate,
+                  vesselNo: vesselNo,
+                  etaDate: etaDate,
+                  clearingDate: clearingDate,
+                  shippedOnBoardDate: shippedOnBoardDate,
+                  containerNo: containerNo,
+                  documentReceiveDate: documentReceiveDate,
+                  stuffingDate: stuffingDate,
+                  userId: userId,
+                  itemList: JSON.stringify(styleItems),
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#billOfEntryList").empty();
+                    drawBillEntryList(data.billEntryList);
+                  } else {
+                    alert("Bill Entry Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Bill Of Entry Date...");
+            $("#billOfEntryDate").focus();
+          }
+        } else {
+          alert("Please Enter Bill Of Entry No...");
+          $("#billOfEntryNo").focus();
+        }
+      } else {
+        alert("Please Enter Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#importMasterLCNo").focus();
+    }
+  } else {
+    alert("Please Entry Any Accessories/Fabrics Item...");
+    //alert("Please Enter Any Item...");
+  }
+
+}
+
+
+
+
+
+function billEditAction() {
+
+
+  let rowList = $("#billItemList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+    let billOfEntryAutoId = $("#billOfEntryAutoId").val();
+    let masterLCNo = $("#importMasterLcNo").val();
+    let invoiceNo = $("#importInvoiceNo").val();
+    let billOfEntryNo = $("#billOfEntryNo").val();
+    let billOfEntryDate = $("#billOfEntryDate").val();
+    let billNo = $("#billBillNo").val();
+    let shippedOnBoardDate = $("#billShippedOnBoardDate").val();
+    let telexReleaseDate = $("#billTelexReleaseDate").val();
+    let containerNo = $("#billContainerNo").val();
+    let vesselNo = $("#billVesselNo").val();
+    let documentReceiveDate = $("#billDocumentReceiveDate").val();
+    let etaDate = $("#billEtaDate").val();
+    let stuffingDate = $("#billStuffingDate").val();
+    let clearingDate = $("#billClearingDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    let editedItems = {};
+    editedItems['list'] = [];
+
+    if (masterLCNo != '') {
+      if (invoiceNo != '') {
+        if (billOfEntryNo) {
+          if (billOfEntryDate) {
+
+            let rowList = $("#billItemList tr.newRow");
+            let length = rowList.length;
+            for (let i = 0; i < length; i++) {
+              const newRow = rowList[i];
+              const id = newRow.id.slice(12);
+              console.log("id=",id);
+              const item = {
+                billEntryNo: billOfEntryNo,
+                styleId: newRow.getAttribute('data-style-id'),
+                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                poNo: $("#billPoNo-" + id).text(),
+                accessoriesItemType: newRow.getAttribute('data-item-type'),
+                accessoriesItemId: newRow.getAttribute('data-accessories-item-id'),
+                colorId: newRow.getAttribute('data-color-id'),
+                unitId: newRow.getAttribute('data-unit-id'),
+                size: $("#billSize-" + id).text(),
+                width: $("#billWidth-" + id).text(),
+                gsm: $("#billGSM-" + id).text(),
+                totalQty: $("#billTotalQty-" + id).val(),
+                cartonQty: $("#billCartonQty-" + id).val() == '' ? 0 : $("#billCartonQty-" + id).val(),
+                price: $("#billPrice-" + id).val(),
+                totalValue: $("#billTotalValue-" + id).text(),
+                userId: userId
+              }
+              styleItems.list.push(item);
+            }
+
+            let editedRowList = $("#billItemList tr.editedRow");
+            length = editedRowList.length;
+
+            for (let i = 0; i < length; i++) {
+              const editedRow = editedRowList[i];
+              const id = editedRow.id.slice(12);
+
+              const item = {
+                autoId: editedRow.getAttribute('data-auto-id'),
+                styleId: editedRow.getAttribute('data-style-id'),
+                itemId: editedRow.getAttribute('data-accessories-item-id'),
+                purchaseOrderId: editedRow.getAttribute('data-purchase-order-id'),
+                quantity: $("#billTotalQty-" + id).val(),
+                price: $("#billPrice-" + id).val(),
+                cartonQty: $("#billCartonQty-" + id).val(),
+                totalValue: $("#billTotalValue-" + id).text(),
+                userId: userId
+              }
+              editedItems.list.push(item);
+            }
+            
+            if (confirm("Are you sure to confirm..")) {
+              $("#loader").show();
+              $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: './billOfEntryEdit',
+                data: {
+                  autoId: billOfEntryAutoId,
+                  masterLCNo: masterLCNo,
+                  invoiceNo: invoiceNo,
+                  billEntryNo: billOfEntryNo,
+                  billEntryDate: billOfEntryDate,
+                  billNo: billNo,
+                  telexReleaseDate: telexReleaseDate,
+                  vesselNo: vesselNo,
+                  etaDate: etaDate,
+                  clearingDate: clearingDate,
+                  shippedOnBoardDate: shippedOnBoardDate,
+                  containerNo: containerNo,
+                  documentReceiveDate: documentReceiveDate,
+                  stuffingDate: stuffingDate,
+                  userId: userId,
+                  itemList: JSON.stringify(styleItems),
+                  editedItemList: JSON.stringify(editedItems)
+                },
+                success: function (data) {
+                  if (data.result == 'success') {
+                    alert("Successfully Submitted");
+                    $("#billItemList").empty();
+                    drawBillItemList(data.billItemList);
+                  } else {
+                    alert("Bill Entry Insertion Failed")
+                  }
+                  $("#loader").hide();
+                }
+              });
+
+            }
+
+          } else {
+            alert("Please Select Bill Of Entry Date...");
+            $("#billOfEntryDate").focus();
+          }
+        } else {
+          alert("Please Enter Bill Of Entry No...");
+          $("#billOfEntryNo").focus();
+        }
+      } else {
+        alert("Please Enter Invoice No...");
+        $("#importInvoiceNo").focus();
+      }
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#importMasterLCNo").focus();
+    }
+  } else {
+    alert("Please Entry Any Accessories/Fabrics Item...");
+    //alert("Please Enter Any Item...");
+  }
+
+}
+
+function billRefreshAction() {
+
+  $("#billOfEntryNo").val('');
+  $("#billBillNo").val('');
+  $("#billContainerNo").val('');
+  $("#billVesselNo").val('');
+  $("#billItemList").empty();
+
+  $("#billSubmitButton").show();
+  $("#billEditButton").hide();
+  $("#billPreviewBtn").hide();
+  $("#loader").hide();
+
 }
 
 function successAlert(message) {
@@ -1250,131 +2583,5 @@ let today = new Date();
 today = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
 document.getElementById("masterDate").value = today;
 document.getElementById("exportShippingDate").value = today;
+document.getElementById("billOfEntryDate").value = today;
 
-// let fakeData = {
-//   "masterLcList": [{
-//     "lcNo": "MLC-38394394",
-//     "buyerId": "1",
-//     "sendBankId": "1",
-//     "receiveBankId": "2",
-//     "beneficiaryBankId": "3",
-//     "throughBankId": "4",
-//     "date": "2020-05-04",
-//     "totalValue": "3000",
-//     "currency": "2",
-//     "maturityDate": "2021-04-02",
-//     "remarks": "remarks test",
-//     "amendmentList": [{
-//       "amendmentNo": "1",
-//       "amendmentDate": "2020-03-10"
-//     }, {
-//       "amendmentNo": "2",
-//       "amendmentDate": "2020-03-11"
-//     }],
-//     "shippingList": [{
-//       "shippingNo": "1",
-//       "exportShippingDate": "2020-03-10",
-//       "shippingMark": "TM-3"
-//     }, {
-//       "shippingNo": "2",
-//       "exportShippingDate": "2020-04-09",
-//       "shippingMark": "GH-23"
-//     }],
-//     "styleList": [{
-//       "autoId": "1",
-//       "styleId": "1",
-//       "styleNo": "A734M",
-//       "quantity": "4",
-//       "unitPrice": "10",
-//       "amount": "40"
-//     }, {
-//       "autoId": "2",
-//       "styleId": "3",
-//       "styleNo": "A7341W",
-//       "quantity": "70",
-//       "unitPrice": "40",
-//       "amount": "2800"
-//     }]
-//   }],
-//   "shippingInfoList": {
-//     "1": {
-//       "exportShippingDate": "2020-03-10",
-//       "shippingMark": "TM-3",
-//       "styleList": [{
-//         "styleId": "1",
-//         "styleNo": "A7340M",
-//         "quantity": "20"
-//       }, {
-//         "styleId": "2",
-//         "styleNo": "A7340J",
-//         "quantity": "30"
-//       }]
-//     },
-//     "2": {
-//       "exportShippingDate": "2020-04-09",
-//       "shippingMark": "GH-22",
-//       "styleList": [{
-//         "styleId": "3",
-//         "styleNo": "A7341W",
-//         "quantity": "80"
-//       }, {
-//         "styleId": "4",
-//         "styleNo": "A7341L",
-//         "quantity": "25"
-//       }]
-
-//     }
-//   },
-//   "amendmentInfoList": {
-//     "1": {
-//       "buyerId": "1",
-//       "sendBankId": "3",
-//       "receiveBankId": "1",
-//       "beneficiaryBankId": "4",
-//       "throughBankId": "2",
-//       "date": "2020-03-10",
-//       "totalValue": "3950",
-//       "currency": "1",
-//       "maturityDate": "2021-08-12",
-//       "remarks": "Amendment Remarks",
-//       "styleList": [{
-//         "styleId": "1",
-//         "styleNo": "A7340M",
-//         "quantity": "90",
-//         "unitPrice": "40",
-//         "amount": "3600"
-//       }, {
-//         "styleId": "2",
-//         "styleNo": "A7340J",
-//         "quantity": "7",
-//         "unitPrice": "50",
-//         "amount": "350"
-//       }]
-//     },
-//     "2": {
-//       "buyerId": "1",
-//       "sendBankId": "2",
-//       "receiveBankId": "4",
-//       "beneficiaryBankId": "3",
-//       "throughBankId": "1",
-//       "date": "2021-03-11",
-//       "totalValue": "8000",
-//       "currency": "1",
-//       "maturityDate": "2021-08-12",
-//       "remarks": "Amendment Remarks",
-//       "styleList": [{
-//         "styleId": "3",
-//         "styleNo": "A7341W",
-//         "quantity": "150",
-//         "unitPrice": "20",
-//         "amount": "3000"
-//       }, {
-//         "styleId": "4",
-//         "styleNo": "A7341L",
-//         "quantity": "200",
-//         "unitPrice": "25",
-//         "amount": "5000"
-//       }]
-//     }
-//   }
-// }

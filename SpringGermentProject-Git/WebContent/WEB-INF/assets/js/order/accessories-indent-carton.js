@@ -34,13 +34,14 @@ window.onload = () => {
 function buyerWisePoLoad() {
 	let buyerId = $("#buyerName").val();
 	if (buyerId != 0) {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
 			url: './buyerWisePoLoad/' + buyerId,
 			success: function (data) {
 				loadPoNo(data.result);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -117,7 +118,7 @@ function loadOrderQty(size) {
 
 
 	if (style != 0 && buyerorderid != '0' || item != '0' || color != '0') {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -133,6 +134,7 @@ function loadOrderQty(size) {
 			success: function (data) {
 
 				setOrder(data.size)
+				$("#loader").hide();
 
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -171,7 +173,7 @@ function styleItemColorWiseSize() {
 	let item = $("#itemName").val();
 
 	if (style != 0 && buyerorderid != '0' || item != '0' || color != '0') {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -184,6 +186,7 @@ function styleItemColorWiseSize() {
 			},
 			success: function (data) {
 				LoadSize(data.size);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -234,6 +237,7 @@ function poWiseStyles() {
 	let po = $("#purchaseOrder").val();
 	//conosle.log("po " + po)
 	if (po != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -243,6 +247,7 @@ function poWiseStyles() {
 			success: function (data) {
 				//conosle.log("dt " + data.result)
 				loadStyles(data.result);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -290,6 +295,7 @@ function styleWiseItems() {
 	let styleId = $("#styleNo").val();
 
 	if (styleId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -309,6 +315,7 @@ function styleWiseItems() {
 				$('#itemName').selectpicker('refresh');
 				$("#itemName").prop("selectedIndex", 1).change();
 				itemId = 0;
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -341,7 +348,7 @@ function styleItemsWiseColor() {
 
 	//conosle.log("style " + style)
 	if (styleId != 0) {
-		console.log(`'${poId}'`, `'${styleId}'`);
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -370,7 +377,7 @@ function styleItemsWiseColor() {
 				$("#shippingMark").html(options);
 				$('#shippingMark').selectpicker('refresh');
 				$('#shippingMark').val(shippingMarkForSet).change();
-
+				$("#loader").hide();
 			}
 		});
 
@@ -392,9 +399,8 @@ function shipping() {
 	let item = $("#itemName").val();
 
 	//conosle.log("Po " + po + " style " + style + " item " + item)
-
-
 	if (po != '' && style != '' && item != '') {
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -403,6 +409,7 @@ function shipping() {
 			},
 			success: function (data) {
 				loadShippingMarks(data);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -485,11 +492,9 @@ function SizeWiseQty() {
 	} else {
 		type = 2;
 	}
-
-
 	//conosle.log("style " + style)
 	if (style != 0) {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -497,7 +502,8 @@ function SizeWiseQty() {
 			data: {
 			},
 			success: function (data) {
-				setOrder(data.size)
+				setOrder(data.size);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -664,7 +670,7 @@ function editAccessoriesCarton() {
 															$("#btnAdd").show();
 															$("#btnEdit").hide();
 														}else{
-															console.log(autoId,indentId,buyerId,purchaseOrder,styleId,itemId,colorId,shippingMark,accessoriesItemId,sizeId,cartonSize,orderQty,length1,width1,height1,add1,add2,ply,type,unitId,divideBy,cbm,totalQty,userId);
+															$("#loader").show();
 															$.ajax({
 																type: 'POST',
 																dataType: 'json',
@@ -741,6 +747,7 @@ function editAccessoriesCarton() {
 																	}
 										  
 																  }
+																  $("#loader").hide();
 																}
 															  });
 														}
@@ -990,6 +997,7 @@ function deleteIndent(autoId, indentType) {
 		if (indentType == 'newIndent') {
 			$("#row-" + autoId).remove();
 		} else {
+			$("#loader").show();
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -1005,6 +1013,7 @@ function deleteIndent(autoId, indentType) {
 					} else {
 						warningAlert("Something Wrong..");
 					}
+					$("#loader").hide();
 				}
 			});
 		}
@@ -1060,7 +1069,7 @@ function confirmAction() {
 
 				cartonItems.list.push(indent);
 			})
-
+			$("#loader").show();
 			$.ajax({
 				type: 'POST',
 				dataType: 'json',
@@ -1077,7 +1086,7 @@ function confirmAction() {
 					} else {
 						alert("Incomplete...Something Wrong");
 					}
-
+					$("#loader").hide();
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");
@@ -1120,7 +1129,7 @@ function cartonIndentReport() {
   }
 
 function searchIndent(indentId) {
-
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -1157,6 +1166,7 @@ function searchIndent(indentId) {
 			$("#cartonIndentId").text(data.cartonIndentList[0].indentId);
 			$("#indentId").val(data.cartonIndentList[0].indentId);
 			$("#exampleModal").modal('hide');
+			$("#loader").hide();
 		}
 	});
 }
@@ -1191,6 +1201,7 @@ function saveAccessoriesCarton() {
 			if (item != '0') {
 				if (itemColor != '0') {
 					if (accessoriesItem != '0') {
+						$("#loader").show();
 						$.ajax({
 							type: 'POST',
 							dataType: 'json',
@@ -1222,6 +1233,7 @@ function saveAccessoriesCarton() {
 								//alert(data);
 								$("#dataList").empty();
 								$("#dataList").append(AccessoriesCartonDataShowInTable(data.result));
+								$("#loader").hide();
 							},
 							error: function (jqXHR, textStatus, errorThrown) {
 								//alert("Server Error");
@@ -1296,12 +1308,14 @@ function drawRowDataCartonTable(rowData, c) {
 
 
 function accessoriesCartonItemSet(id) {
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
 		url: './accessoriesCartonItemSet/' + id,
 		success: function (data) {
 			setAccessoriesItemCartonDetails(data.result);
+			$("#loader").hide();
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			//alert("Server Error");

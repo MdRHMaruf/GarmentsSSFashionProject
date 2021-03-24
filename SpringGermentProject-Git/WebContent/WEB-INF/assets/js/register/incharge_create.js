@@ -8,6 +8,7 @@ window.onload = ()=>{
 function factoryWiseDepartmentLoad() {
   const factoryId = $("#factoryName").val();
   if (factoryId != 0) {
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -25,6 +26,7 @@ function factoryWiseDepartmentLoad() {
         document.getElementById("departmentName").innerHTML = options;
         document.getElementById("departmentName").value = departmentIdForSet;
         departmentIdForSet = 0;
+        $("#loader").hide();
       }
     });
   }
@@ -48,6 +50,7 @@ function saveAction() {
   if (name != '') {
     if(factoryId != 0){
       if(depId != 0){
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -77,6 +80,7 @@ function saveAction() {
               $("#dataList").append(drawDataTable(data.result));
     
             }
+            $("#loader").hide();
           }
         });
       }else{
@@ -110,6 +114,7 @@ function editAction() {
   if (name != '') {
     if(factoryId != 0){
       if(depId != 0){
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -139,6 +144,7 @@ function editAction() {
               $("#dataList").append(drawDataTable(data.result));
     
             }
+            $("#loader").hide();
           }
         });
       }else{

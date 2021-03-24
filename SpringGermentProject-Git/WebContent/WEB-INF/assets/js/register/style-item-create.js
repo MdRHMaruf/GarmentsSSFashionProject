@@ -10,6 +10,7 @@ function saveAction() {
   let userId = $("#userId").val();
 
   if (styleItemName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -32,6 +33,7 @@ function saveAction() {
           $("#dataList").append(drawDataTable(data.result));
 
         }
+        $("#loader").hide();
       }
     });
   } else {
@@ -47,6 +49,7 @@ function editAction() {
   let userId = $("#userId").val();
 
   if (styleItemName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -69,6 +72,7 @@ function editAction() {
           $("#dataList").append(drawDataTable(data.result));
 
         }
+        $("#loader").hide();
       }
     });
   } else {

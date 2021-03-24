@@ -283,6 +283,9 @@
 			</p>
 		</div>
 		<hr class="my-1">
+		<div class='w-25'>
+			<input id="indentListSearch" type="text" class="form-control-sm" placeholder="Search Here Anything....">
+		</div>
 		<div class="row mt-1">
 			<div style="overflow: auto; max-height: 300px;"
 				class="col-sm-12 px-1 table-responsive">

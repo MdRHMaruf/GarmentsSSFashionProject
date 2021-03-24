@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccessoriesIndent" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2b2a924-bedf-466f-811f-a9906dcece05">
 	<property name="ireport.zoom" value="1.2100000000000009"/>
 	<property name="ireport.x" value="352"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.AINo,a.PurchaseOrder,a.ShippingMarks,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName,(select colorName from tbColors where ColorId=a.ColorId) as Color,ISNULL((select name from tbbrands where id=a.IndentBrandId),'') as BrandName,(select ItemName from TbAccessoriesItem where Itemid=a.accessoriesItemId) as AccessoriesName,a.accessoriesSize,(select SizeName from tbStyleSize where id=a.size) as SizeName,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.TotalQty,(select Signature from TbMerchendiserInfo where MUserId=a.IndentPostBy) as Signatur from tbAccessoriesIndent a where AiNo ='4' order by a.ColorId,a.accessoriesItemId,a.size"]]></defaultValueExpression>
 	</parameter>
@@ -23,6 +23,32 @@
 	<field name="TotalQty" class="java.math.BigDecimal"/>
 	<field name="RequireUnitQty" class="java.lang.Double"/>
 	<variable name="sl" class="java.lang.String"/>
+	<variable name="subTotal" class="java.lang.Double" resetType="Group" resetGroup="colorSize" calculation="Sum">
+		<variableExpression><![CDATA[$F{RequireUnitQty}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="rowCount" class="java.lang.Integer" resetType="Group" resetGroup="colorSize" calculation="Count">
+		<variableExpression><![CDATA[$V{rowCount}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="colorSize">
+		<groupExpression><![CDATA[$F{Color}+$F{accessoriesSize}+$F{AccessoriesName}]]></groupExpression>
+		<groupFooter>
+			<band height="14">
+				<printWhenExpression><![CDATA[$V{rowCount}>1?true:false]]></printWhenExpression>
+				<textField pattern="#,##0.00">
+					<reportElement x="669" y="0" width="81" height="14" uuid="777ec3c0-cfa7-4689-b08c-6982a6dac0d6"/>
+					<textElement textAlignment="Right"/>
+					<textFieldExpression><![CDATA[$V{subTotal}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="609" y="0" width="59" height="14" uuid="2837386b-f6f5-4c57-9f45-db5c4f4cc61f"/>
+					<textElement textAlignment="Right"/>
+					<text><![CDATA[Total=]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
 	<background>
 		<band splitType="Stretch"/>
 	</background>

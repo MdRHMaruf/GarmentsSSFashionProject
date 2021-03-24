@@ -17,6 +17,7 @@ function saveAction() {
   var userId = $("#userId").val();
 
   if (employeeCode != '' && employeeName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -45,6 +46,8 @@ function saveAction() {
           $("#empList").empty();
 			allEmployee();
         }
+
+        $("#loader").hide();
       }
     });
   } else {
@@ -66,6 +69,7 @@ function editAction() {
   var userId = $("#userId").val();
 
   //if (designation != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -94,6 +98,8 @@ function editAction() {
          /* $("#designationList").append(drawDataTable(data.result));*/
 			allEmployee();
         }
+
+        $("#loader").hide();
       }
     });
   //} else {

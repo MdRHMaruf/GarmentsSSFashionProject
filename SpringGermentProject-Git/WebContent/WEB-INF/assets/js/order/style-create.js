@@ -55,7 +55,7 @@ function btnsaveAction(v) {
 
 	var form = $('#myForm')[0];
 	var data = new FormData(form);
-
+	$("#loader").show();
 	$.ajax({
 		url: './btnSaveAction',
 		method: "POST",
@@ -63,6 +63,7 @@ function btnsaveAction(v) {
 		data: data,
 		success: function (data) {
 			alert(data);
+			$("#loader").hide();
 		},
 		error: function (e) {
 			alert("ERROR : ", e);
@@ -108,9 +109,6 @@ function refreshAction(){
 }
 
 function getImage(id) {
-
-
-
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -119,16 +117,9 @@ function getImage(id) {
 			styleItemAutoId: id
 		},
 		success: function (data) {
-
-
-
 			$('#blahFront').attr('src', "data:image/png;base64," + data[0].frontimage).width(150).height(200);
 			$('#blahBack').attr('src', "data:image/png;base64," + data[0].backImage).width(150).height(200);
 			//document.getElementById('signnatureSet').src="data:image/jpeg;base64,"+data;
-
-
-
-
 		}
 	});
 

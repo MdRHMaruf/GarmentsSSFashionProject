@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import pg.dao.RegisterDao;
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.Bank;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
@@ -23,6 +24,7 @@ import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
 import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.Notifyer;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
@@ -493,6 +495,36 @@ public class RegisterServiceImpl implements RegisterService{
 		// TODO Auto-generated method stub
 		return registerDao.getAllBuyers(userId);
 	}
+	
+	@Override
+	public boolean saveNotifyer(Notifyer notifyer) {
+		// TODO Auto-generated method stub
+		return registerDao.saveNotifyer(notifyer);
+	}
+
+	@Override
+	public boolean editNotifyer(Notifyer notifyer) {
+		// TODO Auto-generated method stub
+		return registerDao.editNotifyer(notifyer);
+	}
+
+	@Override
+	public Notifyer getNotifyerInfo(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.getNotifyerInfo(id);
+	}
+
+	@Override
+	public List<Notifyer> getNotifyerList() {
+		// TODO Auto-generated method stub
+		return registerDao.getNotifyerList();
+	}
+
+	@Override
+	public List<Notifyer> getNotifyerListByBuyerId(String buyerId) {
+		// TODO Auto-generated method stub
+		return registerDao.getNotifyerListByBuyerId(buyerId);
+	}
 
 	@Override
 	public String maxSupplierId() {
@@ -749,5 +781,31 @@ public class RegisterServiceImpl implements RegisterService{
 		// TODO Auto-generated method stub
 		return registerDao.getFactoryWiseDepartment(factoryId);
 	}
+
+	@Override
+	public boolean saveBank(Bank bank) {
+		// TODO Auto-generated method stub
+		return registerDao.saveBank(bank);
+	}
+
+	@Override
+	public boolean editBank(Bank bank) {
+		// TODO Auto-generated method stub
+		return registerDao.editBank(bank);
+	}
+
+	@Override
+	public Bank getBankInfo(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.getBankInfo(id);
+	}
+
+	@Override
+	public List<Bank> getBankList() {
+		// TODO Auto-generated method stub
+		return registerDao.getBankList();
+	}
+
+	
 
 }

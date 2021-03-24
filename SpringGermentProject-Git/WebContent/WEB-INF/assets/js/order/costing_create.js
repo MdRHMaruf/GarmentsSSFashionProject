@@ -36,8 +36,8 @@ function itemWiseCostingReport(styleId, itemId,costingNo) {
 
 function styleWiseItemLoad() {
   let styleId = $("#styleName").val();
-
   if (styleId != 0) {
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -57,6 +57,7 @@ function styleWiseItemLoad() {
         $('#itemName').selectpicker('refresh');
         $("#itemName").prop("selectedIndex", 1).change();
         itemIdForSet = 0;
+        $("#loader").hide();
       }
     });
   } else {
@@ -73,6 +74,7 @@ function typeWiseParticularLoad() {
   let type = $("#particularType").val();
 
   if (type != 0) {
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -92,6 +94,7 @@ function typeWiseParticularLoad() {
         $('#particularName').selectpicker('refresh');
         $('#particularName').val(particularItemIdForSet).change();
         particularItemIdForSet = 0;
+        $("#loader").hide();
       }
     });
   } else {
@@ -128,6 +131,7 @@ function loadCostingOnStyleChange() {
   let costingNo = $("#costingNo").val();
   $("#dataList").empty();
   if (styleId != 0 && itemId != 0) {
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -154,6 +158,7 @@ function loadCostingOnStyleChange() {
             }
           }
         }
+        $("#loader").hide();
       }
     });
   }
@@ -162,6 +167,7 @@ function loadCostingOnStyleChange() {
 function buyerWiseCostingLoad(){
   let buyerId = $("#buyerName").val();
   let userId = $("#userId").val();
+  $("#loader").show();
   $.ajax({
     type: 'POST',
     dataType: 'json',
@@ -173,7 +179,7 @@ function buyerWiseCostingLoad(){
     success: function (data) {
       $("#groupCostingList").empty();
       $("#groupCostingList").append(drawGroupCostingList(data.result));
-
+      $("#loader").hide();
     }
   });
 }
@@ -206,6 +212,7 @@ function cloningCosting(costingNo,oldStyleId, oldItemId) {
   let newItemId = $("#itemName").val();
   let newItemName = $("#itemName option:selected").text();
   let userId = $("#userId").val();
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -293,6 +300,7 @@ function cloningCosting(costingNo,oldStyleId, oldItemId) {
         }
         $("#cloneModal").modal('hide');
       }
+      $("#loader").hide();
     }
   });
 }
@@ -454,6 +462,7 @@ $("#btnNewCosting").click(() => {
       }
       costingList = costingList.slice(0, -1);
       if (confirm("Are you sure to confirm..")) {
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -478,6 +487,7 @@ $("#btnNewCosting").click(() => {
                      
               sessionStorage.setItem("pendingCosting",false);
             }
+            $("#loader").hide();
           }
         });
       }
@@ -525,6 +535,7 @@ $("#btnEditCosting").click(() => {
       }
       costingList = costingList.slice(0, -1);
       if (confirm("Are you sure to confirm..")) {
+        $("#loader").show();
         $.ajax({
           type: 'POST',
           dataType: 'json',
@@ -546,6 +557,7 @@ $("#btnEditCosting").click(() => {
                      
               sessionStorage.setItem("pendingCosting",false);
             }
+            $("#loader").hide();
           }
         });
       }
@@ -643,6 +655,7 @@ function editAction() {
 
               } else {
                 let costingNo = $("#costingNo").val();
+                $("#loader").show();
                 $.ajax({
                   type: 'POST',
                   dataType: 'json',
@@ -683,6 +696,7 @@ function editAction() {
                           $("#dataList").append(drawSessionDataTable(pendingCosting.itemList));
                         }
                       }
+                      $("#loader").hide();
                     }
                   }
                 });
@@ -793,6 +807,7 @@ function costingItemSet(autoId, itemType) {
     $("#unitPrice").val($("#unitPrice-" + autoId).text());
   } else {
     $("#itemType").val("old");
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -826,6 +841,7 @@ function costingItemSet(autoId, itemType) {
           $("#unitPrice").val(costing.unitPrice);
 
         }
+        $("#loader").hide();
       }
     });
   }
@@ -846,6 +862,7 @@ function deleteCostingItem(autoId, rowType, styleId, itemId) {
       $("#row-" + autoId).remove();
     } else {
       let costingNo = $("#costingNo").val();
+      $("#loader").show();
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -877,6 +894,7 @@ function deleteCostingItem(autoId, rowType, styleId, itemId) {
               }
             }
           }
+          $("#loader").hide();
         }
       });
     }

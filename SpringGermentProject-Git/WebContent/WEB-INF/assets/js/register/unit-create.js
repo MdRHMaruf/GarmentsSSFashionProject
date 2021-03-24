@@ -11,6 +11,7 @@ function saveAction() {
   let userId = $("#userId").val();
 
   if (unitName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -31,8 +32,8 @@ function saveAction() {
 
           $("#dataList").empty();
           $("#dataList").append(drawDataTable(data.result));
-
         }
+        $("#loader").hide();
       }
     });
   } else {
@@ -48,6 +49,7 @@ function editAction() {
   let userId = $("#userId").val();
 
   if (unitName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
@@ -68,8 +70,8 @@ function editAction() {
 
           $("#dataList").empty();
           $("#dataList").append(drawDataTable(data.result));
-
         }
+        $("#loader").hide();
       }
     });
   } else {
