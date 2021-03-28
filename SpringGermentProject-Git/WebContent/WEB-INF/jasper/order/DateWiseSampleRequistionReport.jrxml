@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleRequistionReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="377a337c-4aa5-44a9-be36-095e611eeb74">
-	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.zoom" value="0.8264462809917368"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="10"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.sampleReqId,s.Name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a join tbSampleRequisition b on a.sampleReqId=b.sampleReqId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id join TbSampleTypeInfo s on s.AutoId=a.SampleTypeId where a.sampleReqId='1' group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId "]]></defaultValueExpression>
 	</parameter>
@@ -90,9 +90,9 @@ order by a.sampleReqId,a.sizeGroupId]]>
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="86" splitType="Stretch">
+		<band height="40" splitType="Stretch">
 			<subreport>
-				<reportElement x="0" y="72" width="799" height="10" uuid="f50c8112-9f95-4085-af58-4fdbb1dde554"/>
+				<reportElement x="0" y="38" width="799" height="1" uuid="f50c8112-9f95-4085-af58-4fdbb1dde554"/>
 				<subreportParameter name="sampleReqId">
 					<subreportParameterExpression><![CDATA[$F{sampleReqId}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -102,68 +102,69 @@ order by a.sampleReqId,a.sizeGroupId]]>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SampleRequsitionSize.jasper"]]></subreportExpression>
 			</subreport>
-			<textField>
-				<reportElement x="88" y="35" width="230" height="14" uuid="491b3856-dea0-4a52-8ca8-79e7de396a11"/>
-				<textFieldExpression><![CDATA[$F{dateLine}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="5" width="70" height="14" uuid="c098948a-d854-47b2-9fb4-6015481d3f64"/>
-				<text><![CDATA[Style No]]></text>
-			</staticText>
-			<line>
-				<reportElement x="83" y="5" width="1" height="63" uuid="8294fd54-58ec-439e-aca4-92f0d19c8bc4"/>
-			</line>
 			<rectangle>
-				<reportElement x="10" y="4" width="309" height="65" uuid="9cc0600f-8c74-4cf8-a30a-bb1b915d9933"/>
+				<reportElement x="624" y="3" width="170" height="30" uuid="6d136e10-a2ec-4b1b-b59b-335d590d6d2b"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="12" y="36" width="69" height="14" uuid="2e2145ee-8ce4-4bc7-8e37-fc15810176d3"/>
-				<text><![CDATA[Dilivery Date]]></text>
+				<reportElement x="21" y="5" width="70" height="14" uuid="05354a8b-9797-42fe-a9b5-ae39850dc425"/>
+				<text><![CDATA[Style No]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="87" y="5" width="232" height="14" uuid="4f281ad0-7b61-4834-96c0-bfd25408f532"/>
-				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="87" y="37" width="195" height="13" uuid="80c6e259-395f-4b8c-b8e4-217d200df7af"/>
-				<textFieldExpression><![CDATA[$F{dateLine}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="20" width="70" height="14" uuid="51196a73-2139-4684-81e0-bee9d5ceb7b3"/>
-				<text><![CDATA[Item Name]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="87" y="21" width="232" height="14" uuid="bee47a33-be71-4bf0-aff4-6d896047631f"/>
+			<textField>
+				<reportElement x="96" y="21" width="164" height="14" uuid="c400ebaa-e6ad-4c65-afe4-48d2f3881896"/>
 				<textFieldExpression><![CDATA[$F{itemname}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="88" y="51" width="230" height="14" uuid="d96e12bc-7748-4499-95a5-24c86d3d2980"/>
+			<staticText>
+				<reportElement x="625" y="17" width="69" height="14" uuid="e7b4b025-f5f5-4bfa-a282-b526d26454c1"/>
+				<text><![CDATA[Handover Date]]></text>
+			</staticText>
+			<line>
+				<reportElement x="92" y="5" width="1" height="30" uuid="cdf2a699-b62e-4013-b578-aa67b74d3759"/>
+			</line>
+			<textField>
+				<reportElement x="698" y="17" width="96" height="14" uuid="64606686-6026-4782-a812-031ccf1318f0"/>
 				<textFieldExpression><![CDATA[$F{samplerequestdate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="12" y="51" width="69" height="14" uuid="b6e86cc4-1e98-4231-b554-39f77e25fb92"/>
-				<text><![CDATA[Handover Date]]></text>
+				<reportElement x="21" y="20" width="70" height="14" uuid="d8d5a697-3d09-40f6-8532-3308f0550e4b"/>
+				<text><![CDATA[Item Name]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="96" y="5" width="164" height="14" uuid="ef1bf089-72ff-4c69-bb5b-c0bf888c01de"/>
+				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="19" y="4" width="241" height="31" uuid="3a9ba7ec-82eb-435b-9093-7b820b0c632a"/>
+			</rectangle>
+			<line>
+				<reportElement x="696" y="3" width="1" height="29" uuid="20922501-cea8-4536-9215-4368817d1206"/>
+			</line>
 			<staticText>
-				<reportElement x="12" y="5" width="70" height="14" uuid="c34bcde7-f06b-406d-8fff-091914bc3243"/>
-				<text><![CDATA[Stye No]]></text>
+				<reportElement x="625" y="4" width="69" height="14" uuid="271d5445-8f60-4d55-b61c-09f766dd9979"/>
+				<text><![CDATA[Dilivery Date]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="699" y="3" width="95" height="14" uuid="d9cea2fe-929c-4b98-abde-4fc1177d7584"/>
+				<textFieldExpression><![CDATA[$F{dateLine}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="82" y="5" width="5" height="14" uuid="f19bcfc9-a03e-4dc3-ab3d-2cdfec1847c5"/>
-				<text><![CDATA[:]]></text>
+				<reportElement x="21" y="5" width="70" height="14" uuid="fdfd88e1-e845-4d03-8359-f1ed5eb3c46f"/>
+				<text><![CDATA[Style No]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="96" y="21" width="164" height="14" uuid="187e375c-424b-484c-bf29-eb5546e34da0"/>
+				<textFieldExpression><![CDATA[$F{itemname}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="82" y="20" width="5" height="14" uuid="25d21737-6591-4f9e-ac6e-2aa76dfd80b5"/>
-				<text><![CDATA[:]]></text>
+				<reportElement x="21" y="20" width="70" height="14" uuid="027cd9ae-1c43-47b3-ab2b-9f0ea8a81f99"/>
+				<text><![CDATA[Item Name]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="81" y="36" width="5" height="14" uuid="c88ecd69-77c9-4116-80db-9537aa9ded56"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="81" y="51" width="5" height="14" uuid="6eb8b43d-c6c4-4c04-8e0c-7a017ecb0433"/>
-				<text><![CDATA[:]]></text>
-			</staticText>
+			<textField>
+				<reportElement x="96" y="5" width="164" height="14" uuid="092cafc4-66e1-44fb-a3d5-78114d83bf57"/>
+				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="93" y="5" width="1" height="29" uuid="db000787-661b-42f7-b6a2-85c4e2fad163"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
