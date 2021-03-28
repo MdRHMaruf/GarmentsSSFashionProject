@@ -39,7 +39,7 @@ String userName=(String) request.getAttribute("userName");
 
 							<div class="row ">
 								<h2>
-									<b>Germents Item</b>
+									<b>Garments Item</b>
 								</h2>
 							</div>
 							<hr>

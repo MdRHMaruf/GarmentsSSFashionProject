@@ -26,13 +26,14 @@ window.onload = () => {
 function buyerWisePoLoad() {
 	let buyerId = $("#buyerName").val();
 	if (buyerId != 0) {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
 			url: './buyerWisePoLoad/' + buyerId,
 			success: function (data) {
 				loadPoNo(data.result);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -77,7 +78,7 @@ function poWiseStyles() {
 	let po = $("#purchaseOrder").val();
 
 	if (po != 0) {
-
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -85,6 +86,7 @@ function poWiseStyles() {
 			data: {},
 			success: function (data) {
 				loadStyles(data.result);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -131,6 +133,7 @@ function styleWiseItemLoad() {
 	let styleId = $("#styleNo").val();
 
 	if (styleId != 0) {
+		$("#loader").hide();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -150,6 +153,7 @@ function styleWiseItemLoad() {
 				$('#itemName').selectpicker('refresh');
 				$("#itemName").prop("selectedIndex", 1).change();
 				itemId = 0;
+				$("#loader").show();
 			}
 		});
 	} else {
@@ -169,6 +173,7 @@ function styleItemsWiseColor() {
 
 
 	if (item != '0') {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -180,6 +185,7 @@ function styleItemsWiseColor() {
 			},
 			success: function (data) {
 				loadItemsWiseColor(data.result);
+				$("#loader").hide();
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				//alert("Server Error");
@@ -229,9 +235,8 @@ function styleItemWiseColorSizeLoad() {
 	let itemId = $("#itemName").val();
 	let colorName = $("#colorName").val();
 
-
-
 	if (styleId != 0 && itemId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -254,6 +259,7 @@ function styleItemWiseColorSizeLoad() {
 				$('.selectpicker').selectpicker('refresh');
 				$('#size').val(sizeId).change();
 				sizeId = 0;
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -476,6 +482,7 @@ function itemEditAction() {
 											}
 										}
 									} else {
+										$("#loader").show();
 										$.ajax({
 											type: 'GET',
 											dataType: 'json',
@@ -511,6 +518,7 @@ function itemEditAction() {
 														}
 													}
 												}
+												$("#loader").hide();
 											}
 										});
 									}
@@ -559,6 +567,7 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 
 			$("#row-" + autoId).remove();
 		} else {
+			$("#loader").show();
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -588,6 +597,7 @@ function deleteParcelItem(autoId, rowType, styleId, itemId) {
 								drawSessionDataTable(pendingParcelItem.itemList);
 							}
 						}
+						$("#loader").hide();
 					}
 				}
 			});
@@ -677,6 +687,7 @@ function insertParcel() {
 
 
 	if (styleNo != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -706,6 +717,7 @@ function insertParcel() {
 				} else {
 					alert("Parcel Insertion Failed")
 				}
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -773,6 +785,7 @@ $("#btnConfirm").click(() => {
 							//parcelItemList = parcelItemList.slice(0, -1);
 							if (confirm("Are you sure to confirm..")) {
 								if(parcelId == ""){
+									$("#loader").show();
 									$.ajax({
 										type: 'POST',
 										dataType: 'json',
@@ -801,9 +814,11 @@ $("#btnConfirm").click(() => {
 											} else {
 												alert("Parcel Insertion Failed")
 											}
+											$("#loader").hide();
 										}
 									});
 								}else{
+									$("#loader").show();
 									$.ajax({
 										type: 'POST',
 										dataType: 'json',
@@ -833,6 +848,7 @@ $("#btnConfirm").click(() => {
 											} else {
 												alert("Parcel Insertion Failed")
 											}
+											$("#loader").hide();
 										}
 									});
 								}
@@ -867,6 +883,7 @@ $("#btnConfirm").click(() => {
 
 
 function getParcelDetails(autoId) {
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -886,6 +903,7 @@ function getParcelDetails(autoId) {
 				}
 			}
 			$("#exampleModal").modal('hide');
+			$("#loader").hide();
 		}
 	});
 
@@ -937,6 +955,7 @@ function editParcel() {
 
 
 	if (styleNo != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -967,6 +986,7 @@ function editParcel() {
 				} else {
 					alert("Parcel Update Failed")
 				}
+				$("#loader").hide();
 			}
 		});
 	} else {

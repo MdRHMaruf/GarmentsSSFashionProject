@@ -7,7 +7,7 @@ let isFind = false;
 let unitList = {};
 window.onload = () => {
   document.title = "Fabrics Indent";
-
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -25,6 +25,7 @@ window.onload = () => {
 
       $('#unit').selectpicker('refresh');
       $('#unit').val('0').change();
+      $("#loader").hide();
     }
   });
 }
@@ -37,6 +38,7 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
     });
     poList = poList.slice(0, -1);
     let selectedStyleId = $("#styleNo").val();
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -56,7 +58,7 @@ $('#purchaseOrder').on('hide.bs.select', function (e, clickedIndex, isSelected, 
         $("#styleNo").html(options);
         $('#styleNo').selectpicker('refresh');
         $("#styleNo").selectpicker('val', selectedStyleId).change();
-
+        $("#loader").hide();
       }
     });
   }
@@ -77,6 +79,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
         poList += `'${id}',`;
       });
       poList = poList.slice(0, -1);
+      $("#loader").show();
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -95,16 +98,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
           $("#itemColor").html(options);
           $('#itemColor').selectpicker('refresh');
 
-          /*
-          options = "";
-          let shippingMarkList = data.shippingMarkList;
-          length = shippingMarkList.length;
-          for (let i = 0; i < length; i++) {
-            options += "<option value='" + shippingMarkList[i] + "'>" + shippingMarkList[i] + "</option>";
-          };
-          $("#shippingMark").html(options);
-          $('#shippingMark').selectpicker('refresh');
-          */
+          $("#loader").hide();
         }
       });
     } else {
@@ -129,7 +123,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
         }
       });
     }
-
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -148,7 +142,7 @@ $('#styleNo').on('hide.bs.select', function (e, clickedIndex, isSelected, previo
         $("#itemName").html(options);
         $("#itemName").selectpicker('refresh');
         $('#itemName').selectpicker('selectAll');
-
+        $("#loader").hide();
       }
     });
   }
@@ -217,7 +211,7 @@ $('#itemColor').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
   colorsId = colorsId.slice(0, -1);
 
   if (colorsId.length > 0) {
-
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -232,6 +226,7 @@ $('#itemColor').on('hide.bs.select', function (e, clickedIndex, isSelected, prev
         $("#quantity").val(data.orderQuantity);
         $("#dozen").val(data.dozenQuantity.toFixed(2));
         totalQuantityCalculate();
+        $("#loader").hide();
       }
     });
   } else {
@@ -247,7 +242,7 @@ function setOrderQtyByPOStyleItemColor() {
     let purchaseOrder = $("#purchaseOrder option:selected").text();
     let styleId = $("#styleNo").val();
     let itemId = $("#itemName").val();
-
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -262,6 +257,7 @@ function setOrderQtyByPOStyleItemColor() {
         $("#quantity").val(data.orderQuantity);
         $("#dozen").val(data.dozenQuantity.toFixed(2));
         totalQuantityCalculate();
+        $("#loader").hide();
       }
     });
   } else {
@@ -436,7 +432,7 @@ function confirmAction() {
 
         fabricsItems.list.push(indent);
       })
-
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -453,7 +449,7 @@ function confirmAction() {
           } else {
             alert("Incomplete...Something Wrong");
           }
-
+          $("#loader").hide();
         },
         error: function (jqXHR, textStatus, errorThrown) {
           //alert("Server Error");
@@ -522,6 +518,7 @@ function saveAction() {
                 if (unitId != 0) {
                   if (fabricsColorId != 0) {
                     if (confirm("Are you Sure to Save this Fabrics Indent")) {
+                      $("#loader").show();
                       $.ajax({
                         type: 'POST',
                         dataType: 'json',
@@ -560,6 +557,7 @@ function saveAction() {
                             $("#dataList").append(drawDataTable(data.result));
                             successAlert("Fabrics Indent Item Save Successfully");
                           }
+                          $("#loader").hide();
                         }
                       });
 
@@ -682,7 +680,7 @@ function editAction() {
                     $("#btnAdd").show();
                     $("#btnEdit").hide();
                   } else {
-                    console.log(autoId, indentId, itemId, itemColorId, fabricsId, quantity, consumption)
+                    $("#loader").show();
                     $.ajax({
                       type: 'POST',
                       dataType: 'json',
@@ -757,6 +755,7 @@ function editAction() {
                           }
 
                         }
+                        $("#loader").hide();
                       }
                     });
                   }
@@ -799,6 +798,7 @@ function deleteFabricsIndent(autoId, indentType) {
     if (indentType == 'newIndent') {
       $("#row-" + autoId).remove();
     } else {
+      $("#loader").show();
       $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -814,6 +814,7 @@ function deleteFabricsIndent(autoId, indentType) {
           } else {
             warningAlert("Something Wrong..");
           }
+          $("#loader").hide();
         }
       });
     }
@@ -859,6 +860,7 @@ function fabricIndentReport() {
 }
 
 function searchFabricsIndent(indentId) {
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -892,6 +894,7 @@ function searchFabricsIndent(indentId) {
       $("#indentId").text(data.fabricsIndentList[0].indentId);
       $("#fabricsIndentId").val(data.fabricsIndentList[0].indentId);
       $("#exampleModal").modal('hide');
+      $("#loader").hide();
     }
   });
 }
@@ -982,46 +985,7 @@ function viewFabricsIndent(autoId, indentType) {
   $("#btnAdd").hide();
   $("#btnEdit").show();
 
-  // $.ajax({
-  //   type: 'GET',
-  //   dataType: 'json',
-  //   url: './getFabricsIndent',
-  //   data: {
-  //     autoId: autoId
-  //   },
-  //   success: function (data) {
-  //     if (data.fabricsIndent == "Something Wrong") {
-  //       dangerAlert("Something went wrong");
-  //     } else if (data.fabricsIndent == "duplicate") {
-  //       dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-  //     } else {
-
-  //       isFind = true;
-  //       let indent = data.fabricsIndent;
-  //       styleIdForSet = indent.styleId;
-  //       itemIdForSet = indent.itemId;
-  //       itemColorIdForSet = indent.itemColorId;
-  //       $("#fabricsIndentAutoId").val(indent.autoId);
-  //       $("#fabricsItem").val(indent.fabricsId).change();
-  //       $("#consumption").val(indent.consumption);
-  //       $("#quantity").val(indent.qty);
-  //       $("#dozen").val(indent.dozenQty);
-  //       $("#inPercent").val(indent.inPercent);
-  //       $("#percentQuantity").val(indent.percentQty);
-  //       $("#total").val(indent.totalQty);
-  //       $("#unit").val(indent.unitId).change();
-  //       $("#width").val(indent.width);
-  //       $("#yard").val(indent.yard);
-  //       $("#gsm").val(indent.gsm);
-  //       $("#grandQuantity").val(indent.grandQty.toFixed(2));
-  //       $("#fabricsColor").val(indent.fabricsColorId).change();
-  //       $("#brand").val(indent.brandId).change();
-  //       $("#purchaseOrder").val(indent.purchaseOrder).change();
-  //       $("#btnAdd").hide();
-  //       $("#btnEdit").show();
-  //     }
-  //   }
-  // });
+  
 }
 
 function drawDataTable(data) {

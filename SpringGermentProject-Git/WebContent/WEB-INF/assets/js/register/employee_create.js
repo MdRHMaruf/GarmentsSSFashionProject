@@ -1,11 +1,11 @@
 
-window.onload = ()=>{
+window.onload = () => {
   document.title = "Employee Create";
   allEmployee();
-  
-} 
+
+}
 function saveAction() {
-	
+
   var employeeCode = $("#employeeCode").val();
   var employeeName = $("#employeeName").val();
   var cardNo = $("#cardNo").val();
@@ -17,20 +17,21 @@ function saveAction() {
   var userId = $("#userId").val();
 
   if (employeeCode != '' && employeeName != '') {
+    $("#loader").show();
     $.ajax({
       type: 'POST',
       dataType: 'json',
       url: './saveEmployee',
       data: {
-	
-		employeeCode:employeeCode,
-		employeeName:employeeName,
-		cardNo:cardNo,
-		department:department,
-		designation:designation,
-		line:line,
-		grade:grade,
-		joinDate:joinDate,
+
+        employeeCode: employeeCode,
+        employeeName: employeeName,
+        cardNo: cardNo,
+        department: department,
+        designation: designation,
+        line: line,
+        grade: grade,
+        joinDate: joinDate,
         userId: userId
 
       },
@@ -43,8 +44,10 @@ function saveAction() {
           successAlert("Employee Save Successfully");
 
           $("#empList").empty();
-			allEmployee();
+          allEmployee();
         }
+
+        $("#loader").hide();
       }
     });
   } else {
@@ -54,7 +57,7 @@ function saveAction() {
 
 
 function editAction() {
-	
+
   var employeeCode = $("#employeeCode").val();
   var employeeName = $("#employeeName").val();
   var cardNo = $("#cardNo").val();
@@ -66,38 +69,41 @@ function editAction() {
   var userId = $("#userId").val();
 
   //if (designation != '') {
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: './editEmployee',
-      data: {
-			
-			employeeCode:employeeCode,
-			employeeName:employeeName,
-			cardNo:cardNo,
-			department:department,
-			designation:designation,
-			line:line,
-			grade:grade,
-			joinDate:joinDate,
-	        userId: userId
-      },
-      success: function (data) {
-        if (data.result == "Something Wrong") {
-          dangerAlert("Something went wrong");
-        } else if (data.result == "duplicate") {
-          dangerAlert("Duplicate Employee..This Employee Code Allreary Exist")
-        } else {
-          successAlert("Employee Edit Successfully");
+  $("#loader").show();
+  $.ajax({
+    type: 'POST',
+    dataType: 'json',
+    url: './editEmployee',
+    data: {
 
-          $("#empList").empty();
-         /* $("#designationList").append(drawDataTable(data.result));*/
-			allEmployee();
-        }
+      employeeCode: employeeCode,
+      employeeName: employeeName,
+      cardNo: cardNo,
+      department: department,
+      designation: designation,
+      line: line,
+      grade: grade,
+      joinDate: joinDate,
+      userId: userId
+    },
+    success: function (data) {
+      if (data.result == "Something Wrong") {
+        dangerAlert("Something went wrong");
+      } else if (data.result == "duplicate") {
+        dangerAlert("Duplicate Employee..This Employee Code Allreary Exist")
+      } else {
+        successAlert("Employee Edit Successfully");
+
+        $("#empList").empty();
+        /* $("#designationList").append(drawDataTable(data.result));*/
+        allEmployee();
       }
-    });
+
+      $("#loader").hide();
+    }
+  });
   //} else {
- //   warningAlert("Empty Employee... Please Enter Employee");
+  //   warningAlert("Empty Employee... Please Enter Employee");
   //}
 }
 
@@ -106,68 +112,68 @@ function refreshAction() {
   location.reload();
 }
 
-function allEmployee(){
-	 $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: './allEmployee',
-      data: {
-      },
-     success: function (data) {
-			$("#empList").empty();
-  			patchdata(data.result);
-      }
-    });	
+function allEmployee() {
+  $.ajax({
+    type: 'POST',
+    dataType: 'json',
+    url: './allEmployee',
+    data: {
+    },
+    success: function (data) {
+      $("#empList").empty();
+      patchdata(data.result);
+    }
+  });
 }
 
-function patchdata(data){
-	var rows = [];
-	
-	for (var i = 0; i < data.length; i++) {
-		rows.push(drawRow(data[i],i+1));
+function patchdata(data) {
+  var rows = [];
 
-	}
+  for (var i = 0; i < data.length; i++) {
+    rows.push(drawRow(data[i], i + 1));
 
-	$("#empList").append(rows);
+  }
+
+  $("#empList").append(rows);
 }
 
-function drawRow(rowData,c) {
-	
-	var row = $("<tr />")
-	row.append($("<td>" + c + "</td>"));
-	row.append($("<td>" + rowData.EmployeeName+ "</td>"));
-	row.append($("<td>" + rowData.Department+ "</td>"));
-	row.append($("<td>" + rowData.Designation+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=setData('"+encodeURIComponent(rowData.EmployeeName)+"','"+encodeURIComponent(rowData.DepartmentId)+"','"+encodeURIComponent(rowData.DesignationId)+"','"+encodeURIComponent(rowData.EmployeeCode)+"','"+encodeURIComponent(rowData.CardNo)+"','"+encodeURIComponent(rowData.Line)+"','"+encodeURIComponent(rowData.Grade)+"','"+encodeURIComponent(rowData.JoinDate)+"') style='cursor : pointer;'> </i></td>"));
-	
+function drawRow(rowData, c) {
 
-	return row;
+  var row = $("<tr />")
+  row.append($("<td>" + c + "</td>"));
+  row.append($("<td>" + rowData.EmployeeName + "</td>"));
+  row.append($("<td>" + rowData.Department + "</td>"));
+  row.append($("<td>" + rowData.Designation + "</td>"));
+  row.append($("<td ><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.EmployeeName) + "','" + encodeURIComponent(rowData.DepartmentId) + "','" + encodeURIComponent(rowData.DesignationId) + "','" + encodeURIComponent(rowData.EmployeeCode) + "','" + encodeURIComponent(rowData.CardNo) + "','" + encodeURIComponent(rowData.Line) + "','" + encodeURIComponent(rowData.Grade) + "','" + encodeURIComponent(rowData.JoinDate) + "') style='cursor : pointer;'> </i></td>"));
+
+
+  return row;
 }
 
-function setData(EmployeeName,Department,Designation,EmployeeCode,CardNo,Line,Grade,JoinDate){
-	
-	var EmployeeName = decodeURIComponent(EmployeeName);
-	var Department = decodeURIComponent(Department);
-	var Designation = decodeURIComponent(Designation);
-	
-	var EmployeeCode = decodeURIComponent(EmployeeCode);
-	var CardNo = decodeURIComponent(CardNo);
-	var Line = decodeURIComponent(Line);
-	var Grade = decodeURIComponent(Grade);
-	var JoinDate = decodeURIComponent(JoinDate);
-	
-	$("#employeeName").val(EmployeeName);
-	$("#department").val(Department).change();
-	$("#designation").val(Designation).change();
-	
-	$("#employeeCode").val(EmployeeCode);
-	$("#cardNo").val(CardNo);
-	$("#line").val(Line);
-	$("#grade").val(Grade);
-	$("#joinDate").val(JoinDate);
-	
-	document.getElementById("employeeCode").disabled = true;
-	$("#btnSave").hide();
+function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Line, Grade, JoinDate) {
+
+  var EmployeeName = decodeURIComponent(EmployeeName);
+  var Department = decodeURIComponent(Department);
+  var Designation = decodeURIComponent(Designation);
+
+  var EmployeeCode = decodeURIComponent(EmployeeCode);
+  var CardNo = decodeURIComponent(CardNo);
+  var Line = decodeURIComponent(Line);
+  var Grade = decodeURIComponent(Grade);
+  var JoinDate = decodeURIComponent(JoinDate);
+
+  $("#employeeName").val(EmployeeName);
+  $("#department").val(Department).change();
+  $("#designation").val(Designation).change();
+
+  $("#employeeCode").val(EmployeeCode);
+  $("#cardNo").val(CardNo);
+  $("#line").val(Line);
+  $("#grade").val(Grade);
+  $("#joinDate").val(JoinDate);
+
+  document.getElementById("employeeCode").disabled = true;
+  $("#btnSave").hide();
   $("#btnEdit").show();
 
 }
@@ -187,7 +193,7 @@ function warningAlert(message) {
   var element = $(".alert");
   element.hide();
   element = $(".alert-warning");
-  document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
+  document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> " + message + "..";
   element.show();
   setTimeout(() => {
     element.toggle('fade');
@@ -198,7 +204,7 @@ function dangerAlert(message) {
   var element = $(".alert");
   element.hide();
   element = $(".alert-danger");
-  document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
+  document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> " + message + "..";
   element.show();
   setTimeout(() => {
     element.toggle('fade');

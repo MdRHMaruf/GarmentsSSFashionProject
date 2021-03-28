@@ -6,6 +6,8 @@ import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import pg.Commercial.BillOfEntry;
+import pg.Commercial.ExportLC;
 import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
@@ -104,6 +106,18 @@ public class CommercialServiceImpl implements CommercialService{
 	}
 
 	@Override
+	public boolean importInvoiceUdAdd(String udInfo) {
+		// TODO Auto-generated method stub
+		return commercialDao.importInvoiceUdAdd(udInfo);
+	}
+
+	@Override
+	public JSONArray getImportINvoiceUDList(String importInvoiceNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getImportINvoiceUDList(importInvoiceNo);
+	}
+
+	@Override
 	public boolean insertDeedOfContact(deedOfContacts deedcontact) {
 		// TODO Auto-generated method stub
 		return commercialDao.insertDeedOfContact(deedcontact);
@@ -121,10 +135,64 @@ public class CommercialServiceImpl implements CommercialService{
 		return commercialDao.deedOfContractDetails( id);
 	}
 
-	
+	@Override
+	public boolean billOfEntrySubmit(BillOfEntry billOfEntry) {
+		// TODO Auto-generated method stub
+		return commercialDao.billOfEntrySubmit(billOfEntry);
+	}
 
+	@Override
+	public String billOfEntryEdit(BillOfEntry billOfEntry) {
+		// TODO Auto-generated method stub
+		return commercialDao.billOfEntryEdit(billOfEntry);
+	}
 
-	
+	@Override
+	public List<BillOfEntry> getBillOfEntryList(String masterLCNo, String invoiceNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getBillOfEntryList(masterLCNo, invoiceNo);
+	}
 
+	@Override
+	public BillOfEntry getBillOfEntryInfo(String masterLCNo, String invoiceNo, String billEntryNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getBillOfEntryInfo(masterLCNo, invoiceNo, billEntryNo);
+	}
+
+	@Override
+	public JSONArray getBillOfEntryItems(String billEntryAutoId, String billEntryNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getBillOfEntryItems(billEntryAutoId, billEntryNo);
+	}
+
+	@Override
+	public boolean exportLCSubmit(ExportLC exportLc) {
+		// TODO Auto-generated method stub
+		return commercialDao.exportLCSubmit(exportLc);
+	}
+
+	@Override
+	public String exportLCEdit(ExportLC exportLc) {
+		// TODO Auto-generated method stub
+		return commercialDao.exportLCEdit(exportLc);
+	}
+
+	@Override
+	public List<ExportLC> getExportInvoiceList(String masterLCNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getExportInvoiceList(masterLCNo);
+	}
+
+	@Override
+	public ExportLC getExportLCInfo(String masterLCNo, String exportInvoiceNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getExportLCInfo(masterLCNo, exportInvoiceNo);
+	}
+
+	@Override
+	public JSONArray getExportStyleItems(String exportInvoiceAutoId) {
+		// TODO Auto-generated method stub
+		return commercialDao.getExportStyleItems(exportInvoiceAutoId);
+	}
 
 }

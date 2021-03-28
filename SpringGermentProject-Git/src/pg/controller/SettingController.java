@@ -93,7 +93,13 @@ public class SettingController {
 	}
 
 
-
+	@RequestMapping(value = "/getNotificationList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getNotificationList(String targetId) {
+		
+		JSONObject object = new JSONObject();
+		object.put("notificationList", settingService.getNotificationList(targetId));
+		return object;
+	}
 
 	@RequestMapping(value = "/showModuleWiseMenu/{id}",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getmodulewisemenu(@PathVariable ("id") int id) {
@@ -571,6 +577,12 @@ public class SettingController {
 		
 	}
 
-
+	@RequestMapping(value={"/role_management"})
+	public ModelAndView roleManagement(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("setting/role-management");
+		map.addAttribute("roleList","");
+		map.addAttribute("resourceList","");
+		return view;
+	}
 
 }

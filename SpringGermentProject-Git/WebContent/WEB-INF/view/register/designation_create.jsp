@@ -6,30 +6,34 @@
 <%@page import="pg.model.Module"%>
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
+<jsp:include page="../include/header.jsp" />
 
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
 %>
-
-<jsp:include page="../include/header.jsp" />
-
 <div class="page-wrapper">
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
 			style="display: none;">
-			<p id="successAlert" class="mb-0"><strong>Success!</strong> Particular Item Name Save Successfully..</p>
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Designation Save Successfully..
+			</p>
 		</div>
 		<div class="alert alert-warning alert-dismissible fade show"
 			style="display: none;">
-			<p id="warningAlert" class="mb-0"><strong>Warning!</strong> Particular Item Name Empty.Please Enter Particular Item Name...</p>
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Designation Empty.Please Enter
+				Designation...
+			</p>
 		</div>
 		<div class="alert alert-danger alert-dismissible fade show"
 			style="display: none;">
-			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="particularItemId" value="0">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -39,20 +43,35 @@ String userName=(String) request.getAttribute("userName");
 
 							<div class="row ">
 								<h2>
-									<b>Particular Item Create</b>
+									<b>Designation Create</b>
 								</h2>
 							</div>
 							<hr>
 
 							<div class="form-group">
-								<label for="particularItemName">Particular Item Name:</label> <input type="text"
-									class="form-control" id="particularItemName" name="text">
+								<label for="departmentName">Department Name</label> <select
+									id="departmentName" class="selectpicker form-control"
+									data-live-search="true"
+									data-style="btn-light btn-sm border-secondary form-control-sm">
+									<option>Select Department</option>
+
+									<c:forEach items="${department}" var="department"
+										varStatus="counter">
+										<option id='departmentName' value="${department.departmentId}">${department.departmentName}</option>
+									</c:forEach>
+
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label for="designation">Designation</label> <input type="text"
+									class="form-control-sm" id="designation" name="text">
 							</div>
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
 								onclick="saveAction()">Save</button>
 
-							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
-								style="display: none;">Edit</button>
+							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
+								onclick="editAction()" style="display: none;">Edit</button>
 							<button type="button" id="btnRefresh"
 								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 
@@ -60,7 +79,7 @@ String userName=(String) request.getAttribute("userName");
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 							<div class="input-group my-2">
 								<input type="text" class="form-control"
-									placeholder="Search Particular Item" aria-describedby="findButton"
+									placeholder="Search Designation" aria-describedby="findButton"
 									id="search" name="search">
 								<div class="input-group-append">
 									<button class="btn btn-primary" type="button" id="findButton">
@@ -68,32 +87,34 @@ String userName=(String) request.getAttribute("userName");
 									</button>
 								</div>
 							</div>
+
 							<hr>
-							<div class="row" >
-								<div class="col-sm-12 col-md-12 col-lg-12" style="overflow: auto; max-height: 600px;">
-								<table class="table table-hover table-bordered table-sm" >
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Particular Item Name</th>
-										<th scope="col">edit</th>
-									</tr>
-								</thead>
-								<tbody id="dataList">
-									<c:forEach items="${particularItemList}" var="particularItem"
-													varStatus="counter">
-										<tr>
-											<td>${particularItem.particularItemId}</td>
-											<td id='particularItemName${particularItem.particularItemId}'>${particularItem.particularItemName}</td>
-											<td><i class="fa fa-edit" style="cursor: pointer;" onclick="setData(${particularItem.particularItemId})"> </i></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12"
+									style="overflow: auto; max-height: 600px;">
+									<table class="table table-hover table-bordered table-sm">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Department Name</th>
+												<th scope="col">ID</th>
+												<th scope="col">Designation</th>
+												<th scope="col">Edit</th>
+											</tr>
+										</thead>
+										<tbody id="designationList">
+											<tr>
+
+												
+
+											</tr>
+										</tbody>
+									</table>
 								</div>
-								
+
 							</div>
-							
+
 						</div>
 					</div>
 
@@ -110,4 +131,4 @@ String userName=(String) request.getAttribute("userName");
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/register/particular-item-create.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/register/desgination_create.js"></script>

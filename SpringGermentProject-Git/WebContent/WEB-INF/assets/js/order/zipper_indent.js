@@ -11,6 +11,7 @@ let unitList = {};
 
 window.onload = () => {
 	document.title = "Zipper Indent";
+	$("#loader").show();
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
@@ -21,6 +22,7 @@ window.onload = () => {
 			data.unitList.forEach(unit => {
 				unitList[unit.unitId] = unit;
 			});
+			$("#loader").hide();
 		}
 	});
 
@@ -32,6 +34,7 @@ function buyerWiseStyleLoad() {
 	
 	// alert("buyerId "+buyerId);
 	if (buyerId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -51,7 +54,7 @@ function buyerWiseStyleLoad() {
 				$('.selectpicker').selectpicker('refresh');
 				$('#styleNo').val(styleIdForSet).change();
 				styleIdForSet = 0;
-
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -66,10 +69,7 @@ $('#buyerName').on('change', function (e, clickedIndex, isSelected, previousValu
 	if ($("#buyerName").val().length > 0) {
 		let buyerIdList = $("#buyerName").val();
 		buyerIdList = `'${buyerIdList}'`;
-		// $("#buyerName").val().forEach(id => {
-		// 	buyerIdList += `'${id}',`;
-		// });
-		//buyerIdList = buyerIdList.slice(0, -1);
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -97,7 +97,7 @@ $('#buyerName').on('change', function (e, clickedIndex, isSelected, previousValu
 				};
 				$("#styleNo").html(options);
 				$('#styleNo').selectpicker('refresh');
-
+				$("#loader").hide();
 			}
 		});
 	} else {
@@ -112,11 +112,9 @@ $('#purchaseOrder').on('change', function (e, clickedIndex, isSelected, previous
 	if ($("#purchaseOrder").val().length > 0) {
 		let poList = $("#purchaseOrder").val();
 		poList = `'${poList}'`;
-		// $("#purchaseOrder").val().forEach(po => {
-		// 	poList += `'${po}',`;
-		// });
-		//poList = poList.slice(0, -1);
+		
 		let selectedStyleId = $("#styleNo").val();
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -137,6 +135,7 @@ $('#purchaseOrder').on('change', function (e, clickedIndex, isSelected, previous
 				$('#styleNo').selectpicker('refresh');
 				$("#styleNo").selectpicker('val', selectedStyleId).change();
 				selectedStyleId = 0;
+				$("#loader").hide();
 			}
 		});
 	}
@@ -159,6 +158,7 @@ $('#styleNo').on('change', function (e, clickedIndex, isSelected, previousValue)
 			// 	poList += `'${id}',`;
 			// });
 			// poList = poList.slice(0, -1);
+			$("#loader").show();
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -185,10 +185,11 @@ $('#styleNo').on('change', function (e, clickedIndex, isSelected, previousValue)
 					};
 					$("#shippingMark").html(options);
 					$('#shippingMark').selectpicker('refresh');
-
+					$("#loader").hide();
 				}
 			});
 		} else {
+			$("#loader").show();
 			$.ajax({
 				type: 'GET',
 				dataType: 'json',
@@ -206,11 +207,11 @@ $('#styleNo').on('change', function (e, clickedIndex, isSelected, previousValue)
 
 					$("#purchaseOrder").html(options);
 					$('#purchaseOrder').selectpicker('refresh');
-
+					$("#loader").hide();
 				}
 			});
 		}
-
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
@@ -229,7 +230,7 @@ $('#styleNo').on('change', function (e, clickedIndex, isSelected, previousValue)
 				$("#itemName").html(options);
 				$("#itemName").selectpicker('refresh');
 				$('#itemName').selectpicker('selectAll');
-
+				$("#loader").hide();
 			}
 		});
 	}

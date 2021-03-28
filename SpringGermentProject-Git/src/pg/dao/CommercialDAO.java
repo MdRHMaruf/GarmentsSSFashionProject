@@ -5,6 +5,8 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.springframework.stereotype.Repository;
 
+import pg.Commercial.BillOfEntry;
+import pg.Commercial.ExportLC;
 import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
@@ -29,9 +31,25 @@ public interface CommercialDAO {
 	public List<ImportLC> getImportLCList(String masterLCNo);
 	public ImportLC getImportLCInfo(String masterLCNo, String invoiceNo, String amendmentNo);
 	public JSONArray getImportInvoiceItems(String importInvoiceAutoId);
+	public boolean importInvoiceUdAdd(String udInfo);
+	public JSONArray getImportINvoiceUDList(String importInvoiceNo);
 	
+	//Bill Of Entry
+	public boolean billOfEntrySubmit(BillOfEntry billOfEntry);
+	public String billOfEntryEdit(BillOfEntry billOfEntry);
+	public List<BillOfEntry> getBillOfEntryList(String masterLCNo,String invoiceNo);
+	public BillOfEntry getBillOfEntryInfo(String masterLCNo,String invoiceNo,String billEntryNo);
+	public JSONArray getBillOfEntryItems(String billEntryAutoId,String bollEntryNo);
+	
+	//Export
+	public boolean exportLCSubmit(ExportLC exportLc);
+	public String exportLCEdit(ExportLC exportLc);
+	public List<ExportLC> getExportInvoiceList(String masterLCNo);
+	public ExportLC getExportLCInfo(String masterLCNo,String exportInvoiceNo);
+	public JSONArray getExportStyleItems(String exportInvoiceAutoId);
+	
+	//Deed of contract
 	public boolean insertDeedOfContact(deedOfContacts deedcontact);
-	
 	public List<deedOfContacts> deedOfContractsList();
 	public List<deedOfContacts> deedOfContractDetails(String id);
 

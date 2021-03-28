@@ -469,6 +469,17 @@ function sampleCadReport(id) {
 }
 
 
+function sampleCadDateWiseReport(){
+	let date = $("#sampleCadSearchDate").val();
+
+	if(date){
+		var url = "SampleCadDateWiseReportView/"+date;
+		window.open(url, '_blank');
+	}else{
+		alert("Please Provide Date");
+	}
+}
+
 function searchSampleRequisition(v) {
 	
 	var user = $("#userId").val();

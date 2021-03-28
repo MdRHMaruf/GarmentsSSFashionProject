@@ -11,12 +11,14 @@ window.onload = () => {
 function factoryWiseLine() {
 	let factoryId = $("#factoryId").val();
 	if (factoryId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
 			url: './factoryWiseDepartment/' + factoryId,
 			success: function (data) {
 				loadDepartment(data.departmentList);
+				$("#loader").hide();
 			}
 		});
 	}
@@ -42,12 +44,14 @@ function departmentWiseLine() {
 	let departmentId = $("#departmentId").val();
 
 	if (departmentId != 0) {
+		$("#loader").show();
 		$.ajax({
 			type: 'GET',
 			dataType: 'json',
 			url: './departmentWiseLine/' + departmentId,
 			success: function (data) {
 				loadLine(data.lineList);
+				$("#loader").hide();
 			}
 		});
 	}
@@ -81,6 +85,7 @@ function saveAction() {
 	let userId = $("#userId").val();
 
 	if (name != '') {
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -109,6 +114,7 @@ function saveAction() {
 					$("#machineList").empty();
 					allMachine();
 				}
+				$("#loader").hide();
 			}
 
 		});
@@ -126,6 +132,7 @@ function editAction() {
 	let userId = $("#userId").val();
 
 	if (name != '') {
+		$("#loader").show();
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
@@ -153,6 +160,7 @@ function editAction() {
 					$("#machineList").empty();
 					allMachine();
 				}
+				$("#loader").hide();
 			}
 
 		});

@@ -2,6 +2,8 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
@@ -42,6 +44,8 @@ public interface SettingService{
 	public List<noticeModel>getAllNoitice(String deptid,noticeModel nm);
 	
 	public List<noticeModel>getAllnoticesforSearch();
+	
+	public JSONArray getNotificationList(String targetId);
 
 
 }

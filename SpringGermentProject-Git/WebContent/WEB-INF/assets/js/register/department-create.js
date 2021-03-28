@@ -12,6 +12,7 @@ function saveAction() {
 
   if (factoryId != '0') {
     if (departmentName != '') {
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -34,6 +35,7 @@ function saveAction() {
             $("#dataList").append(drawDataTable(data.result));
 
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -53,7 +55,7 @@ function editAction() {
 
   if (factoryId != '0') {
     if (departmentName != '') {
-
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -76,6 +78,7 @@ function editAction() {
             $("#dataList").append(drawDataTable(data.result));
 
           }
+          $("#loader").hide();
         }
       });
     } else {

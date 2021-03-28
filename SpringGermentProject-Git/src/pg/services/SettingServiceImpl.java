@@ -2,6 +2,7 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -137,6 +138,13 @@ public class SettingServiceImpl implements SettingService{
 	public List<noticeModel> getAllnoticesforSearch() {
 		// TODO Auto-generated method stub
 		return settDAO.getAllnoticesforSearch();
+	}
+
+
+	@Override
+	public JSONArray getNotificationList(String targetId) {
+		// TODO Auto-generated method stub
+		return settDAO.getNotificationList(targetId);
 	}
 	
 

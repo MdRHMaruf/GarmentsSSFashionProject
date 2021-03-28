@@ -1323,14 +1323,8 @@ public class OrderController {
 
 	@RequestMapping(value = "/printAccessoriesIndent/{accIndentId}",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printAccessoriesIndent(ModelMap map,@PathVariable ("accIndentId") String accIndentId) {
-
-
 		ModelAndView view=new ModelAndView("order/printAccessoriesIndent");
-
-
 		map.addAttribute("AiNo", accIndentId);
-
-
 		return view;
 	}
 
@@ -2476,6 +2470,16 @@ public class OrderController {
 
 		return view;			
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/SampleCadDateWiseReportView/{date}",method=RequestMethod.GET)
+	public ModelAndView SampleCadDateWiseReportView(ModelAndView map, FabricsIndent p,@PathVariable("date") String date) {
+
+		ModelAndView view = new ModelAndView("order/sample_cad_date_wise_report_view");
+		view.addObject("date", date);		
+		view.addObject("id","10");
+		return view;			
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/printDateWiseSamplCad",method=RequestMethod.GET)
@@ -2522,12 +2526,14 @@ public class OrderController {
 			String purchaseOrder,styleId,supplierId,poNo,type;
 			int approval=0;
 			for (String item : itemList) {
-				String[] itemProperty = item.split(",");
+				String[] itemProperty = item.split("@");
+				
 				purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
 				supplierId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
 				poNo = itemProperty[3].substring(itemProperty[3].indexOf(":")+1).trim();
 				type = itemProperty[4].substring(itemProperty[4].indexOf(":")+1).trim();
+				System.out.println("itemProperty 5="+itemProperty[5]);
 				approval = Integer.valueOf(itemProperty[5].substring(itemProperty[5].indexOf(":")+1).trim());
 
 				poList.add(new PurchaseOrder(purchaseOrder, styleId, "", supplierId, "", poNo, type, "",approval));

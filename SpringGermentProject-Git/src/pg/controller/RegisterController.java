@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.Bank;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
@@ -33,6 +34,7 @@ import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
 import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.Notifyer;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
@@ -52,11 +54,11 @@ public class RegisterController {
 
 	@RequestMapping(value = "/buyer_create",method=RequestMethod.GET)
 	public ModelAndView buyer_create(ModelMap map,HttpSession session) {
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/Buyer_Create");
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -128,9 +130,7 @@ public class RegisterController {
 		for (int i = 0; i < buyers.size(); i++) {
 			array.add(buyers.get(i));
 		}
-
 		return array;
-
 	}
 
 
@@ -197,7 +197,7 @@ public class RegisterController {
 	public JSONObject getAllBuyers(@PathVariable ("user") String user) {
 		System.out.println(" all buyers list ");
 
-		
+
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
 
@@ -220,18 +220,71 @@ public class RegisterController {
 
 	}
 
+	//Notify Create
+
+	@RequestMapping(value = "/notify_create",method=RequestMethod.GET)
+	public ModelAndView notify_create(ModelMap map,HttpSession session) {
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		List<BuyerModel> buyerList = registerService.getAllBuyers(userId);
+		ModelAndView view = new ModelAndView("register/notifyer-create");
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		map.addAttribute("buyerList",buyerList);
+		map.addAttribute("notifyerList",registerService.getNotifyerList());
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveNotify",method=RequestMethod.POST)
+	public JSONObject saveNotify(Notifyer notifyer) {
+		JSONObject object = new JSONObject();
+		if(registerService.saveNotifyer(notifyer)) {
+			object.put("result","successfull");
+			object.put("notifyerList",registerService.getNotifyerList());
+		}else {
+			object.put("result","something wrong");
+		}
+
+		return object;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/editNotify",method=RequestMethod.POST)
+	public JSONObject editNotify(Notifyer notifyer) {
+		JSONObject object = new JSONObject();
+		if(registerService.editNotifyer(notifyer)) {
+			object.put("result","successfull");
+			object.put("notifyerList",registerService.getNotifyerList());
+		}else {
+			object.put("result","something wrong");
+		}
+
+		return object;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getNotifyInfo",method=RequestMethod.GET)
+	public JSONObject getNotifyInfo(String notifyId) {
+		JSONObject object = new JSONObject();
+
+		object.put("notifyInfo", registerService.getNotifyerInfo(notifyId));
+
+		return object;
+	}
+
+
 	//Supplier Create
-
-
-
 	@RequestMapping(value = "/supplier_create",method=RequestMethod.GET)
 	public ModelAndView supplier_create(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("register/Supplier_Create");
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -396,9 +449,9 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/Factory_Create");
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -547,9 +600,9 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/courier_create");
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -695,7 +748,7 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/brand-create");
 		List<Brand> brandList = registerService.getBrandList();
 		System.out.println("list size="+brandList.size());
@@ -785,7 +838,7 @@ public class RegisterController {
 
 		map.addAttribute("fabricsItemList",fabricsItemList);
 		view.addObject("unitList",unitList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -863,11 +916,11 @@ public class RegisterController {
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/addItemUnits",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addItemUnits(Unit unit,String itemId,String itemType) {
 		JSONObject objmain = new JSONObject();
-		
+
 		if(registerService.addItemUnits(unit,itemId,itemType)) {
 			List<Unit> unitList = registerService.getItemUnitsList(itemId,itemType);
 			objmain.put("result", unitList);
@@ -885,7 +938,7 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/accessories-create");
 		List<AccessoriesItem> accessoriesItemList = registerService.getAccessoriesItemList();
 		List<Unit> unitList = registerService.getUnitList();
@@ -932,7 +985,7 @@ public class RegisterController {
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/getAccessoriesItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject getAccessoriesItem(String accessoriesItemId) {
 		JSONObject objmain = new JSONObject();
@@ -1055,12 +1108,12 @@ public class RegisterController {
 	}
 
 	//Style Item Create 
-	@RequestMapping(value = "/item_description_create",method=RequestMethod.GET)
-	public ModelAndView item_description_create(ModelMap map,HttpSession session) {
+	@RequestMapping(value = "/garments_item_create",method=RequestMethod.GET)
+	public ModelAndView garments_item_create(ModelMap map,HttpSession session) {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/style-item-create");
 		List<StyleItem> styleItemList = registerService.getStyleItemList();
 		System.out.println("list size="+styleItemList.size());
@@ -1217,7 +1270,7 @@ public class RegisterController {
 
 		return objmain;
 	}
-	
+
 	@RequestMapping(value = "/getUnitList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getUnitList() {
 		JSONObject objmain = new JSONObject();
@@ -1232,7 +1285,7 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/color-create");
 		List<Color> colorList = registerService.getColorList();
 
@@ -1309,12 +1362,12 @@ public class RegisterController {
 	}
 
 	//Costing Create 
-	@RequestMapping(value = "/costing_details_create",method=RequestMethod.GET)
-	public ModelAndView costing_details_create(ModelMap map,HttpSession session) {
+	@RequestMapping(value = "/costing_item_create",method=RequestMethod.GET)
+	public ModelAndView costing_item_create(ModelMap map,HttpSession session) {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		ModelAndView view = new ModelAndView("register/particular-item-create");
+		ModelAndView view = new ModelAndView("register/costing-item-create");
 		List<ParticularItem> particularItemList = registerService.getParticularItemList();
 
 		map.addAttribute("userId",userId);
@@ -1552,7 +1605,7 @@ public class RegisterController {
 		return objmain;
 	}
 
-	//Brand Create 
+	//Department Create 
 	@RequestMapping(value = "/department_create",method=RequestMethod.GET)
 	public ModelAndView department_create(ModelMap map,HttpSession session) {
 
@@ -1639,7 +1692,7 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/merchandiser_create");
 		List<MerchandiserInfo> merchandiserList= registerService.getMerchandiserList();
 
@@ -1720,7 +1773,7 @@ public class RegisterController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/incharge_create");
 		List<FactoryModel> factoryList= registerService.getAllFactories();
 
@@ -1728,7 +1781,7 @@ public class RegisterController {
 		map.addAttribute("inchargeList",inchargeList);
 
 		map.addAttribute("factoryList",factoryList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -1741,11 +1794,11 @@ public class RegisterController {
 		if(!registerService.isInchargeExist(v)) {
 			if(registerService.saveIncharge(v)) {
 
-				
+
 
 				List<InchargeInfo> List= registerService.getInchargeList();
 
-				
+
 				objmain.put("result", List);
 
 			}else {
@@ -1764,7 +1817,7 @@ public class RegisterController {
 		if(!registerService.isInchargeExist(v)) {
 			if(registerService.editIncharge(v)) {
 
-				
+
 
 				List<InchargeInfo> List= registerService.getInchargeList();
 
@@ -1779,21 +1832,21 @@ public class RegisterController {
 
 		return objmain;
 	}
-	
+
 	//Line Create 
 	@RequestMapping(value = "/line_create",method=RequestMethod.GET)
 	public ModelAndView line_create(ModelMap map,HttpSession session) {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("register/line-create");
 		List<Line> lineList = registerService.getLineList();
 		List<FactoryModel> factoryList = registerService.getAllFactories();
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		map.addAttribute("lineList",lineList);
 		view.addObject("factoryList",factoryList);
 		return view; //JSP - /WEB-INF/view/index.jsp
@@ -1904,18 +1957,18 @@ public class RegisterController {
 	@RequestMapping(value = "/style_size_create",method=RequestMethod.GET)
 	public ModelAndView style_size_create(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-	
-		
+
+
 		ModelAndView view = new ModelAndView("register/style-size-create");
 		List<Size> sizeList = registerService.getStyleSizeList();
 		view.addObject("sizeList",sizeList);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
@@ -2073,478 +2126,528 @@ public class RegisterController {
 	}
 
 	//Designation Create
-	
-		@RequestMapping(value = "/desgination_create",method=RequestMethod.GET)
-		public ModelAndView desgination_create(ModelMap map,HttpSession session) {
-			
-			String userId=(String)session.getAttribute("userId");
-			String userName=(String)session.getAttribute("userName");
-			
-			List<Department> departmentList = registerService.getDepartmentList();
-			ModelAndView view = new ModelAndView("register/desgination_create");
-			
-			
-			map.addAttribute("userId",userId);
-			map.addAttribute("userName",userName);
-			
-			view.addObject("department",departmentList);
-			return view; //JSP - /WEB-INF/view/index.jsp
+
+	@RequestMapping(value = "/designation_create",method=RequestMethod.GET)
+	public ModelAndView designation_create(ModelMap map,HttpSession session) {
+
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+
+		List<Department> departmentList = registerService.getDepartmentList();
+		ModelAndView view = new ModelAndView("register/designation_create");
+
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		view.addObject("department",departmentList);
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@RequestMapping(value = "/allDesignation", method = RequestMethod.POST)
+	public @ResponseBody JSONObject allDesignation() {
+
+		List<Designation> designationList = registerService.getDesignationList();
+
+		JSONObject mainobj = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		for (int i = 0; i < designationList.size(); i++) {
+
+			JSONObject obj = new JSONObject();
+			obj.put("departmentId", designationList.get(i).getDepartmentId());
+			obj.put("departmentName", designationList.get(i).getDepartmentName());
+			obj.put("designationId", designationList.get(i).getDesignationId());
+			obj.put("designationName", designationList.get(i).getDesignation());
+
+			mainarray.add(obj);
 		}
-		
-		@RequestMapping(value = "/allDesignation", method = RequestMethod.POST)
-		public @ResponseBody JSONObject allDesignation() {
+		mainobj.put("result", mainarray);
 
-			List<Designation> designationList = registerService.getDesignationList();
-			
-			JSONObject mainobj = new JSONObject();
-			JSONArray mainarray = new JSONArray();
-
-			for (int i = 0; i < designationList.size(); i++) {
-
-				JSONObject obj = new JSONObject();
-				obj.put("departmentId", designationList.get(i).getDepartmentId());
-				obj.put("departmentName", designationList.get(i).getDepartmentName());
-				obj.put("designationId", designationList.get(i).getDesignationId());
-				obj.put("designationName", designationList.get(i).getDesignation());
-				
-				mainarray.add(obj);
-			}
-			mainobj.put("result", mainarray);
-
-			return mainobj;
-		}
-
-		
-		@RequestMapping(value = "/saveDesignation",method=RequestMethod.POST)
-		public @ResponseBody JSONObject saveDesignation(Designation v) {
-			
-			System.out.println("Designation : "+v.getDesignation());
-			
-			JSONObject objmain = new JSONObject();
-			if(!registerService.isDesignationExist(v)) {
-				if(registerService.saveDesignation(v)) {
-
-					JSONArray mainarray = new JSONArray();
-
-					List<Designation> List= registerService.getDesignationList();
-
-					for(int a=0;a<List.size();a++) {
-						JSONObject obj = new JSONObject();
-						obj.put("DesignationId", List.get(a).getDesignationId());
-						obj.put("Designation", List.get(a).getDesignation());
-						obj.put("DepartmentId", List.get(a).getDepartmentId());
-
-						mainarray.add(obj);
-					}
+		return mainobj;
+	}
 
 
-					objmain.put("result", mainarray);
+	@RequestMapping(value = "/saveDesignation",method=RequestMethod.POST)
+	public @ResponseBody JSONObject saveDesignation(Designation v) {
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
+		System.out.println("Designation : "+v.getDesignation());
+
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isDesignationExist(v)) {
+			if(registerService.saveDesignation(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<Designation> List= registerService.getDesignationList();
+
+				for(int a=0;a<List.size();a++) {
+					JSONObject obj = new JSONObject();
+					obj.put("DesignationId", List.get(a).getDesignationId());
+					obj.put("Designation", List.get(a).getDesignation());
+					obj.put("DepartmentId", List.get(a).getDepartmentId());
+
+					mainarray.add(obj);
+				}
+
+
+				objmain.put("result", mainarray);
+
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
-		
-		@RequestMapping(value = "/editDesignation",method=RequestMethod.POST)
-		public @ResponseBody JSONObject editDesignation(Designation v) {
-			
-			System.out.println("Designation : "+v.getDesignation());
-			
-			JSONObject objmain = new JSONObject();
-			if(registerService.isDesignationExist(v)) {
-				if(registerService.editDesignation(v)) {
 
-					JSONArray mainarray = new JSONArray();
+		return objmain;
+	}
 
-					List<Designation> List= registerService.getDesignationList();
+	@RequestMapping(value = "/editDesignation",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editDesignation(Designation v) {
 
-					for(int a=0;a<List.size();a++) {
-						JSONObject obj = new JSONObject();
-						obj.put("DesignationId", List.get(a).getDesignationId());
-						obj.put("Designation", List.get(a).getDesignation());
-						obj.put("DepartmentId", List.get(a).getDepartmentId());
+		System.out.println("Designation : "+v.getDesignation());
 
-						mainarray.add(obj);
-					}
+		JSONObject objmain = new JSONObject();
+		if(registerService.isDesignationExist(v)) {
+			if(registerService.editDesignation(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<Designation> List= registerService.getDesignationList();
+
+				for(int a=0;a<List.size();a++) {
+					JSONObject obj = new JSONObject();
+					obj.put("DesignationId", List.get(a).getDesignationId());
+					obj.put("Designation", List.get(a).getDesignation());
+					obj.put("DepartmentId", List.get(a).getDepartmentId());
+
+					mainarray.add(obj);
+				}
 
 
-					objmain.put("result", mainarray);
+				objmain.put("result", mainarray);
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
-		
-		
-		//Employee
-		
-		@RequestMapping(value = "/employee_create",method=RequestMethod.GET)
-		public ModelAndView employee_create(ModelMap map,HttpSession session) {
-			
-			String userId=(String)session.getAttribute("userId");
-			String userName=(String)session.getAttribute("userName");
-			
-			List<Line> lineList = registerService.getLineList();
-			List<Designation> designationList = registerService.getDesignationList();
-			List<Department> departmentList = registerService.getDepartmentList();
-			ModelAndView view = new ModelAndView("register/employee_create");
-			
-			view.addObject("department",departmentList);
-			view.addObject("designation",designationList);
-			view.addObject("line",lineList);
-			
-			map.addAttribute("userId",userId);
-			map.addAttribute("userName",userName);
-			
-			return view; //JSP - /WEB-INF/view/index.jsp
+
+		return objmain;
+	}
+
+
+	//Employee
+
+	@RequestMapping(value = "/employee_create",method=RequestMethod.GET)
+	public ModelAndView employee_create(ModelMap map,HttpSession session) {
+
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+
+		List<Line> lineList = registerService.getLineList();
+		List<Designation> designationList = registerService.getDesignationList();
+		List<Department> departmentList = registerService.getDepartmentList();
+		ModelAndView view = new ModelAndView("register/employee_create");
+
+		view.addObject("department",departmentList);
+		view.addObject("designation",designationList);
+		view.addObject("line",lineList);
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@RequestMapping(value = "/allEmployee", method = RequestMethod.POST)
+	public @ResponseBody JSONObject allEmployee() {
+
+		List<Employee> employeeList = registerService.getEmployeeList();
+
+		JSONObject mainobj = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		for (int i = 0; i < employeeList.size(); i++) {
+
+			JSONObject obj = new JSONObject();
+
+			obj.put("EmployeeName", employeeList.get(i).getEmployeeName());
+			obj.put("Department", employeeList.get(i).getDepartment());
+			obj.put("Designation", employeeList.get(i).getDesignation());
+			obj.put("DepartmentId", employeeList.get(i).getDepartmentId());
+			obj.put("DesignationId", employeeList.get(i).getDesignationId());
+
+			obj.put("CardNo", employeeList.get(i).getCardNo());
+			obj.put("Line", employeeList.get(i).getLine());
+			obj.put("Grade", employeeList.get(i).getGrade());
+			obj.put("EmployeeCode", employeeList.get(i).getEmployeeCode());
+			obj.put("JoinDate", employeeList.get(i).getJoinDate());
+
+			mainarray.add(obj);
 		}
-		
-		@RequestMapping(value = "/allEmployee", method = RequestMethod.POST)
-		public @ResponseBody JSONObject allEmployee() {
+		mainobj.put("result", mainarray);
 
-			List<Employee> employeeList = registerService.getEmployeeList();
+		return mainobj;
+	}
 
-			JSONObject mainobj = new JSONObject();
-			JSONArray mainarray = new JSONArray();
+	@RequestMapping(value = "/saveEmployee",method=RequestMethod.POST)
+	public @ResponseBody JSONObject saveEmployee(Employee v) {
 
-			for (int i = 0; i < employeeList.size(); i++) {
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isEmployeeExist(v)) {
+			if(registerService.saveEmployee(v)) {
 
-				JSONObject obj = new JSONObject();
-				
-				obj.put("EmployeeName", employeeList.get(i).getEmployeeName());
-				obj.put("Department", employeeList.get(i).getDepartment());
-				obj.put("Designation", employeeList.get(i).getDesignation());
-				obj.put("DepartmentId", employeeList.get(i).getDepartmentId());
-				obj.put("DesignationId", employeeList.get(i).getDesignationId());
-				
-				obj.put("CardNo", employeeList.get(i).getCardNo());
-				obj.put("Line", employeeList.get(i).getLine());
-				obj.put("Grade", employeeList.get(i).getGrade());
-				obj.put("EmployeeCode", employeeList.get(i).getEmployeeCode());
-				obj.put("JoinDate", employeeList.get(i).getJoinDate());
-				
-				mainarray.add(obj);
-			}
-			mainobj.put("result", mainarray);
+				JSONArray mainarray = new JSONArray();
 
-			return mainobj;
-		}
-		
-		@RequestMapping(value = "/saveEmployee",method=RequestMethod.POST)
-		public @ResponseBody JSONObject saveEmployee(Employee v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(!registerService.isEmployeeExist(v)) {
-				if(registerService.saveEmployee(v)) {
+				List<Employee> List= registerService.getEmployeeList();
 
-					JSONArray mainarray = new JSONArray();
+				for(int a=0;a<List.size();a++) {
 
-					List<Employee> List= registerService.getEmployeeList();
+					JSONObject obj = new JSONObject();
+					obj.put("EmployeeCode", List.get(a).getEmployeeCode());
+					obj.put("EmployeeName", List.get(a).getEmployeeName());
+					obj.put("CardNo", List.get(a).getCardNo());
+					obj.put("Department", List.get(a).getDepartment());
+					obj.put("Designation", List.get(a).getDesignation());
+					obj.put("Line", List.get(a).getLine());
+					obj.put("Grade", List.get(a).getGrade());
+					obj.put("JoinDate", List.get(a).getJoinDate());
 
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("EmployeeCode", List.get(a).getEmployeeCode());
-						obj.put("EmployeeName", List.get(a).getEmployeeName());
-						obj.put("CardNo", List.get(a).getCardNo());
-						obj.put("Department", List.get(a).getDepartment());
-						obj.put("Designation", List.get(a).getDesignation());
-						obj.put("Line", List.get(a).getLine());
-						obj.put("Grade", List.get(a).getGrade());
-						obj.put("JoinDate", List.get(a).getJoinDate());
-						
-						mainarray.add(obj);
-					}
+					mainarray.add(obj);
+				}
 
 
-					objmain.put("result", mainarray);
+				objmain.put("result", mainarray);
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
-		
-		@RequestMapping(value = "/editEmployee",method=RequestMethod.POST)
-		public @ResponseBody JSONObject editEmployee(Employee v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(registerService.isEmployeeExist(v)) {
-				if(registerService.editEmployee(v)) {
 
-					JSONArray mainarray = new JSONArray();
+		return objmain;
+	}
 
-					List<Employee> List= registerService.getEmployeeList();
+	@RequestMapping(value = "/editEmployee",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editEmployee(Employee v) {
 
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("EmployeeCode", List.get(a).getEmployeeCode());
-						obj.put("EmployeeName", List.get(a).getEmployeeName());
-						obj.put("CardNo", List.get(a).getCardNo());
-						obj.put("Department", List.get(a).getDepartment());
-						obj.put("Designation", List.get(a).getDesignation());
-						obj.put("Line", List.get(a).getLine());
-						obj.put("Grade", List.get(a).getGrade());
-						obj.put("JoinDate", List.get(a).getJoinDate());
-						
-						mainarray.add(obj);
-					}
+		JSONObject objmain = new JSONObject();
+		if(registerService.isEmployeeExist(v)) {
+			if(registerService.editEmployee(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<Employee> List= registerService.getEmployeeList();
+
+				for(int a=0;a<List.size();a++) {
+
+					JSONObject obj = new JSONObject();
+					obj.put("EmployeeCode", List.get(a).getEmployeeCode());
+					obj.put("EmployeeName", List.get(a).getEmployeeName());
+					obj.put("CardNo", List.get(a).getCardNo());
+					obj.put("Department", List.get(a).getDepartment());
+					obj.put("Designation", List.get(a).getDesignation());
+					obj.put("Line", List.get(a).getLine());
+					obj.put("Grade", List.get(a).getGrade());
+					obj.put("JoinDate", List.get(a).getJoinDate());
+
+					mainarray.add(obj);
+				}
 
 
-					objmain.put("result", mainarray);
+				objmain.put("result", mainarray);
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
-		}
-		
-		//Machine Create
-		
-		@RequestMapping(value = "/machine_create",method=RequestMethod.GET)
-		public ModelAndView machine_create(ModelMap map,HttpSession session) {
-					
-			String userId=(String)session.getAttribute("userId");
-			String userName=(String)session.getAttribute("userName");
-			List<Employee> employeeList = registerService.getEmployeeList();
-			List<Factory> factorylist = registerService.getFactoryNameList();
-			ModelAndView view = new ModelAndView("register/machine_create");
-			
-			view.addObject("employee",employeeList);
-			view.addObject("factorylist",factorylist);
-			
-			map.addAttribute("userId",userId);
-			map.addAttribute("userName",userName);
-			
-			return view; //JSP - /WEB-INF/view/index.jsp
-		}
-		
-		@ResponseBody
-		@RequestMapping(value = "/departmentWiseLine/{departmentId}",method=RequestMethod.GET)
-		public JSONObject departmentWiseLine(@PathVariable ("departmentId") String departmentId) {
-			JSONObject objMain = new JSONObject();	
-			List<Line> lineList = registerService.getDepartmentWiseLine(departmentId);
-
-			objMain.put("lineList",lineList);
-			return objMain; 
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
 
-		@ResponseBody
-		@RequestMapping(value = "/factoryWiseDepartment/{factoryId}",method=RequestMethod.GET)
-		public JSONObject factoryWiseDepartment(@PathVariable ("factoryId") String factoryId) {
-			JSONObject objMain = new JSONObject();	
-			List<Department> departmentList = registerService.getFactoryWiseDepartment(factoryId);
+		return objmain;
+	}
 
-			objMain.put("departmentList",departmentList);
-			return objMain; 
-		}
+	//Machine Create
 
-		
-		@RequestMapping(value = "/saveMachine",method=RequestMethod.POST)
-		public @ResponseBody JSONObject saveMachine(Machine v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(!registerService.isMachineExist(v)) {
-				if(registerService.saveMachine(v)) {
+	@RequestMapping(value = "/machine_create",method=RequestMethod.GET)
+	public ModelAndView machine_create(ModelMap map,HttpSession session) {
 
-					JSONArray mainarray = new JSONArray();
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		List<Employee> employeeList = registerService.getEmployeeList();
+		List<Factory> factorylist = registerService.getFactoryNameList();
+		ModelAndView view = new ModelAndView("register/machine_create");
 
-					List<Machine> List= registerService.getMachineList();
+		view.addObject("employee",employeeList);
+		view.addObject("factorylist",factorylist);
 
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("MachineId", List.get(a).getMachineId());
-						obj.put("Name", List.get(a).getName());
-						obj.put("Brand", List.get(a).getBrand());
-						obj.put("ModelNo", List.get(a).getModelNo());
-						obj.put("Motor", List.get(a).getMotor());
-						obj.put("EmployeeId", List.get(a).getEmployeeId());
-						
-						mainarray.add(obj);
-					}
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/departmentWiseLine/{departmentId}",method=RequestMethod.GET)
+	public JSONObject departmentWiseLine(@PathVariable ("departmentId") String departmentId) {
+		JSONObject objMain = new JSONObject();	
+		List<Line> lineList = registerService.getDepartmentWiseLine(departmentId);
+
+		objMain.put("lineList",lineList);
+		return objMain; 
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/factoryWiseDepartment/{factoryId}",method=RequestMethod.GET)
+	public JSONObject factoryWiseDepartment(@PathVariable ("factoryId") String factoryId) {
+		JSONObject objMain = new JSONObject();	
+		List<Department> departmentList = registerService.getFactoryWiseDepartment(factoryId);
+
+		objMain.put("departmentList",departmentList);
+		return objMain; 
+	}
 
 
-					objmain.put("result", mainarray);
+	@RequestMapping(value = "/saveMachine",method=RequestMethod.POST)
+	public @ResponseBody JSONObject saveMachine(Machine v) {
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isMachineExist(v)) {
+			if(registerService.saveMachine(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<Machine> List= registerService.getMachineList();
+
+				for(int a=0;a<List.size();a++) {
+
+					JSONObject obj = new JSONObject();
+					obj.put("MachineId", List.get(a).getMachineId());
+					obj.put("Name", List.get(a).getName());
+					obj.put("Brand", List.get(a).getBrand());
+					obj.put("ModelNo", List.get(a).getModelNo());
+					obj.put("Motor", List.get(a).getMotor());
+					obj.put("EmployeeId", List.get(a).getEmployeeId());
+
+					mainarray.add(obj);
+				}
+
+
+				objmain.put("result", mainarray);
+
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
-		
-		
-		@RequestMapping(value = "/editMachine",method=RequestMethod.POST)
-		public @ResponseBody JSONObject editMachine(Machine v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(registerService.isMachineExist(v)) {
-				if(registerService.editMachine(v)) {
 
-					JSONArray mainarray = new JSONArray();
-
-					List<Machine> List= registerService.getMachineList();
-
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("MachineId", List.get(a).getMachineId());
-						obj.put("Name", List.get(a).getName());
-						obj.put("Brand", List.get(a).getBrand());
-						obj.put("ModelNo", List.get(a).getModelNo());
-						obj.put("Motor", List.get(a).getMotor());
-						obj.put("EmployeeId", List.get(a).getEmployeeId());
-						
-						mainarray.add(obj);
-					}
+		return objmain;
+	}
 
 
-					objmain.put("result", mainarray);
+	@RequestMapping(value = "/editMachine",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editMachine(Machine v) {
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
+		JSONObject objmain = new JSONObject();
+		if(registerService.isMachineExist(v)) {
+			if(registerService.editMachine(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<Machine> List= registerService.getMachineList();
+
+				for(int a=0;a<List.size();a++) {
+
+					JSONObject obj = new JSONObject();
+					obj.put("MachineId", List.get(a).getMachineId());
+					obj.put("Name", List.get(a).getName());
+					obj.put("Brand", List.get(a).getBrand());
+					obj.put("ModelNo", List.get(a).getModelNo());
+					obj.put("Motor", List.get(a).getMotor());
+					obj.put("EmployeeId", List.get(a).getEmployeeId());
+
+					mainarray.add(obj);
+				}
+
+
+				objmain.put("result", mainarray);
+
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
-		}
-		
-		@RequestMapping(value = "/allMachine", method = RequestMethod.POST)
-		public @ResponseBody JSONObject allMachine() {
-
-			List<Machine> allMachineList = registerService.getMachineList();
-
-			JSONObject mainobj = new JSONObject();
-			JSONArray mainarray = new JSONArray();
-
-			for (int i = 0; i < allMachineList.size(); i++) {
-
-				JSONObject obj = new JSONObject();
-				
-				obj.put("MachineId", allMachineList.get(i).getMachineId());
-				obj.put("Name", allMachineList.get(i).getName());
-				obj.put("Brand", allMachineList.get(i).getBrand());
-				obj.put("ModelNo", allMachineList.get(i).getModelNo());
-				obj.put("Motor", allMachineList.get(i).getMotor());
-				obj.put("EmployeeId", allMachineList.get(i).getEmployeeId());
-				obj.put("EmployeeName", allMachineList.get(i).getEmployeeName());
-				
-				mainarray.add(obj);
-			}
-			mainobj.put("result", mainarray);
-
-			return mainobj;
-		}
-		
-		
-		//Process Create
-		
-		@RequestMapping(value = "/process_create",method=RequestMethod.GET)
-		public ModelAndView process_create(ModelMap map,HttpSession session) {
-			
-			String userId=(String)session.getAttribute("userId");
-			String userName=(String)session.getAttribute("userName");
-			
-			List<ProcessInfo> List= registerService.getProcessList();
-			ModelAndView view = new ModelAndView("register/process_create");
-			
-			view.addObject("processlist",List);
-			
-			map.addAttribute("userId",userId);
-			map.addAttribute("userName",userName);
-			
-			return view; //JSP - /WEB-INF/view/index.jsp
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
 
-		@RequestMapping(value = "/saveProcess",method=RequestMethod.POST)
-		public @ResponseBody JSONObject saveProcess(ProcessInfo v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(!registerService.isProcessExist(v)) {
-				if(registerService.saveProcess(v)) {
+		return objmain;
+	}
 
-					JSONArray mainarray = new JSONArray();
+	@RequestMapping(value = "/allMachine", method = RequestMethod.POST)
+	public @ResponseBody JSONObject allMachine() {
 
-					List<ProcessInfo> List= registerService.getProcessList();
+		List<Machine> allMachineList = registerService.getMachineList();
 
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("ProcessId", List.get(a).getProcessId());
-						obj.put("Name", List.get(a).getProcessName());						
-						mainarray.add(obj);
-					}
+		JSONObject mainobj = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		for (int i = 0; i < allMachineList.size(); i++) {
+
+			JSONObject obj = new JSONObject();
+
+			obj.put("MachineId", allMachineList.get(i).getMachineId());
+			obj.put("Name", allMachineList.get(i).getName());
+			obj.put("Brand", allMachineList.get(i).getBrand());
+			obj.put("ModelNo", allMachineList.get(i).getModelNo());
+			obj.put("Motor", allMachineList.get(i).getMotor());
+			obj.put("EmployeeId", allMachineList.get(i).getEmployeeId());
+			obj.put("EmployeeName", allMachineList.get(i).getEmployeeName());
+
+			mainarray.add(obj);
+		}
+		mainobj.put("result", mainarray);
+
+		return mainobj;
+	}
 
 
-					objmain.put("result", mainarray);
+	//Process Create
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
+	@RequestMapping(value = "/process_create",method=RequestMethod.GET)
+	public ModelAndView process_create(ModelMap map,HttpSession session) {
+
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+
+		List<ProcessInfo> List= registerService.getProcessList();
+		ModelAndView view = new ModelAndView("register/process_create");
+
+		view.addObject("processlist",List);
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@RequestMapping(value = "/saveProcess",method=RequestMethod.POST)
+	public @ResponseBody JSONObject saveProcess(ProcessInfo v) {
+
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isProcessExist(v)) {
+			if(registerService.saveProcess(v)) {
+
+				JSONArray mainarray = new JSONArray();
+
+				List<ProcessInfo> List= registerService.getProcessList();
+
+				for(int a=0;a<List.size();a++) {
+
+					JSONObject obj = new JSONObject();
+					obj.put("ProcessId", List.get(a).getProcessId());
+					obj.put("Name", List.get(a).getProcessName());						
+					mainarray.add(obj);
+				}
+
+
+				objmain.put("result", mainarray);
+
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
-		
-		@RequestMapping(value = "/editProcess",method=RequestMethod.POST)
-		public @ResponseBody JSONObject editProcess(ProcessInfo v) {
-			
-			JSONObject objmain = new JSONObject();
-			if(!registerService.isProcessExist(v)) {
-				if(registerService.editProcess(v)) {
 
-					JSONArray mainarray = new JSONArray();
+		return objmain;
+	}
 
-					List<ProcessInfo> List= registerService.getProcessList();
+	@RequestMapping(value = "/editProcess",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editProcess(ProcessInfo v) {
 
-					for(int a=0;a<List.size();a++) {
-						
-						JSONObject obj = new JSONObject();
-						obj.put("ProcessId", List.get(a).getProcessId());
-						obj.put("Name", List.get(a).getProcessName());						
-						mainarray.add(obj);
-						
-						mainarray.add(obj);
-					}
+		JSONObject objmain = new JSONObject();
+		if(!registerService.isProcessExist(v)) {
+			if(registerService.editProcess(v)) {
 
+				JSONArray mainarray = new JSONArray();
 
-					objmain.put("result", mainarray);
+				List<ProcessInfo> List= registerService.getProcessList();
 
-				}else {
-					objmain.put("result", "Something Wrong");
-				}	
+				for(int a=0;a<List.size();a++) {
+
+					JSONObject obj = new JSONObject();
+					obj.put("ProcessId", List.get(a).getProcessId());
+					obj.put("Name", List.get(a).getProcessName());						
+					mainarray.add(obj);
+
+					mainarray.add(obj);
+				}
+				objmain.put("result", mainarray);
 			}else {
-				objmain.put("result", "duplicate");
-			}
-
-			return objmain;
+				objmain.put("result", "Something Wrong");
+			}	
+		}else {
+			objmain.put("result", "duplicate");
 		}
+		return objmain;
+	}
+
+
+	//Bank Create
+	@RequestMapping(value = "/bank_create",method=RequestMethod.GET)
+	public ModelAndView Bank_create(ModelMap map,HttpSession session) {
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
 		
+		ModelAndView view = new ModelAndView("register/bank-create");
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
+		map.addAttribute("bankList",registerService.getBankList());
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/saveBank",method=RequestMethod.POST)
+	public JSONObject saveBank(Bank bank) {
+		JSONObject object = new JSONObject();
+		if(registerService.saveBank(bank)) {
+			object.put("result","successfull");
+			object.put("bankList",registerService.getBankList());
+		}else {
+			object.put("result","something wrong");
+		}
+
+		return object;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/editBank",method=RequestMethod.POST)
+	public JSONObject editBank(Bank bank) {
+		JSONObject object = new JSONObject();
+		if(registerService.editBank(bank)) {
+			object.put("result","successfull");
+			object.put("bankList",registerService.getBankList());
+		}else {
+			object.put("result","something wrong");
+		}
+
+		return object;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/getBankInfo",method=RequestMethod.GET)
+	public JSONObject getBankInfo(String bankId) {
+		JSONObject object = new JSONObject();
+
+		object.put("bankInfo", registerService.getBankInfo(bankId));
+
+		return object;
+	}
 }

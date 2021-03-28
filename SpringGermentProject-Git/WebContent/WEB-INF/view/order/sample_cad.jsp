@@ -413,8 +413,8 @@
 				<div class="input-group">
 					<label class="col-sm-1">Date</label>
 					<div class="col-sm-8 eventInsForm_Ledger">
-						<input class="form-control-sm" id='sampleSearchDate' type="date">
-						<button type="button" class="btn btn-primary" onclick="previewSampleCad()" >Preview</button>
+						<input class="form-control-sm" id='sampleCadSearchDate' type="date">
+						<button type="button" class="btn btn-primary" onclick="sampleCadDateWiseReport()" >Preview</button>
 					</div>
 				</div>
 			

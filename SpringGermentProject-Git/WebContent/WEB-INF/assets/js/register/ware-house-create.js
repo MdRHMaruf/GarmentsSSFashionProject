@@ -9,6 +9,7 @@ function saveAction() {
 
   if (factoryId != '0') {
     if (wareHouseName != '') {
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -29,8 +30,8 @@ function saveAction() {
 
             $("#dataList").empty();
             $("#dataList").append(drawDataTable(data.result));
-
           }
+          $("#loader").hide();
         }
       });
     } else {
@@ -50,7 +51,7 @@ function editAction() {
 
   if (factoryId != '0') {
     if (wareHouseName != '') {
-
+      $("#loader").show();
       $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -71,8 +72,8 @@ function editAction() {
 
             $("#dataList").empty();
             $("#dataList").append(drawDataTable(data.result));
-
           }
+          $("#loader").hide();
         }
       });
     } else {

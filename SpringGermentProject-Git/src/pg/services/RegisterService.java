@@ -4,6 +4,7 @@ import java.util.List;
 
 import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.Bank;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
@@ -20,6 +21,7 @@ import pg.registerModel.Line;
 import pg.registerModel.LocalItem;
 import pg.registerModel.Machine;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.Notifyer;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.ProcessInfo;
 import pg.registerModel.SampleType;
@@ -35,15 +37,21 @@ public interface RegisterService {
 
 	public String maxBuyerId();
 	public List<String> countries(String value);
-	
+
 	//Buyer Create
 	public boolean insertBuyer(BuyerModel buyer);
 	public List<String> BuyersList(String value);
 	public List<BuyerModel> BuyersDetails(String value);
 	public boolean editBuyer(BuyerModel buyer);
 	public List<BuyerModel> getAllBuyers(String userId);
-	
-	
+
+	//Notify Create
+	public boolean saveNotifyer(Notifyer notifyer);
+	public boolean editNotifyer(Notifyer notifyer);
+	public Notifyer getNotifyerInfo(String id);
+	public List<Notifyer> getNotifyerList();
+	public List<Notifyer> getNotifyerListByBuyerId(String buyerId);
+
 	//Supplier Create
 	public String maxSupplierId();
 	public boolean insertSupplier(SupplierModel supplier);
@@ -51,18 +59,18 @@ public interface RegisterService {
 	public List<SupplierModel> SupplierDetails(String value);
 	public boolean editSupplier(SupplierModel supplier);
 	public List<SupplierModel> getAllSupplier();
-	
-	
+
+
 	//Factory Create
-	
+
 	public String maxFactoryId();
 	public boolean insertFactory(FactoryModel factory);
 	public List<FactoryModel> FactoryDetails(String value);
 	public List<String> factorylist(String value);
 	public boolean editFactory(FactoryModel factory);
 	public List<FactoryModel> getAllFactories();
-	
-	
+
+
 	//Courier Create
 	public String maxCourierId();
 	public boolean insertCourier(CourierModel courier);
@@ -70,7 +78,7 @@ public interface RegisterService {
 	public List<CourierModel> CourierDetails(String value);
 	public boolean editCourier(CourierModel courier);
 	public List<CourierModel> getAllCouriers();
-	
+
 	//Brand Create 
 	public boolean saveBrand(Brand brand);
 	public boolean editBrand(Brand brand);
@@ -83,7 +91,7 @@ public interface RegisterService {
 	public FabricsItem getFabricsItem(String fabricsItemId);
 	public List<FabricsItem> getFabricsItemList();
 	public boolean isFabricsItemExist(FabricsItem fabricsItem);
-	
+
 	public boolean addItemUnits(Unit unit,String itemId,String itemType); 
 	public List<Unit> getItemUnitsList(String itemId,String itemType);
 
@@ -144,18 +152,18 @@ public interface RegisterService {
 	public List<Department> getDepartmentList();
 	public boolean isDepartmentExist(Department department);
 	public List<Department> getFactoryWiseDepartment(String factoryId);
-	
+
 	//Merchandiser Create 
 	public boolean isMerchandiserExist(MerchandiserInfo v);
 	public boolean saveMerchandiser(MerchandiserInfo v);
 	public List<MerchandiserInfo> getMerchandiserList();
 	public boolean editMerchandiser(MerchandiserInfo v);
-	
+
 	//Incharge Create 
 	public boolean isInchargeExist(InchargeInfo v);
 	public boolean saveIncharge(InchargeInfo v);
 	public List<InchargeInfo> getInchargeList();
-	
+
 	//Ware House Create 
 	public boolean saveWareHouse(WareHouse wareHouse);
 	public boolean editWareHouse(WareHouse wareHouse);
@@ -181,45 +189,49 @@ public interface RegisterService {
 	public List<SizeGroup> getStyleSizeGroupList();
 	public boolean isStyleSizeGroupExist(SizeGroup sizeGroup);
 	public Unit getUnit(String unitId);
-	
+
 	//Common get method
 	public List<Factory> getFactoryNameList();
-	
+
 	//Store Category
 	public List<StoreGeneralCategory> getStoreCategoryList();
 
 	public boolean editIncharge(InchargeInfo v);
-	
+
 	// Designation
-	
-		public boolean saveDesignation(Designation designation);
-		public List<Designation> getDesignationList();
-		public boolean editDesignation(Designation designation);
-		public boolean isDesignationExist(Designation v);
-		
-		//Employee
-		
-		public boolean saveEmployee(Employee saveEmployee);
-		public List<Employee> getEmployeeList();
-		public boolean editEmployee(Employee editEmployee);
-		public boolean isEmployeeExist(Employee v);
-		
-		
-		//Machine
-		
-		public boolean saveMachine(Machine saveMachine);
-		public List<Machine> getMachineList();
-		public boolean editMachine(Machine editMachine);
-		public boolean isMachineExist(Machine v);
-		
-		//Process
-		public boolean isProcessExist(ProcessInfo v);
-		public boolean saveProcess(ProcessInfo v);
-		public List<ProcessInfo> getProcessList();
-		public boolean editProcess(ProcessInfo v);
-	
-		
-	
+
+	public boolean saveDesignation(Designation designation);
+	public List<Designation> getDesignationList();
+	public boolean editDesignation(Designation designation);
+	public boolean isDesignationExist(Designation v);
+
+	//Employee
+
+	public boolean saveEmployee(Employee saveEmployee);
+	public List<Employee> getEmployeeList();
+	public boolean editEmployee(Employee editEmployee);
+	public boolean isEmployeeExist(Employee v);
+
+
+	//Machine
+
+	public boolean saveMachine(Machine saveMachine);
+	public List<Machine> getMachineList();
+	public boolean editMachine(Machine editMachine);
+	public boolean isMachineExist(Machine v);
+
+	//Process
+	public boolean isProcessExist(ProcessInfo v);
+	public boolean saveProcess(ProcessInfo v);
+	public List<ProcessInfo> getProcessList();
+	public boolean editProcess(ProcessInfo v);
+
+
+	//Bank Create
+	public boolean saveBank(Bank bank);
+	public boolean editBank(Bank bank);
+	public Bank getBankInfo(String id);
+	public List<Bank> getBankList();
 
 
 }

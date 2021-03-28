@@ -48,6 +48,9 @@
 		value="0"> <input type="hidden" id="masterLCAutoId" value="0">
 	<input type="hidden" id='masterAmendmentNo'> <input type="hidden" id="importLCAutoId" value="0">
 	<input type="hidden" id='importAmendmentNo'>
+	<input type="hidden" id='billOfEntryAutoId'>
+	<input type="hidden" id='exportLCAutoId'>
+	
 
 
 	<div class="card-box">
@@ -228,7 +231,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="masterStyleNo" class="col-form-label-sm my-0 py-0">Style
 							No</label> <select id="masterStyleNo"
-							onchange="styleWiseItemLoad(),styleWiseBuyerPOLoad(this)"
+							onchange="styleWiseItemLoad(this),styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">Select Style</option>
@@ -247,7 +250,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="masterPurchaseOrder"
 							class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
-							id="masterPurchaseOrder" onchange="styleWiseItemLoad()"
+							id="masterPurchaseOrder" onchange="styleWiseItemLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">Select Style</option>
@@ -341,9 +344,9 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group mb-0  row">
-									<label for="importLcType"
+									<label for="importLCType"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Import
-										LC Type</label> <select id="importLcType"
+										LC Type</label> <select id="importLCType"
 										class="col-md-8 form-control-sm">
 										<option value="1">Invoice</option>
 										<option value="2">BTB LC</option>
@@ -507,8 +510,7 @@
 											</div>
 											<input id="importUDNo" type="text" class="form-control"
 												aria-label="Sizing example input"
-												aria-describedby="inputGroup-sizing-sm"
-												onkeyup="setTotalQtyForCarton()"> <input
+												aria-describedby="inputGroup-sizing-sm"> <input
 												id="importUdDate" type="date" class="form-control"
 												aria-label="Sizing example input"
 												aria-describedby="inputGroup-sizing-sm"
@@ -516,7 +518,7 @@
 											<button id="importUDAdd" type="button"
 												class="btn btn-primary btn-sm"
 												aria-label="Sizing example input"
-												aria-describedby="inputGroup-sizing-sm">Add</button>
+												aria-describedby="inputGroup-sizing-sm" onclick="importUDAddAction()">Add</button>
 										</div>
 									</div>
 								</div>
@@ -637,7 +639,7 @@
 							class="form-control-sm pr-0 pl-1" readonly>
 					</div>
 					<div class="col-md-1 pr-0 pl-1">
-						<button id="masterAddBtn" type="button"
+						<button id="importAddBtn" type="button"
 							style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
 							onclick="importItemAddAction()">
 							<i class="fa fa-plus-circle"></i> Add
@@ -678,7 +680,7 @@
 							class="btn btn-primary btn-sm" onclick="importSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
-						<button id="importAmendmentButton" type="button" class="btn btn-primary btn-sm ml-1" onclick="masterAmendmentAction()" style="">
+						<button id="importAmendmentButton" type="button" class="btn btn-primary btn-sm ml-1" onclick="importAmendmentAction()" style="">
 							<i class="fas fa-save"></i> Amendment
 						</button>
 						<button id="importEditButton" type="button"
@@ -687,7 +689,7 @@
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
 						<button id="importRefreshBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+							class="btn btn-primary btn-sm ml-1" onclick="importRefreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
 						<button id="importPreviewBtn" type="button"
@@ -726,7 +728,7 @@
 									<label for="billOfEntryInvoiceNo"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Invoice
 										No</label> <input id="billOfEntryInvoiceNo" type="text"
-										class="col-md-8 form-control-sm">
+										class="col-md-8 form-control-sm" readonly>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -744,8 +746,8 @@
 							class="table table-hover table-bordered table-sm mb-2 small-font">
 							<thead class="no-wrap-text">
 								<tr>
-									<th>Invoice No</th>
-									<th>Invoice Date</th>
+									<th>Bill No</th>
+									<th>Bill Date</th>
 
 								</tr>
 							</thead>
@@ -770,7 +772,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="billPurchaseOrder" class="col-form-label-sm my-0 py-0">Purchase
 							Order</label> <select id="billPurchaseOrder"
-							onchange="styleWiseItemLoad()"
+							onchange="styleWiseItemLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -801,11 +803,8 @@
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="billSize" class="col-form-label-sm my-0 py-0">Size</label>
-						<select id="billSize" class="selectpicker col-md-12 px-0"
-							data-live-search="true"
-							data-style="btn-light btn-sm border-light-gray">
-							<option value="0">--Select Size--</option>
-						</select>
+						<input id="billSize" type="text"
+							class="form-control-sm pr-0 pl-1">
 					</div>
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="billUnit" class="col-form-label-sm my-0 py-0">Unit</label>
@@ -873,7 +872,7 @@
 									<th>Width</th>
 									<th>GSM</th>
 									<th>Total Qty</th>
-									<th>Cuttorn Qty</th>
+									<th>Curton Qty</th>
 									<th>Price</th>
 									<th>Total Value</th>
 								</tr>
@@ -889,15 +888,15 @@
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billBillNo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
-								Entry No</label> <input id="billBillNo" type="text"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill No</label> 
+								<input id="billBillNo" type="text"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billShippedOnBoardDate"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Date:</label>
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipped On Board Date:</label>
 							<input id="billShippedOnBoardDate" type="date"
 								class="col-md-8 form-control-sm">
 						</div>
@@ -906,17 +905,17 @@
 				<div class="row">
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
-							<label for="billTelexRealeaseDate"
+							<label for="billTelexReleaseDate"
 								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Telex
-								Release Date:</label> <input id="billTelexRealeaseDate" type="date"
+								Release Date:</label> <input id="billTelexReleaseDate" type="date"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billContainerNo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
-								Entry No</label> <input id="billContainerNo" type="text"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Container No</label> 
+								<input id="billContainerNo" type="text"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
@@ -971,20 +970,19 @@
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
 						<button id="billSubmitButton" type="button"
-							class="btn btn-primary btn-sm" onclick="submitAction()">
+							class="btn btn-primary btn-sm" onclick="billSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
 						<button id="billEditButton" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-							disabled>
+							class="btn btn-primary btn-sm ml-1" style="display: none;" onclick="billEditAction()">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
 						<button id="billRefreshBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+							class="btn btn-primary btn-sm ml-1" onclick="billRefreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
 						<button id="billPreviewBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" disabled>
+							class="btn btn-primary btn-sm ml-1" style="display: none;">
 							<i class="fa fa-print"></i> Preview
 						</button>
 					</div>
@@ -1062,7 +1060,7 @@
 								<div class="form-group mb-0  row">
 									<label for="exportConractNo"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Contract
-										No</label> <input id="cxportContractNo" type="text"
+										No</label> <input id="exportContractNo" type="text"
 										class="col-md-8 form-control-sm">
 								</div>
 							</div>
@@ -1100,7 +1098,7 @@
 								<div class="form-group mb-0  row">
 									<label for="exportBillEntryNo"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
-										Entry No</label> <input id="exportBilEntrylNo" type="text"
+										Entry No</label> <input id="exportBillEntryNo" type="text"
 										class="col-md-8 form-control-sm">
 								</div>
 							</div>
@@ -1159,7 +1157,7 @@
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad()"
+							No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad(this),styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -1178,7 +1176,7 @@
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="exportPurchaseOrder"
 							class="col-form-label-sm my-0 py-0">Purchase Order</label> <select
-							id="exportPurchaseOrder" onchange="styleWiseItemLoad()"
+							id="exportPurchaseOrder" onchange=""
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -1198,14 +1196,14 @@
 									class="form-control-sm pr-0 pl-1">
 							</div>
 							<div class="col-md-2 pr-0 pl-1">
-								<label for="exportCtnsQty" class="col-form-label-sm my-0 py-0">Ctns
-									Qty</label> <input id="exportCtnsQty" type="number"
+								<label for="exportCartonQty" class="col-form-label-sm my-0 py-0">Ctns
+									Qty</label> <input id="exportCartonQty" type="number"
 									class="form-control-sm pr-0 pl-1">
 							</div>
 							<div class="col-md-2 pr-0 pl-1">
-								<button id="masterAddBtn" type="button"
+								<button id="exportAddBtn" type="button"
 									style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
-									onclick="styleAddAction()">
+									onclick="exportStyleAddAction()">
 									<i class="fa fa-plus-circle"></i> Add
 								</button>
 							</div>
@@ -1226,7 +1224,6 @@
 									<th>Unit Price</th>
 									<th>Amount</th>
 									<th>CuttonQty</th>
-									<th>Edit</th>
 									<th>Delete</th>
 								</tr>
 							</thead>
@@ -1239,21 +1236,21 @@
 
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
-						<button id="exportSubmitButton" type="button"
-							class="btn btn-primary btn-sm" onclick="submitAction()">
+						<button id="exportSubmitBtn" type="button"
+							class="btn btn-primary btn-sm" onclick="exportSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
-						<button id="exportEditButton" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="editAction()"
-							disabled>
+						<button id="exportEditBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="exportEditAction()"
+							style="display: none;">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
-						<button id="btnRefresh" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
+						<button id="exportRefreshBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="exportRefreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
-						<button id="btnPreview" type="button"
-							class="btn btn-primary btn-sm ml-1" disabled>
+						<button id="exportPreviewBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" style="display: none;">
 							<i class="fa fa-print"></i> Preview
 						</button>
 					</div>

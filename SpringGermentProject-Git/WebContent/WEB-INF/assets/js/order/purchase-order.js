@@ -10,6 +10,7 @@ function poWiseStyleLoad() {
   const purchaseOrder = $("#purchaseOrder").val();
 
   if (purchaseOrder != "0") {
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -29,6 +30,7 @@ function poWiseStyleLoad() {
         $('#styleNo').selectpicker('refresh');
         $('#styleNo').val(styleIdForSet).change();
         styleIdForSet = 0;
+        $("#loader").hide();
       }
     });
   } else {
@@ -45,7 +47,7 @@ function typeWiseIndentItemLoad() {
   const purchaseOrder = $("#purchaseOrder").val();
   const styleId = $("#styleNo").val();
   if (type != "0") {
-
+    $("#loader").show();
     $.ajax({
       type: 'GET',
       dataType: 'json',
@@ -67,6 +69,7 @@ function typeWiseIndentItemLoad() {
         $('#indentItem').selectpicker('refresh');
         $('#indentItem').val(indentIdForSet).change();
         indentIdForSet = 0;
+        $("#loader").hide();
       }
     });
 
@@ -87,7 +90,10 @@ function indentItemAdd() {
   const indentType = $("#indentType").val();
   const indentItemId = $("#indentItem").val();
   const rate = $("#rate").val();
-  const dollar = $("#dollar").val();
+  let dollar = $("#dollar").val().trim();
+  if($("#currency").val()== "BDT" && dollar == ''){
+    dollar = 1;
+  }
   const userId = $("#userId").val();
 
 
@@ -96,6 +102,7 @@ function indentItemAdd() {
       if (indentItemId != 0) {
         if (rate != '') {
           if (dollar != '') {
+            $("#loader").show();
             $.ajax({
               type: 'GET',
               dataType: 'json',
@@ -120,6 +127,7 @@ function indentItemAdd() {
                   //setCurrencyValue(data.poItemList);
 
                 }
+                $("#loader").hide();
               }
             });
 
@@ -217,6 +225,7 @@ function submitAction() {
               }
               if (isChecked) {
                 if (confirm("Are you sure to submit this Purchase Order...")) {
+                  $("#loader").show();
                   $.ajax({
                     type: 'POST',
                     dataType: 'json',
@@ -248,6 +257,7 @@ function submitAction() {
                         alert("Successfully Submit...");
                         refreshAction();
                       }
+                      $("#loader").hide();
                     }
                   });
                 }
@@ -331,6 +341,7 @@ function purchaseOrderEdit() {
         if (currency != 0) {
           if (isChecked) {
             if (confirm("Are you sure to Edit this Purchase Order...")) {
+              $("#loader").show();
               $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -361,6 +372,7 @@ function purchaseOrderEdit() {
                     alert("Successfully Edit...");
                     refreshAction();
                   }
+                  $("#loader").hide();
                 }
               });
             }
@@ -388,7 +400,7 @@ function searchIndentItem(indentId, indentType) {
 
   $("#indentId").val(indentId);
   $("#indentType").val(indentType);
-
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -420,6 +432,7 @@ function searchIndentItem(indentId, indentType) {
       $('#styleNo').selectpicker('refresh');
       $('#styleNo').val(indentIdForSet).change();
       indentIdForSet = 0;
+      $("#loader").hide();
     }
   });
 
@@ -466,7 +479,7 @@ function getOptions(elementId) {
 };
 
 function searchPurchaseOrder(poNo,poType) {
-
+  $("#loader").show();
   $.ajax({
     type: 'GET',
     dataType: 'json',
@@ -516,7 +529,7 @@ function searchPurchaseOrder(poNo,poType) {
         //$("#btnPreviewOption").show();
 
         $('#searchModal').modal('hide');
-
+        $("#loader").hide();
       }
     }
   });
@@ -578,7 +591,11 @@ function drawAddDataTable(data, isChecked = "") {
   const length = data.length;
 
   let rate = $("#rate").val();
-  let dollar = $("#dollar").val();
+
+  let dollar = $("#dollar").val().trim();
+  if($("#currency").val()== "BDT" && dollar == ''){
+    dollar = 1;
+  }
   let amount = 0;
 
   for (var i = 0; i < length; i++) {
@@ -604,29 +621,7 @@ function drawAddDataTable(data, isChecked = "") {
 
   return rows;
 }
-// function drawRowDataTable(rowData, c,supplierName,currency) {
-//   const autoId = rowData.autoId;
-//   supplierName.prop("id","supplier-"+autoId);
-//   currency.prop("id","currency-"+autoId);
 
-//   let row = $("<tr id='row-"+autoId+"' data-type='"+rowData.type+"'/>")
-//   row.append($("<td>" + rowData.styleNo + "</td>"));
-//   row.append($("<td>" + rowData.indentItemName + "</td>"));
-//   row.append($("<td>" + rowData.colorName + "</td>"));
-//   row.append($("<td>" + rowData.size + "</td>"));
-//   row.append($("<td></td>").append(supplierName));
-//   row.append($("<td>" + rowData.qty + "</td>"));
-//   row.append($("<td id='grandQty-"+autoId+"'>" + rowData.grandQty + "</td>"));
-//   row.append($("<td>" + rowData.unit + "</td>"));
-//   row.append($("<td id='dollar-"+autoId+"'>" + rowData.dollar + "</td>"));
-//   //row.append($("<td contenteditable='true'>" + rowData.rate + "</td>"));
-//   row.append($("<td><input id='rate-"+autoId+"' class='form-control-sm' type='number' value="+ rowData.rate +" onkeyup='amountCalculation("+autoId+")'></td>"));
-//   row.append($("<td></td>").append(currency));
-//   row.append($("<td id='amount-"+autoId+"'>" + rowData.amount + "</td>"));
-//   row.append($("<td ><input type='checkbox' class='check' id='check-"+autoId+"'></td>"));
-
-//   return row;
-// }
 
 
 
@@ -685,7 +680,15 @@ $(document).ready(function () {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
     });
   });
+	$("#indentListSearch").on("keyup", function () {
+		let value = $(this).val().toLowerCase();
+		$("#dataList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
 });
+
+
 
 
 var today = new Date();

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import pg.Commercial.BillOfEntry;
+import pg.Commercial.ExportLC;
 import pg.Commercial.ImportLC;
 import pg.Commercial.MasterLC;
 import pg.Commercial.MasterLC.StyleInfo;
@@ -27,6 +30,7 @@ import pg.registerModel.AccessoriesItem;
 import pg.registerModel.BuyerModel;
 import pg.registerModel.Color;
 import pg.registerModel.FabricsItem;
+import pg.registerModel.Notifyer;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.CommercialService;
@@ -145,10 +149,14 @@ public class CommercialController {
 		List<StyleInfo> masterLCStyles = commercialService.getMasterLCStyles(masterLCNo, buyerId, amendmentNo);
 		List<MasterLC> ammendmentList = commercialService.getMasterLCAmendmentList(masterLCNo, buyerId);
 		List<ImportLC> importInvoiceList = commercialService.getImportLCList(masterLCNo);
+		List<Notifyer> notifyerList = registerService.getNotifyerListByBuyerId(buyerId);
+		
 		objmain.put("masterLCInfo",masterLCInfo);
 		objmain.put("masterLCStyles", masterLCStyles);
 		objmain.put("amendmentList", ammendmentList);
 		objmain.put("importInvoiceList", importInvoiceList);
+		objmain.put("exportInvoiceList", commercialService.getExportInvoiceList(masterLCNo));
+		objmain.put("notifyerList", notifyerList);
 		return objmain;
 	}
 	
@@ -184,6 +192,7 @@ public class CommercialController {
 
 		if(commercialService.importLCSubmit(importLC)) {
 			objmain.put("result", "success");
+			objmain.put("importInvoiceList", commercialService.getImportLCList(importLC.getMasterLCNo()));
 			objmain.put("amendmentList", commercialService.getImportLCAmendmentList(importLC.getMasterLCNo(), importLC.getInvoiceNo()));
 		}else {
 			objmain.put("result", "something wrong");
@@ -191,6 +200,30 @@ public class CommercialController {
 		return objmain;
 	}
 	
+	@RequestMapping(value = "/importLCEdit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject importLCEdit(ImportLC importLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.importLCEdit(importLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getImportLCAmendmentList(importLC.getMasterLCNo(), importLC.getInvoiceNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+
+	@RequestMapping(value = "/importLCAmendment",method=RequestMethod.POST)
+	public @ResponseBody JSONObject importLCAmendment(ImportLC importLC) {
+		JSONObject objmain = new JSONObject();
+
+		if(commercialService.importLCAmendment(importLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getImportLCAmendmentList(importLC.getMasterLCNo(), importLC.getInvoiceNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
 	@RequestMapping(value = "/searchImportLCInvoice",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchImportLCInvoice(String masterLCNo,String invoiceNo,String amendmentNo) {
 		JSONObject objmain = new JSONObject();
@@ -205,7 +238,27 @@ public class CommercialController {
 		objmain.put("amendmentList", ammendmentList);
 		objmain.put("importLCInfo", importLC);
 		objmain.put("importItemList", itemList);
-		objmain.put("importUDList","");
+		objmain.put("importUDList",commercialService.getImportINvoiceUDList(invoiceNo));
+		objmain.put("billEntryList", commercialService.getBillOfEntryList(masterLCNo,invoiceNo));
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/importInvoiceUDAdd",method=RequestMethod.POST)
+	public @ResponseBody JSONObject importInvoiceUDAdd(String udInfo) {
+		JSONObject objmain = new JSONObject();
+		try{
+			if(commercialService.importInvoiceUdAdd(udInfo)) {
+				JSONParser jsonParser = new JSONParser();
+				JSONObject udObject = (JSONObject)jsonParser.parse(udInfo);
+				objmain.put("result", "success");
+				objmain.put("udList", commercialService.getImportINvoiceUDList(udObject.get("importInvoiceNo").toString()));
+			}else {
+				objmain.put("result", "something wrong");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		return objmain;
 	}
 	
@@ -236,7 +289,45 @@ public class CommercialController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/billOfEntrySubmit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject billOfEntrySubmit(BillOfEntry billOfEntry) {
+		JSONObject objmain = new JSONObject();
+
+		if(commercialService.billOfEntrySubmit(billOfEntry)) {
+			objmain.put("result", "success");
+			objmain.put("billEntryList", commercialService.getBillOfEntryList(billOfEntry.getMasterLCNo(), billOfEntry.getInvoiceNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
 	
+	@RequestMapping(value = "/billOfEntryEdit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject billOfEntryEdit(BillOfEntry billOfEntry) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.billOfEntryEdit(billOfEntry).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("billItemList", commercialService.getBillOfEntryItems(billOfEntry.getAutoId(), billOfEntry.getBillEntryNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchBillOfEntry",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchBillOfEntry(String masterLCNo,String invoiceNo,String billNo) {
+		JSONObject objmain = new JSONObject();
+		//MasterLC masterLCInfo = commercialService.getMasterLCInfo(masterLCNo, buyerId, amendmentNo);
+		// = commercialService.getImportLCStyles(masterLCNo, invoiceNo, amendmentNo);
+		BillOfEntry billOfEntry = commercialService.getBillOfEntryInfo(masterLCNo, invoiceNo, billNo);
+		JSONArray itemList = commercialService.getBillOfEntryItems(billOfEntry.getAutoId(), billNo);
+		
+		//objmain.put("masterLCInfo",masterLCInfo);
+		//sobjmain.put("masterLCStyles", masterLCStyles);
+		objmain.put("billOfEntry", billOfEntry);
+		objmain.put("itemList", itemList);
+		return objmain;
+	}
 	
 	@RequestMapping(value = "/insert", method=RequestMethod.POST)
 	public String insert(deedOfContacts deedcontact) {
@@ -250,16 +341,51 @@ public class CommercialController {
 	}
 	
 	
+	@RequestMapping(value = "/exportLCSubmit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject exportLCSubmit(ExportLC exportLC) {
+		JSONObject objmain = new JSONObject();
+
+		if(commercialService.exportLCSubmit(exportLC)) {
+			objmain.put("result", "success");
+			objmain.put("exportInvoiceList", commercialService.getExportInvoiceList(exportLC.getMasterLCNo()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/exportLCEdit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject exportLCEdit(ExportLC exportLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.exportLCEdit(exportLC).equals("success")) {
+			objmain.put("result", "success");
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchExportLC",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchExportLC(String masterLCNo,String invoiceNo) {
+		JSONObject objmain = new JSONObject();
+
+		
+		ExportLC exportLCInfo = commercialService.getExportLCInfo(masterLCNo, invoiceNo);
+		JSONArray exportLCStyles = commercialService.getExportStyleItems(exportLCInfo.getAutoId());
+		
+		objmain.put("exportLCInfo",exportLCInfo);
+		objmain.put("exportLCStyles", exportLCStyles);
+		
+		return objmain;
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/deedofcontract/{contractid}",method=RequestMethod.POST)
 	public String deedofcontractreport(@PathVariable ("contractid") String contractid) {
 		System.out.println(" Open Ooudoor sales report 1");
 		
 		this.contractId=contractid;
-		
-		
 		return "yes";
-		
 	}
 	
 	
