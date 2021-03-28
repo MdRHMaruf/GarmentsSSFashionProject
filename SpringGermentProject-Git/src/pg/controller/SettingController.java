@@ -577,6 +577,12 @@ public class SettingController {
 		
 	}
 
-
+	@RequestMapping(value={"/role_management"})
+	public ModelAndView roleManagement(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("setting/role-management");
+		map.addAttribute("roleList","");
+		map.addAttribute("resourceList","");
+		return view;
+	}
 
 }

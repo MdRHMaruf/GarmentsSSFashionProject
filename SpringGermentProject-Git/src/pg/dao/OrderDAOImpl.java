@@ -1153,19 +1153,20 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount \r\n" + 
+			String sql="select cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount,convert(varchar,convert(date,min(cc.EntryTime),25)) as entryDate \r\n" + 
 					"from TbCostingCreate cc\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on cc.StyleId = sc.StyleId\r\n" + 
 					"left join tbItemDescription id\r\n" + 
 					"on cc.ItemId = id.itemid\r\n" + 
-					"where cc.userId='"+userId+"' group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname";
+					"where cc.userId='"+userId+"' group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname \r\n"+
+					"order by cc.costingNo desc";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				temp = new Costing("0", element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), "","","", "", "",0.0, 0.0, 0.0, 0.0, 0.0, Double.valueOf(element[5].toString()), 0.0,"", "0");
+				temp = new Costing("0", element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), "","","", "", "",0.0, 0.0, 0.0, 0.0, 0.0, Double.valueOf(element[5].toString()), 0.0, element[6].toString(), "0");
 				temp.setCostingNo(element[0].toString());
 				datalist.add(temp);				
 			}			
@@ -2486,14 +2487,14 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, a.IndentDate, 25)) indentDate\r\n" + 
+			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 					"from tbAccessoriesIndent a \r\n" + 
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
-					"group by a.AINo,a.PurchaseOrder,a.IndentDate";
+					"group by a.AINo,a.PurchaseOrder \r\n"+
+					"order by a.AINo desc";
 
 
 			List<?> list = session.createSQLQuery(sql).list();
-
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -2950,10 +2951,11 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, a.IndentDate, 25)) indentDate\r\n" + 
+			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 					"from tbZipperIndent a \r\n" + 
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
-					"group by a.AINo,a.PurchaseOrder,a.IndentDate";
+					"group by a.AINo,a.PurchaseOrder \r\n"+
+					"order by a.AINo desc";
 
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -3484,7 +3486,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select indentId,(SELECT CONVERT(varchar, indentDate, 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId,IndentDate";
+			String sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId order by indentId desc";
 			List<?> list = session.createSQLQuery(sql).list();
 			AccessoriesIndentCarton tempAcc = null;
 
@@ -4093,9 +4095,9 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="select a.indentId,(SELECT CONVERT(varchar, a.indentDate, 25)) as indentDate  \r\n" + 
+			String sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 					"from tbFabricsIndent a \r\n" + 
-					"where a.entryby='"+userId+"' group by a.indentId,a.indentDate  order by a.indentDate desc";
+					"where a.entryby='"+userId+"' group by a.indentId  order by a.indentId desc";
 			session.createSQLQuery(sql).list();
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -6646,66 +6648,152 @@ public class OrderDAOImpl implements OrderDAO{
 
 			if(approveType.equals("0")) {
 				if(itemType.equals(String.valueOf(ItemType.FABRICS.getType()))) {
-					sql=" select purchaseOrder,fabI.styleId,sc.StyleNo,supplierid,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
-							"on fabI.styleId =sc.StyleId\r\n" + 
+							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
 							"left join tbSupplier s\r\n" + 
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
 							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
 				}else if(itemType.equals(String.valueOf(ItemType.ACCESSORIES.getType()))) {
-					sql = "select purchaseOrder,accI.styleId,sc.StyleNo,supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
-							"on acci.styleId =sc.StyleId\r\n" + 
+							"on acci.styleId = cast(sc.StyleId as varchar)\r\n" + 
 							"left join tbSupplier s\r\n" + 
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
 							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
 				}
 			}else {
 				if(itemType.equals(String.valueOf(ItemType.FABRICS.getType()))) {
-					sql=" select purchaseOrder,fabI.styleId,sc.StyleNo,supplierid,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
-							"on fabI.styleId =sc.StyleId\r\n" + 
+							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
 							"left join tbSupplier s\r\n" + 
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
 							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
 				}else if(itemType.equals(String.valueOf(ItemType.ACCESSORIES.getType()))) {
-					sql = "select purchaseOrder,accI.styleId,sc.StyleNo,supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
-							"on acci.styleId =sc.StyleId\r\n" + 
+							"on acci.styleId = cast(sc.StyleId as varchar) \r\n" + 
 							"left join tbSupplier s\r\n" + 
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
 							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
 				}
 			}
 
-
-			List<?> list = session.createSQLQuery(sql).list();
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
-				tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
-				dataList.add(tempPo);
+			if(itemType.equals("allItem")) {
+				if(approveType.equals("0")) {
+					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+							"from tbFabricsIndent fabI\r\n" + 
+							"left join TbStyleCreate sc\r\n" + 
+							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
+							"left join tbSupplier s\r\n" + 
+							"on fabi.supplierid = s.id\r\n" + 
+							"left join tbPurchaseOrderSummary pos\r\n" + 
+							"on fabI.pono = pos.pono \r\n" + 
+							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"order by fabI.pono desc";
+					List<?> list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						Object[] element = (Object[]) iter.next();
+						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+						dataList.add(tempPo);
+					}
+					
+					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+							"from tbAccessoriesIndent accI\r\n" + 
+							"left join TbStyleCreate sc\r\n" + 
+							"on acci.styleId = cast(sc.StyleId as varchar)\r\n" + 
+							"left join tbSupplier s\r\n" + 
+							"on acci.supplierid = s.id\r\n" + 
+							"left join tbPurchaseOrderSummary pos\r\n" + 
+							"on accI.pono = pos.pono \r\n" + 
+							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"order by accI.pono desc";
+					list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						Object[] element = (Object[]) iter.next();
+						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+						dataList.add(tempPo);
+					}
+				}else {
+					
+					
+					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+							"from tbFabricsIndent fabI\r\n" + 
+							"left join TbStyleCreate sc\r\n" + 
+							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
+							"left join tbSupplier s\r\n" + 
+							"on fabi.supplierid = s.id\r\n" + 
+							"left join tbPurchaseOrderSummary pos\r\n" + 
+							"on fabI.pono = pos.pono \r\n" + 
+							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
+							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"order by fabI.pono desc";
+					
+					List<?> list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						Object[] element = (Object[]) iter.next();
+						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+						dataList.add(tempPo);
+					}
+					
+					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+							"from tbAccessoriesIndent accI\r\n" + 
+							"left join TbStyleCreate sc\r\n" + 
+							"on acci.styleId = cast(sc.StyleId as varchar) \r\n" + 
+							"left join tbSupplier s\r\n" + 
+							"on acci.supplierid = s.id\r\n" + 
+							"left join tbPurchaseOrderSummary pos\r\n" + 
+							"on accI.pono = pos.pono \r\n" + 
+							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
+							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"order by accI.pono desc";
+					
+					list = session.createSQLQuery(sql).list();
+					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+					{	
+						Object[] element = (Object[]) iter.next();
+						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+						dataList.add(tempPo);
+					}
+				}
+				
+				
+			}else {
+				List<?> list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+					dataList.add(tempPo);
+				}
 			}
+			
 
 			tx.commit();
 		}

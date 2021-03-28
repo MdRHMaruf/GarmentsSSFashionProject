@@ -1,7 +1,8 @@
 package pg.registerModel;
 
 public class Employee {
-
+	String autoId="";
+	String employeeId;
 	String employeeCode;
 	String employeeName;
 	String cardNo;
@@ -15,7 +16,7 @@ public class Employee {
 	String grade;
 	String joinDate;
 	String UserId;
-	String employeeId="";
+	
 	
 	public Employee() {
 		
@@ -23,7 +24,7 @@ public class Employee {
 	
 	public Employee(String AutoId,String employeeCode, String employeeName, String cardNo, String departmentId, String department, String designationId, String designation, String line, String grade, String joinDate) {
 		super();
-		this.employeeId=AutoId;
+		this.autoId=AutoId;
 		this.employeeCode = employeeCode;
 		this.employeeName = employeeName;
 		this.designation = designation;
@@ -124,6 +125,14 @@ public class Employee {
 		UserId = userId;
 	}
 
+	public String getAutoId() {
+		return autoId;
+	}
+
+	public void setAutoId(String autoId) {
+		this.autoId = autoId;
+	}
+
 	public String getEmployeeId() {
 		return employeeId;
 	}
@@ -131,5 +140,6 @@ public class Employee {
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
+	
 	
 }
