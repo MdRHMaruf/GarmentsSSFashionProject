@@ -2598,8 +2598,7 @@ public class RegisterController {
 
 
 	//Bank Create
-
-	@RequestMapping(value = "/Bank_create",method=RequestMethod.GET)
+	@RequestMapping(value = "/bank_create",method=RequestMethod.GET)
 	public ModelAndView Bank_create(ModelMap map,HttpSession session) {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
@@ -2644,10 +2643,10 @@ public class RegisterController {
 
 	@ResponseBody
 	@RequestMapping(value = "/getBankInfo",method=RequestMethod.GET)
-	public JSONObject getBankInfo(String BankId) {
+	public JSONObject getBankInfo(String bankId) {
 		JSONObject object = new JSONObject();
 
-		object.put("bankInfo", registerService.getBankInfo(BankId));
+		object.put("bankInfo", registerService.getBankInfo(bankId));
 
 		return object;
 	}

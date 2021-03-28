@@ -4624,30 +4624,130 @@ public class RegisterDaoImpl implements RegisterDao{
 	@Override
 	public boolean saveBank(Bank bank) {
 		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="insert into tbBankInfo(bankName,branch,address,entryTime,entryBy) values('"+bank.getBankName()+"','"+bank.getBranchName()+"','"+bank.getAddress()+"',CURRENT_TIMESTAMP,'"+bank.getUserId()+"')";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
 		return false;
 	}
 
 	@Override
 	public boolean editBank(Bank bank) {
 		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql="update tbBankInfo set bankName='"+bank.getBankName()+"',branch='"+bank.getBranchName()+"',address='"+bank.getAddress()+"' where id='"+bank.getId()+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
 		return false;
 	}
 
 	@Override
 	public Bank getBankInfo(String id) {
 		// TODO Auto-generated method stub
-		return null;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		Bank bank= null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select id,bankName,branch,address,entryBy from tbBankInfo where id = '"+id+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				bank = new Bank(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString());
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return bank;
 	}
 
 	@Override
 	public List<Bank> getBankList() {
 		// TODO Auto-generated method stub
-		return null;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Bank> dataList=new ArrayList<Bank>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			int i=1;
+			String sql="select id,bankName,branch,address,entryBy from tbBankInfo";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				Object[] element = (Object[]) iter.next();
+
+				
+				dataList.add(new Bank(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+				i++;
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
 	}
-
-
-
-
-
 
 }

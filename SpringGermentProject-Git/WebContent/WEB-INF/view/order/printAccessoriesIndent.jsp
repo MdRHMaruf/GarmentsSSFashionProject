@@ -27,25 +27,25 @@
     	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select ai.AINo,ai.PurchaseOrder,ai.ShippingMarks,isnull(sc.StyleNo,'')as StyleNo,ISNULL(id.itemname,'') as ItemName,ISNULL(c.colorName,'')as Color, "+
-				"ISNULL(b.name,'') as BrandName,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ISNULL(ss.sizeName,'') as SizeName,ISNULL(u.unitname,'') as UnitName,ai.TotalQty,ai.RequireUnitQty "+
-				"from tbAccessoriesIndent ai  "+
-				"left join TbStyleCreate sc "+
-				"on ai.styleid = cast(sc.StyleId as varchar) "+
-				"left join tbItemDescription id "+
-				"on ai.Itemid = cast(id.itemid as varchar) "+
-				"left join tbColors c "+
-				"on ai.ColorId = cast(c.colorId as varchar) "+
-				"left join tbbrands b "+
-				"on ai.IndentBrandId = b.id "+
-				"left join TbAccessoriesItem aItem "+
-				"on ai.accessoriesItemId = aItem.itemid "+
-				"left join tbStyleSize ss "+
-				"on ai.size = ss.id "+
-				"left join tbunits u "+
-				"on ai.UnitId = u.Unitid "+
+		String Sql="select ai.AINo,ai.PurchaseOrder,ai.ShippingMarks,isnull(sc.StyleNo,'')as StyleNo,ISNULL(id.itemname,'') as ItemName,ISNULL(c.colorName,'')as Color,  \r\n"+
+				"ISNULL(b.name,'') as BrandName,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ISNULL(ss.sizeName,'') as SizeName,ISNULL(u.unitname,'') as UnitName,ai.TotalQty,ai.RequireUnitQty  \r\n"+
+				"from tbAccessoriesIndent ai   \r\n"+
+				"left join TbStyleCreate sc  \r\n"+
+				"on ai.styleid = cast(sc.StyleId as varchar)  \r\n"+
+				"left join tbItemDescription id  \r\n"+
+				"on ai.Itemid = cast(id.itemid as varchar)  \r\n"+
+				"left join tbColors c  \r\n"+
+				"on ai.ColorId = cast(c.colorId as varchar)  \r\n"+
+				"left join tbbrands b  \r\n"+
+				"on ai.IndentBrandId = b.id  \r\n"+
+				"left join TbAccessoriesItem aItem  \r\n"+
+				"on ai.accessoriesItemId = aItem.itemid  \r\n"+
+				"left join tbStyleSize ss  \r\n"+
+				"on ai.size = ss.id  \r\n"+
+				"left join tbunits u  \r\n"+
+				"on ai.UnitId = u.Unitid \r\n"+
 				"where ai.AINo = '"+AiNo+"' "+
-				"order by ai.ColorId,ai.accessoriesItemId,ai.size";
+				"order by ai.accessoriesItemId,ai.styleid,ai.ColorId,ss.sortingNo";
       	System.out.println("sql "+Sql);
       	
 		String jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesIndent.jrxml");

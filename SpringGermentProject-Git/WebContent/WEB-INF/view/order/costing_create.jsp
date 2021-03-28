@@ -287,6 +287,7 @@ String userName=(String)session.getAttribute("userName");
 					<thead>
 						<tr>
 							<th>Costing No</th>
+							<th>Date</th>
 							<th>Style</th>
 							<th>Item Name</th>
 							<th><span><i class="fa fa-search"></i></span></th>
@@ -298,6 +299,7 @@ String userName=(String)session.getAttribute("userName");
 							varStatus="counter">
 							<tr>
 								<td>${costing.costingNo}</td>
+								<td>${costing.date}</td>
 								<td>${costing.styleName}</td>
 								<td>${costing.itemName}</td>
 
@@ -398,6 +400,7 @@ String userName=(String)session.getAttribute("userName");
 							<thead>
 								<tr>
 									<th style="width: 15px;">Costing No</th>
+									<th>Date</th>
 									<th>Style</th>
 									<th>Item Name</th>
 									<th>Check</th>
@@ -408,6 +411,7 @@ String userName=(String)session.getAttribute("userName");
 									varStatus="counter">
 									<tr id='groupRow-${costing.costingNo }' data-id='${costing.costingNo}'>
 										<td>${costing.costingNo}</td>
+										<td>${costing.date}</td>
 										<td>${costing.styleName}</td>
 										<td>${costing.itemName}</td>
 										<td><input id='groupCheck-${costing.costingNo }' type="checkbox" /></td>

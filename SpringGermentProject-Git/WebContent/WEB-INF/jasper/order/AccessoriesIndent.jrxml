@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccessoriesIndent" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2b2a924-bedf-466f-811f-a9906dcece05">
-	<property name="ireport.zoom" value="1.2100000000000009"/>
-	<property name="ireport.x" value="352"/>
+	<property name="ireport.zoom" value="0.8264462809917362"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.AINo,a.PurchaseOrder,a.ShippingMarks,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName,(select colorName from tbColors where ColorId=a.ColorId) as Color,ISNULL((select name from tbbrands where id=a.IndentBrandId),'') as BrandName,(select ItemName from TbAccessoriesItem where Itemid=a.accessoriesItemId) as AccessoriesName,a.accessoriesSize,(select SizeName from tbStyleSize where id=a.size) as SizeName,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.TotalQty,(select Signature from TbMerchendiserInfo where MUserId=a.IndentPostBy) as Signatur from tbAccessoriesIndent a where AiNo ='4' order by a.ColorId,a.accessoriesItemId,a.size"]]></defaultValueExpression>
@@ -53,7 +53,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="83" splitType="Stretch">
+		<band height="58" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="29" width="799" height="11" uuid="5c386ac4-253a-4606-a852-589690a7f7ec"/>
 				<textElement textAlignment="Center">
@@ -82,23 +82,6 @@
 				</textElement>
 				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
-			<rectangle>
-				<reportElement x="0" y="61" width="185" height="16" uuid="86a25717-55c7-461b-80f4-db1096d7c530"/>
-			</rectangle>
-			<staticText>
-				<reportElement x="2" y="62" width="40" height="14" uuid="3333e5cc-977e-4ca6-80b1-88c0e0b53340"/>
-				<text><![CDATA[Style No]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="45" y="62" width="140" height="14" uuid="131f3523-fcb2-4206-8e15-6e5d075a2c63"/>
-				<textElement>
-					<font isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="43" y="61" width="1" height="15" uuid="9fea73a6-9c33-4ab6-9497-bda6335fe331"/>
-			</line>
 		</band>
 	</title>
 	<pageHeader>
@@ -124,7 +107,7 @@
 				<reportElement x="0" y="0" width="1" height="30" uuid="fe272f69-0051-4f11-afe5-53793e2cecaf"/>
 			</line>
 			<line>
-				<reportElement x="44" y="1" width="1" height="29" uuid="77d9d1d2-515b-4978-bcf7-ec8111655602"/>
+				<reportElement x="27" y="1" width="1" height="29" uuid="77d9d1d2-515b-4978-bcf7-ec8111655602"/>
 			</line>
 			<line>
 				<reportElement x="185" y="1" width="1" height="30" uuid="cfffd651-51c2-43e4-8bfa-bce23e8b3ec4"/>
@@ -184,13 +167,13 @@
 				<text><![CDATA[COLOR]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="117" y="1" width="68" height="29" uuid="63981a69-a212-4711-9f0b-cf8056a78ed5"/>
+				<reportElement x="96" y="1" width="89" height="29" uuid="63981a69-a212-4711-9f0b-cf8056a78ed5"/>
 				<box leftPadding="2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[SHIPPING MARK]]></text>
+				<text><![CDATA[STYLE NO.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="1" width="42" height="29" uuid="c93f448d-6347-48cb-92e8-31751d3e633e"/>
+				<reportElement x="1" y="1" width="26" height="29" uuid="c93f448d-6347-48cb-92e8-31751d3e633e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[#SL]]></text>
 			</staticText>
@@ -213,10 +196,10 @@
 				<text><![CDATA[ACCESSORIES]]></text>
 			</staticText>
 			<line>
-				<reportElement x="115" y="0" width="1" height="30" uuid="265a90e5-f111-4291-bb23-57c453422f1f"/>
+				<reportElement x="95" y="0" width="1" height="30" uuid="265a90e5-f111-4291-bb23-57c453422f1f"/>
 			</line>
 			<staticText>
-				<reportElement x="45" y="1" width="68" height="29" uuid="b9066626-11a8-48ba-a52a-fdc9e3bba2a6"/>
+				<reportElement x="28" y="1" width="68" height="29" uuid="b9066626-11a8-48ba-a52a-fdc9e3bba2a6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[PO#]]></text>
 			</staticText>
@@ -234,7 +217,7 @@
 				<reportElement x="0" y="-1" width="1" height="14" uuid="0f5a6251-f3cd-4f8c-8453-580427a6bf8c"/>
 			</line>
 			<line>
-				<reportElement x="44" y="0" width="1" height="14" uuid="96926078-0852-4db9-9e43-7f948d1bea3d"/>
+				<reportElement x="27" y="0" width="1" height="14" uuid="96926078-0852-4db9-9e43-7f948d1bea3d"/>
 			</line>
 			<line>
 				<reportElement x="185" y="0" width="1" height="14" uuid="9a23ed07-b504-45dd-afef-bc5730f142e2"/>
@@ -314,7 +297,7 @@
 				<textFieldExpression><![CDATA[$F{UnitName}.toUpperCase()]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0" isBlankWhenNull="true">
-				<reportElement x="1" y="0" width="42" height="13" uuid="d3285d7a-2332-49b4-8673-d72291298455"/>
+				<reportElement x="1" y="0" width="26" height="13" uuid="d3285d7a-2332-49b4-8673-d72291298455"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
@@ -331,20 +314,20 @@
 				<textFieldExpression><![CDATA[$F{accessoriesSize}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="117" y="-1" width="68" height="14" uuid="0a946b5a-c164-41bd-b9de-11bf28d2aa32"/>
+				<reportElement isPrintRepeatedValues="false" x="96" y="-1" width="89" height="14" uuid="0a946b5a-c164-41bd-b9de-11bf28d2aa32"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{ShippingMarks}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="373" y="-1" width="1" height="14" uuid="c652c4f2-0581-420e-acbd-713d81717eeb"/>
 			</line>
 			<line>
-				<reportElement x="115" y="-1" width="1" height="14" uuid="c7694be0-dd7c-4428-8932-95c5e31ba3ab"/>
+				<reportElement x="95" y="-1" width="1" height="14" uuid="c7694be0-dd7c-4428-8932-95c5e31ba3ab"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="45" y="0" width="68" height="13" uuid="ea46af27-dfee-45e0-bbac-10fafe128b40"/>
+				<reportElement isPrintRepeatedValues="false" x="28" y="0" width="68" height="13" uuid="ea46af27-dfee-45e0-bbac-10fafe128b40"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
 				</textElement>

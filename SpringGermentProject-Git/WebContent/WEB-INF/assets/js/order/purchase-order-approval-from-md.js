@@ -45,8 +45,8 @@ function printPurchaseOrder(autoId) {
     const supplierId = row.getAttribute("data-supplier-id");
     const poNo = $("#poNo-" + autoId).text();
     const type = $("#itemType-" + autoId).text();
-
-    var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type;
+    const previewType = "general";
+    var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type + "/"+previewType;
     window.open(url, '_blank');
 }
 
@@ -72,15 +72,16 @@ $("#btnConfirm").click(() => {
 
         if (checked) {
             isChecked = checked;
-            purchaseOrderList += `purchaseOrder : ${purchaseOrder},styleId : ${styleId},supplierId : ${supplierId},poNo : ${poNo},type : ${type},mdApproval : 1 #`;
+            purchaseOrderList += `purchaseOrder : ${purchaseOrder}@styleId : ${styleId}@supplierId : ${supplierId}@poNo : ${poNo}@type : ${type}@mdApproval : 1 #`;
         } else {
-            purchaseOrderList += `purchaseOrder : ${purchaseOrder},styleId : ${styleId},supplierId : ${supplierId},poNo : ${poNo},type : ${type},mdApproval : 0 #`;
+            purchaseOrderList += `purchaseOrder : ${purchaseOrder}@styleId : ${styleId}@supplierId : ${supplierId}@poNo : ${poNo}@type : ${type}@mdApproval : 0 #`;
         }
 
 
     }
     if (isChecked) {
         purchaseOrderList = purchaseOrderList.slice(0, -1);
+        console.log("purchaseOrderList"+purchaseOrderList);
         $.ajax({
             type: 'GET',
             dataType: 'json',

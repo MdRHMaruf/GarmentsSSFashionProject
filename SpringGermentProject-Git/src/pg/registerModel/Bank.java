@@ -5,6 +5,7 @@ public class Bank {
 	String bankName;
 	String branchName;
 	String address;
+	String userId;
 	
 	public Bank() {
 		super();
@@ -40,6 +41,12 @@ public class Bank {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	

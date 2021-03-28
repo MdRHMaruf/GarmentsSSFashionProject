@@ -69,12 +69,11 @@ String userName=(String) request.getAttribute("userName");
 										id="department" class="selectpicker form-control"
 										data-live-search="true"
 										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Department</option>
+										<option value="0">Select Department</option>
 
 										<c:forEach items="${department}" var="department"
 											varStatus="counter">
-											<option id='departmentName'
-												value="${department.departmentId}">${department.departmentName}</option>
+											<option value="${department.departmentId}">${department.departmentName}</option>
 										</c:forEach>
 
 									</select>
@@ -84,11 +83,11 @@ String userName=(String) request.getAttribute("userName");
 										id="designation" class="selectpicker form-control"
 										data-live-search="true"
 										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Designation</option>
+										<option value="0">Select Designation</option>
 
 										<c:forEach items="${designation}" var="designation"
 											varStatus="counter">
-											<option id='designation' value="${designation.designationId}">${designation.designation}</option>
+											<option value="${designation.designationId}">${designation.designation}</option>
 										</c:forEach>
 
 									</select>
@@ -99,10 +98,10 @@ String userName=(String) request.getAttribute("userName");
 									<label for="line" class="mb-0">Line</label> <select id="line"
 										class="selectpicker form-control" data-live-search="true"
 										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option>Select Line</option>
+										<option value="0">Select Line</option>
 
 										<c:forEach items="${line}" var="line" varStatus="counter">
-											<option id='line' value="${line.lineId}">${line.lineName}</option>
+											<option value="${line.lineId}">${line.lineName}</option>
 										</c:forEach>
 
 									</select>
