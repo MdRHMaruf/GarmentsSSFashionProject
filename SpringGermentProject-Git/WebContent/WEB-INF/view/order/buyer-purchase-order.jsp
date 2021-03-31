@@ -155,8 +155,7 @@
 						<div class="input-group input-group-sm mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text" id="inputGroup-sizing-sm"><label
-									class="my-0" for="customerOrder">Customer Order<span
-										style="color: red">*</span></label></span>
+									class="my-0" for="customerOrder">Customer Order</label></span>
 							</div>
 							<input id="customerOrder" type="text" class="form-control"
 								aria-label="Sizing example input"
@@ -424,7 +423,7 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
 	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-xl">
 		<div class="modal-content">
 			<div class="modal-header">
 				<div class="input-group">
@@ -447,9 +446,12 @@
 						<tr>
 							<th>Order Id</th>
 							<th>Buyer Name</th>
+							<th>Purchase Order</th>
+							<th>Style No</th>
 							<th>Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
-							<th>Print</th>
+							<th><span><i class="fa fa-print"></i></span></th>
+							<th><span><i class="fa fa-download"></i></span></th>
 						</tr>
 					</thead>
 					<tbody id="poList">
@@ -457,6 +459,8 @@
 							<tr>
 								<td>${po.buyerPoId}</td>
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
+								<td>${po.purchaseOrder}</td>
+								<td>${po.styleNo}</td>
 								<td>${po.date}</td>
 								<td><i class="fa fa-search"
 									onclick="searchBuyerPO(${po.buyerPoId})"
@@ -464,6 +468,7 @@
 								<td><i class="fa fa-print"
 									onclick="printBuyerPO(${po.buyerPoId})"
 									style='cursor: pointer;'> </i></td>
+									<td><i class="fa fa-download" style='cursor: pointer;'></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>

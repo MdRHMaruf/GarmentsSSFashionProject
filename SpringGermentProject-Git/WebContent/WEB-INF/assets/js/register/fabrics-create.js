@@ -11,7 +11,7 @@ function saveAction() {
   const userId = $("#userId").val();
 
   if (fabricsItemName != '') {
-    if (unitId != '0') {
+    //if (unitId != '0') {
       if(confirm("Are you sure to Save this Item?")){
         $("#loader").show();
         $.ajax({
@@ -29,7 +29,7 @@ function saveAction() {
             if (data.result == "Something Wrong") {
               dangerAlert("Something went wrong");
             } else if (data.result == "duplicate") {
-              dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Allreary Exist")
+              dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Already Exist")
             } else {
               successAlert("Fabrics Item Name Save Successfully");
   
@@ -42,10 +42,10 @@ function saveAction() {
         });
       }
       
-    } else {
-      warningAlert("Unit Not Selected... Please Select Unit");
-      $("#unit").focus();
-    }
+    // } else {
+    //   warningAlert("Unit Not Selected... Please Select Unit");
+    //   $("#unit").focus();
+    // }
   } else {
     warningAlert("Empty Fabrics Item Name... Please Enter Fabrics Item Name");
     $("#fabricsItemName").focus();
@@ -61,7 +61,7 @@ function editAction() {
   const userId = $("#userId").val();
 
   if (fabricsItemName != '') {
-    if (unitId != '0') {
+    //if (unitId != '0') {
       $("#loader").show();
       $.ajax({
         type: 'POST',
@@ -78,7 +78,7 @@ function editAction() {
           if (data.result == "Something Wrong") {
             dangerAlert("Something went wrong");
           } else if (data.result == "duplicate") {
-            dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Allreary Exist")
+            dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Already Exist")
           } else {
             successAlert("Fabrics Item Name Edit Successfully");
 
@@ -89,10 +89,10 @@ function editAction() {
           $("#loader").hide();
         }
       });
-    } else {
-      warningAlert("Unit Not Selected... Please Select Unit");
-      $("#unit").focus();
-    }
+    // } else {
+    //   warningAlert("Unit Not Selected... Please Select Unit");
+    //   $("#unit").focus();
+    // }
   } else {
     warningAlert("Empty Fabrics Item Name... Please Enter Fabrics Item Name");
     $("#fabricsItemName").focus();
@@ -119,7 +119,7 @@ function unitAddAction() {
   const userId = $("#userId").val();
 
   if (fabricsItemId != '') {
-    if (unitId != '0') {
+    //if (unitId != '0') {
       if (unitQty != '' && Number(unitQty) > 0) {
         if(confirm("Are you sure to Add this Unit with Quantity '"+ unitQty +"'?")){
           $("#loader").show();
@@ -138,7 +138,7 @@ function unitAddAction() {
               if (data.result == "Something Wrong") {
                 dangerAlert("Something went wrong");
               } else if (data.result == "duplicate") {
-                dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Allreary Exist")
+                dangerAlert("Duplicate Fabrics Item Name..This Fabrics Item Name Already Exist")
               } else {
                 drawUnitTable(data.result);
               }
@@ -151,11 +151,11 @@ function unitAddAction() {
         warningAlert("Invalid Minimum Qty... Please Enter Valid Minimum Qty");
         $("#unitQty").focus();
       }
-    }
-    else {
-      warningAlert("Unit Not Selected... Please Select Unit");
-      $("#unit").focus();
-    }
+    // }
+    // else {
+    //   warningAlert("Unit Not Selected... Please Select Unit");
+    //   $("#unit").focus();
+    // }
   } else {
     warningAlert("Empty Fabrics Item Name... Please Select Fabrics Item Name");
     $("#fabricsItemName").focus();
