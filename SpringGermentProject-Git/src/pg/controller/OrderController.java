@@ -2430,8 +2430,6 @@ public class OrderController {
 
 	}
 
-
-
 	@ResponseBody
 	@RequestMapping(value = "/editSampleCad",method=RequestMethod.GET)
 	public String editSampleCad(SampleCadAndProduction sample) {
@@ -2443,8 +2441,6 @@ public class OrderController {
 		return "fail";
 
 	}
-
-
 
 
 	@ResponseBody

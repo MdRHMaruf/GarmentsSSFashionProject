@@ -22,6 +22,8 @@ public class BuyerPO {
 	String userId;
 	List<BuyerPoItem> itemList;
 	String changedItemsList;
+	String purchaseOrder;
+	String styleNo;
 
 	public BuyerPO() {}
 	
@@ -47,6 +49,15 @@ public class BuyerPO {
 		this.buyerPoId = buyerPoId;
 		this.buyerId = buyerId;
 		this.buyerName = buyerName;
+		this.date = date;
+	}
+	
+	public BuyerPO(String buyerPoId,String buyerId,String buyerName,String purchaseOrder,String styleNo,String date) {
+		this.buyerPoId = buyerPoId;
+		this.buyerId = buyerId;
+		this.buyerName = buyerName;
+		this.purchaseOrder = purchaseOrder;
+		this.styleNo = styleNo;
 		this.date = date;
 	}
 	public String getBuyerName() {
@@ -168,6 +179,22 @@ public class BuyerPO {
 
 	public void setInspectionDate(String inspectionDate) {
 		this.inspectionDate = inspectionDate;
+	}
+
+	public String getPurchaseOrder() {
+		return purchaseOrder;
+	}
+
+	public void setPurchaseOrder(String purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+
+	public String getStyleNo() {
+		return styleNo;
+	}
+
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
 	}
 	
 }

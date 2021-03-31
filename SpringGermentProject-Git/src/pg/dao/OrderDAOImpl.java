@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -1629,22 +1630,43 @@ public class OrderDAOImpl implements OrderDAO{
 		Transaction tx=null;
 		List<BuyerPO> dataList=new ArrayList<BuyerPO>();
 		try{
-			tx=session.getTransaction();
-			tx.begin();
+			//tx=session.getTransaction();
+			//tx.begin();
 
-			String sql="select autoId,BuyerId,b.name,(select convert(varchar,bos.EntryTime,103))as date from TbBuyerOrderEstimateSummary bos\r\n" + 
-					"join tbBuyer b\r\n" + 
+			String sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
+					"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+					"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+					"	group by boed.PurchaseOrder\n" + 
+					"    FOR XML PATH('')),1,1,'') purchaseOrder, \n" + 
+					"	STUFF((SELECT ','+sc.StyleNo \n" + 
+					"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+					"	left join TbStyleCreate sc\n" + 
+					"	on boed.StyleId = sc.StyleId\n" + 
+					"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+					"	group by sc.StyleNo\n" + 
+					"    FOR XML PATH('')),1,1,'') styleNo,\n" + 
+					"(select convert(varchar,bos.EntryTime,103))as date \n" + 
+					"from TbBuyerOrderEstimateSummary bos\n" + 
+					"join tbBuyer b\n" + 
 					"on b.id = bos.BuyerId\r\n" + 
 					" where bos.userId='"+userId+"' order by bos.autoId desc";
-			List<?> list = session.createSQLQuery(sql).list();
+			/*List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();	
 				dataList.add(new BuyerPO(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
+			}*/
+			
+			SpringRootConfig sp=new SpringRootConfig();
+			Statement stmnt = sp.getConnection().createStatement();
+			ResultSet rs = stmnt.executeQuery(sql);
+			while(rs.next()) {
+				System.out.println("test"+rs.getString("styleNo"));
+				dataList.add(new BuyerPO(rs.getString("autoId"), rs.getString("buyerId"), rs.getString("buyerName"), rs.getString("purchaseOrder"),rs.getString("styleNo"),rs.getString("date")));
 			}
+			stmnt.close();
 
-
-			tx.commit();
+			//tx.commit();
 		}
 		catch(Exception e){
 			if (tx != null) {
