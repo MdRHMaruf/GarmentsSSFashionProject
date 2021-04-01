@@ -113,7 +113,7 @@ public interface OrderDAO {
 	boolean saveAccessoriesCurton(AccessoriesIndentCarton v);
 	String confirmCartonIndent(String cartonIndentId,String cartonItems);
 	List<AccessoriesIndentCarton> getAccessoriesIndentCarton(String poNo, String style, String item, String itemColor);
-	List<AccessoriesIndentCarton> getAllAccessoriesCartonData();
+	List<AccessoriesIndentCarton> getAllAccessoriesCartonData(String userId);
 
 	List<AccessoriesIndentCarton> getAccessoriesIndentCartonItemDetails(String id);
 	boolean editAccessoriesCarton(AccessoriesIndentCarton cartonIndent);
