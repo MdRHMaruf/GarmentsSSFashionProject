@@ -2389,17 +2389,15 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
-		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
-
+		//List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
+		List<SampleRequisitionItem> sampleReqList = orderService.getAllSampleRequisitionList();
 		ModelAndView view = new ModelAndView("order/sample_cad");
 
 
-		List<String> poList = orderService.getPurchaseOrderList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
-
-
-		view.addObject("poList",poList);
+		
+		
 		view.addObject("sampleList",sampleList);
 		view.addObject("sampleCadList",sampleCadList);
 		view.addObject("sampleReqList",sampleReqList);

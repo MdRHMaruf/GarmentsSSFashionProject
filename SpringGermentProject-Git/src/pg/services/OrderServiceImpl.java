@@ -933,6 +933,12 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.deletesamplefile(filename, id);
 	}
 
+	@Override
+	public List<SampleRequisitionItem> getAllSampleRequisitionList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getAllSampleRequisitionList();
+	}
+
 	
 	
 }
