@@ -1506,7 +1506,7 @@ public class OrderController {
 
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
-		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData();
+		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData(userId);
 		//List<CommonModel>unit=orderService.Unit();
 
 		ModelAndView view = new ModelAndView("order/accessories_indent_curton");
@@ -1612,8 +1612,8 @@ public class OrderController {
 	public JSONObject getAllAccessoriesCartonData(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
-
-		List<AccessoriesIndentCarton>qty=orderService.getAllAccessoriesCartonData();
+		
+		List<AccessoriesIndentCarton>qty=orderService.getAllAccessoriesCartonData(userId);
 
 		for (int i = 0; i < qty.size(); i++) {
 			JSONObject obj=new JSONObject();
@@ -2118,6 +2118,7 @@ public class OrderController {
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
 		map.addAttribute("previewType",previewType);
+		map.addAttribute("landscapeCheck","false");
 		return view;
 	}
 	
@@ -2130,6 +2131,9 @@ public class OrderController {
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
 		map.addAttribute("previewType",previewType);
+		
+		String[] dataList = data.split("@");
+		map.addAttribute("landscapeCheck",dataList[0]);
 		return view;
 	}
 	
@@ -2142,6 +2146,7 @@ public class OrderController {
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
 		map.addAttribute("previewType","general");
+		map.addAttribute("landscapeCheck","false");
 		return view;
 	}
 

@@ -44,6 +44,7 @@ import pg.storeModel.StoreGeneralCategory;
 public class RegisterDaoImpl implements RegisterDao{
 
 	boolean existsbuyer;
+	final String MD_ID = "9";
 
 
 	@Override
@@ -463,7 +464,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
+			
 			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' order by id";
+			
+			if(userId.equals(MD_ID)) {
+				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer order by id";
+			}
+			
 			System.out.println(" buyer details query ");
 
 			List<?> list = session.createSQLQuery(sql).list();

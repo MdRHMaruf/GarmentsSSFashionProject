@@ -28,6 +28,7 @@
 	String supplierId = request.getAttribute("supplierId").toString();
 	String type = request.getAttribute("type").toString();
 	String previewType = request.getAttribute("previewType").toString();
+	boolean landscapeCheck = Boolean.valueOf(request.getAttribute("landscapeCheck").toString());
 	
     try {
 
@@ -73,7 +74,7 @@
 			sql="select (select dbo.number((select sum(amount) from tbAccessoriesIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,b.ShippingMarks,b.PurchaseOrder, \r\n"+
 					"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
 					" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
-					"ISNULL(c.Colorname,'') as ColorName,b.sqNumber,b.accessoriesSize,ss.sizeName as size, \r\n"+
+					"ISNULL(c.Colorname,'') as ColorName,b.sqNumber,isnull(brand.name,'') as brand,b.accessoriesSize,ss.sizeName as size, \r\n"+
 					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
 					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
@@ -94,12 +95,23 @@
 					" on b.IndentColorId = cast(c.ColorId as varchar)  \r\n"+
 					"left join tbStyleSize ss \r\n"+
  					"on b.size = ss.id \r\n"+
+					"left join tbbrands brand\r\n"+
+					"on b.IndentBrandId = brand.id\r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
 			if(previewType.equalsIgnoreCase("withoutPcs")){
-				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcs.jrxml");
+				if(landscapeCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderLandscape.jrxml");
+				}else{
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcs.jrxml");
+				}
 			}else{
-				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
+				if(landscapeCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderLandscape.jrxml");
+				}else{
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
+				}
+				
 			}
 			
 			
@@ -135,7 +147,13 @@
 	 					"on b.size = ss.id \r\n"+
 						"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 						"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
-				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperGeneralPurchaseOrderView.jrxml");
+				
+				if(landscapeCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperGeneralPurchaseOrderViewLandscape.jrxml");
+				}else{
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperGeneralPurchaseOrderView.jrxml");	
+				}
+				
 			}else{
 				
 				sql="select (select dbo.number((select sum(amount) from tbZipperIndent where pono=a.pono),b.dolar)) as Taka,b.ShippingMarks,b.styleId,  \r\n"+
@@ -167,13 +185,15 @@
 						"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
 						"group by a.pono,b.dolar,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
 						"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
-				
-				
-				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");	
+				if(landscapeCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrderLandscape.jrxml");
+				}else{
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrder.jrxml");	
+				}			
 			}
 				
 		}else if(type.equalsIgnoreCase("Fabrics")) {
-			sql="select (select dbo.number((select sum(amount) from tbFabricsIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,'' as accessoriesSize,'' as size,    \r\n"+
+			sql="select (select dbo.number((select sum(amount) from tbFabricsIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,isnull(brand.name,'') as brandName,'' as accessoriesSize,'' as size,    \r\n"+
 				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
 					" (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,    \r\n"+
 					" (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,    \r\n"+
@@ -191,9 +211,18 @@
 					" on b.fabricsid = cast(fi.id as varchar)  \r\n"+
 					" left join tbColors c  \r\n"+
 					" on b.fabricscolor = cast(c.ColorId as varchar)  \r\n"+
+					"left join tbbrands brand \r\n"+
+ 					"on b.brand = brand.id \r\n"+
 					" where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'  \r\n"+
 					" order by  b.styleid,b.PurchaseOrder,b.Itemid,b.fabricsid asc ";
-			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrder.jrxml");
+			
+			if(landscapeCheck){
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrderLandscape.jrxml");
+			}else{
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/FabricsPurchaseOrder.jrxml");
+			}
+			
+			
 			
 
 		}else if(type.equalsIgnoreCase("Carton")){
@@ -214,7 +243,13 @@
 					  " join tbAccessoriesIndentForCarton b on a.pono=b.pono \r\n"+ 
 					"  where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'   \r\n"+
 					  " order by  b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId asc";
-			jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonPurchaseOrder.jrxml");
+			
+			if(landscapeCheck){
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonPurchaseOrderLandscape.jrxml");
+			}else{
+				jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/CartonPurchaseOrder.jrxml");	
+			}
+			
 		}
     	
     	System.out.println(sql);
