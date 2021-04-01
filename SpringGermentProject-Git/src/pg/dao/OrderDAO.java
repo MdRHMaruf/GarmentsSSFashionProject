@@ -226,6 +226,8 @@ public interface OrderDAO {
 	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
 	
 	boolean deletesamplefile(String filename, String id);
+	
+	List<SampleRequisitionItem> getAllSampleRequisitionList();
 }
 
 
