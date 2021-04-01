@@ -4687,6 +4687,9 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
+			if(userId.equals(MD_ID)) {
+				sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
+			}
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{		
