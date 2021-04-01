@@ -26,7 +26,7 @@
 	<div class="card-box">
 		<header class="d-flex justify-content-between">
 			<h5 class="text-center" style="display: inline;">Buyer Purchase
-				Order</h5>
+				Order <span class="badge badge-primary" id='buyerPOIdTitle'>New</span></h5>
 			<button type="button" class="btn btn-outline-dark btn-sm"
 				data-toggle="modal" data-target="#exampleModal">
 				<i class="fa fa-search"></i>
@@ -222,11 +222,12 @@
 									class="my-0" for="shipmentDate">Shipment Date<span
 										style="color: red">*</span></label></span>
 							</div>
-							<input id="shipmentDate" type="date" class="form-control"
+							<input id="shipmentDate" type="date" class="form-control" placeholder="dd/mm/yyyy" data-date-format="dd/mm/yyyy"
 								aria-label="Sizing example input"
 								aria-describedby="inputGroup-sizing-sm">
 						</div>
 					</div>
+					
 					<div class="col-md-4 px-1">
 						<div class="input-group input-group-sm mb-1">
 							<div class="input-group-prepend">
@@ -371,7 +372,7 @@
 			</div>
 		</div>
 		<div class="row mt-1">
-			<div style="width: 55%">
+			<div class="col-md-7">
 				<div class="progress">
 					<div id="bar" class="progress-bar" style="width: 0%"></div>
 				</div>
@@ -400,9 +401,8 @@
 					</tbody>
 				</table>
 			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12 d-flex justify-content-end">
+			<div class="col-md-5 d-flex justify-content-end">
+				<div>
 				<button id="btnPOSubmit" type="button"
 					class="btn btn-primary btn-sm" onclick="submitAction()">
 					<i class="fas fa-save"></i> Submit
@@ -416,6 +416,27 @@
 					class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
+				
+				<div class="btn-group ml-1" role="group" id="btnPreview"
+							aria-label="Button group with nested dropdown" style="display: none;">
+							<button type="button" class="btn btn-sm btn-info" onclick="previewAction('primary')"><i class="fa fa-print"></i> Preview</button>
+							<div class="btn-group" role="group">
+								<button id="btnGroupDrop1" type="button"
+									class="btn btn-sm btn-info dropdown-toggle"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false"></button>
+								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+									<a class="dropdown-item" onclick="previewAction('withPcs')" href="#">With Pcs</a>
+									<a class="dropdown-item" onclick="previewAction('withOutPcs')" href="#">Without Pcs</a>
+									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper Preview</a> <a
+										class="dropdown-item" onclick="previewAction('general')" href="#">General Preview</a>
+								</div>
+							</div>
+						</div>
+				</div>
+				
+				
+				
 			</div>
 		</div>
 	</div>

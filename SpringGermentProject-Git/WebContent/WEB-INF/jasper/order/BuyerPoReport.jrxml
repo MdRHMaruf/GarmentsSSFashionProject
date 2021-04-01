@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="10" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
 	<property name="ireport.zoom" value="1.1000000000000132"/>
-	<property name="ireport.x" value="3"/>
+	<property name="ireport.x" value="257"/>
 	<property name="ireport.y" value="86"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select organizationLogo from tbOrganizationInfo where organizationId='1') as OrgLogo,b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId,sum(a.TotalUnit) as TotalUnit,sum(a.TotalPrice) as TotalCmt,sum(a.TotalAmount) as TotalAmount from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='4' group by b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId   order by a.BuyerOrderId,a.sizeGroupId"]]></defaultValueExpression>
@@ -31,7 +31,7 @@
 		<![CDATA[$P!{sql}]]>
 	</queryString>
 	<field name="OrgLogo" class="java.awt.Image"/>
-	<field name="shipmentDate" class="java.lang.String"/>
+	<field name="shipmentDate" class="java.util.Date"/>
 	<field name="PaymentTerm" class="java.lang.String"/>
 	<field name="Currency" class="java.lang.String"/>
 	<field name="note" class="java.lang.String"/>
@@ -51,6 +51,7 @@
 	<field name="TotalCmt" class="java.math.BigDecimal"/>
 	<field name="TotalAmount" class="java.math.BigDecimal"/>
 	<field name="StyleId" class="java.lang.String"/>
+	<field name="inspectionDate" class="java.util.Date"/>
 	<variable name="totalUnit" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{TotalUnit}]]></variableExpression>
 		<initialValueExpression><![CDATA[0]]></initialValueExpression>
@@ -112,7 +113,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="139" splitType="Stretch">
+		<band height="149" splitType="Stretch">
 			<staticText>
 				<reportElement x="1" y="36" width="802" height="16" uuid="c6e7424a-12ac-4e75-b88d-a4d91a4cf00b"/>
 				<textElement textAlignment="Center">
@@ -243,7 +244,7 @@
 				<text><![CDATA[#]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="549" y="103" width="73" height="13" uuid="bbbce539-153a-4974-9948-945dc388354e"/>
+				<reportElement x="535" y="103" width="87" height="13" uuid="bbbce539-153a-4974-9948-945dc388354e"/>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
@@ -260,6 +261,27 @@
 				<reportElement x="185" y="-2" width="50" height="55" uuid="5ec69ab5-0e7a-4dd6-bafe-3cce0631d29f"/>
 				<imageExpression><![CDATA[$F{OrgLogo}]]></imageExpression>
 			</image>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="634" y="117" width="91" height="13" uuid="56d3338c-e600-4b39-9850-42bf482f0c05"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inspectionDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="536" y="117" width="87" height="13" uuid="2f294852-73e4-44f9-bf88-b4e22bce6166"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[INSPECTION DATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="626" y="117" width="6" height="13" uuid="a1ca8bac-c575-4bc1-922b-1440ce74f884"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[#]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

@@ -668,7 +668,7 @@ public class OrderController {
 
 		JSONArray mainArray = new JSONArray();
 		BuyerPO buyerPo = orderService.getBuyerPO(buyerPoNo);
-		List<FileUpload> fileList = orderService.findfiles(buyerPo.getBuyerId(), buyerPo.getItemList().get(0).getPurchaseOrder(), 1);
+		List<FileUpload> fileList = orderService.findfiles(buyerPo.getBuyerId(), "bpo-"+buyerPo.getBuyerPoId(), 1);
 		
 		
 		objmain.put("buyerPO",buyerPo);
@@ -725,12 +725,12 @@ public class OrderController {
 
 
 	// Process multiple file upload action and return a result page to user. 
-	@RequestMapping(value="/save-product/{purpose}/{user}/{buyerName}/{purchaseOrder}", method={RequestMethod.PUT, RequestMethod.POST})
+	@RequestMapping(value="/save-product/{purpose}/{user}/{buyerName}/{purchaseOrderId}", method={RequestMethod.PUT, RequestMethod.POST})
 	public String uploadFileSubmit(
 			@PathVariable ("purpose") String purpose,
 			@PathVariable ("user") String user,
 			@PathVariable ("buyerName") String buyerName,
-			@PathVariable ("purchaseOrder") String purchaseOrder,
+			@PathVariable ("purchaseOrderId") String purchaseOrderId,
 			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
 		try
 		{
@@ -771,7 +771,7 @@ public class OrderController {
 
 				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
 
-				String uploadFileName = srcFile.getOriginalFilename();
+				String uploadFileName = purchaseOrderId+srcFile.getOriginalFilename();
 
 				System.out.println(" file names "+uploadFileName);
 
@@ -792,7 +792,7 @@ public class OrderController {
 					srcFile.transferTo(destFile);
 					fileupload = true;
 
-					orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
+					orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrderId);
 
 					CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
 					boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
@@ -2111,6 +2111,18 @@ public class OrderController {
 
 	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}/{previewType}")
 	public @ResponseBody ModelAndView getPurchaseOrderReport(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type,@PathVariable String previewType) {
+
+		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
+		System.out.println("null test"+poNo+" "+supplierId+" "+type);
+		map.addAttribute("poNo",poNo);
+		map.addAttribute("supplierId",supplierId);
+		map.addAttribute("type",type);
+		map.addAttribute("previewType",previewType);
+		return view;
+	}
+	
+	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}/{previewType}/{data}")
+	public @ResponseBody ModelAndView getPurchaseOrderReportWithData(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type,@PathVariable String previewType,@PathVariable String data) {
 
 		ModelAndView view = new ModelAndView("order/purchaseOrderReportView");
 		System.out.println("null test"+poNo+" "+supplierId+" "+type);

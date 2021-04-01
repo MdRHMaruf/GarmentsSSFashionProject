@@ -1400,7 +1400,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on bo.ItemId = id.itemid\r\n" + 
 					"left join tbColors c\r\n" + 
 					"on bo.ColorId = c.ColorId\r\n" + 
-					"where BuyerOrderId='"+buyerPOId+"' and bo.userId='"+userId+"' order by sizeGroupId";
+					"where BuyerOrderId='"+buyerPOId+"' and bo.userId='"+userId+"' order by autoId,sizeGroupId";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
