@@ -450,7 +450,10 @@ function previewAction(previewType = "general"){
   let poNo = $("#poNo").val();
   let supplierId = $("#supplierName").val();
   let poType = $("#poType").val();
-  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType +"/"+ previewType;
+
+  let data = $("#landscapeViewCheck").prop(checked)+"@"+$("#withBrandCheck").prop(checked)+"@"+$("#withSQNumberCheck").prop(checked);
+
+  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType +"/"+ previewType + "/" +data;
   window.open(url, '_blank');
 }
 

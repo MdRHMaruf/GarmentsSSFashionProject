@@ -1,9 +1,9 @@
 /*------------------------------------------------------------------
 [1. Common]
 */
-html {
+/* html {
     height: 100%;
-}
+} */
 
 body {
     font-family: 'inter', sans-serif;
@@ -11,8 +11,7 @@ body {
     color: #505050;
     background-color: #f8fafb;
     overflow-x: hidden;
-    height: 100%;
-}
+} 
 
 @font-face {
     src: url("../fonts/Inter-Regular.ttf");
@@ -21,6 +20,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
+    margin-bottom: 2px;
 }
 
 a:hover, a:active, a:focus {
@@ -820,7 +820,7 @@ table.table td h2 span {
 
 .header .dropdown-menu > li > a {
     position: relative;
-}
+} 
 
 .page-title-box {
     border-radius: 0;
