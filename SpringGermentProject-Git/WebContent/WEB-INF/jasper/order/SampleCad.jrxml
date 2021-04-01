@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d625d62d-a4bf-470d-88f1-90edcb63ffac">
-	<property name="ireport.zoom" value="3.7974983358325303"/>
-	<property name="ireport.x" value="2559"/>
-	<property name="ireport.y" value="547"/>
+	<property name="ireport.zoom" value="1.000000000000031"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.SampleCommentId='7' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId"]]></defaultValueExpression>
 	</parameter>
@@ -65,7 +65,7 @@
 			<line>
 				<reportElement x="74" y="78" width="1" height="16" uuid="31a7cd96-5e08-417c-93e7-0a8646872868"/>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="76" y="79" width="139" height="14" uuid="78e53dec-015d-427b-8cff-0c94753e5724"/>
 				<textElement>
 					<font isBold="false"/>
@@ -127,7 +127,7 @@
 			<line>
 				<reportElement x="74" y="93" width="1" height="16" uuid="421e529d-f544-42ac-8d07-170ce12c432a"/>
 			</line>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="76" y="94" width="138" height="14" uuid="4d444bc2-2660-4fed-a0c5-3dc6cd94de3e"/>
 				<textFieldExpression><![CDATA[$F{PurchaseOrder}]]></textFieldExpression>
 			</textField>
@@ -384,7 +384,9 @@
 				<textFieldExpression><![CDATA[$F{ColorName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="137" y="0" width="28" height="28" uuid="0679f008-08d7-4952-9779-4223606236e6"/>
+				<reportElement x="137" y="0" width="28" height="28" uuid="0679f008-08d7-4952-9779-4223606236e6">
+					<printWhenExpression><![CDATA[$F{Size}.equals("null")?false:true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{Size}]]></textFieldExpression>
 			</textField>

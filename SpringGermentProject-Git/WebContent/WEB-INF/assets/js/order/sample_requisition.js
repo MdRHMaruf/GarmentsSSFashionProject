@@ -145,9 +145,7 @@ function confirmAction() {
 	var sampleId = $("#sampleId").val();
 	var userId = $("#userId").val();
 
-
-	if (styleId != 0) {
-
+	if(sampleId!='0'){
 		var sizeListLength = $(".sizeValue").length;
 		var sizeList = "";
 		for (var i = 0; i < sizeListLength; i++) {
@@ -178,11 +176,11 @@ function confirmAction() {
 				refreshAction();
 			}
 		});
-
-	} else {
-		warningAlert("Style No not selected... Please Select Style No");
-		$("#styleNo").focus();
 	}
+	else{
+		alert("Provide Sample Type");
+	}
+
 
 }
 
@@ -433,10 +431,12 @@ function deleteSampleRequisitioonItem(sapleAutoId,sampleReqId){
 		},
 		url: './deleteSampleRequisitionItem',
 		success: function (data) {
-			if(data.result='Sorry You are already confirm sample requisition'){
+			
+			console.log("sampleDelete "+data.result);
+			if(data.result=='Sorry You are already confirm sample requisition'){
 				alert("Sorry You are already confirm sample requisition");
 			}
-			else if(data.result='Something has wrong!!'){
+			else if(data.result=='Something has wrong!!'){
 				alert("Something has wrong!!");
 			}
 			else{
