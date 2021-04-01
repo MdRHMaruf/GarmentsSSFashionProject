@@ -64,6 +64,27 @@ function printBuyerPO(buyerPoId) {
 	});
 }
 
+function previewAction(type='') {
+
+	buyerPoId = $("#buyerPOId").val();
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './buyerIndentInfo',
+		data: {
+			buyerPoId: buyerPoId
+		},
+		success: function (data) {
+			if (data == "Success") {
+				let url = "printBuyerPoOrder";
+				window.open(url, '_blank');
+
+			}
+			$("#loader").hide();
+		}
+	});
+}
+
 function buyerWiseStyleLoad() {
 	let buyerId = $("#buyerName").val();
 
@@ -585,6 +606,7 @@ function searchBuyerPO(buyerPoNo) {
 				let buyerPo = data.buyerPO;
 				console.log(buyerPo);
 				$("#buyerPOId").val(buyerPo.buyerPoId);
+				$("#buyerPOIdTitle").text(buyerPo.buyerPoId);
 				$("#buyerName").val(buyerPo.buyerId).change();
 				$("#shipmentDate").val(buyerPo.shipmentDate);
 				$("#inspectionDate").val(buyerPo.inspectionDate);
@@ -597,7 +619,8 @@ function searchBuyerPO(buyerPoNo) {
 				$('.modal').modal('hide')
 				$("#btnPOSubmit").hide();
 				$("#btnPOEdit").show();
-				$("#btnPreview").prop("disabled", false);
+				$("#btnPreview").show();
+				//$("#btnPreview").prop("disabled", false);
 
 				files(data.fileList)
 				$("#loader").hide();
@@ -976,8 +999,9 @@ function uploadNext() {
 	var i = 0;
 
 	var buyerName = $("#buyerName").val();
-	var purchaseOrder = $("#purchaseOrder").val();
+	var purchaseOrderId = $("#buyerPOId").val();
 	var dept = $('#dept').val();
+	
 	if (buyerName != 0) {
 		if (purchaseOrder != 0) {
 			if (dept != 0) {
@@ -993,9 +1017,10 @@ function uploadNext() {
 				xhr.addEventListener("load", onUploadComplete, false);
 				xhr.addEventListener("error", onUploadFailed, false);
 
+				purchaseOrderId = 'bpo-'+purchaseOrderId;
 				var user = $("#userId").val();
 
-				xhr.open("POST", "save-product/" + purpose + "/" + user + "/" + buyerName + "/" + purchaseOrder);
+				xhr.open("POST", "save-product/" + purpose + "/" + user + "/" + buyerName + "/" + purchaseOrderId);
 				debug('uploading ' + file.name);
 				xhr.send(fd);
 				add();
@@ -1187,6 +1212,13 @@ $(document).ready(function () {
 			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 		});
 	});
+
+	// $('.datepicker').datepicker({
+	// 	format: 'dd/mm/yyyy',
+	// 	startDate: '-3d'
+	// })
+	
+	// $("#shipmentDate").datepicker('setDate','2013-12-11');
 });
 
 

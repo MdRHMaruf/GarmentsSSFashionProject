@@ -52,7 +52,7 @@ import pg.share.StateStatus;
 @Repository
 public class OrderDAOImpl implements OrderDAO{
 
-	
+	final String MD_ID = "9";
 	DecimalFormat df2 = new DecimalFormat("#.00");
 	@Override
 	public List<ItemDescription> getItemDescriptionList() {
@@ -591,6 +591,9 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();		
 			String sql="select StyleId,StyleNo from TbStyleCreate where userId='"+userId+"' order by StyleNo";		
+			if(userId.equals(MD_ID)) {
+				sql="select StyleId,StyleNo from TbStyleCreate order by StyleNo";
+			}
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -628,6 +631,10 @@ public class OrderDAOImpl implements OrderDAO{
 
 			//String sql="select a.Id,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId from tbStyleWiseItem a order by StyleId,BuyerId";
 			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' order by StyleId,BuyerId";
+			if(userId.equals(MD_ID)) {
+				sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a order by StyleId,BuyerId";
+			}
+			
 			List<?> list = session.createSQLQuery(sql).list();
 
 			String StyleNo="",PerStyle="";
@@ -1163,6 +1170,17 @@ public class OrderDAOImpl implements OrderDAO{
 					"where cc.userId='"+userId+"' group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname \r\n"+
 					"order by cc.costingNo desc";
 
+			if(userId.equals(MD_ID)) {
+				sql="select cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount,convert(varchar,convert(date,min(cc.EntryTime),25)) as entryDate \r\n" + 
+						"from TbCostingCreate cc\r\n" + 
+						"left join TbStyleCreate sc\r\n" + 
+						"on cc.StyleId = sc.StyleId\r\n" + 
+						"left join tbItemDescription id\r\n" + 
+						"on cc.ItemId = id.itemid\r\n" + 
+						"group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname \r\n"+
+						"order by cc.costingNo desc";
+			}
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1400,7 +1418,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on bo.ItemId = id.itemid\r\n" + 
 					"left join tbColors c\r\n" + 
 					"on bo.ColorId = c.ColorId\r\n" + 
-					"where BuyerOrderId='"+buyerPOId+"' and bo.userId='"+userId+"' order by sizeGroupId";
+					"where BuyerOrderId='"+buyerPOId+"' and bo.userId='"+userId+"' order by autoId,sizeGroupId";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1650,6 +1668,26 @@ public class OrderDAOImpl implements OrderDAO{
 					"join tbBuyer b\n" + 
 					"on b.id = bos.BuyerId\r\n" + 
 					" where bos.userId='"+userId+"' order by bos.autoId desc";
+			
+			if(userId.equals(MD_ID)) {
+				sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+						"	group by boed.PurchaseOrder\n" + 
+						"    FOR XML PATH('')),1,1,'') purchaseOrder, \n" + 
+						"	STUFF((SELECT ','+sc.StyleNo \n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+						"	left join TbStyleCreate sc\n" + 
+						"	on boed.StyleId = sc.StyleId\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+						"	group by sc.StyleNo\n" + 
+						"    FOR XML PATH('')),1,1,'') styleNo,\n" + 
+						"(select convert(varchar,bos.EntryTime,103))as date \n" + 
+						"from TbBuyerOrderEstimateSummary bos\n" + 
+						"join tbBuyer b\n" + 
+						"on b.id = bos.BuyerId\r\n" + 
+						"order by bos.autoId desc";
+			}
 			/*List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1786,6 +1824,9 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where userId='"+userId+"' group by BuyerOrderId,PurchaseOrder";
+			if(userId.equals(MD_ID)) {
+				sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails group by BuyerOrderId,PurchaseOrder";
+			}
 			System.out.println(" max ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -1798,9 +1839,6 @@ public class OrderDAOImpl implements OrderDAO{
 				query.add(new CommonModel(element[0].toString(),element[1].toString()));
 
 			}
-
-
-
 			tx.commit();
 
 			return query;
@@ -2514,7 +2552,13 @@ public class OrderDAOImpl implements OrderDAO{
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
 					"group by a.AINo,a.PurchaseOrder \r\n"+
 					"order by a.AINo desc";
-
+			if(userId.equals(MD_ID)) {
+				sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+						"from tbAccessoriesIndent a \r\n" + 
+						"where AiNo IS NOT NULL \r\n" + 
+						"group by a.AINo,a.PurchaseOrder \r\n"+
+						"order by a.AINo desc";
+			}
 
 			List<?> list = session.createSQLQuery(sql).list();
 
@@ -2978,7 +3022,13 @@ public class OrderDAOImpl implements OrderDAO{
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
 					"group by a.AINo,a.PurchaseOrder \r\n"+
 					"order by a.AINo desc";
-
+			if(userId.equals(MD_ID)) {
+				sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+						"from tbZipperIndent a \r\n" + 
+						"where AiNo IS NOT NULL \r\n" + 
+						"group by a.AINo,a.PurchaseOrder \r\n"+
+						"order by a.AINo desc";
+			}
 
 			List<?> list = session.createSQLQuery(sql).list();
 
@@ -3498,7 +3548,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<AccessoriesIndentCarton> getAllAccessoriesCartonData() {
+	public List<AccessoriesIndentCarton> getAllAccessoriesCartonData(String userId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -3507,8 +3557,11 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-
-			String sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId order by indentId desc";
+			
+			String sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton where IndentPostBy = '"+userId+"' group by indentId order by indentId desc";
+			if(userId.equals(MD_ID)) {
+				sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId order by indentId desc";
+			}
 			List<?> list = session.createSQLQuery(sql).list();
 			AccessoriesIndentCarton tempAcc = null;
 
@@ -4120,6 +4173,11 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 					"from tbFabricsIndent a \r\n" + 
 					"where a.entryby='"+userId+"' group by a.indentId  order by a.indentId desc";
+			if(userId.equals(MD_ID)) {
+				sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
+						"from tbFabricsIndent a \r\n" + 
+						" group by a.indentId  order by a.indentId desc";
+			}
 			session.createSQLQuery(sql).list();
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -5084,6 +5142,12 @@ public class OrderDAOImpl implements OrderDAO{
 					" on pos.supplierId = s.id\r\n" + 
 					" where pos.entryBy = '"+userId+"'\r\n" + 
 					" order by pos.pono desc";
+			if(userId.equals(MD_ID)) {
+				sql=" select pono,(select convert(varchar,orderDate,25))as orderDate,supplierId,isnull(s.name,'') as supplierName,type from tbPurchaseOrderSummary pos\r\n" + 
+						" left join tbSupplier s \r\n" + 
+						" on pos.supplierId = s.id\r\n" +  
+						" order by pos.pono desc";
+			}
 					
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -5186,6 +5250,12 @@ public class OrderDAOImpl implements OrderDAO{
 					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0) \r\n" + 
 					"group by ai.AINo,ai.IndentDate\r\n" + 
 					"order by ai.AINo desc";
+			if(userId.equals(MD_ID)) {
+				sql="select AINo,'Accessories' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndent ai\r\n" + 
+						"where ai.pono is null or ai.pono = 0 \r\n" + 
+						"group by ai.AINo,ai.IndentDate\r\n" + 
+						"order by ai.AINo desc";
+			}
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	

@@ -284,7 +284,8 @@
 		</div>
 		<hr class="my-1">
 		<div class='w-25'>
-			<input id="indentListSearch" type="text" class="form-control-sm" placeholder="Search Here Anything....">
+			<input id="indentListSearch" type="text" class="form-control-sm"
+				placeholder="Search Here Anything....">
 		</div>
 		<div class="row mt-1">
 			<div style="overflow: auto; max-height: 300px;"
@@ -387,18 +388,41 @@
 						</button> -->
 
 						<div class="btn-group ml-1" role="group" id="btnPreview"
-							aria-label="Button group with nested dropdown" style="display: none;">
-							<button type="button" class="btn btn-sm btn-info" onclick="previewAction('primary')"><i class="fa fa-print"></i> Preview</button>
+							aria-label="Button group with nested dropdown">
+							<button type="button" class="btn btn-sm btn-info"
+								onclick="previewAction('primary')">
+								<i class="fa fa-print"></i> Preview
+							</button>
 							<div class="btn-group" role="group">
 								<button id="btnGroupDrop1" type="button"
 									class="btn btn-sm btn-info dropdown-toggle"
 									data-toggle="dropdown" aria-haspopup="true"
 									aria-expanded="false"></button>
 								<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-									<a class="dropdown-item" onclick="previewAction('withPcs')" href="#">With Pcs</a>
-									<a class="dropdown-item" onclick="previewAction('withOutPcs')" href="#">Without Pcs</a>
-									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper Preview</a> <a
-										class="dropdown-item" onclick="previewAction('general')" href="#">General Preview</a>
+									<div class="form-group form-check">
+										<input type="checkbox" class="form-check-input"
+											id="withBrandCheck"> <label class="form-check-label"
+											for="withBrandCheck">With Brand</label>
+									</div>
+									<div class="form-group form-check">
+										<input type="checkbox" class="form-check-input"
+											id="withSQNumberCheck"> <label class="form-check-label"
+											for="withSQNumberCheck">With SQ Number</label>
+									</div>
+									<div class="form-group form-check">
+										<input type="checkbox" class="form-check-input"
+											id="landscapeViewCheck"> <label class="form-check-label"
+											for="landscapeViewCheck">Landscape View</label>
+									</div>
+									 <a
+										class="dropdown-item" onclick="previewAction('withPcs')"
+										href="#">With Pcs</a> <a class="dropdown-item"
+										onclick="previewAction('withOutPcs')" href="#">Without Pcs</a>
+									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper
+										Preview</a> <a class="dropdown-item"
+										onclick="previewAction('general')" href="#">General
+										Preview</a>
+										
 								</div>
 							</div>
 						</div>
