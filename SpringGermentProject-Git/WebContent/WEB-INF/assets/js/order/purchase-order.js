@@ -464,13 +464,13 @@ function generalPreviewAction(){
   var url = "getPurchaseOrderGeneralReport/" + poNo + "/" + supplierId + "/" + poType;
   window.open(url, '_blank');
 }
+
 function showPreview(poNo, supplierId, type,previewType='primary') {
 
-  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type +"/"+ previewType;
-  window.open(url, '_blank');
+	  var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + type +"/"+ previewType;
+	  window.open(url, '_blank');
 
 };
-
 
 
 function getOptions(elementId) {

@@ -77,19 +77,7 @@ String userName=(String)session.getAttribute("userName");
 
 
 					</div>
-					<div class="form-group col-md-2 mb-1"
-						style="padding-left: 1px; padding-right: 1px;">
-						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
-							Order:</label>
-						<div class="row">
-							<select id="purchaseOrder" class="selectpicker col-md-12"
-								onchange="poWiseStyles()" data-live-search="true"
-								data-style="btn-light btn-sm border-light-gray">
-								<option id="purchaseOrder" value="0">Select Purchase Order</option>
-							</select>
-						</div>
-
-					</div>
+					
 					<div class="form-group col-md-2 mb-1"
 						style="padding-left: 1px; padding-right: 1px;">
 						<label for="styleNo" class="col-form-label-sm mb-0 pb-0">Style
@@ -106,6 +94,21 @@ String userName=(String)session.getAttribute("userName");
 						</div>
 
 					</div>
+					
+					<div class="form-group col-md-2 mb-1"
+						style="padding-left: 1px; padding-right: 1px;">
+						<label for="purchaseOrder" class="col-form-label-sm mb-0 pb-0">Purchase
+							Order:</label>
+						<div class="row">
+							<select id="purchaseOrder" class="selectpicker col-md-12"
+								onchange="poWiseStyles()" data-live-search="true"
+								data-style="btn-light btn-sm border-light-gray">
+								<option id="purchaseOrder" value="0">Select Purchase Order</option>
+							</select>
+						</div>
+
+					</div>
+
 					<div class="form-group col-md-4 mb-1" style="padding-left: 1px;">
 						<label for="itemType" class="col-form-label-sm mb-0 pb-0">Item
 							Description:</label>

@@ -1960,7 +1960,8 @@ public class OrderController {
 
 		System.out.println("sampleReqId "+sampleReqId);
 
-		if(!sampleReqId.equals("")) {
+		if(!sampleReqId.equals("0")) {
+			System.out.println("HassampleReqId "+sampleReqId);
 			objmain.put("result","Sorry You are already confirm sample requisition");
 		}
 		else {
@@ -2485,12 +2486,14 @@ public class OrderController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/SampleCadDateWiseReportView/{date}",method=RequestMethod.GET)
-	public ModelAndView SampleCadDateWiseReportView(ModelAndView map, FabricsIndent p,@PathVariable("date") String date) {
+	@RequestMapping(value = "/SampleCadDateWiseReportView/{idList}",method=RequestMethod.GET)
+	public ModelAndView SampleCadDateWiseReportView(ModelAndView map,@PathVariable ("idList") String idList) {
 
 		ModelAndView view = new ModelAndView("order/sample_cad_date_wise_report_view");
-		view.addObject("date", date);		
-		view.addObject("id","10");
+		String id[] = idList.split("@");
+		view.addObject("date",  id[0]);		
+		view.addObject("userId",id[1]);
+		view.addObject("reportType",id[2]);
 		return view;			
 	}
 

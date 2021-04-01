@@ -4617,7 +4617,7 @@ public class OrderDAOImpl implements OrderDAO{
 			session.createSQLQuery(sql).executeUpdate();
 
 			//String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and ColorId='"+v.getColorId()+"' ";
-			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where buyerOrderId='"+v.getBuyerOrderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and sampleReqId IS NULL";
+			String sqlupdate="update TbSampleRequisitionDetails set sampleReqId='"+sampleReqId+"',SampleTypeId='"+v.getSampleId()+"' where userId='"+v.getUserId()+"' and sampleReqId IS NULL";
 
 			session.createSQLQuery(sqlupdate).executeUpdate();
 

@@ -179,7 +179,7 @@
 
 								<div class="col-sm-3 px-1">
 
-									<h5>Pattern Marking</h5>
+									<h5>Mini Marking</h5>
 
 									<div class="row">
 										<label for="markingDate" class="col-sm-2">Date</label>
@@ -409,13 +409,31 @@
 						<span class="input-group-text"><i class="fa fa-search"></i></span>
 					</div>
 				</div>
+				
+				<hr>
 
 				<div class="input-group">
-					<label class="col-sm-1">Date</label>
-					<div class="col-sm-8 eventInsForm_Ledger">
+					
+			
+						<label class="col-sm-1">Date</label>
 						<input class="form-control-sm" id='sampleCadSearchDate' type="date">
+						
+						<label for="makeingdespatch" style="width:50px;">Type</label>
+						
+							<select id="ReportType" style="width:280px;"
+												class="selectpicker" data-live-search="false"
+												data-style="btn-light btn-sm border-secondary ">
+
+												<option id="ReportType" value='1'>Pattern Making</option>
+												<option id="ReportType" value='2'>Pattern Correction</option>
+												<option id="ReportType" value='3'>Pattern Grading</option>
+												<option id="ReportType" value='4'>Mini Marking</option>
+
+							</select>
+	
+										
 						<button type="button" class="btn btn-primary" onclick="sampleCadDateWiseReport()" >Preview</button>
-					</div>
+		
 				</div>
 			
 								<div class="modal-body">

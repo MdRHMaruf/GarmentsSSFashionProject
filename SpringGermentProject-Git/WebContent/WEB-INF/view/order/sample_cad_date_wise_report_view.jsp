@@ -44,9 +44,9 @@
 	ArrayList<SampleCadAndProduction> list=new ArrayList<SampleCadAndProduction>();
 	list = (ArrayList<SampleCadAndProduction>) request.getAttribute("list");
 	
-	String id=(String) request.getAttribute("id");
-		
-	
+	String date=(String) request.getAttribute("date");
+	String userId=(String) request.getAttribute("userId");	
+	String reportType=(String) request.getAttribute("reportType");	
 	
 	
 	
@@ -62,7 +62,20 @@
 		Transaction tx=null;
         
 	
-		String Sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.SampleCommentId='"+id+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		String Sql="";
+		if(reportType.equals("1")){
+			Sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.PatternMakingDate like '"+date+"%' and a.SampleCommentUserId='"+userId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		}
+		else if(reportType.equals("2")){
+			Sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.PatternCorrectionDate like '"+date+"%' and a.SampleCommentUserId='"+userId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		}
+		else if(reportType.equals("3")){
+			Sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.PatternGradingDate like '"+date+"%' and a.SampleCommentUserId='"+userId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		}
+		else if(reportType.equals("4")){
+			Sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.PatternMakingDate,a.PatternMakingDespatch,a.PatternMakingReceived,a.PatternCorrectionDate,a.PatternCorrectionDespatch,a.PatternCorrectionReceived,a.PatternGradingDate,a.PatternGradingDespatch,a.PatternGradingReceived,a.PatternMarkingDate,a.PatternMarkingDespatch,a.PatternMarkingReceived from TbSampleCadInfo a where a.PatternMarkingDate like '"+date+"%' and a.SampleCommentUserId='"+userId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		}
+		
     	System.out.println("Query "+Sql);
     	
         

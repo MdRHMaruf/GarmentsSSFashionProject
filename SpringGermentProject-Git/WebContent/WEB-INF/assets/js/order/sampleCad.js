@@ -471,10 +471,16 @@ function sampleCadReport(id) {
 
 function sampleCadDateWiseReport(){
 	let date = $("#sampleCadSearchDate").val();
-
+	var userId=$('#userId').val();
+	var reportType=$('#ReportType').val();
+	
+	
+	console.log("reportType "+reportType);
+	
 	if(date){
-		var url = "SampleCadDateWiseReportView/"+date;
+		var url = `SampleCadDateWiseReportView/${date}@${userId}@${reportType}`;
 		window.open(url, '_blank');
+		
 	}else{
 		alert("Please Provide Date");
 	}
