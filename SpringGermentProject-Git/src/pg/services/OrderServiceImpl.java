@@ -938,6 +938,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAllSampleRequisitionList();
 	}
+	
+	@Override
+	public List<CommonModel> getStyleWisePurchaseOrder(String styleId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getStyleWisePurchaseOrder(styleId);
+	}
 
 	
 	

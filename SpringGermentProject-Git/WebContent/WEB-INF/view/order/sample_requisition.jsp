@@ -101,7 +101,7 @@ String userName=(String)session.getAttribute("userName");
 							Order:</label>
 						<div class="row">
 							<select id="purchaseOrder" class="selectpicker col-md-12"
-								onchange="poWiseStyles()" data-live-search="true"
+								 data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 								<option id="purchaseOrder" value="0">Select Purchase Order</option>
 							</select>

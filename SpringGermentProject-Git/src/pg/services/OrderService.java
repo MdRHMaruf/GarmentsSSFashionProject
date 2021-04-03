@@ -225,6 +225,7 @@ public interface OrderService {
 	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
 	boolean deletesamplefile(String filename, String id);
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
+	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
 	
 }
 

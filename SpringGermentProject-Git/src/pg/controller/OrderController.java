@@ -1856,6 +1856,34 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/getStyleWisePurchaseOrder/{styleId}",method=RequestMethod.GET)
+	public JSONObject getStyleWisePurchaseOrder(@PathVariable ("styleId") String styleId) {
+
+		System.out.println("Wise");
+		JSONObject objmain = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		List<CommonModel>po=orderService.getStyleWisePurchaseOrder(styleId);
+
+		for (int i = 0; i < po.size(); i++) {
+			JSONObject obj=new JSONObject();
+
+			obj.put("id", po.get(i).getId());
+			obj.put("name", po.get(i).getName());
+
+			mainarray.add(obj);
+
+		}
+
+		objmain.put("result", mainarray);
+		System.out.println(" obj main "+objmain);
+
+		return objmain;
+
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/getAllColor",method=RequestMethod.POST)
 	public JSONObject getAllColor() {
@@ -2011,6 +2039,17 @@ public class OrderController {
 		return view;
 	}
 	
+	@RequestMapping(value = "/printDateWiseAllSampleRequsition/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printDateWiseAllSampleRequsition(ModelMap map,@PathVariable ("idList") String idList) {
+		
+		ModelAndView view=new ModelAndView("order/printDateWiseAllSampleRequsition");
+		
+		String id[] = idList.split("@");
+		map.addAttribute("date", id[0]);
+
+		
+		return view;
+	}
 	
 	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
@@ -2161,8 +2200,11 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("order/sample_production");
-		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
-		view.addObject("sampleCommentsList",sampleCommentsList);
+		
+		
+		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
+
+		map.addAttribute("sampleCadList",sampleCadList);
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
@@ -2414,6 +2456,9 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
+		
+		System.out.println("sampleReqId "+sampleReqId);
+		System.out.println("sampleCommentId "+sampleCommentId);
 		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
 		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
 		objmain.put("result_sample_requisition",sampleRequisitionList);

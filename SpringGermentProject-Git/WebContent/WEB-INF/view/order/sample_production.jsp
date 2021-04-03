@@ -138,12 +138,14 @@ String userName=(String)session.getAttribute("userName");
 							<header class="d-flex justify-content-between">
 								<h5 class="text-center" style="display: inline;">Search
 									Sample Production</h5>
-								<button id="sampleSearch" type="button"
-									class="btn btn-outline-dark btn-sm" data-toggle="modal"
-									data-target="#searchModal">
-									<i class="fa fa-search"></i>
-									Sample Cad List
-								</button>
+									<button type="button" class="btn btn-outline-dark btn-sm"
+										data-toggle="modal" data-target="#sampleCadModal">
+										<i class="fa fa-search"></i>Sample Cad List
+									</button>
+									<button type="button" class="btn btn-outline-dark btn-sm"
+										data-toggle="modal" data-target="#sampleProductionModal">
+										<i class="fa fa-search"></i>Sample Production List
+									</button>
 							</header>
 							<hr class="my-1">
 							<div class="row mt-1">
@@ -371,41 +373,91 @@ String userName=(String)session.getAttribute("userName");
 					</div>
 
 
-					<div class="modal fade" id="searchModal" tabindex="-1"
-						role="dialog" aria-labelledby="searchModalLabel"
-						aria-hidden="true">
+<!-- Modal -->
+
+					<div class="modal fade" id="sampleCadModal" tabindex="-1"
+						role="dialog" aria-labelledby="sampleCadModal" aria-hidden="true">
 						<div class="modal-dialog modal-lg">
 							<div class="modal-content">
-								<div class="modal-header">
-									<div class="input-group">
-										<input id="search" type="text" class="form-control"
-											placeholder="Search Sample Production"
-											aria-label="Sample Production"
-											aria-describedby="basic-addon2">
-										<div class="input-group-append">
-											<span class="input-group-text"><i class="fa fa-search"></i></span>
-										</div>
-									</div>
-									<button type="button" class="close" data-dismiss="modal"
-										aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
+	<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Sample Cad List</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			
+
+			
+				<div class="input-group">
+
+					<input id="search" type="text" class="form-control"
+						placeholder="Search Sample Cad"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				
+				<hr>
+
+				<div class="input-group">
+					
+			
+						<label class="col-sm-1">Date</label>
+						<input class="form-control-sm" id='sampleCadSearchDate' type="date">
+						
+						<label for="makeingdespatch" style="width:50px;">Type</label>
+						
+							<select id="ReportType" style="width:280px;"
+												class="selectpicker" data-live-search="false"
+												data-style="btn-light btn-sm border-secondary ">
+
+												<option id="ReportType" value='1'>Pattern Making</option>
+												<option id="ReportType" value='2'>Pattern Correction</option>
+												<option id="ReportType" value='3'>Pattern Grading</option>
+												<option id="ReportType" value='4'>Mini Marking</option>
+
+							</select>
+	
+										
+						<button type="button" class="btn btn-primary" onclick="sampleCadDateWiseReport()" >Preview</button>
+		
+				</div>
+			
 								<div class="modal-body">
 									<table class="table table-hover table-bordered table-sm mb-0">
 										<thead>
 											<tr>
-												<th scope="col">#</th>
-												<th scope="col">Purchase</th>
-												<th scope="col">Style No</th>
-												<th scope="col">Item Name</th>
-												<th scope="col">Item Name</th>
-												<th scope="col">Sample Type</th>
-												<th><span><i class="fa fa-search"></i></span></th>
+												<th>SL#</th>
+												<th>Sample Cad No</th>
+												<th>Buyer Name</th>
+												<th>Purchase Order</th>
+												<th>Style No</th>
+												<th>Item No</th>
+												<th>Sample Type</th>
+												<td><i class="fa fa-search"></i></td>
+												<td><i class="fa fa-print"></i></td>
 											</tr>
 										</thead>
-										<tbody id="sampleCommentsList">
-
+										<tbody id="sampleCadList">
+											<c:forEach items="${sampleCadList}" var="po"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td>${po.sampleCommentId}</td>
+													<td>${po.buyername}</td>
+													<td>${po.purchaseOrder}</td>
+													<td>${po.styleNo}</td>
+													<td>${po.itemName}</td>
+													<td>${po.sampleTypeId}</td>
+													<td><i class="fa fa-search" style="cursor: pointer;"
+														onclick="searchSampleCad(${po.sampleCommentId},${po.sampleReqId})">
+													</i></td>
+													<td><i class="fa fa-print" style="cursor: pointer;"
+														onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
+												</tr>
+											</c:forEach>
 										</tbody>
 									</table>
 								</div>
@@ -413,6 +465,7 @@ String userName=(String)session.getAttribute("userName");
 							</div>
 						</div>
 					</div>
+					
 				</div>
 			</div>
 		</div>
