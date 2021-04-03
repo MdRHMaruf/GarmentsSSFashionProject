@@ -196,6 +196,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
+	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem) {
+		// TODO Auto-generated method stub
+		return orderDAO.isBuyerPoItemExist(buyerPoItem);
+	}
+	
+	@Override
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem) {
 		// TODO Auto-generated method stub
 		return orderDAO.addBuyerPoItem(buyerPoItem);
@@ -939,6 +945,7 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getAllSampleRequisitionList();
 	}
 
+	
 	
 	
 }

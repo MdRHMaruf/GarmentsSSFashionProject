@@ -61,7 +61,7 @@ public interface OrderDAO {
 	List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
-
+	boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem);
 	boolean addBuyerPoItem(BuyerPoItem buyerPoItem);
 	boolean editBuyerPoItem(BuyerPoItem buyerPoItem);
 	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId);
