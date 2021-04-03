@@ -228,6 +228,8 @@ public interface OrderDAO {
 	boolean deletesamplefile(String filename, String id);
 	
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
+	
+	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
 }
 
 

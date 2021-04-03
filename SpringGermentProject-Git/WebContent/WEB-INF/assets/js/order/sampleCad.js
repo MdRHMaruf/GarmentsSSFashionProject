@@ -41,29 +41,6 @@ function refreshAction() {
 	location.reload();
 }
 
-function searchSampleCad(sampleCommentId,sampleReqId){
-
-	
-	$.ajax({
-		type: 'GET',
-		dataType: 'json',
-		data:{
-			sampleCommentId:sampleCommentId,
-			sampleReqId:sampleReqId
-		},
-		url: './searchSampleCadDetails',
-		success: function (data) {
-			if (data.result == "Something Wrong") {
-				dangerAlert("Something went wrong");
-			} else if (data.result == "duplicate") {
-				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
-			} else {
-				drawItemTable(data.result_sample_requisition);
-				setCadData(data.result_sample_cad);
-			}
-		}
-	});
-}
 
 function setCadData(data){
 	$('#sampleCadModal').modal('hide');
@@ -439,9 +416,8 @@ function dateFormatting(field){
 function previewSampleRequsition(){
 	
 	var date=$('#sampleSearchDate').val();
-	var userId=$('#userId').val();
 	if(date!=''){
-		var url = `printDateWiseSampleRequsition/${date}@${userId}`;
+		var url = `printDateWiseAllSampleRequsition/${date}`;
 		window.open(url, '_blank');
 	}
 	else{
