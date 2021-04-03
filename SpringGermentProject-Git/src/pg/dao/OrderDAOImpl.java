@@ -7997,5 +7997,35 @@ public class OrderDAOImpl implements OrderDAO{
 		return dataList;
 	}
 
+	@Override
+	public List<CommonModel> getStyleWisePurchaseOrder(String styleId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where StyleId='"+styleId+"' group by BuyerOrderId,PurchaseOrder";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
 
 }
