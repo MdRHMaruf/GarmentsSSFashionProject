@@ -619,17 +619,21 @@ public class OrderController {
 	public @ResponseBody JSONObject editBuyerPoItem(BuyerPoItem buyerPoItem) {
 		JSONObject objmain = new JSONObject();
 
-		if(orderService.editBuyerPoItem(buyerPoItem)) {
-			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
-			objmain.put("result",buyerPOItemList);
+		if(orderService.isBuyerPoItemExist(buyerPoItem)) {
+			if(orderService.editBuyerPoItem(buyerPoItem)) {
+				JSONArray mainArray = new JSONArray();
+				List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
+				objmain.put("result",buyerPOItemList);
+			}else {
+				objmain.put("result", "Something Wrong");
+			}
 		}else {
-			objmain.put("result", "Something Wrong");
+			objmain.put("result", "duplicate");
 		}
-
 		return objmain;
 	}
-
+	
+	
 	@RequestMapping(value = "/getBuyerPOItemsList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getBuyerPOItemsList(String buyerPoNo,String userId) {
 		JSONObject objmain = new JSONObject();

@@ -1309,7 +1309,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			String sql;
 			String itemAutoId ="";
-			sql="select BuyerOrderId,customerOrder from TbBuyerOrderEstimateDetails where buyerId= '"+buyerPoItem.getBuyerId()+"' and customerOrder = '"+buyerPoItem.getCustomerOrder()+"' and shippingMarks = '"+buyerPoItem.getShippingMark()+"' and styleId = '"+buyerPoItem.getStyleId()+"' and itemId='"+buyerPoItem.getItemId()+"' and colorId='"+buyerPoItem.getColorId()+"' and sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"'";
+			sql="select BuyerOrderId,customerOrder from TbBuyerOrderEstimateDetails where buyerId= '"+buyerPoItem.getBuyerId()+"' and customerOrder = '"+buyerPoItem.getCustomerOrder()+"' and shippingMarks = '"+buyerPoItem.getShippingMark()+"' and styleId = '"+buyerPoItem.getStyleId()+"' and itemId='"+buyerPoItem.getItemId()+"' and colorId='"+buyerPoItem.getColorId()+"' and sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' and autoId!= '"+buyerPoItem.getAutoId()+"'";
 			List list = session.createSQLQuery(sql).list();
 			if(list.size()>0) {
 				return true;
@@ -1724,6 +1724,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on b.id = bos.BuyerId\r\n" + 
 						"order by bos.autoId desc";
 			}
+			System.out.println(sql);
 			/*List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1735,7 +1736,7 @@ public class OrderDAOImpl implements OrderDAO{
 			Statement stmnt = sp.getConnection().createStatement();
 			ResultSet rs = stmnt.executeQuery(sql);
 			while(rs.next()) {
-				System.out.println("test"+rs.getString("styleNo"));
+				
 				dataList.add(new BuyerPO(rs.getString("autoId"), rs.getString("buyerId"), rs.getString("buyerName"), rs.getString("purchaseOrder"),rs.getString("styleNo"),rs.getString("date")));
 			}
 			stmnt.close();
