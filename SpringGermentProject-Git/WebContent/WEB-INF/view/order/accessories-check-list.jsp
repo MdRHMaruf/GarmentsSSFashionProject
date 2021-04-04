@@ -124,8 +124,10 @@ String userName=(String)session.getAttribute("userName");
 					Item</label> <select id="fabricsAccessoriesItem"
 					class="selectpicker col-md-12 px-0" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
-					<option id="fabricsAccessoriesItem" value="0">--Select
-						Indent Item--</option>
+					<option id="fabricsAccessoriesItem" value="0">--Select Item--</option>
+						<c:forEach items="${fabricsList}" var="fabrics">
+							<option id="fabricsItem" value="${fabrics.fabricsItemId}">${fabrics.fabricsItemName}</option>
+						</c:forEach>
 				</select>
 			</div>
 
