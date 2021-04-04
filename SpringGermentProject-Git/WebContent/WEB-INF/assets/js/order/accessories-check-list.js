@@ -275,39 +275,55 @@ function styleItemWiseColorSizeLoad() {
 
 function typeWiseIndentItemLoad() {
 	const type = $("#itemType").val();
-	const purchaseOrder = $("#purchaseOrder").val();
-	const styleId = $("#styleNo").val();
-	console.log("item Type=",type);
-	console.log("purchase order id=",purchaseOrder);
-	console.log("Style id=",styleId);
+	
+	if(type == '1'){
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getFabricsItems',
+			data: {},
+			success: function (data) {
+				console.log("Data",data);
+				const itemList = data.fabricsList;
+				let options = "<option value='0' selected>--Select Indent Item--</option>";
+				const length = itemList.length;
+				for (var i = 0; i < length; i++) {
+					options += "<option value='" + itemList[i].fabricsItemId + "'>" + itemList[i].fabricsItemName + "</option>";
+				};
+				document.getElementById("fabricsAccessoriesItem").innerHTML = options;
+				$('#fabricsAccessoriesItem').selectpicker('refresh');
+				$('#fabricsAccessoriesItem').val(accItemId).change();
+				accItemId = 0;
+				$("#loader").hide();
+			}
+		});
+	}else if( type == '2'){
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getAccessoriesItems',
+			data: {},
+			success: function (data) {
+				console.log("Data",data);
+				const itemList = data.accessoriesItems;
+				let options = "<option value='0' selected>--Select Indent Item--</option>";
+				const length = itemList.length;
+				for (var i = 0; i < length; i++) {
+					options += "<option value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+				};
+				document.getElementById("fabricsAccessoriesItem").innerHTML = options;
+				$('#fabricsAccessoriesItem').selectpicker('refresh');
+				$('#fabricsAccessoriesItem').val(accItemId).change();
+				accItemId = 0;
+				$("#loader").hide();
+			}
+		});
+	}
 	
 	if (purchaseOrder != 0) {
 		if (styleId != 0) {
 			$("#loader").show();
-			$.ajax({
-				type: 'GET',
-				dataType: 'json',
-				url: './getTypeWiseIndentItems',
-				data: {
-					purchaseOrder: purchaseOrder,
-					styleId: styleId,
-					type: type
-				},
-				success: function (data) {
-					console.log("Data",data);
-					const itemList = data.itemList;
-					let options = "<option value='0' selected>--Select Indent Item--</option>";
-					const length = itemList.length;
-					for (var i = 0; i < length; i++) {
-						options += "<option value='" + itemList[i].accessoriesItemId + "'>" + itemList[i].accessoriesItemName + "</option>";
-					};
-					document.getElementById("fabricsAccessoriesItem").innerHTML = options;
-					$('#fabricsAccessoriesItem').selectpicker('refresh');
-					$('#fabricsAccessoriesItem').val(accItemId).change();
-					accItemId = 0;
-					$("#loader").hide();
-				}
-			});
+			
 		}
 	}
 

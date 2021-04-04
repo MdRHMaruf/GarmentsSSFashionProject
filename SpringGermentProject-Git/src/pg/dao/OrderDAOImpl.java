@@ -1297,6 +1297,42 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return costing;
 	}
+	
+	
+	@Override
+	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			String sql;
+			String itemAutoId ="";
+			sql="select BuyerOrderId,customerOrder from TbBuyerOrderEstimateDetails where buyerId= '"+buyerPoItem.getBuyerId()+"' and customerOrder = '"+buyerPoItem.getCustomerOrder()+"' and shippingMarks = '"+buyerPoItem.getShippingMark()+"' and styleId = '"+buyerPoItem.getStyleId()+"' and itemId='"+buyerPoItem.getItemId()+"' and colorId='"+buyerPoItem.getColorId()+"' and sizeGroupId = '"+buyerPoItem.getSizeGroupId()+"' and autoId!= '"+buyerPoItem.getAutoId()+"'";
+			List list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				return true;
+			}
+			tx.commit();
+			return false;
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
 
 	@Override
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem) {
@@ -1688,6 +1724,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on b.id = bos.BuyerId\r\n" + 
 						"order by bos.autoId desc";
 			}
+			System.out.println(sql);
 			/*List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1699,7 +1736,7 @@ public class OrderDAOImpl implements OrderDAO{
 			Statement stmnt = sp.getConnection().createStatement();
 			ResultSet rs = stmnt.executeQuery(sql);
 			while(rs.next()) {
-				System.out.println("test"+rs.getString("styleNo"));
+				
 				dataList.add(new BuyerPO(rs.getString("autoId"), rs.getString("buyerId"), rs.getString("buyerName"), rs.getString("purchaseOrder"),rs.getString("styleNo"),rs.getString("date")));
 			}
 			stmnt.close();
@@ -7946,6 +7983,36 @@ public class OrderDAOImpl implements OrderDAO{
 			{		
 				Object[] element = (Object[]) iter.next();
 				dataList.add(new SampleRequisitionItem(element[0].toString(), element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<CommonModel> getStyleWisePurchaseOrder(String styleId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where StyleId='"+styleId+"' group by BuyerOrderId,PurchaseOrder";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
 			tx.commit();
 		}

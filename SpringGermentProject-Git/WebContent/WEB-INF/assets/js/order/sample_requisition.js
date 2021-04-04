@@ -7,6 +7,7 @@ var buyerId = 0;
 var find = 0;
 
 
+
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
@@ -146,36 +147,44 @@ function confirmAction() {
 	var userId = $("#userId").val();
 
 	if(sampleId!='0'){
-		var sizeListLength = $(".sizeValue").length;
-		var sizeList = "";
-		for (var i = 0; i < sizeListLength; i++) {
-			var quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
-			var id = $("#sizeId" + i).val().trim();
-			sizeList += "id=" + id + ",quantity=" + quantity + " ";
-		}
-		$.ajax({
-			type: 'POST',
-			dataType: 'json',
-			url: './confirmItemToSampleRequisition',
-			data: {
-				buyerId: buyerId,
-				styleId: styleId,
-				itemId: itemId,
-				colorId: colorId,
-				buyerOrderId:buyerOrderId,
-				purchaseOrder: purchaseOrder,
-				userId: userId,
-				inchargeId: inchargeId,
-				marchendizerId: marchendizerId,
-				instruction: instruction,
-				sampleDeadline: sampleDeadline,
-				sampleId: sampleId
-			},
-			success: function (data) {
-				alert(data);
-				refreshAction();
+		
+		if(sampleDeadline!=''){
+			var sizeListLength = $(".sizeValue").length;
+			var sizeList = "";
+			for (var i = 0; i < sizeListLength; i++) {
+				var quantity = $("#sizeValue" + i).val().trim() == "" ? "0" : $("#sizeValue" + i).val().trim();
+				var id = $("#sizeId" + i).val().trim();
+				sizeList += "id=" + id + ",quantity=" + quantity + " ";
 			}
-		});
+			$.ajax({
+				type: 'POST',
+				dataType: 'json',
+				url: './confirmItemToSampleRequisition',
+				data: {
+					buyerId: buyerId,
+					styleId: styleId,
+					itemId: itemId,
+					colorId: colorId,
+					buyerOrderId:buyerOrderId,
+					purchaseOrder: purchaseOrder,
+					userId: userId,
+					inchargeId: inchargeId,
+					marchendizerId: marchendizerId,
+					instruction: instruction,
+					sampleDeadline: sampleDeadline,
+					sampleId: sampleId
+				},
+				success: function (data) {
+					alert(data);
+					refreshAction();
+				}
+			});
+		}
+		else{
+			alert("Provide Deadline");
+		}
+		
+
 	}
 	else{
 		alert("Provide Sample Type");
@@ -605,7 +614,7 @@ function loadPoNo(data) {
 
 
 
-function poWiseStyles() {
+/*function poWiseStyles() {
 
 	var po = $("#purchaseOrder").val();
 
@@ -640,7 +649,7 @@ function poWiseStyles() {
 			}
 		});
 	}
-}
+}*/
 
 function loadStyles(data) {
 
@@ -680,6 +689,27 @@ function styleWiseItemLoad() {
 				$('.selectpicker').selectpicker('refresh');
 				$('#itemName').val(itemValue).change();
 				itemValue = 0;
+			}
+		});
+		
+		
+		$.ajax({
+			type: 'GET',
+			dataType: 'json',
+			url: './getStyleWisePurchaseOrder/'+styleId,
+			success: function (data) {
+
+				var itemList = data.result;
+				var options = "<option  value='0' selected>Select Purchase Order</option>";
+				var length = itemList.length;
+				for (var i = 0; i < length; i++) {
+					options += "<option  value='" + itemList[i].id + "'>" + itemList[i].name + "</option>";
+				};
+				document.getElementById("purchaseOrder").innerHTML = options;
+				$('.selectpicker').selectpicker('refresh');
+				$('#purchaseOrder').val(poNoValue).change();
+				poNoValue = 0;
+				
 			}
 		});
 	} else {

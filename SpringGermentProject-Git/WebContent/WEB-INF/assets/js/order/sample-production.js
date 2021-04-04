@@ -1,6 +1,46 @@
+var sizeValueListForSet = [];
+var sizesListByGroup = JSON;
+var sizeGroupId="";
+
+
+
 window.onload = ()=>{
 	document.title = "Sample Production";
+	
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: './sizesLoadByGroup',
+		data: {},
+		success: function (obj) {
+			sizesListByGroup = [];
+			sizesListByGroup = obj.sizeList;
+		}
+	});
 } 
+
+function sizeLoadByGroup() {
+
+	var groupId = $("#sizeGroup").val().trim();
+	var child = "";
+	var length = 0;
+	if (groupId != "0") {
+		length = sizesListByGroup['groupId' + groupId].length;
+		for (var i = 0; i < length; i++) {
+			//child += " <div class=\"list-group-item pt-0 pb-0 sizeNameList\"> <div class=\"form-group row mb-0\"><label for=\"sizeId" + sizesListByGroup['groupId' + groupId][i].sizeId + "\" class=\"col-md-6 col-form-label-sm pb-0 mb-0\" style=\"height:25px;\">" + sizesListByGroup['groupId' + groupId][i].sizeName + "</label><input type=\"number\" class=\"form-control-sm col-md-6\" id=\"sizeValue" + sizesListByGroup['groupId' + groupId][i].sizeId + "\" style=\"height:25px;\"></div></div>";
+			child += " <div class=\"list-group-item pt-0 pb-0\"> <div class=\"form-group row mb-0\"><label for=\"sizeValue" + i + "\" class=\"col-md-6 col-form-label-sm pb-0 mb-0\" style=\"height:25px;\">" + sizesListByGroup['groupId' + groupId][i].sizeName + "</label><input type=\"number\" class=\"form-control-sm col-md-6 sizeValue\" id=\"sizeValue" + i + "\" style=\"height:25px;\"> <input type=\"hidden\" id=\"sizeId" + i + "\" value=" + sizesListByGroup['groupId' + groupId][i].sizeId + "></div></div>";
+		}
+
+	}
+	$("#listGroup").html(child);
+	if (sizeValueListForSet.length > 0) {
+		for (var i = 0; i < length; i++) {
+			$("#sizeValue" + i).val(sizeValueListForSet[i].sizeQuantity);
+		}
+		sizeValueListForSet = [];
+	}
+
+}
 
 
 $("#sampleSearch").click(() => {
@@ -21,6 +61,82 @@ $("#sampleSearch").click(() => {
         }
     });
 });
+
+
+function searchSampleCad(sampleCommentId,sampleReqId){
+
+	
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		data:{
+			sampleCommentId:sampleCommentId,
+			sampleReqId:sampleReqId
+		},
+		url: './searchSampleCadDetails',
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
+			} else {
+				drawItemTable(data.result_sample_requisition);
+				//setCadData(data.result_sample_cad);
+			}
+		}
+	});
+}
+
+
+function drawItemTable(dataList) {
+
+
+	var length = dataList.length;
+	sizeGroupId = "";
+	var tables = "";
+	var isClosingNeed = false;
+	for (var i = 0; i < length; i++) {
+		var item = dataList[i];
+
+		if (sizeGroupId != item.sizeGroupId) {
+			if (isClosingNeed) {
+				tables += "</tbody></table> </div></div>";
+			}
+			sizeGroupId = item.sizeGroupId;
+			tables += `<div class="row">
+				<div class="col-md-12 table-responsive" >
+				<table class="table table-hover table-bordered table-sm mb-0 small-font">
+				<thead class="no-wrap-text bg-light">
+				<tr>
+				<th scope="col" class="min-width-150">Style</th>
+				<th scope="col" class="min-width-150">Item Name</th>
+				<th scope="col" class="min-width-150">Color</th>
+				<th scope="col">Purchase Order</th>`
+				var sizeListLength = sizesListByGroup['groupId' + sizeGroupId].length;
+			for (var j = 0; j < sizeListLength; j++) {
+				tables += "<th class=\"min-width-60 mx-auto\"scope=\"col\">" + sizesListByGroup['groupId' + sizeGroupId][j].sizeName + "</th>";
+			}
+			tables += `<th scope="col">Total Units</th>
+				<th scope="col"><i class="fa fa-edit"></i></th>
+				<th scope="col"><i class="fa fa-trash"></i></th>
+				</tr>
+				</thead>
+				<tbody id="dataList">`
+				isClosingNeed = true;
+		}
+		tables += "<tr id='itemRow" + i + "' data-id='" + item.autoId + "'><td>" + item.styleNo + "</td><td>" + item.itemName + "</td><td>" + item.colorName + "</td><td>" + item.purchaseOrder + "</td>"
+		var sizeList = item.sizeList;
+		var sizeListLength = sizeList.length;
+		var totalSizeQty = 0;
+		for (var j = 0; j < sizeListLength; j++) {
+			totalSizeQty = totalSizeQty + parseFloat(sizeList[j].sizeQuantity);
+			tables += "<td>" + sizeList[j].sizeQuantity + "</td>"
+		}
+		tables += "<td class='totalUnit' id='totalUnit" + item.autoId + "'>" + totalSizeQty + "</td><td><i class='fa fa-edit' onclick='setSampleRequisitionItem(" + item.autoId + ")'> </i></td><td><i class='fa fa-trash' onclick='deleteSampleRequisitioonItem(" + item.autoId + ","+item.sampleReqId+")'> </i></td></tr>";
+	}
+	tables += "</tbody></table> </div></div>";
+	document.getElementById("tableList").innerHTML = tables;
+}
 
 function setSampleProductionInfo(sampleCommentId) {
 
