@@ -1,6 +1,6 @@
 /hibernate.cfg.xml
-<<<<<<< HEAD
-=======
+/.gitignore
+/SizeValues.jasper
+/SizeValues.jrxml
 /noticeModel/
 /pg/
->>>>>>> branch 'master' of https://github.com/MdRHMaruf/GarmentsSSFashionProject.git

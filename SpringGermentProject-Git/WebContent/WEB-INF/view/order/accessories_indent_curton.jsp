@@ -518,7 +518,7 @@ String userName=(String)session.getAttribute("userName");
 		<div class="row mt-1">
 			<div class="col-sm-12">
 				<button id="btnAdd" class="btn btn-primary btn-sm"
-					onclick="addCartonIndent()">Add</button>
+					onclick="addCartonIndent()" accesskey="A"><span style="text-decoration:underline;"> Add</span></button>
 				<button id="btnEdit" class="btn btn-success btn-sm"
 					onclick="editAccessoriesCarton()" style="display: none;">Edit</button>
 				<button id="btnFieldRefresh" class="btn btn-secondary btn-sm" onclick='fieldRefresh()'>Refresh</button>
@@ -595,8 +595,8 @@ String userName=(String)session.getAttribute("userName");
 				<div class="d-flex justify-content-end">
 					<div class="row">
 						<div class="pr-1">
-							<button class="btn btn-primary btn-sm" onclick="confirmAction()">
-								<i class="fas fa-save"></i> Confirm
+							<button class="btn btn-primary btn-sm" onclick="confirmAction()" accesskey="C">
+								<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span>
 							</button>
 						</div>
 						<div class="pr-1">

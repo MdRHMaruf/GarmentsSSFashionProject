@@ -73,7 +73,7 @@
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2">ID</label>
 										<div class="col-sm-4">
-											<input id="id" type="text" class="form-control">
+											<input id="id" type="text" class="form-control-sm">
 										</div>
 
 									</div>
@@ -82,31 +82,31 @@
 										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Factory
 											Name</label>
 										<div class="col-sm-8">
-											<input id="factory_name" type="text" class="form-control">
+											<input id="factory_name" type="text" class="form-control-sm">
 										</div>
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Telphone</label>
 										<div class="col-sm-4">
-											<input id="telphone" type="text" class="form-control">
+											<input id="telphone" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Mobile</label>
 										<div class="col-sm-4">
-											<input id="mobile" type="text" class="form-control">
+											<input id="mobile" type="text" class="form-control-sm">
 										</div>
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2">Fax</label>
 										<div class="col-sm-3">
-											<input id="fax" type="text" class="form-control">
+											<input id="fax" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">E-mail</label>
 										<div class="col-sm-5">
-											<input id="e_mail" type="text" class="form-control">
+											<input id="e_mail" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -114,13 +114,13 @@
 										<label style="text-align: left;" class="col-sm-2">Skype
 											Id</label>
 										<div class="col-sm-4">
-											<input id="skype_id" type="text" class="form-control">
+											<input id="skype_id" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Bond
 											License</label>
 										<div class="col-sm-4">
-											<input id="bond_license" type="text" class="form-control">
+											<input id="bond_license" type="text" class="form-control-sm">
 										</div>
 
 									</div>
@@ -128,7 +128,7 @@
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2"><span style="color:red;">*</span>Address</label>
 										<div class="col-sm-4">
-											<textarea rows="2" cols="2" id="address" class="form-control"
+											<textarea rows="2" cols="2" id="address" class="form-control form-control-sm"
 												placeholder="Enter text here"></textarea>
 										</div>
 									</div>
@@ -142,13 +142,13 @@
 										<label style="text-align: left;" class="col-sm-2">Bank
 											Name</label>
 										<div class="col-sm-3">
-											<input id="bank_name" type="text" class="form-control">
+											<input id="bank_name" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Bank
 											Address</label>
 										<div class="col-sm-5">
-											<input id="bank_address" type="text" class="form-control">
+											<input id="bank_address" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -156,13 +156,13 @@
 										<label style="text-align: left;" class="col-sm-2">Account
 											No</label>
 										<div class="col-sm-3">
-											<input id="account_no" type="text" class="form-control">
+											<input id="account_no" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Swift
 											Code</label>
 										<div class="col-sm-3">
-											<input id="swift_code" type="text" class="form-control">
+											<input id="swift_code" type="text" class="form-control-sm">
 										</div>
 
 									</div>
@@ -171,12 +171,12 @@
 										<label style="text-align: left;" class="col-sm-2">Account
 											Name</label>
 										<div class="col-sm-3">
-											<input id="account_name" type="text" class="form-control">
+											<input id="account_name" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Country</label>
 										<div class="col-sm-5">
-											<input id="bankcountry" type="text" class="form-control"
+											<input id="bankcountry" type="text" class="form-control-sm"
 												onkeyup="CountriesSearch(this)">
 										</div>
 									</div>
@@ -185,7 +185,7 @@
 								<div class="modal-footer">
 									
 									<button class="btn btn-primary btn-sm" id="save" type="button"
-										onclick="FactoryCreate()">Save</button>
+										onclick="FactoryCreate()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
 									<button class="btn btn-success btn-sm" id="edit" type="button"
 										onclick="editFactory()" style="display: none;">Edit</button>
 									<button class="btn btn-secondary btn-sm" type="button">Refresh</button>

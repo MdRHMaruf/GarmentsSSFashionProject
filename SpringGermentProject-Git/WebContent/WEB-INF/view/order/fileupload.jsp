@@ -34,7 +34,7 @@ String userName=(String)session.getAttribute("userName");
 						<div class="col-sm-3">
 							<div class="row">
 								<label class="form-label">Form Date</label>
-								<div class="col-sm-9">
+								<div class="col-sm-8">
 									<input class="form-control-sm col-md-12" type="date"
 										id="formDate">
 								</div>
@@ -43,14 +43,14 @@ String userName=(String)session.getAttribute("userName");
 						<div class="col-sm-3">
 							<div class="row">
 								<label class="form-label">End Date</label>
-								<div class="col-sm-9">
+								<div class="col-sm-8">
 									<input class="form-control-sm col-md-12" type="date"
 										id="endDate">
 								</div>
 							</div>
 						</div>
 						<div class="col-sm-3">
-							<button class="btn btn-primary btn-sm" id="find">Find</button>
+							<button class="btn btn-primary btn-sm" id="find" accesskey="F"><span style="text-decoration:underline;"> Find</span></button>
 
 							<button onclick="getFileDownload('attachment.png')"
 								class="btn btn-secondary btn-sm">Preview</button>
@@ -123,8 +123,8 @@ String userName=(String)session.getAttribute("userName");
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<button class="btn btn-sm btn-danger" type="button" id="btnAdd"
-								value="Upload" onclick="addNew()">Add New</button>
+							<button class="btn btn-sm btn-danger" type="button" id="btnAdd" accesskey="N"
+								value="Upload" onclick="addNew()"><span style="text-decoration:underline;"> Add New</span></button>
 						</div>
 					</div>
 

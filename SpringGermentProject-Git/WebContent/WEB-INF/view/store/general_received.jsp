@@ -259,8 +259,8 @@ String invoiceId=(String) request.getAttribute("InvoiceId");
 			<div class="col-md-12 d-flex justify-content-end">
 				
 				<button id="btnEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick="confrimAction()">
-					<i class="fa fa-pencil-square"></i> Confrim
+					class="btn btn-primary btn-sm ml-1" onclick="confrimAction()" accesskey="C">
+					<i class="fa fa-pencil-square"></i><span style="text-decoration:underline;"> Confirm</span>
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">

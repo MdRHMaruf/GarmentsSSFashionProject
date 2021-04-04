@@ -565,3 +565,15 @@ function addNew(){
 		alert("Select Department");
 	}
 }
+
+
+let idListMicro = ["purpose","formDate","endDate","find","buyerName","purchaseOrder","dept","receiver","btnAdd"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})
+

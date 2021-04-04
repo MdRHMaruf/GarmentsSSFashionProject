@@ -1422,3 +1422,14 @@ function dangerAlert(message) {
 		element.toggle('fade');
 	}, 2500);
 }
+
+
+let idListMicro = ["ply","length1","width1","unit","divideBy","qty","btnAdd"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

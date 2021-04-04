@@ -224,3 +224,13 @@ $(document).ready(function () {
   });
 });
 
+
+let idListMicro = ["employeeCode","employeeName","cardNo","department","designation","line","grade","joinDate","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

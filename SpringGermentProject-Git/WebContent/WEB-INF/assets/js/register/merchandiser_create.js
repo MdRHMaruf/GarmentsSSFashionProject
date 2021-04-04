@@ -191,3 +191,13 @@ $(document).ready(function () {
   });
 });
 
+
+let idListMicro = ["name","telephone","mobile","fax","email","skype","address","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

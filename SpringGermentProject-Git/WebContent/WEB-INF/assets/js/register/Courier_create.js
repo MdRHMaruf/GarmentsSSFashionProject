@@ -386,3 +386,14 @@ $(document).ready(function () {
 function reloadPage(){
 	location.reload();
 }
+
+let idListMicro = ["courier_name","courier_code","courier_address","consignee_address","notify_address","countries1",
+	"telphone","mobile","fax","e_mail","skype_id","bank_name","bank_address","swift_code","bank_country","save"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

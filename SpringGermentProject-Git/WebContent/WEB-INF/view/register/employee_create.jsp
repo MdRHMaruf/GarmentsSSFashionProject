@@ -120,7 +120,7 @@ String userName=(String) request.getAttribute("userName");
 								</div>
 
 								<button type="button" id="btnSave"
-									class="btn btn-primary btn-sm" onclick="saveAction()">Save</button>
+									class="btn btn-primary btn-sm" onclick="saveAction()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
 								<button type="button" id="btnEdit"
 									class="btn btn-success btn-sm" onclick="editAction()" style="display: none;">Edit</button>
 								<button type="button" id="btnRefresh"

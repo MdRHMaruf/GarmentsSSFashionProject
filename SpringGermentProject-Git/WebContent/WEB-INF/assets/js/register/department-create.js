@@ -181,3 +181,13 @@ $(document).ready(function () {
   });
 });
 
+
+let idListMicro = ["factoryName","departmentName","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

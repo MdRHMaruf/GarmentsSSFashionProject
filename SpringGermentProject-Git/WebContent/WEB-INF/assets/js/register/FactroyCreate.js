@@ -398,3 +398,14 @@ $(document).ready(function () {
 function reloadPage(){
 	location.reload();
 }
+
+let idListMicro = ["factory_name","telphone","mobile","fax","e_mail","skype_id","bond_license","address","bank_name","bank_address",
+	"account_no","swift_code","account_name","bankcountry"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

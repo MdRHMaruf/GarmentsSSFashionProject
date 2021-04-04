@@ -1033,3 +1033,15 @@ $(document).ready(function () {
 
 let today = new Date();
 document.getElementById("submissionDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+
+
+let idListMicro = ["styleName","itemName","copyCosting","particularType","particularName","unit","commission","submissionDate","width","consumption","unitPrice","btnAdd"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})
+

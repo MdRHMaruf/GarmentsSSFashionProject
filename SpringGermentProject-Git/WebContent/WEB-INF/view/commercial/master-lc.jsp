@@ -304,9 +304,9 @@
 
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
-						<button id="masterSubmitBtn" type="button"
+						<button id="masterSubmitBtn" type="button" accesskey="S"
 							class="btn btn-primary btn-sm" onclick="masterSubmitAction()">
-							<i class="fas fa-save"></i> Submit
+							<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
 						</button>
 						<button id="masterAmendmentBtn" type="button"
 							class="btn btn-primary btn-sm ml-1"

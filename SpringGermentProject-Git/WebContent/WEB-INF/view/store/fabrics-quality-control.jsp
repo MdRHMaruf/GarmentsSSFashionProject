@@ -211,8 +211,8 @@ String departmentId=(String)session.getAttribute("departmentId");
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
 				<button id="btnSubmit" type="button" class="btn btn-primary btn-sm"
-					onclick="submitAction()">
-					<i class="fas fa-save"></i> Submit
+					onclick="submitAction()" accesskey="S">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
 				</button>
 				<button id="btnEdit" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="editAction()" disabled>
