@@ -221,13 +221,17 @@ public interface OrderDAO {
 	boolean editItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId);
 	
-	boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip);
+	boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip,String searchtype);
 	
 	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
 	
 	boolean deletesamplefile(String filename, String id);
 	
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
+	
+	List<String> getMultifiles(String bpo);
+	String getMaxCadId();
+	List<String> getMultiCadfiles(String bpo);
 }
 
 

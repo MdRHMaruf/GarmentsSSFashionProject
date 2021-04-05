@@ -449,6 +449,7 @@
 												<th>Sample Type</th>
 												<td><i class="fa fa-search"></i></td>
 												<td><i class="fa fa-print"></i></td>
+												<td><i class="fa fa-download"></i></td>
 											</tr>
 										</thead>
 										<tbody id="sampleCadList">
@@ -456,7 +457,7 @@
 												varStatus="counter">
 												<tr>
 													<td>${counter.count}</td>
-													<td>${po.sampleCommentId}</td>
+													<td id="id-${counter.count}" data-sample="${po.sampleCommentId}" }">${po.sampleCommentId}</td>
 													<td>${po.buyername}</td>
 													<td>${po.purchaseOrder}</td>
 													<td>${po.styleNo}</td>
@@ -467,6 +468,7 @@
 													</i></td>
 													<td><i class="fa fa-print" style="cursor: pointer;"
 														onclick="sampleCadReport(${po.sampleCommentId})"> </i></td>
+													<td><i class="fa fa-download" onclick="multidownload(this)" style='cursor: pointer;'></i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

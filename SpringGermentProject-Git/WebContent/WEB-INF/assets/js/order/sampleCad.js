@@ -7,13 +7,13 @@ var color;
 var size;
 var sample;
 var sampleCommentId;
-
+var sampleid="";
 var sampleRequistionQty=0;
 
 var sizeValueListForSet = [];
 var sizesListByGroup = JSON;
 
-
+var searchtype=0;
 
 window.onload = () => {
 	
@@ -42,14 +42,27 @@ function refreshAction() {
 }
 
 function searchSampleCad(sampleCommentId,sampleReqId){
-
+	searchtype=2;
+	
+	/*var rowIndexx = $(v).closest('tr').index();
+	console.log(" row index "+rowIndexx)
+	var initindex=rowIndexx+1;
+	
+	 sampleid=$("#id-"+initindex).attr("data-sample");*/
+	
+	var user = $("#userId").val();
+	
+	sampleid=sampleCommentId;
+	
+	console.log(" ccm id "+sampleid)
 	
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
 		data:{
 			sampleCommentId:sampleCommentId,
-			sampleReqId:sampleReqId
+			sampleReqId:sampleReqId,
+			user:user
 		},
 		url: './searchSampleCadDetails',
 		success: function (data) {
@@ -61,6 +74,7 @@ function searchSampleCad(sampleCommentId,sampleReqId){
 				drawItemTable(data.result_sample_requisition);
 				setCadData(data.result_sample_cad);
 			}
+			files(data.files)
 		}
 	});
 }
@@ -487,7 +501,7 @@ function sampleCadDateWiseReport(){
 }
 
 function searchSampleRequisition(v) {
-	
+	searchtype=1;
 	var user = $("#userId").val();
 	var sampleReqId = v;
 	  $('#exampleModal').modal('hide');
@@ -506,7 +520,7 @@ function searchSampleRequisition(v) {
 				dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 			} else {
 				drawItemTable(data.result);
-				 files(data.files)
+				// files(data.files)
 			}
 		}
 	});
@@ -706,7 +720,7 @@ function onUploadFailed(e) {
 //Pick the next file in queue and upload it to remote server
 function uploadNext() {
 	
-	var i=0;
+					var i=0;
 
 
 					i++;
@@ -724,7 +738,7 @@ function uploadNext() {
 					var samplecadid=$("#sampleReqId").val();
 					console.log(" sample id "+samplecadid)
 
-					xhr.open("POST", "save-samplecad/" + samplecadid + "/" + user);
+					xhr.open("POST", "save-samplecad/" + sampleid + "/" + user+"/"+searchtype);
 					debug('uploading ' + file.name);
 					xhr.send(fd);
 					
@@ -879,3 +893,77 @@ $(document).ready(function () {
 		});
 	});
 });
+
+
+
+function multidownload(v){
+	var rowIndexx = $(v).closest('tr').index();
+	console.log(" row index "+rowIndexx)
+	var initindex=rowIndexx+1;
+	
+	var po=$("#id-"+initindex).attr("data-sample");
+	console.log(" po id "+po)
+	
+	
+
+	//var rowIndex = $(a).closest('tr').index();
+	//var initindex = rowIndex + 1
+	//var fileid = $("#filename-" + initindex).text();
+
+	//console.log(" file name " + fileid)
+
+
+
+
+	var file = po;
+
+	var user = $("#userId").val();
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "multiCaddownload/" + file + '/' + user);
+	xhr.responseType = 'arraybuffer';
+	xhr.onload = function () {
+		if (this.status === 200) {
+			var filename = "";
+			var disposition = xhr.getResponseHeader('Content-Disposition');
+			if (disposition && disposition.indexOf('attachment') !== -1) {
+				var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+				var matches = filenameRegex.exec(disposition);
+				if (matches != null && matches[1]) {
+					filename = matches[1].replace(/['"]/g, '');
+				}
+			}
+			var type = xhr.getResponseHeader('Content-Type'); var blob = typeof File === 'function' ? new File([this.response], filename, { type: type }) : new Blob([this.response], { type: type });
+			if (typeof window.navigator.msSaveBlob !== 'undefined') {
+				// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. 
+				// These URLs will no longer resolve as the data backing the URL has been freed."
+				window.navigator.msSaveBlob(blob, filename);
+			} else {
+				var URL = window.URL || window.webkitURL;
+				var downloadUrl = URL.createObjectURL(blob); if (filename) {
+					// use HTML5 a[download] attribute to specify filename
+					var a = document.createElement("a");
+					// safari doesn't support this yet
+					if (typeof a.download === 'undefined') {
+						window.location = downloadUrl;
+					} else {
+						a.href = downloadUrl;
+						a.download = filename;
+						document.body.appendChild(a);
+						a.click();
+					}
+				} else {
+					window.location = downloadUrl;
+				}
+				setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+			}
+		}
+	};
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+	xhr.send($.param({
+
+	}));
+
+	
+}
+

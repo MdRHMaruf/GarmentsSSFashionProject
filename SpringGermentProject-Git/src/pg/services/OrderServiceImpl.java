@@ -916,9 +916,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip,String searchtype) {
 		// TODO Auto-generated method stub
-		return orderDAO.samplecadfileupload(smaplecadid, filename, user, uploadedpcip);
+		return orderDAO.samplecadfileupload(smaplecadid, filename, user, uploadedpcip,searchtype);
 	}
 
 	@Override
@@ -938,6 +938,26 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAllSampleRequisitionList();
 	}
+
+	@Override
+	public List<String> getMultifiles(String bpo) {
+		// TODO Auto-generated method stub
+		return orderDAO.getMultifiles(bpo);
+	}
+
+	@Override
+	public String getMaxCadId() {
+		// TODO Auto-generated method stub
+		return orderDAO.getMaxCadId();
+	}
+
+	@Override
+	public List<String> getMultiCadfiles(String bpo) {
+		// TODO Auto-generated method stub
+		return orderDAO.getMultiCadfiles(bpo);
+	}
+
+	
 
 	
 	
