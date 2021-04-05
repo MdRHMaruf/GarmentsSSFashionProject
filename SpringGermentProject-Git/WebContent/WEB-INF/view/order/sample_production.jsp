@@ -262,7 +262,7 @@ String userName=(String)session.getAttribute("userName");
 
 									<div class="row d-flex justify-content-end mt-1">
 
-										<button class="btn btn-sm btn-warning mr-3" id="btnUpload">Upload</button>
+										<button class="btn btn-sm btn-warning mr-3" id="btnUpload" accesskey="U"><span style="text-decoration:underline;"> Upload</span></button>
 
 									</div>
 
@@ -362,7 +362,7 @@ String userName=(String)session.getAttribute("userName");
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">
 							<button type="button" id="btnPost" class="btn btn-warning btn-sm"
-								onclick="">Post</button>
+								onclick="" accesskey="P"><span style="text-decoration:underline;"> Post</span></button>
 
 							<button type="button" id="btnRefresh" class="btn btn-dark btn-sm"
 								onclick="refreshAction()">Refresh</button>

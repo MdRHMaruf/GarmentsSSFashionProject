@@ -6,12 +6,10 @@
 <%@page import="pg.model.Login"%>
 <%@page import="java.util.List"%>
 
-<%	
-
-	String buyerid=(String) request.getAttribute("buyerId");
-	String userId=(String)session.getAttribute("userId");
-	String userName=(String)session.getAttribute("userName");
-
+<%
+	String buyerid = (String) request.getAttribute("buyerId");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -20,23 +18,29 @@
 	<div class="content container-fluid">
 		<div class="alert alert-success alert-dismissible fade show"
 			style="display: none;">
-			<p id="successAlert" class="mb-0"><strong>Success!</strong> Unit Name Save Successfully..</p>
+			<p id="successAlert" class="mb-0">
+				<strong>Success!</strong> Unit Name Save Successfully..
+			</p>
 		</div>
 		<div class="alert alert-warning alert-dismissible fade show"
 			style="display: none;">
-			<p id="warningAlert" class="mb-0"><strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...</p>
+			<p id="warningAlert" class="mb-0">
+				<strong>Warning!</strong> Unit Name Empty.Please Enter Unit Name...
+			</p>
 		</div>
 		<div class="alert alert-danger alert-dismissible fade show"
 			style="display: none;">
-			<p id="dangerAlert" class="mb-0"><strong>Wrong!</strong> Something Wrong...</p>
+			<p id="dangerAlert" class="mb-0">
+				<strong>Wrong!</strong> Something Wrong...
+			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
-<!-- 		<input type="hidden" id="unitId" value="0">
+		<!-- 		<input type="hidden" id="unitId" value="0">
 	 	<input type="hidden" id="itemDescriptionId" value="0">
 	 	<input type="hidden" id="buyerid" value="0">
 	 	<input type="hidden" id="styleItemAutoId" value="0"> -->
-	 	
-	 	
+
+
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -50,109 +54,116 @@
 								</h2>
 							</div>
 							<hr>
-								<%-- <form  id="myForm" method="POST" enctype="multipart/form-data"> --%>
-							<form  id="myForm" action="submitStyleFiles" method="POST" enctype="multipart/form-data">
-							
-							
-	<%	
+							<%-- <form  id="myForm" method="POST" enctype="multipart/form-data"> --%>
+							<form id="myForm" action="submitStyleFiles" method="POST"
+								enctype="multipart/form-data">
 
-	
-	String buyerid1=(String) request.getAttribute("buyerId");
-	System.out.println(" buyer id "+request.getAttribute("buyerId"));
-	String styleid1=(String) request.getAttribute("style");
-	System.out.println(" styleid "+styleid1);
-	String date1=(String) request.getAttribute("date");
-	System.out.println(" date "+date1);
-	
-	
-	
-	//System.out.println(" bid "+${customerEmail});
-%>
-							
-							
+
+								<%
+									String buyerid1 = (String) request.getAttribute("buyerId");
+									System.out.println(" buyer id " + request.getAttribute("buyerId"));
+									String styleid1 = (String) request.getAttribute("style");
+									System.out.println(" styleid " + styleid1);
+									String date1 = (String) request.getAttribute("date");
+									System.out.println(" date " + date1);
+
+									//System.out.println(" bid "+${customerEmail});
+								%>
+
+
 								<div class="row">
-								
-								<input type="hidden" id="hbuyerId" name="hbuyerId" />
-								<input type="hidden" id="styleid" name="styleid" />
-								<input type="hidden" id="styleItemAutoId" name="styleItemAutoId"/>
-								
-								
-									<select id="buyerId" name="buyerId" class="col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
-										<option name="buyerId" id="buyerId" value="0">Select Buyer Name</option>
-										
-										
-										
-										<c:forEach items="${buyerList}" var="blist" varStatus="counter">
-											<option name="buyerId"  id="buyerId" value="${blist.buyerid}">${blist.buyername}</option>
-										</c:forEach>
-										
-									
-									</select>	
-									
-								
+
+									<input type="hidden" id="hbuyerId" name="hbuyerId" /> <input
+										type="hidden" id="styleid" name="styleid" /> <input
+										type="hidden" id="styleItemAutoId" name="styleItemAutoId" />
+
+									<div class="col-md-12">
+										<select id="buyerId" name="buyerId"
+											class="selectpicker form-control form-control-sm"
+											data-live-search="true"
+											data-style="btn-light border-secondary">
+											<option name="buyerId" id="buyerId" value="0">Select
+												Buyer Name</option>
+
+
+
+											<c:forEach items="${buyerList}" var="blist"
+												varStatus="counter">
+												<option name="buyerId" id="buyerId" value="${blist.buyerid}">${blist.buyername}</option>
+											</c:forEach>
+
+
+										</select>
+
+									</div>
 								</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="styleno">Style No:</label> 
-										
-										<input type="text"  name="styleNo" class="form-control" id="styleNo" accesskey="C">
-									</div>							
-								</div>							
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="unitValue">Date:</label> 									
-										<div class="input-group date" data-provide="datepicker">
-												    <input id="date" value=<%=date1%> name="date"  type="date" class="form-control">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group mb-0">
+											<label for="styleno" class="mb-0">Style No:</label> <input
+												type="text" name="styleNo" class="form-control-sm"
+												id="styleNo" accesskey="C">
 										</div>
-									</div>						
-								</div>									
-							</div>	
-
-							<div class="col-md-12 row">
-									<div class="form-group">
-										<label for="Size">Size:</label> 
-										<input type="text" name="size" class="form-control" id="size" >
-									</div>									
-							</div>	
+									</div>
+									<div class="col-md-6">
+										<div class="form-group mb-0">
+											<label for="unitValue" class="mb-0">Date:</label>
+											<div class="input-group date" data-provide="datepicker">
+												<input id="date" value=<%=date1%> name="date" type="date"
+													class="form-control-sm col-md-12">
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<div class="row">
-									<select id="itemId" name="itemId" multiple="multiple" class="itemId col-md-12 selectpicker "  data-live-search="true" data-style="btn-light border-secondary">
-										<option id="itemId" name="itemId" value="0">Select Item Name</option>
-										<c:forEach items="${itemList}" var="list" varStatus="counter">
-											<option id="itemId" name="itemId" value="${list.itemId}">${list.itemName}</option>
-										</c:forEach>
-									</select>		
-	
+									<div class="col-md-6">
+										<label for="Size" class="mb-0">Size:</label> <input
+											type="text" name="size" class="form-control-sm" id="size">
+									</div>
 								</div>
 
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="unitValue">Front Image</label> 
-			
-									     <input type="file" name="frontImage" onchange="readFrontURL(this);" accept=".png" />
-										
-										 <img id="blahFront" src="" alt="Preadmin">
-									</div>								
+								<div class="row mt-1">
+									<div class="col-md-12">
+										<select id="itemId" name="itemId" multiple="multiple"
+											class="itemId selectpicker form-control form-control-sm"
+											data-live-search="true"
+											data-style="btn-light border-secondary">
+											<option id="itemId" name="itemId" value="0">Select
+												Item Name</option>
+											<c:forEach items="${itemList}" var="list" varStatus="counter">
+												<option id="itemId" name="itemId" value="${list.itemId}">${list.itemName}</option>
+											</c:forEach>
+										</select>
+									</div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="unitValue">Back Image</label> 
-										
-									     <input type="file" name="backImage" onchange="readBackURL(this);" id accept=".png" />
-										
-										 <img id="blahBack" src="" alt="Preadmin">
-									</div>								
-								</div>
-							</div>		
-							<button type="submit" accesskey="S" id="btnSave" name="submit" value="1" class="btn btn-primary btn-sm"  onclick="btnsaveAction()">Save</button>
 
-							<button type="submit" id="btnEdit" name="submit" value="2" class="btn btn-success btn-sm" onclick="btneditAction()"
-								style="display: none;">Edit</button>
-							<button type="button" id="btnRefresh"
-								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>							
-							</form>										
+								<div class="row">
+									<div class="col-md-6">
+									
+											<label for="unitValue" class="mb-0">Front Image</label> <input type="file"
+												name="frontImage" onchange="readFrontURL(this);" class="form-control form-control-sm"
+												accept=".png" /> <img id="blahFront" src="" alt="Preadmin">
+										
+									</div>
+									<div class="col-md-6">
+										
+											<label for="unitValue" class="mb-0">Back Image</label> <input type="file" class="form-control form-control-sm"
+												name="backImage" onchange="readBackURL(this);" id
+												accept=".png" /> <img id="blahBack" src="" alt="Preadmin">
+										
+									</div>
+								</div>
+								<button type="submit" accesskey="S" id="btnSave" name="submit"
+									value="1" class="btn btn-primary btn-sm"
+									onclick="btnsaveAction()"><span style="text-decoration:underline;"> Save</span></button>
+
+								<button type="submit" id="btnEdit" name="submit" value="2"
+									class="btn btn-success btn-sm" onclick="btneditAction()"
+									style="display: none;">Edit</button>
+								<button type="button" id="btnRefresh"
+									class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
+							</form>
 
 
 						</div>
@@ -168,33 +179,47 @@
 								</div>
 							</div>
 							<hr>
-							<div class="row" >
-								<div class="col-sm-12 col-md-12 col-lg-12" style="overflow: auto; max-height: 600px;">
-								<table class="table table-hover table-bordered table-sm" >
-								<thead>
-									<tr>
-										<th scope="col">#</th>
-										<th scope="col">Style No</th>
-										<th scope="col">Item Description</th>
-										<th scope="col">Edit</th>
-									</tr>
-								</thead>
-								<tbody id="dataList">
-									<c:forEach items="${styleList}" var="slist"
-													varStatus="counter">
-										<tr>
-											<td>${counter.count}</td>
-											<td id='styleNo${slist.styleItemAutoId}'>${slist.styleNo}</td>
-											<td> <input id='itemId${slist.styleItemAutoId}' type="hidden" value='1'/> ${slist.itemName}</td>
-											<td><input type="hidden" id='hStyleId${slist.styleItemAutoId}' value="${slist.styleId}" /><input type="hidden" id='hBuyerId${slist.styleItemAutoId}' value="${slist.buyerId}" /><input type="hidden" id='hItemId${slist.styleItemAutoId}' value="${slist.itemId}" /><input type="hidden" id='hDate${slist.styleItemAutoId}' value="${slist.date}" /><input type="hidden" id='hStyleNo${slist.styleItemAutoId}' value="${slist.styleNo}" /><input type="hidden" id='hSize${slist.styleItemAutoId}' value="${slist.size}" /><i class="fa fa-edit" onclick="setData(${slist.styleItemAutoId})"> </i></td>
-										</tr>
-									</c:forEach>
-								</tbody>
-							</table>
+							<div class="row">
+								<div class="col-sm-12 col-md-12 col-lg-12"
+									style="overflow: auto; max-height: 600px;">
+									<table class="table table-hover table-bordered table-sm">
+										<thead>
+											<tr>
+												<th scope="col">#</th>
+												<th scope="col">Style No</th>
+												<th scope="col">Item Description</th>
+												<th scope="col">Edit</th>
+											</tr>
+										</thead>
+										<tbody id="dataList">
+											<c:forEach items="${styleList}" var="slist"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td id='styleNo${slist.styleItemAutoId}'>${slist.styleNo}</td>
+													<td><input id='itemId${slist.styleItemAutoId}'
+														type="hidden" value='1' /> ${slist.itemName}</td>
+													<td><input type="hidden"
+														id='hStyleId${slist.styleItemAutoId}'
+														value="${slist.styleId}" /><input type="hidden"
+														id='hBuyerId${slist.styleItemAutoId}'
+														value="${slist.buyerId}" /><input type="hidden"
+														id='hItemId${slist.styleItemAutoId}'
+														value="${slist.itemId}" /><input type="hidden"
+														id='hDate${slist.styleItemAutoId}' value="${slist.date}" /><input
+														type="hidden" id='hStyleNo${slist.styleItemAutoId}'
+														value="${slist.styleNo}" /><input type="hidden"
+														id='hSize${slist.styleItemAutoId}' value="${slist.size}" /><i
+														class="fa fa-edit"
+														onclick="setData(${slist.styleItemAutoId})"> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
 								</div>
-								
+
 							</div>
-							
+
 						</div>
 					</div>
 
@@ -210,7 +235,7 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-			<script>
+<script>
 			$('.datepicker').datepicker({
 			    format: 'mm/dd/yyyy',
 			    startDate: '-3d'
@@ -218,7 +243,7 @@
 			</script>
 <script
 	src="${pageContext.request.contextPath}/assets/js/order/style-create.js"></script>
-	
-	<script>
+
+<script>
 	  
 	</script>

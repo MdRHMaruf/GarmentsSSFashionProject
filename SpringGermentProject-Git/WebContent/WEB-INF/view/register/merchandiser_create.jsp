@@ -44,36 +44,36 @@ String userName=(String)session.getAttribute("userName");
 							</div>
 							<hr>
 
-							<div class="form-group">
-								<label for="fabricsItemName">Name:</label> <input type="text"
-									class="form-control" id="name" name="text">
+							<div class="form-group mb-0">
+								<label for="fabricsItemName mb-0">Name:</label> <input type="text"
+									class="form-control-sm" id="name" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Telephone:</label> <input type="text"
-									class="form-control" id="telephone" name="text">
+							<div class="form-group mb-0">
+								<label for="reference" class=" mb-0">Telephone:</label> <input type="text"
+									class="form-control-sm" id="telephone" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Mobile:</label> <input type="text"
-									class="form-control" id="mobile" name="text">
+							<div class="form-group mb-0">
+								<label for="reference" class=" mb-0">Mobile:</label> <input type="text"
+									class="form-control-sm" id="mobile" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Fax:</label> <input type="text"
-									class="form-control" id="fax" name="text">
+							<div class="form-group mb-0">
+								<label for="reference" class=" mb-0">Fax:</label> <input type="text"
+									class="form-control-sm" id="fax" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Email:</label> <input type="text"
-									class="form-control" id="email" name="text">
+							<div class="form-group mb-0">
+								<label for="reference" class=" mb-0">Email:</label> <input type="text"
+									class="form-control-sm" id="email" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Skype Id:</label> <input type="text"
-									class="form-control" id="skype" name="text">
+							<div class="form-group mb-0">
+								<label for="reference" class=" mb-0">Skype Id:</label> <input type="text"
+									class="form-control-sm" id="skype" name="text">
 							</div>
-							<div class="form-group">
-								<label for="reference">Address:</label> <input type="text"
-									class="form-control" id="address" name="text">
+							<div class="form-group mb-1">
+								<label for="reference" class=" mb-0">Address:</label> <input type="text"
+									class="form-control-sm" id="address" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm" accesskey="S"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
 								style="display: none;">Edit</button>

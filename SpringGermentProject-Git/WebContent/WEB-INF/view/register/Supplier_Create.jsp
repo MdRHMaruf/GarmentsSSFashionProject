@@ -57,7 +57,7 @@
 					<div class="modal fade" id="exampleModal" tabindex="-1"
 						role="dialog" aria-labelledby="exampleModalLabel"
 						aria-hidden="true">
-						<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-dialog modal-xl" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
 									<h5 class="modal-title" id="exampleModalLabel">Supplier
@@ -74,13 +74,13 @@
 										<label style="text-align: left;" class="col-sm-2">Supplier
 											Id</label>
 										<div class="col-sm-4">
-											<input id="suppier_id" type="text" class="form-control">
+											<input id="suppier_id" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Supplier
 											Code</label>
 										<div class="col-sm-4">
-											<input id="suppier_code" type="text" class="form-control">
+											<input id="suppier_code" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -88,13 +88,13 @@
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Supplier
 											Name</label>
 										<div class="col-sm-4">
-											<input id="suppier_name" type="text" class="form-control">
+											<input id="suppier_name" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Contact
 											Person</label>
 										<div class="col-sm-4">
-											<input id="contact_person" type="text" class="form-control">
+											<input id="contact_person" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -103,14 +103,14 @@
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="2" cols="2" id="suppier_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Consignee
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="2" cols="2" id="consignee_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 									</div>
 
@@ -119,13 +119,13 @@
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="2" cols="2" id="notify_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 
 										<label class="col-sm-2"><span id="redwarning" style="color:red">*</span>Country</label>
 										<div class="col-sm-4">
 
-											<input id="countries1" type="text" class="form-control"
+											<input id="countries1" type="text" class="form-control-sm"
 												onkeyup="CountriesSearch(this)">
 										</div>
 
@@ -134,24 +134,24 @@
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Telphone</label>
 										<div class="col-sm-4">
-											<input id="telphone" type="text" class="form-control">
+											<input id="telphone" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Mobile</label>
 										<div class="col-sm-4">
-											<input id="mobile" type="text" class="form-control">
+											<input id="mobile" type="text" class="form-control-sm">
 										</div>
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2">Fax</label>
 										<div class="col-sm-3">
-											<input id="fax" type="text" class="form-control">
+											<input id="fax" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>E-mail</label>
 										<div class="col-sm-5">
-											<input id="e_mail" type="text" class="form-control">
+											<input id="e_mail" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -159,7 +159,7 @@
 										<label style="text-align: left;" class="col-sm-2">Skype
 											Id</label>
 										<div class="col-sm-4">
-											<input id="skype_id" type="text" class="form-control">
+											<input id="skype_id" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -172,13 +172,13 @@
 										<label style="text-align: left;" class="col-sm-2">Bank
 											Name</label>
 										<div class="col-sm-4">
-											<input id="bank_name" type="text" class="form-control">
+											<input id="bank_name" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Accounts
 											No</label>
 										<div class="col-sm-4">
-											<input id="accounts_no" type="text" class="form-control">
+											<input id="accounts_no" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -187,13 +187,13 @@
 											Address</label>
 										<div class="col-sm-4">
 											<textarea rows="2" cols="2" id="bank_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Accounts
 											Name</label>
 										<div class="col-sm-4">
-											<input id="accounts_name" type="text" class="form-control">
+											<input id="accounts_name" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -201,13 +201,13 @@
 										<label style="text-align: left;" class="col-sm-2">Swift
 											Code</label>
 										<div class="col-sm-3">
-											<input id="swift_code" type="text" class="form-control">
+											<input id="swift_code" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Country</label>
 										<div class="col-sm-5">
 
-											<input id="bankCOuntry" type="text" class="form-control"
+											<input id="bankCOuntry" type="text" class="form-control-sm"
 												onkeyup="CountriesSearch(this)">
 
 										</div>
@@ -218,8 +218,8 @@
 
 								<div class="modal-footer">
 									
-									<button class="btn btn-primary btn-sm" id="save" type="button"
-										onclick="insertSupplier()">Save</button>
+									<button class="btn btn-primary btn-sm" id="save" accesskey="S" type="button"
+										onclick="insertSupplier()"><span style="text-decoration:underline;"> Save</span></button>
 									<button class="btn btn-success btn-sm" id="edit" type="button"
 										onclick="editSupplier(this) style="display: none;"">Edit</button>
 									<button class="btn btn-secondary btn-sm" type="button">Refresh</button>

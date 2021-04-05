@@ -9,7 +9,8 @@
 <%@page import="java.util.List"%>
 <jsp:include page="../include/header.jsp" />
 <%
-	List<Login> lg = (List<Login>) session.getAttribute("pg_admin");
+String userId=(String)session.getAttribute("userId");
+String userName=(String)session.getAttribute("userName");
 %>
 <div class="page-wrapper">
 	<div class="alert alert-success alert-dismissible fade show"
@@ -30,7 +31,7 @@
 			<strong>Wrong!</strong> Something Wrong...
 		</p>
 	</div>
-	<input type="hidden" id="userId" value="<%=lg.get(0).getId()%>">
+	<input type="hidden" id="userId" value="<%=userId%>">
 	<input type="hidden" id="type" value="<%=ProductionType.FINAL_QC_LAYOUT.getType()%>">
 	<input type="hidden" id="itemAutoId" value="0">
 
@@ -186,8 +187,8 @@
 			<div class="row" style="margin-top: 15px;">
 			<div class="col-md-12">
 				<button id="btnSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="saveAction()">
-					<i class="fas fa-save"></i> Submit
+					class="btn btn-primary btn-sm" onclick="saveAction()" accesskey="S">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">

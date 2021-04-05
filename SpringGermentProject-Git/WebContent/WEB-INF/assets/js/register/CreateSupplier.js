@@ -461,3 +461,15 @@ $(document).ready(function () {
 function reloadPage(){
 	location.reload();
 }
+
+
+let idListMicro = ["suppier_code","suppier_name","contact_person","suppier_address","consignee_address","notify_address","countries1","telphone",
+	"mobile","fax","e_mail","skype_id","bank_name","accounts_no","bank_address","accounts_name","swift_code","bankCOuntry","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

@@ -55,14 +55,14 @@ String userName=(String) request.getAttribute("userName");
 
 							<div class="form-group">
 								<label for="accessoriesItemName">Accessories Item Name:</label>
-								<input type="text" class="form-control" id="accessoriesItemName"
+								<input type="text" class="form-control-sm inputs" id="accessoriesItemName"
 									name="text">
 							</div>
 
 
 							<div class="form-group">
 								<label for="accessoriesItemCode">Accessories Item Code:</label>
-								<input type="text" class="form-control" id="accessoriesItemCode"
+								<input type="text" class="form-control-sm inputs" id="accessoriesItemCode"
 									name="text">
 							</div>
 
@@ -73,7 +73,7 @@ String userName=(String) request.getAttribute("userName");
 									<label for="unit" class="col-md-3 col-form-label-sm pr-0">Unit</label>
 									<select id="unit" class="selectpicker col-md-9 px-0"
 										data-live-search="true"
-										data-style="btn-light btn-sm border-light-gray">
+										data-style="btn-light btn-sm border-light-gray inputs">
 										<option id="unit" value="0">Select Unit</option>
 										<c:forEach items="${unitList}" var="unit">
 											<option id="unit" value="${unit.unitId}">${unit.unitName}</option>
@@ -85,7 +85,7 @@ String userName=(String) request.getAttribute("userName");
 
 								<div class="col-md-6">
 									<div class="input-group input-group-sm my-0">
-										<input type="text" class="form-control"
+										<input type="text" class="form-control inputs"
 											placeholder="Unit Qty" aria-describedby="addUnit"
 											id="unitQty">
 										<div class="input-group-append">
@@ -108,8 +108,8 @@ String userName=(String) request.getAttribute("userName");
 								</div>
 							</div>
 
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" accesskey="S" class="btn btn-primary btn-sm inputs"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style="display: none;">Edit</button>

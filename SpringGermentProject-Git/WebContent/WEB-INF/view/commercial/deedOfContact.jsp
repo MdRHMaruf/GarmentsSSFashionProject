@@ -448,7 +448,7 @@ String userName=(String)session.getAttribute("userName");
 
 						<div class="row mt-1">
 							<div class="col-sm-12 p-0">
-								<button id="save" value="1" onclick="insert(this)" class="btn btn-sm btn-primary">Save</button>
+								<button id="save" value="1" onclick="insert(this)" accesskey="S" class="btn btn-sm btn-primary"><span style="text-decoration:underline;"> Save</span></button>
 								<button id="edit" value="2" onclick="insert(this)" class="btn btn-sm btn-dark">Edit</button>
 								<button id="btnRefresh" class="btn btn-sm btn-danger">Refresh</button>
 							</div>

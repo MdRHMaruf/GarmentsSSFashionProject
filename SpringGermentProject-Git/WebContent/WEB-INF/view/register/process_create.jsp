@@ -51,10 +51,10 @@
 
 							<div class="form-group">
 								<label for="sampleTypeName">Process Name:</label> <input
-									type="text" class="form-control" id="processName" name="text">
+									type="text" class="form-control-sm" id="processName" name="text">
 							</div>
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+								onclick="saveAction()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style="display: none;">Edit</button>

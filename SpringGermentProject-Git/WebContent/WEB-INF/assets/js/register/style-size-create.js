@@ -346,3 +346,10 @@ function setSizeGroupId(groupId) {
   document.getElementById("sizeGroupId").value = groupId;
 }
 
+
+$('.inputs').keyup(function (e) {
+	if (e.which === 13) {
+		var index = $('.inputs').index(this) + 1;
+		$('.inputs').eq(index).focus();
+	}
+});

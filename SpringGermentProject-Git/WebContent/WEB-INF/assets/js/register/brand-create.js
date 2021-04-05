@@ -162,3 +162,32 @@ $(document).ready(function () {
   });
 });
 
+
+/*$(this).click(function(event){
+	$(this).next('.inputs').focus();
+});*/
+
+/*$(".inputs").keyup(function (e) {
+    if (e.KeyCode() === 13) {
+      $(this).next('.inputs').focus();
+    }
+});*/
+/*
+$('.inputs').keyup(function (e) {
+	console.log("hi")
+	if (e.which === 13) {
+		//var index = $('.inputs').index(this) + 1;
+//		$('.inputs').next().focus();
+		 $(this).next('input').focus();
+	}
+});*/
+
+$('.inputs').keyup(function (e) {
+	console.log(e)
+	if (e.which === 13) {
+		var index = $('.inputs').index(this) + 1;
+		$('.inputs').eq(index).focus();
+	}
+});
+
+

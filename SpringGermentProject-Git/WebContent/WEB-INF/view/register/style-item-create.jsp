@@ -52,8 +52,8 @@ String userName=(String) request.getAttribute("userName");
 								<label for="styleItemCode">Item Code:</label> <input type="text"
 									class="form-control" id="styleItemCode" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm" accesskey="S"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
 								style="display: none">Edit</button>

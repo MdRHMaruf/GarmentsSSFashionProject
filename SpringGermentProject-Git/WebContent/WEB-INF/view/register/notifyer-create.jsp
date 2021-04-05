@@ -83,7 +83,7 @@
 									</div>
 								</div>
 							</div>
-							
+
 							<div class="row mt-1">
 								<div class="col-md-12 px-1">
 									<div class="input-group input-group-sm mb-1">
@@ -136,14 +136,18 @@
 									</div>
 								</div>
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<div class="row mt-1">
+								<div class="col-md-12 text-center">
+									<button type="button" id="btnSave"
+										class="btn btn-primary btn-sm" onclick="saveAction()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
 
-							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
-								onclick="editAction()" style="display: none;">Edit</button>
-							<button type="button" id="btnRefresh"
-								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
-
+									<button type="button" id="btnEdit"
+										class="btn btn-success btn-sm" onclick="editAction()"
+										style="display: none;">Edit</button>
+									<button type="button" id="btnRefresh"
+										class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
+								</div>
+							</div>
 						</div>
 						<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 							<div class="input-group my-2">
@@ -178,8 +182,8 @@
 													<td>${notifyer.country}</td>
 													<td>${notifyer.address}</td>
 													<td><i class="fa fa-edit"
-														onclick="setData(${notifyer.id})"
-														style="cursor: pointer;"> </i></td>
+														onclick="setData(${notifyer.id})" style="cursor: pointer;">
+													</i></td>
 												</tr>
 											</c:forEach>
 										</tbody>
