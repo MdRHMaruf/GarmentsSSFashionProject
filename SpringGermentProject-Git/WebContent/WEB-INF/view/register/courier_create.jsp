@@ -70,7 +70,7 @@
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Courier
 											Name</label>
 										<div class="col-sm-4">
-											<input id="courier_name" type="text" class="form-control">
+											<input id="courier_name" type="text" class="form-control-sm">
 										</div>
 
 									</div>
@@ -79,13 +79,13 @@
 										<label style="text-align: left;" class="col-sm-2">Courier
 											Id</label>
 										<div class="col-sm-4">
-											<input id="courier_id" type="text" class="form-control">
+											<input id="courier_id" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Courier
 											Code</label>
 										<div class="col-sm-4">
-											<input id="courier_code" type="text" class="form-control">
+											<input id="courier_code" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -93,15 +93,15 @@
 										<label style="text-align: left;" class="col-sm-2"><span  style="color:red">*</span>Courier
 											Address</label>
 										<div class="col-sm-4">
-											<textarea rows="5" cols="5" id="courier_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+											<textarea rows="2" cols="5" id="courier_address"
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Consignee
 											Address</label>
 										<div class="col-sm-4">
-											<textarea rows="5" cols="5" id="consignee_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+											<textarea rows="2" cols="5" id="consignee_address"
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 									</div>
 
@@ -109,15 +109,15 @@
 										<label style="text-align: left;" class="col-sm-2">Notify
 											Address</label>
 										<div class="col-sm-4">
-											<textarea rows="5" cols="5" id="notify_address"
-												class="form-control" placeholder="Enter text here"></textarea>
+											<textarea rows="2" cols="5" id="notify_address"
+												class="form-control form-control-sm" placeholder="Enter text here"></textarea>
 										</div>
 
 										<label class="col-sm-2"><span id="redwarning" style="color:red">*</span>Country</label>
 										<div class="col-sm-4">
 
 
-											<input id="countries1" type="text" class="form-control"
+											<input id="countries1" type="text" class="form-control-sm"
 												onkeyup="CountriesSearch(this)">
 										</div>
 
@@ -126,24 +126,24 @@
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>Telphone</label>
 										<div class="col-sm-4">
-											<input id="telphone" type="text" class="form-control">
+											<input id="telphone" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Mobile</label>
 										<div class="col-sm-4">
-											<input id="mobile" type="text" class="form-control">
+											<input id="mobile" type="text" class="form-control-sm">
 										</div>
 									</div>
 
 									<div style="margin-top: 5px;" class="row">
 										<label style="text-align: left;" class="col-sm-2">Fax</label>
 										<div class="col-sm-3">
-											<input id="fax" type="text" class="form-control">
+											<input id="fax" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2"><span id="redwarning" style="color:red">*</span>E-mail</label>
 										<div class="col-sm-5">
-											<input id="e_mail" type="text" class="form-control">
+											<input id="e_mail" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -151,7 +151,7 @@
 										<label style="text-align: left;" class="col-sm-2">Skype
 											Id</label>
 										<div class="col-sm-4">
-											<input id="skype_id" type="text" class="form-control">
+											<input id="skype_id" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -164,13 +164,13 @@
 										<label style="text-align: left;" class="col-sm-2">Bank
 											Name</label>
 										<div class="col-sm-3">
-											<input id="bank_name" type="text" class="form-control">
+											<input id="bank_name" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Bank
 											Address</label>
 										<div class="col-sm-5">
-											<input id="bank_address" type="text" class="form-control">
+											<input id="bank_address" type="text" class="form-control-sm">
 										</div>
 									</div>
 
@@ -178,7 +178,7 @@
 										<label style="text-align: left;" class="col-sm-2">Swift
 											Code</label>
 										<div class="col-sm-3">
-											<input id="swift_code" type="text" class="form-control">
+											<input id="swift_code" type="text" class="form-control-sm">
 										</div>
 
 										<label style="text-align: left;" class="col-sm-2">Country</label>
@@ -191,7 +191,7 @@
 	                         <option>Option 4</option>
 	                         <option>Option 5</option>
 	                     </select> --%>
-											<input id="bank_country" type="text" class="form-control"
+											<input id="bank_country" type="text" class="form-control-sm"
 												onkeypress="CountriesSearch(this)">
 										</div>
 									</div>
@@ -201,8 +201,8 @@
 								</div>
 								<div class="modal-footer">
 									
-										<button class="btn btn-primary btn-sm" type="button" id="save"
-											onclick="insertCourier()">Save</button>
+										<button class="btn btn-primary btn-sm" type="button" id="save" accesskey="S"
+											onclick="insertCourier()"><span style="text-decoration:underline;"> Save</span></button>
 										<button class="btn btn-success btn-sm" type="button" id="edit"
 											onclick="editCourier()" style="display: none;">Edit</button>
 										<button class="btn btn-secondary btn-sm" type="button"

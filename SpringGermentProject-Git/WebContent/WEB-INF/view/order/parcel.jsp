@@ -121,12 +121,12 @@ String userName=(String)session.getAttribute("userName");
 
 				<div class="row my-1 d-flex justify-content-end">
 					<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
-						onclick="itemAddAction()">
-						<i class="fa fa-plus-circle"></i> Add
+						onclick="itemAddAction()" accesskey="A">
+						<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
 					</button>
 					<button type="button" class="btn btn-primary btn-sm ml-1"
-						id="btnEdit" onclick="itemEditAction()" disabled>
-						<i class="fa fa-pencil-square"></i> Edit
+						id="btnEdit" onclick="itemEditAction()" accesskey="E" disabled>
+						<i class="fa fa-pencil-square"></i><span style="text-decoration:underline;"> Edit</span>
 					</button>
 					<button id="btnItemRefresh" type="button"
 						class="btn btn-primary btn-sm ml-1" onclick="itemRefreshAction()">
@@ -250,8 +250,8 @@ String userName=(String)session.getAttribute("userName");
 
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm">
-					<i class="fas fa-save"></i> Confirm
+				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm" accesskey="C">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span>
 				</button>
 
 				<button id="btnRefresh" type="button"

@@ -44,16 +44,16 @@ String userName=(String) request.getAttribute("userName");
 							</div>
 							<hr>
 
-							<div class="form-group">
+							<div class="form-group mb-1">
 								<label for="colorName">Color Name:</label> <input type="text"
-									class="form-control" id="colorName" name="text">
+									class="form-control-sm inputs" id="colorName" name="text">
 							</div>
-							<div class="form-group">
+							<div class="form-group mb-1">
 								<label for="colorCode">Color Code:</label> <input type="text"
-									class="form-control" id="colorCode" name="text">
+									class="form-control-sm inputs" id="colorCode" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm inputs" accesskey="S"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
 								style="display: none;">Edit</button>

@@ -18,13 +18,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -42,11 +45,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import com.sun.istack.internal.logging.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.sun.istack.internal.logging.Logger;
+
 import pg.model.CommonModel;
-import pg.model.Login;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.AccessoriesIndentCarton;
 import pg.orderModel.BuyerPO;
@@ -61,7 +64,6 @@ import pg.orderModel.PurchaseOrderItem;
 import pg.orderModel.SampleCadAndProduction;
 import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
-import pg.proudctionModel.ProductionPlan;
 import pg.registerModel.AccessoriesItem;
 import pg.registerModel.Brand;
 import pg.registerModel.BuyerModel;
@@ -71,7 +73,6 @@ import pg.registerModel.FabricsItem;
 import pg.registerModel.Factory;
 import pg.registerModel.FactoryModel;
 import pg.registerModel.ItemDescription;
-import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
 import pg.registerModel.SizeGroup;
@@ -600,14 +601,20 @@ public class OrderController {
 	@RequestMapping(value = "/addItemToBuyerPO",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addItemToBuyerPO(BuyerPoItem buyerPoItem) {
 		JSONObject objmain = new JSONObject();
-
-		if(orderService.addBuyerPoItem(buyerPoItem)) {
-			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
-			objmain.put("result",buyerPOItemList);
+		if(!orderService.isBuyerPoItemExist(buyerPoItem)) {
+			if(orderService.addBuyerPoItem(buyerPoItem)) {
+				JSONArray mainArray = new JSONArray();
+				List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
+				objmain.put("result",buyerPOItemList);
+			}else {
+				objmain.put("result", "Something Wrong");
+				objmain.put("message", "Something Wrong");
+			}
 		}else {
-			objmain.put("result", "Something Wrong");
+			objmain.put("result", "duplicate");
+			objmain.put("message", "Duplicate Item");
 		}
+		
 
 		return objmain;
 	}
@@ -618,17 +625,21 @@ public class OrderController {
 	public @ResponseBody JSONObject editBuyerPoItem(BuyerPoItem buyerPoItem) {
 		JSONObject objmain = new JSONObject();
 
-		if(orderService.editBuyerPoItem(buyerPoItem)) {
-			JSONArray mainArray = new JSONArray();
-			List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
-			objmain.put("result",buyerPOItemList);
+		if(orderService.isBuyerPoItemExist(buyerPoItem)) {
+			if(orderService.editBuyerPoItem(buyerPoItem)) {
+				JSONArray mainArray = new JSONArray();
+				List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
+				objmain.put("result",buyerPOItemList);
+			}else {
+				objmain.put("result", "Something Wrong");
+			}
 		}else {
-			objmain.put("result", "Something Wrong");
+			objmain.put("result", "duplicate");
 		}
-
 		return objmain;
 	}
-
+	
+	
 	@RequestMapping(value = "/getBuyerPOItemsList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getBuyerPOItemsList(String buyerPoNo,String userId) {
 		JSONObject objmain = new JSONObject();
@@ -1861,6 +1872,34 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	
+	@ResponseBody
+	@RequestMapping(value = "/getStyleWisePurchaseOrder/{styleId}",method=RequestMethod.GET)
+	public JSONObject getStyleWisePurchaseOrder(@PathVariable ("styleId") String styleId) {
+
+		System.out.println("Wise");
+		JSONObject objmain = new JSONObject();
+		JSONArray mainarray = new JSONArray();
+
+		List<CommonModel>po=orderService.getStyleWisePurchaseOrder(styleId);
+
+		for (int i = 0; i < po.size(); i++) {
+			JSONObject obj=new JSONObject();
+
+			obj.put("id", po.get(i).getId());
+			obj.put("name", po.get(i).getName());
+
+			mainarray.add(obj);
+
+		}
+
+		objmain.put("result", mainarray);
+		System.out.println(" obj main "+objmain);
+
+		return objmain;
+
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/getAllColor",method=RequestMethod.POST)
 	public JSONObject getAllColor() {
@@ -2016,7 +2055,19 @@ public class OrderController {
 		return view;
 	}
 
+	
+	@RequestMapping(value = "/printDateWiseAllSampleRequsition/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printDateWiseAllSampleRequsition(ModelMap map,@PathVariable ("idList") String idList) {
+		
+		ModelAndView view=new ModelAndView("order/printDateWiseAllSampleRequsition");
+		
+		String id[] = idList.split("@");
+		map.addAttribute("date", id[0]);
 
+		
+		return view;
+	}
+	
 	@RequestMapping(value = "/printsampleRequisition",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printsampleRequisition(ModelMap map) {
 
@@ -2166,8 +2217,11 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("order/sample_production");
-		List<SampleCadAndProduction> sampleCommentsList = orderService.getSampleCommentsList();
-		view.addObject("sampleCommentsList",sampleCommentsList);
+		
+		
+		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
+
+		map.addAttribute("sampleCadList",sampleCadList);
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
@@ -2184,10 +2238,13 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/getSampleProductionInfo",method=RequestMethod.GET)
-	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
+	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId,String sampleReqId) {
 		JSONObject objmain = new JSONObject();
+		
+		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionAndCuttingDetails(sampleReqId,sampleCommentId);
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
 		objmain.put("sampleProduction", sampleProduction);
+		objmain.put("result_sample_requisition", sampleRequisitionList);
 
 		return objmain;
 	}
@@ -2195,6 +2252,8 @@ public class OrderController {
 	@RequestMapping(value = "/postSampleProduction",method=RequestMethod.POST)
 	public @ResponseBody JSONObject postSampleProduction(SampleCadAndProduction	sampleCadAndProduction) {
 		JSONObject objmain = new JSONObject();
+		
+		
 		if(orderService.postSampleProductionInfo(sampleCadAndProduction)) {
 			objmain.put("result", "successfull");
 		}else {
@@ -2203,22 +2262,34 @@ public class OrderController {
 		return objmain;
 	}
 
-	@RequestMapping(value="/getSampleProductionReport/{idList}/{printType}")
-	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable String idList,@PathVariable String printType) {
+	@RequestMapping(value="/getSampleProductionReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable ("idList") String idList) {
 
 		ModelAndView view = new ModelAndView("order/sample-production-report-view");
 
-		map.addAttribute("purchaseOrder","");
-		map.addAttribute("styleId","");
-		map.addAttribute("itemId","");
-		map.addAttribute("sampleTypeId","");
-		map.addAttribute("printType",printType);
-		map.addAttribute("sampleCommentId",idList);
+		String id[] = idList.split("@");
+		
+		map.addAttribute("sampleCommentId",id[0]);
+		map.addAttribute("printType",id[1]);
 
 		return view;
 
 	}
 
+	@RequestMapping(value="/sampleProductionDateWiseReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView sampleProductionDateWiseReport(ModelMap map,@PathVariable ("idList") String idList) {
+
+		ModelAndView view = new ModelAndView("order/date-wise-sample-production-report-view");
+
+		String id[] = idList.split("@");
+		
+		map.addAttribute("date",id[0]);
+		map.addAttribute("reportType",id[1]);
+
+		return view;
+
+	}
+	
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
@@ -2419,9 +2490,16 @@ public class OrderController {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
+		
+		System.out.println("sampleReqId "+sampleReqId);
+		System.out.println("sampleCommentId "+sampleCommentId);
 		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
-		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
+
+		
 		List<FileUpload>filelist=orderService.findsamplecadfiles(user, sampleCommentId);
+
+		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetailsForProduction(sampleCommentId);
+
 		objmain.put("result_sample_requisition",sampleRequisitionList);
 		objmain.put("result_sample_cad",sampleCadList);
 		objmain.put("files",filelist);
@@ -2588,10 +2666,12 @@ public class OrderController {
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<Unit> unitList= registerService.getUnitList();	
 		List<CheckListModel> checkList= orderService.getChekList();	
+		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		view.addObject("buyerList",buyerList);
 		view.addObject("sampletype",sampleList);
 		view.addObject("unitList",unitList);
 		view.addObject("parcelList",checkList);
+		view.addObject("fabricsList",fabricsItemList);
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
@@ -2610,6 +2690,21 @@ public class OrderController {
 		return "fail";
 	}
 
+	@RequestMapping(value = "/getFabricsItems",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getFabricsItems() {
+		JSONObject objmain = new JSONObject();
+		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
+		objmain.put("fabricsList", fabricsItemList);
+		return objmain;
+	}
+	
+	@RequestMapping(value = "/getAccessoriesItems",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getAccessoriesItems() {
+		JSONObject objmain = new JSONObject();
+		List<CommonModel>accessoriesitem=orderService.AccessoriesItem("1");
+		objmain.put("accessoriesItems", accessoriesitem);
+		return objmain;
+	}
 
 
 	@ResponseBody

@@ -63,6 +63,7 @@ public interface OrderService {
 	Costing getCostingItem(String autoId);
 
 	//Buyder Po Order
+	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem);
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem);
 	boolean editBuyerPoItem(BuyerPoItem buyerPoItem);
 	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId);
@@ -225,6 +226,9 @@ public interface OrderService {
 	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
 	boolean deletesamplefile(String filename, String id);
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
+	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
+	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
+	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
 	
 	List<String> getMultifiles(String bpo);
 	

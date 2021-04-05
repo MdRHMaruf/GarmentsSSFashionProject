@@ -300,10 +300,10 @@
 
 					<div class="row mt-1">
 						<div class="col-sm-12 p-0">
-							<button type="button" id="save" onclick="insertSample()"
-								class="btn btn-warning btn-sm" onclick="">Save</button>
-							<button type="button" id="edit" class="btn btn-warning btn-sm"
-								onclick="editSmapleCad()">Edit</button>
+							<button type="button" id="save" onclick="insertSample()" accesskey="S"
+								class="btn btn-warning btn-sm" onclick=""><span style="text-decoration:underline;"> Save</span></button>
+							<button type="button" id="edit" class="btn btn-warning btn-sm" accesskey="E"
+								onclick="editSmapleCad()"><span style="text-decoration:underline;"> Edit</span></button>
 							<button type="button" id="btnRefresh" class="btn btn-dark btn-sm"
 								onclick="">Refresh</button>
 

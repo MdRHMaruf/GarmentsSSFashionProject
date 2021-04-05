@@ -229,12 +229,12 @@ String userName=(String)session.getAttribute("userName");
 			<div class="row" style="margin-top: 15px;">
 			<div class="col-md-12">
 				<button id="btnPOSubmit" type="button"
-					class="btn btn-primary btn-sm" onclick="saveAction()">
-					<i class="fas fa-save"></i> Save
+					class="btn btn-primary btn-sm" onclick="saveAction()" accesskey="S">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Save</span>
 				</button>
 				<button id="btnPOEdit" type="button"
-					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" disabled>
-					<i class="fa fa-pencil-square" ></i> Edit
+					class="btn btn-primary btn-sm ml-1" onclick = "buyerPoEditAction()" accesskey="E" disabled>
+					<i class="fa fa-pencil-square" ></i><span style="text-decoration:underline;"> Edit</span>
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">

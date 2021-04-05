@@ -1221,6 +1221,7 @@ $(document).ready(function () {
 	// $("#shipmentDate").datepicker('setDate','2013-12-11');
 });
 
+
 function multidownload(v){
 	var rowIndexx = $(v).closest('tr').index();
 	console.log(" row index "+rowIndexx)
@@ -1291,5 +1292,17 @@ function multidownload(v){
 
 	
 }
+
+
+let idListMicro = ["buyerName","styleNo","itemType","factory","color","customerOrder","purchaseOrder","shippingMark","shipmentDate"
+	,"inspectionDate","paymentTerm","currency","btnAdd","note","remarks","btnPOSubmit"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})
 
 

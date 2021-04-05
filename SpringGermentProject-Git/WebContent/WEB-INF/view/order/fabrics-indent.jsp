@@ -326,8 +326,8 @@ String userName=(String)session.getAttribute("userName");
 				<div class="d-flex justify-content-end">
 					<div class="row">
 						<div class="pr-1">
-							<button class="btn btn-primary btn-sm" onclick="confirmAction()">
-								<i class="fas fa-save"></i> Confirm
+							<button class="btn btn-primary btn-sm" onclick="confirmAction()" accesskey="C">
+								<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span>
 							</button>
 						</div>
 						<div class="pr-1">

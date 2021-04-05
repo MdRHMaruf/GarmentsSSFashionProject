@@ -277,3 +277,42 @@ $(document).ready(function () {
   });
 });
 
+
+/*let idListMicro = ["name","factoryName","departmentName","telephone","mobile","fax","email","skype","address","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})*/
+
+/*$('input,select').on('keypress', function (e) {
+    if (e.which == 13) {
+        e.preventDefault();
+        var $next = $('[tabIndex=' + (+this.tabIndex + 1) + ']');
+        if (!$next.length) {
+            $next = $('[tabIndex=1]');
+        }
+        $next.focus();
+    }
+});*/
+
+jQuery.extend(jQuery.expr[':'], {
+    focusable: function (el, index, selector) {
+        return $(el).is('a, button, :input, [tabindex]');
+    }
+});
+
+$(document).on('keypress', 'input,select', function (e) {
+    if (e.which == 13) {
+        e.preventDefault();
+        // Get all focusable elements on the page
+        var $canfocus = $(':focusable');
+        var index = $canfocus.index(document.activeElement) + 1;
+        if (index >= $canfocus.length) index = 0;
+        $canfocus.eq(index).focus();
+    }
+});
+

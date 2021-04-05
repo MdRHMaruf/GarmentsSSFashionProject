@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="482"/>
+	<property name="ireport.y" value="197"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -89,7 +89,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 		<groupHeader>
 			<band height="13">
 				<textField>
-					<reportElement x="0" y="1" width="320" height="11" uuid="d6dcd569-16be-4288-bfe6-21e7b4438110"/>
+					<reportElement x="4" y="1" width="368" height="11" uuid="d6dcd569-16be-4288-bfe6-21e7b4438110"/>
 					<textElement>
 						<font size="7" isBold="true"/>
 					</textElement>
@@ -120,12 +120,12 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 					</graphicElement>
 				</line>
 				<textField isStretchWithOverflow="true">
-					<reportElement isPrintRepeatedValues="false" x="318" y="1" width="56" height="12" uuid="3187e4cb-1a0e-4d99-bd81-b4a8bf299d3f"/>
+					<reportElement isPrintRepeatedValues="false" x="372" y="1" width="111" height="12" uuid="3187e4cb-1a0e-4d99-bd81-b4a8bf299d3f"/>
 					<box leftPadding="4"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="7"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ShippingMarks}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Shipping Mark: "+$F{ShippingMarks}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -354,14 +354,14 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<reportElement x="169" y="138" width="1" height="24" uuid="45e61fa3-82bb-45f1-867f-f6a1532441f4"/>
 			</line>
 			<staticText>
-				<reportElement x="1" y="231" width="23" height="11" uuid="6f1d0bb1-326e-4947-8c11-86515dc5d189"/>
+				<reportElement positionType="Float" x="1" y="231" width="23" height="11" uuid="6f1d0bb1-326e-4947-8c11-86515dc5d189"/>
 				<textElement textAlignment="Justified">
 					<font size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Mobile:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="221" width="307" height="11" uuid="e62d3159-de2b-4d77-a197-4d3295b5a8ae"/>
+				<reportElement positionType="Float" x="1" y="221" width="307" height="11" uuid="e62d3159-de2b-4d77-a197-4d3295b5a8ae"/>
 				<textElement textAlignment="Justified">
 					<font size="7" isBold="false"/>
 				</textElement>
@@ -416,28 +416,28 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA["Subject:"+$F{Subject}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="209" width="306" height="11" uuid="38e6ffd0-da30-4391-8533-e6d80e606f79"/>
+				<reportElement positionType="Float" x="1" y="209" width="306" height="11" uuid="38e6ffd0-da30-4391-8533-e6d80e606f79"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{OrderBy}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="24" y="231" width="62" height="11" uuid="df5ddd08-6c40-4748-97a7-efcbf1d8bcc8"/>
+				<reportElement positionType="Float" x="24" y="231" width="62" height="11" uuid="df5ddd08-6c40-4748-97a7-efcbf1d8bcc8"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MerMobile}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="107" y="232" width="192" height="11" uuid="34894b61-0e0b-4883-8e90-beac94affdfd"/>
+				<reportElement positionType="Float" x="107" y="231" width="192" height="11" uuid="34894b61-0e0b-4883-8e90-beac94affdfd"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{MerEmail}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="84" y="231" width="23" height="11" uuid="010002df-00cb-4f59-aa43-69530fbd56d8"/>
+				<reportElement positionType="Float" x="84" y="231" width="23" height="11" uuid="010002df-00cb-4f59-aa43-69530fbd56d8"/>
 				<textElement textAlignment="Justified">
 					<font size="7" isBold="false"/>
 				</textElement>
@@ -1007,7 +1007,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textFieldExpression><![CDATA[$V{grossamount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="493" y="13" width="51" height="12" uuid="e2631f58-4c44-491b-9785-8a075a78ab10"/>
+				<reportElement x="485" y="13" width="51" height="12" uuid="e2631f58-4c44-491b-9785-8a075a78ab10"/>
 				<box rightPadding="2">
 					<pen lineStyle="Double"/>
 					<topPen lineStyle="Double"/>

@@ -115,8 +115,8 @@ String departmentId=(String)session.getAttribute("departmentId");
 		<div class="row">
 			<div class="col-md-12 d-flex justify-content-end">
 				<button id="btnSendRequisition" type="button" class="btn btn-primary btn-sm"
-					onclick="submitAction()">
-					<i class="fas fa-save"></i> Issue
+					onclick="submitAction()" accesskey="I">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Issue</span>
 				</button>
 				<button id="btnRefresh" type="button"
 					class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">

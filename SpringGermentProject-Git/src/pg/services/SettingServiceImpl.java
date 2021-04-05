@@ -146,6 +146,13 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.getNotificationList(targetId);
 	}
+
+
+	@Override
+	public JSONArray getUserList() {
+		// TODO Auto-generated method stub
+		return settDAO.getUserList();
+	}
 	
 
 }

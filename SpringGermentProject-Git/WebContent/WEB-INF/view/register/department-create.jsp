@@ -48,9 +48,9 @@ String userName=(String) request.getAttribute("userName");
 							</div>
 							<hr>
 
-							<div class="form-group">
-								<label for="factoryName">Factory Name:</label> <select
-									class="form-control" id="factoryName">
+							<div class="form-group mb-0">
+								<label for="factoryName" class="mb-0">Factory Name:</label> <select
+									class="form-control form-control-sm" id="factoryName">
 									<option value="0">Select Factory</option>
 									<c:forEach items="${factorylist}" var="factory"
 										varStatus="counter">
@@ -60,13 +60,13 @@ String userName=(String) request.getAttribute("userName");
 
 								</select>
 							</div>
-							<div class="form-group">
-								<label for="departmentName">Department Name:</label> <input
-									type="text" class="form-control" id="departmentName"
+							<div class="form-group mb-1">
+								<label for="departmentName" class="mb-0">Department Name:</label> <input
+									type="text" class="form-control-sm" id="departmentName"
 									name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" accesskey="S" class="btn btn-primary btn-sm"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style="display: none;">Edit</button>

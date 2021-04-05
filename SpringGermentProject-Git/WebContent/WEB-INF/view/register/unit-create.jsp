@@ -46,16 +46,16 @@ String userName=(String) request.getAttribute("userName");
 
 							<div class="form-group">
 								<label for="unitName">Unit Name:</label> <input type="text"
-									class="form-control" id="unitName" name="text">
+									class="form-control-sm inputs" id="unitName" name="text">
 							</div>
 							<div class="form-group">
 								<label for="unitValue">Unit Value:</label> <input type="text"
-									class="form-control" id="unitValue" name="text">
+									class="form-control-sm inputs" id="unitValue" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm inputs" accesskey="S"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
-							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
+							<button type="button" id="btnEdit" accesskey="L" class="btn btn-success btn-sm" onclick="editAction()"
 								style='display: none;'>Edit</button>
 							<button type="button" id="btnRefresh"
 								class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>

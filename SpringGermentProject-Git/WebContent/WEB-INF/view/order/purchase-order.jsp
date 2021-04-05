@@ -253,8 +253,8 @@
 					<div class="col-md-4 pr-0 pl-1">
 
 						<button id="btnAdd" type="button" style="margin-top: 1.3rem;"
-							class="btn btn-primary btn-sm" onclick="indentItemAdd()">
-							<i class="fa fa-plus-circle"></i> Add
+							class="btn btn-primary btn-sm" onclick="indentItemAdd()" accesskey="A">
+							<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
 						</button>
 					</div>
 
@@ -368,9 +368,9 @@
 			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12 d-flex justify-content-end">
-						<button id="btnPOSubmit" type="button"
+						<button id="btnPOSubmit" type="button" accesskey="S"
 							class="btn btn-primary btn-sm" onclick="submitAction()">
-							<i class="fas fa-save"></i> Submit
+							<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
 						</button>
 						<button id="btnPOEdit" type="button"
 							class="btn btn-success btn-sm ml-1" onclick="purchaseOrderEdit()"

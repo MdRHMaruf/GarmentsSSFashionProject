@@ -43,7 +43,7 @@
 					<strong>Wrong!</strong> Something Wrong...
 				</p>
 			</div>
-			<input type="hidden" id="roleId" value="0"> <input
+			<input type="hidden" id="groupId" value="0"> <input
 				type="hidden" id="resourceId" value="0">
 			<div class="row">
 				<div class="col-sm-12 col-md-12 col-lg-12">
@@ -53,18 +53,18 @@
 
 								<div class="row ">
 									<h2>
-										<b>Role Create</b>
+										<b>Group Create</b>
 									</h2>
 								</div>
 								<hr>
 
 								<div class="form-group">
-									<label for="roleName">Role Name:</label> <input type="text"
+									<label for="roleName">Group Name:</label> <input type="text"
 										class="form-control" id="roleName" name="text">
 								</div>
 
 								<button type="button" id="btnSave"
-									class="btn btn-primary btn-sm" onclick="saveAction()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
+									class="btn btn-primary btn-sm" onclick="saveAction()">Save</button>
 
 								<button type="button" id="btnEdit"
 									class="btn btn-success btn-sm" onclick="editAction()"
@@ -81,9 +81,9 @@
 												aria-describedby="inputGroup-sizing-sm"
 												data-live-search="true"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
-												<option value="0">Select Resource</option>
-												<c:forEach items="${resourceList}" var="resource">
-													<option value="${resource.id}">${resource.resourceName}</option>
+												<option value="0">Select Member</option>
+												<c:forEach items="${members}" var="member">
+													<option value="${member.id}">${member.fullname}</option>
 												</c:forEach>
 											</select>
 											<div class="input-group-append">
@@ -104,20 +104,16 @@
 													<thead>
 														<tr>
 															<th>#</th>
-															<th>Resource Name</th>
-															<th title="Add"><i class="fa fa-plus"> </i></th>
-															<th title="Edit"><i class="fa fa-edit"> </i></th>
-															<th title="View"><i class="fa fa-eye"> </i></th>
-															<th title="Delete"><i class="fa fa-trash"> </i></th>
+															<th>Member Name</th>
 															<th><i class="fa fa-edit"> </i></th>
 														</tr>
 													</thead>
-													<tbody id="resourceRoleList">
-														<c:forEach items="${resourceRoleList}" var="resourceRole"
+													<tbody id="resourceGroupList">
+														<c:forEach items="${memberList}" var="resourceGroup"
 															varStatus="counter">
 															<tr>
 																<td>${counter.count}</td>
-																<td>${resource.resourceName}</td>
+																<td>${resource.memberName}</td>
 																<td><i class="fa fa-edit" style="cursor: pointer;"
 																	onclick="setData(${resource.id})"> </i></td>
 															</tr>
@@ -135,7 +131,7 @@
 							<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 								<div class="input-group my-2">
 									<input type="text" class="form-control"
-										placeholder="Search Role" aria-describedby="findButton"
+										placeholder="Search Group" aria-describedby="findButton"
 										id="search" name="search">
 									<div class="input-group-append">
 										<button class="btn btn-primary" type="button" id="findButton">
@@ -151,16 +147,16 @@
 											<thead>
 												<tr>
 													<th scope="col">#</th>
-													<th scope="col">Role Name</th>
+													<th scope="col">Group Name</th>
 													<th scope="col"><i class="fa fa-edit"> </i></th>
 												</tr>
 											</thead>
 											<tbody id="roleList">
-												<c:forEach items="${roleList}" var="role"
+												<c:forEach items="${groupList}" var="group"
 													varStatus="counter">
 													<tr>
 														<td>${counter.count}</td>
-														<td id='roleName${role.id}'>${role.roleName}</td>
+														<td id='groupName${group.id}'>${group.groupName}</td>
 														<td><i class="fa fa-edit" style="cursor: pointer;"
 															onclick="setData(${role.id})"> </i></td>
 													</tr>
@@ -224,8 +220,7 @@
 									<tr>
 										<td id='resourceName${resource.id}'>${resource.resourceName}</td>
 										<td id='resourceLink${resource.id}'>${resource.resourceLink}</td>
-										<td><i class="fa fa-edit"
-											onclick="setResourceData(${resource.id})"> </i></td>
+										`
 									</tr>
 								</c:forEach>
 							</tbody>

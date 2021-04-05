@@ -196,6 +196,12 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
+	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem) {
+		// TODO Auto-generated method stub
+		return orderDAO.isBuyerPoItemExist(buyerPoItem);
+	}
+	
+	@Override
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem) {
 		// TODO Auto-generated method stub
 		return orderDAO.addBuyerPoItem(buyerPoItem);
@@ -938,6 +944,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.getAllSampleRequisitionList();
 	}
+	
+	@Override
+	public List<CommonModel> getStyleWisePurchaseOrder(String styleId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getStyleWisePurchaseOrder(styleId);
+	}
 
 	@Override
 	public List<String> getMultifiles(String bpo) {
@@ -958,6 +970,20 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	
+
+
+	public List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCadDetailsForProduction(sampleCommentId);
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,
+			String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleRequisitionAndCuttingDetails(sampleReqId, sampleCommentId);
+	}
+
 
 	
 	

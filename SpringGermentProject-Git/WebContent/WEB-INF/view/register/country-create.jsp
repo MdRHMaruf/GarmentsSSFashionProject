@@ -46,10 +46,10 @@ String userName=(String) request.getAttribute("userName");
 
 							<div class="form-group">
 								<label for="countryName">Country Name:</label> <input type="text"
-									class="form-control" id="countryName" name="text">
+									class="form-control-sm inputs" id="countryName" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" accesskey="S" class="btn btn-primary btn-sm inputs"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
 								style="display: none;">Edit</button>

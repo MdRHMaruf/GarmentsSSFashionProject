@@ -44,12 +44,12 @@ String userName=(String) request.getAttribute("userName");
 							</div>
 							<hr>
 
-							<div class="form-group">
+							<div class="form-group mb-1">
 								<label for="particularItemName">Particular Item Name:</label> <input type="text"
-									class="form-control" id="particularItemName" name="text">
+									class="form-control-sm inputs" id="particularItemName" name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" accesskey="S" class="btn btn-primary btn-sm inputs"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm" onclick="editAction()"
 								style="display: none;">Edit</button>

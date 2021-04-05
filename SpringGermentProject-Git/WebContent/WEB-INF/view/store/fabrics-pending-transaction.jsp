@@ -124,9 +124,9 @@ String departmentId=(String)session.getAttribute("departmentId");
 					</div>
 					<div class="row mt-1">
 						<div class="col-md-12 d-flex justify-content-end">
-							<button id="btnConfirm" type="button"
+							<button id="btnConfirm" type="button" accesskey="C"
 								class="btn btn-primary btn-sm ml-1">
-								<i class="fa fa-check"></i> Confirm
+								<i class="fa fa-check"></i><span style="text-decoration:underline;"> Confirm</span>
 							</button>
 							<button id="btnRefresh" type="button"
 								class="btn btn-primary btn-sm ml-1">

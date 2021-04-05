@@ -61,7 +61,7 @@ public interface OrderDAO {
 	List<Costing> cloningCosting(String costingNo,String oldStyleId,String oldItemId);
 	Costing getCostingItem(String autoId);
 
-
+	boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem);
 	boolean addBuyerPoItem(BuyerPoItem buyerPoItem);
 	boolean editBuyerPoItem(BuyerPoItem buyerPoItem);
 	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId);
@@ -228,10 +228,16 @@ public interface OrderDAO {
 	boolean deletesamplefile(String filename, String id);
 	
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
-	
+
 	List<String> getMultifiles(String bpo);
 	String getMaxCadId();
 	List<String> getMultiCadfiles(String bpo);
+
+	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
+	
+	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
+	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
+
 }
 
 

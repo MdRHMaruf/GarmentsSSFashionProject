@@ -124,8 +124,10 @@ String userName=(String)session.getAttribute("userName");
 					Item</label> <select id="fabricsAccessoriesItem"
 					class="selectpicker col-md-12 px-0" data-live-search="true"
 					data-style="btn-light btn-sm border-light-gray">
-					<option id="fabricsAccessoriesItem" value="0">--Select
-						Indent Item--</option>
+					<option id="fabricsAccessoriesItem" value="0">--Select Item--</option>
+						<c:forEach items="${fabricsList}" var="fabrics">
+							<option id="fabricsItem" value="${fabrics.fabricsItemId}">${fabrics.fabricsItemName}</option>
+						</c:forEach>
 				</select>
 			</div>
 
@@ -223,8 +225,8 @@ String userName=(String)session.getAttribute("userName");
 
 		<div class="row mt-1">
 			<div class="col-md-12 d-flex justify-content-end">
-				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm">
-					<i class="fas fa-save"></i> Confirm
+				<button type="button" id="btnConfirm" class="btn btn-primary btn-sm" accesskey="C">
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span>
 				</button>
 
 				<button id="btnRefresh" type="button"

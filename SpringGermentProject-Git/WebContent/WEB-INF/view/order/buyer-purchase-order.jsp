@@ -286,8 +286,8 @@
 						<div class="row">
 							<div class="col-md-12 d-flex justify-content-end">
 								<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
-									onclick="itemSizeAdd()">
-									<i class="fa fa-plus-circle"></i> Add
+									onclick="itemSizeAdd()" accesskey="A">
+									<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
 								</button>
 								<button id="btnEdit" type="button"
 									class="btn btn-success btn-sm ml-1" onclick="itemSizeEdit()"
@@ -355,7 +355,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">Note</span>
 					</div>
-					<textarea id="note" class="form-control"
+					<textarea id="note" class="form-control form-control-sm"
 						aria-label="Sizing example input"
 						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
@@ -365,7 +365,7 @@
 					<div class="input-group-prepend">
 						<span class="input-group-text" id="inputGroup-sizing-sm">Remarks</span>
 					</div>
-					<textarea id="remarks" class="form-control"
+					<textarea id="remarks" class="form-control form-control-sm"
 						aria-label="Sizing example input"
 						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
@@ -403,9 +403,9 @@
 			</div>
 			<div class="col-md-5 d-flex justify-content-end">
 				<div>
-				<button id="btnPOSubmit" type="button"
+				<button id="btnPOSubmit" type="button" accesskey="S"
 					class="btn btn-primary btn-sm" onclick="submitAction()">
-					<i class="fas fa-save"></i> Submit
+					<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
 				</button>
 				<button id="btnPOEdit" type="button"
 					class="btn btn-success btn-sm ml-1" onclick="buyerPoEditAction()"

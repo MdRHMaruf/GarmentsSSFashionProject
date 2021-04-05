@@ -25,8 +25,12 @@ public class SampleRequisitionItem {
 	String sampleDeadline="";
 	String sampleId="";
 	String sampleReqId="";
+	String cuttingSizeListString="";
 	
 	ArrayList<Size> sizeList;
+	ArrayList<Size> sizeCuttingList;
+	
+	
 	
 	public SampleRequisitionItem(){
 		
@@ -180,6 +184,34 @@ public class SampleRequisitionItem {
 		for (String size : sizeList) {
 			this.sizeList.add(new Size(size.substring(size.indexOf('=')+1,size.indexOf(',')),size.substring(size.lastIndexOf('=')+1)));
 		}
+	}
+
+	
+	public ArrayList<Size> getSizeCuttingList() {
+		return sizeCuttingList;
+	}
+
+	public void setSizeCuttingList(String sizeCuttingList) {
+		this.cuttingSizeListString = sizeCuttingList;
+		String sizeList[] = sizeCuttingList.split(" ");
+		this.sizeCuttingList = new ArrayList<Size>();
+		for (String size : sizeList) {
+			this.sizeCuttingList.add(new Size(size.substring(size.indexOf('=')+1,size.indexOf(',')),size.substring(size.lastIndexOf('=')+1)));
+		}
+	}
+	
+	
+
+	public String getCuttingSizeListString() {
+		return cuttingSizeListString;
+	}
+
+	public void setCuttingSizeListString(String cuttingSizeListString) {
+		this.cuttingSizeListString = cuttingSizeListString;
+	}
+
+	public void setSizeCuttingList(ArrayList<Size> sizeCuttingList) {
+		this.sizeCuttingList = sizeCuttingList;
 	}
 
 	public String getSampleId() {

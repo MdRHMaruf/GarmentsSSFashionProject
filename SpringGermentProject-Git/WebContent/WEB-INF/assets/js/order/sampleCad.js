@@ -41,6 +41,7 @@ function refreshAction() {
 	location.reload();
 }
 
+
 function searchSampleCad(sampleCommentId,sampleReqId){
 	searchtype=2;
 	
@@ -78,6 +79,7 @@ function searchSampleCad(sampleCommentId,sampleReqId){
 		}
 	});
 }
+
 
 function setCadData(data){
 	$('#sampleCadModal').modal('hide');
@@ -453,9 +455,8 @@ function dateFormatting(field){
 function previewSampleRequsition(){
 	
 	var date=$('#sampleSearchDate').val();
-	var userId=$('#userId').val();
 	if(date!=''){
-		var url = `printDateWiseSampleRequsition/${date}@${userId}`;
+		var url = `printDateWiseAllSampleRequsition/${date}`;
 		window.open(url, '_blank');
 	}
 	else{

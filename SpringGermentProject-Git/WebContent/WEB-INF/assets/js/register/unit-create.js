@@ -171,3 +171,9 @@ $(document).ready(function () {
   });
 });
 
+$('.inputs').keyup(function (e) {
+	if (e.which === 13) {
+		var index = $('.inputs').index(this) + 1;
+		$('.inputs').eq(index).focus();
+	}
+});

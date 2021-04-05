@@ -97,7 +97,7 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 							</div>
 							<div class="col-md-2">
-								<button type="button" class="btn btn-outline-dark btn-sm"
+								<button type="button" class="btn btn-outline-dark btn-sm" id="copyCosting"
 									onclick="cloneButtonAction()" title="Copy Costing">
 									<i class="fas fa-copy"></i> Copy Costing
 								</button>
@@ -206,9 +206,9 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 								</div>
 							</div>
-							<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
-								onclick="addAction()">
-								<i class="fa fa-plus-circle"></i> Add
+							<button id="btnAdd" type="button" class="btn btn-primary btn-sm" accesskey="S"
+								onclick="addAction()" accesskey="A">
+								<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
 							</button>
 							<button id="btnEdit" type="button"
 								class="btn btn-success btn-sm ml-1" onclick="editAction()"
@@ -244,9 +244,9 @@ String userName=(String)session.getAttribute("userName");
 					</div>
 					<div class="row mt-1">
 						<div class="col-md-12 d-flex justify-content-end">
-							<button id="btnNewCosting" type="button"
+							<button id="btnNewCosting" type="button" accesskey="N"
 								class="btn btn-primary btn-sm ml-1" title="Save As New Costing">
-								<i class="fas fa-save"></i> New Costing
+								<i class="fas fa-save"></i><span style="text-decoration:underline;"> New Costing</span>
 							</button>
 							<button id="btnEditCosting" type="button"
 								class="btn btn-success btn-sm ml-1" style="display: none;">

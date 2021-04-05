@@ -73,22 +73,22 @@ String userName=(String)session.getAttribute("userName");
 								<div class="col-md-9">
 									<div class="form-group">
 										<label for="sizeName">Style Size Name:</label> <input
-											type="text" class="form-control" id="sizeName"
+											type="text" class="form-control-sm inputs" id="sizeName"
 											name="sizeName">
 									</div>
 								</div>
 								<div class="col-md-3">
 									<div class="form-group">
 										<label for="sorting">Sorting</label> <input type="number"
-											class="form-control" id="sorting" name="text">
+											class="form-control-sm inputs" id="sorting" name="text">
 
 									</div>
 								</div>
 
 							</div>
 
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()"><i class="fas fa-save"></i> Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm inputs" accesskey="S"
+								onclick="saveAction()"><i class="fas fa-save"></i><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style='display: none;'><i class="fa fa-pencil-square"></i> Edit</button>
