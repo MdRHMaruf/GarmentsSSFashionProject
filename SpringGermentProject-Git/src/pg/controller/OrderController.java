@@ -2231,10 +2231,13 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/getSampleProductionInfo",method=RequestMethod.GET)
-	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
+	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId,String sampleReqId) {
 		JSONObject objmain = new JSONObject();
+		
+		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionAndCuttingDetails(sampleReqId,sampleCommentId);
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
 		objmain.put("sampleProduction", sampleProduction);
+		objmain.put("result_sample_requisition", sampleRequisitionList);
 
 		return objmain;
 	}
@@ -2242,6 +2245,8 @@ public class OrderController {
 	@RequestMapping(value = "/postSampleProduction",method=RequestMethod.POST)
 	public @ResponseBody JSONObject postSampleProduction(SampleCadAndProduction	sampleCadAndProduction) {
 		JSONObject objmain = new JSONObject();
+		
+		
 		if(orderService.postSampleProductionInfo(sampleCadAndProduction)) {
 			objmain.put("result", "successfull");
 		}else {
@@ -2250,22 +2255,34 @@ public class OrderController {
 		return objmain;
 	}
 
-	@RequestMapping(value="/getSampleProductionReport/{idList}/{printType}")
-	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable String idList,@PathVariable String printType) {
+	@RequestMapping(value="/getSampleProductionReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable ("idList") String idList) {
 
 		ModelAndView view = new ModelAndView("order/sample-production-report-view");
 
-		map.addAttribute("purchaseOrder","");
-		map.addAttribute("styleId","");
-		map.addAttribute("itemId","");
-		map.addAttribute("sampleTypeId","");
-		map.addAttribute("printType",printType);
-		map.addAttribute("sampleCommentId",idList);
+		String id[] = idList.split("@");
+		
+		map.addAttribute("sampleCommentId",id[0]);
+		map.addAttribute("printType",id[1]);
 
 		return view;
 
 	}
 
+	@RequestMapping(value="/sampleProductionDateWiseReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView sampleProductionDateWiseReport(ModelMap map,@PathVariable ("idList") String idList) {
+
+		ModelAndView view = new ModelAndView("order/date-wise-sample-production-report-view");
+
+		String id[] = idList.split("@");
+		
+		map.addAttribute("date",id[0]);
+		map.addAttribute("reportType",id[1]);
+
+		return view;
+
+	}
+	
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
@@ -2470,7 +2487,7 @@ public class OrderController {
 		System.out.println("sampleReqId "+sampleReqId);
 		System.out.println("sampleCommentId "+sampleCommentId);
 		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
-		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
+		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetailsForProduction(sampleCommentId);
 		objmain.put("result_sample_requisition",sampleRequisitionList);
 		objmain.put("result_sample_cad",sampleCadList);
 

@@ -42,10 +42,10 @@ public class SampleCadAndProduction {
 	String cuttingDate;
 	String printSendDate;
 	String printReceivedDate;
-	String printReceivedQty;
+	String printReceivedBy;
 	String embroiderySendDate;
 	String embroideryReceivedDate;
-	String embroideryReceivedQty;
+	String embroideryReceivedBy;
 	String sewingSendDate;
 	String sewingReceivedDate;
 	String sewingFinishDate;
@@ -68,6 +68,8 @@ public class SampleCadAndProduction {
 	String sampleReqId;
 	String patternMakingReceived;
 	String sampleCadId;
+	
+	String sizeGroupId;
 	
 	public SampleCadAndProduction(String sampleCommentId, String po,
 			String style, String item, String color, String size, 
@@ -176,8 +178,8 @@ public class SampleCadAndProduction {
 	public SampleCadAndProduction(String sampleCommentId, String purchaseOrder, String styleId, String styleNo,
 			String itemId, String itemName, String colorId, String colorName,
 			String sampleTypeId, String sampleTypeName, String cuttingQty, String cuttingDate, String requisitionQty,
-			String printSendDate, String printReceivedDate, String printReceivedQty, String embroiderySendDate,
-			String embroideryReceivedDate, String embroideryReceivedQty, String sewingSendDate,
+			String printSendDate, String printReceivedDate, String printReceivedBy, String embroiderySendDate,
+			String embroideryReceivedDate, String embroideryReceivedBy, String sewingSendDate,
 			String sewingFinishDate, String operatorName, String quality) {
 		super();
 		this.sampleCommentId = sampleCommentId;
@@ -196,10 +198,10 @@ public class SampleCadAndProduction {
 		this.requisitionQty = requisitionQty;
 		this.printSendDate = printSendDate;
 		this.printReceivedDate = printReceivedDate;
-		this.printReceivedQty = printReceivedQty;
+		this.printReceivedBy = printReceivedBy;
 		this.embroiderySendDate = embroiderySendDate;
 		this.embroideryReceivedDate = embroideryReceivedDate;
-		this.embroideryReceivedQty = embroideryReceivedQty;
+		this.embroideryReceivedBy = embroideryReceivedBy;
 		this.sewingSendDate = sewingSendDate;
 		this.sewingFinishDate = sewingFinishDate;
 		this.operatorName = operatorName;
@@ -231,6 +233,16 @@ public class SampleCadAndProduction {
 		this.patternMarkingReceived=PatternMarkingReceived;
 		
 		
+	}
+
+
+	public SampleCadAndProduction(String SampleCommentId, String SampleReqId, String StyleNo, String PurchaseOrder, String ItemName,String SampleType) {
+		this.sampleCadId=SampleCommentId;
+		this.sampleReqId=SampleReqId;
+		this.styleNo=StyleNo;
+		this.purchaseOrder=PurchaseOrder;
+		this.itemName=ItemName;
+		this.sampleTypeId=SampleType;
 	}
 
 
@@ -445,12 +457,28 @@ public class SampleCadAndProduction {
 	public void setPrintReceivedDate(String printReceivedDate) {
 		this.printReceivedDate = printReceivedDate;
 	}
-	public String getPrintReceivedQty() {
-		return printReceivedQty;
+
+
+	public String getPrintReceivedBy() {
+		return printReceivedBy;
 	}
-	public void setPrintReceivedQty(String printReceivedQty) {
-		this.printReceivedQty = printReceivedQty;
+
+
+	public void setPrintReceivedBy(String printReceivedBy) {
+		this.printReceivedBy = printReceivedBy;
 	}
+
+
+	public String getEmbroideryReceivedBy() {
+		return embroideryReceivedBy;
+	}
+
+
+	public void setEmbroideryReceivedBy(String embroideryReceivedBy) {
+		this.embroideryReceivedBy = embroideryReceivedBy;
+	}
+
+
 	public String getEmbroiderySendDate() {
 		return embroiderySendDate;
 	}
@@ -463,12 +491,7 @@ public class SampleCadAndProduction {
 	public void setEmbroideryReceivedDate(String embroideryReceivedDate) {
 		this.embroideryReceivedDate = embroideryReceivedDate;
 	}
-	public String getEmbroideryReceivedQty() {
-		return embroideryReceivedQty;
-	}
-	public void setEmbroideryReceivedQty(String embroideryReceivedQty) {
-		this.embroideryReceivedQty = embroideryReceivedQty;
-	}
+	
 	public String getSewingSendDate() {
 		return sewingSendDate;
 	}
@@ -672,6 +695,16 @@ public class SampleCadAndProduction {
 
 	public void setSampleReqId(String sampleReqId) {
 		this.sampleReqId = sampleReqId;
+	}
+
+
+	public String getSizeGroupId() {
+		return sizeGroupId;
+	}
+
+
+	public void setSizeGroupId(String sizeGroupId) {
+		this.sizeGroupId = sizeGroupId;
 	}
 
 

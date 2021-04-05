@@ -230,6 +230,9 @@ public interface OrderDAO {
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
 	
 	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
+	
+	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
+	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
 }
 
 

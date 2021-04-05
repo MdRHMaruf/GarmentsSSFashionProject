@@ -951,6 +951,19 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getStyleWisePurchaseOrder(styleId);
 	}
 
+	@Override
+	public List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCadDetailsForProduction(sampleCommentId);
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,
+			String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleRequisitionAndCuttingDetails(sampleReqId, sampleCommentId);
+	}
+
 	
 	
 	
