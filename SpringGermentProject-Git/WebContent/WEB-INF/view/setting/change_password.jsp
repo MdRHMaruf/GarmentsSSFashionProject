@@ -71,8 +71,8 @@ String userName=(String)session.getAttribute("userName");
 					<div class="card-footer">
 
 						<div class="col-sm-12 p-0">
-							<button type="button" id="con" onclick="change_password()"
-								class="btn btn-sm btn-success">Change</button>
+							<button type="button" id="con" accesskey="C" onclick="change_password()"
+								class="btn btn-sm btn-success"><span style="text-decoration:underline;">Change</span></button>
 
 						</div>
 

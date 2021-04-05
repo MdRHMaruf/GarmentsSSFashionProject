@@ -63,6 +63,7 @@ public interface OrderService {
 	Costing getCostingItem(String autoId);
 
 	//Buyder Po Order
+	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem);
 	public boolean addBuyerPoItem(BuyerPoItem buyerPoItem);
 	boolean editBuyerPoItem(BuyerPoItem buyerPoItem);
 	List<BuyerPoItem> getBuyerPOItemList(String buyerPOId,String userId);

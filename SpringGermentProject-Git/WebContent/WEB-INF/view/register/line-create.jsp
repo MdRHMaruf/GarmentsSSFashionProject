@@ -51,9 +51,9 @@ String userName=(String)session.getAttribute("userName");
 							</div>
 							<hr>
 
-							<div class="form-group">
-								<label for="factoryName">Factory Name:</label> <select
-									class="form-control" id="factoryName" onchange="loadDepartmentByFactory()">
+							<div class="form-group mb-0">
+								<label for="factoryName" class="mb-0">Factory Name:</label> <select
+									class="form-control form-control-sm" id="factoryName" onchange="loadDepartmentByFactory()">
 									<option value="0">Select Factory</option>
 									<c:forEach items="${factoryList}" var="factory"
 										varStatus="counter">
@@ -63,9 +63,9 @@ String userName=(String)session.getAttribute("userName");
 
 								</select>
 							</div>
-							<div class="form-group">
-								<label for="departmentName">Department Name:</label> <select
-									class="form-control" id="departmentName">
+							<div class="form-group mb-0">
+								<label for="departmentName" class="mb-0">Department Name:</label> <select
+									class="form-control form-control-sm" id="departmentName">
 									<option value="0">Select Department</option>
 									<c:forEach items="${departmentLis}" var="department"
 										varStatus="counter">
@@ -73,13 +73,13 @@ String userName=(String)session.getAttribute("userName");
 									</c:forEach>
 								</select>
 							</div>
-							<div class="form-group">
-								<label for="lineName">Line Name:</label> <input
-									type="text" class="form-control" id="lineName"
+							<div class="form-group mb-1">
+								<label for="lineName" class="mb-0">Line Name:</label> <input
+									type="text" class="form-control-sm" id="lineName"
 									name="text">
 							</div>
-							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()">Save</button>
+							<button type="button" id="btnSave" class="btn btn-primary btn-sm" accesskey="S"
+								onclick="saveAction()"><span style="text-decoration:underline;"> Save</span></button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style="display: none;">Edit</button>

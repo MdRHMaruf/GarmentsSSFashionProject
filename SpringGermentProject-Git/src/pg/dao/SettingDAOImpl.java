@@ -902,5 +902,49 @@ public class SettingDAOImpl implements SettingDAO {
 
 	}
 	
+	@Override
+	public JSONArray getUserList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		JSONArray array=new JSONArray();
+		JSONObject object;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select id,fullname,type,factoryId,departmentId from Tblogin";
 
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				object = new JSONObject();
+				object.put("id", element[0].toString());
+				object.put("fullname", element[1].toString());
+				object.put("type", element[2].toString());
+				object.put("factoryId", element[3].toString());
+				object.put("departmentId", element[4].toString());
+				array.add(object);
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+
+		finally {
+			session.close();
+		}
+
+		return array;
+
+	}
 }

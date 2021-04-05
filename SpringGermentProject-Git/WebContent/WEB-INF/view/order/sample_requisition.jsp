@@ -208,8 +208,8 @@ String userName=(String)session.getAttribute("userName");
 				<div class="row">
 					<div class="col-md-12 d-flex justify-content-end">
 						<button id="btnAdd" type="button" class="btn btn-primary btn-sm"
-							onclick="itemSizeAdd()">
-							<i class="fa fa-plus-circle"></i> Add
+							onclick="itemSizeAdd()" accesskey="A">
+							<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
 						</button>
 						<button id="btnEditItemSize" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="itemSizeEdit()"
@@ -296,14 +296,14 @@ String userName=(String)session.getAttribute("userName");
 	</div>
 	<div class="row">
 		<div class="col-md-12 d-flex justify-content-end">
-			<button id="btnPOSubmit" type="button" class="btn btn-primary btn-sm"
+			<button id="btnPOSubmit" type="button" class="btn btn-primary btn-sm" accesskey="C"
 				onclick="confirmAction()">
-				<i class="fas fa-save"></i> Confrim
+				<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span>
 			</button>
-			<button id="btnPOEdit" type="button"
+			<button id="btnPOEdit" type="button" accesskey="E"
 				class="btn btn-primary btn-sm ml-1" onclick="buyerPoEditAction()"
 				disabled>
-				<i class="fa fa-pencil-square"></i> Edit
+				<i class="fa fa-pencil-square"></i><span style="text-decoration:underline;"> Edit</span>
 			</button>
 			<button id="btnRefresh" type="button"
 				class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">

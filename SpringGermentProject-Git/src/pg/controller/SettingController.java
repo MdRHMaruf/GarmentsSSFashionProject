@@ -577,6 +577,7 @@ public class SettingController {
 		
 	}
 
+	// Role Management
 	@RequestMapping(value={"/role_management"})
 	public ModelAndView roleManagement(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("setting/role-management");
@@ -584,5 +585,25 @@ public class SettingController {
 		map.addAttribute("resourceList","");
 		return view;
 	}
+	
+	
+	// Group Create
+	@RequestMapping(value= {"/group_create"})
+	public ModelAndView groupCreate(ModelMap map,HttpSession session) {
+		ModelAndView view = new ModelAndView("setting/group-create");
+		map.addAttribute("members",settingService.getUserList());
+		
+		return view;
+	}
+	
+	
+	// Group Create
+		@RequestMapping(value= {"/access_permit"})
+		public ModelAndView access_permit(ModelMap map,HttpSession session) {
+			ModelAndView view = new ModelAndView("setting/group-create");
+			map.addAttribute("groupList","");
+			
+			return view;
+		}
 
 }

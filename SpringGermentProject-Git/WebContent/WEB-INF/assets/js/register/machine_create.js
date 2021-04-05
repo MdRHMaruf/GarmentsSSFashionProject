@@ -118,6 +118,8 @@ function saveAction() {
 			}
 
 		});
+	}else{
+		alert("Information Not Complete")
 	}
 }
 
@@ -279,3 +281,13 @@ $(document).ready(function () {
 		});
 	});
 });
+
+let idListMicro = ["name","brand","modelNo","motor","factoryId","departmentId","employee","lineId","btnSave"];
+idListMicro.forEach((id,index)=>{
+  $('#'+id).keyup(function(event){
+    if(event.keyCode ===13){
+      event.preventDefault();
+      $("#"+idListMicro[index+1]).focus();
+    }
+  });
+})

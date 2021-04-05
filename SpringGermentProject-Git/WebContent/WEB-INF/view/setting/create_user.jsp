@@ -199,7 +199,7 @@ String userName=(String)session.getAttribute("userName");
 
 						<div class="col-sm-12 p-0">
 							<button type="button" id="con" onclick="create_user()"
-								class="btn btn-sm btn-success">Confirm</button>
+								class="btn btn-sm btn-success" accesskey="C"><span style="text-decoration:underline;"> Confirm</span></button>
 
 						</div>
 

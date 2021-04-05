@@ -173,8 +173,10 @@ String userName=(String)session.getAttribute("userName");
 								</div>
 
 
-								<button type="button" id="btnSave"
-									class="btn btn-primary btn-sm" onclick="saveAction()">Save</button>
+								<button type="button" id="btnSave" accesskey="S"
+									class="btn btn-primary btn-sm" onclick="saveAction()">
+									<span style="text-decoration:underline;"> Save</span>
+									</button>
 
 								<button type="button" id="btnEdit"
 									class="btn btn-primary btn-sm" onclick="editAction()" disabled>Edit</button>

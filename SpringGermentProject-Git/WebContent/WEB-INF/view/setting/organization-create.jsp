@@ -74,8 +74,8 @@ String userName=(String)session.getAttribute("userName");
 							<div class="col-sm-5">
 								<div class="row">
 									<div class="col-sm-12 text-right">
-										<button type="button" id="con" onclick="changeAddress()"
-											class="btn btn-sm btn-success">Change</button>
+										<button type="button" id="con" onclick="changeAddress()" accesskey="C"
+											class="btn btn-sm btn-success"><span style="text-decoration:underline;">Change</span></button>
 									</div>
 								</div>
 							</div>
