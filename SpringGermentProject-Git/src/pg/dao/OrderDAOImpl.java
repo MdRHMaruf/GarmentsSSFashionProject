@@ -7859,14 +7859,17 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 	@Override
-	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip,String searchtype) {
 		Session session=HibernateUtil.openSession();
 		boolean fileinsert=false;
 		Transaction tx=null;
 		try{
 			tx=session.getTransaction();
 			tx.begin();
+			
+			
 
+			
 			if (!duplicatesampleFile(user, filename)) {
 				String sql="insert into tbsamplecadfiles ( samplecadid, filename, uploadedmachinip, entryby, entrytime) values "
 						+ "('"+smaplecadid+"','"+filename+"','"+uploadedpcip+"','"+user+"',CURRENT_TIMESTAMP)";
@@ -7890,6 +7893,8 @@ public class OrderDAOImpl implements OrderDAO{
 		session.close();
 		return fileinsert;
 	}
+	
+	
 	
 	
 	public boolean duplicatesampleFile(String user, String filename) {
@@ -8034,6 +8039,108 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
+	public List<String> getMultifiles(String bpo) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<String> dataList=new ArrayList<>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from TbUploadFileLogInfo where purchaseorder='"+bpo+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				//Object[] element = (Object[]) iter.next();
+				dataList.add((iter.next().toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public String getMaxCadId() {
+
+		String  no="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="SELECT IDENT_CURRENT('TbSampleCadInfo') + IDENT_INCR('TbSampleCadInfo')";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();							
+				//dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				no=iter.next().toString();
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return no;
+
+
+	}
+
+	@Override
+	public List<String> getMultiCadfiles(String bpo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<String> dataList=new ArrayList<String>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from tbsamplecadfiles where  samplecadid='"+bpo+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+
+				//Object[] element = (Object[]) iter.next();
+
+				dataList.add(iter.next().toString());
+			}
+			
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
 	public List<CommonModel> getStyleWisePurchaseOrder(String styleId) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
@@ -8161,6 +8268,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 			
 			
+
 			tx.commit();
 		}
 		catch(Exception e){

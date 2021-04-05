@@ -221,7 +221,7 @@ public interface OrderService {
 	boolean editItemToSampleRequisition(SampleRequisitionItem v);
 	List<SampleCadAndProduction> getSampleCadDetails(String sampleCommentId);
 	
-	boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip);
+	boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip,String searchtype);
 	
 	List<pg.orderModel.FileUpload> findsamplecadfiles(String userid, String samplereqid);
 	boolean deletesamplefile(String filename, String id);
@@ -229,6 +229,12 @@ public interface OrderService {
 	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
 	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
 	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
+	
+	List<String> getMultifiles(String bpo);
+	
+	String getMaxCadId();
+	
+	List<String> getMultiCadfiles(String bpo);
 	
 }
 

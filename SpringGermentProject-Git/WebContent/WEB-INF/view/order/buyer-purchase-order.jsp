@@ -478,7 +478,7 @@
 					<tbody id="poList">
 						<c:forEach items="${buyerPoList}" var="po" varStatus="counter">
 							<tr>
-								<td>${po.buyerPoId}</td>
+								<td id="id-${counter.count}" data-po="${po.buyerPoId}">${po.buyerPoId}</td>
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
 								<td>${po.purchaseOrder}</td>
 								<td>${po.styleNo}</td>
@@ -489,7 +489,7 @@
 								<td><i class="fa fa-print"
 									onclick="printBuyerPO(${po.buyerPoId})"
 									style='cursor: pointer;'> </i></td>
-									<td><i class="fa fa-download" style='cursor: pointer;'></i></td>
+									<td><i class="fa fa-download" onclick="multidownload(this)" style='cursor: pointer;'></i></td>
 							</tr>
 						</c:forEach>
 					</tbody>
