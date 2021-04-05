@@ -55,6 +55,14 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>
 
+								<div class="col-sm-6 ml-1 p-0">
+									<label for="sampleCommentsNo" class="mb-0">
+										Comment No</label> <input style="width:120px;background: black; color: white;"
+										class="form-control-sm" readonly type="text" id="sampleCommentsNo"
+										readonly>
+
+								</div>
+								
 							</div>
 
 							<div class="row mt-1">
@@ -73,59 +81,27 @@ String userName=(String)session.getAttribute("userName");
 
 								</div>
 
-								<div class="col-sm-6 ml-1 p-0">
-									<label for="sampleCommentsNo" class="mb-0">Sample
-										Comment No</label> <input style="background: black; color: white;"
-										class="form-control-sm" readonly type="text" id="sampleCommentsNo"
-										readonly>
 
-								</div>
 							</div>
 
 							<div class="row mt-1">
 
-								<div class="col-sm-5 p-0">
-									<label for="color" class="mb-0">Color</label> <input
-										class="form-control-sm" readonly type="text" id="color">
-
-								</div>
-							</div>
-
-							<div class="row mt-1">
-
-								<div class="col-sm-5 p-0">
-									<label for="size" class="mb-0">Size</label> <input
-										class="form-control-sm" type="text" id="size">
-
-								</div>
-
-								<div class="col-sm-6 ml-1 p-0">
+								<div class="col-sm-5 ml-1 p-0">
 									<label for="sampleType" class="mb-0">Sample Type</label> <input
 										class="form-control-sm" type="text" id="sampleType">
 
 								</div>
-
 							</div>
+
 
 							<div class="row mt-1">
 
 								<div class="col-sm-5 p-0">
 									<label for="cuttingDate" class="mb-0">Cutting</label> <input
-										class="form-control-sm col-sm-12" type="date" id="cuttingDate">
+										class="form-control-sm col-sm-12" type="datetime-local" id="cuttingDate">
 
 								</div>
-
-								<div class="col-sm-3 ml-1 p-0">
-									<label for="cuttingQty" class="mb-0">Cutting Qty</label> <input
-										class="form-control-sm" type="text" id="cuttingQty">
-
-								</div>
-
-								<div class="col-sm-3 ml-1 p-0">
-									<label for="reqQty" class="mb-0">Req. Qty</label> <input
-										class="form-control-sm" type="text" id="reqQty" readonly>
-
-								</div>
+						
 
 							</div>
 
@@ -143,7 +119,7 @@ String userName=(String)session.getAttribute("userName");
 										<i class="fa fa-search"></i>Sample Cad List
 									</button>
 									<button type="button" class="btn btn-outline-dark btn-sm"
-										data-toggle="modal" data-target="#sampleProductionModal">
+										data-toggle="modal" data-target="#sampleCadProductionModal">
 										<i class="fa fa-search"></i>Sample Production List
 									</button>
 							</header>
@@ -173,10 +149,10 @@ String userName=(String)session.getAttribute("userName");
 
 									<div class="row mt-1">
 										<label for="printReceivedQty" class="col-sm-4">Received
-											Qty</label>
+											By</label>
 										<div class="col-sm-8">
 											<input class="form-control-sm" type="text"
-												id="printReceivedQty">
+												id="printReceivedBy">
 										</div>
 									</div>
 
@@ -207,10 +183,10 @@ String userName=(String)session.getAttribute("userName");
 
 									<div class="row mt-1">
 										<label for="embroideryReceivedQty" class="col-sm-4">Received
-											Qty</label>
+											By</label>
 										<div class="col-sm-8">
 											<input class="form-control-sm" type="text"
-												id="embroideryReceivedQty">
+												id="embroideryReceivedBy">
 										</div>
 									</div>
 
@@ -391,7 +367,7 @@ String userName=(String)session.getAttribute("userName");
 			
 				<div class="input-group">
 
-					<input id="search" type="text" class="form-control"
+					<input id="searchSampleCad" type="text" class="form-control"
 						placeholder="Search Sample Cad"
 						aria-label="Recipient's username" aria-describedby="basic-addon2">
 					<div class="input-group-append">
@@ -465,6 +441,101 @@ String userName=(String)session.getAttribute("userName");
 							</div>
 						</div>
 					</div>
+
+<!-- Sample Cad Production -->
+<div class="modal fade" id="sampleCadProductionModal" tabindex="-1"
+						role="dialog" aria-labelledby="sampleCadProductionModal" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+	<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Sample Production List</h5>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			
+
+			
+				<div class="input-group">
+
+					<input id="searchProduction" type="text" class="form-control"
+						placeholder="Search Sample Cad"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				
+				<hr>
+
+				<div class="input-group">
+					
+			
+						<label class="col-sm-1">Date</label>
+						<input class="form-control-sm" id='sampleCadProductionSearchDate' type="date">
+						
+						<label for="makeingdespatch" style="width:50px;">Type</label>
+						
+							<select id="ProductionReportType" style="width:280px;"
+												class="selectpicker" data-live-search="false"
+												data-style="btn-light btn-sm border-secondary ">
+
+												<option id="ProductionReportType" value='1'>Production Date</option>
+												<option id="ProductionReportType" value='2'>Print Send Date</option>
+												<option id="ProductionReportType" value='3'>Print Received Date</option>
+												<option id="ProductionReportType" value='4'>Embroidery Send Date</option>
+												<option id="ProductionReportType" value='5'>Embroidery Received Date</option>
+												<option id="ProductionReportType" value='6'>Sewing Send Date</option>
+												<option id="ProductionReportType" value='7'>Sewing Finish Date</option>
+
+							</select>
+	
+										
+						<button type="button" class="btn btn-primary" onclick="sampleProductionDateWiseReport()" >Preview</button>
+		
+				</div>
+			
+								<div class="modal-body">
+									<table class="table table-hover table-bordered table-sm mb-0">
+										<thead>
+											<tr>
+												<th>SL#</th>
+												<th>Sample Cad No</th>
+												<th>Buyer Name</th>
+												<th>Purchase Order</th>
+												<th>Style No</th>
+												<th>Item No</th>
+												<th>Sample Type</th>
+												<td><i class="fa fa-search"></i></td>
+												<td><i class="fa fa-print"></i></td>
+											</tr>
+										</thead>
+										<tbody id="sampleCadProductionList">
+											<c:forEach items="${sampleCadList}" var="po"
+												varStatus="counter">
+												<tr>
+													<td>${counter.count}</td>
+													<td>${po.sampleCommentId}</td>
+													<td>${po.buyername}</td>
+													<td>${po.purchaseOrder}</td>
+													<td>${po.styleNo}</td>
+													<td>${po.itemName}</td>
+													<td>${po.sampleTypeId}</td>
+													<td><i class="fa fa-search" style="cursor: pointer;"
+														onclick="setSampleProductionInfo(${po.sampleCommentId},${po.sampleReqId})">
+													</i></td>
+													<td><i class="fa fa-print" style="cursor: pointer;"
+														onclick="showPreview(${po.sampleCommentId})"> </i></td>
+												</tr>
+											</c:forEach>
+										</tbody>
+									</table>
+								</div>
+
+							</div>
+						</div>
+					</div>					
 					
 				</div>
 			</div>

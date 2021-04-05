@@ -4521,7 +4521,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			int listSize=v.getSizeList().size();
 			for(int i=0;i<listSize;i++) {
-				sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+itemAutoId+"','"+v.getSizeGroupId()+"','"+v.getSizeList().get(i).getSizeId()+"','"+v.getSizeList().get(i).getSizeQuantity()+"','"+SizeValuesType.SAMPLE.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+				sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+itemAutoId+"','"+v.getSizeGroupId()+"','"+v.getSizeList().get(i).getSizeId()+"','"+v.getSizeList().get(i).getSizeQuantity()+"','"+SizeValuesType.SAMPLE_REQUISITION.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -4575,7 +4575,7 @@ public class OrderDAOImpl implements OrderDAO{
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
-						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE_REQUISITION.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
 						"order by ss.sortingNo";
 				System.out.println(sql);
 				List<?> list2 = session.createSQLQuery(sql).list();
@@ -4742,7 +4742,7 @@ public class OrderDAOImpl implements OrderDAO{
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
-						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE_REQUISITION.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
 						"order by ss.sortingNo";
 				System.out.println(sql);
 				List<?> list2 = session.createSQLQuery(sql).list();
@@ -4751,9 +4751,13 @@ public class OrderDAOImpl implements OrderDAO{
 				{	
 					Object[] element = (Object[]) iter.next();	
 					sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+					//sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+
 				}
 				sampleReqItem.setSizeList(sizeList);
 			}
+			
+			
 			tx.commit();
 		}
 		catch(Exception e){
@@ -5689,7 +5693,7 @@ public class OrderDAOImpl implements OrderDAO{
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
-						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE_REQUISITION.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
 						"order by ss.sortingNo";
 				System.out.println(sql);
 				List<?> list2 = session.createSQLQuery(sql).list();
@@ -6050,7 +6054,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,isnull(sci.SampleTypeId,'')as SampleTypeId,isnull(sti.name,'') as sampleTypeName,isnull(sci.CuttingQty,'') cuttingQty,isnull(sci.CuttingDate,'') cuttingDate, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedQty,'') printReceiveQty,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedQty,'') embroideryReceiveQty,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
+			String sql="select sampleCommentId,sci.PurchaseOrder,sc.StyleId,sc.StyleNo,sci.ItemId,id.itemname,c.ColorId,c.Colorname,isnull(sci.SampleTypeId,'')as SampleTypeId,isnull(sti.name,'') as sampleTypeName,isnull(sci.CuttingQty,'') cuttingQty,isnull(sci.CuttingDate,'') cuttingDate, isnull(sv.sizeQuantity,'0') as requisitionQty,isnull(sci.PrintSendDate,'') printSendDate,isnull(sci.PrintReceivedDate,'') printReceiveDate,isnull(sci.PrintReceivedBy,'') as PrintReceivedBy,isnull(sci.EmbroiderySendDate,'') embroiderySendDate,isnull(sci.EmbroideryReceivedDate,'') embroideryReceiveDate,isnull(sci.EmbroideryReceivedBy,'') embroideryReceiveBy,isnull(sci.SewingSendDate,'') sewingSendDate,isnull(sci.SewingFinishedDate,'') sewingFinishDate,isnull(sci.OperatorName,'') operatorName,isnull(sci.quality,'') quality\r\n" + 
 					"from TbSampleCadInfo sci\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on sci.StyleId = sc.StyleId\r\n" + 
@@ -6063,7 +6067,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"left join TbSampleRequisitionDetails srd\r\n" + 
 					"on sci.PurchaseOrder = srd.purchaseOrder and sci.StyleId = srd.StyleId and sci.itemId = srd.ItemId and sci.ColorId = srd.ColorId and sci.SampleTypeId = srd.SampleTypeId\r\n" + 
 					"left join tbSizeValues sv\r\n" + 
-					"on srd.sampleAutoId = sv.linkedAutoId and sv.type = '"+SizeValuesType.SAMPLE.getType()+"'\r\n" + 
+					"on srd.sampleAutoId = sv.linkedAutoId and sv.type = '"+SizeValuesType.SAMPLE_REQUISITION.getType()+"'\r\n" + 
 					"where sci.sampleCommentId = '"+sampleCommentsId+"'";
 			System.out.println(sql);
 			List<?> list = session.createSQLQuery(sql).list();
@@ -6090,22 +6094,21 @@ public class OrderDAOImpl implements OrderDAO{
 	public boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-
-		List<CommonModel> query=new ArrayList<CommonModel>();
+		
 
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-
+			
 			String sql="update TbSampleCadInfo set "
 					+ "CuttingQty='"+sampleCadAndProduction.getCuttingQty()+"',"
 					+ " CuttingDate='"+sampleCadAndProduction.getCuttingDate()+"',"
 					+ "PrintSendDate='"+sampleCadAndProduction.getPrintSendDate()+"',"
 					+ "PrintReceivedDate='"+sampleCadAndProduction.getPrintReceivedDate()+"',"
-					+ "PrintReceivedQty='"+sampleCadAndProduction.getPrintReceivedQty()+"',"
+					+ "PrintReceivedBy='"+sampleCadAndProduction.getPrintReceivedBy()+"',"
 					+ "EmbroiderySendDate='"+sampleCadAndProduction.getEmbroiderySendDate()+"',"
 					+ "EmbroideryReceivedDate='"+sampleCadAndProduction.getEmbroideryReceivedDate()+"',"
-					+ "EmbroideryReceivedQty='"+sampleCadAndProduction.getEmbroideryReceivedQty()+"',"
+					+ "EmbroideryReceivedBy='"+sampleCadAndProduction.getPrintReceivedBy()+"',"
 					+ "SewingSendDate='"+sampleCadAndProduction.getSewingSendDate()+"',"
 					+ "SewingFinishedDate='"+sampleCadAndProduction.getSewingFinishDate()+"',"
 					+ "SampleProductionUserId='"+sampleCadAndProduction.getSampleProductionUserId()+"',"
@@ -6118,6 +6121,38 @@ public class OrderDAOImpl implements OrderDAO{
 					+ " where SampleCommentId='"+sampleCadAndProduction.getSampleCommentId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 
+			int cuttingQtyExist=0;
+			sql="select linkedAutoId from tbSizeValues where linkedAutoId='"+sampleCadAndProduction.getSampleCommentId()+"' and type='3'";
+			List<?> list = session.createSQLQuery(sql).list();
+
+
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				cuttingQtyExist=1;
+				break;
+				
+			}
+			
+			if(cuttingQtyExist!=1) {
+				String resultValue=sampleCadAndProduction.getResultList().substring(sampleCadAndProduction.getResultList().indexOf("[")+1, sampleCadAndProduction.getResultList().indexOf("]"));
+				
+				StringTokenizer token=new StringTokenizer(resultValue,",");
+				while(token.hasMoreTokens()){
+					
+					String firstValue=token.nextToken();
+					
+					StringTokenizer tokenSize=new StringTokenizer(firstValue,"*");
+					while(tokenSize.hasMoreTokens()) {
+						String sizeId=tokenSize.nextToken();
+						String sizeQty=tokenSize.nextToken();
+						String sizeGroupId=sampleCadAndProduction.getSizeGroupId();
+						
+						sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+sampleCadAndProduction.getSampleCommentId()+"','"+sizeGroupId+"','"+sizeId+"','"+sizeQty+"','"+SizeValuesType.SAMPLE_CUTTING.getType()+"',CURRENT_TIMESTAMP,'"+sampleCadAndProduction.getUserId()+"');";
+						session.createSQLQuery(sql).executeUpdate();
+					}	
+				}
+			}
+			
 
 			tx.commit();
 
@@ -7683,7 +7718,7 @@ public class OrderDAOImpl implements OrderDAO{
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
-						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE_REQUISITION.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
 						"order by ss.sortingNo";
 				System.out.println(sql);
 				List<?> list2 = session.createSQLQuery(sql).list();
@@ -7728,7 +7763,7 @@ public class OrderDAOImpl implements OrderDAO{
 			
 			int listSize=v.getSizeList().size();
 			for(int i=0;i<listSize;i++) {
-				sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+v.getAutoId()+"','"+v.getSizeGroupId()+"','"+v.getSizeList().get(i).getSizeId()+"','"+v.getSizeList().get(i).getSizeQuantity()+"','"+SizeValuesType.SAMPLE.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
+				sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+v.getAutoId()+"','"+v.getSizeGroupId()+"','"+v.getSizeList().get(i).getSizeId()+"','"+v.getSizeList().get(i).getSizeQuantity()+"','"+SizeValuesType.SAMPLE_REQUISITION.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -7977,6 +8012,118 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();
 				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
 			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleCadAndProduction> dataList=new ArrayList<SampleCadAndProduction>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select a.sampleCommentId,a.sampleReqId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select itemName from tbItemDescription where itemid=a.ItemId) as ItemName,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleName from TbSampleCadInfo a where a.SampleCommentId='"+sampleCommentId+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new SampleCadAndProduction(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(),element[5].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,
+			String sampleCommentId) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			
+			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,ISNULL(c.Colorname,'') as colorName,isnull(srd.buyerOrderId,'') as buyerOrderId,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
+					"					from TbSampleRequisitionDetails srd\r\n" + 
+					"					left join tbSampleRequisition sr\r\n" + 
+					"					on sr.sampleReqId=srd.sampleReqId\r\n" + 
+					"					left join TbStyleCreate sc\r\n" + 
+					"					on srd.StyleId = sc.StyleId\r\n" + 
+					"					left join tbItemDescription id\r\n" + 
+					"					on srd.ItemId = id.itemid\r\n" + 
+					"					left join tbColors c\r\n" + 
+					"					on srd.ColorId = c.ColorId\r\n" + 
+					"					where srd.sampleReqId='"+sampleReqId+"' order by sizeGroupId";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();							
+				dataList.add(new SampleRequisitionItem(sampleReqId,element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString(),element[15].toString()));
+			}
+
+			for (SampleRequisitionItem sampleReqItem : dataList) {
+				
+				System.out.println("dataList In");
+				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
+						"join tbStyleSize ss \r\n" + 
+						"on ss.id = bs.sizeId \r\n" + 
+						"where bs.linkedAutoId = '"+sampleReqItem.getAutoId()+"' and bs.type='"+SizeValuesType.SAMPLE_REQUISITION.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"order by ss.sortingNo";
+				System.out.println(sql);
+				List<?> list2 = session.createSQLQuery(sql).list();
+				ArrayList<Size> sizeList=new ArrayList<Size>();
+				for(Iterator<?> iter = list2.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();	
+					sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+					//sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+
+				}
+				sampleReqItem.setSizeList(sizeList);
+				
+				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
+						"join tbStyleSize ss \r\n" + 
+						"on ss.id = bs.sizeId \r\n" + 
+						"where bs.linkedAutoId = '"+sampleCommentId+"' and bs.type='"+SizeValuesType.SAMPLE_CUTTING.getType()+"' and bs.sizeGroupId = '"+sampleReqItem.getSizeGroupId()+"' \r\n" + 
+						"order by ss.sortingNo";
+				System.out.println(sql);
+				List<?> list3 = session.createSQLQuery(sql).list();
+				ArrayList<Size> sizeList1=new ArrayList<Size>();
+				for(Iterator<?> iter = list3.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();	
+					sizeList1.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+					//sizeList.add(new Size(element[0].toString(),element[1].toString(), element[3].toString()));
+				}
+				sampleReqItem.setSizeCuttingList(sizeList1);
+			}
+			
+			
 			tx.commit();
 		}
 		catch(Exception e){

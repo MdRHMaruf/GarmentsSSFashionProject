@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56722aa9-ffee-4a9e-9a6a-7967f4c450d8">
-	<property name="ireport.zoom" value="1.7715610000000606"/>
-	<property name="ireport.x" value="281"/>
-	<property name="ireport.y" value="89"/>
+	<property name="ireport.zoom" value="0.9090909090909397"/>
+	<property name="ireport.x" value="2"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbGermentStyleItem where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a where a.SampleCommentId='1' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,(select sizeName from tbStyleSize where id=b.sizeId) as SizeName,b.sizeQuantity,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a join tbSizeValues b on a.sampleCommentId=b.linkedAutoId where a.SampleCommentId='12' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId"]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[$P!{sql}]]>
@@ -14,7 +14,8 @@
 	<field name="PurchaseOrder" class="java.lang.String"/>
 	<field name="ItemName" class="java.lang.String"/>
 	<field name="ColorName" class="java.lang.String"/>
-	<field name="Size" class="java.lang.String"/>
+	<field name="SizeName" class="java.lang.String"/>
+	<field name="sizeQuantity" class="java.lang.Integer"/>
 	<field name="SampleType" class="java.lang.String"/>
 	<field name="FeedbackComments" class="java.lang.String"/>
 	<field name="CuttingDate" class="java.lang.String"/>
@@ -338,63 +339,65 @@
 				<reportElement stretchType="RelativeToBandHeight" x="111" y="-1" width="1" height="14" uuid="3dce97c7-1235-4695-91d3-189ef3dc5fc1"/>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="37" y="0" width="74" height="13" uuid="b358f159-8ec8-46b0-b4ef-4997167f9bd0"/>
+				<reportElement isPrintRepeatedValues="false" x="37" y="0" width="74" height="13" uuid="b358f159-8ec8-46b0-b4ef-4997167f9bd0"/>
 				<textFieldExpression><![CDATA[$F{ColorName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="189" y="0" width="50" height="13" uuid="5e0c95dc-588c-4778-b148-81a8b0424351"/>
+				<reportElement isPrintRepeatedValues="false" x="189" y="0" width="50" height="13" uuid="5e0c95dc-588c-4778-b148-81a8b0424351"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{Size}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SizeName}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="113" y="0" width="76" height="13" uuid="c54dc750-965a-4dc2-9289-5cda9521f272"/>
+				<reportElement isPrintRepeatedValues="false" x="113" y="0" width="76" height="13" uuid="c54dc750-965a-4dc2-9289-5cda9521f272"/>
 				<textFieldExpression><![CDATA[$F{SampleType}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="530" y="-1" width="1" height="14" uuid="a209da04-bc3a-4e72-b45d-359de305dc0c"/>
 			</line>
 			<textField>
-				<reportElement x="241" y="0" width="61" height="13" uuid="a4fbf0e1-2168-4934-bd08-cb643bc9bec9"/>
+				<reportElement isPrintRepeatedValues="false" x="241" y="0" width="61" height="13" uuid="a4fbf0e1-2168-4934-bd08-cb643bc9bec9"/>
 				<box leftPadding="2"/>
 				<textFieldExpression><![CDATA[$F{CuttingDate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="304" y="0" width="60" height="13" uuid="c6919b6e-4e61-4452-be72-22648096d495"/>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="304" y="0" width="60" height="13" uuid="c6919b6e-4e61-4452-be72-22648096d495"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA[$F{CuttingQty}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{sizeQuantity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="364" y="0" width="55" height="13" uuid="b13ecc96-2f45-4e9c-a817-924403c77d58"/>
+				<reportElement isPrintRepeatedValues="false" x="364" y="0" width="55" height="13" uuid="b13ecc96-2f45-4e9c-a817-924403c77d58"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{PrintSendDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="420" y="0" width="55" height="13" uuid="574602da-1ff6-4646-9d53-52440d449d5b"/>
+				<reportElement isPrintRepeatedValues="false" x="420" y="0" width="55" height="13" uuid="574602da-1ff6-4646-9d53-52440d449d5b"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{PrintReceivedDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="476" y="0" width="54" height="13" uuid="210418d1-2c61-482e-baf2-a9717a927f44"/>
+				<reportElement isPrintRepeatedValues="false" x="476" y="0" width="54" height="13" uuid="210418d1-2c61-482e-baf2-a9717a927f44"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{EmbroiderySendDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="531" y="0" width="54" height="13" uuid="db4ef227-a627-4925-82ce-db4505e12e3c"/>
+				<reportElement isPrintRepeatedValues="false" x="531" y="0" width="54" height="13" uuid="db4ef227-a627-4925-82ce-db4505e12e3c">
+					<printWhenExpression><![CDATA[$F{EmbroideryReceivedDate}==":00"?false:true]]></printWhenExpression>
+				</reportElement>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{EmbroideryReceivedDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="587" y="0" width="55" height="13" uuid="017ea65a-9dba-4edc-bacd-3194e73fa9fc"/>
+				<reportElement isPrintRepeatedValues="false" x="587" y="0" width="55" height="13" uuid="017ea65a-9dba-4edc-bacd-3194e73fa9fc"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{SewingSendDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="644" y="0" width="55" height="13" uuid="18f831f5-996d-4e69-b826-6a5715985dd7"/>
+				<reportElement isPrintRepeatedValues="false" x="644" y="0" width="55" height="13" uuid="18f831f5-996d-4e69-b826-6a5715985dd7"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{SewingFinishedDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="699" y="0" width="102" height="13" uuid="9af6ff56-ff37-45de-86bd-324ebe54fe2e"/>
+				<reportElement isPrintRepeatedValues="false" x="699" y="0" width="102" height="13" uuid="9af6ff56-ff37-45de-86bd-324ebe54fe2e"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{OperatorName}]]></textFieldExpression>
 			</textField>

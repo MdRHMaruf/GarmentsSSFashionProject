@@ -226,6 +226,8 @@ public interface OrderService {
 	boolean deletesamplefile(String filename, String id);
 	List<SampleRequisitionItem> getAllSampleRequisitionList();
 	List<CommonModel> getStyleWisePurchaseOrder(String styleId);
+	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
+	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
 	
 }
 

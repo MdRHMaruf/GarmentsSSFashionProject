@@ -25,39 +25,22 @@
 <%
 	
 	String sampleCommentId = request.getAttribute("sampleCommentId").toString();
-	String purchaseOrder = request.getAttribute("purchaseOrder").toString();
-	String styleId = request.getAttribute("styleId").toString();
-	String itemId = request.getAttribute("itemId").toString();
-	String sampleTypeId = request.getAttribute("sampleTypeId").toString();
 	String printType = request.getAttribute("printType").toString();
 	
+	System.out.println("sampleCommentId "+sampleCommentId);
+	System.out.println("printType "+printType);
+	
     try {
-    	
-    	System.out.println(sampleCommentId+" "+purchaseOrder+" "+styleId + " "+itemId+" "+sampleTypeId + " "+ printType );
 
     	HashMap map=new HashMap();
 		Session dbsession=HibernateUtil.openSession();
 		
 		
 		String sql="";
-		if(printType.equals("styleWise")){
-			sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a where a.StyleId='"+styleId+"' and a.PurchaseOrder='"+purchaseOrder+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
+		if(printType.equals("1")){
+			sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,(select sizeName from tbStyleSize where id=b.sizeId) as SizeName,b.sizeQuantity,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a join tbSizeValues b on a.sampleCommentId=b.linkedAutoId where a.SampleCommentId='"+sampleCommentId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
 		}
-		else if(printType.equals("itemWise")){
-			sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a where a.StyleId='"+styleId+"' and a.PurchaseOrder='"+purchaseOrder+"' and a.ItemId='"+itemId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
-		}
-		else if(printType.equals("sampleWise")){
-			sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a where a.StyleId='"+styleId+"' and a.PurchaseOrder='"+purchaseOrder+"' and a.ItemId='"+itemId+"' and a.SampleTypeId='"+sampleTypeId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
-		}
-		else if(printType.equals("sizeWise")){
-			sql="select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,a.Size,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a where a.SampleCommentId='"+sampleCommentId+"' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId";
-		}
-
-
-		
-		
-		
-		
+	
     	
     	System.out.println(sql);
         SpringRootConfig sp=new SpringRootConfig();
