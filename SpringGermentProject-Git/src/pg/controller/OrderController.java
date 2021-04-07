@@ -10,12 +10,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -80,7 +86,7 @@ import pg.services.RegisterService;
 @RestController
 public class OrderController {
 
-	private static final String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
+	private static String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
 
 	private static final String UPLOAD_DIRECTORY ="/WEB-INF/upload";  
 
@@ -679,8 +685,8 @@ public class OrderController {
 		JSONArray mainArray = new JSONArray();
 		BuyerPO buyerPo = orderService.getBuyerPO(buyerPoNo);
 		List<FileUpload> fileList = orderService.findfiles(buyerPo.getBuyerId(), "bpo-"+buyerPo.getBuyerPoId(), 1);
-		
-		
+
+
 		objmain.put("buyerPO",buyerPo);
 		objmain.put("fileList",fileList);
 		return objmain;
@@ -1421,15 +1427,15 @@ public class OrderController {
 		return objmain;
 
 	}
-	
+
 	//zipper_indent
 	@RequestMapping(value = "/zipper_indent",method=RequestMethod.GET)
 	public ModelAndView zipper_indent(ModelMap map,HttpSession session) {
 
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
@@ -1449,7 +1455,7 @@ public class OrderController {
 		view.addObject("unitList",registerService.getUnitList());
 		view.addObject("color",color);
 		view.addObject("listAccPostedData",listAccPostedData);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -1457,7 +1463,7 @@ public class OrderController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/confirmZipperIndent",method=RequestMethod.POST)
 	public JSONObject confirmZipperIndent(String zipperIndentId,String zipperItems) {
@@ -1468,7 +1474,7 @@ public class OrderController {
 
 		return objmain;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/getZipperIndentList",method=RequestMethod.GET)
 	public JSONObject getZipperIndentList(String zipperIndentId) {
@@ -1482,7 +1488,7 @@ public class OrderController {
 		return objmain;
 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/editZipperIndent",method=RequestMethod.POST)
 	public String editZipperIndent(AccessoriesIndent v) {
@@ -1495,7 +1501,7 @@ public class OrderController {
 
 		return msg;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/deleteZipperIndent",method=RequestMethod.POST)
 	public String deleteZipperIndent(String zipperIndentId,String indentAutoId) {
@@ -1622,7 +1628,7 @@ public class OrderController {
 	public JSONObject getAllAccessoriesCartonData(AccessoriesIndentCarton v) {
 		JSONObject objmain = new JSONObject();
 		JSONArray mainarray = new JSONArray();
-		
+
 		List<AccessoriesIndentCarton>qty=orderService.getAllAccessoriesCartonData(userId);
 
 		for (int i = 0; i < qty.size(); i++) {
@@ -1984,9 +1990,9 @@ public class OrderController {
 
 		JSONArray mainArray = new JSONArray();
 		List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionDetails(sampleReqId);
-		List<FileUpload>filelist=orderService.findsamplecadfiles(user, sampleReqId);
+		//List<FileUpload>filelist=orderService.findsamplecadfiles(user, sampleReqId);
 		objmain.put("result",sampleList);
-		objmain.put("files",filelist);
+		//objmain.put("files",filelist);
 
 		return objmain;
 	}
@@ -2039,15 +2045,16 @@ public class OrderController {
 
 	@RequestMapping(value = "/printDateWiseSampleRequsition/{idList}",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printDateWiseSampleRequsition(ModelMap map,@PathVariable ("idList") String idList) {
-		
+
 		ModelAndView view=new ModelAndView("order/printDateWiseSampleRequsition");
-		
+
 		String id[] = idList.split("@");
 		map.addAttribute("date", id[0]);
 		map.addAttribute("userId", id[1]);
-		
+
 		return view;
 	}
+
 	
 	@RequestMapping(value = "/printDateWiseAllSampleRequsition/{idList}",method=RequestMethod.GET)
 	public @ResponseBody ModelAndView printDateWiseAllSampleRequsition(ModelMap map,@PathVariable ("idList") String idList) {
@@ -2171,7 +2178,7 @@ public class OrderController {
 		map.addAttribute("landscapeCheck","false");
 		return view;
 	}
-	
+
 	@RequestMapping(value="/getPurchaseOrderReport/{poNo}/{supplierId}/{type}/{previewType}/{data}")
 	public @ResponseBody ModelAndView getPurchaseOrderReportWithData(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type,@PathVariable String previewType,@PathVariable String data) {
 
@@ -2181,12 +2188,12 @@ public class OrderController {
 		map.addAttribute("supplierId",supplierId);
 		map.addAttribute("type",type);
 		map.addAttribute("previewType",previewType);
-		
+
 		String[] dataList = data.split("@");
 		map.addAttribute("landscapeCheck",dataList[0]);
 		return view;
 	}
-	
+
 	@RequestMapping(value="/getPurchaseOrderGeneralReport/{poNo}/{supplierId}/{type}")
 	public @ResponseBody ModelAndView getPurchaseOrderGeneralReport(ModelMap map,@PathVariable String poNo,@PathVariable String supplierId,@PathVariable String type) {
 
@@ -2231,10 +2238,13 @@ public class OrderController {
 	}
 
 	@RequestMapping(value = "/getSampleProductionInfo",method=RequestMethod.GET)
-	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId) {
+	public @ResponseBody JSONObject getSampleProductionInfo(String sampleCommentId,String sampleReqId) {
 		JSONObject objmain = new JSONObject();
+		
+		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionAndCuttingDetails(sampleReqId,sampleCommentId);
 		SampleCadAndProduction sampleProduction = orderService.getSampleProductionInfo(sampleCommentId);
 		objmain.put("sampleProduction", sampleProduction);
+		objmain.put("result_sample_requisition", sampleRequisitionList);
 
 		return objmain;
 	}
@@ -2242,6 +2252,8 @@ public class OrderController {
 	@RequestMapping(value = "/postSampleProduction",method=RequestMethod.POST)
 	public @ResponseBody JSONObject postSampleProduction(SampleCadAndProduction	sampleCadAndProduction) {
 		JSONObject objmain = new JSONObject();
+		
+		
 		if(orderService.postSampleProductionInfo(sampleCadAndProduction)) {
 			objmain.put("result", "successfull");
 		}else {
@@ -2250,22 +2262,34 @@ public class OrderController {
 		return objmain;
 	}
 
-	@RequestMapping(value="/getSampleProductionReport/{idList}/{printType}")
-	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable String idList,@PathVariable String printType) {
+	@RequestMapping(value="/getSampleProductionReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView getSampleProductionReport(ModelMap map,@PathVariable ("idList") String idList) {
 
 		ModelAndView view = new ModelAndView("order/sample-production-report-view");
 
-		map.addAttribute("purchaseOrder","");
-		map.addAttribute("styleId","");
-		map.addAttribute("itemId","");
-		map.addAttribute("sampleTypeId","");
-		map.addAttribute("printType",printType);
-		map.addAttribute("sampleCommentId",idList);
+		String id[] = idList.split("@");
+		
+		map.addAttribute("sampleCommentId",id[0]);
+		map.addAttribute("printType",id[1]);
 
 		return view;
 
 	}
 
+	@RequestMapping(value="/sampleProductionDateWiseReport/{idList}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView sampleProductionDateWiseReport(ModelMap map,@PathVariable ("idList") String idList) {
+
+		ModelAndView view = new ModelAndView("order/date-wise-sample-production-report-view");
+
+		String id[] = idList.split("@");
+		
+		map.addAttribute("date",id[0]);
+		map.addAttribute("reportType",id[1]);
+
+		return view;
+
+	}
+	
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
 
@@ -2448,8 +2472,8 @@ public class OrderController {
 
 		List<CommonModel> sampleList = orderService.getSampleList();
 		List<SampleCadAndProduction>sampleCadList=orderService.getSampleComments(userId);	
-		
-		
+
+
 		view.addObject("sampleList",sampleList);
 		view.addObject("sampleCadList",sampleCadList);
 		view.addObject("sampleReqList",sampleReqList);
@@ -2462,7 +2486,7 @@ public class OrderController {
 
 
 	@RequestMapping(value = "/searchSampleCadDetails",method=RequestMethod.GET)
-	public @ResponseBody JSONObject searchSampleCadDetails(String sampleCommentId,String sampleReqId) {
+	public @ResponseBody JSONObject searchSampleCadDetails(String sampleCommentId,String sampleReqId,String user) {
 		JSONObject objmain = new JSONObject();
 
 		JSONArray mainArray = new JSONArray();
@@ -2470,9 +2494,15 @@ public class OrderController {
 		System.out.println("sampleReqId "+sampleReqId);
 		System.out.println("sampleCommentId "+sampleCommentId);
 		List<SampleRequisitionItem> sampleRequisitionList = orderService.getSampleRequisitionDetails(sampleReqId);
-		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetails(sampleCommentId);
+
+		
+		List<FileUpload>filelist=orderService.findsamplecadfiles(user, sampleCommentId);
+
+		List<SampleCadAndProduction> sampleCadList = orderService.getSampleCadDetailsForProduction(sampleCommentId);
+
 		objmain.put("result_sample_requisition",sampleRequisitionList);
 		objmain.put("result_sample_cad",sampleCadList);
+		objmain.put("files",filelist);
 
 		return objmain;
 	}
@@ -2537,7 +2567,7 @@ public class OrderController {
 
 		return view;			
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/SampleCadDateWiseReportView/{idList}",method=RequestMethod.GET)
 	public ModelAndView SampleCadDateWiseReportView(ModelAndView map,@PathVariable ("idList") String idList) {
@@ -2596,7 +2626,7 @@ public class OrderController {
 			int approval=0;
 			for (String item : itemList) {
 				String[] itemProperty = item.split("@");
-				
+
 				purchaseOrder = itemProperty[0].substring(itemProperty[0].indexOf(":")+1).trim();
 				styleId = itemProperty[1].substring(itemProperty[1].indexOf(":")+1).trim();
 				supplierId = itemProperty[2].substring(itemProperty[2].indexOf(":")+1).trim();
@@ -2792,21 +2822,21 @@ public class OrderController {
 
 		return setModalData;
 	}*/
-	
-	
-	
-	@RequestMapping(value="/save-samplecad/{samplecadid}/{user}", method={RequestMethod.PUT, RequestMethod.POST})
+
+
+
+	@RequestMapping(value="/save-samplecad/{samplecadid}/{user}/{searchtype}", method={RequestMethod.PUT, RequestMethod.POST})
 	public String uploadSampleFileSubmit(
 			@PathVariable ("samplecadid") String samplecadid,
-			@PathVariable ("user") String user,
-			
+			@PathVariable ("user") String user,@PathVariable ("searchtype") String searchtype,
+
 			MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
-		
+
 		String filelocation="E:/uploadspringfiles/samplecadfiles/";
 		try
 		{
-			
-			
+
+
 			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
 			response.setContentType("text/html");
 
@@ -2843,8 +2873,17 @@ public class OrderController {
 				String fileControlName = it.next();
 
 				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+				String uploadFileName ="";
+				
+				if (searchtype.equals("1")) {
+					samplecadid=orderService.getMaxCadId();
+					uploadFileName="sam-"+orderService.getMaxCadId()+srcFile.getOriginalFilename();
+					
+				}else if(searchtype.equals("2")) {
+					uploadFileName="sam-"+samplecadid+srcFile.getOriginalFilename();
+				}
 
-				String uploadFileName = srcFile.getOriginalFilename();
+				System.out.println(" sample cad id "+samplecadid);
 
 				System.out.println(" file names "+uploadFileName);
 
@@ -2864,10 +2903,10 @@ public class OrderController {
 					// Save uploaded file to target.
 					srcFile.transferTo(destFile);
 					fileupload = true;
-						System.out.println(" sample id "+samplecadid);
-					orderService.samplecadfileupload(samplecadid, uploadFileName, user, inetAddress.toString());
+					System.out.println(" sample id "+samplecadid);
+					orderService.samplecadfileupload(samplecadid, uploadFileName, user, inetAddress.toString(),searchtype);
 
-				//	CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+					//	CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
 					//boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
 					//fileupload=false;
 				}
@@ -2893,9 +2932,9 @@ public class OrderController {
 			return "upload_file_result";
 		}
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(value="/download-samplecad/{fileName:.+}/{user}", method=RequestMethod.POST)
 	public @ResponseBody void downloadsamplecad(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
 		System.out.println(" download controller ");
@@ -2975,8 +3014,8 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	@RequestMapping(value = "/deletesamplecadfile/{filename:.+}/{id}",method=RequestMethod.POST)
 	public @ResponseBody boolean deletesamplecadfile(@PathVariable ("filename") String filename,@PathVariable ("id") String id) {
 
@@ -2989,5 +3028,238 @@ public class OrderController {
 
 		return delete;
 	}
+
+
+	@RequestMapping(value="/multidownload/{fileName:.+}/{user}", method=RequestMethod.POST)
+	public @ResponseBody void multidownload(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
+		System.out.println(" download controller ");
+
+		Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+		response.setContentType("text/html");
+
+		String hostname = request.getRemoteHost(); // hostname
+		System.out.println("hostname "+hostname);
+
+		String computerName = null;
+		String remoteAddress = request.getRemoteAddr();
+		InetAddress inetAddress=null;
+
+
+		inetAddress = InetAddress.getByName(remoteAddress);
+		System.out.println("inetAddress: " + inetAddress);
+		computerName = inetAddress.getHostName();
+
+		System.out.println("computerName: " + computerName);
+
+
+		if (computerName.equalsIgnoreCase("localhost")) {
+			computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			inetAddress = InetAddress.getLocalHost();
+			computerName=inetAddress.getHostName();
+		}
+		System.out.println("ip : " + inetAddress);
+		System.out.println("computerName: " + computerName);
+
+
+
+
+		try {	
+
+			System.out.println(" filename "+fileName);		
+			List<String> filelist= orderService.getMultifiles(fileName);
+
+
+			String zipfilename=user+"-"+"Zippedfiles.zip";
+			String zipfilenamewithpath=UPLOAD_FILE_SAVE_FOLDER+zipfilename;
+			FileOutputStream fos = new FileOutputStream(zipfilenamewithpath);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+
+
+			for (int i = 0; i < filelist.size(); i++) {
+
+				// File firstFile = new File(UPLOAD_FILE_SAVE_FOLDER+filelist.get(i));
+				String aFile=UPLOAD_FILE_SAVE_FOLDER+filelist.get(i);
+				/* fos = new FileOutputStream(zipFileName);
+					             zos = new ZipOutputStream(fos);*/
+				boolean download=orderService.fileDownload(filelist.get(i), user, inetAddress.toString(), computerName);
+
+				zos.putNextEntry(new ZipEntry(new File(aFile).getName()));
+
+				byte[] bytes = Files.readAllBytes(Paths.get(aFile));
+				zos.write(bytes, 0, bytes.length);
+				zos.closeEntry();
+
+
+			}
+
+			zos.close();
+
+
+			System.out.println(" end ");
+
+			try {
+				File file = new File(zipfilenamewithpath);
+				System.out.println(" file "+file.length()/(1024*1024));
+				FileInputStream in = new FileInputStream(file);
+				System.out.println(" file in "+in);
+				response.setHeader("Expires", new Date().toGMTString());
+				response.setContentType(URLConnection.guessContentTypeFromStream(in));
+
+				// response.setContentLength(Files.readAllBytes(file.toPath()).length);
+
+				response.setContentLength((int)file.length());
+
+				response.setHeader("Content-Disposition","attachment; filename=\"" + zipfilename +"\"");
+				response.setHeader("Pragma", "no-cache");
+
+				response.setContentType("application/octet-stream");
+				// FileCopyUtils.copy(in, response.getOutputStream());
+
+
+				IOUtils.copyLarge(in, response.getOutputStream());
+
+
+				//boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
+
+				in.close();
+				response.flushBuffer();
+				file.delete();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+
+
+
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	
+	@RequestMapping(value="/multiCaddownload/{fileName:.+}/{user}", method=RequestMethod.POST)
+	public @ResponseBody void multiCaddownload(HttpServletResponse response,@PathVariable ("fileName") String fileName,@PathVariable ("user") String user,HttpServletRequest request) throws IOException {
+		System.out.println(" download controller ");
+		
+		
+		String filelocation="E:/uploadspringfiles/samplecadfiles/";
+		UPLOAD_FILE_SAVE_FOLDER=filelocation;
+
+		Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+		response.setContentType("text/html");
+
+		String hostname = request.getRemoteHost(); // hostname
+		System.out.println("hostname "+hostname);
+
+		String computerName = null;
+		String remoteAddress = request.getRemoteAddr();
+		InetAddress inetAddress=null;
+
+
+		inetAddress = InetAddress.getByName(remoteAddress);
+		System.out.println("inetAddress: " + inetAddress);
+		computerName = inetAddress.getHostName();
+
+		System.out.println("computerName: " + computerName);
+
+
+		if (computerName.equalsIgnoreCase("localhost")) {
+			computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+		}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+			inetAddress = InetAddress.getLocalHost();
+			computerName=inetAddress.getHostName();
+		}
+		System.out.println("ip : " + inetAddress);
+		System.out.println("computerName: " + computerName);
+
+
+
+
+		try {	
+
+			System.out.println(" filename "+fileName);		
+			List<String> filelist= orderService.getMultiCadfiles(fileName);
+
+
+			String zipfilename=user+"-"+"Zippedfiles.zip";
+			String zipfilenamewithpath=UPLOAD_FILE_SAVE_FOLDER+zipfilename;
+			FileOutputStream fos = new FileOutputStream(zipfilenamewithpath);
+			ZipOutputStream zos = new ZipOutputStream(fos);
+
+
+			for (int i = 0; i < filelist.size(); i++) {
+
+				// File firstFile = new File(UPLOAD_FILE_SAVE_FOLDER+filelist.get(i));
+				String aFile=UPLOAD_FILE_SAVE_FOLDER+filelist.get(i);
+				/* fos = new FileOutputStream(zipFileName);
+					             zos = new ZipOutputStream(fos);*/
+			//	boolean download=orderService.fileDownload(filelist.get(i), user, inetAddress.toString(), computerName);
+
+				zos.putNextEntry(new ZipEntry(new File(aFile).getName()));
+
+				byte[] bytes = Files.readAllBytes(Paths.get(aFile));
+				zos.write(bytes, 0, bytes.length);
+				zos.closeEntry();
+
+
+			}
+
+			zos.close();
+
+
+			System.out.println(" end ");
+
+			try {
+				File file = new File(zipfilenamewithpath);
+				System.out.println(" file "+file.length()/(1024*1024));
+				FileInputStream in = new FileInputStream(file);
+				System.out.println(" file in "+in);
+				response.setHeader("Expires", new Date().toGMTString());
+				response.setContentType(URLConnection.guessContentTypeFromStream(in));
+
+				// response.setContentLength(Files.readAllBytes(file.toPath()).length);
+
+				response.setContentLength((int)file.length());
+
+				response.setHeader("Content-Disposition","attachment; filename=\"" + zipfilename +"\"");
+				response.setHeader("Pragma", "no-cache");
+
+				response.setContentType("application/octet-stream");
+				// FileCopyUtils.copy(in, response.getOutputStream());
+
+
+				IOUtils.copyLarge(in, response.getOutputStream());
+
+
+				//boolean download=orderService.fileDownload(fileName, user, inetAddress.toString(), computerName);
+
+				in.close();
+				response.flushBuffer();
+				file.delete();
+
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}	
+
+
+
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+
+
 }
 

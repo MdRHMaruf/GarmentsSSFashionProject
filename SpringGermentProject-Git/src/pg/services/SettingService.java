@@ -45,6 +45,8 @@ public interface SettingService{
 	
 	public List<noticeModel>getAllnoticesforSearch();
 	
+	public JSONArray getUserList();
+	
 	public JSONArray getNotificationList(String targetId);
 
 

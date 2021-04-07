@@ -922,9 +922,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip) {
+	public boolean samplecadfileupload(String smaplecadid, String filename, String user, String uploadedpcip,String searchtype) {
 		// TODO Auto-generated method stub
-		return orderDAO.samplecadfileupload(smaplecadid, filename, user, uploadedpcip);
+		return orderDAO.samplecadfileupload(smaplecadid, filename, user, uploadedpcip,searchtype);
 	}
 
 	@Override
@@ -951,7 +951,40 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getStyleWisePurchaseOrder(styleId);
 	}
 
+	@Override
+	public List<String> getMultifiles(String bpo) {
+		// TODO Auto-generated method stub
+		return orderDAO.getMultifiles(bpo);
+	}
+
+	@Override
+	public String getMaxCadId() {
+		// TODO Auto-generated method stub
+		return orderDAO.getMaxCadId();
+	}
+
+	@Override
+	public List<String> getMultiCadfiles(String bpo) {
+		// TODO Auto-generated method stub
+		return orderDAO.getMultiCadfiles(bpo);
+	}
+
 	
+
+
+	public List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleCadDetailsForProduction(sampleCommentId);
+	}
+
+	@Override
+	public List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,
+			String sampleCommentId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleRequisitionAndCuttingDetails(sampleReqId, sampleCommentId);
+	}
+
+
 	
 	
 }

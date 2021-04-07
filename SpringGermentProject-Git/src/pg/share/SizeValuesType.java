@@ -2,7 +2,8 @@ package pg.share;
 
 public enum SizeValuesType {
 	BUYER_PO(1),
-	SAMPLE(2),
+	SAMPLE_REQUISITION(2),
+	SAMPLE_CUTTING(3),
 	CUTTING(3),
 	CUTTING_RATIO(4),
 	CUTTING_QTY(5);

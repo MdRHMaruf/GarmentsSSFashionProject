@@ -45,6 +45,8 @@ public interface SettingDAO {
 	
 	public List<noticeModel>getAllnoticesforSearch();
 	
+	public JSONArray getUserList();
+	
 	public JSONArray getNotificationList(String targetId);
 	
 }
