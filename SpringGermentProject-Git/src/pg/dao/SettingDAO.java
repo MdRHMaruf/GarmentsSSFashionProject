@@ -3,6 +3,7 @@ package pg.dao;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
@@ -46,7 +47,18 @@ public interface SettingDAO {
 	public List<noticeModel>getAllnoticesforSearch();
 	
 	public JSONArray getUserList();
+	public String saveGroup(String group);
+	public String editGroup(String group);
+	public JSONArray getGroupList();
+	public JSONArray getGroupMembers(String groupId);
 	
 	public JSONArray getNotificationList(String targetId);
+	
+	public JSONArray getMenus(String userId);
+	
+	public JSONArray getFormPermitInvoiceList(String formId,String ownerId,String permittedUserId);
+	public JSONArray getFormPermitedUsers(String formId,String ownerId);
+	public String submitFileAccessPermit(String fileAccessPermit);
+	
 	
 }

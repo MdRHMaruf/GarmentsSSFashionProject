@@ -974,7 +974,7 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+		List<CommonModel>purchaseorders=orderService.getPurchaseOrders(userId);
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
@@ -1436,7 +1436,7 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+		List<CommonModel>purchaseorders=orderService.getPurchaseOrders(userId);
 
 		//List<AccessoriesIndent>listAccPending=orderService.getPendingAccessoriesIndent();
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
@@ -1520,7 +1520,7 @@ public class OrderController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+		List<CommonModel>purchaseorders=orderService.getPurchaseOrders(userId);
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<AccessoriesIndentCarton> indentList=orderService.getAllAccessoriesCartonData(userId);
 		//List<CommonModel>unit=orderService.Unit();
@@ -1717,7 +1717,7 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 
 		List<FabricsIndent> fabricindentsummarylist= orderService.getStyleDetailsForFabricsIndent(userId);
-		List<CommonModel>purchaseorders=orderService.PurchaseOrders(userId);
+		List<CommonModel>purchaseorders=orderService.getPurchaseOrders(userId);
 		List<Color> colorList = registerService.getColorList();
 		List<FabricsItem> fabricsItemList = registerService.getFabricsItemList();
 		List<Brand> brandList = registerService.getBrandList();

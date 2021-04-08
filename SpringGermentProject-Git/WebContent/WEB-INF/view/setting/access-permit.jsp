@@ -43,7 +43,7 @@
 					<strong>Wrong!</strong> Something Wrong...
 				</p>
 			</div>
-			<input type="hidden" id="groupId" value="0"> 
+			<input type="hidden" id="userId" value="<%=userId%>"> 
 			<div class="row">
 				<div class="col-sm-12 col-md-12 col-lg-12">
 					<div class="card-box">
@@ -52,30 +52,40 @@
 
 								<div class="row ">
 									<h2>
-										<b>Group Create</b>
+										<b>Access Permit Control</b>
 									</h2>
 								</div>
 								<hr>
 
 								<div class="form-group">
-									<label for="roleName">Group Name:</label> <input type="text"
-										class="form-control" id="groupName" name="text">
+									<label for="formName">Form Name:</label> 
+									<select id="formName"
+												class="form-control selectpicker"
+												aria-label="Sizing example input"
+												aria-describedby="inputGroup-sizing-sm"
+												data-live-search="true"
+												data-style="btn-light btn-sm border-secondary form-control-sm" onchange="formSelectChangeAction()">
+												<option value="0">Select Form</option>
+												<c:forEach items="${menus}" var="menu">
+													<option value="${menu.id}">${menu.name}</option>
+												</c:forEach>
+											</select>
 								</div>
 
 								
 								<hr>
 								<div class="row">
 									<div class="col-sm-12 col-md-12">
-										<div class="input-group my-2">
-											<select id="memberSelect"
+										<%-- <div class="input-group my-2">
+											<select id="permittedUser"
 												class="form-control selectpicker"
 												aria-label="Sizing example input"
 												aria-describedby="inputGroup-sizing-sm"
 												data-live-search="true"
 												data-style="btn-light btn-sm border-secondary form-control-sm">
-												<option value="0">Select Member</option>
-												<c:forEach items="${members}" var="member">
-													<option value="${member.id}">${member.fullname}</option>
+												<option value="0">Select Permitted User</option>
+												<c:forEach items="${users}" var="user">
+													<option value="${user.id}">${user.fullname}</option>
 												</c:forEach>
 											</select>
 											<div class="input-group-append">
@@ -87,7 +97,7 @@
 													<i class="fa fa-cog"></i>
 												</button> -->
 											</div>
-										</div>
+										</div> --%>
 
 										<div class="row">
 											<div class="col-sm-12 col-md-12 col-lg-12"
@@ -96,38 +106,24 @@
 													<thead>
 														<tr>
 															<th>#</th>
-															<th>Member Name</th>
-															<th><i class="fa fa-trash"> </i></th>
+															<th>User Name</th>
+															
 														</tr>
 													</thead>
-													<tbody id="memberList">
-														<c:forEach items="${memberList}" var="resourceGroup"
+													<tbody id="permittedUserList">
+														<c:forEach items="${permittedUserList}" var="resourceGroup"
 															varStatus="counter">
 															<tr>
 																<td>${counter.count}</td>
-																<td>${resource.memberName}</td>
-																<td><i class="fa fa-edit" style="cursor: pointer;"
-																	onclick="setData(${resource.id})"> </i></td>
+																<td>${resource.userName}</td>
 															</tr>
 														</c:forEach>
 													</tbody>
 												</table>
 											</div>
-
 										</div>
 									</div>
-
-
-								</div>
-								
-								<button type="button" id="btnSave"
-									class="btn btn-primary btn-sm" onclick="saveAction()">Save</button>
-
-								<button type="button" id="btnEdit"
-									class="btn btn-success btn-sm" onclick="editAction()"
-									style="display: none;">Edit</button>
-								<button type="button" id="btnRefresh"
-									class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
+								</div>	
 							</div>
 							<div class="col-sm-6 col-md-6 col-lg-6 shadow ">
 								<div class="input-group my-2">
@@ -141,31 +137,68 @@
 									</div>
 								</div>
 								<hr>
+								<div>
+									<div class="input-group my-2">
+											<select id="permittedUser"
+												class="form-control selectpicker"
+												aria-label="Sizing example input"
+												aria-describedby="inputGroup-sizing-sm"
+												data-live-search="true"
+												data-style="btn-light btn-sm border-secondary form-control-sm" onchange="formSelectChangeAction()">
+												<option value="0">Select Permitted User</option>
+												<c:forEach items="${users}" var="user">
+													<option value="${user.id}">${user.fullname}</option>
+												</c:forEach>
+											</select>
+											<!-- <div class="input-group-append">
+												<button class="btn btn-sm btn-primary" type="button" onclick="memberAddAction()">
+													<i class="fa fa-plus-square"></i>
+												</button>
+												<button class="btn btn-sm btn-primary" type="button"
+													data-toggle="modal" data-target="#exampleModal">
+													<i class="fa fa-cog"></i>
+												</button>
+											</div> -->
+										</div>
+									
+								</div>
 								<div class="row">
 									<div class="col-sm-12 col-md-12 col-lg-12"
 										style="overflow: auto; max-height: 400px;">
 										<table class="table table-hover table-bordered table-sm">
 											<thead>
 												<tr>
-													<th scope="col">#</th>
-													<th scope="col">Group Name</th>
-													<th scope="col"><i class="fa fa-edit"> </i></th>
+													<th>#</th>
+															<th>Form Name</th>
+															<th>ID/No</th>
+															<th><input type="checkbox" id="permitAll" onclick="checkAllAction()"></th>
 												</tr>
 											</thead>
-											<tbody id="groupList">
-												<c:forEach items="${groupList}" var="group"
+											<tbody id="fileList">
+												<c:forEach items="${fileList}" var="file"
 													varStatus="counter">
 													<tr>
 														<td>${counter.count}</td>
-														<td id='groupName${group.groupId}'>${group.groupName}</td>
-														<td><i class="fa fa-edit" style="cursor: pointer;"
-															onclick="setGroup('${group.groupId}')"> </i></td>
+														<td>${file.formName}</td>
+														<td>${file.fileNo}</td>
+														<td><input type="checkbox" id="permit-${file.id}"></td>
 													</tr>
 												</c:forEach>
 											</tbody>
 										</table>
 									</div>
 
+								</div>
+								
+								<div>
+								<button type="button" id="btnSave"
+									class="btn btn-primary btn-sm" onclick="saveAction()">Save</button>
+
+								<button type="button" id="btnEdit"
+									class="btn btn-success btn-sm" onclick="editAction()"
+									style="display: none;">Edit</button>
+								<button type="button" id="btnRefresh"
+									class="btn btn-secondary btn-sm" onclick="refreshAction()">Refresh</button>
 								</div>
 
 							</div>
@@ -250,7 +283,7 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 <script
-	src="${pageContext.request.contextPath}/assets/js/settings/group-create.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/settings/access-permit.js"></script>
 
 
 
