@@ -24,6 +24,7 @@ import pg.model.Password;
 import pg.model.SubMenuInfo;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.model.roleManagement;
 
 @Service
 public class SettingServiceImpl implements SettingService{
@@ -153,6 +154,40 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.getUserList();
 	}
-	
 
+
+	@Override
+	public List<roleManagement> getSubmenu(String moduleId) {
+		// TODO Auto-generated method stub
+		return settDAO.getSubmenu(moduleId);
+	}
+
+
+	@Override
+	public boolean saveRolePermission(roleManagement v) {
+		// TODO Auto-generated method stub
+		return settDAO.saveRolePermission(v);
+	}
+
+
+	@Override
+	public List<roleManagement> getAllRoleName(roleManagement v) {
+		// TODO Auto-generated method stub
+		return settDAO.getAllRoleName(v);
+	}
+
+
+	@Override
+	public List<roleManagement> getAllPermissions(String id) {
+		// TODO Auto-generated method stub
+		return settDAO.getAllPermissions(id);
+	}
+
+
+	@Override
+	public boolean editRolePermission(roleManagement v) {
+		// TODO Auto-generated method stub
+		return settDAO.editRolePermission(v);
+	}
+	
 }
