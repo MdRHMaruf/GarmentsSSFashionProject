@@ -17,6 +17,7 @@ import pg.model.Password;
 import pg.model.SubMenuInfo;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.model.roleManagement;
 
 public interface SettingDAO {
 
@@ -54,11 +55,16 @@ public interface SettingDAO {
 	
 	public JSONArray getNotificationList(String targetId);
 	
-	public JSONArray getMenus(String userId);
-	
+
 	public JSONArray getFormPermitInvoiceList(String formId,String ownerId,String permittedUserId);
 	public JSONArray getFormPermitedUsers(String formId,String ownerId);
 	public String submitFileAccessPermit(String fileAccessPermit);
-	
-	
+
+	public JSONArray getMenus(String userId);
+	public List<roleManagement> getSubmenu(String moduleId);
+	public boolean saveRolePermission(roleManagement v);
+	public List<roleManagement> getAllRoleName(roleManagement v);
+	public List<roleManagement> getAllPermissions(String id);
+	public boolean editRolePermission(roleManagement v);
+
 }

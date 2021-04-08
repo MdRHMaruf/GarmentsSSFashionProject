@@ -15,19 +15,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-
+import pg.model.roleManagement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,9 +39,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.sun.istack.internal.logging.Logger;
-
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.CommonModel;
@@ -585,10 +580,47 @@ public class SettingController {
 		ModelAndView view = new ModelAndView("setting/role-management");
 		map.addAttribute("roleList","");
 		map.addAttribute("resourceList","");
+		view.addObject("allModule",settingService.getAllModuleName());
 		return view;
 	}
 
+	
+	@RequestMapping(value = "/getSubmenu/{moduleId}", method = RequestMethod.POST)
+	public @ResponseBody List<roleManagement> getSubmenu(@PathVariable ("moduleId") String moduleId) {
 
+		List<roleManagement> getSubmenu = settingService.getSubmenu(moduleId);
+
+		return getSubmenu;
+	}
+	
+	@RequestMapping(value = "/saveRolePermission", method = RequestMethod.POST)
+	public @ResponseBody boolean saveRolePermission(roleManagement v) {
+		boolean saveRolePermission = settingService.saveRolePermission(v);
+		return saveRolePermission;
+	}
+	
+	@RequestMapping(value = "/getAllRoleName", method = RequestMethod.POST)
+	public @ResponseBody List<roleManagement> getAllRoleName(roleManagement v) {
+
+		List<roleManagement> getAllRoleName = settingService.getAllRoleName(v);
+
+		return getAllRoleName;
+	}
+	
+	@RequestMapping(value = "/getAllPermissions/{id}", method = RequestMethod.GET)
+	public @ResponseBody JSONObject getAllPermissions(@PathVariable ("id") String id) {
+		JSONObject obj = new JSONObject();
+		List<roleManagement> getAllPermissions = settingService.getAllPermissions(id);
+		obj.put("permissionList", getAllPermissions);
+		return obj;
+	}
+	
+	@RequestMapping(value = "/editRolePermission", method = RequestMethod.POST)
+	public @ResponseBody boolean editRolePermission(roleManagement v) {
+		boolean editRolePermission = settingService.editRolePermission(v);
+		return editRolePermission;
+	}
+	
 	// Group Create
 	@RequestMapping(value= {"/group_create"})
 	public ModelAndView groupCreate(ModelMap map,HttpSession session) {
