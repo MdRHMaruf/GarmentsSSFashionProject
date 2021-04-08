@@ -17,6 +17,7 @@ import pg.model.Password;
 import pg.model.SubMenuInfo;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.model.roleManagement;
 
 public interface SettingService{
 	public boolean addWare(Ware ware) throws UserBlockedException;
@@ -49,5 +50,10 @@ public interface SettingService{
 	
 	public JSONArray getNotificationList(String targetId);
 
-
+	public List<roleManagement> getSubmenu(String moduleId);
+	public boolean saveRolePermission(roleManagement v);
+	public List<roleManagement> getAllRoleName(roleManagement v);
+	public List<roleManagement> getAllPermissions(String id);
+	public boolean editRolePermission(roleManagement v);
+	
 }

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import noticeModel.noticeModel;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.model.roleManagement;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Menu;
 import pg.model.MenuInfo;
@@ -45,12 +46,12 @@ public class SettingDAOImpl implements SettingDAO {
 			tx.begin();
 
 
-			List<?> list = session.createSQLQuery("select id,name,ware from Tbmodule").list();
+			List<?> list = session.createSQLQuery("select id,name from Tbmodule").list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				Object[] element = (Object[]) iter.next();
-				query.add(new Module(Integer.parseInt(element[0].toString()),element[1].toString(),Integer.parseInt(element[2].toString())));
+				query.add(new Module(Integer.parseInt(element[0].toString()),element[1].toString(),0));
 			}
 
 			tx.commit();
@@ -666,7 +667,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			
+
 			String sql = "update tbOrganizationInfo set organizationName='"+v.getOrganizationName()+"', organizationContact='"+v.getOrganizationContact()+"', organizationAddress='"+v.getOrganizationAddress()+"' where organizationId='"+v.getOrganizationId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 
@@ -699,9 +700,9 @@ public class SettingDAOImpl implements SettingDAO {
 			tx = session.getTransaction();
 			tx.begin();
 			String depts[]=departs.split(",");
-			
+
 			int maxnoticeno=getMaxNoticeNo();
-			
+
 			for (int i = 0; i < depts.length; i++) {
 				String sql = "insert into tbnotice(noticeno, noticeheader,noticebody, filenames, accessabledepartments, entryby, entrytime) values('"+maxnoticeno+"','"+heading+"','"+textbody+"','"+filename+"','"+depts[i]+"','"+userid+"', CURRENT_TIMESTAMP)";
 				session.createSQLQuery(sql).executeUpdate();
@@ -721,12 +722,12 @@ public class SettingDAOImpl implements SettingDAO {
 			session.close();
 		}
 		return false;
-	
+
 	}
 
 
 
-	
+
 	public int getMaxNoticeNo() {
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
@@ -764,14 +765,14 @@ public class SettingDAOImpl implements SettingDAO {
 
 	@Override
 	public List<noticeModel> getAllNoitice(String deptid,noticeModel nm) {
-		
+
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		List<noticeModel>query=new ArrayList<>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select distinct(noticeno) as id,(noticeheader) as header ,noticebody as body,filenames,CONVERT(varchar,CONVERT(DATE, entrytime))  from tbnotice where  (accessabledepartments='"+deptid+"' or accessabledepartments=0) ";
 
@@ -798,22 +799,22 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 
 		return query;
-	
-		
+
+
 	}
 
 
 
 	@Override
 	public List<noticeModel> getAllnoticesforSearch() {
-		
+
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		List<noticeModel>query=new ArrayList<>();
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select noticeno, noticeheader, noticebody from tbnotice group by noticeno, noticeheader, noticebody";
 
@@ -840,8 +841,8 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 
 		return query;
-	
-		
+
+
 	}
 
 
@@ -856,7 +857,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select n.id,l.username,n.subject,n.type,n.notificationContent,n.issueLinkId,nt.targetUserId,nt.targetSeen,n.createdTime  \r\n" + 
 					"from tbNotificationTargets nt\r\n" + 
@@ -891,7 +892,7 @@ public class SettingDAOImpl implements SettingDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 
 		finally {
@@ -901,7 +902,7 @@ public class SettingDAOImpl implements SettingDAO {
 		return array;
 
 	}
-	
+
 	@Override
 	public JSONArray getUserList() {
 		// TODO Auto-generated method stub
@@ -912,7 +913,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select id,fullname,type,factoryId,departmentId from Tblogin";
 
@@ -937,7 +938,7 @@ public class SettingDAOImpl implements SettingDAO {
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 
 		finally {
@@ -947,4 +948,226 @@ public class SettingDAOImpl implements SettingDAO {
 		return array;
 
 	}
+
+
+
+	@Override
+	public List<roleManagement> getSubmenu(String moduleId) {
+		// TODO Auto-generated method stub
+		String sql = "";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		List<roleManagement> dataList = new ArrayList<roleManagement>();
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			sql = "select (a.id) as module, (a.name) as moduleNmae, (b.id) as head,c.id,c.name from TbModule a join TbMenu b on b.module=a.id join TbSubMenu c on c.root=b.id where a.id in ("+moduleId+") and b.module=a.id and c.root=b.id order by a.id";
+			List<?> list = session.createSQLQuery(sql).list();
+			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new roleManagement(element[0].toString(),element[1].toString(),Integer.parseInt(element[2].toString()),Integer.parseInt(element[3].toString()), element[4].toString()));
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+
+
+	@Override
+	public boolean saveRolePermission(roleManagement v) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+
+			String accesslit=v.getAccesslist();
+			accesslit=accesslit.replace("[", "");
+			accesslit=accesslit.replace("]", "");
+			int x=0;
+			sql="select rulename from tbruleinfo where rulename='"+v.getRoleName()+"'";
+			List<?> list1 = session.createSQLQuery(sql).list();
+			if(list1.size()==0) {
+
+				sql = "select (isnull(max(ruleid),0)+1) as id from tbruleinfo";
+				List<?> list = session.createSQLQuery(sql).list();
+				String maxRuleId = list.get(0).toString();
+
+				sql="insert into tbruleinfo (ruleid, rulename, userid, entrytime) values ('"+maxRuleId+"', '"+v.getRoleName()+"', '"+v.getUserId()+"', CURRENT_TIMESTAMP) ";
+				//			System.err.println("sql : "+sql);
+				session.createSQLQuery(sql).executeUpdate();
+
+				StringTokenizer s=new StringTokenizer(accesslit,",");
+				while(s.hasMoreElements()) {
+					String a=s.nextToken().trim();
+					StringTokenizer s2=new StringTokenizer(a,":");
+					while(s2.hasMoreElements()) {
+
+						String moduleId=s2.nextToken();
+						String headId=s2.nextToken();
+						String subId=s2.nextToken();
+						String add=s2.nextToken();
+						String edit=s2.nextToken();
+						String view=s2.nextToken();
+						String delete=s2.nextToken();
+
+						sql="insert into tbrulepermission (ruleid, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+maxRuleId+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
+						//					System.err.println("sql 2 : "+sql);
+						session.createSQLQuery(sql).executeUpdate();
+
+					}
+				}
+				x++;
+			}
+			tx.commit();
+			if(x>0) {
+				return true;
+			}else {
+				return false;
+			}
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+
+
+	@Override
+	public List<roleManagement> getAllRoleName(roleManagement v) {
+		// TODO Auto-generated method stub
+		String sql = "";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		List<roleManagement> dataList = new ArrayList<roleManagement>();
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			sql = "select ruleid,rulename from tbruleinfo";
+			List<?> list = session.createSQLQuery(sql).list();
+			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new roleManagement(element[0].toString(),element[1].toString()));
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+
+
+	@Override
+	public List<roleManagement> getAllPermissions(String id) {
+		// TODO Auto-generated method stub
+		String sql = "";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		List<roleManagement> dataList = new ArrayList();
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			sql = "select moduleid,head,sub,clear,entry,edit,[view] from tbrulepermission where ruleid='"+id+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new roleManagement(element[0].toString(), Integer.parseInt(element[1].toString()),
+						Integer.parseInt(element[2].toString()),element[3].toString(),element[4].toString(),
+						element[5].toString(),element[6].toString()));
+			}
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+
+
+	@Override
+	public boolean editRolePermission(roleManagement v) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+
+			String accesslit=v.getAccesslist();
+			accesslit=accesslit.replace("[", "");
+			accesslit=accesslit.replace("]", "");
+			int x=0;
+			sql="select rulename from tbruleinfo where rulename='"+v.getRoleName()+"' and ruleid!='"+v.getRoleId()+"' ";
+			List<?> list1 = session.createSQLQuery(sql).list();
+			if(list1.size()==0) {
+				
+				sql="update tbruleinfo set rulename='"+v.getRoleName()+"' where ruleid='"+v.getRoleId()+"'";
+				session.createSQLQuery(sql).executeUpdate();
+				
+				sql="delete from tbrulepermission where ruleid='"+v.getRoleId()+"'";
+				session.createSQLQuery(sql).executeUpdate();
+
+				StringTokenizer s=new StringTokenizer(accesslit,",");
+				while(s.hasMoreElements()) {
+					String a=s.nextToken().trim();
+					StringTokenizer s2=new StringTokenizer(a,":");
+					while(s2.hasMoreElements()) {
+
+						String moduleId=s2.nextToken();
+						String headId=s2.nextToken();
+						String subId=s2.nextToken();
+						String add=s2.nextToken();
+						String edit=s2.nextToken();
+						String view=s2.nextToken();
+						String delete=s2.nextToken();
+
+						sql="insert into tbrulepermission (ruleid, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+v.getRoleId()+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
+						session.createSQLQuery(sql).executeUpdate();
+
+					}
+				}
+				x++;
+			}
+			tx.commit();
+			if(x>0) {
+				return true;
+			}else {
+				return false;
+			}
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
 }
