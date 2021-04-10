@@ -181,8 +181,6 @@ function editAction(){
 			accesslist[j++] = [value];
 		}
 	}
-	
-	console.log("acc list : "+accesslist)
 
 	var valuelist="["+accesslist+"]";
 
@@ -198,8 +196,12 @@ function editAction(){
 				roleName:roleName,userId:userId,
 			},
 			success: function(data){
+				if(data==true){
 				alert("Role Edit Successfully");
 				refreshAction();
+				}else{
+					alert("Role Name Already Exist")
+				}
 			}
 		});
 
