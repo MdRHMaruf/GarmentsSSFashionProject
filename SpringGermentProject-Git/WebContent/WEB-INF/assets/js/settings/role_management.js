@@ -147,9 +147,9 @@ function editAction(){
 			let module=0,head=0,sub=0,add=0,edit=0,view=0,del=0;
 
 			module = $("#moduleId_"+rId).text();
-			
+
 			console.log("module id : "+module)
-			
+
 			head = $("#head_"+rId).text();
 			sub = $("#id_"+rId).text();
 
@@ -197,8 +197,8 @@ function editAction(){
 			},
 			success: function(data){
 				if(data==true){
-				alert("Role Edit Successfully");
-				refreshAction();
+					alert("Role Edit Successfully");
+					refreshAction();
 				}else{
 					alert("Role Name Already Exist")
 				}
@@ -358,6 +358,19 @@ $("#checkAllDelete").click(function () {
 	}else{
 		$(this).closest('table').find('td input[class="delete"]').prop('checked', false);
 	}
+});
+
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		let value = $(this).val().toLowerCase();
+		$("#roleNameList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
 });
 
 function refreshAction(){
