@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -44,6 +45,7 @@ import pg.registerModel.ItemDescription;
 import pg.registerModel.MerchandiserInfo;
 import pg.registerModel.ParticularItem;
 import pg.registerModel.Size;
+import pg.share.FormId;
 import pg.share.HibernateUtil;
 import pg.share.ItemType;
 import pg.share.ProductionType;
@@ -590,7 +592,14 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();		
-			String sql="select StyleId,StyleNo from TbStyleCreate where userId='"+userId+"' order by StyleNo";		
+			String sql="select StyleId,StyleNo from TbStyleCreate where userId='"+userId+"' \r\n"
+					+ "union\r\n" + 
+					"select StyleId,StyleNo \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join TbStyleCreate sc\r\n" + 
+					"on fap.ownerId = sc.UserId and sc.StyleId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.STYLE_CREATE.getId()+"'\r\n" + 
+					"order by StyleNo";		
 			if(userId.equals(MD_ID)) {
 				sql="select StyleId,StyleNo from TbStyleCreate order by StyleNo";
 			}
@@ -627,14 +636,20 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
+			//String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' order by StyleId,BuyerId";
+			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"'  "
+					+ "union\r\n" + 
+					" select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic \r\n" + 
+					" from tbFileAccessPermission fap\r\n" + 
+					" inner join  tbStyleWiseItem a \r\n" + 
+					" on fap.ownerId = a.UserId and a.styleid = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.STYLE_CREATE.getId()+"'\r\n" + 
+					"order by StyleId,BuyerId";
 
-
-			//String sql="select a.Id,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId from tbStyleWiseItem a order by StyleId,BuyerId";
-			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' order by StyleId,BuyerId";
 			if(userId.equals(MD_ID)) {
 				sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a order by StyleId,BuyerId";
 			}
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 
 			String StyleNo="",PerStyle="";
@@ -876,6 +891,19 @@ public class OrderDAOImpl implements OrderDAO{
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
+			String userId = costingList.get(0).getUserId();
+			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+userId+"' and g2.memberId != '"+userId+"'";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.COSTING_CREATE.getId()+"','"+costingNo+"','"+userId+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+userId+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}	
 			tx.commit();
 			return costingNo;
 		}
@@ -1168,6 +1196,17 @@ public class OrderDAOImpl implements OrderDAO{
 					"left join tbItemDescription id\r\n" + 
 					"on cc.ItemId = id.itemid\r\n" + 
 					"where cc.userId='"+userId+"' group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname \r\n"+
+					"union\r\n" + 
+					"select cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname,sum(cc.amount) as amount,convert(varchar,convert(date,min(cc.EntryTime),25)) as entryDate \r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join TbCostingCreate cc\r\n" + 
+					"on fap.ownerId = cc.UserId and cc.costingNo = fap.resourceId\r\n" + 
+					"left join TbStyleCreate sc\r\n" + 
+					"on cc.StyleId = sc.StyleId\r\n" + 
+					"left join tbItemDescription id\r\n" + 
+					"on cc.ItemId = id.itemid\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.COSTING_CREATE.getId()+"' \r\n" + 
+					"group by cc.costingNo,cc.StyleId,sc.StyleNo,cc.ItemId,id.itemname \r\n" + 
 					"order by cc.costingNo desc";
 
 			if(userId.equals(MD_ID)) {
@@ -1297,8 +1336,8 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return costing;
 	}
-	
-	
+
+
 	@Override
 	public boolean isBuyerPoItemExist(BuyerPoItem buyerPoItem) {
 		// TODO Auto-generated method stub
@@ -1605,7 +1644,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			sql = "update TbBuyerOrderEstimateDetails set BuyerOrderId='"+buyerPoId+"' where buyerOrderId='"+buyerPo.getBuyerPoId()+"' and buyerId='"+buyerPo.getBuyerId()+"' and userId='"+buyerPo.getUserId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			JSONParser jsonParser = new JSONParser();
 			JSONObject itemsObject = (JSONObject)jsonParser.parse(buyerPo.getChangedItemsList());
 			JSONArray itemList = (JSONArray) itemsObject.get("list");
@@ -1616,6 +1655,20 @@ public class OrderDAOImpl implements OrderDAO{
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
+
+			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+buyerPo.getUserId()+"' and g2.memberId != '"+buyerPo.getUserId()+"'";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.BUYER_PO.getId()+"','"+buyerPoId+"','"+buyerPo.getUserId()+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+buyerPo.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}	
+
 			tx.commit();
 			return true;
 		}
@@ -1625,7 +1678,7 @@ public class OrderDAOImpl implements OrderDAO{
 				tx.rollback();
 				return false;
 			}
-			
+
 		}
 
 		finally {
@@ -1703,8 +1756,28 @@ public class OrderDAOImpl implements OrderDAO{
 					"from TbBuyerOrderEstimateSummary bos\n" + 
 					"join tbBuyer b\n" + 
 					"on b.id = bos.BuyerId\r\n" + 
-					" where bos.userId='"+userId+"' order by bos.autoId desc";
-			
+					" where bos.userId='"+userId+"' \r\n"
+					+ "union\r\n" + 
+					" select bos.autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \r\n" + 
+					"    FROM TbBuyerOrderEstimateDetails boed\r\n" + 
+					"    WHERE boed.BuyerOrderId = bos.autoId\r\n" + 
+					"	group by boed.PurchaseOrder\r\n" + 
+					"    FOR XML PATH('')),1,1,'') purchaseOrder, \r\n" + 
+					"	STUFF((SELECT ','+sc.StyleNo \r\n" + 
+					"    FROM TbBuyerOrderEstimateDetails boed\r\n" + 
+					"	left join TbStyleCreate sc\r\n" + 
+					"	on boed.StyleId = sc.StyleId\r\n" + 
+					"    WHERE boed.BuyerOrderId = bos.autoId\r\n" + 
+					"	group by sc.StyleNo\r\n" + 
+					"    FOR XML PATH('')),1,1,'') styleNo,\r\n" + 
+					"(select convert(varchar,bos.EntryTime,103))as date \r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join TbBuyerOrderEstimateSummary bos\r\n" + 
+					"on fap.ownerId = bos.UserId and bos.autoId = fap.resourceId\r\n" + 
+					"join tbBuyer b\r\n" + 
+					"on b.id = bos.BuyerId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.BUYER_PO.getId()+"' order by bos.autoId desc";
+
 			if(userId.equals(MD_ID)) {
 				sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
 						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
@@ -1731,12 +1804,12 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();	
 				dataList.add(new BuyerPO(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 			}*/
-			
+
 			SpringRootConfig sp=new SpringRootConfig();
 			Statement stmnt = sp.getConnection().createStatement();
 			ResultSet rs = stmnt.executeQuery(sql);
 			while(rs.next()) {
-				
+
 				dataList.add(new BuyerPO(rs.getString("autoId"), rs.getString("buyerId"), rs.getString("buyerName"), rs.getString("purchaseOrder"),rs.getString("styleNo"),rs.getString("date")));
 			}
 			stmnt.close();
@@ -1848,7 +1921,7 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<CommonModel> PurchaseOrders(String userId) {
+	public List<CommonModel> getPurchaseOrders(String userId) {
 		// TODO Auto-generated method stub
 
 		Session session=HibernateUtil.openSession();
@@ -1860,7 +1933,14 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where userId='"+userId+"' group by BuyerOrderId,PurchaseOrder";
+			String sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where userId='"+userId+"' group by BuyerOrderId,PurchaseOrder \r\n"
+					+ "union\r\n" + 
+					" select BuyerOrderId,PurchaseOrder \r\n" + 
+					" from tbFileAccessPermission fap\r\n" + 
+					" inner join TbBuyerOrderEstimateDetails boed\r\n" + 
+					" on fap.ownerId = boed.UserId and boed.BuyerOrderId = fap.resourceId \r\n" + 
+					" where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ACCESSORIES_INDENT.getId()+"'\r\n" + 
+					" group by BuyerOrderId,PurchaseOrder";
 			if(userId.equals(MD_ID)) {
 				sql="select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails group by BuyerOrderId,PurchaseOrder";
 			}
@@ -2588,7 +2668,14 @@ public class OrderDAOImpl implements OrderDAO{
 					"from tbAccessoriesIndent a \r\n" + 
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
 					"group by a.AINo,a.PurchaseOrder \r\n"+
-					"order by a.AINo desc";
+					"union\r\n" + 
+					" select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join tbAccessoriesIndent a \r\n" + 
+					"on fap.ownerId = a.IndentPostBy and a.AINo = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ACCESSORIES_INDENT.getId()+"'\r\n" + 
+					"group by a.AINo,a.PurchaseOrder\r\n" + 
+					" order by a.AINo desc";
 			if(userId.equals(MD_ID)) {
 				sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 						"from tbAccessoriesIndent a \r\n" + 
@@ -3001,7 +3088,8 @@ public class OrderDAOImpl implements OrderDAO{
 			System.out.println(accessoriesItems);
 			JSONObject indentObject = (JSONObject)jsonParser.parse(accessoriesItems);
 			JSONArray indentList = (JSONArray) indentObject.get("list");
-
+			
+			String userId ="";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
 				String sql="insert into tbAccessoriesIndent (AINo,styleid, PurchaseOrder, "
@@ -3020,7 +3108,20 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
 						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
 						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
-
+				userId = indent.get("userId").toString();
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+userId+"' and g2.memberId != '"+userId+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.ACCESSORIES_INDENT.getId()+"','"+accessoriesIndentId+"','"+userId+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+userId+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -3039,10 +3140,9 @@ public class OrderDAOImpl implements OrderDAO{
 		finally {
 			session.close();
 		}
-
 		return "something wrong";
-
 	}
+	
 	@Override
 	public List<AccessoriesIndent> getPostedZipperIndent(String userId) {
 		Session session=HibernateUtil.openSession();
@@ -3058,6 +3158,13 @@ public class OrderDAOImpl implements OrderDAO{
 					"from tbZipperIndent a \r\n" + 
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
 					"group by a.AINo,a.PurchaseOrder \r\n"+
+					"union\r\n" + 
+					" select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join tbZipperIndent a \r\n" + 
+					" on fap.ownerId = a.IndentPostBy and a.AINo = fap.resourceId\r\n" + 
+					"where  fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ZIPPER_INDENT.getId()+"'\r\n" + 
+					"group by a.AINo,a.PurchaseOrder \r\n" + 
 					"order by a.AINo desc";
 			if(userId.equals(MD_ID)) {
 				sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
@@ -3102,7 +3209,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return query;
 	}
-	
+
 	@Override
 	public String confirmZipperIndent(String zipperIndentId, String zipperItems) {
 		Session session=HibernateUtil.openSession();
@@ -3125,7 +3232,7 @@ public class OrderDAOImpl implements OrderDAO{
 			System.out.println(zipperItems);
 			JSONObject indentObject = (JSONObject)jsonParser.parse(zipperItems);
 			JSONArray indentList = (JSONArray) indentObject.get("list");
-
+			String userId = "";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
 				String sql="insert into tbZipperIndent (AINo,styleid, PurchaseOrder, "
@@ -3145,6 +3252,20 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
 						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
 
+				session.createSQLQuery(sql).executeUpdate();
+				userId = indent.get("userId").toString();
+			}
+			
+			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+userId+"' and g2.memberId != '"+userId+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.ZIPPER_INDENT.getId()+"','"+zipperIndentId+"','"+userId+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+userId+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
@@ -3167,7 +3288,7 @@ public class OrderDAOImpl implements OrderDAO{
 		return "something wrong";
 
 	}
-	
+
 	@Override
 	public List<AccessoriesIndent> getZipperIndentItemList(String zipperIndentId) {
 		Session session=HibernateUtil.openSession();
@@ -3259,7 +3380,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return dataList;
 	}
-	
+
 	@Override
 	public boolean editZipperIndent(AccessoriesIndent ai) {
 		Session session=HibernateUtil.openSession();
@@ -3299,8 +3420,8 @@ public class OrderDAOImpl implements OrderDAO{
 
 	}
 
-	
-	
+
+
 	@Override
 	public boolean deleteZipperIndent(String zipperIndentId,String indentAutoId) {
 		Session session=HibernateUtil.openSession();
@@ -3360,6 +3481,7 @@ public class OrderDAOImpl implements OrderDAO{
 			JSONObject indentObject = (JSONObject)jsonParser.parse(cartonItems);
 			JSONArray indentList = (JSONArray) indentObject.get("list");
 
+			String userId = "";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
 				String sql="insert into tbAccessoriesIndentForCarton ("
@@ -3413,7 +3535,20 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,'"+indent.get("userId")+"'"
 						+ ")";
 
-
+				userId = indent.get("userId").toString();
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+userId+"' and g2.memberId != '"+userId+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.CARTON_INDENT.getId()+"','"+cartonIndentId+"','"+userId+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+userId+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -3594,8 +3729,15 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			String sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton where IndentPostBy = '"+userId+"' group by indentId order by indentId desc";
+
+			String sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton where IndentPostBy = '"+userId+"' group by indentId \r\n"
+					+ "union\r\n" + 
+					" select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate \r\n" + 
+					" from  tbFileAccessPermission fap\r\n" + 
+					" inner join tbAccessoriesIndentForCarton aic\r\n" + 
+					" on fap.ownerId = aic.IndentPostBy and aic.indentId = fap.resourceId\r\n" + 
+					" where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.CARTON_INDENT.getId()+"'\r\n" + 
+					" group by indentId order by indentId desc";
 			if(userId.equals(MD_ID)) {
 				sql="select indentId,(SELECT CONVERT(varchar, min(indentDate), 25)) as indentDate from  tbAccessoriesIndentForCarton group by indentId order by indentId desc";
 			}
@@ -3966,7 +4108,7 @@ public class OrderDAOImpl implements OrderDAO{
 			System.out.println(fabricsItems);
 			JSONObject indentObject = (JSONObject)jsonParser.parse(fabricsItems);
 			JSONArray indentList = (JSONArray) indentObject.get("list");
-
+			String userId = "";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
 				String sql="insert into tbFabricsIndent  "
@@ -4018,6 +4160,20 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "CURRENT_TIMESTAMP,"
 						+ "'"+indent.get("userId")+"'"
 						+ ") ";
+				session.createSQLQuery(sql).executeUpdate();
+				userId = indent.get("userId").toString();
+			}
+			
+			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+userId+"' and g2.memberId != '"+userId+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.FABRICS_INDENT.getId()+"','"+fabricsIndentId+"','"+userId+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+userId+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
 			tx.commit();
@@ -4209,7 +4365,14 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 			String sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 					"from tbFabricsIndent a \r\n" + 
-					"where a.entryby='"+userId+"' group by a.indentId  order by a.indentId desc";
+					"where a.entryby='"+userId+"' group by a.indentId  \r\n"
+							+ " union\r\n" + 
+							"select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
+							"from tbFileAccessPermission fap \r\n" + 
+							"inner join tbFabricsIndent a \r\n" + 
+							"on fap.ownerId = a.entryby and a.indentId = fap.resourceId\r\n" + 
+							"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.FABRICS_INDENT.getId()+"' \r\n" + 
+							"group by a.indentId  order by a.indentId desc";
 			if(userId.equals(MD_ID)) {
 				sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 						"from tbFabricsIndent a \r\n" + 
@@ -4793,8 +4956,8 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 				sampleReqItem.setSizeList(sizeList);
 			}
-			
-			
+
+
 			tx.commit();
 		}
 		catch(Exception e){
@@ -4861,7 +5024,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<pg.registerModel.AccessoriesItem> getIndentItems(String indentId, String indentType) {
 		// TODO Auto-generated method stub
@@ -4898,7 +5061,7 @@ public class OrderDAOImpl implements OrderDAO{
 						"on aic.accessoriesItemId = ai.itemid\r\n" + 
 						"where aic.indentId = '"+indentId+"' and (aic.pono is null or aic.pono = '0') group by aic.accessoriesItemId,ai.itemname,aic.UnitId ";
 			}
-			
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -4919,7 +5082,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<Style> getIndentStyles(String indentId, String indentType) {
 		// TODO Auto-generated method stub
@@ -5070,6 +5233,18 @@ public class OrderDAOImpl implements OrderDAO{
 				session.createSQLQuery(sql).executeUpdate();
 			}
 
+			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+purchaseOrder.getUserId()+"' and g2.memberId != '"+purchaseOrder.getUserId()+"'";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.PURCHASE_ORDER.getId()+"','"+poId+"','"+purchaseOrder.getUserId()+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+purchaseOrder.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
 			tx.commit();
 
 			return true;
@@ -5185,6 +5360,14 @@ public class OrderDAOImpl implements OrderDAO{
 					" left join tbSupplier s \r\n" + 
 					" on pos.supplierId = s.id\r\n" + 
 					" where pos.entryBy = '"+userId+"'\r\n" + 
+					" union\r\n" + 
+					"select pono,(select convert(varchar,orderDate,25))as orderDate,supplierId,isnull(s.name,'') as supplierName,type \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join tbPurchaseOrderSummary pos\r\n" + 
+					"on fap.ownerId = pos.entryBy and pos.pono = fap.resourceId\r\n" + 
+					" left join tbSupplier s \r\n" + 
+					" on pos.supplierId = s.id\r\n" + 
+					" where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.PURCHASE_ORDER.getId()+"'\r\n" + 
 					" order by pos.pono desc";
 			if(userId.equals(MD_ID)) {
 				sql=" select pono,(select convert(varchar,orderDate,25))as orderDate,supplierId,isnull(s.name,'') as supplierName,type from tbPurchaseOrderSummary pos\r\n" + 
@@ -5192,7 +5375,7 @@ public class OrderDAOImpl implements OrderDAO{
 						" on pos.supplierId = s.id\r\n" +  
 						" order by pos.pono desc";
 			}
-					
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -5203,7 +5386,7 @@ public class OrderDAOImpl implements OrderDAO{
 				tempPo.setType(element[4].toString());
 				dataList.add(tempPo);
 			}
-			
+
 			/*sql=" select pos.pono,(select convert(varchar,orderDate,103))as orderDate,fi.supplierid,isnull(s.name,'') as suppilerName  \r\n" + 
 					" from tbPurchaseOrderSummary pos\r\n" + 
 					"join tbFabricsIndent fi\r\n" + 
@@ -5212,7 +5395,7 @@ public class OrderDAOImpl implements OrderDAO{
 					" on fi.supplierid = s.id\r\n" + 
 					" where pos.entryBy='"+userId+"' \r\n"+
 					" order by pos.pono desc ";
-					
+
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -5271,14 +5454,14 @@ public class OrderDAOImpl implements OrderDAO{
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 		finally {
 			session.close();
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<CommonModel> getPendingIndentList(String userId) {
 		Session session=HibernateUtil.openSession();
@@ -5292,6 +5475,13 @@ public class OrderDAOImpl implements OrderDAO{
 
 			sql="select AINo,'Accessories' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndent ai\r\n" + 
 					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0) \r\n" + 
+					"group by ai.AINo,ai.IndentDate\r\n" + 
+					"union\r\n" + 
+					"select AINo,'Accessories' as type,(select convert(varchar,IndentDate,25))as IndentDate \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join tbAccessoriesIndent ai\r\n" + 
+					"on fap.ownerId = ai.IndentPostBy and ai.AINo = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ACCESSORIES_INDENT.getId()+"'\r\n" + 
 					"group by ai.AINo,ai.IndentDate\r\n" + 
 					"order by ai.AINo desc";
 			if(userId.equals(MD_ID)) {
@@ -5310,11 +5500,24 @@ public class OrderDAOImpl implements OrderDAO{
 				tempCommon.setDate(element[2].toString());
 				dataList.add(tempCommon);
 			}
-			
+
 			sql="select AINo,'Zipper And Others' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbZipperIndent ai\r\n" + 
 					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0)\r\n" + 
 					"group by ai.AINo,ai.IndentDate\r\n" + 
+					"union\r\n" + 
+					"select AINo,'Zipper And Others' as type,(select convert(varchar,IndentDate,25))as IndentDate \r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join tbZipperIndent ai\r\n" + 
+					"on fap.ownerId = ai.IndentPostBy and ai.AINo = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ZIPPER_INDENT.getId()+"'\r\n" + 
+					"group by ai.AINo,ai.IndentDate\r\n" + 
 					"order by ai.AINo desc";
+			if(userId.equals(MD_ID)) {
+				sql="select AINo,'Zipper And Others' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbZipperIndent ai\r\n" + 
+						"where ai.pono is null or ai.pono = 0\r\n" + 
+						"group by ai.AINo,ai.IndentDate\r\n" + 
+						"order by ai.AINo desc";
+			}
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -5329,7 +5532,20 @@ public class OrderDAOImpl implements OrderDAO{
 			sql="select fi.indentId,'Fabrics' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbFabricsIndent fi\r\n" + 
 					"where fi.entryby = '"+userId+"' and (fi.pono is null or fi.pono = 0)\r\n" + 
 					"group by fi.indentId,fi.IndentDate\r\n" + 
+					"union\r\n" + 
+					"select fi.indentId,'Fabrics' as type,(select convert(varchar,IndentDate,25))as IndentDate \r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join tbFabricsIndent fi\r\n" + 
+					"on fap.ownerId = fi.entryby and fi.indentId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.FABRICS_INDENT.getId()+"'\r\n" + 
+					"group by fi.indentId,fi.IndentDate\r\n" + 
 					"order by fi.indentId desc";
+			if(userId.equals(MD_ID)) {
+				sql="select fi.indentId,'Fabrics' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbFabricsIndent fi\r\n" + 
+						"where fi.pono is null or fi.pono = 0 \r\n" + 
+						"group by fi.indentId,fi.IndentDate\r\n" + 
+						"order by fi.indentId desc";
+			}
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -5344,7 +5560,20 @@ public class OrderDAOImpl implements OrderDAO{
 			sql="select indentId,'Carton' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndentForCarton ai\r\n" + 
 					"where ai.IndentPostBy = '"+userId+"' and (ai.pono is null or ai.pono = 0)\r\n" + 
 					"group by ai.indentId,ai.IndentDate\r\n" + 
+					"union\r\n" + 
+					" select indentId,'Carton' as type,(select convert(varchar,IndentDate,25))as IndentDate \r\n" + 
+					" from tbFileAccessPermission fap\r\n" + 
+					" inner join tbAccessoriesIndentForCarton ai\r\n" + 
+					" on fap.ownerId = ai.IndentPostBy and ai.indentId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.CARTON_INDENT.getId()+"'\r\n" + 
+					"group by ai.indentId,ai.IndentDate\r\n" + 
 					"order by ai.indentId desc";
+			if(userId.equals(MD_ID)) {
+				sql="select indentId,'Carton' as type,(select convert(varchar,IndentDate,25))as IndentDate from tbAccessoriesIndentForCarton ai\r\n" + 
+						"where ai.pono is null or ai.pono = 0\r\n" + 
+						"group by ai.indentId,ai.IndentDate\r\n" + 
+						"order by ai.indentId desc";
+			}
 			list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -5409,7 +5638,7 @@ public class OrderDAOImpl implements OrderDAO{
 						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
 						" left join tbColors c\r\n" + 
 						" on ai.ColorId = cast(c.ColorId as varchar)\r\n" + 
-						 "left join tbStyleSize ss \r\n"
+						"left join tbStyleSize ss \r\n"
 						+ "on ai.size = ss.id \r\n" + 
 						" left join TbAccessoriesItem accItem\r\n" + 
 						" on ai.accessoriesItemId = accItem.itemid\r\n" + 
@@ -5463,7 +5692,7 @@ public class OrderDAOImpl implements OrderDAO{
 					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),poType, element[3].toString(), element[4].toString(), Double.valueOf(element[5].toString()), element[6].toString(), element[7].toString(), element[8].toString(), Double.valueOf(element[9].toString()), Double.valueOf(element[10].toString()), element[11].toString(),element[12].toString(),true));
 				}
 			}
-			
+
 
 
 			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
@@ -5482,7 +5711,7 @@ public class OrderDAOImpl implements OrderDAO{
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 		finally {
 			session.close();
@@ -5556,7 +5785,7 @@ public class OrderDAOImpl implements OrderDAO{
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					
+
 					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}else {
@@ -5594,7 +5823,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return dataList;
 	}
-	
+
 	@Override
 	public List<PurchaseOrderItem> getPurchaseOrderItemListByStyleId(AccessoriesIndent accessoriesIndent) {
 		Session session=HibernateUtil.openSession();
@@ -5661,7 +5890,7 @@ public class OrderDAOImpl implements OrderDAO{
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 				{	
 					Object[] element = (Object[]) iter.next();
-					
+
 					dataList.add(new PurchaseOrderItem(element[0].toString(),element[1].toString(), element[2].toString(),accessoriesIndent.getIndentType(), element[3].toString(), "", 0, "0", element[4].toString(), element[5].toString(), Double.valueOf(element[6].toString()), Double.valueOf(element[7].toString()), element[8].toString(),"",false));
 				}
 			}else {
@@ -5954,7 +6183,7 @@ public class OrderDAOImpl implements OrderDAO{
 				exists=true;
 			}
 
-	
+
 
 			tx.commit();
 		}
@@ -6131,12 +6360,12 @@ public class OrderDAOImpl implements OrderDAO{
 	public boolean postSampleProductionInfo(SampleCadAndProduction sampleCadAndProduction) {
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-		
+
 
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			String sql="update TbSampleCadInfo set "
 					+ "CuttingQty='"+sampleCadAndProduction.getCuttingQty()+"',"
 					+ " CuttingDate='"+sampleCadAndProduction.getCuttingDate()+"',"
@@ -6167,29 +6396,29 @@ public class OrderDAOImpl implements OrderDAO{
 			{	
 				cuttingQtyExist=1;
 				break;
-				
+
 			}
-			
+
 			if(cuttingQtyExist!=1) {
 				String resultValue=sampleCadAndProduction.getResultList().substring(sampleCadAndProduction.getResultList().indexOf("[")+1, sampleCadAndProduction.getResultList().indexOf("]"));
-				
+
 				StringTokenizer token=new StringTokenizer(resultValue,",");
 				while(token.hasMoreTokens()){
-					
+
 					String firstValue=token.nextToken();
-					
+
 					StringTokenizer tokenSize=new StringTokenizer(firstValue,"*");
 					while(tokenSize.hasMoreTokens()) {
 						String sizeId=tokenSize.nextToken();
 						String sizeQty=tokenSize.nextToken();
 						String sizeGroupId=sampleCadAndProduction.getSizeGroupId();
-						
+
 						sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+sampleCadAndProduction.getSampleCommentId()+"','"+sizeGroupId+"','"+sizeId+"','"+sizeQty+"','"+SizeValuesType.SAMPLE_CUTTING.getType()+"',CURRENT_TIMESTAMP,'"+sampleCadAndProduction.getUserId()+"');";
 						session.createSQLQuery(sql).executeUpdate();
 					}	
 				}
 			}
-			
+
 
 			tx.commit();
 
@@ -6682,7 +6911,7 @@ public class OrderDAOImpl implements OrderDAO{
 				Buyers.add(new SampleCadAndProduction(element[0].toString(),element[1].toString(),element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString()));
 
 			}
-			
+
 
 
 			tx.commit();
@@ -6887,7 +7116,7 @@ public class OrderDAOImpl implements OrderDAO{
 						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
 						dataList.add(tempPo);
 					}
-					
+
 					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
@@ -6907,8 +7136,8 @@ public class OrderDAOImpl implements OrderDAO{
 						dataList.add(tempPo);
 					}
 				}else {
-					
-					
+
+
 					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
@@ -6920,7 +7149,7 @@ public class OrderDAOImpl implements OrderDAO{
 							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
 							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
-					
+
 					List<?> list = session.createSQLQuery(sql).list();
 					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 					{	
@@ -6928,7 +7157,7 @@ public class OrderDAOImpl implements OrderDAO{
 						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
 						dataList.add(tempPo);
 					}
-					
+
 					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
@@ -6940,7 +7169,7 @@ public class OrderDAOImpl implements OrderDAO{
 							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
 							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
-					
+
 					list = session.createSQLQuery(sql).list();
 					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 					{	
@@ -6949,8 +7178,8 @@ public class OrderDAOImpl implements OrderDAO{
 						dataList.add(tempPo);
 					}
 				}
-				
-				
+
+
 			}else {
 				List<?> list = session.createSQLQuery(sql).list();
 				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -6960,7 +7189,7 @@ public class OrderDAOImpl implements OrderDAO{
 					dataList.add(tempPo);
 				}
 			}
-			
+
 
 			tx.commit();
 		}
@@ -7545,11 +7774,6 @@ public class OrderDAOImpl implements OrderDAO{
 
 				//fileBytes = result.getBytes("signature");
 				ImageList.add(new Style(result.getBytes("frontpic"),result.getBytes("backpic")));
-
-
-
-
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -7638,6 +7862,19 @@ public class OrderDAOImpl implements OrderDAO{
 					sp.getDataSource().getConnection().createStatement().executeUpdate(sqlStyleItem);
 				}
 
+				sql = "select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+						"from tbGroups g1\r\n" + 
+						"join tbGroups g2\r\n" + 
+						"on g1.groupId = g2.groupId \r\n" + 
+						"where g1.memberId = '"+user+"' and g2.memberId != '"+user+"'";
+				ResultSet rs = sp.getConnection().createStatement().executeQuery(sql);
+				while (rs.next()) {
+					String memberId = rs.getString("memberId");
+					sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.STYLE_CREATE.getId()+"','"+StyleId+"','"+user+"','"+memberId+"',CURRENT_TIMESTAMP,'"+user+"')";
+					System.out.println(sql);
+					sp.getDataSource().getConnection().createStatement().executeUpdate(sql);
+
+				}
 			}
 
 
@@ -7700,11 +7937,11 @@ public class OrderDAOImpl implements OrderDAO{
 				confrim=1;
 				break;
 			}
-			
+
 			if(confrim==0) {
 				sql="delete from TbSampleRequisitionDetails where sampleAutoId='"+sapleAutoId+"' ";
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql="delete from tbSizeValues where type='2' and linkedAutoId='"+sapleAutoId+"'";
 				session.createSQLQuery(sql).executeUpdate();
 				tx.commit();
@@ -7774,13 +8011,13 @@ public class OrderDAOImpl implements OrderDAO{
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 		finally {
 			session.close();
 		}
 		return dataList;
-		
+
 	}
 
 	@Override
@@ -7794,10 +8031,10 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="";
 			sql="delete from tbSizeValues where type='2' and linkedAutoId='"+v.getAutoId()+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			sql="update TbSampleRequisitionDetails set BuyerId='"+v.getBuyerId()+"',buyerOrderId='"+v.getBuyerOrderId()+"' ,purchaseOrder='"+v.getPurchaseOrder()+"',StyleId='"+v.getStyleId()+"',ItemId='"+v.getItemId()+"',ColorId='"+v.getColorId()+"',SampleTypeId='"+v.getSampleId()+"',sizeGroupId='"+v.getSizeGroupId()+"',EntryTime=CURRENT_TIMESTAMP,UserId='"+v.getUserId()+"' where sampleAutoId='"+v.getAutoId()+"';";
 			session.createSQLQuery(sql).executeUpdate();
-			
+
 			int listSize=v.getSizeList().size();
 			for(int i=0;i<listSize;i++) {
 				sql = "insert into tbSizeValues (linkedAutoId,sizeGroupId,sizeId,sizeQuantity,type,entryTime,userId) values('"+v.getAutoId()+"','"+v.getSizeGroupId()+"','"+v.getSizeList().get(i).getSizeId()+"','"+v.getSizeList().get(i).getSizeQuantity()+"','"+SizeValuesType.SAMPLE_REQUISITION.getType()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"');";
@@ -7840,7 +8077,7 @@ public class OrderDAOImpl implements OrderDAO{
 				dataList.add(new SampleCadAndProduction(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
 			}
 
-	
+
 			tx.commit();
 		}
 		catch(Exception e){
@@ -7848,7 +8085,7 @@ public class OrderDAOImpl implements OrderDAO{
 			if (tx != null) {
 				tx.rollback();
 			}
-			
+
 		}
 		finally {
 			session.close();
@@ -7866,10 +8103,10 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
-			
 
-			
+
+
+
 			if (!duplicatesampleFile(user, filename)) {
 				String sql="insert into tbsamplecadfiles ( samplecadid, filename, uploadedmachinip, entryby, entrytime) values "
 						+ "('"+smaplecadid+"','"+filename+"','"+uploadedpcip+"','"+user+"',CURRENT_TIMESTAMP)";
@@ -7893,10 +8130,10 @@ public class OrderDAOImpl implements OrderDAO{
 		session.close();
 		return fileinsert;
 	}
-	
-	
-	
-	
+
+
+
+
 	public boolean duplicatesampleFile(String user, String filename) {
 
 		boolean exists=false;
@@ -7960,7 +8197,7 @@ public class OrderDAOImpl implements OrderDAO{
 				exists=true;
 			}
 
-	
+
 
 			tx.commit();
 		}
@@ -8126,7 +8363,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 				dataList.add(iter.next().toString());
 			}
-			
+
 			tx.commit();
 		}
 		catch(Exception e){
@@ -8210,7 +8447,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			
+
 			String sql="select sr.InchargeId,sr.MerchendizerId,sr.Instruction,srd.SampleTypeId,srd.BuyerId,srd.sampleAutoId,srd.StyleId,sc.StyleNo,srd.ItemId,id.itemname,srd.ColorId,ISNULL(c.Colorname,'') as colorName,isnull(srd.buyerOrderId,'') as buyerOrderId,srd.PurchaseOrder,srd.sizeGroupId,srd.userId \r\n" + 
 					"					from TbSampleRequisitionDetails srd\r\n" + 
 					"					left join tbSampleRequisition sr\r\n" + 
@@ -8231,7 +8468,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 
 			for (SampleRequisitionItem sampleReqItem : dataList) {
-				
+
 				System.out.println("dataList In");
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
@@ -8249,7 +8486,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 				}
 				sampleReqItem.setSizeList(sizeList);
-				
+
 				sql = "select bs.sizeGroupId,bs.sizeId,ss.sizeName,bs.sizeQuantity from tbSizeValues bs\r\n" + 
 						"join tbStyleSize ss \r\n" + 
 						"on ss.id = bs.sizeId \r\n" + 
@@ -8266,8 +8503,8 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 				sampleReqItem.setSizeCuttingList(sizeList1);
 			}
-			
-			
+
+
 
 			tx.commit();
 		}

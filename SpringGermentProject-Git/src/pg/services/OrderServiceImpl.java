@@ -263,9 +263,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<CommonModel> PurchaseOrders(String userId) {
+	public List<CommonModel> getPurchaseOrders(String userId) {
 		// TODO Auto-generated method stub
-		return orderDAO.PurchaseOrders(userId);
+		return orderDAO.getPurchaseOrders(userId);
 	}
 
 	@Override

@@ -155,6 +155,59 @@ public class SettingServiceImpl implements SettingService{
 		return settDAO.getUserList();
 	}
 
+	@Override
+	public String saveGroup(String group) {
+		// TODO Auto-generated method stub
+		return settDAO.saveGroup(group);
+	}
+
+	@Override
+	public String editGroup(String group) {
+		// TODO Auto-generated method stub
+		return settDAO.editGroup(group);
+	}
+
+	@Override
+	public JSONArray getGroupList() {
+		// TODO Auto-generated method stub
+		return settDAO.getGroupList();
+	}
+
+
+	@Override
+	public JSONArray getGroupMembers(String groupId) {
+		// TODO Auto-generated method stub
+		return settDAO.getGroupMembers(groupId);
+	}
+
+
+	@Override
+	public JSONArray getMenus(String userId) {
+		// TODO Auto-generated method stub
+		return settDAO.getMenus(userId);
+	}
+
+
+	@Override
+	public JSONArray getFormPermitInvoiceList(String formId, String ownerId, String permittedUserId) {
+		// TODO Auto-generated method stub
+		return settDAO.getFormPermitInvoiceList(formId, ownerId, permittedUserId);
+	}
+
+
+	@Override
+	public String submitFileAccessPermit(String fileAccessPermit) {
+		// TODO Auto-generated method stub
+		return settDAO.submitFileAccessPermit(fileAccessPermit);
+	}
+
+
+	@Override
+	public JSONArray getFormPermitedUsers(String formId, String ownerId) {
+		// TODO Auto-generated method stub
+		return settDAO.getFormPermitedUsers(formId, ownerId);
+	}
+	
 
 	@Override
 	public List<roleManagement> getSubmenu(String moduleId) {

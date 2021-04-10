@@ -47,9 +47,17 @@ public interface SettingService{
 	public List<noticeModel>getAllnoticesforSearch();
 	
 	public JSONArray getUserList();
-	
+	public String saveGroup(String group);
+	public String editGroup(String group);
+	public JSONArray getGroupList();
+	public JSONArray getGroupMembers(String groupId);
 	public JSONArray getNotificationList(String targetId);
+	
+	public JSONArray getFormPermitInvoiceList(String formId,String ownerId,String permittedUserId);
+	public JSONArray getFormPermitedUsers(String formId,String ownerId);
+	public String submitFileAccessPermit(String fileAccessPermit);
 
+	public JSONArray getMenus(String userId);
 	public List<roleManagement> getSubmenu(String moduleId);
 	public boolean saveRolePermission(roleManagement v);
 	public List<roleManagement> getAllRoleName(roleManagement v);
