@@ -4821,6 +4821,19 @@ public class OrderDAOImpl implements OrderDAO{
 
 			session.createSQLQuery(sqlupdate).executeUpdate();
 
+			
+			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+v.getUserId()+"' and g2.memberId != '"+v.getUserId()+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.SAMPLE_REQUISITION.getId()+"','"+sampleReqId+"','"+v.getUserId()+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
 			tx.commit();
 			return true;
 		}
@@ -4886,7 +4899,14 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
+			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date \r\n"
+					+ "union\r\n" + 
+					"select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join TbSampleRequisitionDetails a \r\n" + 
+					"on fap.ownerId = a.UserId and a.sampleReqId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.SAMPLE_REQUISITION.getId()+"' \r\n" + 
+					"group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
 			if(userId.equals(MD_ID)) {
 				sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
 			}

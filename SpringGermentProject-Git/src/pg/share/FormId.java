@@ -9,7 +9,8 @@ public enum FormId {
 	ZIPPER_INDENT(4101),
 	FABRICS_INDENT(33),
 	CARTON_INDENT(56),
-	PURCHASE_ORDER(35);
+	PURCHASE_ORDER(35),
+	SAMPLE_REQUISITION(27);
 	
 	private int id;
 	private FormId(int id) {

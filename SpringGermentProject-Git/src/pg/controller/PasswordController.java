@@ -302,5 +302,31 @@ public class PasswordController {
 
 		return msg; //JSP - /WEB-INF/view/index.jsp
 	}
+	
+	
+	@RequestMapping(value = "user_profile_create",method=RequestMethod.GET)
+	public ModelAndView user_profile_create(ModelMap map,HttpSession session) {
+
+		List<Module> modulelist=(List<Module>)session.getAttribute("modulelist");
+		map.put("modulelist", modulelist);
+
+		List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
+		List<FactoryModel> factoryList = registerService.getAllFactories();
+
+		map.put("menulist", menulist);
+
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+
+		ModelAndView view = new ModelAndView("setting/user_profile_create");
+		view.addObject("modulelist",modulelist);
+		view.addObject("menulist",menulist);
+		view.addObject("factoryList",factoryList);
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
 
 }
