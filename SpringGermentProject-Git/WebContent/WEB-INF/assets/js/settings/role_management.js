@@ -110,13 +110,13 @@ function setTableData(data){
 
 				<td class="row-index text-center"> ${rowIdx} </td>
 
-				<td class="row-index text-center" id='moduleName_${rowIdx}'>${data[i].moduleName}</td>
-				<td class="row-index text-center" id='moduleId_${rowIdx}' hidden>${data[i].moduleId}</td>
+				<td class="row-index text-center" id='moduleName_${data[i].subId}'>${data[i].moduleName}</td>
+				<td class="row-index text-center" id='moduleId_${data[i].subId}' hidden>${data[i].moduleId}</td>
 
-				<td class="row-index text-center" id='head_${rowIdx}' hidden>${data[i].head}</td>
-				<td class="row-index text-center" id='id_${rowIdx}' hidden>${data[i].subId}</td>
+				<td class="row-index text-center" id='head_${data[i].subId}' hidden>${data[i].head}</td>
+				<td class="row-index text-center" id='id_${data[i].subId}' hidden>${data[i].subId}</td>
 
-				<td class="row-index" id='sub_${rowIdx}' data-sub="${data[i].subId}"> ${data[i].subName} </td>
+				<td class="row-index" id='sub_${data[i].subId}' data-sub="${data[i].subId}"> ${data[i].subName} </td>
 
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="add_${data[i].subId}" class="add" type="checkbox"> </td>
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="edit_${data[i].subId}" class="edit" type="checkbox"> </td>	
@@ -141,12 +141,15 @@ function editAction(){
 	for (var i = 1; i <=rowlist; i++) {
 
 		var rId = $("#R"+i).attr("data-id");
-
+		console.log(i+" : rId : "+rId)
 		if($("#check_"+rId).is(":checked")){
 
 			let module=0,head=0,sub=0,add=0,edit=0,view=0,del=0;
 
 			module = $("#moduleId_"+rId).text();
+			
+			console.log("module id : "+module)
+			
 			head = $("#head_"+rId).text();
 			sub = $("#id_"+rId).text();
 
@@ -178,6 +181,8 @@ function editAction(){
 			accesslist[j++] = [value];
 		}
 	}
+	
+	console.log("acc list : "+accesslist)
 
 	var valuelist="["+accesslist+"]";
 
