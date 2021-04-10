@@ -15,17 +15,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-
+import pg.model.roleManagement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,9 +39,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.sun.istack.internal.logging.Logger;
-
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.CommonModel;
@@ -95,7 +92,7 @@ public class SettingController {
 
 	@RequestMapping(value = "/getNotificationList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getNotificationList(String targetId) {
-		
+
 		JSONObject object = new JSONObject();
 		object.put("notificationList", settingService.getNotificationList(targetId));
 		return object;
@@ -157,7 +154,7 @@ public class SettingController {
 		moduleout=moduleout.replace("]", "");
 		moduleout=moduleout.replace("\"", "");
 
-		
+
 		List<ModuleWiseMenuSubMenu> moduleaccesslist=settingService.getAllModuleWiseMenuSubMenuName(um.getUser(), moduleout);
 
 
@@ -227,12 +224,12 @@ public class SettingController {
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
-		
+
 		ModelAndView view = new ModelAndView("admin/create_user");
 		view.addObject("warelist", warelist);
 
 		map.put("storelist", warelist);
-		
+
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -317,7 +314,7 @@ public class SettingController {
 					msg = "User: "+ pass.getUser() + " details updated successfully...";
 					System.out.println("flag "+flag);
 				}
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -325,22 +322,22 @@ public class SettingController {
 		return msg;
 	}
 
-	
+
 	@RequestMapping(value = "organization_create",method=RequestMethod.GET)
 	public ModelAndView organization_create(ModelMap map,HttpSession session) {
-		
+
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("setting/organization-create");
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
-		
+
 	}
 	@RequestMapping(value = "/getOrganizationName", method = RequestMethod.POST)
 	public @ResponseBody List<OrganizationInfo> getOrganizationName(OrganizationInfo v) {
-		
+
 		List<OrganizationInfo> OrganizationCreate = settingService.getOrganization();
 		return OrganizationCreate;
 
@@ -348,26 +345,26 @@ public class SettingController {
 	@RequestMapping(value = "/saveOrganizationName", method = RequestMethod.POST)
 	public @ResponseBody String saveOrganizationName(OrganizationInfo v) {
 
-			boolean saveOrganizationName = settingService.editOrganization(v);
-			return "success";
+		boolean saveOrganizationName = settingService.editOrganization(v);
+		return "success";
 
 	}
-	
-	
+
+
 	@RequestMapping(value = "create_notice",method=RequestMethod.GET)
 	public ModelAndView create_notice(ModelMap map,HttpSession session) {
-		
-		
+
+
 		String userName=(String)session.getAttribute("userName");
 		ModelAndView view = new ModelAndView("setting/noticeboard");		
 		map.addAttribute("departments",registerService.getDepartmentList());
 		System.out.println(" body "+settingService.getAllnoticesforSearch().get(0).getNoticeBody());
 		map.addAttribute("notices",settingService.getAllnoticesforSearch());
-		
+
 		return view; //JSP - /WEB-INF/view/index.jsp
-		
+
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value="/save-notice/{heading}/{departments}/{textbody}/{userid}", method={RequestMethod.PUT, RequestMethod.POST})
 	public String uploadFileSubmit(@PathVariable ("heading") String heading,
@@ -376,9 +373,9 @@ public class SettingController {
 		try
 		{
 
-			
+
 			int filno=settingService.getMaxNoticeNo();
-			
+
 
 			Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
 			response.setContentType("text/html");
@@ -409,7 +406,7 @@ public class SettingController {
 
 			//   Date date=new Date();
 
-			
+
 			String extension="";
 			String uploadFileName="";
 
@@ -422,19 +419,19 @@ public class SettingController {
 
 				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
 
-				 uploadFileName = srcFile.getOriginalFilename();
+				uploadFileName = srcFile.getOriginalFilename();
 
 				System.out.println(" file names "+uploadFileName);
 
-			//	orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
+				//	orderService.fileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrder);
 
 				// Create server side target file path.
-				 extension=uploadFileName.substring(uploadFileName.indexOf(".")+1);
+				extension=uploadFileName.substring(uploadFileName.indexOf(".")+1);
 				System.out.println(" extension "+extension);
 
 
 				//String destFilePath = UPLOAD_FILE_SAVE_FOLDER+heading+"."+extension;
-				
+
 				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+filno+"."+extension;
 				File destFile = new File(destFilePath);
 
@@ -446,15 +443,15 @@ public class SettingController {
 
 			String filename=filno+"."+extension;
 			System.out.println(" file name "+filename);
-			
-			
-					
-					// Set message that will be displayed in return page.
+
+
+
+			// Set message that will be displayed in return page.
 			//  model.addAttribute("message", msgBuf.toString());
-			
+
 			if (fileupload) {
 				//CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
-			//	boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+				//	boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
 				boolean savenotice=settingService.savenotice(heading, departments, textbody, filename,userid);
 				fileupload=false;
 			}
@@ -466,10 +463,10 @@ public class SettingController {
 		{
 			//return "setting/noticeboard/noticeboard.jsp";
 			return "";
-			
+
 		}
 	}
-	
+
 	@RequestMapping(value="/attachmetndownload/{fileName:.+}", method=RequestMethod.POST)
 	public @ResponseBody void downloadfile(HttpServletResponse response,@PathVariable ("fileName") String fileName,HttpServletRequest request) throws IOException {
 		System.out.println(" download controller ");
@@ -549,32 +546,32 @@ public class SettingController {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	@ResponseBody
 	@RequestMapping(value = "/previousnoticeopen",method=RequestMethod.POST)
 	public String previousnoticeopen() {
-		
-				
+
+
 		return "yes";
-		
+
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/loadpreviousnotice",method=RequestMethod.GET)
 	public ModelAndView loadpreviousnotice(HttpServletRequest request, noticeModel nm) {
-		
+
 		System.out.println(" session value "+request.getSession().getAttribute("deptid"));
 		String deptid=request.getSession().getAttribute("deptid").toString();
 		List<noticeModel>noticelist=settingService.getAllNoitice(deptid,nm);
-		
+
 		ModelAndView view = new ModelAndView("setting/previousNotice");
 		view.addObject("notice",noticelist);
-		
 
-				
+
+
 		return view;
-		
+
 	}
 
 	// Role Management
@@ -583,27 +580,119 @@ public class SettingController {
 		ModelAndView view = new ModelAndView("setting/role-management");
 		map.addAttribute("roleList","");
 		map.addAttribute("resourceList","");
+		view.addObject("allModule",settingService.getAllModuleName());
 		return view;
 	}
+
 	
+	@RequestMapping(value = "/getSubmenu/{moduleId}", method = RequestMethod.POST)
+	public @ResponseBody List<roleManagement> getSubmenu(@PathVariable ("moduleId") String moduleId) {
+
+		List<roleManagement> getSubmenu = settingService.getSubmenu(moduleId);
+
+		return getSubmenu;
+	}
+	
+	@RequestMapping(value = "/saveRolePermission", method = RequestMethod.POST)
+	public @ResponseBody boolean saveRolePermission(roleManagement v) {
+		boolean saveRolePermission = settingService.saveRolePermission(v);
+		return saveRolePermission;
+	}
+	
+	@RequestMapping(value = "/getAllRoleName", method = RequestMethod.POST)
+	public @ResponseBody List<roleManagement> getAllRoleName(roleManagement v) {
+
+		List<roleManagement> getAllRoleName = settingService.getAllRoleName(v);
+
+		return getAllRoleName;
+	}
+	
+	@RequestMapping(value = "/getAllPermissions/{id}", method = RequestMethod.GET)
+	public @ResponseBody JSONObject getAllPermissions(@PathVariable ("id") String id) {
+		JSONObject obj = new JSONObject();
+		List<roleManagement> getAllPermissions = settingService.getAllPermissions(id);
+		obj.put("permissionList", getAllPermissions);
+		return obj;
+	}
+	
+	@RequestMapping(value = "/editRolePermission", method = RequestMethod.POST)
+	public @ResponseBody boolean editRolePermission(roleManagement v) {
+		boolean editRolePermission = settingService.editRolePermission(v);
+		return editRolePermission;
+	}
 	
 	// Group Create
 	@RequestMapping(value= {"/group_create"})
 	public ModelAndView groupCreate(ModelMap map,HttpSession session) {
 		ModelAndView view = new ModelAndView("setting/group-create");
 		map.addAttribute("members",settingService.getUserList());
+		map.addAttribute("groupList",settingService.getGroupList());
+		return view;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/saveGroupName", method = RequestMethod.POST)
+	public  JSONObject  saveGroupName(String group){
+
+		JSONObject obj = new JSONObject();
+		obj.put("result", settingService.saveGroup(group));
+		obj.put("groupList", settingService.getGroupList());
+		return obj;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/editGroup", method = RequestMethod.POST)
+	public  JSONObject  editGroup(String group){
+
+		JSONObject obj = new JSONObject();
+		obj.put("result", settingService.editGroup(group));
+		obj.put("groupList", settingService.getGroupList());
+		return obj;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="/getGroupInfo", method = RequestMethod.GET)
+	public  JSONObject  getGroupInfo(String groupId){
+
+		JSONObject obj = new JSONObject();
+		obj.put("memberList", settingService.getGroupMembers(groupId));
+		return obj;
+	}
+	
+
+	// Access Create
+	@RequestMapping(value= {"/access_permit"})
+	public ModelAndView access_permit(ModelMap map,HttpSession session) {
 		
+		String userId=(String)session.getAttribute("userId");
+		ModelAndView view = new ModelAndView("setting/access-permit");
+		
+		map.addAttribute("users",settingService.getUserList());
+		map.addAttribute("menus",settingService.getMenus(userId));
 		return view;
 	}
 	
 	
-	// Group Create
-		@RequestMapping(value= {"/access_permit"})
-		public ModelAndView access_permit(ModelMap map,HttpSession session) {
-			ModelAndView view = new ModelAndView("setting/group-create");
-			map.addAttribute("groupList","");
-			
-			return view;
-		}
+	@ResponseBody
+	@RequestMapping(value="/getPermitUserAndInvoiceNoList", method = RequestMethod.GET)
+	public  JSONObject  getPermitUserAndInvoiceNoList(String formId,String ownerId,String permittedUserId){
+
+		JSONObject obj = new JSONObject();
+		obj.put("fileList", settingService.getFormPermitInvoiceList(formId, ownerId, permittedUserId));
+		obj.put("permittedUser", settingService.getFormPermitedUsers(formId, ownerId));
+		
+		return obj;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/submitFileAccessPermit", method = RequestMethod.POST)
+	public  JSONObject  submitFileAccessPermit(String fileAccessPermit){
+
+		JSONObject obj = new JSONObject();
+		System.out.println(fileAccessPermit);
+		obj.put("result", settingService.submitFileAccessPermit(fileAccessPermit));
+		//obj.put("groupList", settingService.getGroupList());
+		return obj;
+	}
 
 }

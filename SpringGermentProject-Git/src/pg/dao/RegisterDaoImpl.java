@@ -36,6 +36,7 @@ import pg.registerModel.StyleItem;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.registerModel.WareHouse;
+import pg.share.FormId;
 import pg.share.HibernateUtil;
 import pg.share.ItemType;
 import pg.storeModel.StoreGeneralCategory;
@@ -264,10 +265,24 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "values('"+buyer.getBuyername()+"','"+buyer.getBuyercode()+"','"+buyer.getBuyerAddress()+"','"+buyer.getConsigneeAddress()+"','"+buyer.getNotifyAddress()+"','"+getCountryname(buyer.getCountry())+"','"+buyer.getTelephone()+"','"+buyer.getMobile()+"','"+buyer.getFax()+"','"+buyer.getEmail()+"','"+buyer.getSkypeid()+"','"+buyer.getBankname()+"','"+buyer.getBankaddress()+"','"+buyer.getSwiftcode()+"','"+getCountryname(buyer.getBankcountry())+"',GETDATE(),'"+buyer.getUser()+"')";
 
 				session.createSQLQuery(sql).executeUpdate();
+				
+				sql="select max(id) as maxId from tbBuyer";
+				List<?> list = session.createSQLQuery(sql).list();
+				String buyerId = list.get(0).toString();
+				
+				sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+						"from tbGroups g1\r\n" + 
+						"join tbGroups g2\r\n" + 
+						"on g1.groupId = g2.groupId \r\n" + 
+						"where g1.memberId = '"+buyer.getUser()+"' and g2.memberId != '"+buyer.getUser()+"'";
+				list = session.createSQLQuery(sql).list();
+				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+				{	
+					Object[] element = (Object[]) iter.next();
+					sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.BUYER_CREATE.getId()+"','"+buyerId+"','"+buyer.getUser()+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+buyer.getUser()+"')";
+					session.createSQLQuery(sql).executeUpdate();
+				}	
 			}
-
-
-
 			tx.commit();
 
 			return true;
@@ -465,7 +480,14 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			
-			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' order by id";
+			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' "
+					+ "union\r\n" + 
+					"select b.id, b.name, b.BuyerCode, b.BuyerAddress, b.ConsigneeAddress, b.NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BuyerCountry),'') as BuyerCountry, b.Telephone, b.MobileNo, b.Fax, b.Email, b.SkypeId, b.BankName, b.BankAddress, b.SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BankCountry),'') as  BankCount \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					" inner join tbBuyer b\r\n" + 
+					" on fap.ownerId = b.UserId and b.id = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.BUYER_CREATE.getId()+"'\r\n" + 
+					" order by id";
 			
 			if(userId.equals(MD_ID)) {
 				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer order by id";

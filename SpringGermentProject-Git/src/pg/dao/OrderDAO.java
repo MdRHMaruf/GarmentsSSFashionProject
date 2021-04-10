@@ -74,7 +74,7 @@ public interface OrderDAO {
 
 	//Accessories
 	public String maxAIno(); 
-	public List<CommonModel>PurchaseOrders(String userId);
+	public List<CommonModel>getPurchaseOrders(String userId);
 	public List<CommonModel>Styles(String po);
 	public List<CommonModel>Colors(String style, String item);
 	public List<CommonModel>Items(String buyerorderid,String style);
