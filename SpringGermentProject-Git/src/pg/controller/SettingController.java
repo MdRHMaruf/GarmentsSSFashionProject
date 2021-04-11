@@ -600,9 +600,9 @@ public class SettingController {
 	}
 	
 	@RequestMapping(value = "/getAllRoleName", method = RequestMethod.POST)
-	public @ResponseBody List<roleManagement> getAllRoleName(roleManagement v) {
+	public @ResponseBody List<roleManagement> getAllRoleName() {
 
-		List<roleManagement> getAllRoleName = settingService.getAllRoleName(v);
+		List<roleManagement> getAllRoleName = settingService.getAllRoleName();
 
 		return getAllRoleName;
 	}

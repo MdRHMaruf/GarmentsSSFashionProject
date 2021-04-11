@@ -224,9 +224,9 @@ public class SettingServiceImpl implements SettingService{
 
 
 	@Override
-	public List<roleManagement> getAllRoleName(roleManagement v) {
+	public List<roleManagement> getAllRoleName() {
 		// TODO Auto-generated method stub
-		return settDAO.getAllRoleName(v);
+		return settDAO.getAllRoleName();
 	}
 
 

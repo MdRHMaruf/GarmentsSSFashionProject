@@ -210,9 +210,7 @@ $(document).ready(function() {
 		type: 'POST',
 		dataType: 'json',
 		url: './getAllRoleName',
-		data: {
-
-		},
+		data: {},
 		success: function(data){
 			$("#roleNameList").empty();
 			setroleNameListData(data);

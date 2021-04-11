@@ -1482,7 +1482,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<roleManagement> getAllRoleName(roleManagement v) {
+	public List<roleManagement> getAllRoleName() {
 		// TODO Auto-generated method stub
 		String sql = "";
 		Session session = HibernateUtil.openSession();

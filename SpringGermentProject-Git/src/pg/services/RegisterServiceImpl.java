@@ -721,6 +721,18 @@ public class RegisterServiceImpl implements RegisterService{
 		// TODO Auto-generated method stub
 		return registerDao.isEmployeeExist(v);
 	}
+	
+	@Override
+	public Employee getEmployeeInfoByEmployeeCode(String employeeCode) {
+		// TODO Auto-generated method stub
+		return registerDao.getEmployeeInfoByEmployeeCode(employeeCode);
+	}
+
+	@Override
+	public Employee getEmployeeInfo(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.getEmployeeInfo(id);
+	}
 
 	@Override
 	public boolean saveMachine(Machine saveMachine) {
@@ -805,6 +817,8 @@ public class RegisterServiceImpl implements RegisterService{
 		// TODO Auto-generated method stub
 		return registerDao.getBankList();
 	}
+
+	
 
 	
 

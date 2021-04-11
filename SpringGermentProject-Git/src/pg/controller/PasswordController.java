@@ -31,6 +31,7 @@ import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.Ware;
 import pg.model.WareInfo;
+import pg.model.roleManagement;
 import pg.registerModel.FactoryModel;
 import pg.model.Login;
 import pg.model.Menu;
@@ -38,8 +39,7 @@ import pg.model.Module;
 import pg.services.PasswordService;
 import pg.services.PasswordServiceImpl;
 import pg.services.RegisterService;
-
-
+import pg.services.SettingService;
 import pg.share.SessionBean;
 
 @Controller
@@ -52,6 +52,8 @@ public class PasswordController {
 	static String userName="",passWord="";
 	String departmentid="";
 
+	@Autowired
+	private SettingService settingService;
 	@Autowired
 	private PasswordService passService;
 	@Autowired
@@ -307,22 +309,18 @@ public class PasswordController {
 	@RequestMapping(value = "user_profile_create",method=RequestMethod.GET)
 	public ModelAndView user_profile_create(ModelMap map,HttpSession session) {
 
-		List<Module> modulelist=(List<Module>)session.getAttribute("modulelist");
-		map.put("modulelist", modulelist);
+		
 
-		List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
-		List<FactoryModel> factoryList = registerService.getAllFactories();
-
-		map.put("menulist", menulist);
+		//List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
+		//List<FactoryModel> factoryList = registerService.getAllFactories();
+		List<roleManagement> roleList = settingService.getAllRoleName();
+		map.put("roleList", roleList);
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
 		ModelAndView view = new ModelAndView("setting/user_profile_create");
-		view.addObject("modulelist",modulelist);
-		view.addObject("menulist",menulist);
-		view.addObject("factoryList",factoryList);
-
+		
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 

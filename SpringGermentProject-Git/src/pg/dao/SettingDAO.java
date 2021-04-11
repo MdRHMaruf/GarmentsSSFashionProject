@@ -63,7 +63,7 @@ public interface SettingDAO {
 	public JSONArray getMenus(String userId);
 	public List<roleManagement> getSubmenu(String moduleId);
 	public boolean saveRolePermission(roleManagement v);
-	public List<roleManagement> getAllRoleName(roleManagement v);
+	public List<roleManagement> getAllRoleName();
 	public List<roleManagement> getAllPermissions(String id);
 	public boolean editRolePermission(roleManagement v);
 
