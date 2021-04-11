@@ -61,7 +61,9 @@ function saveAction(){
 			url: './saveRolePermission',
 			data: {
 
-				accesslist:valueList,roleName:roleName,userId:userId,
+				accesslist:valueList,
+				roleName:roleName,
+				userId:userId,
 			},
 			success: function(data){
 				if(data==true){

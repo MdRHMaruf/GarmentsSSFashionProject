@@ -13,6 +13,9 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +28,7 @@ import pg.model.Login;
 import pg.model.Menu;
 import pg.model.Module;
 import pg.model.WareInfo;
+import pg.share.FormId;
 import pg.share.HibernateUtil;
 
 /**
@@ -484,5 +488,103 @@ public class PasswordDAOImpl implements PasswordDAO{
 		}
 
 		return query;
+	}
+
+	@Override
+	public JSONArray getRolePermissions(String roleIds) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		JSONArray permissionArray = new JSONArray();
+		JSONObject permissionObject;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select p.moduleid,m.name as ModuleName,p.sub,sm.name as subMenuName,p.entry,p.edit,p.[view],p.clear from tbRolePermission p\n" + 
+					"left join tbsubMenu sm\n" + 
+					"on p.sub = sm.id\n" + 
+					"left join TbModule m\n" + 
+					"on p.moduleid = m.id\n" + 
+					"where p.roleId in ("+roleIds+")\n" + 
+					"group by  p.moduleid,m.name,p.sub,sm.name,p.entry,p.edit,p.[view],p.clear,sm.ordering\n" + 
+					"order by  p.moduleid,p.sub";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				permissionObject = new JSONObject();
+				permissionObject.put("moduleId", element[0].toString());
+				permissionObject.put("moduleName", element[1].toString());
+				permissionObject.put("subMenuId", element[2].toString());
+				permissionObject.put("subMenuName", element[3].toString());
+				permissionObject.put("enter", element[4].toString());
+				permissionObject.put("edit", element[5].toString());
+				permissionObject.put("view", element[6].toString());
+				permissionObject.put("delete", element[7].toString());
+				
+				permissionArray.add(permissionObject);
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+		finally {
+			session.close();
+		}
+		return permissionArray;
+		
+	}
+
+	@Override
+	public String saveUserProfile(String userInfo) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			JSONParser jsonParser = new JSONParser();
+			JSONObject permissionObject = (JSONObject)jsonParser.parse(userInfo);
+			//JSONArray itemList = (JSONArray) itemsObject.get("list");
+
+			String sql = "insert into Tblogin (fullname,username,password,active,createby,entrytime) values('"+permissionObject.get("fullName")+"','"+permissionObject.get("userName")+"','"+permissionObject.get("password")+"','"+permissionObject.get("activeStatus")+"','"+permissionObject.get("userId")+"',CURRENT_TIMESTAMP);";
+			session.createSQLQuery(sql).executeUpdate();
+
+			sql="select isnull(max(id),0) as maxId from Tblogin ";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			String maxUserId = list.get(0).toString();
+			
+			String roleIds[] = permissionObject.get("userRoles").toString().split(",");
+			
+			for(String roleId: roleIds) {
+				sql = "insert into tbUserRole(userId,roleId,entryTime) values('"+maxUserId+"','"+roleId+"',CURRENT_TIMESTAMP)";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+			tx.commit();
+			return "successfull";
+		}
+		catch(Exception ee){
+			ee.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+				return "something wrong";
+			}
+
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "something wrong";
 	}
 }

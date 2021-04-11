@@ -7,6 +7,8 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
@@ -31,4 +33,7 @@ public interface PasswordService {
 	public String getUserDepartmentId(String userId);
 	
 	public List<noticeModel> getNotice(String depid,noticeModel nm);
+	
+	public JSONArray getRolePermissions(String roleIds);
+	public String saveUserProfile(String userInfo);
 }

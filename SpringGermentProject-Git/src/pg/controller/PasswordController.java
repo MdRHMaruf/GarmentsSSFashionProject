@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -319,12 +322,32 @@ public class PasswordController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
-		ModelAndView view = new ModelAndView("setting/user_profile_create");
 		
+		ModelAndView view = new ModelAndView("setting/user_profile_create");
+		view.addObject("allModule",settingService.getAllModuleName());
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@RequestMapping(value = "/getRolePermissions",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getRolePermissions(String roleIds) {
+		JSONObject obj = new JSONObject();
+		System.out.println("roleIds = "+roleIds);
+		JSONArray rolePermissions = passService.getRolePermissions(roleIds);
+		obj.put("permissionList", rolePermissions);
+		return obj;
+	}
+	
+	@RequestMapping(value= "/saveUserProfile",method=RequestMethod.POST)
+	public @ResponseBody JSONObject saveUser(String userInfo) {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("result", passService.saveUserProfile(userInfo));
+		
+		return obj;
 	}
 
 }
