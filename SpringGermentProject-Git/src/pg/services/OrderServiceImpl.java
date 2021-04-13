@@ -797,9 +797,9 @@ public class OrderServiceImpl implements OrderService{
 	}
 
 	@Override
-	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType) {
+	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType,String buyerId,String supplierId) {
 		// TODO Auto-generated method stub
-		return orderDAO.getPurchaseOrderApprovalList(fromDate, toDate, itemType,approveType);
+		return orderDAO.getPurchaseOrderApprovalList(fromDate, toDate, itemType,approveType,buyerId,supplierId);
 	}
 
 	@Override

@@ -114,7 +114,7 @@ function refreshAction() {
 
 function allEmployee() {
   $.ajax({
-    type: 'POST',
+    type: 'GET',
     dataType: 'json',
     url: './allEmployee',
     data: {

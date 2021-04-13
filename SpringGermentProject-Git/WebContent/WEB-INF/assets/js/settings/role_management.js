@@ -1,4 +1,5 @@
 
+
 let permissionList=[];
 
 function saveAction(){
@@ -6,10 +7,10 @@ function saveAction(){
 	let roleName = $("#roleName").val();
 	let userId = $("#userId").val();
 
-	const rowlist=$("#roleList tr").length;
-	var accesslist = [];
+	const rowList=$("#roleList tr").length;
+	var accessList = [];
 	let j=0;
-	for (var i = 1; i <=rowlist; i++) {
+	for (var i = 1; i <=rowList; i++) {
 
 		var rId = $("#R"+i).attr("data-id");
 
@@ -46,11 +47,11 @@ function saveAction(){
 			}
 
 			var value=module+":"+head+":"+sub+":"+add+":"+edit+":"+view+":"+del;
-			accesslist[j++] = [value];
+			accessList[j++] = [value];
 		}
 	}
 
-	var valuelist="["+accesslist+"]";
+	var valueList="["+accessList+"]";
 
 	if(roleName!=""){
 
@@ -60,7 +61,9 @@ function saveAction(){
 			url: './saveRolePermission',
 			data: {
 
-				accesslist:valuelist,roleName:roleName,userId:userId,
+				accesslist:valueList,
+				roleName:roleName,
+				userId:userId,
 			},
 			success: function(data){
 				if(data==true){
@@ -135,10 +138,10 @@ function editAction(){
 	let roleName = $("#roleName").val();
 	let userId = $("#userId").val();
 
-	const rowlist=$("#roleList tr").length;
-	var accesslist = [];
+	const rowList=$("#roleList tr").length;
+	var accessList = [];
 	let j=0;
-	for (var i = 1; i <=rowlist; i++) {
+	for (var i = 1; i <=rowList; i++) {
 
 		var rId = $("#R"+i).attr("data-id");
 		console.log(i+" : rId : "+rId)
@@ -178,11 +181,11 @@ function editAction(){
 			}
 
 			var value=module+":"+head+":"+sub+":"+add+":"+edit+":"+view+":"+del;
-			accesslist[j++] = [value];
+			accessList[j++] = [value];
 		}
 	}
 
-	var valuelist="["+accesslist+"]";
+	var valueList="["+accessList+"]";
 
 	if(roleName!=""){
 
@@ -192,7 +195,7 @@ function editAction(){
 			url: './editRolePermission',
 			data: {
 
-				accesslist:valuelist,roleId:roleId,
+				accesslist:valueList,roleId:roleId,
 				roleName:roleName,userId:userId,
 			},
 			success: function(data){
@@ -222,13 +225,13 @@ $(document).ready(function() {
 		},
 		success: function(data){
 			$("#roleNameList").empty();
-			setroleNameListData(data);
+			setRoleNameListData(data);
 		}
 	});
 
 });
 let rowId=0;
-function setroleNameListData(data){
+function setRoleNameListData(data){
 
 	for (var i = 0; i < data.length; i++) {
 		$('#roleNameList').append(`<tr id="R${++rowId}">
@@ -375,4 +378,5 @@ $(document).ready(function () {
 
 function refreshAction(){
 	location.reload();
+
 }

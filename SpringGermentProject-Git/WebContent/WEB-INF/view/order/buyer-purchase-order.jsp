@@ -465,6 +465,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>SL</th>
 							<th>Order Id</th>
 							<th>Buyer Name</th>
 							<th>Purchase Order</th>
@@ -478,6 +479,7 @@
 					<tbody id="poList">
 						<c:forEach items="${buyerPoList}" var="po" varStatus="counter">
 							<tr>
+								<td>${counter.count}</td>
 								<td id="id-${counter.count}" data-po="${po.buyerPoId}">${po.buyerPoId}</td>
 								<td id='buyerName${po.buyerPoId}'>${po.buyerName}</td>
 								<td>${po.purchaseOrder}</td>

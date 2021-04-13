@@ -2601,17 +2601,22 @@ public class OrderController {
 		String userName=(String)session.getAttribute("userName");
 
 		ModelAndView view = new ModelAndView("order/purchase-order-approve-from-md");
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
+		List<SupplierModel> supplierList = registerService.getAllSupplier();
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		
+		view.addObject("buyerList", buyerList);
+		view.addObject("supplierList", supplierList);
 
 		return view;
 	}
 
 
 	@RequestMapping(value = "/getPOListForMd",method=RequestMethod.GET)
-	public @ResponseBody JSONObject getPOListForMd(String fromDate,String toDate,String itemType,String approveType) {
+	public @ResponseBody JSONObject getPOListForMd(String fromDate,String toDate,String itemType,String approveType,String buyerId,String supplierId) {
 		JSONObject objmain = new JSONObject();
-		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderApprovalList(fromDate, toDate, itemType, approveType);
+		List<PurchaseOrder> purchaseOrderList = orderService.getPurchaseOrderApprovalList(fromDate, toDate, itemType, approveType,buyerId,supplierId);
 		objmain.put("purchaseOrderList", purchaseOrderList);
 		return objmain;
 	}

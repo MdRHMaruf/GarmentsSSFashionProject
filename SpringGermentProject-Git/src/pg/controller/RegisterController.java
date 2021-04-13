@@ -2262,7 +2262,7 @@ public class RegisterController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
-	@RequestMapping(value = "/allEmployee", method = RequestMethod.POST)
+	@RequestMapping(value = "/allEmployee", method = RequestMethod.GET)
 	public @ResponseBody JSONObject allEmployee() {
 
 		List<Employee> employeeList = registerService.getEmployeeList();
@@ -2289,7 +2289,6 @@ public class RegisterController {
 			mainarray.add(obj);
 		}
 		mainobj.put("result", mainarray);
-
 		return mainobj;
 	}
 
@@ -2369,6 +2368,15 @@ public class RegisterController {
 		}
 
 		return objmain;
+	}
+	
+	@RequestMapping(value = "/getEmployeeInfoByEmployeeCode",method = RequestMethod.GET)
+	public @ResponseBody JSONObject getEmployeeInfo(String employeeCode) {
+		JSONObject obj = new JSONObject();
+		Employee employee = registerService.getEmployeeInfoByEmployeeCode(employeeCode);
+		obj.put("employeeInfo", employee);
+		
+		return obj;
 	}
 
 	//Machine Create

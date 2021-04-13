@@ -1425,15 +1425,15 @@ public class SettingDAOImpl implements SettingDAO {
 			accesslit=accesslit.replace("[", "");
 			accesslit=accesslit.replace("]", "");
 			int x=0;
-			sql="select rulename from tbRoleInfo where rulename='"+v.getRoleName()+"'";
+			sql="select roleName from tbRoleInfo where roleName='"+v.getRoleName()+"'";
 			List<?> list1 = session.createSQLQuery(sql).list();
 			if(list1.size()==0) {
 
-				sql = "select (isnull(max(ruleid),0)+1) as id from tbRoleInfo";
+				sql = "select (isnull(max(roleId),0)+1) as id from tbRoleInfo";
 				List<?> list = session.createSQLQuery(sql).list();
-				String maxRuleId = list.get(0).toString();
+				String maxRoleId = list.get(0).toString();
 
-				sql="insert into tbRoleInfo (ruleid, rulename, userid, entrytime) values ('"+maxRuleId+"', '"+v.getRoleName()+"', '"+v.getUserId()+"', CURRENT_TIMESTAMP) ";
+				sql="insert into tbRoleInfo (roleId, roleName, userid, entrytime) values ('"+maxRoleId+"', '"+v.getRoleName()+"', '"+v.getUserId()+"', CURRENT_TIMESTAMP) ";
 				//			System.err.println("sql : "+sql);
 				session.createSQLQuery(sql).executeUpdate();
 
@@ -1451,7 +1451,7 @@ public class SettingDAOImpl implements SettingDAO {
 						String view=s2.nextToken();
 						String delete=s2.nextToken();
 
-						sql="insert into tbRolePermission (ruleid, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+maxRuleId+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
+						sql="insert into tbRolePermission (roleId, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+maxRoleId+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
 						//					System.err.println("sql 2 : "+sql);
 						session.createSQLQuery(sql).executeUpdate();
 
@@ -1482,7 +1482,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<roleManagement> getAllRoleName(roleManagement v) {
+	public List<roleManagement> getAllRoleName() {
 		// TODO Auto-generated method stub
 		String sql = "";
 		Session session = HibernateUtil.openSession();
@@ -1491,7 +1491,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			sql = "select ruleid,rulename from tbRoleInfo";
+			sql = "select roleId,roleName from tbRoleInfo";
 			List<?> list = session.createSQLQuery(sql).list();
 			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
 				Object[] element = (Object[]) iter.next();
@@ -1518,7 +1518,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			sql = "select moduleid,head,sub,clear,entry,edit,[view] from tbRolePermission where ruleid='"+id+"'";
+			sql = "select moduleid,head,sub,clear,entry,edit,[view] from tbRolePermission where roleId='"+id+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
@@ -1552,14 +1552,14 @@ public class SettingDAOImpl implements SettingDAO {
 			accesslit=accesslit.replace("[", "");
 			accesslit=accesslit.replace("]", "");
 			int x=0;
-			sql="select rulename from tbRoleInfo where rulename='"+v.getRoleName()+"' and ruleid!='"+v.getRoleId()+"' ";
+			sql="select roleName from tbRoleInfo where roleName='"+v.getRoleName()+"' and roleId!='"+v.getRoleId()+"' ";
 			List<?> list1 = session.createSQLQuery(sql).list();
 			if(list1.size()==0) {
 				
-				sql="update tbRoleInfo set rulename='"+v.getRoleName()+"' where ruleid='"+v.getRoleId()+"'";
+				sql="update tbRoleInfo set roleName='"+v.getRoleName()+"' where roleId='"+v.getRoleId()+"'";
 				session.createSQLQuery(sql).executeUpdate();
 				
-				sql="delete from tbRolePermission where ruleid='"+v.getRoleId()+"'";
+				sql="delete from tbRolePermission where roleId='"+v.getRoleId()+"'";
 				session.createSQLQuery(sql).executeUpdate();
 
 				StringTokenizer s=new StringTokenizer(accesslit,",");
@@ -1576,7 +1576,7 @@ public class SettingDAOImpl implements SettingDAO {
 						String view=s2.nextToken();
 						String delete=s2.nextToken();
 
-						sql="insert into tbRolePermission (ruleid, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+v.getRoleId()+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
+						sql="insert into tbRolePermission (roleId, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+v.getRoleId()+"','"+moduleId+"','"+headId+"','"+subId+"','"+add+"','"+edit+"','"+view+"','"+delete+"','"+v.getUserId()+"')";
 						session.createSQLQuery(sql).executeUpdate();
 
 					}

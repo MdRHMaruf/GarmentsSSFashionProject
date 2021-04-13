@@ -9,8 +9,8 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -35,8 +35,8 @@ String userName=(String)session.getAttribute("userName");
 				<strong>Wrong!</strong> Something Wrong...
 			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="itemAutoId" value="0">
+		<input type="hidden" id="userId" value="<%=userId%>"> <input
+			type="hidden" id="itemAutoId" value="0">
 		<div class="card-box pt-1">
 			<header class="d-flex justify-content-between">
 				<h5 class="text-center" style="display: inline;">Purchase Order
@@ -58,6 +58,45 @@ String userName=(String)session.getAttribute("userName");
 			<div class="row">
 				<div class="col-md-12">
 					<div class="card shadow  p-2 mb-3 ">
+						<div class="row">
+							<div class='col-md-4 pr-1'>
+								<div class="input-group input-group-sm mb-1">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm"><label
+											class='my-0' for="buyerName">Buyer Name</label></span>
+									</div>
+									<select id="buyerName" class="form-control selectpicker"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-light-gray form-control-sm">
+										<option value="0">Select Buyer</option>
+										<c:forEach items="${buyerList}" var="buyer">
+											<option value="${buyer.buyerid}">${buyer.buyername}</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+							
+							<div class='col-md-4 pr-1'>
+								<div class="input-group input-group-sm mb-1">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm"><label
+											class='my-0' for="supplierName">Supplier Name</label></span>
+									</div>
+									<select id="supplierName" class="form-control selectpicker"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-light-gray form-control-sm">
+										<option value="0">Select Supplier</option>
+										<c:forEach items="${supplierList}" var="supplier">
+											<option value="${supplier.supplierid}">${supplier.suppliername}</option>
+										</c:forEach>
+									</select>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-md-3">
 								<div class="form-group mb-0  row">
@@ -84,21 +123,20 @@ String userName=(String)session.getAttribute("userName");
 											int length = ItemType.values().length;
 											for (int i = 0; i < length; i++) {
 										%>
-										<option 
-											value="<%=ItemType.values()[i].getType()%>"><%=ItemType.values()[i].name()%></option>
+										<option value="<%=ItemType.values()[i].getType()%>"><%=ItemType.values()[i].name()%></option>
 										<%
 											}
 										%>
 										<option value="allItem">All Item</option>
-									</select>
-									<select id="approveType" class="col-md-5 px-0 form-control-sm">
+									</select> <select id="approveType" class="col-md-5 px-0 form-control-sm">
 										<option value="0">Pending</option>
 										<option value="1">Approved</option>
 									</select>
 								</div>
 							</div>
 							<div class="col-md-2">
-								<button id="btnSearch" type="button" class="btn btn-outline-dark btn-sm" title="Search">
+								<button id="btnSearch" type="button"
+									class="btn btn-outline-dark btn-sm" title="Search">
 									<i class="fas fa-search"></i> Search
 								</button>
 							</div>
@@ -116,7 +154,8 @@ String userName=(String)session.getAttribute("userName");
 										<th>Style No</th>
 										<th>Supplier Name</th>
 										<th>Po No</th>
-										<th><input type="checkbox" id="checkAll"><span><label for="checkAll">Approve</label></span></th>
+										<th><input type="checkbox" id="checkAll"><span><label
+												for="checkAll">Approve</label></span></th>
 										<th>Item Type</th>
 										<th>Date</th>
 										<th><i class="fa fa-eye"></i>Preview</th>
@@ -132,7 +171,8 @@ String userName=(String)session.getAttribute("userName");
 						<div class="col-md-12 d-flex justify-content-end">
 							<button id="btnConfirm" type="button" accesskey="C"
 								class="btn btn-primary btn-sm ml-1">
-								<i class="fa fa-check"></i><span style="text-decoration:underline;"> Confirm</span>
+								<i class="fa fa-check"></i><span
+									style="text-decoration: underline;"> Confirm</span>
 							</button>
 							<button id="btnRefresh" type="button"
 								class="btn btn-primary btn-sm ml-1">

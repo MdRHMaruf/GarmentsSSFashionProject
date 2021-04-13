@@ -211,7 +211,8 @@ public interface RegisterService {
 	public List<Employee> getEmployeeList();
 	public boolean editEmployee(Employee editEmployee);
 	public boolean isEmployeeExist(Employee v);
-
+	public Employee getEmployeeInfoByEmployeeCode(String employeeCode);
+	public Employee getEmployeeInfo(String id);
 
 	//Machine
 

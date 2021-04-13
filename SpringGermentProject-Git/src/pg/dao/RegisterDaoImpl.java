@@ -4386,6 +4386,72 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
+	
+	@Override
+	public Employee getEmployeeInfoByEmployeeCode(String employeeCode) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		Employee employeeInfo = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select AutoId,EmployeeCode,CardNo,Name,DepartmentId,DesginationId,LineId,Grade,isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo where EmployeeCode= '"+employeeCode+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				employeeInfo = new Employee(element[0].toString(), element[1].toString(), element[3].toString(), element[2].toString(), element[4].toString(), "", element[5].toString(), "", element[6].toString(), element[7].toString(), element[8].toString());
+				
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return employeeInfo;
+	}
+
+	@Override
+	public Employee getEmployeeInfo(String id) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		Employee employeeInfo = null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select AutoId,EmployeeCode,CardNo,Name,DepartmentId,DesginationId,LineId,Grade,isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo where AutoId= '"+id+"'";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				employeeInfo = new Employee(element[0].toString(), element[1].toString(), element[3].toString(), element[2].toString(), element[4].toString(), "", element[5].toString(), "", element[6].toString(), element[7].toString(), element[8].toString());
+				
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return employeeInfo;
+	}
 
 	@Override
 	public boolean isEmployeeExist(Employee v) {
@@ -4778,5 +4844,9 @@ public class RegisterDaoImpl implements RegisterDao{
 		}
 		return dataList;
 	}
+
+	
+
+	
 
 }

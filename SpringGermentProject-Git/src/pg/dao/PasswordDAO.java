@@ -8,6 +8,9 @@ package pg.dao;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Login;
@@ -37,5 +40,11 @@ public interface PasswordDAO {
 	public String getUserDepartmentId(String userId);
 	
 	public List<noticeModel> getNotice(String depid,noticeModel nm);
+	
+	public JSONArray getRolePermissions(String roleIds);
+	public String saveUserProfile(String userInfo);
+	public JSONArray getUserList();
+	public JSONObject getUserInfo(String userId);
+	
 }
     

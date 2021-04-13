@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.6500000000000001"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="367"/>
+	<property name="ireport.y" value="319"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -121,7 +121,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="269" splitType="Stretch">
+		<band height="267" splitType="Stretch">
 			<staticText>
 				<reportElement x="357" y="6" width="187" height="19" uuid="65e40f0b-7e98-4d71-9a61-fba171b2ea74"/>
 				<box leftPadding="0">
@@ -400,7 +400,7 @@
 				<textFieldExpression><![CDATA["Subject:"+$F{Subject}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="1" y="209" width="306" height="11" uuid="38e6ffd0-da30-4391-8533-e6d80e606f79"/>
+				<reportElement positionType="Float" x="1" y="209" width="306" height="11" uuid="38e6ffd0-da30-4391-8533-e6d80e606f79"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
@@ -431,7 +431,7 @@
 				<reportElement x="356" y="138" width="1" height="24" uuid="b69ab052-5769-4a12-85b8-90b372327d14"/>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="2" y="255" width="380" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
+				<reportElement positionType="Float" x="2" y="255" width="380" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -442,7 +442,7 @@
 				<imageExpression><![CDATA[$F{organizationLogo}]]></imageExpression>
 			</image>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="1" y="197" width="542" height="11" uuid="fee6ba3d-bb66-4d3d-b481-8c191728a9f5"/>
+				<reportElement positionType="Float" x="1" y="197" width="542" height="11" uuid="fee6ba3d-bb66-4d3d-b481-8c191728a9f5"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>

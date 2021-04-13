@@ -7,6 +7,8 @@ package pg.services;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,5 +93,29 @@ public class PasswordServiceImpl implements PasswordService {
 	public List<noticeModel> getNotice(String depid,noticeModel nm) {
 		// TODO Auto-generated method stub
 		return passDAO.getNotice(depid, nm);
+	}
+
+	@Override
+	public JSONArray getRolePermissions(String roleIds) {
+		// TODO Auto-generated method stub
+		return passDAO.getRolePermissions(roleIds);
+	}
+
+	@Override
+	public String saveUserProfile(String userInfo) {
+		// TODO Auto-generated method stub
+		return passDAO.saveUserProfile(userInfo);
+	}
+
+	@Override
+	public JSONArray getUserList() {
+		// TODO Auto-generated method stub
+		return passDAO.getUserList();
+	}
+
+	@Override
+	public JSONObject getUserInfo(String userId) {
+		// TODO Auto-generated method stub
+		return passDAO.getUserInfo(userId);
 	}
 }
