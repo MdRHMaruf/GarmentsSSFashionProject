@@ -25,7 +25,7 @@
 			<div class="col-lg-12 d-flex justify-content-between">
 				<h2 class="page-header">Users Panel</h2>
 				<button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#exampleModal" title="Search">
-								User List<i class="fa fa-search"></i>
+								User List <i class="fa fa-search"></i>
 							</button>
 			</div>
 		</div>
@@ -128,7 +128,7 @@
 								</div>
 
 								<button id="btnRefresh" type="button"
-									class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
+									class="btn btn-secondary btn-sm ml-1" onclick="fieldRefresh()">
 									<i class="fa fa-refresh"></i> Refresh
 								</button>
 							</div>
@@ -252,6 +252,60 @@
 	</div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+	aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="input-group">
+					<input id="search" type="text" class="form-control"
+						placeholder="Search User"
+						aria-label="Recipient's username" aria-describedby="basic-addon2">
+					<div class="input-group-append">
+						<span class="input-group-text"><i class="fa fa-search"></i></span>
+					</div>
+				</div>
+				<button type="button" class="close" data-dismiss="modal"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<table class="table table-hover table-bordered table-sm mb-0">
+					<thead>
+						<tr>
+							<th>SL#</th>
+							<th>Employee Name</th>
+							<th>User Name</th>
+							<th>Department</th>
+							<th>Designation</th>
+							<th>Active Status</th>						
+							<th><span><i class="fa fa-search"></i></span></th>
+						</tr>
+					</thead>
+					<tbody id="poList">
+						<c:forEach items="${userList}" var="user"
+							varStatus="counter">
+							<tr>
+								<td>${counter.count}</td>
+								<td>${user.fullName}</td>
+								<td>${user.username}</td>
+								<td>${user.departmentName}</td>
+								<td>${user.designationName}</td>
+								<td>${user.activeStatus}</td>
+								<td><i class="fa fa-search" style="cursor:pointer;"
+									onclick="searchUser('${user.id}')"> </i></td>
+									
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
 <jsp:include page="../include/footer.jsp" />
 <script
 	src="${pageContext.request.contextPath}/assets/js/custom/link.js"></script>

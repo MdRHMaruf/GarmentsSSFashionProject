@@ -1236,10 +1236,13 @@ function confirmAction() {
 						$("#accessoriesIndentId").val(data.result);
 						$("#accessoriesId").text(data.result);
 						alert("Accessories Save Successfully;")
+						$("#loader").hide();
+						location.reload();
 					} else {
 						alert("Incomplete...Something Wrong");
 					}
 					$("#loader").hide();
+					
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");

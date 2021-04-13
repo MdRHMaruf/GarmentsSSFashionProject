@@ -317,6 +317,7 @@ public class PasswordController {
 		//List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<roleManagement> roleList = settingService.getAllRoleName();
+		
 		map.put("roleList", roleList);
 
 		String userId=(String)session.getAttribute("userId");
@@ -325,6 +326,7 @@ public class PasswordController {
 		
 		ModelAndView view = new ModelAndView("setting/user_profile_create");
 		view.addObject("allModule",settingService.getAllModuleName());
+		view.addObject("userList",passService.getUserList());
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -346,6 +348,15 @@ public class PasswordController {
 		JSONObject obj = new JSONObject();
 		
 		obj.put("result", passService.saveUserProfile(userInfo));
+		
+		return obj;
+	}
+	
+	@RequestMapping(value="/getUserInfo",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getUserInfo(String userId) {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("result", passService.getUserInfo(userId));
 		
 		return obj;
 	}

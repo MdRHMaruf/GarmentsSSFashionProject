@@ -119,20 +119,20 @@ function saveAction(){
     let activeStatus = $("#activeStatus").val();
 
 
-    const rowList=$("#roleList tr").length;
+    const rowList=$("#extraPermissionList tr").length;
 	let accessList = [];
-	let j=0;
+	
 	for (let i = 1; i <=rowList; i++) {
 
 		let rId = $("#R"+i).attr("data-id");
 
 		if($("#check_"+rId).is(":checked")){
 
-			let module=0,head=0,sub=0,add=0,edit=0,view=0,del=0;
+			let moduleId=0,headId=0,subId=0,add=0,edit=0,view=0,del=0;
 
-			module = $("#moduleId_"+rId).text();
-			head = $("#head_"+rId).text();
-			sub = $("#id_"+rId).text();
+			moduleId = $("#moduleId_"+rId).text();
+			headId = $("#head_"+rId).text();
+			subId = $("#id_"+rId).text();
 
 			if($("#add_"+rId).is(":checked")){
 				add=1;
@@ -158,37 +158,112 @@ function saveAction(){
 				del=0;
 			}
 
-			let value=module+":"+head+":"+sub+":"+add+":"+edit+":"+view+":"+del;
-			accessList[j++] = [value];
+			//let value=moduleId+":"+headId+":"+subId+":"+add+":"+edit+":"+view+":"+del;
+			accessList.push({
+                moduleId: moduleId,
+                headId: headId,
+                subId: subId,
+                add: add,
+                edit: edit,
+                view: view,
+                delete: del
+            });
 		}
 	}
 
-	let valueList="["+accessList+"]";
+	//let valueList="["+accessList+"]";
 
-    $.ajax({
-        type: 'POST',
-        dataType: 'json',
-        url: './saveUserProfile',
-        data: {
-            userInfo: JSON.stringify({
-                employeeId: employeeId,
-                fullName: fullName,
-                userName: userName,
-                password: password,
-                userRoles: userRoles,
-                activeStatus: activeStatus,
-                userId: userId
-            })
-        },
-        success: function(data){
-            alert(data.result);
+    if(employeeId != "0" && employeeId != ""){
+        if(userName != ''){
+            if(password != ''){
+                if(userRoles != ''){
+                    if(confirm("Are you sure to Save this User")){
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            url: './saveUserProfile',
+                            data: {
+                                userInfo: JSON.stringify({
+                                    employeeId: employeeId,
+                                    fullName: fullName,
+                                    userName: userName,
+                                    password: password,
+                                    userRoles: userRoles,
+                                    activeStatus: activeStatus,
+                                    userId: userId,
+                                    extraPermissionList: accessList
+                                })
+                            },
+                            success: function(data){
+                                if(data.result == "successful"){
+                                    alert("User Save Successful");
+                                    location.reload();
+                                }else
+                                alert(data.result);
+
+                            }
+                        });
+                    }
+                }else{
+                    alert("Please Select Any Role");
+                }
+            }else{
+                alert("Please Enter Password");
+            }
+        }else{
+            alert("Please Enter User Name");
         }
-    });
+    }else{
+        alert("Please Select Employee");
+    }
+    
 
 }
 
 function editAction(){
 
+}
+
+function searchUser(userId){
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './getUserInfo',
+        data: {
+            userId : userId
+        },
+        success: function(data){
+           console.log(data.result);
+           let userInfo = data.result;
+
+           $("#employeeAutoId").val(userInfo.employeeId);
+           $("#employeeId").val(userInfo.employeeCode);
+           $("#name").val(userInfo.fullName);
+           $("#userName").val(userInfo.username);
+           $("#password").val(userInfo.password);
+           $("#confirmPassword").val(userInfo.password);
+           let roleIds = userInfo.roleIds.split(',');
+           $("#userRole").val(roleIds).change();
+           $("activeStatus").val(userInfo.activeStatus);
+
+           $("#exampleModal").modal('hide');
+        }
+    });
+}
+
+function fieldRefresh(){
+    $("#employeeAutoId").val("0");
+    $("#employeeId").val("");
+    $("#name").val("");
+    $("#userName").val("");
+    $("#password").val("");
+    $("#confirmPassword").val("");
+    $("#userRole").val("").change();
+
+}
+
+function refreshAction(){
+    location.reload();
 }
 
 function drawRolePermissionTable(data) {
