@@ -21,6 +21,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
+import javassist.compiler.ast.Stmnt;
 import pg.config.SpringRootConfig;
 import pg.model.CommonModel;
 import pg.orderModel.AccessoriesIndent;
@@ -2655,66 +2656,73 @@ public class OrderDAOImpl implements OrderDAO{
 
 	@Override
 	public List<AccessoriesIndent> getPostedAccessoriesIndent(String userId) {
-		Session session=HibernateUtil.openSession();
-		Transaction tx=null;
+		//Session session=HibernateUtil.openSession();
+		//Transaction tx=null;
 
 		List<AccessoriesIndent> query=new ArrayList<AccessoriesIndent>();
 		AccessoriesIndent tempAccIndent;
 		try{
-			tx=session.getTransaction();
-			tx.begin();
+			/*tx=session.getTransaction();
+			tx.begin();*/
 
-			String sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+			String sql="select a.AINo,STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+					"    FROM tbAccessoriesIndent ai\r\n" + 
+					"    WHERE ai.AINo = a.AINo\r\n" + 
+					"	group by ai.PurchaseOrder\r\n" + 
+					"    FOR XML PATH('')),1,1,'') purchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 					"from tbAccessoriesIndent a \r\n" + 
 					"where IndentPostBy='"+userId+"' and AiNo IS NOT NULL \r\n" + 
-					"group by a.AINo,a.PurchaseOrder \r\n"+
+					"group by a.AINo \r\n"+
 					"union\r\n" + 
-					" select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+					" select a.AINo,STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+					"    FROM tbAccessoriesIndent ai\r\n" + 
+					"    WHERE ai.AINo = a.AINo\r\n" + 
+					"	group by ai.PurchaseOrder\r\n" + 
+					"    FOR XML PATH('')),1,1,'') purchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 					"from tbFileAccessPermission fap \r\n" + 
 					"inner join tbAccessoriesIndent a \r\n" + 
 					"on fap.ownerId = a.IndentPostBy and a.AINo = fap.resourceId\r\n" + 
 					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.ACCESSORIES_INDENT.getId()+"'\r\n" + 
-					"group by a.AINo,a.PurchaseOrder\r\n" + 
+					"group by a.AINo\r\n" + 
 					" order by a.AINo desc";
 			if(userId.equals(MD_ID)) {
-				sql="select a.AINo,a.PurchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
+				sql="select a.AINo,STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+						"    FROM tbAccessoriesIndent ai\r\n" + 
+						"    WHERE ai.AINo = a.AINo\r\n" + 
+						"	group by ai.PurchaseOrder\r\n" + 
+						"    FOR XML PATH('')),1,1,'') purchaseOrder,(SELECT CONVERT(varchar, min(a.IndentDate), 25)) indentDate\r\n" + 
 						"from tbAccessoriesIndent a \r\n" + 
 						"where AiNo IS NOT NULL \r\n" + 
-						"group by a.AINo,a.PurchaseOrder \r\n"+
+						"group by a.AINo \r\n"+
 						"order by a.AINo desc";
 			}
 
-			List<?> list = session.createSQLQuery(sql).list();
-
-			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-			{	
-				Object[] element = (Object[]) iter.next();
+			System.out.println(sql);
+			
+			SpringRootConfig sp=new SpringRootConfig();
+			Statement stmnt = sp.getConnection().createStatement();
+			ResultSet rs = stmnt.executeQuery(sql);
+			while(rs.next()) {
 
 				tempAccIndent = new AccessoriesIndent();
-				tempAccIndent.setAiNo(element[0].toString());
-				tempAccIndent.setPurchaseOrder(element[1].toString());
-				tempAccIndent.setIndentDate(element[2].toString());
+				tempAccIndent.setAiNo(rs.getString("AINo"));
+				tempAccIndent.setPurchaseOrder(rs.getString("PurchaseOrder"));
+				tempAccIndent.setIndentDate(rs.getString("indentDate"));
 				query.add(tempAccIndent);
-
 			}
+			stmnt.close();
 
-
-
-			tx.commit();
+			
 
 			return query;
 		}
 		catch(Exception e){
 
-			if (tx != null) {
-				tx.rollback();
-			}
+			
 			e.printStackTrace();
 		}
 
-		finally {
-			session.close();
-		}
+		
 
 		return query;
 	}
@@ -3076,11 +3084,19 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
+			
+			String indentDate = "GETDATE()";
 			if(accessoriesIndentId.equals("New")) {
 				String sql="select (isnull(max(AINo),0)+1) as maxId from tbAccessoriesIndent";
 				List<?> list = session.createSQLQuery(sql).list();
 				if(list.size()>0) {		
 					accessoriesIndentId = list.get(0).toString();
+				}
+			}else {
+				String sql="select (SELECT CONVERT(varchar,IndentDate, 25)) indentDate from tbAccessoriesIndent where AINo='"+accessoriesIndentId+"'";
+				List<?> list = session.createSQLQuery(sql).list();
+				if(list.size()>0) {		
+					indentDate = "'"+list.get(0).toString()+"'";
 				}
 			}
 
@@ -3107,7 +3123,7 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("colorId")+"','"+indent.get("shippingMark")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"',"
 						+ "'"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
 						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
-						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',GETDATE(),GETDATE(),'"+indent.get("userId")+"')";
+						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',"+indentDate+",GETDATE(),'"+indent.get("userId")+"')";
 				userId = indent.get("userId").toString();
 				session.createSQLQuery(sql).executeUpdate();
 			}
@@ -4821,6 +4837,19 @@ public class OrderDAOImpl implements OrderDAO{
 
 			session.createSQLQuery(sqlupdate).executeUpdate();
 
+			
+			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
+					"from tbGroups g1\r\n" + 
+					"join tbGroups g2\r\n" + 
+					"on g1.groupId = g2.groupId \r\n" + 
+					"where g1.memberId = '"+v.getUserId()+"' and g2.memberId != '"+v.getUserId()+"'";
+			List list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+FormId.SAMPLE_REQUISITION.getId()+"','"+sampleReqId+"','"+v.getUserId()+"','"+element[2].toString()+"',CURRENT_TIMESTAMP,'"+v.getUserId()+"')";
+				session.createSQLQuery(sql).executeUpdate();
+			}
 			tx.commit();
 			return true;
 		}
@@ -4886,7 +4915,14 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
+			String sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a where a.UserId='"+userId+"' group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date \r\n"
+					+ "union\r\n" + 
+					"select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date \r\n" + 
+					"from tbFileAccessPermission fap\r\n" + 
+					"inner join TbSampleRequisitionDetails a \r\n" + 
+					"on fap.ownerId = a.UserId and a.sampleReqId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.SAMPLE_REQUISITION.getId()+"' \r\n" + 
+					"group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
 			if(userId.equals(MD_ID)) {
 				sql="select ISNULL(a.sampleReqId,0) as sampleReqId,ISNULL((select name from tbBuyer where id=a.buyerId),'') as BuyerName,a.purchaseOrder,ISNULL((select StyleNo from TbStyleCreate where StyleId=a.StyleId),'') as StyleNO,a.StyleId,(SELECT CONVERT(varchar, a.Date, 101)) as Date from TbSampleRequisitionDetails a group by a.sampleReqId,a.BuyerId,a.purchaseOrder,a.StyleId,a.Date";
 			}
@@ -7031,20 +7067,24 @@ public class OrderDAOImpl implements OrderDAO{
 	}
 
 	@Override
-	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType) {
+	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType,String buyerId,String supplierId) {
 		// TODO Auto-generated method stub
-		Session session=HibernateUtil.openSession();
-		Transaction tx=null;
+		
+		
 		PurchaseOrder tempPo;
 		List<PurchaseOrder> dataList=new ArrayList<PurchaseOrder>();
-		try{
-			tx=session.getTransaction();
-			tx.begin();
+		try{	
+			SpringRootConfig sp=new SpringRootConfig();
+			Statement stmnt = sp.getConnection().createStatement();
 			String sql="";
 
 			if(approveType.equals("0")) {
 				if(itemType.equals(String.valueOf(ItemType.FABRICS.getType()))) {
-					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select  STUFF((SELECT ','+fi.PurchaseOrder \r\n" + 
+							"    FROM tbFabricsIndent fi\r\n" + 
+							"    WHERE fi.indentId = fabI.indentId\r\n" + 
+							"	group by fi.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierId,s.name as supplierName,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7052,11 +7092,15 @@ public class OrderDAOImpl implements OrderDAO{
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
-							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"where fabI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by fabI.indentId,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
 				}else if(itemType.equals(String.valueOf(ItemType.ACCESSORIES.getType()))) {
-					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+							"    FROM tbAccessoriesIndent ai\r\n" + 
+							"    WHERE ai.AINo = accI.AINo\r\n" + 
+							"	group by ai.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierid,s.name as supplierName,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on acci.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7064,13 +7108,17 @@ public class OrderDAOImpl implements OrderDAO{
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
-							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"where accI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by accI.AINo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
 				}
 			}else {
 				if(itemType.equals(String.valueOf(ItemType.FABRICS.getType()))) {
-					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select STUFF((SELECT ','+fi.PurchaseOrder  \r\n" + 
+							" FROM tbFabricsIndent fi \r\n" + 
+							" WHERE fi.indentId = fabI.indentId \r\n" + 
+							" group by fi.PurchaseOrder \r\n" + 
+							" FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierId,s.name as supplierName,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7078,11 +7126,15 @@ public class OrderDAOImpl implements OrderDAO{
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
-							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"where fabI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
+							"group by fabi.indentId,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
 				}else if(itemType.equals(String.valueOf(ItemType.ACCESSORIES.getType()))) {
-					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+							"    FROM tbAccessoriesIndent ai\r\n" + 
+							"    WHERE ai.AINo = accI.AINo\r\n" + 
+							"	group by ai.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierId,s.name as supplierName,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on acci.styleId = cast(sc.StyleId as varchar) \r\n" + 
@@ -7090,15 +7142,19 @@ public class OrderDAOImpl implements OrderDAO{
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
-							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"where accI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
+							"group by accI.AINo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
 				}
 			}
 
 			if(itemType.equals("allItem")) {
 				if(approveType.equals("0")) {
-					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select STUFF((SELECT ','+fi.PurchaseOrder \r\n" + 
+							"    FROM tbFabricsIndent fi\r\n" + 
+							"    WHERE fi.indentId = fabI.indentId\r\n" + 
+							"	group by fi.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierId,s.name as supplierName,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7106,18 +7162,21 @@ public class OrderDAOImpl implements OrderDAO{
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
-							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"where fabI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by fabI.indentId,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
-					List<?> list = session.createSQLQuery(sql).list();
-					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-					{	
-						Object[] element = (Object[]) iter.next();
-						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+					System.out.println(sql);
+					ResultSet rs = stmnt.executeQuery(sql);
+					while(rs.next()) {
+						tempPo = new PurchaseOrder(rs.getString("purchaseOrder"), rs.getString("styleId"), rs.getString("styleNo"), rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("poNo"), rs.getString("type"), rs.getString("orderDate"), Integer.valueOf(rs.getString("mdapproval")));
 						dataList.add(tempPo);
 					}
 
-					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierid,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+							"    FROM tbAccessoriesIndent ai\r\n" + 
+							"    WHERE ai.AINo = accI.AINo\r\n" + 
+							"	group by ai.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierid,s.name as supplierName,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'0' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on acci.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7125,20 +7184,23 @@ public class OrderDAOImpl implements OrderDAO{
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
-							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"where accI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and (mdapproval is null or mdapproval=0)\r\n" + 
+							"group by accI.AINo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
-					list = session.createSQLQuery(sql).list();
-					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-					{	
-						Object[] element = (Object[]) iter.next();
-						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+					System.out.println(sql);
+					rs = stmnt.executeQuery(sql);
+					while(rs.next()) {
+						tempPo = new PurchaseOrder(rs.getString("purchaseOrder"), rs.getString("styleId"), rs.getString("styleNo"), rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("poNo"), rs.getString("type"), rs.getString("orderDate"), Integer.valueOf(rs.getString("mdapproval")));
 						dataList.add(tempPo);
 					}
 				}else {
 
 
-					sql=" select purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql=" select STUFF((SELECT ','+fi.PurchaseOrder \r\n" + 
+							"    FROM tbFabricsIndent fi\r\n" + 
+							"    WHERE fabI.indentId = fi.indentId\r\n" + 
+							"	group by fi.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,fabI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name as supplierName,fabI.pono,'Fabrics' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbFabricsIndent fabI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on fabI.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -7146,19 +7208,21 @@ public class OrderDAOImpl implements OrderDAO{
 							"on fabi.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on fabI.pono = pos.pono \r\n" + 
-							"where fabI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
-							"group by purchaseOrder,fabI.styleId,styleNo,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
+							"where fabI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval = 1 \r\n" + 
+							"group by fabI.indentId,pos.supplierId,name,fabI.pono,pos.orderDate\r\n" + 
 							"order by fabI.pono desc";
-
-					List<?> list = session.createSQLQuery(sql).list();
-					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-					{	
-						Object[] element = (Object[]) iter.next();
-						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+					System.out.println(sql);
+					ResultSet rs = stmnt.executeQuery(sql);
+					while(rs.next()) {
+						tempPo = new PurchaseOrder(rs.getString("purchaseOrder"), rs.getString("styleId"), rs.getString("styleNo"), rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("poNo"), rs.getString("type"), rs.getString("orderDate"), Integer.valueOf(rs.getString("mdapproval")));
 						dataList.add(tempPo);
 					}
 
-					sql = "select purchaseOrder,accI.styleId,isnull(sc.StyleNo,'') as StyleNo,pos.supplierId,s.name,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
+					sql = "select STUFF((SELECT ','+ai.PurchaseOrder \r\n" + 
+							"    FROM tbAccessoriesIndent ai\r\n" + 
+							"    WHERE accI.AINo =  ai.AINo \r\n" + 
+							"	group by ai.PurchaseOrder\r\n" + 
+							"    FOR XML PATH('')),1,1,'') purchaseOrder,'' as styleId,'' as StyleNo,pos.supplierId,s.name as supplierName,accI.pono,'Accessories' as type,(select convert(varchar,pos.orderDate,103))as orderDate,'1' as mdapproval,count(purchaseOrder) as qty \r\n" + 
 							"from tbAccessoriesIndent accI\r\n" + 
 							"left join TbStyleCreate sc\r\n" + 
 							"on acci.styleId = cast(sc.StyleId as varchar) \r\n" + 
@@ -7166,43 +7230,39 @@ public class OrderDAOImpl implements OrderDAO{
 							"on acci.supplierid = s.id\r\n" + 
 							"left join tbPurchaseOrderSummary pos\r\n" + 
 							"on accI.pono = pos.pono \r\n" + 
-							"where accI.pono is not null and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
-							"group by purchaseOrder,acci.styleId,styleNo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
+							"where accI.pono is not null "+(supplierId.equals("0")?"":"and pos.supplierId = '"+supplierId+"'")+" and pos.orderDate between '"+fromDate+"' and '"+toDate+"' and  mdapproval=1 \r\n" + 
+							"group by accI.AINo,pos.supplierId,name,accI.pono,pos.orderDate\r\n" + 
 							"order by accI.pono desc";
-
-					list = session.createSQLQuery(sql).list();
-					for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-					{	
-						Object[] element = (Object[]) iter.next();
-						tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+					System.out.println(sql);
+					rs = stmnt.executeQuery(sql);
+					while(rs.next()) {
+						tempPo = new PurchaseOrder(rs.getString("purchaseOrder"), rs.getString("styleId"), rs.getString("styleNo"), rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("poNo"), rs.getString("type"), rs.getString("orderDate"), Integer.valueOf(rs.getString("mdapproval")));
 						dataList.add(tempPo);
 					}
 				}
 
 
 			}else {
-				List<?> list = session.createSQLQuery(sql).list();
-				for(Iterator<?> iter = list.iterator(); iter.hasNext();)
-				{	
-					Object[] element = (Object[]) iter.next();
-					tempPo = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), Integer.valueOf(element[8].toString()));
+				System.out.println(sql);
+				ResultSet rs = stmnt.executeQuery(sql);
+				while(rs.next()) {
+					tempPo = new PurchaseOrder(rs.getString("purchaseOrder"), rs.getString("styleId"), rs.getString("styleNo"), rs.getString("supplierId"), rs.getString("supplierName"), rs.getString("poNo"), rs.getString("type"), rs.getString("orderDate"), Integer.valueOf(rs.getString("mdapproval")));
 					dataList.add(tempPo);
 				}
 			}
 
 
-			tx.commit();
+			stmnt.close();
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			if (tx != null) {
-				tx.rollback();
-			}
+			
 
 		}
 		finally {
-			session.close();
+			//stmnt.close();
 		}
+		
 		return dataList;
 	}
 
@@ -7211,9 +7271,6 @@ public class OrderDAOImpl implements OrderDAO{
 		// TODO Auto-generated method stub
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
-
-
-
 		try{
 			tx=session.getTransaction();
 			tx.begin();

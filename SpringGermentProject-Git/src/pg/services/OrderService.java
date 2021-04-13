@@ -196,7 +196,7 @@ public interface OrderService {
 
 
 	//Purchase Order Approval for MD
-	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType);
+	List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate,String toDate,String itemType,String approveType,String buyerId,String supplierId);
 	boolean purchaseOrderApproveConfirm(List<PurchaseOrder> purchaseOrderList);
 	
 	

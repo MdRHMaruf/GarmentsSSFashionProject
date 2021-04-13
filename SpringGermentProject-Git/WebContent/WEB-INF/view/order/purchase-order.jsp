@@ -456,6 +456,7 @@
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>Sl</th>
 							<th>Purchase Order No</th>
 							<th>Supplier Name</th>
 							<th>Date</th>
@@ -468,6 +469,7 @@
 						<c:forEach items="${purchaseOrderList}" var="po"
 							varStatus="counter">
 							<tr id="row-${counter.count}" data-supplierId="${po.supplierId}">
+								<td>${counter.count}</td>
 								<td>${po.poNo}</td>
 								<td>${po.supplierName}</td>
 								<td>${po.orderDate}</td>

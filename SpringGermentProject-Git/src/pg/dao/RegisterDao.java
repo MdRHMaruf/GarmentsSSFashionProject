@@ -38,22 +38,22 @@ public interface RegisterDao {
 
 	public String maxBuyerId();
 	public List<String> countries(String value);
-	
+
 	//Buyer Create
 	public boolean insertBuyer(BuyerModel buyer);
 	public List<String> BuyersList(String value);
 	public List<BuyerModel> BuyersDetails(String value);
 	public boolean editBuyer(BuyerModel buyer);
 	public List<BuyerModel> getAllBuyers(String userId);
-	
+
 	//Notify Create
 	public boolean saveNotifyer(Notifyer notifyer);
 	public boolean editNotifyer(Notifyer notifyer);
 	public Notifyer getNotifyerInfo(String id);
 	public List<Notifyer> getNotifyerList();
 	public List<Notifyer> getNotifyerListByBuyerId(String buyerId);
-	
-	
+
+
 	//Supplier Create
 	public String maxSupplierId();
 	public boolean insertSupplier(SupplierModel supplier);
@@ -61,18 +61,18 @@ public interface RegisterDao {
 	public List<SupplierModel> SupplierDetails(String value);
 	public boolean editSupplier(SupplierModel supplier);
 	public List<SupplierModel> getAllSupplier();
-	
-	
+
+
 	//Factory Create
-	
+
 	public String maxFactoryId();
 	public boolean insertFactory(FactoryModel factory);
 	public List<FactoryModel> FactoryDetails(String value);
 	public List<String> factorylist(String value);
 	public boolean editFactory(FactoryModel factory);
 	public List<FactoryModel> getAllFactories();
-	
-	
+
+
 	//Courier Create
 	public String maxCourierId();
 	public boolean insertCourier(CourierModel courier);
@@ -80,7 +80,7 @@ public interface RegisterDao {
 	public List<CourierModel> CourierDetails(String value);
 	public boolean editCourier(CourierModel courier);
 	public List<CourierModel> getAllCouriers();
-	
+
 	//Brand Create 
 	public boolean saveBrand(Brand brand);
 	public boolean editBrand(Brand brand);
@@ -160,19 +160,19 @@ public interface RegisterDao {
 	public List<Department> getDepartmentList();
 	public boolean isDepartmentExist(Department department);
 	public List<Department> getFactoryWiseDepartment(String factoryId);
-	
+
 	//Merchandiser
 	public boolean isMerchandiserExist(MerchandiserInfo v);
 	public boolean saveMerchandiser(MerchandiserInfo v);
 	public List<MerchandiserInfo> getMerchandiserList();
 	public boolean editMerchandiser(MerchandiserInfo v);
-	
+
 	//Incharge
 	public boolean isInchargeExist(InchargeInfo v);
 	public boolean saveIncharge(InchargeInfo v);
 	public List<InchargeInfo> getInchargeList();
 	public boolean editIncharge(InchargeInfo v);
-	
+
 	//Ware House Create 
 	public boolean saveWareHouse(WareHouse wareHouse);
 	public boolean editWareHouse(WareHouse wareHouse);
@@ -197,47 +197,49 @@ public interface RegisterDao {
 	public boolean editStyleSizeGroup(SizeGroup sizeGroup);
 	public List<SizeGroup> getStyleSizeGroupList();
 	public boolean isStyleSizeGroupExist(SizeGroup sizeGroup);
-	
+
 	//Common get method
 	public List<Factory> getFactoryNameList();
-	
-	
+
+
 	public Unit getUnit(String unitId);
-	
+
 	//Store Category
 	public List<StoreGeneralCategory> getStoreCategoryList();
-	
+
 	//designation
 	public boolean saveDesignation(Designation designation);
 	public List<Designation> getDesignationList();
 	public boolean editDesignation(Designation designation);
 	public boolean isDesignationExist(Designation v);
-	
+
 	//Employee Create
-	
+
 	public boolean saveEmployee(Employee saveEmployee);
 	public List<Employee> getEmployeeList();
 	public boolean editEmployee(Employee editEmployee);
 	public boolean isEmployeeExist(Employee v);
-	
+	public Employee getEmployeeInfoByEmployeeCode(String employeeCode);
+	public Employee getEmployeeInfo(String id);
+
 	//Machine
-	
+
 	public boolean saveMachine(Machine saveMachine);
 	public List<Machine> getMachineList();
 	public boolean editMachine(Machine editMachine);
 	public boolean isMachineExist(Machine v);
-	
+
 	//Process
 	public boolean isProcessExist(ProcessInfo v);
 	public boolean saveProcess(ProcessInfo v);
 	public List<ProcessInfo> getProcessList();
 	public boolean editProcess(ProcessInfo v);
-	
+
 
 	//Bank Create
-		public boolean saveBank(Bank bank);
-		public boolean editBank(Bank bank);
-		public Bank getBankInfo(String id);
-		public List<Bank> getBankList();
-		
+	public boolean saveBank(Bank bank);
+	public boolean editBank(Bank bank);
+	public Bank getBankInfo(String id);
+	public List<Bank> getBankList();
+
 }

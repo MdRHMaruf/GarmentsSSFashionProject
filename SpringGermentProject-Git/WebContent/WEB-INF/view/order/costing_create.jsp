@@ -286,6 +286,7 @@ String userName=(String)session.getAttribute("userName");
 				<table class="table table-hover table-bordered table-sm mb-0">
 					<thead>
 						<tr>
+							<th>Sl</th>
 							<th>Costing No</th>
 							<th>Date</th>
 							<th>Style</th>
@@ -298,6 +299,7 @@ String userName=(String)session.getAttribute("userName");
 						<c:forEach items="${costingList}" var="costing"
 							varStatus="counter">
 							<tr>
+								<td>${counter.count}</td>
 								<td>${costing.costingNo}</td>
 								<td>${costing.date}</td>
 								<td>${costing.styleName}</td>

@@ -1,4 +1,5 @@
 
+
 let permissionList=[];
 
 function saveAction(){
@@ -6,10 +7,10 @@ function saveAction(){
 	let roleName = $("#roleName").val();
 	let userId = $("#userId").val();
 
-	const rowlist=$("#roleList tr").length;
-	var accesslist = [];
+	const rowList=$("#roleList tr").length;
+	var accessList = [];
 	let j=0;
-	for (var i = 1; i <=rowlist; i++) {
+	for (var i = 1; i <=rowList; i++) {
 
 		var rId = $("#R"+i).attr("data-id");
 
@@ -46,11 +47,11 @@ function saveAction(){
 			}
 
 			var value=module+":"+head+":"+sub+":"+add+":"+edit+":"+view+":"+del;
-			accesslist[j++] = [value];
+			accessList[j++] = [value];
 		}
 	}
 
-	var valuelist="["+accesslist+"]";
+	var valueList="["+accessList+"]";
 
 	if(roleName!=""){
 
@@ -60,7 +61,9 @@ function saveAction(){
 			url: './saveRolePermission',
 			data: {
 
-				accesslist:valuelist,roleName:roleName,userId:userId,
+				accesslist:valueList,
+				roleName:roleName,
+				userId:userId,
 			},
 			success: function(data){
 				if(data==true){
@@ -110,13 +113,13 @@ function setTableData(data){
 
 				<td class="row-index text-center"> ${rowIdx} </td>
 
-				<td class="row-index text-center" id='moduleName_${rowIdx}'>${data[i].moduleName}</td>
-				<td class="row-index text-center" id='moduleId_${rowIdx}' hidden>${data[i].moduleId}</td>
+				<td class="row-index text-center" id='moduleName_${data[i].subId}'>${data[i].moduleName}</td>
+				<td class="row-index text-center" id='moduleId_${data[i].subId}' hidden>${data[i].moduleId}</td>
 
-				<td class="row-index text-center" id='head_${rowIdx}' hidden>${data[i].head}</td>
-				<td class="row-index text-center" id='id_${rowIdx}' hidden>${data[i].subId}</td>
+				<td class="row-index text-center" id='head_${data[i].subId}' hidden>${data[i].head}</td>
+				<td class="row-index text-center" id='id_${data[i].subId}' hidden>${data[i].subId}</td>
 
-				<td class="row-index" id='sub_${rowIdx}' data-sub="${data[i].subId}"> ${data[i].subName} </td>
+				<td class="row-index" id='sub_${data[i].subId}' data-sub="${data[i].subId}"> ${data[i].subName} </td>
 
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="add_${data[i].subId}" class="add" type="checkbox"> </td>
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="edit_${data[i].subId}" class="edit" type="checkbox"> </td>	
@@ -135,18 +138,21 @@ function editAction(){
 	let roleName = $("#roleName").val();
 	let userId = $("#userId").val();
 
-	const rowlist=$("#roleList tr").length;
-	var accesslist = [];
+	const rowList=$("#roleList tr").length;
+	var accessList = [];
 	let j=0;
-	for (var i = 1; i <=rowlist; i++) {
+	for (var i = 1; i <=rowList; i++) {
 
 		var rId = $("#R"+i).attr("data-id");
-
+		console.log(i+" : rId : "+rId)
 		if($("#check_"+rId).is(":checked")){
 
 			let module=0,head=0,sub=0,add=0,edit=0,view=0,del=0;
 
 			module = $("#moduleId_"+rId).text();
+
+			console.log("module id : "+module)
+
 			head = $("#head_"+rId).text();
 			sub = $("#id_"+rId).text();
 
@@ -175,11 +181,11 @@ function editAction(){
 			}
 
 			var value=module+":"+head+":"+sub+":"+add+":"+edit+":"+view+":"+del;
-			accesslist[j++] = [value];
+			accessList[j++] = [value];
 		}
 	}
 
-	var valuelist="["+accesslist+"]";
+	var valueList="["+accessList+"]";
 
 	if(roleName!=""){
 
@@ -189,12 +195,16 @@ function editAction(){
 			url: './editRolePermission',
 			data: {
 
-				accesslist:valuelist,roleId:roleId,
+				accesslist:valueList,roleId:roleId,
 				roleName:roleName,userId:userId,
 			},
 			success: function(data){
-				alert("Role Edit Successfully");
-				refreshAction();
+				if(data==true){
+					alert("Role Edit Successfully");
+					refreshAction();
+				}else{
+					alert("Role Name Already Exist")
+				}
 			}
 		});
 
@@ -215,13 +225,13 @@ $(document).ready(function() {
 		},
 		success: function(data){
 			$("#roleNameList").empty();
-			setroleNameListData(data);
+			setRoleNameListData(data);
 		}
 	});
 
 });
 let rowId=0;
-function setroleNameListData(data){
+function setRoleNameListData(data){
 
 	for (var i = 0; i < data.length; i++) {
 		$('#roleNameList').append(`<tr id="R${++rowId}">
@@ -353,6 +363,20 @@ $("#checkAllDelete").click(function () {
 	}
 });
 
+$(document).ready(function () {
+	$("input:text").focus(function () { $(this).select(); });
+});
+
+$(document).ready(function () {
+	$("#search").on("keyup", function () {
+		let value = $(this).val().toLowerCase();
+		$("#roleNameList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
+});
+
 function refreshAction(){
 	location.reload();
+
 }

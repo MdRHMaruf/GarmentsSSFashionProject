@@ -4,6 +4,8 @@ $("#btnSearch").click(() => {
     const toDate = $("#toDate").val();
     const itemType = $("#itemType").val();
     const approveType = $("#approveType").val();
+    const buyerId = $("#buyerName").val();
+    const supplierId = $("#supplierName").val();
 
 
     if (fromDate != '') {
@@ -17,7 +19,9 @@ $("#btnSearch").click(() => {
                         fromDate: fromDate,
                         toDate: toDate,
                         itemType: itemType,
-                        approveType: approveType
+                        approveType: approveType,
+                        buyerId: buyerId,
+                        supplierId: supplierId
                     },
                     success: function (data) {
                         drawPurchaseOrderList(data.purchaseOrderList);
