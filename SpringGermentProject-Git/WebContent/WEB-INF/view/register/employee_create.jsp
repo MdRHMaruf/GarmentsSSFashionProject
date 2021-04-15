@@ -137,7 +137,10 @@
 									<label class="mb-0">Religion</label> <select
 										class="form-control form-control-sm" id="religion">
 										<option>Islam</option>
-										<option>Hindu</option>
+										<option>Hinduism</option>
+										<option>Buddhism</option>
+										<option>Christian</option>
+										<option>Other</option>
 									</select>
 								</div>
 								<div class="col-md-6">
@@ -158,7 +161,8 @@
 								<div class="col-md-6">
 									<label for="joinDate" class="mb-0">Contact No</label> <input
 										type="text" class="form-control-sm col-sm-12" id="contact"
-										name="text">
+										name="text"
+										oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 								</div>
 							</div>
 
