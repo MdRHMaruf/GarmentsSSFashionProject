@@ -39,7 +39,7 @@
 					<label for="orderDate"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Order
 						Date<span style="color: red">*</span>
-					</label> <input id="orderDate" type="date" class="col-md-8 form-control-sm">
+					</label> <input id="orderDate" type="date" class="col-md-8 form-control-sm customDate" data-date-format="DD MMM YYYY">
 
 				</div>
 				<div class="form-group mb-0  row">
@@ -47,7 +47,7 @@
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Delivery
 						Date<span style="color: red">*</span>
 					</label> <input id="deliveryDate" type="date"
-						class="col-md-8 form-control-sm">
+						class="col-md-8 form-control-sm customDate" data-date-format="DD MMM YYYY">
 
 				</div>
 

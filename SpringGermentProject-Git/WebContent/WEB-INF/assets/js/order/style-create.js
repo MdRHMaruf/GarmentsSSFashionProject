@@ -82,7 +82,7 @@ function setData(styleItemAutoId) {
 
 	$('#styleNo').val($('#hStyleNo' + styleItemAutoId).val());
 
-	$('#date').val($('#hDate' + styleItemAutoId).val());
+	$('#date').val($('#hDate' + styleItemAutoId).val()).change();
 	$('#size').val($('#hSize' + styleItemAutoId).val());
 
 	$('#itemId').val($('#hItemId' + styleItemAutoId).val()).change();
@@ -137,6 +137,7 @@ $(document).ready(function () {
 		});
 	});
 });
+
 
 /*let idListMicro = ["buyerId","styleNo","date","size","itemId","btnSave"];
 idListMicro.forEach((id,index)=>{
