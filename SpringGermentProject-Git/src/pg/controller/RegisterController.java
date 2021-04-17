@@ -2285,6 +2285,14 @@ public class RegisterController {
 			obj.put("Grade", employeeList.get(i).getGrade());
 			obj.put("EmployeeCode", employeeList.get(i).getEmployeeCode());
 			obj.put("JoinDate", employeeList.get(i).getJoinDate());
+			
+			obj.put("religion", employeeList.get(i).getReligion());
+			obj.put("gender", employeeList.get(i).getGender());
+			obj.put("email", employeeList.get(i).getEmail());
+			obj.put("contact", employeeList.get(i).getContact());
+			obj.put("nationality", employeeList.get(i).getNationality());
+			obj.put("nationaliid", employeeList.get(i).getNationalId());
+			obj.put("birthdate", employeeList.get(i).getBirthDate());
 
 			mainarray.add(obj);
 		}
