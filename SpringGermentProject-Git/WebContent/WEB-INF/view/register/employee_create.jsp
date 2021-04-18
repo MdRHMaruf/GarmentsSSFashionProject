@@ -126,7 +126,7 @@
 								</div>
 								<div class="col-md-6">
 									<label for="joinDate" class="mb-0">Joining Date</label> <input
-										type="date" class="form-control-sm col-sm-12" id="joinDate"
+										type="date" class="form-control-sm col-sm-12 customDate" id="joinDate"  data-date-format="DD MMM YYYY"
 										name="text">
 								</div>
 							</div>
@@ -183,7 +183,7 @@
 
 								<div class="col-md-6">
 									<label for="BirthDate" class="mb-0">BirthDate</label> <input
-										type="date" class="form-control-sm col-sm-12" id="birthDate"
+										type="date" class="form-control-sm col-sm-12 customDate" id="birthDate"  data-date-format="DD MMM YYYY"
 										name="text">
 								</div>
 								<div class="col-md-6"></div>

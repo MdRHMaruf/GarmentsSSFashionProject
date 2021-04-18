@@ -2846,6 +2846,35 @@ input::-webkit-inner-spin-button {
 }
 /* Loader for lengthy time loading actions */
 
+
+/* Custom Date Style */
+.customDate {
+    position: relative;
+    color: white;
+}
+
+.customDate:before {
+    position: absolute;
+    top: auto; left: 3px;
+    content: attr(data-date);
+    display: inline-block;
+    color: black;
+} 
+
+.customDate::-webkit-datetime-edit, .customDate::-webkit-inner-spin-button, .customDate::-webkit-clear-button {
+    display: none;
+}  
+
+.customDate::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    color: black;
+    opacity: 1;
+}
+/* Custom Date Style */
+
+
 /*Created By Maruf*/
 .bs-searchbox .form-control{
 	height: 25px;

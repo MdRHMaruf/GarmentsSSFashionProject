@@ -157,8 +157,8 @@ String userName=(String)session.getAttribute("userName");
 							<div class="form-group col-md-2 mb-1 pl-1"
 								style="padding-left: 1px;">
 								<label for="submissionDate" class="col-form-label-sm mb-0 pb-0">Submission
-									Date</label> <input id="submissionDate" type="date"
-									class="form-control-sm">
+									Date</label> <input id="submissionDate" data-date-format="DD MMM YYYY" type="date"
+									class="form-control-sm col-md-6 d-block customDate">
 
 							</div>
 						</div>

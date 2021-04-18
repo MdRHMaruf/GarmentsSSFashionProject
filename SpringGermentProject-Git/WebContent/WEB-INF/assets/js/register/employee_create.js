@@ -209,7 +209,7 @@ function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Li
 	$("#cardNo").val(CardNo);
 	$("#line").val(Line);
 	$("#grade").val(Grade);
-	$("#joinDate").val(JoinDate);
+	$("#joinDate").val(JoinDate).change();
 
 	$("#religion").val(religion);
 	$("#gender").val(gender);
@@ -217,7 +217,7 @@ function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Li
 	$("#contact").val(contact);
 	$("#nationality").val(nationality);
 	$("#nationalId").val(nationalId);
-	$("#birthDate").val(birthDate);
+	$("#birthDate").val(birthDate).change();
 
 	document.getElementById("employeeCode").disabled = true;
 	$("#btnSave").hide();
@@ -281,3 +281,6 @@ idListMicro.forEach((id,index)=>{
 		}
 	});
 })
+
+var today = new Date();
+$("#joinDate").val(today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)).change();
