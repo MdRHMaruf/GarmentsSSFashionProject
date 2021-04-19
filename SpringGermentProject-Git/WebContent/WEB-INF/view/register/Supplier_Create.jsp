@@ -21,7 +21,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="card-box">
-
+					<input type="hidden" id="user_hidden" value=<%=userId%>>
 					<div class="row">
 						<div class="col-sm-12 col-md-6 col-lg-6 ">
 							<h3>Supplier List</h3>
@@ -221,7 +221,7 @@
 									<button class="btn btn-primary btn-sm" id="save" accesskey="S" type="button"
 										onclick="insertSupplier()"><span style="text-decoration:underline;"> Save</span></button>
 									<button class="btn btn-success btn-sm" id="edit" type="button"
-										onclick="editSupplier(this) style="display: none;"">Edit</button>
+										onclick="editSupplier(this)" style="display: none;">Edit</button>
 									<button class="btn btn-secondary btn-sm" type="button">Refresh</button>
 									<button type="button" class="btn btn-secondary btn-sm"
 										data-dismiss="modal">Close</button>
