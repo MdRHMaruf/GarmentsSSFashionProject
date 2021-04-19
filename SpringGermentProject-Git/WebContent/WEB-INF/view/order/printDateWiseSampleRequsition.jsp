@@ -26,7 +26,7 @@
 	
         SpringRootConfig sp=new SpringRootConfig();
         
-		String Sql="select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId \n"+ 
+		String Sql="select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemid,e.itemname,a.sizeGroupId \n"+ 
 				"from TbSampleRequisitionDetails a  \n"+
 				"left join tbSampleRequisition b  \n"+
 				"on a.sampleReqId=b.sampleReqId  \n"+
@@ -38,7 +38,7 @@
 				"on a.buyerId=g.id left join tblogin lo on a.UserId=lo.id left join TbSampleTypeInfo s  \n"+
 				"on s.AutoId=a.SampleTypeId  \n"+
 				"where a.date='"+date+"' and a.UserId='"+userId+"'   \n"+
-				"group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,lo.username,a.sizeGroupId \n"+ 
+				"group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemid,e.itemname,lo.username,a.sizeGroupId \n"+ 
 				"order by a.sampleReqId,a.sizeGroupId";
       	System.out.println("sql "+Sql);
       	

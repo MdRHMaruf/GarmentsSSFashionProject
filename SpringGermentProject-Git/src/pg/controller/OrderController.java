@@ -1854,7 +1854,8 @@ public class OrderController {
 		//List<FactoryModel> factoryList = registerSfervice.getAllFactories();
 		List<SampleRequisitionItem> sampleReqList = orderService.getSampleRequisitionList(userId);
 		List<CommonModel> sampleList = orderService.getSampleList();
-		List<CommonModel> inchargeList = orderService.getInchargeList();
+		//List<CommonModel> inchargeList = orderService.getInchargeList();
+		List<CommonModel> sampleEmpList = orderService.getSampleEmployeeList();
 		List<CommonModel> merchendizerList = orderService.getMerchendizerList();
 
 		view.addObject("groupList",groupList);
@@ -1864,7 +1865,7 @@ public class OrderController {
 		//view.addObject("factoryList",factoryList);
 		view.addObject("sampleReqList",sampleReqList);
 		view.addObject("sampleList",sampleList);
-		view.addObject("inchargeList",inchargeList);
+		view.addObject("sampleEmpList",sampleEmpList);
 		view.addObject("merchendizerList",merchendizerList);
 
 		map.addAttribute("userId",userId);
@@ -1931,14 +1932,20 @@ public class OrderController {
 	public @ResponseBody JSONObject addItemToSampleRequisition(SampleRequisitionItem v) {
 		JSONObject objmain = new JSONObject();
 
-		if(orderService.addItemToSampleRequisition(v)) {
-			JSONArray mainArray = new JSONArray();
-			List<SampleRequisitionItem> sampleList = orderService.getIncomepleteSampleRequisitionItemList(v.getUserId());
-			//List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionItemList(v.getUserId());
-			objmain.put("result",sampleList);
-		}else {
-			objmain.put("result", "Something Wrong");
+		if(!orderService.checkDoplicateSampleRequisition(v)) {
+			if(orderService.addItemToSampleRequisition(v)) {
+				JSONArray mainArray = new JSONArray();
+				List<SampleRequisitionItem> sampleList = orderService.getIncomepleteSampleRequisitionItemList(v.getUserId());
+				//List<SampleRequisitionItem> sampleList = orderService.getSampleRequisitionItemList(v.getUserId());
+				objmain.put("result",sampleList);
+			}else {
+				objmain.put("result", "Something Wrong");
+			}
 		}
+		else {
+			objmain.put("result", "Doplicate sample requisition never be save");
+		}
+		
 
 		return objmain;
 	}

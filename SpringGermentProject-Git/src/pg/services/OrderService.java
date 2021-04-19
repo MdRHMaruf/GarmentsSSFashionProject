@@ -235,6 +235,8 @@ public interface OrderService {
 	String getMaxCadId();
 	
 	List<String> getMultiCadfiles(String bpo);
+	List<CommonModel> getSampleEmployeeList();
+	boolean checkDoplicateSampleRequisition(SampleRequisitionItem v);
 	
 }
 

@@ -984,6 +984,18 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.getSampleRequisitionAndCuttingDetails(sampleReqId, sampleCommentId);
 	}
 
+	@Override
+	public List<CommonModel> getSampleEmployeeList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getSampleEmployeeList();
+	}
+
+	@Override
+	public boolean checkDoplicateSampleRequisition(SampleRequisitionItem v) {
+		// TODO Auto-generated method stub
+		return orderDAO.checkDoplicateSampleRequisition(v);
+	}
+
 
 	
 	
