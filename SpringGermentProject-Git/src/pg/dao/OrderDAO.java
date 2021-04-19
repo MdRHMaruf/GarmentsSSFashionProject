@@ -238,6 +238,9 @@ public interface OrderDAO {
 	List<SampleCadAndProduction> getSampleCadDetailsForProduction(String sampleCommentId);
 	List<SampleRequisitionItem> getSampleRequisitionAndCuttingDetails(String sampleReqId,String sampleCommentId);
 
+	List<CommonModel> getSampleEmployeeList();
+	
+	boolean checkDoplicateSampleRequisition(SampleRequisitionItem v);
 }
 
 

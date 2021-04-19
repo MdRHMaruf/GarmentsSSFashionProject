@@ -505,10 +505,10 @@ function searchPurchaseOrder(poNo,poType) {
         $("#poNo").val(purchaseOrder.poNo);
         $("#poType").val(purchaseOrder.type);
         let date = purchaseOrder.orderDate.split("/");
-        $("#orderDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+        $("#orderDate").val(date[2] + "-" + date[1] + "-" + date[0]).change();
 
         date = purchaseOrder.deliveryDate.split("/");
-        $("#deliveryDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+        $("#deliveryDate").val(date[2] + "-" + date[1] + "-" + date[0]).change();
 
         $("#supplierName").val(purchaseOrder.supplierId).change();
         $("#deliveryTo").val(purchaseOrder.deliveryTo).change();
@@ -694,5 +694,5 @@ $(document).ready(function () {
 
 
 var today = new Date();
-document.getElementById("orderDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+$("#orderDate").val(today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)).change();
 

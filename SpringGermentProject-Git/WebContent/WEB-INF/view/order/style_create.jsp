@@ -107,11 +107,11 @@
 									</div>
 									<div class="col-md-6">
 										<div class="form-group mb-0">
-											<label for="unitValue" class="mb-0">Date:</label>
-											<div class="input-group date" data-provide="datepicker">
-												<input id="date" value=<%=date1%> name="date" type="date"
-													class="form-control-sm col-md-12">
-											</div>
+											<label for="date" class="mb-0">Date:</label>
+											
+												<input id="date" name="date" type="date" data-date-format="DD MMM YYYY"
+													class="form-control-sm col-md-12 customDate">
+										
 										</div>
 									</div>
 								</div>
@@ -235,15 +235,4 @@
 </div>
 <jsp:include page="../include/footer.jsp" />
 
-<script>
-			$('.datepicker').datepicker({
-			    format: 'mm/dd/yyyy',
-			    startDate: '-3d'
-			});
-			</script>
-<script
-	src="${pageContext.request.contextPath}/assets/js/order/style-create.js"></script>
-
-<script>
-	  
-	</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/assets/js/order/style-create.js"></script>

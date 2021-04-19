@@ -4303,8 +4303,15 @@ public class RegisterDaoImpl implements RegisterDao{
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			String sql = "insert into TbEmployeeInfo (EmployeeCode, Name, CardNo, DesginationId, DepartmentId, LineId, Grade, JoinDate, EntryTime, UserId) values ('" + saveEmployee.getEmployeeCode()+ "','" + saveEmployee.getEmployeeName()+ "','"+saveEmployee.getCardNo()+"','"+saveEmployee.getDesignation()+"','"+saveEmployee.getDepartment()+"','"+saveEmployee.getLine()+"','"+saveEmployee.getGrade()+"','"+saveEmployee.getJoinDate()+"', CURRENT_TIMESTAMP,'"+ saveEmployee.getUserId() + "')";
-
+			String sql = "insert into TbEmployeeInfo (EmployeeCode, Name, CardNo, DesginationId, DepartmentId, LineId, Grade, JoinDate,"
+					+ " EntryTime, UserId,religion, gender, email, contact, nationality, nationalid, birthdate) values"
+					+ " ('" + saveEmployee.getEmployeeCode()+ "','" + saveEmployee.getEmployeeName()+ "','"+saveEmployee.getCardNo()+"',"
+					+ "'"+saveEmployee.getDesignation()+"','"+saveEmployee.getDepartment()+"','"+saveEmployee.getLine()+"',"
+					+ "'"+saveEmployee.getGrade()+"','"+saveEmployee.getJoinDate()+"', CURRENT_TIMESTAMP,'"+ saveEmployee.getUserId() + "',"
+					+ "'"+saveEmployee.getReligion()+"','"+saveEmployee.getGender()+"','"+saveEmployee.getEmail()+"',"
+					+ "'"+saveEmployee.getContact()+"','"+saveEmployee.getNationality()+"','"+saveEmployee.getNationalId()+"',"
+					+ "'"+saveEmployee.getBirthDate()+"')";
+//			System.err.println("sql : "+sql);
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -4324,6 +4331,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 	@Override
 	public List<Employee> getEmployeeList() {
+		String sql="";
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 		List<Employee> dataList=new ArrayList<Employee>();
@@ -4332,15 +4340,18 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			int i=1;
-			String sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, (select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesginationId, (select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId) as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo a";
-
+			//String sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, (select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesginationId, (select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId) as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo a";
+			sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, isnull((select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId),'') as DepartmentName, a.DesginationId, isnull((select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId),'') as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate,a.religion,a.gender, a.email, a.contact, a.nationality, a.nationalid, isnull(CONVERT(VARCHAR(50),a.birthdate),'') as birthdate from TbEmployeeInfo a";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 
 				Object[] element = (Object[]) iter.next();
 
-				dataList.add(new Employee(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString()));
+				dataList.add(new Employee(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(),
+						element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(),
+						element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),
+						element[14].toString(),element[15].toString(),element[16].toString(),element[17].toString()));
 				i++;
 			}
 			tx.commit();
@@ -4366,7 +4377,13 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="update TbEmployeeInfo set Name='"+editEmployee.getEmployeeName()+"', CardNo='"+editEmployee.getCardNo()+"', DepartmentId='"+editEmployee.getDepartment()+"', DesginationId='"+editEmployee.getDesignation()+"', LineId='"+editEmployee.getLine()+"', Grade='"+editEmployee.getGrade()+"', JoinDate='"+editEmployee.getJoinDate()+"', EntryTime=current_timestamp, UserId='"+editEmployee.getUserId()+"' where EmployeeCode='"+editEmployee.getEmployeeCode()+"'";
+			String sql="update TbEmployeeInfo set Name='"+editEmployee.getEmployeeName()+"', CardNo='"+editEmployee.getCardNo()+"',"
+					+ " DepartmentId='"+editEmployee.getDepartment()+"', DesginationId='"+editEmployee.getDesignation()+"',"
+					+ " LineId='"+editEmployee.getLine()+"', Grade='"+editEmployee.getGrade()+"', JoinDate='"+editEmployee.getJoinDate()+"',"
+					+ " EntryTime=current_timestamp, UserId='"+editEmployee.getUserId()+"',religion='"+editEmployee.getReligion()+"',"
+					+ " gender='"+editEmployee.getGender()+"', email='"+editEmployee.getEmail()+"', contact='"+editEmployee.getContact()+"',"
+					+ " nationality='"+editEmployee.getNationality()+"', nationalid='"+editEmployee.getNationalId()+"',"
+					+ " birthdate='"+editEmployee.getBirthDate()+"' where EmployeeCode='"+editEmployee.getEmployeeCode()+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

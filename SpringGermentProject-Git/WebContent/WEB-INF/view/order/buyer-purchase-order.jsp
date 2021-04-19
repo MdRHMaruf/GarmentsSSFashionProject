@@ -222,7 +222,7 @@
 									class="my-0" for="shipmentDate">Shipment Date<span
 										style="color: red">*</span></label></span>
 							</div>
-							<input id="shipmentDate" type="date" class="form-control" placeholder="dd/mm/yyyy" data-date-format="dd/mm/yyyy"
+							<input id="shipmentDate" type="date" class="form-control customDate" placeholder="dd/mm/yyyy"  data-date-format="DD MMM YYYY"
 								aria-label="Sizing example input"
 								aria-describedby="inputGroup-sizing-sm">
 						</div>
@@ -235,7 +235,7 @@
 									class="my-0" for="inspectionDate">Inspection Date<span
 										style="color: red">*</span></label></span>
 							</div>
-							<input id="inspectionDate" type="date" class="form-control"
+							<input id="inspectionDate" type="date" class="form-control  customDate" placeholder="dd/mm/yyyy"  data-date-format="DD MMM YYYY"
 								aria-label="Sizing example input"
 								aria-describedby="inputGroup-sizing-sm">
 						</div>

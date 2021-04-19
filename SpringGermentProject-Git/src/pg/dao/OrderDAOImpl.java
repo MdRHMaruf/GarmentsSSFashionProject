@@ -8577,5 +8577,69 @@ public class OrderDAOImpl implements OrderDAO{
 		return dataList;
 	}
 
+	@Override
+	public List<CommonModel> getSampleEmployeeList() {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> dataList=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select AutoId,Name from TbEmployeeInfo order by Name";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new CommonModel(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public boolean checkDoplicateSampleRequisition(SampleRequisitionItem v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			
+			
+			String sql="select sizeGroupId from TbSampleRequisitionDetails where SampleTypeId='"+v.getSampleId()+"' and BuyerId='"+v.getBuyerId()+"' and BuyerOrderId='"+v.getBuyerOrderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and colorId='"+v.getColorId()+"' and sizeGroupId='"+v.getSizeGroupId()+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				return true;
+			}
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
 
 }

@@ -173,8 +173,8 @@ String userName=(String)session.getAttribute("userName");
 						<label for="buyerName" class="col-form-label-sm mb-0 pb-0 ">Sample
 							Deadline</label>
 						<div class="row">
-							<input type="date" id="sampleDeadline"
-								class="col-md-12 form-control-sm" />
+							<input type="date" id="sampleDeadline"  data-date-format="DD MMM YYYY"
+								class="col-md-12 form-control-sm customDate" />
 						</div>
 					</div>
 					<div class="form-group col-md-4 mb-1" style="padding-left: 1px;">
@@ -185,7 +185,7 @@ String userName=(String)session.getAttribute("userName");
 								data-live-search="true"
 								data-style="btn-light btn-sm border-light-gray">
 								<option id="inchargeId" value="0">Select Incharge</option>
-								<c:forEach items="${inchargeList}" var="list">
+								<c:forEach items="${sampleEmpList}" var="list">
 									<option id="inchargeId" value="${list.id}">${list.name}</option>
 								</c:forEach>
 							</select>

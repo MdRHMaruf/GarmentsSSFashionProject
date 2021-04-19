@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleRequistionReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="377a337c-4aa5-44a9-be36-095e611eeb74">
 	<property name="ireport.zoom" value="1.818181818181822"/>
-	<property name="ireport.x" value="339"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="345"/>
+	<property name="ireport.y" value="4"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a left join tbSampleRequisition b on a.sampleReqId=b.sampleReqId left join TbStyleCreate d  on a.StyleId=d.StyleId left join tblogin lo on a.UserId=lo.id left join tbItemDescription e on a.ItemId=e.itemid left join tbBuyer g on a.buyerId=g.id left join TbSampleTypeInfo s on s.AutoId=a.SampleTypeId where a.date='2021-02-22' and a.UserId='1' group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId,lo.username order by a.sampleReqId,a.sizeGroupId"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemid,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a  left join tbSampleRequisition b  on a.sampleReqId=b.sampleReqId  left join TbStyleCreate d  on a.StyleId=d.StyleId  left join tbItemDescription e  on a.ItemId=e.itemid  left join tbBuyer g  on a.buyerId=g.id left join tblogin lo on a.UserId=lo.id left join TbSampleTypeInfo s  on s.AutoId=a.SampleTypeId  where a.date='2021-04-18' and a.UserId='7'  group by s.Name,a.sampleReqId,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemid,e.itemname,lo.username,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
@@ -15,10 +15,11 @@
 	<field name="sampleReqId" class="java.lang.String"/>
 	<field name="PurchaseOrder" class="java.lang.String"/>
 	<field name="merchendiser" class="java.lang.String"/>
-	<field name="dateLine" class="java.lang.String"/>
-	<field name="samplerequestdate" class="java.lang.String"/>
+	<field name="dateLine" class="java.util.Date"/>
+	<field name="samplerequestdate" class="java.util.Date"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="StyleNo" class="java.lang.String"/>
+	<field name="itemid" class="java.lang.Integer"/>
 	<field name="itemname" class="java.lang.String"/>
 	<field name="sizeGroupId" class="java.lang.String"/>
 	<background>
@@ -97,7 +98,7 @@
 				<reportElement x="399" y="25" width="69" height="18" uuid="b733a596-77a9-4890-938f-b92037e12f04"/>
 				<text><![CDATA[Dilivery Date]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="473" y="40" width="80" height="18" uuid="61564e4d-e990-458d-b190-533be2ec7610"/>
 				<textFieldExpression><![CDATA[$F{samplerequestdate}]]></textFieldExpression>
 			</textField>
@@ -121,7 +122,7 @@
 				<reportElement x="104" y="39" width="155" height="14" uuid="c2e800c6-8a17-4f0c-bfa1-e4957177ccdf"/>
 				<textFieldExpression><![CDATA[$F{merchendiser}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="473" y="26" width="80" height="17" uuid="d6da0c63-839d-42f8-95c1-a4e870e50207"/>
 				<textFieldExpression><![CDATA[$F{dateLine}]]></textFieldExpression>
 			</textField>
@@ -150,6 +151,9 @@
 				</subreportParameter>
 				<subreportParameter name="sizeGroupId">
 					<subreportParameterExpression><![CDATA[$F{sizeGroupId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="itemId">
+					<subreportParameterExpression><![CDATA[$F{itemid}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SampleRequsitionSize.jasper"]]></subreportExpression>

@@ -4,7 +4,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
-		<defaultValueExpression><![CDATA["select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a left join tbSampleRequisition b on a.sampleReqId=b.sampleReqId left join TbStyleCreate d on a.StyleId=d.StyleId left join tblogin lo on a.UserId=lo.id left join tbItemDescription e on a.ItemId=e.itemid left join tbBuyer g on a.buyerId=g.id where a.sampleReqId='11' group by a.sampleReqId,lo.username,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemname,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemId,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a left join tbSampleRequisition b on a.sampleReqId=b.sampleReqId left join TbStyleCreate d on a.StyleId=d.StyleId left join tblogin lo on a.UserId=lo.id left join tbItemDescription e on a.ItemId=e.itemid left join tbBuyer g on a.buyerId=g.id where a.sampleReqId='11' group by a.sampleReqId,lo.username,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemId,e.itemname,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["E:/production/"]]></defaultValueExpression>
@@ -19,6 +19,7 @@
 	<field name="samplerequestdate" class="java.lang.String"/>
 	<field name="name" class="java.lang.String"/>
 	<field name="StyleNo" class="java.lang.String"/>
+	<field name="itemId" class="java.lang.Integer"/>
 	<field name="itemname" class="java.lang.String"/>
 	<field name="sizeGroupId" class="java.lang.String"/>
 	<background>
@@ -128,6 +129,9 @@
 				</subreportParameter>
 				<subreportParameter name="sizeGroupId">
 					<subreportParameterExpression><![CDATA[$F{sizeGroupId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="itemId">
+					<subreportParameterExpression><![CDATA[$F{itemId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "SampleRequsitionSize.jasper"]]></subreportExpression>

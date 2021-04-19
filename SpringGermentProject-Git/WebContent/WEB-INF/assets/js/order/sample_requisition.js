@@ -352,7 +352,7 @@ function itemSizeAdd() {
 						success: function (data) {
 							if (data.result == "Something Wrong") {
 								dangerAlert("Something went wrong");
-							} else if (data.result == "duplicate") {
+							} else if (data.result == "Doplicate sample requisition never be save") {
 								dangerAlert("Duplicate Item Name..This Item Name Already Exist")
 							} else {
 								drawItemTable(data.result);
@@ -847,4 +847,7 @@ $(document).ready(function () {
 	});
 });
 
+
+var today = new Date();
+$("#sampleDeadline").val(today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)).change();
 

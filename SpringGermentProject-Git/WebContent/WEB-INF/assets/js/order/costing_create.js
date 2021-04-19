@@ -833,7 +833,7 @@ function costingItemSet(autoId, itemType) {
           $("#unit").val(costing.unitId).change();
           $("#commission").val(costing.commission);
           let date = costing.date.split("/");
-          $("#submissionDate").val(date[2] + "-" + date[1] + "-" + date[0]);
+          $("#submissionDate").val(date[2] + "-" + date[1] + "-" + date[0]).change();
           $("#width").val(costing.width);
           $("#yard").val(costing.yard);
           $("#gsm").val(costing.gsm);
@@ -1032,7 +1032,7 @@ $(document).ready(function () {
 });
 
 let today = new Date();
-document.getElementById("submissionDate").value = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+$("#submissionDate").val(today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2)).change();
 
 
 let idListMicro = ["styleName","itemName","copyCosting","particularType","particularName","unit","commission","submissionDate","width","consumption","unitPrice","btnAdd"];

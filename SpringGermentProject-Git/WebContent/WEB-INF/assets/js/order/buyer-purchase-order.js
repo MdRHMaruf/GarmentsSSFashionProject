@@ -608,8 +608,8 @@ function searchBuyerPO(buyerPoNo) {
 				$("#buyerPOId").val(buyerPo.buyerPoId);
 				$("#buyerPOIdTitle").text(buyerPo.buyerPoId);
 				$("#buyerName").val(buyerPo.buyerId).change();
-				$("#shipmentDate").val(buyerPo.shipmentDate);
-				$("#inspectionDate").val(buyerPo.inspectionDate);
+				$("#shipmentDate").val(buyerPo.shipmentDate).change();
+				$("#inspectionDate").val(buyerPo.inspectionDate).change();
 				$("#paymentTerm").val(buyerPo.paymentTerm).change();
 				$("#currency").val(buyerPo.currency).change();
 				$("#note").val(buyerPo.note);

@@ -17,12 +17,44 @@ public class Employee {
 	String joinDate;
 	String UserId;
 	
+	String religion;
+	String gender;
+	String email;
+	String contact;
+	String nationality;
+	String nationalId;
+	String birthDate;
 	
 	public Employee() {
 		
 	}
 	
-	public Employee(String AutoId,String employeeCode, String employeeName, String cardNo, String departmentId, String department, String designationId, String designation, String line, String grade, String joinDate) {
+	public Employee(String AutoId,String employeeCode, String employeeName, String cardNo, String departmentId, String department,
+			String designationId, String designation, String line, String grade, String joinDate,String religion, String gender,
+			String email, String contact, String nationality, String nationalId, String birthDate) {
+		super();
+		this.autoId=AutoId;
+		this.employeeCode = employeeCode;
+		this.employeeName = employeeName;
+		this.designation = designation;
+		this.department = department;
+		this.departmentId=departmentId;
+		this.designationId=designationId;
+		this.line=line;
+		this.cardNo=cardNo;
+		this.grade=grade;
+		this.joinDate=joinDate;
+		this.religion=religion;
+		this.gender=gender;
+		this.email=email;
+		this.contact=contact;
+		this.nationality=nationality;
+		this.nationalId=nationalId;
+		this.birthDate=birthDate;
+	}
+	
+	public Employee(String AutoId,String employeeCode, String employeeName, String cardNo, String departmentId, String department,
+			String designationId, String designation, String line, String grade, String joinDate) {
 		super();
 		this.autoId=AutoId;
 		this.employeeCode = employeeCode;
@@ -140,6 +172,61 @@ public class Employee {
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
-	
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public void setReligion(String religion) {
+		this.religion = religion;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+	public String getNationalId() {
+		return nationalId;
+	}
+
+	public void setNationalId(String nationalId) {
+		this.nationalId = nationalId;
+	}
+
+	public String getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(String birthDate) {
+		this.birthDate = birthDate;
+	}
 	
 }
