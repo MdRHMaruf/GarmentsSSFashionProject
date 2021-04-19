@@ -11,12 +11,7 @@ function maxsupplierId(){
 		type: 'POST',
 		dataType: 'json',
 		url: './max_supplierid',
-		data: {
-
-
-
-
-		},
+		data: {},
 		success: function (data) {
 			$("#suppier_id").val(data);
 			getAllsuppliers();
@@ -397,10 +392,6 @@ function editSupplier(){
 
 function getAllsuppliers(){
 	//$("#itemtable").addClass('ac_loading');
-
-
-
-
 	$.ajax({
 
 		type:'POST',
@@ -412,39 +403,26 @@ function getAllsuppliers(){
 			$("#supplierTable").empty();
 			patchdata(data.result);
 		}
-
-
 	});
-
-
 }
 
 
 function patchdata(data){
 	let rows = [];
-
-
 	for (let i = 0; i < data.length; i++) {
 		//ert("ad "+data[i].aquisitionValue);
 		rows.push(drawRow(data[i],i+1));
-
 	}
 
 	$("#supplierTable").append(rows);
 }
 
 function drawRow(rowData,c) {
-
-	//alert(rowData.aquisitionValue);
-
 	let row = $("<tr />")
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
 	row.append($("<td ><i class='fa fa-edit' onclick=\"SupplierDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModal\"> </i></td>"));
-
-	
-
 	return row;
 }
 

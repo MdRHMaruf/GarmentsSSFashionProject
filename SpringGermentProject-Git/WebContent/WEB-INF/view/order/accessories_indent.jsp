@@ -205,6 +205,23 @@ String userName=(String)session.getAttribute("userName");
 												</button>
 											</div>
 										</div>
+										
+										<div class="row">
+											<div class="col-md-4 ml-3">
+											<label class="form-check-label"> <input
+													id="checkSQ" type="checkbox"
+													class="form-check-input">SQ
+												</label>
+											</div>
+											
+												<div class="col-md-4">
+												<label class="form-check-label"> <input
+													id="checkSKQ" type="checkbox"
+													class="form-check-input">SKQ
+												</label>
+												</div>
+												
+										</div>
 									</div>
 								</div>
 								<div class="col-md-6">
