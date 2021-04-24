@@ -5,6 +5,41 @@ window.onload = ()=>{
 	document.title = "Color Create";
 } 
 
+function deleteColorCreate(itemId){
+    if(confirm("Are you sure to delete this Item?")){
+    	
+   	 var userId = $("#userId").val();
+   	 var linkName=$('#linkName').val();
+   	  
+       $("#loader").show();
+       $.ajax({
+         type: 'POST',
+         dataType: 'json',
+         url: './deleteColorCreate',
+         data:{
+          itemId:itemId,
+       	  userId:userId,
+       	  linkName:linkName
+         },
+         success: function (data) {
+           if (data.result == "Something Wrong") {
+             dangerAlert("Something went wrong");
+           }
+           else if(data.result =="You have no permission to delete this item"){
+           	successAlert("You have no permission to delete this item");
+           }
+           else {
+             
+             $("#dataList").empty();
+             $("#dataList").append(drawDataTable(data.result));
+ 
+           }
+           $("#loader").hide();
+         }
+       });
+     }
+}
+
 function saveAction() {
   let colorName = $("#colorName").val().trim();
   let colorCode = $("#colorCode").val().trim();
@@ -110,7 +145,7 @@ function drawDataTable(data) {
   let length = data.length;
 
   for (let i = 0; i < length; i++) {
-    rows.push(drawRowDataTable(data[i], i));
+    rows.push(drawRowDataTable(data[i], i+1));
   }
 
   return rows;
@@ -119,11 +154,11 @@ function drawDataTable(data) {
 function drawRowDataTable(rowData, c) {
 
   let row = $("<tr />")
-  row.append($("<td>" + rowData.colorId + "</td>"));
+  row.append($("<td>" + c + "</td>"));
   row.append($("<td id='colorName" + rowData.colorId + "'>" + rowData.colorName + "</td>"));
   row.append($("<td id='colorCode" + rowData.colorId + "'>" + rowData.colorCode + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.colorId + ")\"> </i></td>"));
-
+  row.append($("<td ><i class='fa fa-trash' onclick=\"deleteColorCreate(" + rowData.colorId + ")\"> </i></td>"));
   return row;
 }
 

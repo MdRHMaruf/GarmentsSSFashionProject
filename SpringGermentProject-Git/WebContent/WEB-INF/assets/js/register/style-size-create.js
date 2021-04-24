@@ -28,6 +28,42 @@ window.onload = () => {
 }
 let sizeGroup = [];
 
+
+function deleteSize(itemId){
+    if(confirm("Are you sure to delete this Item?")){
+    	
+   	 var userId = $("#userId").val();
+   	 var linkName=$('#linkName').val();
+   	  
+       $("#loader").show();
+       $.ajax({
+         type: 'POST',
+         dataType: 'json',
+         url: './deleteSize',
+         data:{
+          itemId:itemId,
+       	  userId:userId,
+       	  linkName:linkName
+         },
+         success: function (data) {
+           if (data.result == "Something Wrong") {
+             dangerAlert("Something went wrong");
+           }
+           else if(data.result =="You have no permission to delete this item"){
+           	successAlert("You have no permission to delete this item");
+           }
+           else {
+             
+             $("#dataList").empty();
+             $("#dataList").append(drawDataTable(data.result));
+ 
+           }
+           $("#loader").hide();
+         }
+       });
+     }
+}
+
 function saveAction() {
   let sizeGroupId = $("#sizeGroupId").val().trim();
   let sizeGrouName = $("#sizeGroupName").val().trim();
@@ -250,7 +286,7 @@ function drawDataTable(data) {
   let length = data.length;
 
   for (let i = 0; i < length; i++) {
-    rows.push(drawRowDataTable(data[i], i));
+    rows.push(drawRowDataTable(data[i], i+1));
   }
 
   return rows;
@@ -264,7 +300,7 @@ function drawRowDataTable(rowData, c) {
   row.append($("<td id='sizeName" + rowData.sizeId + "'>" + rowData.sizeName + "</td>"));
   row.append($("<td >" + rowData.sorting + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.sizeId + "," + rowData.groupId + ")\"> </i></td>"));
-
+  row.append($("<td ><i class='fa fa-trash' onclick=\"deleteSize("+rowData.sizeId+")\"> </i></td>"));
   return row;
 }
 

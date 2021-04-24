@@ -818,8 +818,60 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.getBankList();
 	}
 
-	
+	@Override
+	public boolean deleteFabricsItem(String fabricsId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteFabricsItem(fabricsId);
+	}
 
-	
+	@Override
+	public boolean hasDeletePermission(String userId,String subId) {
+		// TODO Auto-generated method stub
+		return registerDao.hasDeletePermission(userId,subId);
+	}
+
+	@Override
+	public boolean deleteAccessoriesItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteAccessoriesItem(itemId);
+	}
+
+	@Override
+	public boolean deleteGermentsItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteGermentsItem(itemId);
+	}
+
+	@Override
+	public boolean deleteUnitItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteUnitItem(itemId);
+	}
+
+	@Override
+	public boolean deleteColorItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteColorItem(itemId);
+	}
+
+	@Override
+	public boolean deleteCostingItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteCostingItem(itemId);
+	}
+
+	@Override
+	public boolean deleteBrandItem(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteBrandItem(itemId);
+	}
+
+	@Override
+	public boolean deleteSize(String itemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteSize(itemId);
+	}
+
+
 
 }

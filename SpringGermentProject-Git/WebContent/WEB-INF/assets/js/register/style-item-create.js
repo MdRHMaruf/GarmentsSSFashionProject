@@ -4,6 +4,42 @@ window.onload = ()=>{
 	document.title = "Item Description Create";
 } 
 
+
+function deleteGermentsItem(itemId){
+    if(confirm("Are you sure to delete this Item?")){
+    	
+   	 var userId = $("#userId").val();
+   	 var linkName=$('#linkName').val();
+   	  
+       $("#loader").show();
+       $.ajax({
+         type: 'POST',
+         dataType: 'json',
+         url: './deleteGermentsItem',
+         data:{
+          itemId:itemId,
+       	  userId:userId,
+       	  linkName:linkName
+         },
+         success: function (data) {
+           if (data.result == "Something Wrong") {
+             dangerAlert("Something went wrong");
+           }
+           else if(data.result =="You have no permission to delete this item"){
+           	successAlert("You have no permission to delete this item");
+           }
+           else {
+             
+             $("#dataList").empty();
+             $("#dataList").append(drawDataTable(data.result));
+ 
+           }
+           $("#loader").hide();
+         }
+       });
+     }
+}
+
 function saveAction() {
   let styleItemName = $("#styleItemName").val().trim();
   let styleItemCode = $("#styleItemCode").val().trim();
@@ -109,7 +145,7 @@ function drawDataTable(data) {
   let length = data.length;
 
   for (let i = 0; i < length; i++) {
-    rows.push(drawRowDataTable(data[i], i));
+    rows.push(drawRowDataTable(data[i], i+1));
   }
 
   return rows;
@@ -118,11 +154,11 @@ function drawDataTable(data) {
 function drawRowDataTable(rowData, c) {
 
   let row = $("<tr />")
-  row.append($("<td>" + rowData.styleItemId + "</td>"));
+  row.append($("<td>" +c + "</td>"));
   row.append($("<td id='styleItemName" + rowData.styleItemId + "'>" + rowData.styleItemName + "</td>"));
   row.append($("<td id='styleItemCode" + rowData.styleItemId + "'>" + rowData.styleItemCode + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.styleItemId + ")\"> </i></td>"));
-
+  row.append($("<td ><i class='fa fa-trash' onclick=\"deleteGermentsItem(" + rowData.styleItemId + ")\"> </i></td>"));
   return row;
 }
 

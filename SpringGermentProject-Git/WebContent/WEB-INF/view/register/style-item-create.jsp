@@ -10,6 +10,7 @@
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
+String linkName=(String) request.getAttribute("linkName");	
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -30,6 +31,7 @@ String userName=(String) request.getAttribute("userName");
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="styleItemId" value="0">
+			<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -81,17 +83,19 @@ String userName=(String) request.getAttribute("userName");
 										<th scope="col">#</th>
 										<th scope="col">Item Name</th>
 										<th scope="col">Item Code</th>
-										<th scope="col">edit</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
 									<c:forEach items="${styleItemList}" var="styleItem"
 													varStatus="counter">
 										<tr>
-											<td>${styleItem.styleItemId}</td>
+											<td>${counter.count}</td>
 											<td id='styleItemName${styleItem.styleItemId}'>${styleItem.styleItemName}</td>
 											<td id='styleItemCode${styleItem.styleItemId}'>${styleItem.styleItemCode}</td>
 											<td><i class="fa fa-edit" style='cursor: pointer;' onclick="setData(${styleItem.styleItemId})"> </i></td>
+											<td><i class="fa fa-trash" style='cursor: pointer;' onclick="deleteGermentsItem(${styleItem.styleItemId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>
