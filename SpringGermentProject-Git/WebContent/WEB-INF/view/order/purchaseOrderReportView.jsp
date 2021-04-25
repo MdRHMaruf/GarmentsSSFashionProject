@@ -29,6 +29,9 @@
 	String type = request.getAttribute("type").toString();
 	String previewType = request.getAttribute("previewType").toString();
 	boolean landscapeCheck = Boolean.valueOf(request.getAttribute("landscapeCheck").toString());
+	boolean brandCheck = Boolean.valueOf(request.getAttribute("brandCheck").toString());
+	boolean sqCheck = Boolean.valueOf(request.getAttribute("sqCheck").toString());
+	boolean skqCheck = Boolean.valueOf(request.getAttribute("skqCheck").toString());
 	
     try {
 
@@ -74,7 +77,7 @@
 			sql="select (select dbo.number((select sum(amount) from tbAccessoriesIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,b.ShippingMarks,b.PurchaseOrder, \r\n"+
 					"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
 					" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
-					"ISNULL(c.Colorname,'') as ColorName,b.sqNumber,isnull(brand.name,'') as brand,b.accessoriesSize,ss.sizeName as size, \r\n"+
+					"ISNULL(c.Colorname,'') as ColorName,isnull(b.sqNumber,'')as sqNumber,isnull(b.skqNumber,'')as skqNumber,isnull(brand.name,'') as brand,b.accessoriesSize,ss.sizeName as size, \r\n"+
 					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
 					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
@@ -105,13 +108,26 @@
 				}else{
 					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcs.jrxml");
 				}
+				if(sqCheck && skqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcsWithSQ&SKQ.jrxml");
+				}else if(sqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcsWithSQ.jrxml");
+				}else if(skqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithoutPcsWithSKQ.jrxml");
+				}
 			}else{
 				if(landscapeCheck){
 					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderLandscape.jrxml");
 				}else{
 					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/SupplierWisePurchaseOrder.jrxml");
 				}
-				
+				if(sqCheck && skqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithPcsWithSQ&SKQ.jrxml");
+				}else if(sqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithPcsWithSQ.jrxml");
+				}else if(skqCheck){
+					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderWithPcsWithSKQ.jrxml");
+				}
 			}
 			
 			

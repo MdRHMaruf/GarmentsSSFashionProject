@@ -2919,7 +2919,22 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(sc.StyleNo,'')as StyleNo,ai.Itemid,ISNULL(id.itemname,'') as ItemName,ai.ColorId,ISNULL(c.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty \r\n" + 
+			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(ai.styleNo,'')as StyleNo,ai.Itemid,ISNULL(ai.itemName,'') as ItemName,ai.ColorId,ISNULL(ai.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty,isnull(ai.sqNumber,'')as sqNumber,ISNULL(ai.skqNumber,'')as skqNumber \r\n" + 
+					"from tbAccessoriesIndent ai  \r\n" + 
+					"left join tbbrands b \r\n" + 
+					"on ai.IndentBrandId = b.id \r\n" + 
+					"left join TbAccessoriesItem aItem \r\n" + 
+					"on ai.accessoriesItemId = aItem.itemid \r\n" + 
+					"left join tbStyleSize ss \r\n" + 
+					"on ai.size = ss.id \r\n" + 
+					"left join tbColors ic\r\n" + 
+					"on ai.IndentColorId = ic.ColorId\r\n" + 
+					"left join tbunits u \r\n" + 
+					"on ai.UnitId = u.Unitid \r\n" + 
+					"where ai.AINo = '"+accessoriesIndentId+"' order by ai.AccIndentId,ai.ColorId,ai.accessoriesItemId,ss.sortingNo";
+
+			
+			/*String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(sc.StyleNo,'')as StyleNo,ai.Itemid,ISNULL(id.itemname,'') as ItemName,ai.ColorId,ISNULL(c.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty \r\n" + 
 					"from tbAccessoriesIndent ai  \r\n" + 
 					"left join TbStyleCreate sc \r\n" + 
 					"on ai.styleid = cast(sc.StyleId as varchar) \r\n" + 
@@ -2938,7 +2953,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"left join tbunits u \r\n" + 
 					"on ai.UnitId = u.Unitid \r\n" + 
 					"where ai.AINo = '"+accessoriesIndentId+"' order by ai.AccIndentId,ai.ColorId,ai.accessoriesItemId,ss.sortingNo";
-
+*/
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -2976,6 +2991,8 @@ public class OrderDAOImpl implements OrderDAO{
 				tempIndent.setUnitId(element[29].toString());
 				tempIndent.setUnit(element[30].toString());
 				tempIndent.setRequiredUnitQty(element[31].toString());
+				tempIndent.setSqNo(element[32].toString());
+				tempIndent.setSkqNo(element[33].toString());
 				dataList.add(tempIndent);
 			}
 
@@ -3108,10 +3125,10 @@ public class OrderDAOImpl implements OrderDAO{
 			String userId ="";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
-				String sql="insert into tbAccessoriesIndent (AINo,styleid, PurchaseOrder, "
-						+ "Itemid, ColorId, "
+				String sql="insert into tbAccessoriesIndent (AINo,styleid,styleNo, PurchaseOrder, "
+						+ "Itemid,itemName, ColorId,colorName, "
 						+ "ShippingMarks, accessoriesItemId, "
-						+ "accessoriesSize, "
+						+ "accessoriesSize,sqNumber,skqNumber, "
 						+ "size, PerUnit, TotalBox,"
 						+ " OrderQty, QtyInDozen, "
 						+ "ReqPerPices, ReqPerDoz, "
@@ -3119,8 +3136,8 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "PercentageExtraQty, TotalQty, "
 						+ "UnitId, RequireUnitQty, "
 						+ "IndentColorId, IndentBrandId, IndentDate, "
-						+ " IndentTime, IndentPostBy) values('"+accessoriesIndentId+"','"+indent.get("styleId")+"','"+indent.get("purchaseOrder")+"','"+indent.get("itemId")+"',"
-						+ "'"+indent.get("colorId")+"','"+indent.get("shippingMark")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"',"
+						+ " IndentTime, IndentPostBy) values('"+accessoriesIndentId+"','"+indent.get("styleId")+"','"+indent.get("styleNo")+"','"+indent.get("purchaseOrder")+"','"+indent.get("itemId")+"','"+indent.get("itemName")+"',"
+						+ "'"+indent.get("colorId")+"','"+indent.get("colorName")+"','"+indent.get("shippingMark")+"','"+indent.get("accessoriesItemId")+"','"+indent.get("accessoriesSize")+"','"+indent.get("sqNo")+"','"+indent.get("skqNo")+"',"
 						+ "'"+indent.get("sizeId")+"','"+indent.get("perUnit")+"','"+indent.get("totalBox")+"','"+indent.get("orderQty")+"','"+indent.get("dozenQty")+"',"
 						+ "'"+indent.get("reqPerPcs")+"','"+indent.get("reqPerDozen")+"','"+indent.get("divideBy")+"','"+indent.get("inPercent")+"','"+indent.get("percentQty")+"',"
 						+ "'"+indent.get("totalQty")+"','"+indent.get("unitId")+"','"+indent.get("unitQty")+"','"+indent.get("accessoriesColorId")+"','"+indent.get("accessoriesBrandId")+"',"+indentDate+",GETDATE(),'"+indent.get("userId")+"')";
@@ -4147,6 +4164,8 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "TotalQty,"
 						+ "unitId,"
 						+ "RequireUnitQty,"
+						+ "sqNumber,"
+						+ "skqNumber,"
 						+ "mdapproval,"
 						+ "indentDate,"
 						+ "entrytime,"
@@ -4171,7 +4190,9 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("percentQty")+"',"
 						+ "'"+indent.get("totalQty")+"',"
 						+ "'"+indent.get("unitId")+"',"
-						+ "'"+indent.get("grandQty")+"','0',"
+						+ "'"+indent.get("grandQty")+"',"
+								+ "'"+indent.get("sqNo")+"',"
+										+ "'"+indent.get("skqNo")+"','0',"
 						+ "GETDATE(),"
 						+ "CURRENT_TIMESTAMP,"
 						+ "'"+indent.get("userId")+"'"
@@ -4239,6 +4260,8 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "TotalQty='"+fabricsIndent.getTotalQty()+"',"
 					+ "unitId='"+fabricsIndent.getUnitId()+"',"
 					+ "RequireUnitQty='"+fabricsIndent.getGrandQty()+"',"
+					+ "sqNumber= '"+fabricsIndent.getSqNo()+"',"
+					+ "skqNumber = '"+fabricsIndent.getSkqNo()+"',"
 					+ "entrytime=CURRENT_TIMESTAMP,"
 					+ "entryby='"+fabricsIndent.getUserId()+"' where id = '"+fabricsIndent.getAutoId()+"' ";
 			session.createSQLQuery(sql).executeUpdate();
@@ -4334,7 +4357,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select rf.id,rf.PurchaseOrder,rf.styleId,sc.StyleNo,rf.itemId,id.itemname,rf.itemcolor,c.Colorname,rf.fabricsid,fi.ItemName,rf.qty,rf.dozenqty,rf.consumption,rf.inPercent,rf.PercentQty,TotalQty,rf.unitId,u.unitname,rf.markingWidth  \r\n" + 
+			String sql="select rf.id,rf.PurchaseOrder,rf.styleId,sc.StyleNo,rf.itemId,id.itemname,rf.itemcolor,c.Colorname,rf.fabricsid,fi.ItemName,rf.qty,rf.dozenqty,rf.consumption,rf.inPercent,rf.PercentQty,TotalQty,rf.unitId,u.unitname,rf.markingWidth,rf.sqNumber,rf.skqNumber  \r\n" + 
 					"from tbFabricsIndent rf\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on rf.StyleId = sc.StyleId\r\n" + 
@@ -4354,6 +4377,8 @@ public class OrderDAOImpl implements OrderDAO{
 				Object[] element = (Object[]) iter.next();
 				tempFabrics = new FabricsIndent(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), Double.valueOf(element[10].toString()),  Double.valueOf(element[11].toString()),  Double.valueOf(element[12].toString()),  Double.valueOf(element[13].toString()),  Double.valueOf(element[14].toString()),  Double.valueOf(element[15].toString()), element[16].toString(), element[17].toString());
 				tempFabrics.setMarkingWidth(element[18].toString());
+				tempFabrics.setSqNo(element[19].toString());
+				tempFabrics.setSkqNo(element[20].toString());
 				datalist.add(tempFabrics);		
 			}			
 			tx.commit();			
@@ -4469,7 +4494,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();	
 			String sql="select fi.id,fi.indentId,fi.PurchaseOrder,fi.styleId,isnull(sc.StyleNo,'') as styleNo,fi.itemid,isnull(id.itemname,'')as itemName,fi.itemcolor,isnull(itemColor.Colorname,'') as itemColorName,fabricsid,\r\n" + 
-					"fabricsI.ItemName as fabricsName,fi.fabricscolor,fabricsColor.Colorname as fabricsColorName,fi.qty,fi.dozenqty,fi.consumption,fi.inPercent,fi.PercentQty,fi.TotalQty,fi.unitId,u.unitname,fi.width,fi.Yard,fi.GSM,fi.RequireUnitQty,fi.brand,fi.entryby,fi.markingWidth \r\n" + 
+					"fabricsI.ItemName as fabricsName,fi.fabricscolor,fabricsColor.Colorname as fabricsColorName,fi.qty,fi.dozenqty,fi.consumption,fi.inPercent,fi.PercentQty,fi.TotalQty,fi.unitId,u.unitname,fi.width,fi.Yard,fi.GSM,fi.RequireUnitQty,fi.brand,fi.entryby,fi.markingWidth,isnull(fi.sqNumber,'')as sqNumber,isnull(fi.skqNumber,'')as skqNumber \r\n" + 
 					"from tbFabricsIndent fi\r\n" + 
 					"left join TbStyleCreate sc\r\n" + 
 					"on fi.styleId = cast(sc.StyleId as varchar)\r\n" + 
@@ -4518,6 +4543,8 @@ public class OrderDAOImpl implements OrderDAO{
 				indent.setBrandId(element[25].toString());
 				indent.setUserId(element[26].toString());
 				indent.setMarkingWidth(element[27].toString());
+				indent.setSqNo(element[28].toString());
+				indent.setSkqNo(element[29].toString());
 				indentList.add(indent);
 			}			
 			tx.commit();			
@@ -4534,6 +4561,7 @@ public class OrderDAOImpl implements OrderDAO{
 		return indentList;
 	}
 
+	
 	@Override
 	public double getOrderQuantity(String purchaseOrder, String styleId, String itemId, String colorId) {
 		Session session=HibernateUtil.openSession();

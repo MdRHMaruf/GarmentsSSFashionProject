@@ -201,13 +201,13 @@ String userName=(String)session.getAttribute("userName");
 
 		<div class="row">
 
-			<div id="yardDiv" class="col-sm-2 pr-0 pl-1">
+			<div id="yardDiv" class="col-sm-1 pr-0 pl-1">
 				<label for="yard" class="col-form-label-sm mb-0 pb-0">Yard</label> <input
 					id="yard" type="number" class="form-control-sm"
 					onkeyup="gsmCalculation()" disabled>
 			</div>
 
-			<div id="gsmDiv" class="col-sm-2 pr-0 pl-1">
+			<div id="gsmDiv" class="col-sm-1 pr-0 pl-1">
 				<label for="gsm" class="col-form-label-sm mb-0 pb-0">GSM</label> <input
 					id="gsm" type="number" class="form-control-sm"
 					onkeyup="gsmCalculation()" disabled>
@@ -246,6 +246,16 @@ String userName=(String)session.getAttribute("userName");
 						</c:forEach>
 					</select>
 				</div>
+			</div>
+			
+			<div class="col-sm-2 pr-0 pl-1">
+				<label for="sqNo" class="col-form-label-sm mb-0 pb-0">SQ No</label> <input
+					id="sqNo" type="text" class="form-control-sm">
+			</div>
+			
+			<div class="col-sm-2 pr-0 pl-1">
+				<label for="skqNo" class="col-form-label-sm mb-0 pb-0">SKQ No</label> <input
+					id="skqNo" type="text" class="form-control-sm">
 			</div>
 
 		</div>

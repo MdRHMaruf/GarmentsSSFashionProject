@@ -38,6 +38,8 @@ public class AccessoriesIndent {
 	String accessoriescolor;
 	String accessoriesName;
 	String sizeName;
+	String sqNo;
+	String skqNo;
 	String requiredUnitQty;
 	String indentBrandId;
 	String indentColorId;
@@ -409,6 +411,18 @@ public class AccessoriesIndent {
 	}
 	public void setLengthUnitId(String lengthUnitId) {
 		this.lengthUnitId = lengthUnitId;
+	}
+	public String getSqNo() {
+		return sqNo;
+	}
+	public void setSqNo(String sqNo) {
+		this.sqNo = sqNo;
+	}
+	public String getSkqNo() {
+		return skqNo;
+	}
+	public void setSkqNo(String skqNo) {
+		this.skqNo = skqNo;
 	}
 
 }

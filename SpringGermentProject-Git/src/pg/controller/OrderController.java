@@ -625,7 +625,7 @@ public class OrderController {
 	public @ResponseBody JSONObject editBuyerPoItem(BuyerPoItem buyerPoItem) {
 		JSONObject objmain = new JSONObject();
 
-		if(orderService.isBuyerPoItemExist(buyerPoItem)) {
+		if(!orderService.isBuyerPoItemExist(buyerPoItem)) {
 			if(orderService.editBuyerPoItem(buyerPoItem)) {
 				JSONArray mainArray = new JSONArray();
 				List<BuyerPoItem> buyerPOItemList = orderService.getBuyerPOItemList(buyerPoItem.getBuyerPOId(),buyerPoItem.getUserId());
@@ -2183,6 +2183,9 @@ public class OrderController {
 		map.addAttribute("type",type);
 		map.addAttribute("previewType",previewType);
 		map.addAttribute("landscapeCheck","false");
+		map.addAttribute("brandCheck","false");
+		map.addAttribute("sqCheck","false");
+		map.addAttribute("skqCheck","false");
 		return view;
 	}
 
@@ -2198,6 +2201,9 @@ public class OrderController {
 
 		String[] dataList = data.split("@");
 		map.addAttribute("landscapeCheck",dataList[0]);
+		map.addAttribute("brandCheck",dataList[1]);
+		map.addAttribute("sqCheck",dataList[2]);
+		map.addAttribute("skqCheck",dataList[3]);
 		return view;
 	}
 
