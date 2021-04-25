@@ -3,6 +3,40 @@ window.onload = ()=>{
 	document.title = "Accessories Create";
 } 
 
+function deleteAccessoriesItem(itemId){
+    if(confirm("Are you sure to delete this Item?")){
+    	
+    	 var userId = $("#userId").val();
+    	 var linkName=$('#linkName').val();
+    	  
+        $("#loader").show();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: '/deleteAccessoriesItem',
+          data:{
+        	  itemId:itemId,
+        	  userId:userId,
+        	  linkName:linkName
+          },
+          success: function (data) {
+            if (data.result == "Something Wrong") {
+              dangerAlert("Something went wrong");
+            }
+            else if(data.result =="You have no permission to delete this item"){
+            	successAlert("You have no permission to delete this item");
+            }
+            else {
+              
+              $("#dataList").empty();
+              $("#dataList").append(drawDataTable(data.result));
+  
+            }
+            $("#loader").hide();
+          }
+        });
+      }
+}
 
 function saveAction() {
   const accessoriesItemName = $("#accessoriesItemName").val().trim();
@@ -225,7 +259,7 @@ function drawRowDataTable(rowData, c) {
   row.append($("<td id='accessoriesItemName" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemName + "</td>"));
   row.append($("<td id='accessoriesItemCode" + rowData.accessoriesItemId + "'>" + rowData.accessoriesItemCode + "</td>"));
   row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.accessoriesItemId + ")\" style='cursor:pointer;'>  </i></td>"));
-
+  row.append($("<td ><i class='fa fa-trash' onclick=\"deleteAccessoriesItem(" + rowData.accessoriesItemId + ")\" style='cursor:pointer'> </i></td>"));
   return row;
 }
 

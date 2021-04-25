@@ -241,5 +241,16 @@ public interface RegisterDao {
 	public boolean editBank(Bank bank);
 	public Bank getBankInfo(String id);
 	public List<Bank> getBankList();
-
+	
+	public boolean deleteFabricsItem(String fabricsId);
+	public boolean hasDeletePermission(String userId,String subId);
+	public boolean deleteAccessoriesItem(String itemId);
+	public boolean deleteGermentsItem(String itemId);
+	
+	public boolean deleteUnitItem(String itemId);
+	public boolean deleteColorItem(String itemId);
+	public boolean deleteCostingItem(String itemId);
+	
+	public boolean deleteBrandItem(String itemId);
+	public boolean deleteSize(String itemId);
 }

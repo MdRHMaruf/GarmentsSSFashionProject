@@ -11,6 +11,7 @@
 <%
 String userId=(String)session.getAttribute("userId");
 String userName=(String)session.getAttribute("userName");
+String linkName=(String) request.getAttribute("linkName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -40,6 +41,7 @@ String userName=(String)session.getAttribute("userName");
 		<input type="hidden" id="sizeId" value="0">
 		<input type="hidden" id="sizeGroupId" value="0">
 		<input type="hidden" id="groupId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
 				<div class="card-box">
@@ -118,7 +120,8 @@ String userName=(String)session.getAttribute("userName");
 												<th scope="col">Size Group Name</th>
 												<th scope="col">Size Name</th>
 												<th scope="col">Size Shorting</th>
-												<th scope="col">edit</th>
+												<th scope="col">Edit</th>
+												<th scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -128,8 +131,8 @@ String userName=(String)session.getAttribute("userName");
 													<td id='sizeGroup${size.sizeId}'>${size.groupName}</td>
 													<td id='sizeName${size.sizeId}'>${size.sizeName}</td>
 													<td id='sizeSorting${size.sizeId}'>${size.sizeSorting}</td>
-													<td><i class="fa fa-edit"
-														onclick="setData(${size.sizeId},${size.groupId})" style="cursor: pointer;"> </i></td>
+													<td><i class="fa fa-edit" onclick="setData(${size.sizeId},${size.groupId})" style="cursor: pointer;"> </i></td>
+													<td><i class="fa fa-trash" onclick="deleteSize(${size.sizeId})" style="cursor: pointer;"> </i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

@@ -10,6 +10,7 @@
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
+String linkName=(String) request.getAttribute("linkName");	
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -30,6 +31,7 @@ String userName=(String) request.getAttribute("userName");
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="particularItemId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -76,16 +78,18 @@ String userName=(String) request.getAttribute("userName");
 									<tr>
 										<th scope="col">#</th>
 										<th scope="col">Particular Item Name</th>
-										<th scope="col">edit</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
 									<c:forEach items="${particularItemList}" var="particularItem"
 													varStatus="counter">
 										<tr>
-											<td>${particularItem.particularItemId}</td>
+											<td>${counter.count}</td>
 											<td id='particularItemName${particularItem.particularItemId}'>${particularItem.particularItemName}</td>
 											<td><i class="fa fa-edit" style="cursor: pointer;" onclick="setData(${particularItem.particularItemId})"> </i></td>
+											<td><i class="fa fa-trash" style="cursor: pointer;" onclick="deleteCostingItem(${particularItem.particularItemId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

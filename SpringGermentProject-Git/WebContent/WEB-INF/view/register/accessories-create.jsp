@@ -11,6 +11,7 @@
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
+String linkName=(String) request.getAttribute("linkName");	
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -39,6 +40,7 @@ String userName=(String) request.getAttribute("userName");
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="itemType" value="<%=ItemType.ACCESSORIES.getType()%>">
 		<input type="hidden" id="accessoriesItemId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -138,7 +140,8 @@ String userName=(String) request.getAttribute("userName");
 												<th scope="col">#</th>
 												<th scope="col">Accessories Item Name</th>
 												<th scope="col">Accessories Item Code</th>
-												<th scope="col">edit</th>
+												<th scope="col">Edit</th>
+												<th scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -150,9 +153,8 @@ String userName=(String) request.getAttribute("userName");
 														id='accessoriesItemName${accessoriesItem.accessoriesItemId}'>${accessoriesItem.accessoriesItemName}</td>
 													<td
 														id='accessoriesItemCode${accessoriesItem.accessoriesItemId}'>${accessoriesItem.accessoriesItemCode}</td>
-													<td><i class="fa fa-edit"
-														onclick="setData(${accessoriesItem.accessoriesItemId})" style="cursor:pointer;">
-													</i></td>
+													<td><i class="fa fa-edit" onclick="setData(${accessoriesItem.accessoriesItemId})" style="cursor:pointer;"></i></td>
+													<td><i class="fa fa-trash" onclick="deleteAccessoriesItem(${accessoriesItem.accessoriesItemId})" style="cursor:pointer;"></i></td>
 												</tr>
 											</c:forEach>
 										</tbody>
