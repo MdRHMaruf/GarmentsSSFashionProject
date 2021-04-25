@@ -11,6 +11,7 @@
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
+String linkName=(String) request.getAttribute("linkName");	
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -39,6 +40,7 @@ String userName=(String) request.getAttribute("userName");
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="itemType" value="<%=ItemType.FABRICS.getType()%>">
 		<input type="hidden" id="fabricsItemId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -132,21 +134,22 @@ String userName=(String) request.getAttribute("userName");
 									<table class="table table-hover table-bordered table-sm">
 										<thead>
 											<tr>
-												<th scope="col">#</th>
+												<th scope="col">#SL</th>
 												<th scope="col">Fabrics Item Name</th>
 												<th scope="col">Reference</th>
-												<th scope="col">edit</th>
+												<th scope="col">Edit</th>
+												<th scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
 											<c:forEach items="${fabricsItemList}" var="fabricsItem"
 												varStatus="counter">
 												<tr>
-													<td>${fabricsItem.fabricsItemId}</td>
+													<td>${counter.count}</td>
 													<td id='fabricsItemName${fabricsItem.fabricsItemId}'>${fabricsItem.fabricsItemName}</td>
 													<td id='reference${fabricsItem.fabricsItemId}'>${fabricsItem.reference}</td>
-													<td><i class="fa fa-edit"
-														onclick="setData(${fabricsItem.fabricsItemId})" style='cursor:pointer;'> </i></td>
+													<td><i class="fa fa-edit" onclick="setData(${fabricsItem.fabricsItemId})" style='cursor:pointer;'> </i></td>
+													<td><i class="fa fa-trash" onclick="trashFabricsData(${fabricsItem.fabricsItemId})" style='cursor:pointer;'> </i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

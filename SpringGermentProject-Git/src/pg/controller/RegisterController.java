@@ -756,10 +756,43 @@ public class RegisterController {
 		map.addAttribute("brandList",brandList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkName","brand_create");
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/deleteBrand",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteBrand(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteBrandItem(itemId)) {
+
+					JSONArray mainarray = new JSONArray();
+					
+					List<Brand> brandList= registerService.getBrandList();
+
+					for(int a=0;a<brandList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("brandId", brandList.get(a).getBrandId());
+						obj.put("brandName", brandList.get(a).getBrandName());
+						obj.put("brandCode", brandList.get(a).getBrandCode());
+
+						mainarray.add(obj);
+					}
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+		return objmain;
+	}
 
 	@RequestMapping(value = "/saveBrand",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveBrand(Brand brand) {
@@ -838,9 +871,10 @@ public class RegisterController {
 
 		map.addAttribute("fabricsItemList",fabricsItemList);
 		view.addObject("unitList",unitList);
-
+		
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkName","fabrics_create");
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
@@ -877,6 +911,45 @@ public class RegisterController {
 		return objmain;
 	}
 
+	
+	@RequestMapping(value = "/deleteFabricsItem",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteFabricsItem(String fabricsId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteFabricsItem(fabricsId)) {
+
+					JSONArray mainarray = new JSONArray();
+
+					List<FabricsItem> fabricsItemList= registerService.getFabricsItemList();
+
+					for(int a=0;a<fabricsItemList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("fabricsItemId", fabricsItemList.get(a).getFabricsItemId());
+						obj.put("fabricsItemName", fabricsItemList.get(a).getFabricsItemName());
+						obj.put("reference", fabricsItemList.get(a).getReference());
+
+						mainarray.add(obj);
+					}
+
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+	
+
+
+		return objmain;
+	}
+
+	
 	@RequestMapping(value = "/getFabricsItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject getFabricsItem(String fabricsItemId) {
 		JSONObject objmain = new JSONObject();
@@ -947,12 +1020,48 @@ public class RegisterController {
 		view.addObject("unitList",unitList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-
+		map.addAttribute("linkName","accessories_create");
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/deleteAccessoriesItem",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteAccessoriesItem(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteAccessoriesItem(itemId)) {
+
+					JSONArray mainarray = new JSONArray();
+
+					List<AccessoriesItem> accessoriesItemList= registerService.getAccessoriesItemList();
+
+					for(int a=0;a<accessoriesItemList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("accessoriesItemId", accessoriesItemList.get(a).getAccessoriesItemId());
+						obj.put("accessoriesItemName", accessoriesItemList.get(a).getAccessoriesItemName());
+						obj.put("accessoriesItemCode", accessoriesItemList.get(a).getAccessoriesItemCode());
+
+						mainarray.add(obj);
+					}
+
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+	
+
+
+		return objmain;
+	}
 
 	@RequestMapping(value = "/saveAccessoriesItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveAccessoriesItem(AccessoriesItem accessoriesItem) {
@@ -1121,10 +1230,47 @@ public class RegisterController {
 		map.addAttribute("styleItemList",styleItemList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkName","garments_item_create");
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/deleteGermentsItem",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteGermentsItem(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteGermentsItem(itemId)) {
 
+					JSONArray mainarray = new JSONArray();
+
+					List<StyleItem> styleItemList= registerService.getStyleItemList();
+
+					for(int a=0;a<styleItemList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("styleItemId", styleItemList.get(a).getStyleItemId());
+						obj.put("styleItemName", styleItemList.get(a).getStyleItemName());
+						obj.put("styleItemCode", styleItemList.get(a).getStyleItemCode());
+
+						mainarray.add(obj);
+					}
+
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+	
+
+
+		return objmain;
+	}
+	
 	@RequestMapping(value = "/saveStyleItem",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveStyleItem(StyleItem styleItem) {
 		JSONObject objmain = new JSONObject();
@@ -1202,11 +1348,47 @@ public class RegisterController {
 		map.addAttribute("unitList",unitList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-
+		map.addAttribute("linkName","unit_create");
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/deleteUnit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteUnit(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteUnitItem(itemId)) {
 
+					JSONArray mainarray = new JSONArray();
+
+					List<Unit> unitList= registerService.getUnitList();
+
+					for(int a=0;a<unitList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("unitId", unitList.get(a).getUnitId());
+						obj.put("unitName", unitList.get(a).getUnitName());
+						obj.put("unitValue", unitList.get(a).getUnitValue());
+
+						mainarray.add(obj);
+					}
+
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+	
+
+
+		return objmain;
+	}
+	
 	@RequestMapping(value = "/saveUnit",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveUnit(Unit unit) {
 		JSONObject objmain = new JSONObject();
@@ -1292,10 +1474,47 @@ public class RegisterController {
 		map.addAttribute("colorList",colorList);
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
-
+		map.addAttribute("linkName","color_create");
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 
+	@RequestMapping(value = "/deleteColorCreate",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteColorCreate(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteColorItem(itemId)) {
+
+					JSONArray mainarray = new JSONArray();
+
+					List<Color> colorList= registerService.getColorList();
+
+					for(int a=0;a<colorList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("colorId", colorList.get(a).getColorId());
+						obj.put("colorName", colorList.get(a).getColorName());
+						obj.put("colorCode", colorList.get(a).getColorCode());
+
+
+						mainarray.add(obj);
+					}
+
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+	
+
+
+		return objmain;
+	}
 
 	@RequestMapping(value = "/saveColor",method=RequestMethod.POST)
 	public @ResponseBody JSONObject saveColor(Color color) {
@@ -1373,8 +1592,42 @@ public class RegisterController {
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 		map.addAttribute("particularItemList",particularItemList);
-
+		map.addAttribute("linkName","costing_item_create");
+		
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+
+	@RequestMapping(value = "/deleteCostingItem",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteCostingItem(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteCostingItem(itemId)) {
+
+					JSONArray mainarray = new JSONArray();
+					
+					List<ParticularItem> particularItemList= registerService.getParticularItemList();
+
+					for(int a=0;a<particularItemList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("particularItemId", particularItemList.get(a).getParticularItemId());
+						obj.put("particularItemName", particularItemList.get(a).getParticularItemName());
+
+
+						mainarray.add(obj);
+					}
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+		return objmain;
 	}
 
 
@@ -1968,8 +2221,43 @@ public class RegisterController {
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkName","style_size_create");
 
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/deleteSize",method=RequestMethod.POST)
+	public @ResponseBody JSONObject deleteSize(String itemId,String userId,String linkName) {
+		JSONObject objmain = new JSONObject();
+		
+			if(registerService.hasDeletePermission(userId,linkName)) {
+				if(registerService.deleteSize(itemId)) {
+
+					JSONArray mainarray = new JSONArray();
+					
+					List<Size> sizeList= registerService.getStyleSizeList();
+
+					for(int a=0;a<sizeList.size();a++) {
+						JSONObject obj = new JSONObject();
+						obj.put("sizeId", sizeList.get(a).getSizeId());
+						obj.put("groupId", sizeList.get(a).getGroupId());
+						obj.put("groupName", sizeList.get(a).getGroupName());
+						obj.put("sizeName", sizeList.get(a).getSizeName());
+						obj.put("sorting", sizeList.get(a).getSizeSorting());
+						mainarray.add(obj);
+					}
+
+					objmain.put("result", mainarray);
+
+				}else {
+					objmain.put("result", "Something Wrong");
+				}
+			}
+			else {
+				objmain.put("result", "You have no permission to delete this item");
+			}
+			
+		return objmain;
 	}
 
 	@RequestMapping(value = "/saveSize",method=RequestMethod.POST)

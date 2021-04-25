@@ -10,6 +10,7 @@
 <%
 String userId=(String) request.getAttribute("userId");	
 String userName=(String) request.getAttribute("userName");	
+String linkName=(String) request.getAttribute("linkName");	
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -30,6 +31,7 @@ String userName=(String) request.getAttribute("userName");
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="colorId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -78,20 +80,22 @@ String userName=(String) request.getAttribute("userName");
 								<table class="table table-hover table-bordered table-sm" >
 								<thead>
 									<tr>
-										<th scope="col">#</th>
+										<th scope="col">SL#</th>
 										<th scope="col">Color Name</th>
 										<th scope="col">Color Code</th>
-										<th scope="col">edit</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
 									<c:forEach items="${colorList}" var="color"
 													varStatus="counter">
 										<tr>
-											<td>${color.colorId}</td>
+											<td>${counter.count}</td>
 											<td id='colorName${color.colorId}'>${color.colorName}</td>
 											<td id='colorCode${color.colorId}'>${color.colorCode}</td>
 											<td><i class="fa fa-edit" style="cursor: pointer;" onclick="setData(${color.colorId})"> </i></td>
+											<td><i class="fa fa-trash" style="cursor: pointer;" onclick="deleteColorCreate(${color.colorId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

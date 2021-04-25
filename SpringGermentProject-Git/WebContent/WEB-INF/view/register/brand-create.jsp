@@ -11,6 +11,7 @@
 <%
 	String userId=(String) request.getAttribute("userId");	
 	String userName=(String) request.getAttribute("userName");
+	String linkName=(String) request.getAttribute("linkName");
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">
@@ -28,6 +29,7 @@
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
 		<input type="hidden" id="brandId" value="0">
+		<input type="hidden" id="linkName" value="<%=linkName%>">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -79,17 +81,19 @@
 										<th scope="col">#</th>
 										<th scope="col">Brand Name</th>
 										<th scope="col">Brand Code</th>
-										<th scope="col">edit</th>
+										<th scope="col">Edit</th>
+										<th scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
 									<c:forEach items="${brandList}" var="brand"
 													varStatus="counter">
 										<tr>
-											<td>${brand.brandId}</td>
+											<td>${counter.count}</td>
 											<td id='brandName${brand.brandId}'>${brand.brandName}</td>
 											<td id='brandCode${brand.brandId}'>${brand.brandCode}</td>
 											<td><i class="fa fa-edit" onclick="setData(${brand.brandId})"> </i></td>
+											<td><i class="fa fa-trash" onclick="deleteBrand(${brand.brandId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>
