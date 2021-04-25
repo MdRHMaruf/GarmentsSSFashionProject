@@ -294,6 +294,8 @@ function addAction() {
   let fabricsColors = $("#fabricsColor option:selected").text();
   let brandId = $("#brand").val();
   let markingWidth = $("#markingWidth").val();
+  let sqNo = $("#sqNo").val();
+  let skqNo = $("#skqNo").val();
 
   let indentDataList = $("#dataList tr");
   let length = indentDataList.length;
@@ -325,7 +327,7 @@ function addAction() {
                     if (!isExist) {
                       let row = `<tr id='row-${++listRowId}' class='newIndentRow' data-item-type='newIndent' data-style-id='${styleId}' data-item-id='${itemId}' data-item-color-id='${itemColorId}' 
                       data-fabrics-id='${fabricsId}' data-quantity='${quantity}' data-dozen-qty='${dozenQuantity}' data-in-percent='${inPercent}' data-total-quantity='${totalQuantity}'
-                      data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}' data-marking-width='${markingWidth}'>
+                      data-unit-id='${unitId}' data-width='${width}' data-yard='${yard}' data-gsm='${gsm}' data-fabrics-color-id='${fabricsColorId}' data-brand-id='${brandId}' data-marking-width='${markingWidth}' data-sq-no='${sqNo}' data-skq-no='${skqNo}'>
                                     <td id='purchaseOrder-${listRowId}'>${purchaseOrder}</td>
                                     <td id='styleNo-${listRowId}'>${styleNo}</td>
                                     <td id='itemColor-${listRowId}'>${itemColors}</td>
@@ -427,6 +429,8 @@ function confirmAction() {
           gsm: indentRow.getAttribute('data-gsm'),
           grandQty: $("#totalQty-" + id).text(),
           markingWidth: indentRow.getAttribute('data-marking-width'),
+          sqNo: indentRow.getAttribute('data-sq-no'),
+          skqNo: indentRow.getAttribute('data-skq-no'),
           userId: userId
         }
 
@@ -634,6 +638,9 @@ function editAction() {
   let fabricsColors = $("#fabricsColor option:selected").text();
   let brandId = $("#brand").val();
   let markingWidth = $("#markingWidth").val();
+  let sqNo = $("#sqNo").val();
+  let skqNo = $("#skqNo").val();
+
   let userId = $("#userId").val();
 
 
@@ -664,6 +671,8 @@ function editAction() {
                     row.attr('data-fabrics-color-id', fabricsColorId);
                     row.attr('data-brand-id', brandId);
                     row.attr('data-marking-width', markingWidth);
+                    row.attr('data-sq-no', sqNo);
+                    row.attr('data-skq-no', skqNo);
 
                     $("#purchaseOrder-" + autoId).text(purchaseOrder);
                     $("#styleNo-" + autoId).text(styleNo);
@@ -707,6 +716,8 @@ function editAction() {
                         grandQty: grandQuantity,
                         fabricsColorId: fabricsColorId,
                         brandId: brandId,
+                        sqNo: sqNo,
+                        skqNo: skqNo,
                         userId: userId
                       },
                       success: function (data) {
@@ -735,6 +746,8 @@ function editAction() {
                             row.attr('data-fabrics-color-id', fabricsColorId);
                             row.attr('data-brand-id', brandId);
                             row.attr('data-marking-width', markingWidth);
+                            row.attr('data-sq-no', sqNo);
+                            row.attr('data-skq-no', skqNo);
 
                             $("#purchaseOrder-" + autoId).text(purchaseOrder);
                             $("#styleNo-" + autoId).text(styleNo);
@@ -874,7 +887,7 @@ function searchFabricsIndent(indentId) {
         console.log(indent);
         let row = `<tr id='row-${indent.autoId}' class='oldIndentRow' data-item-type='oldIndent' data-style-id='${indent.styleId}' data-item-id='${indent.itemId}' data-item-color-id='${indent.itemColorId}' 
                     data-fabrics-id='${indent.fabricsId}' data-quantity='${indent.qty}' data-dozen-qty='${indent.dozenQty}' data-in-percent='${indent.inPercent}' data-total-quantity='${indent.totalQty}'
-                    data-unit-id='${indent.unitId}' data-width='${indent.width}' data-yard='${indent.yard}' data-gsm='${indent.gsm}' data-fabrics-color-id='${indent.fabricsColorId}' data-brand-id='${indent.brandId}' data-marking-width='${indent.markingWidth}'>
+                    data-unit-id='${indent.unitId}' data-width='${indent.width}' data-yard='${indent.yard}' data-gsm='${indent.gsm}' data-fabrics-color-id='${indent.fabricsColorId}' data-brand-id='${indent.brandId}' data-marking-width='${indent.markingWidth}' data-sq-no='${indent.sqNo}' data-skq-no='${indent.skqNo}'>
                     <td id='purchaseOrder-${indent.autoId}'>${indent.purchaseOrder}</td>
                     <td id='styleNo-${indent.autoId}'>${indent.styleName}</td>
                     <td id='itemColor-${indent.autoId}'>${indent.itemColorName}</td>
@@ -979,6 +992,8 @@ function viewFabricsIndent(autoId, indentType) {
   $("#fabricsColor").val(row.attr('data-fabrics-color-id')).change();
   $("#brand").val(row.attr('data-brand-id')).change();
   $("#purchaseOrder").val($("#purchaseOrder-" + autoId).text()).change();
+  $("#sqNo").val(row.attr('data-sq-no'));
+  $("#skqNo").val(row.attr('data-skq-no'));
   console.log(autoId, row.attr('data-fabrics-id'), $("#consumption-" + autoId).text(), row.attr('data-quantity'), $("#dozen-" + autoId).text())
   console.log(row.attr('data-in-percent'), $("#percentQty-" + autoId).text(), row.attr('data-total-quantity'))
 

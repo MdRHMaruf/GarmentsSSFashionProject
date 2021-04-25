@@ -58,7 +58,7 @@ const styleListLoadByMultiplePurchaseOrder = function () {
 					$('#styleNo').selectpicker('refresh');
 					$("#styleNo").selectpicker('val', selectedStyleId).change();
 					console.log("style load function");
-					resolve();			
+					resolve();
 				}
 			});
 		}
@@ -151,7 +151,7 @@ function buyerWiseStyleLoad() {
 	let buyerId = $("#buyerName").val();
 
 	// alert("buyerId "+buyerId);
-	
+
 	if (buyerId != 0) {
 		$("#loader").show();
 		$.ajax({
@@ -400,6 +400,8 @@ $("#btnRecyclingData").click(() => {
 	let checkColor = $("#checkColor").prop('checked');
 	let checkShippingMark = $("#checkShippingMark").prop('checked');
 	let checkSizeRequired = $("#checkSizeRequired").prop('checked');
+	let checkSQ = $("#checkSQ").prop('checked');
+	let checkSKQ = $("#checkSKQ").prop('checked');
 
 	let groupPurchaseOrder = 'boed.purchaseOrder,';
 	let groupStyleId = 'boed.styleId,';
@@ -410,10 +412,27 @@ $("#btnRecyclingData").click(() => {
 	let groupColorName = 'c.colorName,'
 	let groupShippingMark = 'boed.ShippingMarks,';
 
+	
 
 	if (purchaseOrdersId.length > 0) {
 		if (stylesId.length > 0) {
 			if (itemsId.length > 0) {
+
+				let purchaseOrderText = $('#purchaseOrder').find('option:selected').map(function () {
+					return $(this).text();
+				}).get().join(', ');
+			
+				let styleNoText = $('#styleNo').find('option:selected').map(function () {
+					return $(this).text();
+				}).get().join(', ');
+			
+				let itemNameText = $('#itemName').find('option:selected').map(function () {
+					return $(this).text();
+				}).get().join(', ');
+			
+				let colorNameText = $('#color').find('option:selected').map(function () {
+					return $(this).text();
+				}).get().join(', ');
 
 				purchaseOrdersId = '';
 				$("#purchaseOrder").val().forEach(id => {
@@ -540,6 +559,9 @@ $("#btnRecyclingData").click(() => {
 							sizeGroupId = "";
 							let tables = "";
 							let isClosingNeed = false;
+							let rowSpan = 3;
+							if (checkSQ) rowSpan++;
+							if (checkSKQ) rowSpan++;
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
 
@@ -568,11 +590,11 @@ $("#btnRecyclingData").click(() => {
 											<tbody id="orderPreviewList-${sizeGroupId}" class="orderPreview">`
 									isClosingNeed = true;
 								}
-								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
-											<td id='purchaseOrder-${i}'>${item.purchaseOrder}</td>
-											<td id='styleNo-${i}'>${item.styleNo}</td>
-											<td id='itemName-${i}'>${item.itemname}</td>
-											<td id='color-${i}'>${item.itemcolor}</td>
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='true' data-size-group-id="${item.sizeGroupId}" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}' data-check-sq='${checkSQ}' data-check-skq='${checkSKQ}'>
+											<td id='purchaseOrder-${i}'>${checkPurchaseOrder?purchaseOrderText:item.purchaseOrder}</td>
+											<td id='styleNo-${i}'>${checkStyleNo?styleNoText:item.styleNo}</td>
+											<td id='itemName-${i}'>${checkItemName?itemNameText:item.itemname}</td>
+											<td id='color-${i}'>${checkColor?colorNameText:item.itemcolor}</td>
 											<td id='shippingMark-${i}'>${item.shippingmark}</td>
 											<td>OrderQty</td>`;
 								let sizeList = item.sizeList;
@@ -584,7 +606,7 @@ $("#btnRecyclingData").click(() => {
 								}
 
 								tables += `</tr><tr>
-												<td colspan="5" rowspan="3"></td>
+												<td colspan="5" rowspan="${rowSpan}"></td>
 												<td>(%) Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
@@ -611,6 +633,28 @@ $("#btnRecyclingData").click(() => {
 										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
 									} else {
 										tables += `<td></td>`;
+									}
+								}
+								if (checkSQ) {
+									tables += `</tr><tr>
+								<td>SQ</td>`
+									for (let j = 0; j < sizeListLength; j++) {
+										if (sizeList[j].sizeQuantity > 0) {
+											tables += `<td><input id='sq-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 sq-${i}' type='text'/></td>`;
+										} else {
+											tables += `<td></td>`;
+										}
+									}
+								}
+								if (checkSKQ) {
+									tables += `</tr><tr>
+								<td>SKQ</td>`
+									for (let j = 0; j < sizeListLength; j++) {
+										if (sizeList[j].sizeQuantity > 0) {
+											tables += `<td><input id='skq-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 skq-${i}' type='text'/></td>`;
+										} else {
+											tables += `<td></td>`;
+										}
 									}
 								}
 								tables += "</tr>"
@@ -668,6 +712,8 @@ $("#btnRecyclingData").click(() => {
 															<th >% Qty</th>
 															<th >Total Qty</th>
 															<th >Unit Qty</th>
+															${checkSQ ? '<th >SQ</th>' : ''}
+															${checkSKQ ? '<th >SKQ</th>' : ''}
 														</tr>
 													</thead>
 													<tbody id="orderList" class="orderPreview">`
@@ -676,16 +722,18 @@ $("#btnRecyclingData").click(() => {
 
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
-								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'>
-											<td id='purchaseOrder-${i}'>${item.purchaseOrder} </td>
-											<td id='styleNo-${i}'>${item.styleNo} </td>
-											<td id='itemName-${i}'>${item.itemname} </td>
-											<td id='color-${i}'>${item.itemcolor} </td>
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'  data-check-sq='${checkSQ}' data-check-skq='${checkSKQ}'>
+											<td id='purchaseOrder-${i}'>${checkPurchaseOrder?purchaseOrderText:item.purchaseOrder} </td>
+											<td id='styleNo-${i}'>${checkStyleNo?styleNoText:item.styleNo} </td>
+											<td id='itemName-${i}'>${checkItemName?itemNameText:item.itemname} </td>
+											<td id='color-${i}'>${checkColor?colorNameText:item.itemcolor} </td>
 											<td id='shippingMark-${i}'>${item.shippingmark} </td>
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)}</td>
 											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)}</span>) </td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
+											${checkSQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sq-${i}' type='text' /></td>` : ''}
+											${checkSKQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='skq-${i}' type='text' /></td>` : ''}
 										</tr>`;
 
 							}
@@ -728,6 +776,8 @@ $("#btnAdd").click(() => {
 		let accessoriesBrandId = $("#brand").val();
 		let unitId = $("#unit").val();
 		let unitQty = $("#unitQty").val();
+		let checkSQ = $("#checkSQ").prop('checked');
+		let checkSKQ = $("#checkSKQ").prop('checked');
 
 		let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
 		unitValue = unitValue == 0 ? 1 : unitValue;
@@ -755,27 +805,17 @@ $("#btnAdd").click(() => {
 					let shippingMark = $("#shippingMark-" + rowId).text();
 
 					let isExist = false;
-					accessoriesDataList.each((index,row)=>{
+					accessoriesDataList.each((index, row) => {
 						let id = row.id.slice(13);
-						console.log($('#indentPurchaseOrder-'+id).text());
-						console.log(row.getAttribute('data-style-id'));
-						console.log(row.getAttribute('data-item-id'));
-						console.log(row.getAttribute('data-color-id'));
-						console.log($('#indentShippingMark-'+id).text());
-						console.log(row.getAttribute('data-accessories-item-id')== accessoriesItemId);
-						console.log($('#indentPurchaseOrder-'+id).text()==purchaseOrder);
-						console.log(row.getAttribute('data-style-id')==styleId);
-						console.log(row.getAttribute('data-item-id')==itemId );
-						console.log(row.getAttribute('data-color-id')==colorId);
-						console.log($('#indentShippingMark-'+id).text()==shippingMark);
-						if(isExist || (row.getAttribute('data-accessories-item-id')== accessoriesItemId && $('#indentPurchaseOrder-'+id).text()==purchaseOrder && row.getAttribute('data-style-id')==styleId && row.getAttribute('data-item-id')==itemId  && row.getAttribute('data-color-id')==colorId && $('#indentShippingMark-'+id).text()==shippingMark && (isSizeRequired == 'true' ? row.getAttribute('data-size-group-id') == sizeGroupId : true ))){
+						
+						if (isExist || (row.getAttribute('data-accessories-item-id') == accessoriesItemId && $('#indentPurchaseOrder-' + id).text() == purchaseOrder && row.getAttribute('data-style-id') == styleId && row.getAttribute('data-item-id') == itemId && row.getAttribute('data-color-id') == colorId && $('#indentShippingMark-' + id).text() == shippingMark && (isSizeRequired == 'true' ? row.getAttribute('data-size-group-id') == sizeGroupId : true))) {
 							isExist = true;
 						}
 					});
 
-					console.log("isExist",isExist);
+					console.log("isExist", isExist);
 
-					if(!isExist){
+					if (!isExist) {
 						if (isSizeRequired == 'true') {
 
 							let sizes = $(".sizes-" + rowId);
@@ -788,11 +828,7 @@ $("#btnAdd").click(() => {
 								let reqPerPcs = $("#reqPerPcs").val();
 								reqPerPcs = parseFloat((reqPerPcs == 0 || reqPerPcs == '') ? 1 : reqPerPcs);
 								let reqPerDozen = parseFloat((orderQty * reqPerPcs) / 12).toFixed(2);
-	
-	
-	
-	
-	
+
 								let perUnit = $("#perUnit").val();
 								let totalBox = $("#totalBox").val();
 								let divideBy = $("#divideBy").val();
@@ -801,13 +837,15 @@ $("#btnAdd").click(() => {
 								let percentQty = $("#percentQty-" + cellId).text();
 								let totalQty = $("#totalQty-" + cellId).val();
 								let unitQty = $("#unitQty-" + cellId).val();
+								let sqNo = checkSQ?$("#sq-"+cellId).val():'';
+								let skqNo = checkSKQ?$("#skq-"+cellId).val():'';
 								if (unitQty > 0) {
-	
+
 									let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-group-id='${sizeGroupId}' data-size-id='${sizeId}' 
 											data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
 											data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
 											data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
-											data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
+											data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}' data-sq-no='${sqNo}' data-skq-no='${skqNo}'>
 											<td>${++length}</td>
 											<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
 											<td id='indentStyleNo-${listRowId}'>${styleNo}</td>
@@ -825,10 +863,10 @@ $("#btnAdd").click(() => {
 									// $('#dataTable').DataTable(({ 
 									// 	"destroy": true, 
 									// }));
-	
-	
+
+
 								}
-	
+
 							})
 						} else {
 							let orderQty = $("#orderQty-" + rowId).text();
@@ -843,16 +881,15 @@ $("#btnAdd").click(() => {
 							let inPercent = $("#inPercent-" + rowId).text();
 							let percentQty = $("#percentQty-" + rowId).text();
 							let totalQty = $("#totalQty-" + rowId).val();
-	
-	
 							let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
-	
-	
+							let sqNo = checkSQ?$("#sq-"+rowId).val():'';
+							let skqNo = checkSKQ?$("#skq-"+rowId).val():'';
+
 							let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
 											data-size-group-id='${sizeGroupId}' data-size-id='' data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
 											data-accessories-brand-id='${accessoriesBrandId}' data-unit-id='${unitId}'
 											data-order-qty='${orderQty}' data-dozen-qty='${dozenQty}' data-req-per-pcs='${reqPerPcs}' data-req-per-dozen='${reqPerDozen}' data-per-unit='${perUnit}' data-total-box='${totalBox}'
-											data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'>
+											data-divide-by='${divideBy}' data-in-percent='${inPercent}' data-percent-qty='${percentQty}' data-total-qty='${totalQty}'  data-sq-no='${sqNo}' data-skq-no='${skqNo}'>
 											<td>${++length}</td>
 											<td id='indentPurchaseOrder-${listRowId}'>${purchaseOrder}</td>
 											<td id='indentStyleNo-${listRowId}'>${styleNo}</td>
@@ -870,15 +907,15 @@ $("#btnAdd").click(() => {
 							// $('#dataTable').DataTable(({ 
 							// 	"destroy": true, 
 							// }));
-	
+
 						}
 						successAlert("Added To Temporary List... You should Confirm...");
-					}else{
+					} else {
 						warningAlert('This Accessories Already exist...');
 					}
-					
+
 				});
-				
+
 			} else {
 				warningAlert("Unit not Selected.....Please Select Unit");
 				$("#unit").focus();
@@ -901,58 +938,66 @@ function editAction() {
 	let itemsId = $("#itemName").val();
 	let colorsId = $("#color").val();
 	let shippingMarks = $("#shippingMark").val();
+	let checkSQ = $("#checkSQ").prop('checked');
+	let checkSKQ = $("#checkSKQ").prop('checked');
 
 	if (purchaseOrdersId.length > 0) {
 		if (stylesId.length > 0) {
 			if (itemsId.length > 0) {
+
+				
 				purchaseOrdersId = '';
 				$("#purchaseOrder").val().forEach(id => {
 					purchaseOrdersId += `${id},`;
 				});
 				purchaseOrdersId = purchaseOrdersId.slice(0, -1);
-				
+
+				let purchaseOrderText = $('#purchaseOrder').find('option:selected').map(function () {
+					return $(this).text();
+				}).get().join(', ');
+
 				stylesId = '';
 				$("#styleNo").val().forEach(id => {
 					stylesId += `${id},`;
 				});
 				stylesId = stylesId.slice(0, -1);
-				let styleText = $('#styleNo').find('option:selected').map(function() {
+				let styleNoText = $('#styleNo').find('option:selected').map(function () {
 					return $(this).text();
-				}).get().join(',');
-				
+				}).get().join(', ');
+
 				itemsId = '';
 				$("#itemName").val().forEach(id => {
 					itemsId += `${id},`;
 				});
 				itemsId = itemsId.slice(0, -1);
 
-				let itemText = $('#itemName').find('option:selected').map(function() {
+				let itemNameText = $('#itemName').find('option:selected').map(function () {
 					return $(this).text();
-				}).get().join(',');
-				
+				}).get().join(', ');
 
-				let colorText='';
+
+				let colorNameText = '';
 				if (colorsId.length > 0) {
 					colorsId = '';
 					$("#color").val().forEach(id => {
 						colorsId += `${id},`;
 					});
 					colorsId = colorsId.slice(0, -1);
-					colorText = $('#color').find('option:selected').map(function() {
+					colorNameText = $('#color').find('option:selected').map(function () {
 						return $(this).text();
 					}).get().join(',');
-				}else{
+				} else {
 					colorsId = '';
 				}
 
-				
+
 				if (shippingMarks.length > 0) {
 					shippingMarks = '';
 					$("#shippingMark").val().forEach(id => {
 						shippingMarks += `${id},`;
 					});
 					shippingMarks = shippingMarks.slice(0, -1);
-				}else{
+				} else {
 					shippingMarks = '';
 				}
 
@@ -990,9 +1035,9 @@ function editAction() {
 					row.attr('data-style-id', stylesId);
 					row.attr('data-item-id', itemsId);
 					row.attr('data-color-id', colorsId);
-					$("#indentStyleNo-" + autoId).text(styleText);
-					$("#indentItemName-" + autoId).text(itemText);
-					$("#indentColor-" + autoId).text(colorText);
+					$("#indentStyleNo-" + autoId).text(styleNoText);
+					$("#indentItemName-" + autoId).text(itemNameText);
+					$("#indentColor-" + autoId).text(colorNameText);
 					$("#indentShippingMark-" + autoId).text(shippingMarks);
 					row.attr('data-accessories-item-id', accessoriesItemId);
 					$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
@@ -1027,10 +1072,10 @@ function editAction() {
 						data: {
 							autoid: autoId,
 							purchaseOrder: purchaseOrdersId,
-							styleId : stylesId,
-							itemId : itemsId,
-							itemColorId : colorsId,
-							shippingmark : shippingMarks,
+							styleId: stylesId,
+							itemId: itemsId,
+							itemColorId: colorsId,
+							shippingmark: shippingMarks,
 							aiNo: accessoriesIndentNo,
 							accessoriesId: accessoriesItemId,
 							accessoriesname: accessoriesItemName,
@@ -1061,9 +1106,9 @@ function editAction() {
 								row.attr('data-style-id', stylesId);
 								row.attr('data-item-id', itemsId);
 								row.attr('data-color-id', colorsId);
-								$("#indentStyleNo-" + autoId).text(styleText);
-								$("#indentItemName-" + autoId).text(itemText);
-								$("#indentColor-" + autoId).text(colorText);
+								$("#indentStyleNo-" + autoId).text(styleNoText);
+								$("#indentItemName-" + autoId).text(itemNameText);
+								$("#indentColor-" + autoId).text(colorNameText);
 								$("#indentShippingMark-" + autoId).text(shippingMarks);
 								row.attr('data-accessories-item-id', accessoriesItemId);
 								$("#indentAccessoriesName-" + autoId).text(accessoriesItemName);
@@ -1197,8 +1242,11 @@ function confirmAction() {
 				const indent = {
 					purchaseOrder: $("#indentPurchaseOrder-" + id).text(),
 					styleId: indentRow.getAttribute('data-style-id'),
+					styleNo: $("#indentStyleNo-" + id).text(),
 					itemId: indentRow.getAttribute('data-item-id'),
+					itemName: $("#indentItemName-" + id).text(),
 					colorId: indentRow.getAttribute('data-color-id'),
+					colorName: $("#indentColor-" + id).text(),
 					shippingMark: $("#indentShippingMark-" + id).text(),
 					sizeId: indentRow.getAttribute('data-size-id'),
 					accessoriesItemId: indentRow.getAttribute('data-accessories-item-id'),
@@ -1217,6 +1265,8 @@ function confirmAction() {
 					totalQty: indentRow.getAttribute('data-total-qty'),
 					unitId: indentRow.getAttribute('data-unit-id'),
 					unitQty: $("#indentUnitQty-" + id).text(),
+					sqNo: indentRow.getAttribute('data-sq-no'),
+					skqNo: indentRow.getAttribute('data-skq-no'),
 					userId: userId
 				}
 
@@ -1242,7 +1292,7 @@ function confirmAction() {
 						alert("Incomplete...Something Wrong");
 					}
 					$("#loader").hide();
-					
+
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					//alert("Server Error");
@@ -1861,7 +1911,7 @@ function drawAccessoriesIndentListTable(data) {
 										data-accessories-size='${indent.accessoriessize}' data-accessories-item-id='${indent.accessoriesId}' data-accessories-color-id='${indent.accessoriesColorId}' 
 										data-accessories-brand-id='${indent.indentBrandId}' data-unit-id='${indent.unitId}'
 										data-order-qty='${indent.orderqty}' data-dozen-qty='${indent.qtyindozen}' data-req-per-pcs='${indent.reqperpcs}' data-req-per-dozen='${indent.reqperdozen}' data-per-unit='${indent.perunit}' data-total-box='${indent.totalbox}'
-										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}'>
+										data-divide-by='${indent.dividedby}' data-in-percent='${indent.extrainpercent}' data-percent-qty='${indent.percentqty}' data-total-qty='${indent.totalqty}' data-sq-no='${indent.sqNo}' data-skq-no='${indent.skqNo}'>
 										<td>${++length}</td>
 										<td id='indentPurchaseOrder-${autoId}'>${indent.purchaseOrder}</td>
 										<td id='indentStyleNo-${autoId}'>${indent.styleNo}</td>
@@ -2205,41 +2255,41 @@ $(document).ready(function () {
 /*let idListMicro = ["buyerName","brand","modelNo","motor","factoryId","departmentId","employee","lineId","btnSave"];
 idListMicro.forEach((id,index)=>{
   $('#'+id).keyup(function(event){
-    if(event.keyCode ===13){
-      event.preventDefault();
-      $("#"+idListMicro[index+1]).focus();
-    }
+	if(event.keyCode ===13){
+	  event.preventDefault();
+	  $("#"+idListMicro[index+1]).focus();
+	}
   });
 })*/
 /*jQuery.extend(jQuery.expr[':'], {
-    focusable: function (el, index, selector) {
-        return $(el).is('a, button, :input, [tabindex]');
-    }
+	focusable: function (el, index, selector) {
+		return $(el).is('a, button, :input, [tabindex]');
+	}
 });
 
 $(document).on('keypress', 'input,select,selectpicker,button', function (e) {
-    if (e.which == 13) {
-        e.preventDefault();
-        // Get all focusable elements on the page
-        var $canfocus = $(':focusable');
-        var index = $canfocus.index(document.activeElement) + 1;
-        if (index >= $canfocus.length) index = 0;
-        $canfocus.eq(index).focus();
-    }
+	if (e.which == 13) {
+		e.preventDefault();
+		// Get all focusable elements on the page
+		var $canfocus = $(':focusable');
+		var index = $canfocus.index(document.activeElement) + 1;
+		if (index >= $canfocus.length) index = 0;
+		$canfocus.eq(index).focus();
+	}
 });*/
 
 /*jQuery.extend(jQuery.expr[':'], {
-    focusable: function (el, index, selector) {
-        return $(el).is('a, button, :input, [tabindex]');
-    }
+	focusable: function (el, index, selector) {
+		return $(el).is('a, button, :input, [tabindex]');
+	}
 });
 
 $(document).on('keypress', 'input,select', function (e) {
-    if (e.which == 13) {
-        e.preventDefault();
-        var $canfocus = $(':focusable');
-        var index = $canfocus.index(document.activeElement) + 1;
-        if (index >= $canfocus.length) index = 0;
-        $canfocus.eq(index).focus();
-    }
+	if (e.which == 13) {
+		e.preventDefault();
+		var $canfocus = $(':focusable');
+		var index = $canfocus.index(document.activeElement) + 1;
+		if (index >= $canfocus.length) index = 0;
+		$canfocus.eq(index).focus();
+	}
 });*/
