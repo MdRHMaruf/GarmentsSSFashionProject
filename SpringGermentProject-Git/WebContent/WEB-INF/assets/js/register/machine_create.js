@@ -201,7 +201,8 @@ function drawRow(rowData, c) {
 	row.append($("<td>" + rowData.Name + "</td>"));
 	row.append($("<td>" + rowData.ModelNo + "</td>"));
 	row.append($("<td>" + rowData.EmployeeName + "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.MachineId) + "','" + encodeURIComponent(rowData.Name) + "','" + encodeURIComponent(rowData.Brand) + "','" + encodeURIComponent(rowData.ModelNo) + "','" + encodeURIComponent(rowData.Motor) + "','" + encodeURIComponent(rowData.EmployeeId) + "','" + encodeURIComponent(rowData.EmployeeName) + "') style='cursor : pointer;'> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.MachineId) + "','" + encodeURIComponent(rowData.Name) + "','" + encodeURIComponent(rowData.Brand) + "','" + encodeURIComponent(rowData.ModelNo) + "','" + encodeURIComponent(rowData.Motor) + "','" + encodeURIComponent(rowData.EmployeeId) + "','" + encodeURIComponent(rowData.EmployeeName) + "') style='cursor : pointer;'> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=deleteMachine('"+encodeURIComponent(rowData.MachineId)+"')> </i></td>"));
 	return row;
 }
 
@@ -226,6 +227,32 @@ function setData(MachineId, Name, Brand, ModelNo, Motor, EmployeeId, EmployeeNam
 	$("#btnSave").hide();
   	$("#btnEdit").show();
 
+}
+
+function deleteMachine(mId){
+	let machineId = decodeURIComponent(mId);
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteMachine/'+machineId,
+		data: {
+		},
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Updated Successfully");
+
+				$("#dataList").empty();
+				allMachine();
+
+			}
+			$("#loader").hide();
+		}
+	});
 }
 
 function refreshAction() {

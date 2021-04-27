@@ -33,8 +33,8 @@
 				<strong>Wrong!</strong> Something Wrong...
 			</p>
 		</div>
-		<input type="hidden" id="userId" value="<%=userId%>">
-		<input type="hidden" id="processId" value="0">
+		<input type="hidden" id="userId" value="<%=userId%>"> <input
+			type="hidden" id="processId" value="0">
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -51,10 +51,13 @@
 
 							<div class="form-group">
 								<label for="sampleTypeName">Process Name:</label> <input
-									type="text" class="form-control-sm" id="processName" name="text">
+									type="text" class="form-control-sm" id="processName"
+									name="text">
 							</div>
 							<button type="button" id="btnSave" class="btn btn-primary btn-sm"
-								onclick="saveAction()" accesskey="S"><span style="text-decoration:underline;"> Save</span></button>
+								onclick="saveAction()" accesskey="S">
+								<span style="text-decoration: underline;"> Save</span>
+							</button>
 
 							<button type="button" id="btnEdit" class="btn btn-success btn-sm"
 								onclick="editAction()" style="display: none;">Edit</button>
@@ -82,7 +85,8 @@
 											<tr>
 												<th scope="col">#</th>
 												<th scope="col">Process Name</th>
-												<th scope="col">edit</th>
+												<th class='text-center' scope="col">Edit</th>
+												<th class='text-center' scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -91,8 +95,11 @@
 												<tr>
 													<td>${counter.count}</td>
 													<td id='processName${list.processId}'>${list.processName}</td>
-													<td><i class="fa fa-edit"
+													<td class='text-center'><i class="fa fa-edit"
 														onclick="setData(${list.processId})"
+														style="cursor: pointer;"> </i></td>
+													<td class='text-center'><i class="fa fa-trash"
+														onclick="deleteProcess(${list.processId})"
 														style="cursor: pointer;"> </i></td>
 												</tr>
 											</c:forEach>

@@ -85,7 +85,8 @@ String userName=(String) request.getAttribute("userName");
 											<tr>
 												<th scope="col">#</th>
 												<th scope="col">Sample Type Name</th>
-												<th scope="col">edit</th>
+												<th class="text-center" scope="col">Edit</th>
+												<th class="text-center" scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -94,8 +95,10 @@ String userName=(String) request.getAttribute("userName");
 												<tr>
 													<td>${sampleType.sampleTypeId}</td>
 													<td id='sampleTypeName${sampleType.sampleTypeId}'>${sampleType.sampleTypeName}</td>
-													<td><i class="fa fa-edit"
+													<td class="text-center"><i class="fa fa-edit"
 														onclick="setData(${sampleType.sampleTypeId})" style="cursor: pointer;"> </i></td>
+													<td class="text-center"><i class="fa fa-trash"
+														onclick="deleteSampleType(${sampleType.sampleTypeId})" style="cursor: pointer;"></i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

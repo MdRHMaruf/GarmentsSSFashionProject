@@ -6,81 +6,81 @@ window.onload = ()=>{
 } 
 
 function saveAction() {
-  let sampleTypeName = $("#sampleTypeName").val().trim();
-  let userId = $("#userId").val();
+	let sampleTypeName = $("#sampleTypeName").val().trim();
+	let userId = $("#userId").val();
 
-  if (sampleTypeName != '') {
-    $("#loader").show();
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: './saveSampleType',
-      data: {
-        sampleTypeId: "0",
-        sampleTypeName: sampleTypeName,
-        userId: userId
-      },
-      success: function (data) {
-        if (data.result == "Something Wrong") {
-          dangerAlert("Something went wrong");
-        } else if (data.result == "duplicate") {
-          dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
-        } else {
-          successAlert("Sample Type Name Save Successfully");
+	if (sampleTypeName != '') {
+		$("#loader").show();
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: './saveSampleType',
+			data: {
+				sampleTypeId: "0",
+				sampleTypeName: sampleTypeName,
+				userId: userId
+			},
+			success: function (data) {
+				if (data.result == "Something Wrong") {
+					dangerAlert("Something went wrong");
+				} else if (data.result == "duplicate") {
+					dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+				} else {
+					successAlert("Sample Type Name Save Successfully");
 
-          $("#dataList").empty();
-          $("#dataList").append(drawDataTable(data.result));
+					$("#dataList").empty();
+					$("#dataList").append(drawDataTable(data.result));
 
-        }
-        $("#loader").hide();
-      }
-    });
-  } else {
-    warningAlert("Empty Sample Type Name... Please Enter Sample Type Name");
-  }
+				}
+				$("#loader").hide();
+			}
+		});
+	} else {
+		warningAlert("Empty Sample Type Name... Please Enter Sample Type Name");
+	}
 }
 
 
 function editAction() {
-  let sampleTypeId = $("#sampleTypeId").val();
-  let sampleTypeName = $("#sampleTypeName").val().trim();
-  let userId = $("#userId").val();
+	let sampleTypeId = $("#sampleTypeId").val();
+	let sampleTypeName = $("#sampleTypeName").val().trim();
+	let userId = $("#userId").val();
 
-  if (sampleTypeName != '') {
-    $("#loader").show();
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: './editSampleType',
-      data: {
-        sampleTypeId: sampleTypeId,
-        sampleTypeName: sampleTypeName,
-        userId: userId
-      },
-      success: function (data) {
-        if (data.result == "Something Wrong") {
-          dangerAlert("Something went wrong");
-        } else if (data.result == "duplicate") {
-          dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
-        } else {
-          successAlert("Sample Type Name Edit Successfully");
+	if (sampleTypeName != '') {
+		$("#loader").show();
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: './editSampleType',
+			data: {
+				sampleTypeId: sampleTypeId,
+				sampleTypeName: sampleTypeName,
+				userId: userId
+			},
+			success: function (data) {
+				if (data.result == "Something Wrong") {
+					dangerAlert("Something went wrong");
+				} else if (data.result == "duplicate") {
+					dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+				} else {
+					successAlert("Sample Type Name Edit Successfully");
 
-          $("#dataList").empty();
-          $("#dataList").append(drawDataTable(data.result));
+					$("#dataList").empty();
+					$("#dataList").append(drawDataTable(data.result));
 
-        }
-        $("#loader").hide();
-      }
-    });
-  } else {
-    warningAlert("Empty Sample Type Name... Please Enter Sample Type Name");
-  }
+				}
+				$("#loader").hide();
+			}
+		});
+	} else {
+		warningAlert("Empty Sample Type Name... Please Enter Sample Type Name");
+	}
 }
 
 
 function refreshAction() {
-  location.reload();
-  /*let element = $(".alert");
+	location.reload();
+	/*let element = $(".alert");
   element.hide();
   document.getElementById("sampleTypeId").value = "0";
   document.getElementById("sampleTypeName").value = "";
@@ -92,78 +92,104 @@ function refreshAction() {
 function setData(sampleTypeId) {
 
 
-  document.getElementById("sampleTypeId").value = sampleTypeId;
-  document.getElementById("sampleTypeName").value = document.getElementById("sampleTypeName" + sampleTypeId).innerHTML;
-  $("#btnSave").hide();
-  $("#btnEdit").show();
+	document.getElementById("sampleTypeId").value = sampleTypeId;
+	document.getElementById("sampleTypeName").value = document.getElementById("sampleTypeName" + sampleTypeId).innerHTML;
+	$("#btnSave").hide();
+	$("#btnEdit").show();
 
 }
 
 function drawDataTable(data) {
-  let rows = [];
-  let length = data.length;
+	let rows = [];
+	let length = data.length;
 
-  for (let i = 0; i < length; i++) {
-    rows.push(drawRowDataTable(data[i], i));
-  }
+	for (let i = 0; i < length; i++) {
+		rows.push(drawRowDataTable(data[i], i));
+	}
 
-  return rows;
+	return rows;
 }
 
 function drawRowDataTable(rowData, c) {
 
-  let row = $("<tr />")
-  row.append($("<td>" + rowData.sampleTypeId + "</td>"));
-  row.append($("<td id='sampleTypeName" + rowData.sampleTypeId + "'>" + rowData.sampleTypeName + "</td>"));
-  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.sampleTypeId + ")\"> </i></td>"));
+	let row = $("<tr />")
+	row.append($("<td>" + rowData.sampleTypeId + "</td>"));
+	row.append($("<td id='sampleTypeName" + rowData.sampleTypeId + "'>" + rowData.sampleTypeName + "</td>"));
+	row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.sampleTypeId + ")\"> </i></td>"));
+	row.append($("<td ><i class='fa fa-trash' onclick=\"deleteSampleType(" + rowData.sampleTypeId + ")\"> </i></td>"));
+	return row;
+}
 
-  return row;
+function deleteSampleType(sampleTypeId){
+	//$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteSampleType/'+sampleTypeId,
+		data: {
+		},
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Updated Successfully");
+
+//				$("#dataList").empty();
+//				$("#dataList").append(drawDataTable(data.result));
+				refreshAction();
+
+			}
+			//$("#loader").hide();
+		}
+	});
 }
 
 function successAlert(message) {
-  let element = $(".alert");
-  element.hide();
-  element = $(".alert-success");
-  document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
-  element.show();
-  setTimeout(() => {
-    element.toggle('fade');
-  }, 2500);
+	let element = $(".alert");
+	element.hide();
+	element = $(".alert-success");
+	document.getElementById("successAlert").innerHTML = "<strong>Success!</strong> " + message + "...";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
 }
 
 function warningAlert(message) {
-  let element = $(".alert");
-  element.hide();
-  element = $(".alert-warning");
-  document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
-  element.show();
-  setTimeout(() => {
-    element.toggle('fade');
-  }, 2500);
+	let element = $(".alert");
+	element.hide();
+	element = $(".alert-warning");
+	document.getElementById("warningAlert").innerHTML = "<strong>Warning!</strong> "+message+"..";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
 }
 
 function dangerAlert(message) {
-  let element = $(".alert");
-  element.hide();
-  element = $(".alert-danger");
-  document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
-  element.show();
-  setTimeout(() => {
-    element.toggle('fade');
-  }, 2500);
+	let element = $(".alert");
+	element.hide();
+	element = $(".alert-danger");
+	document.getElementById("dangerAlert").innerHTML = "<strong>Duplicate!</strong> "+message+"..";
+	element.show();
+	setTimeout(() => {
+		element.toggle('fade');
+	}, 2500);
 }
 
 $(document).ready(function () {
-  $("input:text").focus(function () { $(this).select(); });
+	$("input:text").focus(function () { $(this).select(); });
 });
 
 $(document).ready(function () {
-  $("#search").on("keyup", function () {
-    let value = $(this).val().toLowerCase();
-    $("#dataList tr").filter(function () {
-      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-    });
-  });
+	$("#search").on("keyup", function () {
+		let value = $(this).val().toLowerCase();
+		$("#dataList tr").filter(function () {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	});
 });
 
 
