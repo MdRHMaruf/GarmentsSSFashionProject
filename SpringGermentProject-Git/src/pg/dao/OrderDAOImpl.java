@@ -8669,5 +8669,98 @@ public class OrderDAOImpl implements OrderDAO{
 		return false;
 	}
 
+	@Override
+	public List<Costing> getFabricsItemForCosting() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Costing> dataList=new ArrayList<Costing>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select id,ItemName from TbFabricsItem order by ItemName";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new Costing(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<Costing> getCostingItemList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<Costing> dataList=new ArrayList<Costing>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="select AutoId,Name from TbParticularItemInfo order by Name";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new Costing(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
+	@Override
+	public List<pg.registerModel.Unit> getUnitList() {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<pg.registerModel.Unit> dataList=new ArrayList<pg.registerModel.Unit>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			String sql="select Unitid,UnitName from tbunits order by UnitName";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				Object[] element = (Object[]) iter.next();
+				dataList.add(new pg.registerModel.Unit(element[0].toString(), element[1].toString()));
+			}
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return dataList;
+	}
+
 
 }

@@ -241,6 +241,10 @@ public interface OrderDAO {
 	List<CommonModel> getSampleEmployeeList();
 	
 	boolean checkDoplicateSampleRequisition(SampleRequisitionItem v);
+	
+	List<Costing> getFabricsItemForCosting();
+	List<Costing> getCostingItemList();
+	List<pg.registerModel.Unit> getUnitList();
 }
 
 

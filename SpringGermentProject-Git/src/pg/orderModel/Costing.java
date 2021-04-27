@@ -75,6 +75,11 @@ public class Costing {
 		this.date = date;
 		this.userId = userId;
 	}
+	
+	public Costing(String ItemId,String ItemName) {
+		this.itemId=ItemId;
+		this.itemName=ItemName;
+	}
 
 	public String getAutoId() {
 		return autoId;

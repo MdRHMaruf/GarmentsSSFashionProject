@@ -22,6 +22,13 @@ public class Unit {
 		this.unitQty = unitQty;
 		
 	}
+	
+	public Unit(String unitId, String unitName) {
+		super();
+		this.unitId = unitId;
+		this.unitName = unitName;
+	}
+	
 	public String getUnitId() {
 		return unitId;
 	}
