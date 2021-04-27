@@ -2185,7 +2185,7 @@ public class OrderController {
 		map.addAttribute("landscapeCheck","false");
 		map.addAttribute("brandCheck","false");
 		map.addAttribute("sqCheck","false");
-		map.addAttribute("skqCheck","false");
+		map.addAttribute("skuCheck","false");
 		return view;
 	}
 
@@ -2203,7 +2203,7 @@ public class OrderController {
 		map.addAttribute("landscapeCheck",dataList[0]);
 		map.addAttribute("brandCheck",dataList[1]);
 		map.addAttribute("sqCheck",dataList[2]);
-		map.addAttribute("skqCheck",dataList[3]);
+		map.addAttribute("skuCheck",dataList[3]);
 		return view;
 	}
 
@@ -2219,8 +2219,6 @@ public class OrderController {
 		map.addAttribute("landscapeCheck","false");
 		return view;
 	}
-
-
 
 
 	//Sample Production

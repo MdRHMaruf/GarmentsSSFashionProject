@@ -31,7 +31,7 @@ public class FabricsIndent {
 	String indentDate;
 	String markingWidth;
 	String sqNo;
-	String skqNo;
+	String skuNo;
 	
 	public FabricsIndent(String BuyerName,String BuyerOrderId, String PurchaseOrder,String styleId, String Stylename,String itemid, String ItemName) {
 		this.buyerName=BuyerName;
@@ -382,11 +382,11 @@ public class FabricsIndent {
 	public void setSqNo(String sqNo) {
 		this.sqNo = sqNo;
 	}
-	public String getSkqNo() {
-		return skqNo;
+	public String getSkuNo() {
+		return skuNo;
 	}
-	public void setSkqNo(String skqNo) {
-		this.skqNo = skqNo;
+	public void setSkuNo(String skuNo) {
+		this.skuNo = skuNo;
 	}
 	
 	

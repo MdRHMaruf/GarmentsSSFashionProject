@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BuyerPoReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="10" uuid="9cb39d5d-aa6d-44cf-8beb-ba9d12acd9e6">
 	<property name="ireport.zoom" value="1.1000000000000132"/>
-	<property name="ireport.x" value="257"/>
-	<property name="ireport.y" value="86"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select organizationLogo from tbOrganizationInfo where organizationId='1') as OrgLogo,b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,g.name,a.ShippingMarks,a.SizeReg,d.StyleNo,e.ItemId,e.itemname,a.sizeGroupId,sum(a.TotalUnit) as TotalUnit,sum(a.TotalPrice) as TotalCmt,sum(a.TotalAmount) as TotalAmount from TbBuyerOrderEstimateDetails a join TbBuyerOrderEstimateSummary b on a.BuyerOrderId=b.autoId join TbStyleCreate d on a.StyleId=d.StyleId join tbItemDescription e on a.ItemId=e.itemid join tbBuyer g on a.buyerId=g.id where a.BuyerOrderId='4' group by b.shipmentDate,b.PaymentTerm,b.Currency,b.note,b.QCFor,b.remarks,e.ItemId,g.name,a.BuyerOrderId,a.PurchaseOrder,a.CustomerOrder,d.StyleNo,a.ShippingMarks,a.SizeReg,e.itemname,a.sizeGroupId   order by a.BuyerOrderId,a.sizeGroupId"]]></defaultValueExpression>
 	</parameter>
@@ -119,14 +119,14 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="51" width="802" height="16" uuid="e91b3cfd-6a5f-4431-9d37-f74c791660cd"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="8" width="802" height="28" uuid="58ba3be2-072f-4e8d-802b-f7b3512a4da4"/>
@@ -306,14 +306,14 @@
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="51" width="802" height="16" uuid="8cb49676-bce7-491a-b2da-25ce67d90225"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<image>
 				<reportElement x="187" y="0" width="50" height="55" uuid="ab50db0a-e1e6-4d72-bc66-108a7490b693"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="56722aa9-ffee-4a9e-9a6a-7967f4c450d8">
-	<property name="ireport.zoom" value="0.9090909090909397"/>
-	<property name="ireport.x" value="2"/>
+	<property name="ireport.zoom" value="1.610510000000055"/>
+	<property name="ireport.x" value="54"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.SampleCommentId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo,a.PurchaseOrder,(select Itemname from tbItemDescription where itemid=a.ItemId) as ItemName,(select ColorName from tbColors where ColorId=a.ColorId) as ColorName,(select sizeName from tbStyleSize where id=b.sizeId) as SizeName,b.sizeQuantity,(select Name from TbSampleTypeInfo where AutoId=a.SampleTypeId) as SampleType,a.FeedbackComments,a.CuttingDate,a.CuttingQty,a.PrintSendDate,a.PrintReceivedDate,a.EmbroiderySendDate,a.EmbroideryReceivedDate,a.SewingSendDate,a.SewingFinishedDate,a.OperatorName from TbSampleCadInfo a join tbSizeValues b on a.sampleCommentId=b.linkedAutoId where a.SampleCommentId='12' order by PurchaseOrder,StyleId,ItemId,ColorId,SampleTypeId"]]></defaultValueExpression>
@@ -75,7 +75,7 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="48" width="802" height="11" uuid="d22452de-1b1b-4d90-bc00-cac4f4764e53"/>
@@ -89,10 +89,10 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="5" width="802" height="36" uuid="c85af600-6806-4f98-947d-f78882c4c553"/>
+				<reportElement x="0" y="5" width="802" height="34" uuid="c85af600-6806-4f98-947d-f78882c4c553"/>
 				<textElement textAlignment="Center">
 					<font size="22" isBold="true"/>
 				</textElement>

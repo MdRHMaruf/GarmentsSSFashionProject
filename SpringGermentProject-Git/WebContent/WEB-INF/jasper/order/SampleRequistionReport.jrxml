@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleRequistionReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="377a337c-4aa5-44a9-be36-095e611eeb74">
-	<property name="ireport.zoom" value="1.0263162364614138"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.420000000000002"/>
+	<property name="ireport.x" value="115"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.sampleReqId,a.PurchaseOrder,(lo.username) as merchendiser,b.dateLine,b.samplerequestdate,g.name,d.StyleNo,e.itemId,e.itemname,a.sizeGroupId from TbSampleRequisitionDetails a left join tbSampleRequisition b on a.sampleReqId=b.sampleReqId left join TbStyleCreate d on a.StyleId=d.StyleId left join tblogin lo on a.UserId=lo.id left join tbItemDescription e on a.ItemId=e.itemid left join tbBuyer g on a.buyerId=g.id where a.sampleReqId='11' group by a.sampleReqId,lo.username,g.name,a.PurchaseOrder,b.dateLine,b.samplerequestdate,d.StyleNo,e.itemId,e.itemname,a.sizeGroupId order by a.sampleReqId,a.sizeGroupId"]]></defaultValueExpression>
@@ -42,14 +42,14 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="-3" y="32" width="558" height="11" uuid="8d138bbe-30db-434d-92b7-5c28fe3684d9"/>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="-3" y="49" width="558" height="11" uuid="f1dc71ac-ca90-430f-994b-9528f877d19f"/>

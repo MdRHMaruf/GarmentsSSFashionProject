@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f409598-7b6b-4249-a548-0f35c5a855f8">
 	<property name="ireport.zoom" value="1.464100000000032"/>
-	<property name="ireport.x" value="505"/>
-	<property name="ireport.y" value="95"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.id,(select styleno from TbStyleCreate where styleid=a.styleId) as styleno,(select itemname from tbGermentStyleItem where itemid=a.itemid) as itemname,(select colorname from tbcolors where ColorId=a.itemcolor) as itemcolor,(select ItemName from tbfabricsItem where id=a.fabricsid) as FabricsItemName,(select colorname from tbcolors where ColorId=a.fabricscolor) as fabricscolor,(select name from tbbrands where id=a.brand) as brand,a.width,a.GSM,a.Yard,a.qty,a.dozenqty,a.consumption,a.TotalQty,a.RequireUnitQty,(select unitname from tbunits where Unitid=a.unitId) as unit,(select Signature from TbMerchendiserInfo where MUserId=a.entryby) as Signature  from tbrequiredfabrics a where a.PurchaseOrder='86970' and  a.styleid='1' "]]></defaultValueExpression>
 	</parameter>
@@ -95,7 +95,7 @@ where ai.indentId = '1' order by ai.fabricsid,ai.fabricscolor]]>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="48" width="802" height="11" uuid="3e4deaff-53f5-4f59-a0dd-68f8dd813b46"/>
@@ -109,10 +109,10 @@ where ai.indentId = '1' order by ai.fabricsid,ai.fabricscolor]]>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="5" width="802" height="36" uuid="72f7755f-2c74-46d9-8df7-c31127f04941"/>
+				<reportElement x="0" y="5" width="802" height="34" uuid="72f7755f-2c74-46d9-8df7-c31127f04941"/>
 				<textElement textAlignment="Center">
 					<font size="22" isBold="true"/>
 				</textElement>
