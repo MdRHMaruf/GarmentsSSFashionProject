@@ -61,10 +61,11 @@ function saveAction() {
 
 						$("#empList").empty();
 						allEmployee();
+						refreshAction();
 					}
 
 					$("#loader").hide();
-					refreshAction();
+					
 				}
 			});
 		}else{

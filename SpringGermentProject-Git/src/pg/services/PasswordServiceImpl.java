@@ -118,4 +118,10 @@ public class PasswordServiceImpl implements PasswordService {
 		// TODO Auto-generated method stub
 		return passDAO.getUserInfo(userId);
 	}
+
+	@Override
+	public String editUserProfile(String userInfo) {
+		// TODO Auto-generated method stub
+		return passDAO.editUserProfile(userInfo);
+	}
 }

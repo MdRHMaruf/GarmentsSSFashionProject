@@ -37,6 +37,7 @@ public interface PasswordService {
 	
 	public JSONArray getRolePermissions(String roleIds);
 	public String saveUserProfile(String userInfo);
+	public String editUserProfile(String userInfo);
 	public JSONArray getUserList();
 	public JSONObject getUserInfo(String userId);
 }

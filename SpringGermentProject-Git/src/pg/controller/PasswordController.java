@@ -105,8 +105,6 @@ public class PasswordController {
 			modelmap.put("modulelist", modulelist);
 
 			if(modulelist.size()>0) {
-
-
 				modelmap.put("modulelist", modulelist);
 
 				List<Menu> menulist=passService.getAdminUserMenu(lg.get(0).getId(),modulelist.get(0).getId());
@@ -348,6 +346,15 @@ public class PasswordController {
 		JSONObject obj = new JSONObject();
 		
 		obj.put("result", passService.saveUserProfile(userInfo));
+		
+		return obj;
+	}
+	
+	@RequestMapping(value= "/editUserProfile",method=RequestMethod.POST)
+	public @ResponseBody JSONObject editUser(String userInfo) {
+		JSONObject obj = new JSONObject();
+		
+		obj.put("result", passService.editUserProfile(userInfo));
 		
 		return obj;
 	}

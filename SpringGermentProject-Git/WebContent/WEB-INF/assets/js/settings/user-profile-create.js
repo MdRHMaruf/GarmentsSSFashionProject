@@ -221,7 +221,118 @@ function saveAction(){
 }
 
 function editAction(){
+    let userAutoId = $("#userAutoId").val();
+    let employeeId = $("#employeeAutoId").val();
+    let fullName = $("#name").val();
+    let userName = $("#userName").val();
+    let password = $("#password").val();
+    let confirmPassword = $("#confirmPassword").val();
+    let userRoles = '';
+    let userId = $("#userId").val();
+    $("#userRole").val().forEach(roleId => {
+        userRoles += `'${roleId}',`;
+    });
+    let activeStatus = $("#activeStatus").val();
 
+
+    const rowList=$("#extraPermissionList tr").length;
+	let accessList = [];
+	
+	for (let i = 1; i <=rowList; i++) {
+
+		let rId = $("#R"+i).attr("data-id");
+
+		if($("#check_"+rId).is(":checked")){
+
+			let moduleId=0,headId=0,subId=0,add=0,edit=0,view=0,del=0;
+
+			moduleId = $("#moduleId_"+rId).text();
+			headId = $("#head_"+rId).text();
+			subId = $("#id_"+rId).text();
+
+			if($("#add_"+rId).is(":checked")){
+				add=1;
+			}else{
+				add=0;
+			}
+
+			if($("#edit_"+rId).is(":checked")){
+				edit=1;
+			}else{
+				edit=0;
+			}
+
+			if($("#view_"+rId).is(":checked")){
+				view=1;
+			}else{
+				view=0;
+			}
+
+			if($("#delete_"+rId).is(":checked")){
+				del=1;
+			}else{
+				del=0;
+			}
+
+			//let value=moduleId+":"+headId+":"+subId+":"+add+":"+edit+":"+view+":"+del;
+			accessList.push({
+                moduleId: moduleId,
+                headId: headId,
+                subId: subId,
+                add: add,
+                edit: edit,
+                view: view,
+                delete: del
+            });
+		}
+	}
+
+	//let valueList="["+accessList+"]";
+
+    if(employeeId != "0" && employeeId != ""){
+        if(userName != ''){
+            if(password != ''){
+                if(userRoles != ''){
+                    if(confirm("Are you sure to Edit this User")){
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            url: './editUserProfile',
+                            data: {
+                                userInfo: JSON.stringify({
+                                    userAutoId: userAutoId,
+                                    employeeId: employeeId,
+                                    fullName: fullName,
+                                    userName: userName,
+                                    password: password,
+                                    userRoles: userRoles,
+                                    activeStatus: activeStatus,
+                                    userId: userId,
+                                    extraPermissionList: accessList
+                                })
+                            },
+                            success: function(data){
+                                if(data.result == "successful"){
+                                    alert("User Edit  Successful");
+                                    location.reload();
+                                }else
+                                alert(data.result);
+
+                            }
+                        });
+                    }
+                }else{
+                    alert("Please Select Any Role");
+                }
+            }else{
+                alert("Please Enter Password");
+            }
+        }else{
+            alert("Please Enter User Name");
+        }
+    }else{
+        alert("Please Select Employee");
+    }
 }
 
 function searchUser(userId){
@@ -237,6 +348,7 @@ function searchUser(userId){
            let userInfo = data.result;
 
            $("#employeeAutoId").val(userInfo.employeeId);
+           $("#userAutoId").val(userId);
            $("#employeeId").val(userInfo.employeeCode);
            $("#name").val(userInfo.fullName);
            $("#userName").val(userInfo.username);
@@ -244,8 +356,9 @@ function searchUser(userId){
            $("#confirmPassword").val(userInfo.password);
            let roleIds = userInfo.roleIds.split(',');
            $("#userRole").val(roleIds).change();
-           $("activeStatus").val(userInfo.activeStatus);
-
+           $("#activeStatus").val(userInfo.activeStatus);
+            $("#btnSave").hide();
+            $("#btnEdit").show();
            $("#exampleModal").modal('hide');
         }
     });
