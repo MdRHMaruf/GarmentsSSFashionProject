@@ -228,7 +228,8 @@
 												<th scope="col">Employee Name</th>
 												<th scope="col">Department</th>
 												<th scope="col">Designation</th>
-												<th scope="col">edit</th>
+												<th class='text-center' scope="col">Edit</th>
+												<th class='text-center' scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="empList">

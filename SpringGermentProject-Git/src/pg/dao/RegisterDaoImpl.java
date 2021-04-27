@@ -3064,7 +3064,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into TbSampleTypeInfo (name,entrytime,UserId) values('"+sampleType.getSampleTypeName()+"', CURRENT_TIMESTAMP,'"+sampleType.getUserId()+"')";
+			String sql="insert into TbSampleTypeInfo (name,entrytime,UserId,trash) values('"+sampleType.getSampleTypeName()+"', CURRENT_TIMESTAMP,'"+sampleType.getUserId()+"',0)";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -3124,7 +3124,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select AutoId,name,UserId from TbSampleTypeInfo order by name";
+			String sql="select AutoId,name,UserId from TbSampleTypeInfo where trash=0 order by name";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -4214,7 +4214,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			int i=1;
-			String sql="select DepartmentId,(select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesignationId, a.DesignationName from TbDesignationInfo a order by DepartmentId";
+			String sql="select DepartmentId,(select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesignationId, a.DesignationName from TbDesignationInfo a where trash=0 order by DepartmentId";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -4341,7 +4341,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 			int i=1;
 			//String sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, (select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId) as DepartmentName, a.DesginationId, (select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId) as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate from TbEmployeeInfo a";
-			sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, isnull((select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId),'') as DepartmentName, a.DesginationId, isnull((select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId),'') as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate,a.religion,a.gender, a.email, a.contact, a.nationality, a.nationalid, isnull(CONVERT(VARCHAR(50),a.birthdate),'') as birthdate from TbEmployeeInfo a";
+			sql="select a.AutoId,a.EmployeeCode, a.Name, a.CardNo, a.DepartmentId, isnull((select b.DepartmentName from TbDepartmentInfo b where b.DepartmentId=a.DepartmentId),'') as DepartmentName, a.DesginationId, isnull((select c.DesignationName from TbDesignationInfo c where c.DesignationId=a.DesginationId),'') as Designation, a.LineId, a.Grade, isnull(CONVERT(VARCHAR(50),JoinDate),'') as JoinDate,a.religion,a.gender, a.email, a.contact, a.nationality, a.nationalid, isnull(CONVERT(VARCHAR(50),a.birthdate),'') as birthdate from TbEmployeeInfo a where trash=0";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -4536,7 +4536,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			int i=1;
-			String sql="select a.MachineId, a.MachineName, a.Brand, a.ModelNo, a.Motor, a.OperatorId, (select b.Name from TbEmployeeInfo b where b.AutoId=a.OperatorId) as EmployeeName from TbMachineInfo a";
+			String sql="select a.MachineId, a.MachineName, a.Brand, a.ModelNo, a.Motor, a.OperatorId, (select b.Name from TbEmployeeInfo b where b.AutoId=a.OperatorId) as EmployeeName from TbMachineInfo a where trash=0";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -4682,7 +4682,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			int i=1;
-			String sql="select ProcessId,ProcessName from TbProcessInfo order by ProcessId";
+			String sql="select ProcessId,ProcessName from TbProcessInfo where trash=0 order by ProcessId";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -5106,6 +5106,151 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			String sql="update tbStyleSize set trash='1' where id='"+itemId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteSampleItem(String sampleItemId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbSampleTypeInfo set trash='1' where AutoId='"+sampleItemId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteDesignition(String deptId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbDesignationInfo set trash='1' where DesignationId='"+deptId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteMachine(String machineId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbMachineInfo set trash='1' where MachineId='"+machineId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteEmployee(String empcode) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbEmployeeInfo set trash='1' where EmployeeCode='"+empcode+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteProcess(String processId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbProcessInfo set trash='1' where ProcessId='"+processId+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

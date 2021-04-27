@@ -113,9 +113,37 @@ function drawRowDataTable(rowData, c) {
   let row = $("<tr />")
   row.append($("<td>" + c + "</td>"));
   row.append($("<td id='sampleTypeName" + rowData.ProcessId + "'>" + rowData.Name + "</td>"));
-  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.ProcessId + ")\"> </i></td>"));
+  row.append($("<td class='text-center'><i class='fa fa-edit' onclick=\"setData(" + rowData.ProcessId + ")\"> </i></td>"));
+  row.append($("<td class='text-center'><i class='fa fa-trash' onclick=\"deleteProcess(" + rowData.ProcessId + ")\"> </i></td>"));
 
   return row;
+}
+
+function deleteProcess(pId){
+	
+	let processId = decodeURIComponent(pId);
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteProcess/'+processId,
+		data: {
+		},
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Updated Successfully");
+
+				refreshAction();
+
+			}
+			$("#loader").hide();
+		}
+	});
+	
 }
 
 function successAlert(message) {

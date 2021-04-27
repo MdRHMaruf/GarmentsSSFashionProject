@@ -150,7 +150,8 @@
 												<th scope="col">Name</th>
 												<th scope="col">Model</th>
 												<th scope="col">Operator</th>
-												<th scope="col">Edit</th>
+												<th class="text-center" scope="col">Edit</th>
+												<th class="text-center" scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="machineList">

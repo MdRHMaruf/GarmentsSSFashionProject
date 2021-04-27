@@ -872,6 +872,36 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.deleteSize(itemId);
 	}
 
+	@Override
+	public boolean deleteSampleItem(String sampleItemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteSampleItem(sampleItemId);
+	}
+
+	@Override
+	public boolean deleteDesignition(String deptId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteDesignition(deptId);
+	}
+
+	@Override
+	public boolean deleteMachine(String machineId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteMachine(machineId);
+	}
+
+	@Override
+	public boolean deleteEmployee(String empcode) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteEmployee(empcode);
+	}
+
+	@Override
+	public boolean deleteProcess(String processId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteProcess(processId);
+	}
+
 
 
 }

@@ -100,14 +100,12 @@ String userName=(String) request.getAttribute("userName");
 												<th scope="col">Department Name</th>
 												<th scope="col">ID</th>
 												<th scope="col">Designation</th>
-												<th scope="col">Edit</th>
+												<th class="text-center" scope="col">Edit</th>
+												<th class="text-center" scope="col">Delete</th>
 											</tr>
 										</thead>
 										<tbody id="designationList">
 											<tr>
-
-												
-
 											</tr>
 										</tbody>
 									</table>
