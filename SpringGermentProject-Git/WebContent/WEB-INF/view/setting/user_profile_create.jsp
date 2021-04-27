@@ -32,6 +32,7 @@
 
 		<input type="hidden" id="userId" value="<%=userId%>"> <input
 			type="hidden" id="employeeAutoId" value="0">
+			<input type="hidden" id="userAutoId" value="0">
 		<div class="row mt-2">
 			<div class="col-lg-12">
 				<div class="card">
@@ -238,7 +239,7 @@
 
 								<button type="button" id="btnEdit"
 									class="btn btn-success btn-sm" onclick="editAction()"
-									accesskey="E" hidden="">
+									accesskey="E" style="display: none;">
 									<span style="text-decoration: underline;"> Edit</span>
 								</button>
 								<button type="button" id="btnRefresh"
