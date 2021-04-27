@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MultipleStyleReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="40" bottomMargin="20" uuid="02f90df7-7d06-4ff5-b516-b38fa8d17ff6">
-	<property name="ireport.zoom" value="1.6105100000000103"/>
-	<property name="ireport.x" value="276"/>
-	<property name="ireport.y" value="129"/>
+	<property name="ireport.zoom" value="2.3579476910000157"/>
+	<property name="ireport.x" value="128"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select * from funMultipleStyleView()"]]></defaultValueExpression>
 	</parameter>
@@ -25,7 +25,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="85" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
 				<reportElement x="11" y="-3" width="543" height="36" uuid="69971de0-9785-443b-936e-514770d9798d"/>
 				<textElement textAlignment="Center">
@@ -38,7 +38,7 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="11" y="40" width="543" height="11" uuid="b0974348-c558-45ab-a4a3-e623ad5d9795"/>
@@ -48,7 +48,7 @@
 				<text><![CDATA[Tel:+88-031-2583247,2583245,Email:ssfashionwear@gmail.com liton@ssfashionwear.com]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="57" width="543" height="20" uuid="acc4883c-0df5-4b1f-9548-070437b5ee98"/>
+				<reportElement x="11" y="51" width="543" height="16" uuid="acc4883c-0df5-4b1f-9548-070437b5ee98"/>
 				<textElement textAlignment="Center">
 					<font size="12" isBold="true" isUnderline="true" isStrikeThrough="false"/>
 				</textElement>
@@ -59,7 +59,7 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 		</band>
 	</title>

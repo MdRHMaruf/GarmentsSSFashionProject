@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PPComentReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="86233f15-02fc-4cb0-a2c7-7a94e318baf1">
-	<property name="ireport.zoom" value="1.2100000000000093"/>
+	<property name="ireport.zoom" value="1.9487171000000156"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="50"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select *,(select styleno from TbStyleCreate b where b.StyleId=a.styleid) as StyleNo,(select b.itemname from tbItemDescription b where b.itemid=a.itemid)  as ItemName,(select name from tbCourier where id= a.courierId) as CourierName,(select CourierAddress from tbCourier where id= a.courierId) as CourierAddress,(select Telephone from tbCourier where id= a.courierId) as Telephone,(select MobileNo from tbCourier where id= a.courierId) as MobileNo,(select Fax from tbCourier where id= a.courierId) as Fax,(select Email from tbCourier where id= a.courierId) as Email,(select SkypeId from tbCourier where id= a.courierId) as SkypeId from tbparcel a where a.autoId=1"]]></defaultValueExpression>
 	</parameter>
@@ -56,7 +56,7 @@ where ac.autoId= '2']]>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="-1" y="43" width="556" height="11" uuid="b1a783b7-16fa-4739-a407-467e1f01b5be"/>
@@ -70,10 +70,10 @@ where ac.autoId= '2']]>
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="-1" y="0" width="556" height="36" uuid="15815e0d-68a9-460b-b92e-2d094aa4f59c"/>
+				<reportElement x="-1" y="0" width="556" height="34" uuid="15815e0d-68a9-460b-b92e-2d094aa4f59c"/>
 				<textElement textAlignment="Center">
 					<font size="22" isBold="true"/>
 				</textElement>

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.3310000000000366"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="145"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -69,6 +69,8 @@
 	<field name="mdapproval" class="java.lang.Integer"/>
 	<field name="poNo" class="java.lang.Integer"/>
 	<field name="body" class="java.lang.String"/>
+	<field name="sqNumber" class="java.lang.String"/>
+	<field name="skuNumber" class="java.lang.String"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
@@ -143,14 +145,14 @@
 				<textElement textAlignment="Center">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Manufactures and Exporter of Reademade Garments]]></text>
+				<text><![CDATA[Manufactures and Exporter of Readymade Garments]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="46" y="34" width="307" height="11" uuid="f3d39aac-e99c-4bef-bc19-146d0f99822a"/>
 				<textElement textAlignment="Justified">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Block-A,Plot A/2 (part),BScic Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
+				<text><![CDATA[Block-A,Plot A/2 (Part),BSCIC Industrial Estate,Baized Bostami,Road Chittagong,Bangladesh]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="46" y="43" width="307" height="11" uuid="a1ef4a6f-e8d7-4c5e-a880-e4b1bdf5eb66"/>
@@ -455,10 +457,10 @@
 				<reportElement x="386" y="0" width="1" height="20" uuid="8df36d6b-6b0f-4d0d-b6ae-228c3afe6c30"/>
 			</line>
 			<line>
-				<reportElement x="186" y="0" width="1" height="20" uuid="b5d85110-ddd1-4451-9b9c-800860718e82"/>
+				<reportElement x="203" y="0" width="1" height="20" uuid="b5d85110-ddd1-4451-9b9c-800860718e82"/>
 			</line>
 			<staticText>
-				<reportElement x="2" y="1" width="183" height="18" uuid="b217508a-75f5-4bbd-97d4-f7c1bc499848"/>
+				<reportElement x="2" y="1" width="201" height="18" uuid="b217508a-75f5-4bbd-97d4-f7c1bc499848"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -504,11 +506,8 @@
 			<line>
 				<reportElement x="300" y="0" width="1" height="20" uuid="a2853371-9b3d-4534-b6db-7afa6c60641e"/>
 			</line>
-			<line>
-				<reportElement x="254" y="0" width="1" height="20" uuid="c1f84cea-a55d-49f6-a4ab-98cd99ceedc1"/>
-			</line>
 			<staticText>
-				<reportElement x="186" y="1" width="68" height="18" uuid="6353cb68-b1e1-415c-b4c9-c9512b96f4e1"/>
+				<reportElement x="204" y="1" width="95" height="18" uuid="6353cb68-b1e1-415c-b4c9-c9512b96f4e1"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
@@ -540,7 +539,7 @@
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="-1" width="1" height="15" uuid="2d8dbd36-6670-4c21-9e38-1795342f4d9c"/>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="186" y="-1" width="1" height="15" uuid="eabdccfd-ea1a-4479-9989-01cdfe7919f3"/>
+				<reportElement stretchType="RelativeToBandHeight" x="203" y="-1" width="1" height="15" uuid="eabdccfd-ea1a-4479-9989-01cdfe7919f3"/>
 			</line>
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="462" y="-1" width="1" height="15" uuid="3394acc9-35e4-4431-9c4a-865ba66b11e2"/>
@@ -558,7 +557,7 @@
 				<reportElement stretchType="RelativeToBandHeight" x="499" y="-1" width="1" height="15" uuid="e26b758e-1c60-4b9b-936e-a5f336e6a58e"/>
 			</line>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="2" y="0" width="183" height="12" uuid="eb140845-9581-4e2c-b757-a3cedef723ce"/>
+				<reportElement stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="2" y="0" width="201" height="12" uuid="eb140845-9581-4e2c-b757-a3cedef723ce"/>
 				<box leftPadding="4"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>
@@ -605,11 +604,8 @@
 			<line>
 				<reportElement x="1" y="-1" width="545" height="1" uuid="a6d45ff7-4120-4ba9-834e-f16006c82a02"/>
 			</line>
-			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="254" y="-1" width="1" height="14" uuid="666442d3-9e91-481f-b87f-5d9cba5065d4"/>
-			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="186" y="0" width="68" height="12" uuid="51e6cc3c-ba55-4811-9c74-dbb4e0191dc3"/>
+				<reportElement isPrintRepeatedValues="false" x="204" y="0" width="95" height="12" uuid="51e6cc3c-ba55-4811-9c74-dbb4e0191dc3"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="8"/>

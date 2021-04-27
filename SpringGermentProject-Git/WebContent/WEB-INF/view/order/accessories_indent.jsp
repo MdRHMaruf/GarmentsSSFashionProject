@@ -216,8 +216,8 @@ String userName=(String)session.getAttribute("userName");
 											
 												<div class="col-md-4">
 												<label class="form-check-label"> <input
-													id="checkSKQ" type="checkbox"
-													class="form-check-input">SKQ
+													id="checkSKU" type="checkbox"
+													class="form-check-input">SKU
 												</label>
 												</div>
 												

@@ -254,8 +254,8 @@ String userName=(String)session.getAttribute("userName");
 			</div>
 			
 			<div class="col-sm-2 pr-0 pl-1">
-				<label for="skqNo" class="col-form-label-sm mb-0 pb-0">SKQ No</label> <input
-					id="skqNo" type="text" class="form-control-sm">
+				<label for="skuNo" class="col-form-label-sm mb-0 pb-0">SKU No</label> <input
+					id="skuNo" type="text" class="form-control-sm">
 			</div>
 
 		</div>

@@ -411,8 +411,8 @@
 									</div>
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
-											id="withSKQNumberCheck"> <label class="form-check-label"
-											for="withSKQNumberCheck">With SKQ Number</label>
+											id="withSKUNumberCheck"> <label class="form-check-label"
+											for="withSKUNumberCheck">With SKU Number</label>
 									</div>
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"

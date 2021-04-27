@@ -451,7 +451,7 @@ function previewAction(previewType = "general"){
   let supplierId = $("#supplierName").val();
   let poType = $("#poType").val();
 
-  let data = $("#landscapeViewCheck").prop('checked')+"@"+$("#withBrandCheck").prop('checked')+"@"+$("#withSQNumberCheck").prop('checked')+"@"+$("#withSKQNumberCheck").prop('checked');
+  let data = $("#landscapeViewCheck").prop('checked')+"@"+$("#withBrandCheck").prop('checked')+"@"+$("#withSQNumberCheck").prop('checked')+"@"+$("#withSKUNumberCheck").prop('checked');
 
   var url = "getPurchaseOrderReport/" + poNo + "/" + supplierId + "/" + poType +"/"+ previewType + "/" +data;
   window.open(url, '_blank');
