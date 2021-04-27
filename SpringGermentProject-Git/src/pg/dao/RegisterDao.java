@@ -114,7 +114,6 @@ public interface RegisterDao {
 	public boolean isStyleItemExist(StyleItem styleItem);
 
 
-
 	//Unit Create 
 	public boolean saveUnit(Unit unit);
 	public boolean editUnit(Unit unit);
@@ -153,6 +152,7 @@ public interface RegisterDao {
 	public boolean editSampleType(SampleType sampleType);
 	public List<SampleType> getSampleTypeList();
 	public boolean isSampleTypeExist(SampleType sampleType);
+	public boolean deleteSampleItem(String sampleItemId);
 
 	//Department Create 
 	public boolean saveDepartment(Department department);
@@ -212,6 +212,7 @@ public interface RegisterDao {
 	public List<Designation> getDesignationList();
 	public boolean editDesignation(Designation designation);
 	public boolean isDesignationExist(Designation v);
+	public boolean deleteDesignition(String deptId);
 
 	//Employee Create
 
@@ -221,6 +222,7 @@ public interface RegisterDao {
 	public boolean isEmployeeExist(Employee v);
 	public Employee getEmployeeInfoByEmployeeCode(String employeeCode);
 	public Employee getEmployeeInfo(String id);
+	public boolean deleteEmployee(String empcode);
 
 	//Machine
 
@@ -228,13 +230,15 @@ public interface RegisterDao {
 	public List<Machine> getMachineList();
 	public boolean editMachine(Machine editMachine);
 	public boolean isMachineExist(Machine v);
+	public boolean deleteMachine(String machineId);
 
 	//Process
 	public boolean isProcessExist(ProcessInfo v);
 	public boolean saveProcess(ProcessInfo v);
 	public List<ProcessInfo> getProcessList();
 	public boolean editProcess(ProcessInfo v);
-
+	public boolean deleteProcess(String processId);
+	
 
 	//Bank Create
 	public boolean saveBank(Bank bank);

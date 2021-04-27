@@ -108,6 +108,7 @@ public interface RegisterService {
 	public boolean editStyleItem(StyleItem styleItem);
 	public List<StyleItem> getStyleItemList();
 	public boolean isStyleItemExist(StyleItem styleItem);
+	public boolean deleteSampleItem(String sampleItemId);
 
 	//Unit Create 
 	public boolean saveUnit(Unit unit);
@@ -204,6 +205,7 @@ public interface RegisterService {
 	public List<Designation> getDesignationList();
 	public boolean editDesignation(Designation designation);
 	public boolean isDesignationExist(Designation v);
+	public boolean deleteDesignition(String deptId);
 
 	//Employee
 
@@ -213,6 +215,7 @@ public interface RegisterService {
 	public boolean isEmployeeExist(Employee v);
 	public Employee getEmployeeInfoByEmployeeCode(String employeeCode);
 	public Employee getEmployeeInfo(String id);
+	public boolean deleteEmployee(String empcode);
 
 	//Machine
 
@@ -220,13 +223,14 @@ public interface RegisterService {
 	public List<Machine> getMachineList();
 	public boolean editMachine(Machine editMachine);
 	public boolean isMachineExist(Machine v);
+	public boolean deleteMachine(String machineId);
 
 	//Process
 	public boolean isProcessExist(ProcessInfo v);
 	public boolean saveProcess(ProcessInfo v);
 	public List<ProcessInfo> getProcessList();
 	public boolean editProcess(ProcessInfo v);
-
+	public boolean deleteProcess(String processId);
 
 	//Bank Create
 	public boolean saveBank(Bank bank);

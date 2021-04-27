@@ -1857,6 +1857,13 @@ public class RegisterController {
 
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/deleteSampleType/{sampleItemId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteSampleType(@PathVariable ("sampleItemId") String sampleItemId) {
+		boolean deleteSampleType = registerService.deleteSampleItem(sampleItemId);
+		return deleteSampleType;
+		
+	}
 
 	//Department Create 
 	@RequestMapping(value = "/department_create",method=RequestMethod.GET)
@@ -2525,7 +2532,13 @@ public class RegisterController {
 
 		return objmain;
 	}
-
+	
+	@RequestMapping(value = "/deleteDesignition/{deptId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteDesignition(@PathVariable ("deptId") String deptId) {
+		boolean deleteDesignition = registerService.deleteDesignition(deptId);
+		return deleteDesignition;
+		
+	}
 
 	//Employee
 
@@ -2674,6 +2687,13 @@ public class RegisterController {
 		
 		return obj;
 	}
+	
+	@RequestMapping(value = "/deleteEmployee/{empcode}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteEmployee(@PathVariable ("empcode") String empcode) {
+		boolean deleteEmployee = registerService.deleteEmployee(empcode);
+		return deleteEmployee;
+		
+	}
 
 	//Machine Create
 
@@ -2817,6 +2837,13 @@ public class RegisterController {
 
 		return mainobj;
 	}
+	
+	@RequestMapping(value = "/deleteMachine/{machineId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteMachine(@PathVariable ("machineId") String machineId) {
+		boolean deleteMachine = registerService.deleteMachine(machineId);
+		return deleteMachine;
+		
+	}
 
 
 	//Process Create
@@ -2898,6 +2925,13 @@ public class RegisterController {
 			objmain.put("result", "duplicate");
 		}
 		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteProcess/{processId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteProcess(@PathVariable ("processId") String processId) {
+		boolean deleteProcess = registerService.deleteProcess(processId);
+		return deleteProcess;
+		
 	}
 
 

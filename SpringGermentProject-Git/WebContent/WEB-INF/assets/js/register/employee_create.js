@@ -176,8 +176,8 @@ function drawRow(rowData, c) {
 	row.append($("<td>" + rowData.EmployeeName + "</td>"));
 	row.append($("<td>" + rowData.Department + "</td>"));
 	row.append($("<td>" + rowData.Designation + "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.EmployeeName) + "','" + encodeURIComponent(rowData.DepartmentId) + "','" + encodeURIComponent(rowData.DesignationId) + "','" + encodeURIComponent(rowData.EmployeeCode) + "','" + encodeURIComponent(rowData.CardNo) + "','" + encodeURIComponent(rowData.Line) + "','" + encodeURIComponent(rowData.Grade) + "','" + encodeURIComponent(rowData.JoinDate) + "','" + encodeURIComponent(rowData.religion) + "','" + encodeURIComponent(rowData.gender) + "','" + encodeURIComponent(rowData.email) + "','" + encodeURIComponent(rowData.contact) + "','" + encodeURIComponent(rowData.nationality) + "','" + encodeURIComponent(rowData.nationaliid) + "','" + encodeURIComponent(rowData.birthdate) + "') style='cursor : pointer;'> </i></td>"));
-
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.EmployeeName) + "','" + encodeURIComponent(rowData.DepartmentId) + "','" + encodeURIComponent(rowData.DesignationId) + "','" + encodeURIComponent(rowData.EmployeeCode) + "','" + encodeURIComponent(rowData.CardNo) + "','" + encodeURIComponent(rowData.Line) + "','" + encodeURIComponent(rowData.Grade) + "','" + encodeURIComponent(rowData.JoinDate) + "','" + encodeURIComponent(rowData.religion) + "','" + encodeURIComponent(rowData.gender) + "','" + encodeURIComponent(rowData.email) + "','" + encodeURIComponent(rowData.contact) + "','" + encodeURIComponent(rowData.nationality) + "','" + encodeURIComponent(rowData.nationaliid) + "','" + encodeURIComponent(rowData.birthdate) + "') style='cursor : pointer;'> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=deleteEmployee('" + encodeURIComponent(rowData.EmployeeCode) + "') style='cursor : pointer;'> </i></td>"));
 
 	return row;
 }
@@ -224,6 +224,34 @@ function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Li
 	$("#btnSave").hide();
 	$("#btnEdit").show();
 
+}
+
+function deleteEmployee(ecode){
+	
+	let empcode = decodeURIComponent(ecode);
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteEmployee/'+empcode,
+		data: {
+		},
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Updated Successfully");
+
+				$("#dataList").empty();
+				allEmployee();
+
+			}
+			$("#loader").hide();
+		}
+	});
+	
 }
 
 function successAlert(message) {
