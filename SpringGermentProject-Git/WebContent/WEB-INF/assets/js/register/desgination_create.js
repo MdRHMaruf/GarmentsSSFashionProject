@@ -124,8 +124,8 @@ function drawRow(rowData,c) {
 	row.append($("<td id='rowData.departmentId'>" + rowData.departmentName+ "</td>"));
 	row.append($("<td>" + rowData.designationId+ "</td>"));
 	row.append($("<td>" + rowData.designationName+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=setData('"+encodeURIComponent(rowData.departmentId)+"','"+encodeURIComponent(rowData.designationId)+"','"+encodeURIComponent(rowData.designationName)+"')> </i></td>"));
-	
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=setData('"+encodeURIComponent(rowData.departmentId)+"','"+encodeURIComponent(rowData.designationId)+"','"+encodeURIComponent(rowData.designationName)+"')> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=deleteDesignition('"+encodeURIComponent(rowData.designationId)+"')> </i></td>"));
 
 	return row;
 }
@@ -141,6 +141,33 @@ function setData(departmentId,designationId,designationName){
 	$("#btnSave").hide();
   $("#btnEdit").show();
 
+}
+
+function deleteDesignition(dId){
+	
+	let deptId = decodeURIComponent(dId);
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteDesignition/'+deptId,
+		data: {
+		},
+		success: function (data) {
+			if (data.result == "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Updated Successfully");
+
+				$("#dataList").empty();
+				allDesignation();
+
+			}
+			$("#loader").hide();
+		}
+	});
 }
 
 function successAlert(message) {
