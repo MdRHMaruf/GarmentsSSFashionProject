@@ -77,8 +77,14 @@ public class RegisterController {
 		return maxId;
 
 	}
-
-
+	
+	@RequestMapping(value = "/deleteBuyerDetails/{id}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteBuyerDetails(@PathVariable ("id") String id) {
+		boolean deleteBuyerDetails = registerService.deleteBuyerDetails(id);
+		return deleteBuyerDetails;
+		
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/countryNames/{value}",method=RequestMethod.GET)
 	public JSONArray countryNames(@PathVariable ("value") String value) {
@@ -304,7 +310,12 @@ public class RegisterController {
 
 	}
 
-
+	@RequestMapping(value = "/deleteSupplierDetails/{id}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteSupplierDetails(@PathVariable ("id") String id) {
+		boolean deleteSupplierDetails = registerService.deleteSupplierDetails(id);
+		return deleteSupplierDetails;
+		
+	}
 
 
 
@@ -621,7 +632,13 @@ public class RegisterController {
 		return maxId;
 
 	}
-
+	
+	@RequestMapping(value = "/deleteCourieriDetails/{id}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteCourieriDetails(@PathVariable ("id") String id) {
+		boolean deleteCourieriDetails = registerService.deleteCourieriDetails(id);
+		return deleteCourieriDetails;
+		
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/insertCourier",method=RequestMethod.POST)

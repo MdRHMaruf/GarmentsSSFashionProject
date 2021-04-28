@@ -261,8 +261,8 @@ public class RegisterDaoImpl implements RegisterDao{
 			if (checkDuplicateBuyer(buyer.getBuyername())) {
 				return false;
 			}else {
-				String sql="insert into tbbuyer ( name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress, BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode, BankCountry, EntryTime, UserId ) "
-						+ "values('"+buyer.getBuyername()+"','"+buyer.getBuyercode()+"','"+buyer.getBuyerAddress()+"','"+buyer.getConsigneeAddress()+"','"+buyer.getNotifyAddress()+"','"+getCountryname(buyer.getCountry())+"','"+buyer.getTelephone()+"','"+buyer.getMobile()+"','"+buyer.getFax()+"','"+buyer.getEmail()+"','"+buyer.getSkypeid()+"','"+buyer.getBankname()+"','"+buyer.getBankaddress()+"','"+buyer.getSwiftcode()+"','"+getCountryname(buyer.getBankcountry())+"',GETDATE(),'"+buyer.getUser()+"')";
+				String sql="insert into tbbuyer ( name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress, BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode, BankCountry, EntryTime, UserId, trash) "
+						+ "values('"+buyer.getBuyername()+"','"+buyer.getBuyercode()+"','"+buyer.getBuyerAddress()+"','"+buyer.getConsigneeAddress()+"','"+buyer.getNotifyAddress()+"','"+getCountryname(buyer.getCountry())+"','"+buyer.getTelephone()+"','"+buyer.getMobile()+"','"+buyer.getFax()+"','"+buyer.getEmail()+"','"+buyer.getSkypeid()+"','"+buyer.getBankname()+"','"+buyer.getBankaddress()+"','"+buyer.getSwiftcode()+"','"+getCountryname(buyer.getBankcountry())+"',GETDATE(),'"+buyer.getUser()+"',0)";
 
 				session.createSQLQuery(sql).executeUpdate();
 				
@@ -480,7 +480,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx.begin();
 
 			
-			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' "
+			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"'  and trash=0"
 					+ "union\r\n" + 
 					"select b.id, b.name, b.BuyerCode, b.BuyerAddress, b.ConsigneeAddress, b.NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BuyerCountry),'') as BuyerCountry, b.Telephone, b.MobileNo, b.Fax, b.Email, b.SkypeId, b.BankName, b.BankAddress, b.SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BankCountry),'') as  BankCount \r\n" + 
 					"from tbFileAccessPermission fap\r\n" + 
@@ -490,7 +490,7 @@ public class RegisterDaoImpl implements RegisterDao{
 					" order by id";
 			
 			if(userId.equals(MD_ID)) {
-				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer order by id";
+				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where trash=0 order by id";
 			}
 			
 			System.out.println(" buyer details query ");
@@ -811,7 +811,7 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "SupplierCountry, Telephone, MobileNo, "
 						+ "Fax, Email, SkypeId, BankName, "
 						+ "BankAddress, AccountsNo, AccountsName,  "
-						+ " SwiftCode, BankCountry, EntryTime, UserId  ) "
+						+ " SwiftCode, BankCountry, EntryTime, UserId, trash) "
 						+ "values('"+supplier.getSuppliername()+"',"
 						+ "'"+supplier.getSuppliercode()+"','"+supplier.getContcatPerson()+"',"
 						+ "'"+supplier.getSupplieraddress()+"','"+supplier.getConsigneeAddress()+"',"
@@ -820,7 +820,7 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "'"+supplier.getFax()+"','"+supplier.getEmail()+"','"+supplier.getSkypeid()+"',"
 						+ "'"+supplier.getBankname()+"','"+supplier.getBankaddress()+"',"
 						+ "'"+supplier.getAccountno()+"','"+supplier.getAccountname()+"','"+supplier.getSwiftcode()+"',"
-						+ "'"+getCountryname(supplier.getBankcountry())+"',GETDATE(),'"+supplier.getUser()+"')";
+						+ "'"+getCountryname(supplier.getBankcountry())+"',GETDATE(),'"+supplier.getUser()+"',0)";
 
 				session.createSQLQuery(sql).executeUpdate();
 			}
@@ -1023,9 +1023,8 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select id, name, suppliercode, supplieraddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=SupplierCountry),'') as SupplierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbsupplier order by id";
-			System.out.println(" buyer details query ");
-
+			String sql="select id, name, suppliercode, supplieraddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=SupplierCountry),'') as SupplierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbsupplier where trash=0 order by id";
+			
 			List<?> list = session.createSQLQuery(sql).list();
 
 
@@ -1491,14 +1490,14 @@ public class RegisterDaoImpl implements RegisterDao{
 				String sql="insert into tbCourier (name, CourierCode, CourierAddress, "
 						+ "ConsigneeAddress, NutifyAddress, CourierCountry, "
 						+ "Telephone, MobileNo, Fax, Email, SkypeId, BankName,"
-						+ " BankAddress, SwiftCode, BankCountry, EntryTime, UserId) values"
+						+ " BankAddress, SwiftCode, BankCountry, EntryTime, UserId,trash) values"
 						+ " ('"+courier.getCouriername()+"',"
 						+ "'"+courier.getCouriercode()+"','"+courier.getCourierAddress()+"',"
 						+ "'"+courier.getConsigneeAddress()+"','"+courier.getNotifyAddress()+"',"
 						+ "'"+getCountryname(courier.getCountry())+"','"+courier.getTelephone()+"',"
 						+ "'"+courier.getMobile()+"','"+courier.getFax()+"','"+courier.getEmail()+"',"
 						+ "'"+courier.getSkypeid()+"','"+courier.getBankname()+"','"+courier.getBankaddress()+"',"
-						+ "'"+courier.getSwiftcode()+"','"+getCountryname(courier.getBankcountry())+"',GETDATE(),'"+courier.getUser()+"')";
+						+ "'"+courier.getSwiftcode()+"','"+getCountryname(courier.getBankcountry())+"',GETDATE(),'"+courier.getUser()+"',0)";
 
 				session.createSQLQuery(sql).executeUpdate();
 			}
@@ -1750,9 +1749,8 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select id, name, couriercode, courierAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=courierCountry),'') as CourierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbCourier order by id";
-			System.out.println(" buyer details query ");
-
+			String sql="select id, name, couriercode, courierAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=courierCountry),'') as CourierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbCourier where trash=0 order by id";
+			
 			List<?> list = session.createSQLQuery(sql).list();
 
 
@@ -4183,7 +4181,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			String sql = "insert into TbDesignationInfo (DepartmentId, DesignationName, EntryTime, UserId) values ('" + designation.getDepartmentId()+ "','" + designation.getDesignation()+ "', CURRENT_TIMESTAMP,'"+ designation.getUserId() + "')";
+			String sql = "insert into TbDesignationInfo (DepartmentId, DesignationName, EntryTime, UserId,trash) values ('" + designation.getDepartmentId()+ "','" + designation.getDesignation()+ "', CURRENT_TIMESTAMP,'"+ designation.getUserId() + "',0)";
 
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
@@ -4304,13 +4302,13 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx = session.getTransaction();
 			tx.begin();
 			String sql = "insert into TbEmployeeInfo (EmployeeCode, Name, CardNo, DesginationId, DepartmentId, LineId, Grade, JoinDate,"
-					+ " EntryTime, UserId,religion, gender, email, contact, nationality, nationalid, birthdate) values"
+					+ " EntryTime, UserId,religion, gender, email, contact, nationality, nationalid, birthdate,trash) values"
 					+ " ('" + saveEmployee.getEmployeeCode()+ "','" + saveEmployee.getEmployeeName()+ "','"+saveEmployee.getCardNo()+"',"
 					+ "'"+saveEmployee.getDesignation()+"','"+saveEmployee.getDepartment()+"','"+saveEmployee.getLine()+"',"
 					+ "'"+saveEmployee.getGrade()+"','"+saveEmployee.getJoinDate()+"', CURRENT_TIMESTAMP,'"+ saveEmployee.getUserId() + "',"
 					+ "'"+saveEmployee.getReligion()+"','"+saveEmployee.getGender()+"','"+saveEmployee.getEmail()+"',"
 					+ "'"+saveEmployee.getContact()+"','"+saveEmployee.getNationality()+"','"+saveEmployee.getNationalId()+"',"
-					+ "'"+saveEmployee.getBirthDate()+"')";
+					+ "'"+saveEmployee.getBirthDate()+"',0)";
 //			System.err.println("sql : "+sql);
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
@@ -4506,7 +4504,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			String sql = "insert into TbMachineInfo (MachineName, Brand, ModelNo, Motor, OperatorId,FactoryId,DepartmentId,LineId,EntryTime, UserId) values ('" + saveMachine.getName()+ "','" + saveMachine.getBrand()+ "','"+saveMachine.getModelNo()+"','"+saveMachine.getMotor()+"','"+saveMachine.getEmployeeId()+"','"+saveMachine.getFactoryId()+"','"+saveMachine.getDepartmentId()+"','"+saveMachine.getLineId()+"', CURRENT_TIMESTAMP,'"+ saveMachine.getUserId() + "')";
+			String sql = "insert into TbMachineInfo (MachineName, Brand, ModelNo, Motor, OperatorId,FactoryId,DepartmentId,LineId,EntryTime, UserId,trash) values ('" + saveMachine.getName()+ "','" + saveMachine.getBrand()+ "','"+saveMachine.getModelNo()+"','"+saveMachine.getMotor()+"','"+saveMachine.getEmployeeId()+"','"+saveMachine.getFactoryId()+"','"+saveMachine.getDepartmentId()+"','"+saveMachine.getLineId()+"', CURRENT_TIMESTAMP,'"+ saveMachine.getUserId() + "',0)";
 
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
@@ -4653,7 +4651,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			String sql = "insert into TbProcessInfo (ProcessName,EntryTime, UserId) values ('" + v.getProcessName()+ "',CURRENT_TIMESTAMP,'"+ v.getUserId() + "')";
+			String sql = "insert into TbProcessInfo (ProcessName,EntryTime, UserId,trash) values ('" + v.getProcessName()+ "',CURRENT_TIMESTAMP,'"+ v.getUserId() + "',0)";
 
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
@@ -5251,6 +5249,93 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			sql="update TbProcessInfo set trash='1' where ProcessId='"+processId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteBuyerDetails(String id) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update tbBuyer set trash='1' where id='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteCourieriDetails(String id) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update tbCourier set trash='1' where id='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteSupplierDetails(String id) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update tbSupplier set trash='1' where id='"+id+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

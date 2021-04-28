@@ -240,7 +240,8 @@
 										<th>ID</th>
 										<th>Supplier's Name</th>
 										<th>Supplier's Code</th>
-										<th>edit</th>
+										<th class='text-center'>Edit</th>
+										<th class='text-center'>Delete</th>
 									</tr>
 								</thead>
 								<tbody id="supplierTable">

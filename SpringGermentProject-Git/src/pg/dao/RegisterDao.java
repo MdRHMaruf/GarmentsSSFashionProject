@@ -45,6 +45,8 @@ public interface RegisterDao {
 	public List<BuyerModel> BuyersDetails(String value);
 	public boolean editBuyer(BuyerModel buyer);
 	public List<BuyerModel> getAllBuyers(String userId);
+	
+	public boolean deleteBuyerDetails(String id);
 
 	//Notify Create
 	public boolean saveNotifyer(Notifyer notifyer);
@@ -61,7 +63,7 @@ public interface RegisterDao {
 	public List<SupplierModel> SupplierDetails(String value);
 	public boolean editSupplier(SupplierModel supplier);
 	public List<SupplierModel> getAllSupplier();
-
+	public boolean deleteSupplierDetails(String id);
 
 	//Factory Create
 
@@ -80,6 +82,7 @@ public interface RegisterDao {
 	public List<CourierModel> CourierDetails(String value);
 	public boolean editCourier(CourierModel courier);
 	public List<CourierModel> getAllCouriers();
+	public boolean deleteCourieriDetails(String id);
 
 	//Brand Create 
 	public boolean saveBrand(Brand brand);

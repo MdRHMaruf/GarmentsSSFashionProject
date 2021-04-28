@@ -370,8 +370,31 @@ function drawRow(rowData,c) {
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick='courieriDetails(" + rowData.id + ")' class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModalCenter\"> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick='courieriDetails(" + rowData.id + ")' class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModalCenter\"> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick='deleteCourieriDetails(" + rowData.id + ")'> </i></td>"));
 	return row;
+}
+
+function deleteCourieriDetails(id){
+	
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteCourieriDetails/'+id,
+		data: {
+		},
+		success: function (data) {
+			if (data==true) {
+				//alert("Updated Successfully");
+				location.reload();
+			}else{
+				alert("Something Went Wrong!!! ");
+			}
+			$("#loader").hide();
+		}
+	});
+	
 }
 
 $(document).ready(function () {
