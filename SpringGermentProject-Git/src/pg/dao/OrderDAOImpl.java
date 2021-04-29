@@ -2698,7 +2698,7 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 
 			System.out.println(sql);
-			
+
 			SpringRootConfig sp=new SpringRootConfig();
 			Statement stmnt = sp.getConnection().createStatement();
 			ResultSet rs = stmnt.executeQuery(sql);
@@ -2712,17 +2712,17 @@ public class OrderDAOImpl implements OrderDAO{
 			}
 			stmnt.close();
 
-			
+
 
 			return query;
 		}
 		catch(Exception e){
 
-			
+
 			e.printStackTrace();
 		}
 
-		
+
 
 		return query;
 	}
@@ -2933,7 +2933,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"on ai.UnitId = u.Unitid \r\n" + 
 					"where ai.AINo = '"+accessoriesIndentId+"' order by ai.AccIndentId,ai.ColorId,ai.accessoriesItemId,ss.sortingNo";
 
-			
+
 			/*String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(sc.StyleNo,'')as StyleNo,ai.Itemid,ISNULL(id.itemname,'') as ItemName,ai.ColorId,ISNULL(c.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty \r\n" + 
 					"from tbAccessoriesIndent ai  \r\n" + 
 					"left join TbStyleCreate sc \r\n" + 
@@ -2953,7 +2953,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"left join tbunits u \r\n" + 
 					"on ai.UnitId = u.Unitid \r\n" + 
 					"where ai.AINo = '"+accessoriesIndentId+"' order by ai.AccIndentId,ai.ColorId,ai.accessoriesItemId,ss.sortingNo";
-*/
+			 */
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -3101,7 +3101,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			String indentDate = "GETDATE()";
 			if(accessoriesIndentId.equals("New")) {
 				String sql="select (isnull(max(AINo),0)+1) as maxId from tbAccessoriesIndent";
@@ -3121,7 +3121,7 @@ public class OrderDAOImpl implements OrderDAO{
 			System.out.println(accessoriesItems);
 			JSONObject indentObject = (JSONObject)jsonParser.parse(accessoriesItems);
 			JSONArray indentList = (JSONArray) indentObject.get("list");
-			
+
 			String userId ="";
 			for(int i=0;i<indentList.size();i++) {
 				JSONObject indent = (JSONObject) indentList.get(i);
@@ -3144,7 +3144,7 @@ public class OrderDAOImpl implements OrderDAO{
 				userId = indent.get("userId").toString();
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
+
 			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 					"from tbGroups g1\r\n" + 
 					"join tbGroups g2\r\n" + 
@@ -3175,7 +3175,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return "something wrong";
 	}
-	
+
 	@Override
 	public List<AccessoriesIndent> getPostedZipperIndent(String userId) {
 		Session session=HibernateUtil.openSession();
@@ -3288,7 +3288,7 @@ public class OrderDAOImpl implements OrderDAO{
 				session.createSQLQuery(sql).executeUpdate();
 				userId = indent.get("userId").toString();
 			}
-			
+
 			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 					"from tbGroups g1\r\n" + 
 					"join tbGroups g2\r\n" + 
@@ -3571,7 +3571,7 @@ public class OrderDAOImpl implements OrderDAO{
 				userId = indent.get("userId").toString();
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			
+
 			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 					"from tbGroups g1\r\n" + 
 					"join tbGroups g2\r\n" + 
@@ -4191,8 +4191,8 @@ public class OrderDAOImpl implements OrderDAO{
 						+ "'"+indent.get("totalQty")+"',"
 						+ "'"+indent.get("unitId")+"',"
 						+ "'"+indent.get("grandQty")+"',"
-								+ "'"+indent.get("sqNo")+"',"
-										+ "'"+indent.get("skuNo")+"','0',"
+						+ "'"+indent.get("sqNo")+"',"
+						+ "'"+indent.get("skuNo")+"','0',"
 						+ "GETDATE(),"
 						+ "CURRENT_TIMESTAMP,"
 						+ "'"+indent.get("userId")+"'"
@@ -4200,7 +4200,7 @@ public class OrderDAOImpl implements OrderDAO{
 				session.createSQLQuery(sql).executeUpdate();
 				userId = indent.get("userId").toString();
 			}
-			
+
 			String sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 					"from tbGroups g1\r\n" + 
 					"join tbGroups g2\r\n" + 
@@ -4407,13 +4407,13 @@ public class OrderDAOImpl implements OrderDAO{
 			String sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 					"from tbFabricsIndent a \r\n" + 
 					"where a.entryby='"+userId+"' group by a.indentId  \r\n"
-							+ " union\r\n" + 
-							"select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
-							"from tbFileAccessPermission fap \r\n" + 
-							"inner join tbFabricsIndent a \r\n" + 
-							"on fap.ownerId = a.entryby and a.indentId = fap.resourceId\r\n" + 
-							"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.FABRICS_INDENT.getId()+"' \r\n" + 
-							"group by a.indentId  order by a.indentId desc";
+					+ " union\r\n" + 
+					"select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
+					"from tbFileAccessPermission fap \r\n" + 
+					"inner join tbFabricsIndent a \r\n" + 
+					"on fap.ownerId = a.entryby and a.indentId = fap.resourceId\r\n" + 
+					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.FABRICS_INDENT.getId()+"' \r\n" + 
+					"group by a.indentId  order by a.indentId desc";
 			if(userId.equals(MD_ID)) {
 				sql="select a.indentId,(SELECT CONVERT(varchar, min(a.indentDate), 25)) as indentDate  \r\n" + 
 						"from tbFabricsIndent a \r\n" + 
@@ -4561,7 +4561,7 @@ public class OrderDAOImpl implements OrderDAO{
 		return indentList;
 	}
 
-	
+
 	@Override
 	public double getOrderQuantity(String purchaseOrder, String styleId, String itemId, String colorId) {
 		Session session=HibernateUtil.openSession();
@@ -4865,7 +4865,7 @@ public class OrderDAOImpl implements OrderDAO{
 
 			session.createSQLQuery(sqlupdate).executeUpdate();
 
-			
+
 			sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 					"from tbGroups g1\r\n" + 
 					"join tbGroups g2\r\n" + 
@@ -5240,9 +5240,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "deliveryto,"
 					+ "paymentTerm,"
 					+ "currency,"
+					+ "caNo,"
+					+ "contentNo,"
 					+ "Note,"
 					+ "Subject,"
 					+ "body,"
+					+ "terms,"
 					+ "ManualPo,"
 					+ "entryBy,"
 					+ "entryTime) "
@@ -5258,9 +5261,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "'"+purchaseOrder.getDeliveryTo()+"',"
 					+ "'"+purchaseOrder.getPaymentType()+"',"
 					+ "'"+purchaseOrder.getCurrency()+"',"
+					+ "'"+purchaseOrder.getCaNo()+"',"
+					+ "'"+purchaseOrder.getContentNo()+"',"
 					+ "'"+purchaseOrder.getNote()+"',"
 					+ "'"+purchaseOrder.getSubject()+"',"
 					+ "'"+purchaseOrder.getBody()+"',"
+					+ "'"+purchaseOrder.getTerms()+"',"
 					+ "'"+purchaseOrder.getManualPO()+"',"
 					+ "'"+purchaseOrder.getUserId()+"',"
 					+ "CURRENT_TIMESTAMP ) ";
@@ -5350,9 +5356,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "deliveryto = '"+purchaseOrder.getDeliveryTo()+"',"
 					+ "paymentTerm = '"+purchaseOrder.getPaymentType()+"',"
 					+ "currency = '"+purchaseOrder.getCurrency()+"',"
+					+ "caNo = '"+purchaseOrder.getCaNo()+"',"
+					+ "contentNo = '"+purchaseOrder.getContentNo()+"',"
 					+ "Note = '"+purchaseOrder.getNote()+"',"
 					+ "Subject = '"+purchaseOrder.getSubject()+"',"
 					+ "body = '"+purchaseOrder.getBody()+"',"
+					+ "terms = '"+purchaseOrder.getTerms()+"',"
 					+ "ManualPo = '"+purchaseOrder.getManualPO()+"',"
 					+ "entryBy = '"+purchaseOrder.getUserId()+"',"
 					+ "entryTime = CURRENT_TIMESTAMP where poNo= '"+purchaseOrder.getPoNo()+"'";
@@ -5759,13 +5768,16 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,caNo,contentNo,terms,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{
 				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[13].toString());
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[16].toString());
 				purchaseOrder.setBody(element[12].toString());
+				purchaseOrder.setCaNo(element[13].toString());
+				purchaseOrder.setContentNo(element[14].toString());
+				purchaseOrder.setTerms(element[15].toString());
 			}
 
 			tx.commit();
@@ -7097,8 +7109,8 @@ public class OrderDAOImpl implements OrderDAO{
 	@Override
 	public List<PurchaseOrder> getPurchaseOrderApprovalList(String fromDate, String toDate,String itemType,String approveType,String buyerId,String supplierId) {
 		// TODO Auto-generated method stub
-		
-		
+
+
 		PurchaseOrder tempPo;
 		List<PurchaseOrder> dataList=new ArrayList<PurchaseOrder>();
 		try{	
@@ -7284,13 +7296,13 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			
+
 
 		}
 		finally {
 			//stmnt.close();
 		}
-		
+
 		return dataList;
 	}
 
@@ -8644,8 +8656,8 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			
-			
+
+
 			String sql="select sizeGroupId from TbSampleRequisitionDetails where SampleTypeId='"+v.getSampleId()+"' and BuyerId='"+v.getBuyerId()+"' and BuyerOrderId='"+v.getBuyerOrderId()+"' and purchaseOrder='"+v.getPurchaseOrder()+"' and StyleId='"+v.getStyleId()+"' and ItemId='"+v.getItemId()+"' and colorId='"+v.getColorId()+"' and sizeGroupId='"+v.getSizeGroupId()+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)

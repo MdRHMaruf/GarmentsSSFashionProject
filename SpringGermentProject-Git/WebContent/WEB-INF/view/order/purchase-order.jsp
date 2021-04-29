@@ -283,10 +283,35 @@
 			</p>
 		</div>
 		<hr class="my-1">
-		<div class='w-25'>
+		<div class="row">
+			<div class='col-md-8'>
+			<div class='w-50'>
 			<input id="indentListSearch" type="text" class="form-control-sm"
 				placeholder="Search Here Anything....">
 		</div>
+			</div>
+			<div class="col-md-2">
+				<div class="input-group input-group-sm mb-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" for="caNo">CA NO.</span>
+					</div>
+					<input id="caNo" type="text" class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			<div class="col-md-2">
+				<div class="input-group input-group-sm mb-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" for="contentNo">Content NO.</span>
+					</div>
+					<input id="contentNo" type="text" class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+		</div>
+		
 		<div class="row mt-1">
 			<div style="overflow: auto; max-height: 300px;"
 				class="col-sm-12 px-1 table-responsive">
@@ -364,7 +389,24 @@
 						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
+			
+			<div class="col-md-6">
+				<div class="input-group input-group-sm mb-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" for="terms">Terms & Condition</span>
+					</div>
+					<textarea id="terms" class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm">Pls follow up the bellow instruction for avoiding any problem.
+1) Label should be as per buyer approved copy.
+2) Colours should be matched with approved copy.
+3) Any shortage will not be allowed.
+4) Have to submit bill with challan & receiver signature copy.
+5) Sample qty s/b sent to SS Fashion Wear.</textarea>
+				</div>
+			</div>
 
+			<div class='col-md-6'></div>
 			<div class="col-md-6">
 				<div class="row">
 					<div class="col-md-12 d-flex justify-content-end">

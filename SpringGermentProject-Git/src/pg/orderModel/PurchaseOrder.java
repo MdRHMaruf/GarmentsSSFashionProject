@@ -14,9 +14,12 @@ public class PurchaseOrder {
 	String manualPO;
 	String paymentType;
 	String currency;
+	String caNo;
+	String contentNo;
 	String note;
 	String subject;
 	String body;
+	String terms;
 	String itemListString;
 	List<PurchaseOrderItem> itemList;
 	String userId;
@@ -254,6 +257,23 @@ public class PurchaseOrder {
 	public void setBody(String body) {
 		this.body = body;
 	}
-
+	public String getCaNo() {
+		return caNo;
+	}
+	public void setCaNo(String caNo) {
+		this.caNo = caNo;
+	}
+	public String getContentNo() {
+		return contentNo;
+	}
+	public void setContentNo(String contentNo) {
+		this.contentNo = contentNo;
+	}
+	public String getTerms() {
+		return terms;
+	}
+	public void setTerms(String terms) {
+		this.terms = terms;
+	}
 
 }

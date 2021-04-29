@@ -27,7 +27,7 @@ function saveAction() {
           if (data.result == "Something Wrong") {
             dangerAlert("Something went wrong");
           } else if (data.result == "duplicate") {
-            dangerAlert("Duplicate Department Name..This Department Name Allreary Exist")
+            dangerAlert("Duplicate Department Name..This Department Name Already Exist")
           } else {
             successAlert("Department Name Save Successfully");
 
