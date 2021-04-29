@@ -191,9 +191,12 @@ function submitAction() {
   const manualPO = $("#manualPO").val();
   const paymentType = $("#paymentType").val();
   const currency = $("#currency").val();
+  const caNo = $("#caNo").val();
+  const contentNo = $("#contentNo").val();
   const subject = $("#subject").val();
   const body = $("#body").val();
   const note = $("#note").val();
+  const terms = $("#terms").val();
   const userId = $("#userId").val();
 
   for (let i = 0; i < length; i++) {
@@ -242,9 +245,12 @@ function submitAction() {
                       manualPO: manualPO,
                       paymentType: paymentType,
                       currency: currency,
+                      caNo: caNo,
+                      contentNo: contentNo,
                       note: note,
                       subject: subject,
                       body: body,
+                      terms: terms,
                       itemListString: itemList,
                       userId: userId
                     },
@@ -314,9 +320,12 @@ function purchaseOrderEdit() {
   const manualPO = $("#manualPO").val();
   const paymentType = $("#paymentType").val();
   const currency = $("#currency").val();
+  const caNo = $("#caNo").val();
+  const contentNo = $("#contentNo").val();
   const note = $("#note").val();
   const subject = $("#subject").val();
   const body = $("#body").val();
+  const terms = $("#terms").val();
   const userId = $("#userId").val();
  
   for (let i = 0; i < length; i++) {
@@ -357,9 +366,12 @@ function purchaseOrderEdit() {
                   manualPO: manualPO,
                   paymentType: paymentType,
                   currency: currency,
+                  caNo: caNo,
+                  contentNo: contentNo,
                   note: note,
                   body: body,
                   subject: subject,
+                  terms: terms,
                   itemListString: itemList,
                   userId: userId
                 },
@@ -517,9 +529,12 @@ function searchPurchaseOrder(poNo,poType) {
         $("#manualPO").val(purchaseOrder.manualPO);
         $("#paymentType").val(purchaseOrder.paymentType);
         $("#currency").val(purchaseOrder.currency);
+        $("#caNo").val(purchaseOrder.caNo);
+        $("#contentNo").val(purchaseOrder.contentNo);
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
         $("#body").val(purchaseOrder.body);
+        $("#terms").val(purchaseOrder.terms);
         $("#dataList").empty();
         $("#dataList").append(drawDataTable(purchaseOrder.itemList, "checked"));
         $('.tableSelect').selectpicker('refresh');

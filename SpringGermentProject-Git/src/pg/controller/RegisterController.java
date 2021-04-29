@@ -2504,7 +2504,7 @@ public class RegisterController {
 		System.out.println("Designation : "+v.getDesignation());
 
 		JSONObject objmain = new JSONObject();
-		if(registerService.isDesignationExist(v)) {
+		if(!registerService.isDesignationExist(v)) {
 			if(registerService.editDesignation(v)) {
 
 				JSONArray mainarray = new JSONArray();

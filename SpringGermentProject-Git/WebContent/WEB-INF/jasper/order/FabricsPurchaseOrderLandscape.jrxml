@@ -72,6 +72,9 @@
 	<field name="brandName" class="java.lang.String"/>
 	<field name="skuNumber" class="java.lang.String"/>
 	<field name="sqNumber" class="java.lang.String"/>
+	<field name="caNo" class="java.lang.String"/>
+	<field name="contentNo" class="java.lang.String"/>
+	<field name="terms" class="java.lang.String"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
@@ -186,7 +189,7 @@
 				<text><![CDATA[Email]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="2" y="256" width="792" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
+				<reportElement positionType="Float" x="2" y="256" width="512" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -400,6 +403,24 @@
 			<line>
 				<reportElement x="266" y="139" width="1" height="24" uuid="53db483b-c0e1-4b07-803a-ad5ce9b08cc0"/>
 			</line>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="568" y="256" width="102" height="11" uuid="6de5854d-c1d0-4141-a478-5d94ccefd210">
+					<printWhenExpression><![CDATA[$F{caNo}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CA NO# "+$F{caNo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="670" y="256" width="122" height="11" uuid="8a31b90f-8fc1-4c26-99bb-84f629c687c2">
+					<printWhenExpression><![CDATA[$F{contentNo}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Content No: "+$F{contentNo}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -813,7 +834,7 @@
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="45" splitType="Stretch">
+		<band height="63" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="1" height="45" uuid="f83dbd21-5cff-4219-b3c5-e68239c505ab"/>
 			</line>
@@ -903,6 +924,24 @@
 				</textElement>
 				<text><![CDATA[$]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="10" y="51" width="25" height="11" uuid="611049de-2009-4baf-b105-6da391882cbd">
+					<printWhenExpression><![CDATA[$F{terms}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Terms:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="36" y="51" width="740" height="11" uuid="4ecf9471-1f65-409a-bf23-6cc4b62dd487">
+					<printWhenExpression><![CDATA[$F{terms}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{terms}]]></textFieldExpression>
+			</textField>
 		</band>
 	</summary>
 </jasperReport>
