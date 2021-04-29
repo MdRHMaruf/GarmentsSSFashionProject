@@ -902,6 +902,24 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.deleteProcess(processId);
 	}
 
+	@Override
+	public boolean deleteBuyerDetails(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteBuyerDetails(id);
+	}
+
+	@Override
+	public boolean deleteCourieriDetails(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteCourieriDetails(id);
+	}
+
+	@Override
+	public boolean deleteSupplierDetails(String id) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteSupplierDetails(id);
+	}
+
 
 
 }

@@ -392,10 +392,32 @@ function drawRow(rowData,c) {
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=\"BuyerDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModalCenter\"> </i></td>"));
-	
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=\"BuyerDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModalCenter\"> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=\"deleteBuyerDetails(" + rowData.id + ")\"> </i></td>"));
 
 	return row;
+}
+
+function deleteBuyerDetails(id){
+	
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteBuyerDetails/'+id,
+		data: {
+		},
+		success: function (data) {
+			if (data==true) {
+				//alert("Updated Successfully");
+				location.reload();
+			}else{
+				alert("Something Went Wrong!!! ");
+			}
+			$("#loader").hide();
+		}
+	});
+	
 }
 
 

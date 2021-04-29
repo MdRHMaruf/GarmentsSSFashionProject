@@ -224,7 +224,8 @@
 										<th>ID</th>
 										<th>Courier's Name</th>
 										<th>Courier's Code</th>
-										<th>Action</th>
+										<th class='text-center'>Action</th>
+										<th class='text-center'>Delete</th>
 									</tr>
 								</thead>
 								<tbody id="couriertable">

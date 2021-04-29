@@ -422,10 +422,31 @@ function drawRow(rowData,c) {
 	row.append($("<td>" + rowData.id+ "</td>"));
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
-	row.append($("<td ><i class='fa fa-edit' onclick=\"SupplierDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModal\"> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=\"SupplierDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModal\"> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=\"deleteSupplierDetails(" + rowData.id + ")\"> </i></td>"));
 	return row;
 }
 
+function deleteSupplierDetails(id){
+	
+	$("#loader").show();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteSupplierDetails/'+id,
+		data: {
+		},
+		success: function (data) {
+			if (data==true) {
+				location.reload();
+			}else{
+				alert("Something Went Wrong!!! ");
+			}
+			$("#loader").hide();
+		}
+	});
+	
+}
 
 $(document).ready(function () {
 	  $("#search").on("keyup", function () {

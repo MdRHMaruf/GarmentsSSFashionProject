@@ -232,7 +232,8 @@
 										<th>ID</th>
 										<th>Buyer's Name</th>
 										<th>Buyer's Code</th>
-										<th>Action</th>
+										<th class='text-center'>Action</th>
+										<th class='text-center' scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="buyerstable">
