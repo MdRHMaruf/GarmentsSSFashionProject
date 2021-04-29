@@ -240,6 +240,10 @@ public interface OrderService {
 	List<Costing> getFabricsItemForCosting();
 	List<Costing> getCostingItemList();
 	List<pg.registerModel.Unit> getUnitList();
+	boolean checkCostingExist(Costing v);
+	boolean saveCostingNewVersion(Costing v);
+	List<Costing> getNewCostingList(String userId);
+	List<Costing> searchCostingNewVersion(String costingNo);
 	
 }
 

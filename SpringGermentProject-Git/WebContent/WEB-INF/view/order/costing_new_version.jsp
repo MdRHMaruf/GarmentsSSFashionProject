@@ -69,15 +69,18 @@ String userName=(String)session.getAttribute("userName");
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group mb-0  row">
-									   <label for="styleName" style="padding:5px;width:90px;" >Style No</label> 
-										<input id="styleNo" type="text" class="col-md-2 form-control-sm" >
+									   <label for="styleName" style="padding:5px;width:80px;" >Style No</label> 
+										<input id="styleNo" type="text" class="col-md-1 form-control-sm" >
 										
 									
 										<label for="itemName" style="padding:5px;width:90px;" >Item Name</label> 
 									<input id="itemName" type="text" class="col-md-3 form-control-sm" >
 										
-									<label for="itemName" style="padding:5px;width:120px;">Commission %</label> 
-									<input id="commission" type="text" class="col-md-1 form-control-sm" >
+									<label for="itemName" style="padding:5px;width:90px;">Comm. %</label> 
+									<input id="commission" type="text" style="padding:5px;width:50px;height:35px;">
+									
+									<label for="itemName" style="padding:5px;width:110px;" >Submission Date</label> 
+									<input id="submissionDate" type="date" style="width:158px;height:30px;" >
 									
 								<button style="margin-left:10px;height:40px;" type="button" class="btn btn-outline-dark btn-sm" id="copyCosting"
 									onclick="cloneButtonAction()" title="Copy Costing">
@@ -104,6 +107,7 @@ String userName=(String)session.getAttribute("userName");
 								<thead>
 									<tr>
 										<th>SL#</th>
+										<th style="width:100px;">Group Type</th>
 										<th style="width:460px;">Particular Item</th>
 										<th style="width:120px;">Unit</th>
 										<th style="width:60px;">Width</th>
@@ -182,14 +186,14 @@ String userName=(String)session.getAttribute("userName");
 								<td>${counter.count}</td>
 								<td>${costing.costingNo}</td>
 								<td>${costing.date}</td>
-								<td>${costing.styleName}</td>
+								<td>${costing.styleNo}</td>
 								<td>${costing.itemName}</td>
 
 								<td><i class="fa fa-search"
-									onclick="searchCosting('${costing.styleId}', '${costing.itemId}','${costing.costingNo}')"
+									onclick="searchCosting('${costing.costingNo}')"
 									style='cursor: pointer;'></i></td>
 								<td><i class="fa fa-print"
-									onclick="itemWiseCostingReport('${costing.styleId}', '${costing.itemId}','${costing.costingNo}')"
+									onclick="itemWiseCostingReport('${costing.costingNo}')"
 									style='cursor: pointer;'></i></td>
 							</tr>
 						</c:forEach>
@@ -235,7 +239,7 @@ String userName=(String)session.getAttribute("userName");
 							varStatus="counter">
 							<tr>
 								<td>${costing.costingNo	}</td>
-								<td>${costing.styleName}</td>
+								<td>${costing.styleNo}</td>
 								<td>${costing.itemName}</td>
 								<td><i class="fas fa-copy"
 									onclick="cloningCosting('${costing.costingNo}','${costing.styleId}', '${costing.itemId}')"
@@ -294,7 +298,7 @@ String userName=(String)session.getAttribute("userName");
 									<tr id='groupRow-${costing.costingNo }' data-id='${costing.costingNo}'>
 										<td>${costing.costingNo}</td>
 										<td>${costing.date}</td>
-										<td>${costing.styleName}</td>
+										<td>${costing.styleNo}</td>
 										<td>${costing.itemName}</td>
 										<td><input id='groupCheck-${costing.costingNo }' type="checkbox" /></td>
 									</tr>

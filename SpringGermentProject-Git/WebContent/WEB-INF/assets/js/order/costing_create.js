@@ -14,21 +14,10 @@ window.onload = () => {
 }
 
 function itemWiseCostingReport(styleId, itemId,costingNo) {
-  // $.ajax({
-  //   type: 'GET',
-  //   dataType: 'json',
-  //   url: './costingReportInfo',
-  //   data: {
-  //     styleId: styleId,
-  //     itemId: itemId,
-  //     costingNo: costingNo
-  //   },
-  //   success: function (data) {
-  //     if (data == "Success") {
-       
-  //     }
-  //   }
-  // });
+
+
+ 
+	
   let url = `printCostingReport/${styleId}/${itemId}/${costingNo}`;
   window.open(url, '_blank');
 

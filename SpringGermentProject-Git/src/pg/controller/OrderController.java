@@ -211,7 +211,7 @@ public class OrderController {
 		List<Style> styleList= orderService.getStyleList(userId);
 		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
 		List<ParticularItem> particularList = orderService.getTypeWiseParticularList("1");
-		List<Costing> costingList = orderService.getCostingList(userId);
+		List<Costing> costingList = orderService.getNewCostingList(userId);
 		map.addAttribute("styleList",styleList);
 		map.addAttribute("unitList",unitList);
 		map.addAttribute("buyerList",buyerList);
@@ -224,21 +224,50 @@ public class OrderController {
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
 	
-	@RequestMapping(value = "/confirmCostingNewVersion",method=RequestMethod.POST)
-	public @ResponseBody String confirmCostingNewVersion(String costingList) {
+	@RequestMapping(value = "/printNewCostingReport/{costingNo}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printCostingReport(ModelMap map,@PathVariable("costingNo") String costingNo) {
 		
-		return "Costing Create Confrim Successfully";
+		ModelAndView view=new ModelAndView("order/printNewCostingReport");
+		map.addAttribute("costingNo", costingNo);
+
+		return view;
 	}
+	
+	@RequestMapping(value = "/confirmCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody String confirmCostingNewVersion(Costing v) {
+		String msg="";
+		if(!orderService.checkCostingExist(v)) {
+			boolean flag=orderService.saveCostingNewVersion(v);
+			System.out.println("flag "+flag);
+			if(flag) {
+				msg="Costing Create Succesfully";
+			}
+		}
+		else{
+			msg="Costing Already Save";
+		}
+		return msg;
+	}
+	
+	@RequestMapping(value = "/searchCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody JSONObject searchCostingNewVersion(String costingNo) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<Costing> costingList = orderService.searchCostingNewVersion(costingNo);
+		objmain.put("result",costingList);
+		return objmain;
+	}
+
 	
 	
 	@RequestMapping(value = "/getCostingItemList",method=RequestMethod.GET)
 	public @ResponseBody JSONObject getCostingItemList(Costing costing) {
 		JSONObject objmain = new JSONObject();
 		List<Costing> costingFabricsList = orderService.getFabricsItemForCosting();
-		List<Costing> costingItemList = orderService.getCostingItemList();
+		//List<Costing> costingItemList = orderService.getCostingItemList();
 		List<Unit> unitList = orderService.getUnitList();
 		objmain.put("costingFabricsList",costingFabricsList);
-		objmain.put("costingItemList",costingItemList);
 		objmain.put("unitList",unitList);
 		return objmain;
 	}
