@@ -240,9 +240,9 @@ function deleteEmployee(ecode){
 			if (data.result == "Something Wrong") {
 				dangerAlert("Something went wrong");
 			} else if (data.result == "duplicate") {
-				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+				dangerAlert("Duplicate Employee Name..This Employee Name Allreary Exist")
 			} else {
-				successAlert("Updated Successfully");
+				successAlert("Employee Delete Successfully");
 
 				$("#dataList").empty();
 				allEmployee();

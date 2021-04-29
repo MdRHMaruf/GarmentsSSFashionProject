@@ -186,6 +186,8 @@ public class OrderController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
+	
+	
 
 	@RequestMapping(value = "/cloningCosting",method=RequestMethod.GET)
 	public @ResponseBody JSONObject cloningCosting(String costingNo,String oldStyleId,String oldItemId,String newStyleId,String newItemId,String userId) {
@@ -197,17 +199,78 @@ public class OrderController {
 		return objmain;
 	}
 
-	/*@RequestMapping(value = "/saveCosting",method=RequestMethod.POST)
-	public @ResponseBody JSONObject saveCosting(Costing costing) {
-		JSONObject objmain = new JSONObject();
-		if(orderService.saveCosting(costing)) {
-			List<Costing> costingList = orderService.getCostingList(costing.getStyleId(),costing.getItemId());
-			objmain.put("result",costingList);
-		}else {
-			objmain.put("result", "Something Wrong");
+	//Costing Create Work of nasir bai...
+	@RequestMapping(value = "/costing_new_version",method=RequestMethod.GET)
+	public ModelAndView costing_new_version(ModelMap map,HttpSession session) {
+
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+
+		ModelAndView view = new ModelAndView("order/costing_new_version");
+		List<Unit> unitList= registerService.getUnitList();	
+		List<Style> styleList= orderService.getStyleList(userId);
+		List<BuyerModel> buyerList= registerService.getAllBuyers(userId);
+		List<ParticularItem> particularList = orderService.getTypeWiseParticularList("1");
+		List<Costing> costingList = orderService.getNewCostingList(userId);
+		map.addAttribute("styleList",styleList);
+		map.addAttribute("unitList",unitList);
+		map.addAttribute("buyerList",buyerList);
+		map.addAttribute("particularList",particularList);
+		map.addAttribute("costingList",costingList);
+
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+
+		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@RequestMapping(value = "/printNewCostingReport/{costingNo}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printCostingReport(ModelMap map,@PathVariable("costingNo") String costingNo) {
+		
+		ModelAndView view=new ModelAndView("order/printNewCostingReport");
+		map.addAttribute("costingNo", costingNo);
+
+		return view;
+	}
+	
+	@RequestMapping(value = "/confirmCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody String confirmCostingNewVersion(Costing v) {
+		String msg="";
+		if(!orderService.checkCostingExist(v)) {
+			boolean flag=orderService.saveCostingNewVersion(v);
+			System.out.println("flag "+flag);
+			if(flag) {
+				msg="Costing Create Succesfully";
+			}
 		}
+		else{
+			msg="Costing Already Save";
+		}
+		return msg;
+	}
+	
+	@RequestMapping(value = "/searchCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody JSONObject searchCostingNewVersion(String costingNo) {
+		JSONObject objmain = new JSONObject();
+
+		JSONArray mainArray = new JSONArray();
+		List<Costing> costingList = orderService.searchCostingNewVersion(costingNo);
+		objmain.put("result",costingList);
 		return objmain;
-	}*/
+	}
+
+	
+	
+	@RequestMapping(value = "/getCostingItemList",method=RequestMethod.GET)
+	public @ResponseBody JSONObject getCostingItemList(Costing costing) {
+		JSONObject objmain = new JSONObject();
+		List<Costing> costingFabricsList = orderService.getFabricsItemForCosting();
+		//List<Costing> costingItemList = orderService.getCostingItemList();
+		List<Unit> unitList = orderService.getUnitList();
+		objmain.put("costingFabricsList",costingFabricsList);
+		objmain.put("unitList",unitList);
+		return objmain;
+	}
 
 	@RequestMapping(value = "/confirmCosting",method=RequestMethod.POST)
 	public @ResponseBody JSONObject confirmCosting(String costingList) {
