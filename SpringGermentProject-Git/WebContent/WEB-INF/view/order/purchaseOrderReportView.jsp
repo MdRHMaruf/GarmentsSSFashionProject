@@ -86,7 +86,7 @@
 					"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
 					"(select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
-					"b.mdapproval,a.poNo  \r\n"+ 
+					"b.mdapproval,a.poNo,a.caNo,a.contentNo,a.terms  \r\n"+ 
 					"from tbPurchaseOrderSummary a   \r\n"+
 					"join tbAccessoriesIndent b   \r\n"+
 					"on a.pono=b.pono    \r\n"+
@@ -149,7 +149,7 @@
 						"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,  \r\n"+
 						"(select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 						" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
-						"b.mdapproval,a.poNo  \r\n"+ 
+						"b.mdapproval,a.poNo,a.caNo,a.contentNo,a.terms  \r\n"+ 
 						"from tbPurchaseOrderSummary a   \r\n"+
 						"join tbZipperIndent b   \r\n"+
 						"on a.pono=b.pono    \r\n"+
@@ -184,7 +184,7 @@
 						"(select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
 						"(select Signature from Tblogin where id='9') as MdSignature,  \r\n"+
 						 "(select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+ 
-						"b.mdapproval,a.poNo ,count(a.poNo) as cnt,b.dolar  \r\n"+
+						"b.mdapproval,a.poNo ,count(a.poNo) as cnt,b.dolar,a.caNo,a.contentNo,a.terms  \r\n"+
 						"from tbPurchaseOrderSummary a    \r\n"+
 						"join tbZipperIndent b    \r\n"+
 						"on a.pono=b.pono     \r\n"+
@@ -199,7 +199,7 @@
 						"left join tbStyleSize ss  \r\n"+
 						"on b.size = ss.id \r\n"+
 						"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
-						"group by a.pono,b.dolar,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate\r\n"+
+						"group by a.pono,b.dolar,b.shippingMarks,b.styleId,sc.StyleNo,b.Itemid,id.itemname,b.accessoriesItemId,ai.itemname,b.SizeGroupId,b.colorId,c.Colorname,b.UnitId,a.orderby,a.Note,a.Subject,cast(a.body as varchar(300)),a.ManualPo,b.IndentPostBy,b.mdapproval,b.PurchaseOrder,b.Itemid,b.currency,b.poManual,a.orderDate,deliveryDate,a.caNo,a.contentNo,a.terms\r\n"+
 						"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks asc";
 				if(landscapeCheck){
 					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/ZipperPurchaseOrderLandscape.jrxml");
@@ -217,7 +217,7 @@
 					" (select Signature from Tblogin where id=b.entryby) as Signature,    \r\n"+
 					" (select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					" (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
-					" b.mdapproval,a.poNo  \r\n"+  
+					" b.mdapproval,a.poNo,a.caNo,a.contentNo,a.terms  \r\n"+  
 					" from tbPurchaseOrderSummary a     \r\n"+
 					" join tbFabricsIndent b   \r\n"+
 					" on a.pono=b.pono    \r\n"+
@@ -260,7 +260,7 @@
 					  " (select Signature from Tblogin where id=b.IndentPostBy) as Signature,   \r\n"+
 					  " (select Signature from Tblogin where id='9') as MdSignature, \r\n"+
 					  " (select organizationLogo from tbOrganizationInfo where organizationId = 1) organizationLogo, \r\n"+
-					  "	b.mdapproval,a.poNo \r\n"+  
+					  "	b.mdapproval,a.poNo,a.caNo,a.contentNo,a.terms \r\n"+  
 					  " from tbPurchaseOrderSummary a    \r\n"+
 					  " join tbAccessoriesIndentForCarton b on a.pono=b.pono \r\n"+ 
 					"  where a.pono='"+poNo+"' and a.supplierid='"+supplierId+"'   \r\n"+

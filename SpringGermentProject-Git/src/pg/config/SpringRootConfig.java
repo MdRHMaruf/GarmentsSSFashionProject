@@ -20,8 +20,9 @@ public class SpringRootConfig {
 	//TODO Serice,Dao,datasource ,Email Sendar or some other busniess layer beans.
 
 		String database_url   = "jdbc:sqlserver://103.127.1.234:1433;databaseName=SSFashionSpringProject";
-		//String database_url   = "jdbc:sqlserver://192.168.0.130:1433;databaseName=SSFashionSpringProject";
+
 /*		String database_url   = "jdbc:sqlserver://localhost;databaseName=SSFashionSpringProject";*/
+
 
 
 	String username       = "sa";
@@ -33,9 +34,6 @@ public class SpringRootConfig {
 		BasicDataSource bds=new BasicDataSource();
 		bds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 	    bds.setUrl("jdbc:sqlserver://103.127.1.234:1433;databaseName =SSFashionSpringProject");
-		//bds.setUrl("jdbc:sqlserver://192.168.0.130:1433;databaseName =SSFashionSpringProject");
-	/*	bds.setUrl("jdbc:sqlserver://localhost;databaseName =SSFashionSpringProject");*/
-
 		bds.setUsername("sa");
 		bds.setPassword("Cursor777");
 		bds.setMaxTotal(2);

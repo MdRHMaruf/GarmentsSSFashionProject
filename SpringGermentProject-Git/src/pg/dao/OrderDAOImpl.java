@@ -5240,9 +5240,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "deliveryto,"
 					+ "paymentTerm,"
 					+ "currency,"
+					+ "caNo,"
+					+ "contentNo,"
 					+ "Note,"
 					+ "Subject,"
 					+ "body,"
+					+ "terms,"
 					+ "ManualPo,"
 					+ "entryBy,"
 					+ "entryTime) "
@@ -5258,9 +5261,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "'"+purchaseOrder.getDeliveryTo()+"',"
 					+ "'"+purchaseOrder.getPaymentType()+"',"
 					+ "'"+purchaseOrder.getCurrency()+"',"
+					+ "'"+purchaseOrder.getCaNo()+"',"
+					+ "'"+purchaseOrder.getContentNo()+"',"
 					+ "'"+purchaseOrder.getNote()+"',"
 					+ "'"+purchaseOrder.getSubject()+"',"
 					+ "'"+purchaseOrder.getBody()+"',"
+					+ "'"+purchaseOrder.getTerms()+"',"
 					+ "'"+purchaseOrder.getManualPO()+"',"
 					+ "'"+purchaseOrder.getUserId()+"',"
 					+ "CURRENT_TIMESTAMP ) ";
@@ -5350,9 +5356,12 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "deliveryto = '"+purchaseOrder.getDeliveryTo()+"',"
 					+ "paymentTerm = '"+purchaseOrder.getPaymentType()+"',"
 					+ "currency = '"+purchaseOrder.getCurrency()+"',"
+					+ "caNo = '"+purchaseOrder.getCaNo()+"',"
+					+ "contentNo = '"+purchaseOrder.getContentNo()+"',"
 					+ "Note = '"+purchaseOrder.getNote()+"',"
 					+ "Subject = '"+purchaseOrder.getSubject()+"',"
 					+ "body = '"+purchaseOrder.getBody()+"',"
+					+ "terms = '"+purchaseOrder.getTerms()+"',"
 					+ "ManualPo = '"+purchaseOrder.getManualPO()+"',"
 					+ "entryBy = '"+purchaseOrder.getUserId()+"',"
 					+ "entryTime = CURRENT_TIMESTAMP where poNo= '"+purchaseOrder.getPoNo()+"'";
@@ -5759,13 +5768,16 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,caNo,contentNo,terms,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{
 				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[13].toString());
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[16].toString());
 				purchaseOrder.setBody(element[12].toString());
+				purchaseOrder.setCaNo(element[13].toString());
+				purchaseOrder.setContentNo(element[14].toString());
+				purchaseOrder.setTerms(element[15].toString());
 			}
 
 			tx.commit();

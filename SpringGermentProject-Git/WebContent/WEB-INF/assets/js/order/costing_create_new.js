@@ -245,7 +245,7 @@ function fetechDataRow(datalist){
 	 for (let i = 0; i < length; i++) {
 		 const rowData = datalist[i];
 			$('#dataList_costing').append("<tr class='itemrow' data-id='"+i+"'>" +
-					"<td style='width:60px;'>"+i+"</td>" +
+					"<td style='width:60px;'>"+(i+1)+"</td>" +
 					"<td style='width:120px;'><select id='groupType-"+i+"'  class='selectpicker groupType-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'  ><option value='1'>Fabrics</option><option value='2'>Others</option></select></td>" +
 					"<td style='width:460px;'><input type='text' class='form-control form-control-sm' placeholder='Search Item' aria-describedby='findButton' id='itemId-"+i+"' name='itemId-"+i+"' ></td>" +
 					"<td style='width:120px;'><select id='unitId-"+i+"'  class='selectpicker unitId-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray' onchange='EditUnit("+i+")' >" + unitlist + "</select></td>" +

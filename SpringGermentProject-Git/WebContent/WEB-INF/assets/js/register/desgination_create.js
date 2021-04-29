@@ -58,17 +58,16 @@ function editAction() {
       dataType: 'json',
       url: './editDesignation',
       data: {
-	
-			departmentId: departmentId,
-			id:id,
-        	designation: designation,
-        	userId: userId
+        departmentId: departmentId,
+        id:id,
+        designation: designation,
+        userId: userId
       },
       success: function (data) {
         if (data.result == "Something Wrong") {
           dangerAlert("Something went wrong");
         } else if (data.result == "duplicate") {
-          dangerAlert("Duplicate Designation..This Designation Name Allreary Exist")
+          dangerAlert("Duplicate Designation..This Designation Name Already Exist")
         } else {
           successAlert("Designation Edit Successfully");
 

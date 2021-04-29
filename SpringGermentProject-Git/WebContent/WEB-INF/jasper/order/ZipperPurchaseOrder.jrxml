@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="2.1435888100000575"/>
 	<property name="ireport.x" value="13"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="49"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -80,6 +80,9 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 	<field name="cnt" class="java.lang.Integer"/>
 	<field name="body" class="java.lang.String"/>
 	<field name="dolar" class="java.lang.Double"/>
+	<field name="caNo" class="java.lang.String"/>
+	<field name="contentNo" class="java.lang.String"/>
+	<field name="terms" class="java.lang.String"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
@@ -410,7 +413,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<reportElement x="356" y="138" width="1" height="24" uuid="b69ab052-5769-4a12-85b8-90b372327d14"/>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="1" y="252" width="542" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
+				<reportElement positionType="Float" x="1" y="252" width="308" height="11" isPrintWhenDetailOverflows="true" uuid="b71b61b7-b671-4e2d-ba88-a8a58f19f2a5"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
@@ -420,6 +423,24 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<reportElement x="0" y="-1" width="46" height="50" uuid="4ef09988-ad53-4139-b593-52c6c46d578d"/>
 				<imageExpression><![CDATA[$F{organizationLogo}]]></imageExpression>
 			</image>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="319" y="252" width="102" height="11" uuid="c465d5fd-02c3-4e2f-82f4-d1fc42940295">
+					<printWhenExpression><![CDATA[$F{caNo}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CA NO# "+$F{caNo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="421" y="252" width="122" height="11" uuid="070b4096-5126-4fae-960d-8dd5bc76794b">
+					<printWhenExpression><![CDATA[$F{contentNo}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Content No: "+$F{contentNo}]]></textFieldExpression>
+			</textField>
 		</band>
 	</title>
 	<pageHeader>
@@ -625,7 +646,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 		</band>
 	</lastPageFooter>
 	<summary>
-		<band height="42" splitType="Stretch">
+		<band height="56" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="1" height="42" uuid="f83dbd21-5cff-4219-b3c5-e68239c505ab"/>
 			</line>
@@ -701,6 +722,24 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				</textElement>
 				<textFieldExpression><![CDATA[$V{grossamount} * $F{dolar}]]></textFieldExpression>
 			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="36" y="45" width="503" height="11" uuid="e75459ab-480b-463e-af56-511fb3b5c03f">
+					<printWhenExpression><![CDATA[$F{terms}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{terms}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="45" width="25" height="11" uuid="0c817b5a-3ec1-481d-8ac5-440d1a56432a">
+					<printWhenExpression><![CDATA[$F{terms}.length()>0?true:false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Terms:]]></text>
+			</staticText>
 		</band>
 	</summary>
 </jasperReport>
