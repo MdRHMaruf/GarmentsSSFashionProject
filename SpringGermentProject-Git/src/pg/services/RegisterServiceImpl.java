@@ -920,6 +920,18 @@ public class RegisterServiceImpl implements RegisterService{
 		return registerDao.deleteSupplierDetails(id);
 	}
 
+	@Override
+	public boolean deleteLocalItem(String localItemId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteLocalItem(localItemId);
+	}
+
+	@Override
+	public boolean deleteCountry(String countryId) {
+		// TODO Auto-generated method stub
+		return registerDao.deleteCountry(countryId);
+	}
+
 
 
 }

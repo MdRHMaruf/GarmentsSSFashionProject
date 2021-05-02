@@ -76,7 +76,8 @@ String userName=(String) request.getAttribute("userName");
 									<tr>
 										<th scope="col">#</th>
 										<th scope="col">Country Name</th>
-										<th scope="col">edit</th>
+										<th class='text-center' scope="col">Edit</th>
+										<th class='text-center' scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
@@ -85,7 +86,8 @@ String userName=(String) request.getAttribute("userName");
 										<tr>
 											<td>${country.countryId}</td>
 											<td id='countryName${country.countryId}'>${country.countryName}</td>
-											<td><i class="fa fa-edit" onclick="setData(${country.countryId})" style="cursor: pointer;"> </i></td>
+											<td class='text-center'><i class="fa fa-edit" onclick="setData(${country.countryId})" style="cursor: pointer;"> </i></td>
+											<td class='text-center'><i class="fa fa-trash" onclick="deleteCountry(${country.countryId})" style="cursor: pointer;"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

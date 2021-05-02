@@ -80,7 +80,8 @@ String userName=(String) request.getAttribute("userName");
 										<th scope="col">#</th>
 										<th scope="col">Local Item Name</th>
 										<th scope="col">Local Item Code</th>
-										<th scope="col">edit</th>
+										<th class="text-center" scope="col">Edit</th>
+										<th class="text-center" scope="col">Delete</th>
 									</tr>
 								</thead>
 								<tbody id="dataList">
@@ -90,7 +91,8 @@ String userName=(String) request.getAttribute("userName");
 											<td>${localItem.localItemId}</td>
 											<td id='localItemName${localItem.localItemId}'>${localItem.localItemName}</td>
 											<td id='localItemCode${localItem.localItemId}'>${localItem.localItemCode}</td>
-											<td><i class="fa fa-edit" onclick="setData(${localItem.localItemId})"> </i></td>
+											<td class='text-center'><i class="fa fa-edit" onclick="setData(${localItem.localItemId})"> </i></td>
+											<td class='text-center'><i class="fa fa-trash" onclick="deleteLocalItem(${localItem.localItemId})"> </i></td>
 										</tr>
 									</c:forEach>
 								</tbody>

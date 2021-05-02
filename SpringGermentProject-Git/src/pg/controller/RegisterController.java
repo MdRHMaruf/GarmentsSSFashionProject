@@ -1232,6 +1232,13 @@ public class RegisterController {
 
 		return objmain;
 	}
+	
+	@RequestMapping(value = "/deleteLocalItem/{localItemId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteLocalItem(@PathVariable ("localItemId") String localItemId) {
+		boolean deleteLocalItem = registerService.deleteLocalItem(localItemId);
+		return deleteLocalItem;
+		
+	}
 
 	//Style Item Create 
 	@RequestMapping(value = "/garments_item_create",method=RequestMethod.GET)
@@ -1792,6 +1799,13 @@ public class RegisterController {
 		}
 
 		return objmain;
+	}
+	
+	@RequestMapping(value = "/deleteCountry/{countryId}",method=RequestMethod.POST)
+	public @ResponseBody boolean deleteCountry(@PathVariable ("countryId") String countryId) {
+		boolean deleteCountry = registerService.deleteCountry(countryId);
+		return deleteCountry;
+		
 	}
 
 	//Country Create 

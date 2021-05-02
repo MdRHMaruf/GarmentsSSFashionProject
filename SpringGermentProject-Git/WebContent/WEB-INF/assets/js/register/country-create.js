@@ -99,6 +99,28 @@ function setData(countryId) {
 
 }
 
+function deleteCountry (countryId){
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteCountry/'+countryId,
+		data: {
+		},
+		success: function (data) {
+			if (data== "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Item Delete Successfully");
+				$("#dataList").empty();
+				refreshAction();
+			}
+			$("#loader").hide();
+		}
+	});
+}
+
 function drawDataTable(data) {
   let rows = [];
   let length = data.length;
@@ -115,8 +137,8 @@ function drawRowDataTable(rowData, c) {
   let row = $("<tr />")
   row.append($("<td>" + rowData.countryId + "</td>"));
   row.append($("<td id='countryName" + rowData.countryId + "'>" + rowData.countryName + "</td>"));
-  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.countryId + ")\"> </i></td>"));
-
+  row.append($("<td class='text-center'><i class='fa fa-edit' onclick=\"setData(" + rowData.countryId + ")\"> </i></td>"));
+  row.append($("<td class='text-center'><i class='fa fa-trash' onclick=\"drawDataTable(" + rowData.countryId + ")\"> </i></td>"));
   return row;
 }
 

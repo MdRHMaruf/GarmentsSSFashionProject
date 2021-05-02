@@ -129,6 +129,7 @@ public interface RegisterService {
 	public boolean editLocalItem(LocalItem localItem);
 	public List<LocalItem> getLocalItemList();
 	public boolean isLocalItemExist(LocalItem localItem);
+	public boolean deleteLocalItem(String localItemId);
 
 	//Particular Item Create 
 	public boolean saveParticularItem(ParticularItem particularItem);
@@ -142,6 +143,7 @@ public interface RegisterService {
 	public boolean editCountry(Country country);
 	public List<Country> getCountryList();
 	public boolean isCountryExist(Country country);
+	public boolean deleteCountry(String countryId);
 
 	//Sample Type Create 
 	public boolean saveSampleType(SampleType sampleType);

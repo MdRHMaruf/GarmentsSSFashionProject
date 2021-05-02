@@ -121,9 +121,34 @@ function drawRowDataTable(rowData, c) {
   row.append($("<td>" + rowData.localItemId + "</td>"));
   row.append($("<td id='localItemName" + rowData.localItemId + "'>" + rowData.localItemName + "</td>"));
   row.append($("<td id='localItemCode" + rowData.localItemId + "'>" + rowData.localItemCode + "</td>"));
-  row.append($("<td ><i class='fa fa-edit' onclick=\"setData(" + rowData.localItemId + ")\"> </i></td>"));
-
+  row.append($("<td class='text-center'><i class='fa fa-edit' onclick=\"setData(" + rowData.localItemId + ")\"> </i></td>"));
+  row.append($("<td class='text-center'><i class='fa fa-trash' onclick=\"deleteLocalItem(" + rowData.localItemId + ")\"> </i></td>"));
+  
   return row;
+}
+
+function deleteLocalItem(localItemId){
+	
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './deleteLocalItem/'+localItemId,
+		data: {
+		},
+		success: function (data) {
+			if (data== "Something Wrong") {
+				dangerAlert("Something went wrong");
+			} else if (data.result == "duplicate") {
+				dangerAlert("Duplicate Sample Type Name..This Sample Type Name Allreary Exist")
+			} else {
+				successAlert("Item Delete Successfully");
+				$("#dataList").empty();
+				refreshAction();
+			}
+			$("#loader").hide();
+		}
+	});
+	
 }
 
 function successAlert(message) {

@@ -2705,7 +2705,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into TbLocalItem (Itemname,ItemCode,entrytime,UserId) values('"+localItem.getLocalItemName()+"','"+localItem.getLocalItemCode()+"', CURRENT_TIMESTAMP,'"+localItem.getUserId()+"')";
+			String sql="insert into TbLocalItem (Itemname,ItemCode,entrytime,UserId,trash) values('"+localItem.getLocalItemName()+"','"+localItem.getLocalItemCode()+"', CURRENT_TIMESTAMP,'"+localItem.getUserId()+"',0)";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -2765,8 +2765,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select itemId,Itemname,ItemCode,UserId from TbLocalItem order by itemName";
-
+			String sql="select itemId,Itemname,ItemCode,UserId from TbLocalItem where trash=0 order by itemName";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -2943,7 +2942,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="insert into TbCountryInfo (countryName,entrytime,UserId) values('"+country.getCountryName()+"', CURRENT_TIMESTAMP,'"+country.getUserId()+"')";
+			String sql="insert into TbCountryInfo (countryName,entrytime,UserId,trash) values('"+country.getCountryName()+"', CURRENT_TIMESTAMP,'"+country.getUserId()+"',0)";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -3003,7 +3002,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select autoId,countryName,UserId from TbCountryInfo order by countryName";
+			String sql="select autoId,countryName,UserId from TbCountryInfo where trash=0 order by countryName";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -5336,6 +5335,64 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			sql="update tbSupplier set trash='1' where id='"+id+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteLocalItem(String localItemId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbLocalItem set trash='1' where itemid='"+localItemId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteCountry(String countryId) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbCountryInfo set trash='1' where autoId='"+countryId+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
