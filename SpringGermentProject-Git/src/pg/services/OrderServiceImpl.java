@@ -1037,6 +1037,18 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.searchCostingNewVersion(costingNo);
 	}
+	
+	@Override
+	public boolean updateConfirmCostingNewVersion(Costing v) {
+		// TODO Auto-generated method stub
+		return orderDAO.updateConfirmCostingNewVersion(v);
+	}
+
+	@Override
+	public List<Costing> cloneCostingNewVersion(String costingNo, String userId, String styleNo, String itemName) {
+		// TODO Auto-generated method stub
+		return orderDAO.cloneCostingNewVersion(costingNo, userId, styleNo, itemName);
+	}
 
 
 }

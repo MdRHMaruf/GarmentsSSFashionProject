@@ -116,7 +116,6 @@ String userName=(String)session.getAttribute("userName");
 										<th style="width:80px;">CONS/ </br>DOZEN</th>
 										<th style="width:80px;">Rate</th>
 										<th style="width:80px;">Amount</th>
-										<th><i class="fa fa-edit"></i>Edit</th>
 										<th><i class="fa fa-trash"></i>Delete</th>
 									</tr>
 								</thead>
@@ -133,8 +132,8 @@ String userName=(String)session.getAttribute("userName");
 								<i class="fas fa-save"></i><span style="text-decoration:underline;"> New Costing</span>
 							</button>
 							<button id="btnEditCosting" type="button"
-								class="btn btn-success btn-sm ml-1" style="display: none;">
-								<i class="fas fa-pencil-square"></i> Edit Costing
+								class="btn btn-success btn-sm ml-1" onclick="UpdateConfrimedCosting()" style="display: none;" accesskey="U">
+								<i class="fas fa-pencil-square"></i> <span style="text-decoration:underline;">U</span>pdate Costing
 							</button>
 							<button id="btnRefresh" type="button"
 								class="btn btn-secondary btn-sm ml-1" onclick="refreshAction()">
@@ -231,7 +230,7 @@ String userName=(String)session.getAttribute("userName");
 							<th>Costing No</th>
 							<th>Style</th>
 							<th>Item Name</th>
-							<th><span><i class="fa fa-search"></i></span></th>
+							<th><span><i class="fa fa-search"></i>Copy</span></th>
 						</tr>
 					</thead>
 					<tbody id="cloneCostingTable">
@@ -242,7 +241,7 @@ String userName=(String)session.getAttribute("userName");
 								<td>${costing.styleNo}</td>
 								<td>${costing.itemName}</td>
 								<td><i class="fas fa-copy"
-									onclick="cloningCosting('${costing.costingNo}','${costing.styleId}', '${costing.itemId}')"
+									onclick="cloningCosting('${costing.costingNo}','${costing.styleNo}', '${costing.itemName}')"
 									style="cursor: pointer;"></i></td>
 							</tr>
 						</c:forEach>
@@ -284,6 +283,7 @@ String userName=(String)session.getAttribute("userName");
 					<div style="overflow: auto; max-height: 300px;" class="col-sm-12">
 						<table class="table table-hover table-bordered table-sm mb-0">
 							<thead>
+							
 								<tr>
 									<th style="width: 15px;">Costing No</th>
 									<th>Date</th>
@@ -291,6 +291,7 @@ String userName=(String)session.getAttribute("userName");
 									<th>Item Name</th>
 									<th>Check</th>
 								</tr>
+								
 							</thead>
 							<tbody id="groupCostingList">
 								<c:forEach items="${costingList}" var="costing"

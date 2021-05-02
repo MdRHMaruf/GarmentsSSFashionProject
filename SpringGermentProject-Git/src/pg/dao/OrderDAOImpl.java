@@ -8977,7 +8977,7 @@ public class OrderDAOImpl implements OrderDAO{
 		try{	
 			tx=session.getTransaction();
 			tx.begin();	
-			String sql="select * from funCostingForStyleWiseItemNewVersion('"+costingNo+"') a order by a.GroupType asc";
+			String sql="select costingNo,AutoId,StyleNo,ItemName,FabricItem,GroupType,Size,Unit,UnitId,Width,Yard,GSM,Comission,consumption,UnitPrice,Amount,(select convert(varchar,SubmissionDate,103))as SubmissionDate from funCostingForStyleWiseItemNewVersion('"+costingNo+"') a order by a.GroupType asc";
 
 
 
@@ -8990,6 +8990,148 @@ public class OrderDAOImpl implements OrderDAO{
 				datalist.add(temp);				
 			}			
 			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return datalist;
+	}
+
+	@Override
+	public boolean updateConfirmCostingNewVersion(Costing v) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			
+			
+			String costingNo=v.getCostingNo();
+			String sql="delete from TbCostingCreateNewVersion where costingNo='"+costingNo+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			
+			String resultValue=v.getResultList().substring(v.getResultList().indexOf("[")+1, v.getResultList().indexOf("]"));
+			StringTokenizer token=new StringTokenizer(resultValue,",");
+			while(token.hasMoreTokens()){
+
+				String firstValue=token.nextToken();
+				StringTokenizer tokenSize=new StringTokenizer(firstValue,"*");
+				while(tokenSize.hasMoreTokens()) {
+
+					String costintItem=tokenSize.nextToken().toString();
+					String groupType=tokenSize.nextToken().toString();
+					String unitId=tokenSize.nextToken().toString();
+					String width=tokenSize.nextToken().toString();
+					String yard=tokenSize.nextToken().toString();
+					String gsm=tokenSize.nextToken().toString();
+					String consumption=tokenSize.nextToken().toString();
+					String rate=tokenSize.nextToken().toString();
+					String amount=tokenSize.nextToken().toString();
+						
+
+					sql="insert into TbCostingCreateNewVersion ("
+							+ "costingNo,"
+							+ "StyleNo,"
+							+ "ItemName,"
+							+ "GroupType,"
+							+ "ParticularItem,"
+							+ "size,"
+							+ "UnitId,"
+							+ "width,"
+							+ "yard,"
+							+ "gsm,"
+							+ "consumption,"
+							+ "UnitPrice,"
+							+ "Amount,"
+							+ "Comission,"
+							+ "SubmissionDate,"
+							+ "EntryTime,"
+							+ "UserId) values ("
+							+ "'"+costingNo+"',"
+							+ "'"+v.getStyleNo()+"',"
+							+ "'"+v.getItemName()+"',"
+							+ "'"+groupType+"',"
+							+ "'"+costintItem+"',"
+							+ "'',"
+							+ "'"+unitId+"',"
+							+ "'"+width+"',"
+							+ "'"+yard+"',"
+							+ "'"+gsm+"',"
+							+ "'"+consumption+"',"
+							+ "'"+rate+"',"
+							+ "'"+amount+"',"
+							+ "'"+v.getCommission()+"',"
+							+ "'"+v.getSubmissionDate()+"',"
+							+ "CURRENT_TIMESTAMP,"
+							+ "'"+v.getUserId()+"'"
+							+ ")";
+					session.createSQLQuery(sql).executeUpdate();
+
+				}	
+			}
+			
+			tx.commit();
+			return true;
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		
+			if (tx != null) {
+				tx.rollback();
+			}
+			
+		}
+		finally {
+			session.close();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Costing> cloneCostingNewVersion(String costingNo, String userId, String styleNo, String itemName) {
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<Costing> datalist=new ArrayList<Costing>();
+		Costing temp = null;
+		try{	
+			tx=session.getTransaction();
+			tx.begin();	
+			
+			String maxCostingNo="";
+			String sql="select isnull(max(costingNo),0)+1 from TbCostingCreateNewVersion";
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{		
+				maxCostingNo=iter.next().toString();
+				break;
+			}
+			
+		    sql="insert into TbCostingCreateNewVersion (costingNo,StyleNo,ItemName,GroupType,ParticularItem,size,UnitId,width,yard,gsm,consumption,UnitPrice,Amount,Comission,SubmissionDate,EntryTime,UserId) select '"+maxCostingNo+"','"+styleNo+"','"+itemName+"',GroupType,FabricItem,size,UnitId,width,yard,gsm,consumption,UnitPrice,Amount,Comission,SubmissionDate,CURRENT_TIMESTAMP,'"+userId+"' from funCostingForStyleWiseItemNewVersion('"+costingNo+"') order by GroupType";
+			session.createSQLQuery(sql).executeUpdate();
+				
+			sql="select costingNo,AutoId,StyleNo,ItemName,FabricItem,GroupType,Size,Unit,UnitId,Width,Yard,GSM,Comission,consumption,UnitPrice,Amount,(select convert(varchar,SubmissionDate,103))as SubmissionDate from funCostingForStyleWiseItemNewVersion('"+maxCostingNo+"') a order by a.GroupType asc";
+			
+			
+			List<?> list1 = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list1.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				temp = new Costing(element[0].toString(),element[1].toString(), element[2].toString(),element[3].toString(),element[4].toString(),element[5].toString(),element[6].toString(),element[8].toString(),Double.parseDouble(element[9].toString()),Double.parseDouble(element[10].toString()),Double.parseDouble(element[11].toString()),Double.parseDouble(element[12].toString()),Double.parseDouble(element[13].toString()),Double.parseDouble(element[14].toString()),Double.parseDouble(element[15].toString()));
+				temp.setCostingNo(element[0].toString());
+				datalist.add(temp);				
+			}			
+			tx.commit();	
+			
+			
 		}	
 		catch(Exception e){
 			if (tx != null) {
