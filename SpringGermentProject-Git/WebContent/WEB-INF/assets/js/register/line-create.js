@@ -159,6 +159,51 @@ function setData(factoryId, departmentId, lineId) {
 
 }
 
+
+function trashline(factoryId, departmentId, lineId) {
+
+
+	
+	
+	var linkname=$('#linkname').val();
+	var userid=$('#userId').val();
+	
+	console.log(" value "+lineId+" "+linkname+" "+userid)
+
+	if(confirm("Are you sure to delete this Line?")){
+		
+	
+		//value=value.substring(value.lastIndexOf("*")+1,value.length);
+		$.ajax({
+			url: "./trashline",
+			type: 'POST',
+			dataType: "json",
+			data: {
+				linkname:linkname,
+				userid:userid,
+				lineId:lineId
+
+			},
+			success: function (data) {
+
+				if (data=="Success") {
+					alert("Delete Successful")
+					reloadPage();
+				}else{
+					alert("Delete Failed")
+				}
+
+			}
+		});
+	}
+
+
+}
+
+function reloadPage(){
+	location.reload();
+}
+
 function drawDataTable(data) {
   let rows = [];
   let length = data.length;

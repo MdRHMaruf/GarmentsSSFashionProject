@@ -10,6 +10,7 @@
 <%
 String userId=(String)session.getAttribute("userId");
 String userName=(String)session.getAttribute("userName");
+String linkname=(String)request.getAttribute("linkname");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -36,6 +37,7 @@ String userName=(String)session.getAttribute("userName");
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
+		<input type="hidden" id="linkname" value="<%=linkname%>">
 		<input type="hidden" id="lineId" value="0">
 
 		<div class="row">
@@ -110,6 +112,7 @@ String userName=(String)session.getAttribute("userName");
 												<th scope="col">Department Name</th>
 												<th scope="col">Line Name</th>
 												<th scope="col">edit</th>
+												<th scope="col">Trash</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -122,6 +125,9 @@ String userName=(String)session.getAttribute("userName");
 													<td id='lineName${line.lineId}'>${line.lineName}</td>
 													<td><i class="fa fa-edit"
 														onclick="setData(${line.factoryId},${line.departmentId},${line.lineId})" style="cursor: pointer;"> </i></td>
+														
+														<td><i class="fa fa-trash"
+														onclick="trashline(${line.factoryId},${line.departmentId},${line.lineId})" style="cursor: pointer;"> </i></td>
 												</tr>
 											</c:forEach>
 										</tbody>

@@ -638,7 +638,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx.begin();
 
 			//String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' order by StyleId,BuyerId";
-			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"'  "
+			String sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where a.UserId='"+userId+"' and a.trash=0  "
 					+ "union\r\n" + 
 					" select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic \r\n" + 
 					" from tbFileAccessPermission fap\r\n" + 
@@ -648,7 +648,7 @@ public class OrderDAOImpl implements OrderDAO{
 					"order by StyleId,BuyerId";
 
 			if(userId.equals(MD_ID)) {
-				sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a order by StyleId,BuyerId";
+				sql="select a.Id,a.buyerid as buyer,(select styleid from TbStyleCreate where StyleId=a.StyleId) as StyleId,(select StyleNo from TbStyleCreate where StyleId=a.StyleId) as StyleNo, convert(varchar,(select date from TbStyleCreate where StyleId=a.StyleId)) as date,(select itemname from tbItemDescription where itemid=a.ItemId) as ItemName,a.ItemId, a.size,a.frontpic, a.backpic from tbStyleWiseItem a where  a.trash=0  order by StyleId,BuyerId";
 			}
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -9001,6 +9001,43 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 		return datalist;
+	}
+
+	@Override
+	public boolean styletrash(String styleno) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		boolean flag=false;
+		try{	
+			tx=session.getTransaction();
+			tx.begin();	
+			String sql="update TbStyleCreate set trash=1 where StyleId='"+styleno+"'";
+			System.out.println(" style trash "+sql);
+
+			session.createSQLQuery(sql).executeUpdate();
+			 
+			
+			sql="update tbStyleWiseItem set trash=1 where StyleId='"+styleno+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			
+			flag=true;
+
+
+					
+			tx.commit();			
+		}	
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return flag;
 	}
 
 

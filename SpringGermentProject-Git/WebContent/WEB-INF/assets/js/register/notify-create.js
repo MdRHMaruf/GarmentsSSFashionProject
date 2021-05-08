@@ -155,6 +155,51 @@ function setData(notifyId) {
 
 }
 
+
+function trashNotify(notifyId) {
+
+
+	
+	
+	var linkname=$('#linkname').val();
+	var userid=$('#userId').val();
+	
+	console.log(" value "+notifyId+" "+linkname+" "+userid)
+
+	if(confirm("Are you sure to delete this Notify?")){
+		
+	
+		//value=value.substring(value.lastIndexOf("*")+1,value.length);
+		$.ajax({
+			url: "./trashNotify",
+			type: 'POST',
+			dataType: "json",
+			data: {
+				linkname:linkname,
+				userid:userid,
+				notifyid:notifyId
+
+			},
+			success: function (data) {
+
+				if (data=="Success") {
+					alert("Delete Successful")
+					reloadPage();
+				}else{
+					alert("Delete Failed")
+				}
+
+			}
+		});
+	}
+
+
+}
+
+function reloadPage(){
+	location.reload();
+}
+
 function drawDataTable(data) {
   let rows = '';
   let length = data.length;

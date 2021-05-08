@@ -2366,6 +2366,8 @@ public class OrderController {
 	
 	@RequestMapping(value = "style_create")
 	public ModelAndView style_create(ModelMap map,HttpSession session) {
+		
+		
 
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
@@ -2382,7 +2384,30 @@ public class OrderController {
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkname","style_create");
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/trashstyleno", method = RequestMethod.POST)
+	public List<Style>  trashstyleno(@RequestParam String styleItemAutoId,
+			@RequestParam String linkname,@RequestParam String userid,
+			HttpSession session,Model map,RedirectAttributes attr) throws IOException, SQLException {
+		
+		System.out.println(" link "+linkname+" style "+styleItemAutoId);
+		List<Style> styleList= new ArrayList<>();
+		
+		if(registerService.hasDeletePermission(userid,linkname)) {
+			if (orderService.styletrash(styleItemAutoId)) {
+				 styleList= orderService.getStyleWiseItemList(userId);
+			}
+			
+		}
+		
+		
+		
+		return styleList;
 	}
 
 	@ResponseBody
@@ -3336,6 +3361,8 @@ public class OrderController {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	
 
 

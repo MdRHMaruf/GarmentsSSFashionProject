@@ -10,6 +10,7 @@
 <%
 	String userId = (String) request.getAttribute("userId");
 	String userName = (String) request.getAttribute("userName");
+	String linkname = (String) request.getAttribute("linkname");
 %>
 <div class="page-wrapper">
 	<div class="content container-fluid">
@@ -34,6 +35,10 @@
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>"> <input
 			type="hidden" id="notifyId" value="0">
+			
+		
+		<input type="hidden" id="linkname" value="<%=linkname%>"> <input
+			type="hidden" id="notifyId" value="0">	
 
 		<div class="row">
 			<div class="col-sm-12 col-md-12 col-lg-12">
@@ -171,6 +176,8 @@
 												<th scope="col">Notify Name</th>
 												<th scope="col">Country</th>
 												<th scope="col">Address</th>
+												<th scope="col">Edit</th>
+												<th scope="col">Trash</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -183,6 +190,9 @@
 													<td>${notifyer.address}</td>
 													<td><i class="fa fa-edit"
 														onclick="setData(${notifyer.id})" style="cursor: pointer;">
+													</i></td>
+													<td><i class="fa fa-trash"
+														onclick="trashNotify(${notifyer.id})" style="cursor: pointer;">
 													</i></td>
 												</tr>
 											</c:forEach>

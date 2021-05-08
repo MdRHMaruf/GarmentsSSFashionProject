@@ -11,9 +11,9 @@ function readFrontURL(input) {
 
 		reader.onload = function (e) {
 			$('#blahFront')
-				.attr('src', e.target.result)
-				.width(150)
-				.height(200);
+			.attr('src', e.target.result)
+			.width(150)
+			.height(200);
 		};
 
 		reader.readAsDataURL(input.files[0]);
@@ -26,9 +26,9 @@ function readBackURL(input) {
 
 		reader.onload = function (e) {
 			$('#blahBack')
-				.attr('src', e.target.result)
-				.width(150)
-				.height(200);
+			.attr('src', e.target.result)
+			.width(150)
+			.height(200);
 		};
 
 		reader.readAsDataURL(input.files[0]);
@@ -101,6 +101,36 @@ function setData(styleItemAutoId) {
 	$("#btnEdit").show();
 
 	getImage(styleItemAutoId);
+}
+
+
+function trash(styleItemAutoId) {
+
+	var styleid=$('#hStyleId' + styleItemAutoId).val();
+	var linkname=$('#linkname').val();
+	var userid=$('#userId').val();
+	console.log("linkname "+linkname+' '+userid)
+
+	console.log(" style id "+styleid)
+
+	if(confirm("Are you sure to delete this Style?")){
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: './trashstyleno',
+			data: {
+				styleItemAutoId: styleid,
+				linkname:linkname,
+				userid:userid
+			},
+			success: function (data) {
+				refreshAction();
+			}
+		});
+	}
+
+
 }
 
 

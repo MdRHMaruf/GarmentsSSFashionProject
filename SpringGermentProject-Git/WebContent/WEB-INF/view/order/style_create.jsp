@@ -10,6 +10,8 @@
 	String buyerid = (String) request.getAttribute("buyerId");
 	String userId = (String) session.getAttribute("userId");
 	String userName = (String) session.getAttribute("userName");
+	String linkname = (String) request.getAttribute("linkname");
+	System.out.println(" styel link "+linkname);
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -35,6 +37,9 @@
 			</p>
 		</div>
 		<input type="hidden" id="userId" value="<%=userId%>">
+		
+		<input type="hidden" id="linkname" value="<%=linkname%>">
+		
 		<!-- 		<input type="hidden" id="unitId" value="0">
 	 	<input type="hidden" id="itemDescriptionId" value="0">
 	 	<input type="hidden" id="buyerid" value="0">
@@ -189,6 +194,7 @@
 												<th scope="col">Style No</th>
 												<th scope="col">Item Description</th>
 												<th scope="col">Edit</th>
+												<th scope="col">Trash</th>
 											</tr>
 										</thead>
 										<tbody id="dataList">
@@ -212,6 +218,22 @@
 														id='hSize${slist.styleItemAutoId}' value="${slist.size}" /><i
 														class="fa fa-edit"
 														onclick="setData(${slist.styleItemAutoId})"> </i></td>
+														
+														
+														<td><input type="hidden"
+														id='hStyleId${slist.styleItemAutoId}'
+														value="${slist.styleId}" /><input type="hidden"
+														id='hBuyerId${slist.styleItemAutoId}'
+														value="${slist.buyerId}" /><input type="hidden"
+														id='hItemId${slist.styleItemAutoId}'
+														value="${slist.itemId}" /><input type="hidden"
+														id='hDate${slist.styleItemAutoId}' value="${slist.date}" /><input
+														type="hidden" id='hStyleNo${slist.styleItemAutoId}'
+														value="${slist.styleNo}" /><input type="hidden"
+														id='hSize${slist.styleItemAutoId}' value="${slist.size}" /><i
+														class="fa fa-trash"
+														onclick="trash(${slist.styleItemAutoId})"> </i></td>
+														
 												</tr>
 											</c:forEach>
 										</tbody>

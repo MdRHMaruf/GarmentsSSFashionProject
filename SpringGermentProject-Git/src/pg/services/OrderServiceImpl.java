@@ -1038,5 +1038,11 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.searchCostingNewVersion(costingNo);
 	}
 
+	@Override
+	public boolean styletrash(String styleno) {
+		// TODO Auto-generated method stub
+		return orderDAO.styletrash(styleno);
+	}
+
 
 }

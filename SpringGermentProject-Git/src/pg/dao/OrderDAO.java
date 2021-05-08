@@ -251,6 +251,7 @@ public interface OrderDAO {
 	
 	List<Costing> getNewCostingList(String userId);
 	List<Costing> searchCostingNewVersion(String costingNo);
+	boolean styletrash(String styleno);
 }
 
 

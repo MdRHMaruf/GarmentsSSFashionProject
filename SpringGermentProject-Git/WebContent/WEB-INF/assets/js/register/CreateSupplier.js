@@ -423,8 +423,54 @@ function drawRow(rowData,c) {
 	row.append($("<td>" + rowData.name+ "</td>"));
 	row.append($("<td>" + rowData.code+ "</td>"));
 	row.append($("<td ><i class='fa fa-edit' onclick=\"SupplierDetails(" + rowData.id + ")\" class=\"btn btn-primary\" data-toggle=\"modal\"data-target=\"#exampleModal\"> </i></td>"));
+	row.append($("<td ><i class='fa fa-trash' onclick=\"trashsupplier(" + rowData.id + ")\" class=\"btn btn-primary\"> </i></td>"));
+
 	return row;
 }
+
+
+function trashsupplier(value){
+
+
+	
+	
+	var linkname=$('#linkname').val();
+	var userid=$('#user_hidden').val();
+	
+	console.log(" value "+value+" "+linkname+" "+userid)
+
+	if(confirm("Are you sure to delete this Supplier?")){
+		
+	
+		//value=value.substring(value.lastIndexOf("*")+1,value.length);
+		$.ajax({
+			url: "./trashsupplier",
+			type: 'POST',
+			dataType: "json",
+			data: {
+				linkname:linkname,
+				userid:userid,
+				supplierid:value
+
+			},
+			success: function (data) {
+				
+				if (data=="Success") {
+					alert("Delete Successful")
+					reloadPage();
+				}else{
+					alert("Delete Failed")
+				}
+
+				
+
+			}
+		});
+	}
+
+
+}
+
 
 
 $(document).ready(function () {

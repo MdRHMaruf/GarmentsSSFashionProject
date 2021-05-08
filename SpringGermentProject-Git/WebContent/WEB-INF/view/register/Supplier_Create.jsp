@@ -1,3 +1,4 @@
+<%@page import="com.sun.org.apache.bcel.internal.generic.LNEG"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="f"%>
@@ -13,6 +14,7 @@
 	String userId=(String) request.getAttribute("userId");	
 	String userName=(String) request.getAttribute("userName");	
 	String buyerid=(String) request.getAttribute("buyerId");
+	String linkname=(String) request.getAttribute("linkname");
 
 %>
 
@@ -22,6 +24,7 @@
 			<div class="col-md-12">
 				<div class="card-box">
 					<input type="hidden" id="user_hidden" value=<%=userId%>>
+					<input type="hidden" id="linkname" value=<%=linkname%>>
 					<div class="row">
 						<div class="col-sm-12 col-md-6 col-lg-6 ">
 							<h3>Supplier List</h3>
@@ -241,6 +244,7 @@
 										<th>Supplier's Name</th>
 										<th>Supplier's Code</th>
 										<th>edit</th>
+										<th>Trash</th>
 									</tr>
 								</thead>
 								<tbody id="supplierTable">

@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -233,8 +234,20 @@ public class RegisterController {
 		map.addAttribute("userName",userName);
 		map.addAttribute("buyerList",buyerList);
 		map.addAttribute("notifyerList",registerService.getNotifyerList());
+		map.addAttribute("linkname","notify_create");
 
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/trashNotify",method=RequestMethod.POST)
+	public String trashNotify(@RequestParam String linkname,@RequestParam String userid,@RequestParam String notifyid) {
+		if (registerService.hasDeletePermission(userid, linkname)) {
+			if (registerService.deleteNotify(notifyid)) {
+				return "Success";
+			}
+		}
+		return "Failed";
 	}
 
 	@ResponseBody
@@ -287,9 +300,33 @@ public class RegisterController {
 
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
+		map.addAttribute("linkname","supplier_create");
 
 
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/trashsupplier",method=RequestMethod.POST)
+	public String trashsupplier(@RequestParam String linkname,@RequestParam String userid,@RequestParam String supplierid) {
+		System.out.println(" Countrylist ");
+
+		JSONArray array=new JSONArray();
+		
+		System.out.println(" linkname "+linkname+" userid "+userid+" supplier "+supplierid);
+
+
+		if (registerService.hasDeletePermission(userid, linkname)) {
+			if (registerService.deleteSupplier(supplierid)) {
+				return "Success";
+			}
+		}
+
+		System.out.println(" array  "+array);
+
+
+		return "Falied";
+
 	}
 
 	@ResponseBody
@@ -2108,8 +2145,22 @@ public class RegisterController {
 		map.addAttribute("userName",userName);
 
 		map.addAttribute("lineList",lineList);
+		view.addObject("linkname","line_create");
 		view.addObject("factoryList",factoryList);
 		return view; //JSP - /WEB-INF/view/index.jsp
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/trashline",method=RequestMethod.POST)
+	public String trashline(@RequestParam String linkname,@RequestParam String userid,@RequestParam String lineId) {
+		if (registerService.hasDeletePermission(userid, linkname)) {
+			if (registerService.deleteLine(lineId)) {
+				return "Success";
+			}
+		}
+		return "Failed";
+		
 	}
 
 	@ResponseBody

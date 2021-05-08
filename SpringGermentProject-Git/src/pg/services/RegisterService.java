@@ -246,6 +246,11 @@ public interface RegisterService {
 	public boolean deleteCostingItem(String itemId);
 	public boolean deleteBrandItem(String itemId);
 	public boolean deleteSize(String itemId);
+	
+	public boolean deleteSupplier(String supplierid);
+	
+	public boolean deleteNotify(String notifyid);
+	public boolean deleteLine(String lineid);
 
 
 }

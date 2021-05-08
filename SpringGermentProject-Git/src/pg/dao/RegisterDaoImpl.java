@@ -630,7 +630,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select n.id,n.buyerId,notifyName,notifyAddress,country,telephone,email,entryBy from tbnotifyer n";
+			String sql="select n.id,n.buyerId,notifyName,notifyAddress,country,telephone,email,entryBy from tbnotifyer n where trash=0";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -1023,7 +1023,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select id, name, suppliercode, supplieraddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=SupplierCountry),'') as SupplierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbsupplier order by id";
+			String sql="select id, name, suppliercode, supplieraddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=SupplierCountry),'') as SupplierCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbsupplier where trash=0 order by id";
 			System.out.println(" buyer details query ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -3632,7 +3632,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select lineId,factoryId,(select factoryName from tbfactoryInfo where factoryId=lc.factoryId) as factoryName,departmentId,(select departmentName from TbDepartmentInfo where DepartmentId = lc.departmentId) as departmentName,lineName,userId from tblineCreate lc order by factoryName,departmentName,lineName";
+			String sql="select lineId,factoryId,(select factoryName from tbfactoryInfo where factoryId=lc.factoryId) as factoryName,departmentId,(select departmentName from TbDepartmentInfo where DepartmentId = lc.departmentId) as departmentName,lineName,userId from tblineCreate lc where trash=0 order by factoryName,departmentName,lineName";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -4899,12 +4899,13 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			String sql="select entry from Tbuseraccess where userId='"+userId+"' and sub=(select id from TbSubMenu where links='"+linkName+"') and entry='1'";
+			String sql="select entry from Tbuseraccess where userId='"+userId+"' and sub=(select id from TbSubMenu where links='"+linkName+"') and del='1'";
 			System.out.println(sql);
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
 				return true;
+				
 			}
 		}
 		catch(Exception ee){
@@ -5251,6 +5252,93 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			sql="update TbProcessInfo set trash='1' where ProcessId='"+processId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteSupplier(String supplierid) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update tbSupplier set trash='1' where id='"+supplierid+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteNotify(String notifyid) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update tbNotifyer set trash='1' where id='"+notifyid+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean deleteLine(String lineid) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbLineCreate set trash='1' where lineid='"+lineid+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

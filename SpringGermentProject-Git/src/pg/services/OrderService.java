@@ -245,6 +245,8 @@ public interface OrderService {
 	List<Costing> getNewCostingList(String userId);
 	List<Costing> searchCostingNewVersion(String costingNo);
 	
+	boolean styletrash(String styleno);
+	
 }
 
 
