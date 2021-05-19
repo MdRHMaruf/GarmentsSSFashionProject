@@ -193,6 +193,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 
 
 			//String sql = "select a.module_id,(select name from Tbmodule where id=a.module_id) as ModuleName from Tbuser_access_module a where a.userId='"+i+"' ";
+			
+			
 			String sql = "select rp.moduleid,m.name as moduleName\n" + 
 					"from tbUserRole ur \n" + 
 					"left join tbRolePermission rp\n" + 
@@ -245,6 +247,13 @@ public class PasswordDAOImpl implements PasswordDAO{
 			tx.begin();
 
 			String sql="";
+			String limitList = "''";
+			sql = "select limitList from tbUserLimitPermission where userId='"+i+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				 limitList = list.get(0).toString();
+			}
+			if(limitList.length()==0) limitList = "''";
 			if(moduleId==0) {
 				/*sql="select a.head, \r\n"
 						+ "(select name from Tbmenu where id=a.head) as Menu, \r\n"
@@ -266,8 +275,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on rp.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on rp.sub = sm.id\n" + 
-						"where ur.userId = '"+i+"' \n" + 
-						"group by rp.moduleid,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where ur.userId = '"+i+"' and rp.sub not in ("+limitList+") \n" + 
+						"group by rp.moduleid,rp.sub,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"union\n" + 
 						"select uep.head,m.name as Menu,sm.name as SubMenu,sm.links as Links,uep.moduleid,sm.ordering \n" + 
 						"from tbUserExtraPermission uep \n" + 
@@ -275,8 +284,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on uep.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on uep.sub = sm.id\n" + 
-						"where uep.userId = '"+i+"' \n" + 
-						"group by uep.moduleid,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where uep.userId = '"+i+"' and uep.sub not in ("+limitList+") \n" + 
+						"group by uep.moduleid,uep.sub,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"order by rp.moduleid,rp.head,sm.ordering";
 			}
 			else {
@@ -299,8 +308,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on rp.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on rp.sub = sm.id\n" + 
-						"where ur.userId = '"+i+"' and rp.moduleid = '"+moduleId+"'\n" + 
-						"group by rp.moduleid,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where ur.userId = '"+i+"' and rp.moduleid = '"+moduleId+"' and rp.sub not in ("+limitList+")\n" + 
+						"group by rp.moduleid,rp.sub,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"union\n" + 
 						"select uep.head,m.name as Menu,sm.name as SubMenu,sm.links as Links,uep.moduleid,sm.ordering \n" + 
 						"from tbUserExtraPermission uep \n" + 
@@ -308,11 +317,11 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on uep.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on uep.sub = sm.id\n" + 
-						"where uep.userId = '"+i+"' and uep.moduleid = '"+moduleId+"'\n" + 
-						"group by uep.moduleid,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where uep.userId = '"+i+"' and uep.moduleid = '"+moduleId+"' and uep.sub not in ("+limitList+")\n" + 
+						"group by uep.moduleid,uep.sub,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"order by rp.moduleid,rp.head,sm.ordering";
 			}
-			List<?> list = session.createSQLQuery(sql).list();
+			list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -333,7 +342,6 @@ public class PasswordDAOImpl implements PasswordDAO{
 		finally {
 			session.close();
 		}
-
 		return query;
 	}
 
@@ -348,10 +356,14 @@ public class PasswordDAOImpl implements PasswordDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			System.out.println("user "+i);
-			System.out.println("moduleId "+moduleId);
-
 			String sql="";
+			String limitList = "''";
+			sql = "select limitList from tbUserLimitPermission where userId='"+i+"'";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				 limitList = list.get(0).toString();
+			}
+			if(limitList.length()==0) limitList = "''";
 			if(moduleId==0) {
 				//sql="select a.head,(select name from menu where id=a.head) as Menu,(select name from sub_menu where id=a.sub) as SubMenu,(select links from sub_menu where id=a.sub) as Links from useraccess a join user_access_module b on a.user=b.user and a.module=b.module_id where a.user='"+i+"' order by a.module,a.head ";
 				/*sql="select a.head,(select name from Tbmenu where id=a.head) as Menu,\r\n"
@@ -371,8 +383,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on rp.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on rp.sub = sm.id\n" + 
-						"where ur.userId = '"+i+"' \n" + 
-						"group by rp.moduleid,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where ur.userId = '"+i+"' and rp.sub not in ("+limitList+") \n" + 
+						"group by rp.moduleid,rp.sub,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"union\n" + 
 						"select uep.head,m.name as Menu,sm.name as SubMenu,sm.links as Links,uep.moduleid,sm.ordering \n" + 
 						"from tbUserExtraPermission uep \n" + 
@@ -403,8 +415,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on rp.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on rp.sub = sm.id\n" + 
-						"where ur.userId = '"+i+"' and rp.moduleid = '"+moduleId+"'\n" + 
-						"group by rp.moduleid,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where ur.userId = '"+i+"' and rp.moduleid = '"+moduleId+"' and rp.sub not in("+limitList+")\n" + 
+						"group by rp.moduleid,rp.sub,rp.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"union\n" + 
 						"select uep.head,m.name as Menu,sm.name as SubMenu,sm.links as Links,uep.moduleid,sm.ordering \n" + 
 						"from tbUserExtraPermission uep \n" + 
@@ -412,11 +424,11 @@ public class PasswordDAOImpl implements PasswordDAO{
 						"on uep.head = m.id\n" + 
 						"left join TbSubMenu sm\n" + 
 						"on uep.sub = sm.id\n" + 
-						"where uep.userId = '"+i+"' and uep.moduleid = '"+moduleId+"'\n" + 
-						"group by uep.moduleid,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
+						"where uep.userId = '"+i+"' and uep.moduleid = '"+moduleId+"' and uep.sub not in("+limitList+") \n" + 
+						"group by uep.moduleid,uep.sub,uep.head,m.name,sm.name,sm.links,sm.ordering\n" + 
 						"order by rp.moduleid,rp.head,sm.ordering";
 			}
-			List<?> list = session.createSQLQuery(sql).list();
+			list = session.createSQLQuery(sql).list();
 
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{	
@@ -672,6 +684,8 @@ public class PasswordDAOImpl implements PasswordDAO{
 				sql="insert into tbUserExtraPermission (userId, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+maxUserId+"','"+extraPermission.get("moduleId")+"','"+extraPermission.get("headId")+"','"+extraPermission.get("subId")+"','"+extraPermission.get("add")+"','"+extraPermission.get("edit")+"','"+extraPermission.get("view")+"','"+extraPermission.get("delete")+"','"+permissionObject.get("userId")+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
+			sql="insert into tbUserLimitPermission (userId, limitList) values ('"+maxUserId+"','"+permissionObject.get("limitList")+"'";
+			session.createSQLQuery(sql).executeUpdate();
 			
 			tx.commit();
 			return "successful";
@@ -727,6 +741,9 @@ public class PasswordDAOImpl implements PasswordDAO{
 				sql="insert into tbUserExtraPermission (userId, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+permissionObject.get("userAutoId")+"','"+extraPermission.get("moduleId")+"','"+extraPermission.get("headId")+"','"+extraPermission.get("subId")+"','"+extraPermission.get("add")+"','"+extraPermission.get("edit")+"','"+extraPermission.get("view")+"','"+extraPermission.get("delete")+"','"+permissionObject.get("userId")+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
+			
+			sql="update tbUserLimitPermission set limitList ='"+permissionObject.get("limitList")+"' where userId='"+permissionObject.get("userAutoId")+"'";
+			session.createSQLQuery(sql).executeUpdate();
 			
 			tx.commit();
 			return "successful";

@@ -4499,6 +4499,35 @@ public class RegisterDaoImpl implements RegisterDao{
 	}
 
 	@Override
+	public boolean deleteEmployee(String empcode) {
+		// TODO Auto-generated method stub
+		String sql="";
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+			sql="update TbEmployeeInfo set trash='1' where EmployeeCode='"+empcode+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return true;
+		}
+		catch(Exception ee){
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+	
+		finally {
+			session.close();
+		}
+	
+		return false;
+	}
+
+	@Override
 	public boolean saveMachine(Machine saveMachine) {
 		// TODO Auto-generated method stub
 		Session session = HibernateUtil.openSession();
@@ -5193,35 +5222,6 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 			sql="update TbMachineInfo set trash='1' where MachineId='"+machineId+"'";
-			session.createSQLQuery(sql).executeUpdate();
-			tx.commit();
-			return true;
-		}
-		catch(Exception ee){
-			if (tx != null) {
-				tx.rollback();
-				return false;
-			}
-			ee.printStackTrace();
-		}
-
-		finally {
-			session.close();
-		}
-
-		return false;
-	}
-
-	@Override
-	public boolean deleteEmployee(String empcode) {
-		// TODO Auto-generated method stub
-		String sql="";
-		Session session=HibernateUtil.openSession();
-		Transaction tx=null;
-		try{
-			tx=session.getTransaction();
-			tx.begin();
-			sql="update TbEmployeeInfo set trash='1' where EmployeeCode='"+empcode+"'";
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;

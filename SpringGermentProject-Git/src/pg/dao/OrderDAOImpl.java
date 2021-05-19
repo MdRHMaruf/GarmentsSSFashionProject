@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.format.datetime.standard.TemporalAccessorPrinter;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -2919,7 +2920,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(ai.styleNo,'')as StyleNo,ai.Itemid,ISNULL(ai.itemName,'') as ItemName,ai.ColorId,ISNULL(ai.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty,isnull(ai.sqNumber,'')as sqNumber,ISNULL(ai.skuNumber,'')as skuNumber \r\n" + 
+			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(ai.styleNo,'')as StyleNo,ai.Itemid,ISNULL(ai.itemName,'') as ItemName,ai.ColorId,ISNULL(ai.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty,isnull(ai.sqNumber,'')as sqNumber,ISNULL(ai.skuNumber,'')as skuNumber,isnull(ss.groupId,'0') as sizeGroupId \r\n" + 
 					"from tbAccessoriesIndent ai  \r\n" + 
 					"left join tbbrands b \r\n" + 
 					"on ai.IndentBrandId = b.id \r\n" + 
@@ -2993,6 +2994,7 @@ public class OrderDAOImpl implements OrderDAO{
 				tempIndent.setRequiredUnitQty(element[31].toString());
 				tempIndent.setSqNo(element[32].toString());
 				tempIndent.setSkuNo(element[33].toString());
+				tempIndent.setSizeGroupId(element[34].toString());
 				dataList.add(tempIndent);
 			}
 
