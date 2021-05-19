@@ -996,7 +996,47 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.checkDoplicateSampleRequisition(v);
 	}
 
+	@Override
+	public List<Costing> getFabricsItemForCosting() {
+		// TODO Auto-generated method stub
+		return orderDAO.getFabricsItemForCosting();
+	}
 
-	
-	
+	@Override
+	public List<Costing> getCostingItemList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getCostingItemList();
+	}
+
+	@Override
+	public List<pg.registerModel.Unit> getUnitList() {
+		// TODO Auto-generated method stub
+		return orderDAO.getUnitList();
+	}
+
+	@Override
+	public boolean checkCostingExist(Costing v) {
+		// TODO Auto-generated method stub
+		return orderDAO.checkCostingExist(v);
+	}
+
+	@Override
+	public boolean saveCostingNewVersion(Costing v) {
+		// TODO Auto-generated method stub
+		return orderDAO.saveCostingNewVersion(v);
+	}
+
+	@Override
+	public List<Costing> getNewCostingList(String userId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getNewCostingList(userId);
+	}
+
+	@Override
+	public List<Costing> searchCostingNewVersion(String costingNo) {
+		// TODO Auto-generated method stub
+		return orderDAO.searchCostingNewVersion(costingNo);
+	}
+
+
 }

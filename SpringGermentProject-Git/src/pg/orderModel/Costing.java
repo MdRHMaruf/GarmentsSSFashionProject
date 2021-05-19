@@ -21,8 +21,9 @@ public class Costing {
 	double commission;
 	String date;
 	String userId;
-	
-	
+	String styleNo;
+	String resultList;
+	String submissionDate;
 	
 	public Costing() {
 		super();
@@ -74,6 +75,41 @@ public class Costing {
 		this.commission = commission;
 		this.date = date;
 		this.userId = userId;
+	}
+	
+	public Costing(String autoId, String styleName,String itemName,double amount,String date) {
+		super();
+		this.autoId = autoId;
+		this.styleNo = styleName;
+		this.itemName = itemName;
+		this.amount = amount;
+		this.date = date;
+	}
+	
+	public Costing(String ItemId,String ItemName) {
+		this.itemId=ItemId;
+		this.itemName=ItemName;
+	}
+
+	public Costing(String costingNo, String AutoId, String StyleNo, String itemName, String fabricsItem,
+			String groupType, String size, String unitId, double width, double yard, double gsm,
+			double commission, double consumtion, double unitPrice,double Amount) {
+		this.costingNo=costingNo;
+		this.autoId=AutoId;
+		this.styleNo=StyleNo;
+		this.itemName=itemName;
+		this.particularName=fabricsItem;
+		this.particularType=groupType;
+		this.size=size;
+		this.unitId=unitId;
+		this.width=width;
+		this.yard=yard;
+		this.gsm=gsm;
+		this.commission=commission;
+		this.consumption=consumtion;
+		this.unitPrice=unitPrice;
+		this.amount=Amount;
+		this.size=size;
 	}
 
 	public String getAutoId() {
@@ -197,6 +233,30 @@ public class Costing {
 
 	public void setCostingNo(String costingNo) {
 		this.costingNo = costingNo;
+	}
+
+	public String getStyleNo() {
+		return styleNo;
+	}
+
+	public void setStyleNo(String styleNo) {
+		this.styleNo = styleNo;
+	}
+
+	public String getResultList() {
+		return resultList;
+	}
+
+	public void setResultList(String resultList) {
+		this.resultList = resultList;
+	}
+
+	public String getSubmissionDate() {
+		return submissionDate;
+	}
+
+	public void setSubmissionDate(String submissionDate) {
+		this.submissionDate = submissionDate;
 	}
 	
 	
