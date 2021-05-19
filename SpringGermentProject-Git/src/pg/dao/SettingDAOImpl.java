@@ -20,7 +20,7 @@ import org.springframework.stereotype.Repository;
 import noticeModel.noticeModel;
 import pg.model.Ware;
 import pg.model.WareInfo;
-import pg.model.roleManagement;
+import pg.model.RoleManagement;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Menu;
 import pg.model.MenuInfo;
@@ -1385,12 +1385,12 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<roleManagement> getSubmenu(String moduleId) {
+	public List<RoleManagement> getSubmenu(String moduleId) {
 		// TODO Auto-generated method stub
 		String sql = "";
 		Session session = HibernateUtil.openSession();
 		Transaction tx = null;
-		List<roleManagement> dataList = new ArrayList<roleManagement>();
+		List<RoleManagement> dataList = new ArrayList<RoleManagement>();
 		try {
 			tx = session.getTransaction();
 			tx.begin();
@@ -1398,7 +1398,7 @@ public class SettingDAOImpl implements SettingDAO {
 			List<?> list = session.createSQLQuery(sql).list();
 			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new roleManagement(element[0].toString(),element[1].toString(),Integer.parseInt(element[2].toString()),Integer.parseInt(element[3].toString()), element[4].toString()));
+				dataList.add(new RoleManagement(element[0].toString(),element[1].toString(),Integer.parseInt(element[2].toString()),Integer.parseInt(element[3].toString()), element[4].toString()));
 			}
 			tx.commit();
 		} catch (Exception e) {
@@ -1412,7 +1412,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public boolean saveRolePermission(roleManagement v) {
+	public boolean saveRolePermission(RoleManagement v) {
 		// TODO Auto-generated method stub
 		String sql="";
 		Session session = HibernateUtil.openSession();
@@ -1482,12 +1482,12 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<roleManagement> getAllRoleName() {
+	public List<RoleManagement> getAllRoleName() {
 		// TODO Auto-generated method stub
 		String sql = "";
 		Session session = HibernateUtil.openSession();
 		Transaction tx = null;
-		List<roleManagement> dataList = new ArrayList<roleManagement>();
+		List<RoleManagement> dataList = new ArrayList<RoleManagement>();
 		try {
 			tx = session.getTransaction();
 			tx.begin();
@@ -1495,7 +1495,7 @@ public class SettingDAOImpl implements SettingDAO {
 			List<?> list = session.createSQLQuery(sql).list();
 			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new roleManagement(element[0].toString(),element[1].toString()));
+				dataList.add(new RoleManagement(element[0].toString(),element[1].toString()));
 			}
 			tx.commit();
 		} catch (Exception e) {
@@ -1509,12 +1509,12 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public List<roleManagement> getAllPermissions(String id) {
+	public List<RoleManagement> getAllPermissions(String id) {
 		// TODO Auto-generated method stub
 		String sql = "";
 		Session session = HibernateUtil.openSession();
 		Transaction tx = null;
-		List<roleManagement> dataList = new ArrayList();
+		List<RoleManagement> dataList = new ArrayList();
 		try {
 			tx = session.getTransaction();
 			tx.begin();
@@ -1523,7 +1523,7 @@ public class SettingDAOImpl implements SettingDAO {
 			List<?> list = session.createSQLQuery(sql).list();
 			for (Iterator<?> iter = list.iterator(); iter.hasNext();) {
 				Object[] element = (Object[]) iter.next();
-				dataList.add(new roleManagement(element[0].toString(), Integer.parseInt(element[1].toString()),
+				dataList.add(new RoleManagement(element[0].toString(), Integer.parseInt(element[1].toString()),
 						Integer.parseInt(element[2].toString()),element[3].toString(),element[4].toString(),
 						element[5].toString(),element[6].toString()));
 			}
@@ -1539,7 +1539,7 @@ public class SettingDAOImpl implements SettingDAO {
 
 
 	@Override
-	public boolean editRolePermission(roleManagement v) {
+	public boolean editRolePermission(RoleManagement v) {
 		// TODO Auto-generated method stub
 		String sql="";
 		Session session = HibernateUtil.openSession();
