@@ -383,6 +383,12 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.editAccessoriesIndent(v);
 	}
+	
+	@Override
+	public String newEditAccessoriesIndent(String changedIndentList) {
+		// TODO Auto-generated method stub
+		return orderDAO.newEditAccessoriesIndent(changedIndentList);
+	}
 	@Override
 	public boolean deleteAccessoriesIndent(String accessorienIndentId, String indentAutoId) {
 		// TODO Auto-generated method stub
@@ -1037,6 +1043,8 @@ public class OrderServiceImpl implements OrderService{
 		// TODO Auto-generated method stub
 		return orderDAO.searchCostingNewVersion(costingNo);
 	}
+
+	
 
 
 }

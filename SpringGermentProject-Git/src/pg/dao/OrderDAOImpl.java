@@ -3055,6 +3055,55 @@ public class OrderDAOImpl implements OrderDAO{
 		return false;
 
 	}
+	
+	@Override
+	public String newEditAccessoriesIndent(String changedIndentList) {
+		// TODO Auto-generated method stub
+		
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CommonModel> query=new ArrayList<CommonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(changedIndentList);
+			//JSONObject indentObject = (JSONObject)jsonParser.parse(changedIndentList);
+			JSONArray indentList = (JSONArray) jsonParser.parse(changedIndentList);
+
+			
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="update tbAccessoriesIndent set  purchaseOrder='"+indent.get("purchaseOrder")+"',styleId='"+indent.get("styleId")+"',itemId='"+indent.get("itemId")+"',colorId='"+indent.get("itemColorId")+"',shippingMarks='"+indent.get("shippingmark")+"',accessoriesItemId='"+indent.get("accessoriesId")+"',accessoriesSize='"+indent.get("accessoriessize")+"',indentColorId='"+indent.get("accessoriesColorId")+"',indentBrandId='"+indent.get("indentBrandId")+"',unitId='"+indent.get("unitId")+"',PerUnit='"+indent.get("perunit")+"',TotalBox='"+indent.get("totalbox")+"',OrderQty='"+indent.get("orderqty")+"',QtyInDozen='"+indent.get("qtyindozen")+"',"
+						+ "ReqPerPices='"+indent.get("reqperpcs")+"',ReqPerDoz='"+indent.get("reqperdozen")+"',DividedBy='"+indent.get("dividedby")+"',PercentageExtra='"+indent.get("extrainpercent")+"',PercentageExtraQty='"+indent.get("percentqty")+"',"
+						+ "TotalQty='"+indent.get("totalqty")+"',RequireUnitQty='"+indent.get("grandqty")+"',sqNumber='"+indent.get("sqNo")+"',skuNumber='"+indent.get("skuNo")+"',IndentDate=GETDATE(),IndentTime=GETDATE(),IndentPostBy='"+indent.get("user")+"' where AccIndentId='"+indent.get("autoid")+"' and aino='"+indent.get("aiNo")+"'";
+
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+
+
+			tx.commit();
+
+			return "successful";
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "Something Wrong";
+	}
 
 	@Override
 	public boolean deleteAccessoriesIndent(String accessorienIndentId,String indentAutoId) {
@@ -9004,6 +9053,8 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return datalist;
 	}
+
+	
 
 
 }
