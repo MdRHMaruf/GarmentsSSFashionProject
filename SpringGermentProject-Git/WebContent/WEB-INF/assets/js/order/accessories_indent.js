@@ -381,6 +381,7 @@ function refreshShippingMarkList() {
 }
 
 $("#btnRecyclingData").click(() => {
+
 	let buyersId = $("#buyerName").val();
 	let purchaseOrdersId = $("#purchaseOrder").val();
 	let stylesId = $("#styleNo").val();
@@ -633,7 +634,7 @@ $("#btnRecyclingData").click(() => {
 								<td>Unit Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
-										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
+										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}${sizeList[j].sizeId}'  type='hidden' value=""/></td>`;
 									} else {
 										tables += `<td></td>`;
 									}
@@ -669,6 +670,44 @@ $("#btnRecyclingData").click(() => {
 							setTotalOrderQty();
 							setUnitQty();
 							$("#loader").hide();
+
+							if ($("#indentType").val() != 'newIndentRow') {
+								stylesId = $("#styleNo").val();
+								itemsId = $("#itemName").val();
+								colorsId = $("#color").val();
+
+								let accessoriesItemId = $("#accessoriesItem").val();
+								let accessoriesColorId = $("#accessoriesColor").val();
+								let unitId = $("#unit").val();
+
+								for (let i = 0; i < length; i++) {
+									let item = dataList[i];
+
+									let sizeList = item.sizeList;
+									let sizeListLength = sizeList.length;
+
+									for (let j = 0; j < sizeListLength; j++) {
+										if (sizeList[j].sizeQuantity > 0) {
+											let tempRow = searchRow(stylesId, itemsId, colorsId, sizeGroupId, sizeList[j].sizeId, accessoriesItemId, accessoriesColorId, unitId)
+
+											if (tempRow != undefined) {
+												let rowId = tempRow.id.slice(13);
+
+												console.log("rowId=", rowId);
+												console.log("row=", tempRow);
+												$(`#inPercent-${i}${sizeList[j].sizeId}`).text(parseFloat(tempRow.getAttribute("data-in-percent")).toFixed(1));
+												$(`#percentQty-${i}${sizeList[j].sizeId}`).text(parseFloat(tempRow.getAttribute("data-percent-qty")).toFixed(1));
+												$(`#totalQty-${i}${sizeList[j].sizeId}`).val(parseFloat(tempRow.getAttribute("data-total-qty")).toFixed(2));
+												$(`#unitQty-${i}${sizeList[j].sizeId}`).val($("#indentUnitQty-" + rowId).text());
+												$(`#hiddenAutoId-${i}${sizeList[j].sizeId}`).val(rowId);
+												//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
+											}
+
+										}
+									}
+								}
+							}
+
 						}
 					});
 				} else {
@@ -725,7 +764,7 @@ $("#btnRecyclingData").click(() => {
 
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
-								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-size-group-id='' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}' data-size-group-id=''  data-check-sq='${checkSQ}' data-check-sku='${checkSKU}'>
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-size-group-id='0' data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}' data-size-group-id=''  data-check-sq='${checkSQ}' data-check-sku='${checkSKU}'>
 											<td id='purchaseOrder-${i}'>${checkPurchaseOrder ? purchaseOrderText : item.purchaseOrder} </td>
 											<td id='styleNo-${i}'>${checkStyleNo ? styleNoText : item.styleNo} </td>
 											<td id='itemName-${i}'>${checkItemName ? itemNameText : item.itemname} </td>
@@ -734,7 +773,7 @@ $("#btnRecyclingData").click(() => {
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)}</td>
 											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)}</span>) </td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
-											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}'  type='hidden' value=""/></td>
 											${checkSQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sq-${i}' type='text' /></td>` : ''}
 											${checkSKU ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sku-${i}' type='text' /></td>` : ''}
 										</tr>`;
@@ -746,11 +785,41 @@ $("#btnRecyclingData").click(() => {
 							setTotalOrderQty();
 							setUnitQty();
 							$("#loader").hide();
+
+							if ($("#indentType").val() != 'newIndentRow') {
+
+								stylesId = $("#styleNo").val();
+								itemsId = $("#itemName").val();
+								colorsId = $("#color").val();
+
+								let accessoriesItemId = $("#accessoriesItem").val();
+								let accessoriesColorId = $("#accessoriesColor").val();
+								let unitId = $("#unit").val();
+
+								for (let i = 0; i < length; i++) {
+									let item = dataList[i];
+
+									let tempRow = searchRow(stylesId, itemsId, colorsId, "0", "", accessoriesItemId, accessoriesColorId, unitId)
+
+									if (tempRow != undefined) {
+										let rowId = tempRow.id.slice(13);
+
+										console.log("rowId=", rowId);
+										console.log("row=", tempRow);
+										$(`#inPercent-${i}`).text(parseFloat(tempRow.getAttribute("data-in-percent")).toFixed(1));
+										$(`#percentQty-${i}`).text(parseFloat(tempRow.getAttribute("data-percent-qty")).toFixed(1));
+										$(`#totalQty-${i}`).val(parseFloat(tempRow.getAttribute("data-total-qty")).toFixed(2));
+										$(`#unitQty-${i}`).val($("#indentUnitQty-" + rowId).text());
+										$(`#hiddenAutoId-${i}`).val(rowId);
+										//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
+									}
+								}
+							}
 						}
 					});
 				}
-				$('#btnAdd').show();
-				$('#btnEdit').hide();
+				//$('#btnAdd').show();
+				//$('#btnEdit').hide();
 
 			} else {
 				warningAlert("Please Select Any Item Name");
@@ -1180,6 +1249,11 @@ function editAction() {
 }
 
 function newEditAction() {
+
+	let autoId = $("#autoId").val();
+	let indentType = $("#indentType").val();
+	let accessoriesIndentNo = $("#accessoriesIndentId").val();
+
 	let rowList = $(".orderPreviewRow");
 	let length = rowList.length;
 
@@ -1194,7 +1268,7 @@ function newEditAction() {
 		let unitQty = $("#unitQty").val();
 		let checkSQ = $("#checkSQ").prop('checked');
 		let checkSKU = $("#checkSKU").prop('checked');
-
+		let userId = $("#userId").val();
 		let unitValue = parseFloat($('#unit').val() == '0' ? "1" : unitList[$('#unit').val()].unitValue);
 		unitValue = unitValue == 0 ? 1 : unitValue;
 
@@ -1220,12 +1294,13 @@ function newEditAction() {
 					let itemName = $("#itemName-" + rowId).text();
 					let color = $("#color-" + rowId).text();;
 					let shippingMark = $("#shippingMark-" + rowId).text();
-
+					let changedIndentList = []
 					if (isSizeRequired == 'true') {
 
 						let sizes = $(".sizes-" + rowId);
 						sizes.each((index, td) => {
 							let cellId = td.id.slice(9);
+							autoId = $("#hiddenAutoId-" + cellId).val();
 							sizeId = td.getAttribute('data-size-id');
 							let sizeName = $("#sizeHeading-" + sizeGroupId + sizeId).text();
 							let orderQty = $("#orderQty-" + cellId).text();
@@ -1267,6 +1342,40 @@ function newEditAction() {
 									tempRow.setAttribute('data-sku-no', skuNo);
 									$("#indentAccessoriesName-" + rowId).text(accessoriesItemName);
 									$("#indentUnitQty-" + rowId).text(unitQty);
+
+									if (indentType != 'newIndentRow') {
+
+										changedIndentList.push({
+											autoid: autoId,
+											purchaseOrder: purchaseOrder,
+											styleId: styleId,
+											itemId: itemId,
+											itemColorId: colorId,
+											shippingmark: shippingMark,
+											aiNo: accessoriesIndentNo,
+											accessoriesId: accessoriesItemId,
+											accessoriesname: accessoriesItemName,
+											accessoriessize: accessoriesSize,
+											accessoriesColorId: accessoriesColorId,
+											indentBrandId: accessoriesBrandId,
+											orderqty: orderQty,
+											qtyindozen: dozenQty,
+											reqperpcs: reqPerPcs,
+											reqperdozen: reqPerDozen,
+											perunit: perUnit,
+											totalbox: totalBox,
+											dividedby: divideBy,
+											extrainpercent: inPercent,
+											percentqty: percentQty,
+											totalqty: totalQty,
+											unitId: unitId,
+											grandqty: unitQty,
+											sqNo: sqNo,
+											skuNo: skuNo,
+											user: userId
+										});
+									}
+
 								}
 
 
@@ -1298,6 +1407,7 @@ function newEditAction() {
 
 						})
 					} else {
+						autoId = $("#hiddenAutoId-" + rowId).val();
 						let orderQty = $("#orderQty-" + rowId).text();
 						let dozenQty = parseFloat(orderQty / 12).toFixed(2);
 						let reqPerPcs = $("#reqPerPcs").val();
@@ -1336,6 +1446,39 @@ function newEditAction() {
 							tempRow.setAttribute('data-sku-no', skuNo);
 							$("#indentAccessoriesName-" + rowId).text(accessoriesItemName);
 							$("#indentUnitQty-" + rowId).text(unitQty);
+
+							if (indentType != 'newIndentRow') {
+								changedIndentList.push({
+									autoid: autoId,
+									purchaseOrder: purchaseOrder,
+									styleId: styleId,
+									itemId: itemId,
+									itemColorId: colorId,
+									shippingmark: shippingMark,
+									aiNo: accessoriesIndentNo,
+									accessoriesId: accessoriesItemId,
+									accessoriesname: accessoriesItemName,
+									accessoriessize: accessoriesSize,
+									accessoriesColorId: accessoriesColorId,
+									indentBrandId: accessoriesBrandId,
+									orderqty: orderQty,
+									qtyindozen: dozenQty,
+									reqperpcs: reqPerPcs,
+									reqperdozen: reqPerDozen,
+									perunit: perUnit,
+									totalbox: totalBox,
+									dividedby: divideBy,
+									extrainpercent: inPercent,
+									percentqty: percentQty,
+									totalqty: totalQty,
+									unitId: unitId,
+									grandqty: unitQty,
+									sqNo: sqNo,
+									skuNo: skuNo,
+									user: userId
+								});
+							}
+
 						}
 
 						// let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
@@ -1362,8 +1505,55 @@ function newEditAction() {
 						// }));
 
 					}
-					successAlert("Edit To Temporary List... You should Confirm...");
+					if (indentType != 'newIndentRow') {
+						if (confirm("Are you sure to Edit this Data?")) {
+							$("#loader").show();
+							$.ajax({
+								type: 'POST',
+								dataType: 'json',
+								url: './newEditAccessoriesIndent',
+								data: {
+									changedIndentList: JSON.stringify(changedIndentList)
+								},
+								success: function (data) {
+									if (data == 'successful') {
+										successAlert("Edit Successfully....");
+										$("#unitQty").attr("readonly", true);
+										$("#totalQty").attr("readonly", true);
+										$("#btnAdd").show();
+										$("#btnEdit").hide();
+									} else {
+										alert(data);
+									}
+									$("#loader").hide();
 
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+									//alert("Server Error");
+									if (jqXHR.status === 0) {
+										alert('Not connect.\n Verify Network.');
+									} else if (jqXHR.status == 404) {
+										alert('Requested page not found.');
+									} else if (jqXHR.status == 500) {
+										alert('Internal Server Error.');
+									} else if (errorThrown === 'parsererror') {
+										alert('Requested JSON parse failed');
+									} else if (errorThrown === 'timeout') {
+										alert('Time out error');
+									} else if (errorThrown === 'abort') {
+										alert('Ajax request aborted ');
+									} else {
+										alert('Uncaught Error.\n' + jqXHR.responseText);
+									}
+
+								}
+							});
+						}
+					} else {
+						successAlert("Edit To Temporary List... You should Confirm...");
+						$("#btnAdd").show();
+						$("#btnEdit").hide();
+					}
 
 				});
 
@@ -1580,8 +1770,8 @@ function setIndentItem(rowId, indentType) {
 	$("#totalQty").val(parseFloat(row.attr('data-total-qty')).toFixed(2));
 	$("#autoId").val(rowId);
 	$("#indentType").val(indentType);
-	$("#unitQty").attr("readonly", false);
-	$("#totalQty").attr("readonly", false);
+	//$("#unitQty").attr("readonly", false);
+	//$("#totalQty").attr("readonly", false);
 	$('#btnAdd').hide();
 	$('#btnEdit').show();
 
@@ -1857,7 +2047,7 @@ function recyclingActionForEdit() {
 								<td>Unit Qty</td>`
 								for (let j = 0; j < sizeListLength; j++) {
 									if (sizeList[j].sizeQuantity > 0) {
-										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>`;
+										tables += `<td><input id='unitQty-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 unitQty-${i}' type='number' onkeyup="setTotalByUnitQtyInPreviewTable('${i}${sizeList[j].sizeId}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(sizeList[j].sizeQuantity * reqPerPcs) + ((sizeList[j].sizeQuantity * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}${sizeList[j].sizeId}'  type='hidden' value=""/></td>`;
 									} else {
 										tables += `<td></td>`;
 									}
@@ -1918,6 +2108,9 @@ function recyclingActionForEdit() {
 											$(`#percentQty-${i}${sizeList[j].sizeId}`).text(parseFloat(tempRow.getAttribute("data-percent-qty")).toFixed(1));
 											$(`#totalQty-${i}${sizeList[j].sizeId}`).val(parseFloat(tempRow.getAttribute("data-total-qty")).toFixed(2));
 											$(`#unitQty-${i}${sizeList[j].sizeId}`).val($("#indentUnitQty-" + rowId).text());
+											$(`#hiddenAutoId-${i}${sizeList[j].sizeId}`).val(rowId);
+											if(checkSQ) $(`#sq-${i}${sizeList[j].sizeId}`).val(tempRow.getAttribute("data-sq-no"));
+											if(checkSKU) $(`#sku-${i}${sizeList[j].sizeId}`).val(tempRow.getAttribute("data-sku-no"));
 											//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
 										}
 
@@ -1982,7 +2175,7 @@ function recyclingActionForEdit() {
 
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
-								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-size-group-id="" data-size-id="" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'  data-check-sq='${checkSQ}' data-check-sku='${checkSKU}'>
+								tables += `<tr id='orderRow-${i}' class='orderPreviewRow' data-size-required='false' data-size-group-id="0" data-size-id="" data-style-id='${item.styleId}' data-item-id='${item.itemId}' data-color-id='${item.itemColorId}'  data-check-sq='${checkSQ}' data-check-sku='${checkSKU}'>
 											<td id='purchaseOrder-${i}'>${checkPurchaseOrder ? purchaseOrderText : item.purchaseOrder} </td>
 											<td id='styleNo-${i}'>${checkStyleNo ? styleNoText : item.styleNo} </td>
 											<td id='itemName-${i}'>${checkItemName ? itemNameText : item.itemname} </td>
@@ -1991,7 +2184,7 @@ function recyclingActionForEdit() {
 											<td id='orderQty-${i}'>${parseFloat(item.orderqty).toFixed(1)}</td>
 											<td><span id='inPercent-${i}'>${inPercent}</span>% (<span id="percentQty-${i}">${parseFloat((item.orderqty * inPercent) / 100).toFixed(1)}</span>) </td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
-											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
+											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}'  type='hidden' value=""/></td>
 											${checkSQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sq-${i}' type='text' /></td>` : ''}
 											${checkSKU ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sku-${i}' type='text' /></td>` : ''}
 										</tr>`;
@@ -2012,7 +2205,7 @@ function recyclingActionForEdit() {
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
 
-								let tempRow = searchRow(stylesId, itemsId, colorsId, "", "", accessoriesItemId, accessoriesColorId, unitId)
+								let tempRow = searchRow(stylesId, itemsId, colorsId, "0", "", accessoriesItemId, accessoriesColorId, unitId)
 
 								if (tempRow != undefined) {
 									let rowId = tempRow.id.slice(13);
@@ -2023,6 +2216,9 @@ function recyclingActionForEdit() {
 									$(`#percentQty-${i}`).text(parseFloat(tempRow.getAttribute("data-percent-qty")).toFixed(1));
 									$(`#totalQty-${i}`).val(parseFloat(tempRow.getAttribute("data-total-qty")).toFixed(2));
 									$(`#unitQty-${i}`).val($("#indentUnitQty-" + rowId).text());
+									$(`#hiddenAutoId-${i}`).val(rowId);
+									if(checkSQ) $(`#sq-${i}`).val(tempRow.getAttribute("data-sq-no"));
+									if(checkSKU) $(`#sku-${i}`).val(tempRow.getAttribute("data-sku-no"));
 									//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
 								}
 							}

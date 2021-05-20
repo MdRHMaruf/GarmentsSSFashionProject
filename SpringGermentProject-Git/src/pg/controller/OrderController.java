@@ -1420,6 +1420,16 @@ public class OrderController {
 
 		return msg;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/newEditAccessoriesIndent",method=RequestMethod.POST)
+	public String newEditAccessoriesIndent(String changedIndentList) {
+		String msg= "something wrong";
+		
+		msg=orderService.newEditAccessoriesIndent(changedIndentList);
+
+		return msg;
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/deleteAccessoriesIndent",method=RequestMethod.POST)
