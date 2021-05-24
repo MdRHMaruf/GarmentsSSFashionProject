@@ -149,15 +149,10 @@
 															<th class="text-center">#</th>
 															<th>Module</th>
 															<th>Sub Name</th>
-															<th class="text-center">Add <input class="checkItem"
-																type="checkbox" id="checkAllAdd"></th>
-															<th class="text-center">Edit <input
-																class="checkItem" type="checkbox" id="checkAllEdit"></th>
-															<th class="text-center">View <input
-																class="checkItem" type="checkbox" id="checkAllView"></th>
-															<th class="text-center">Delete <input
-																class="checkItem" type="checkbox" id="checkAllDelete"></i></th>
-
+															<th class="text-center">Add </th>
+															<th class="text-center">Edit </th>
+															<th class="text-center">View </th>
+															<th class="text-center">Delete </th>
 														</tr>
 													</thead>
 													<tbody id="permissionList">
@@ -205,16 +200,12 @@
 													<th class="text-center">#</th>
 													<th>Module</th>
 													<th>Sub Name</th>
-													<th class="text-center">Add <input class="checkItem"
-														type="checkbox" id="checkAllAdd"></th>
-													<th class="text-center">Edit <input class="checkItem"
-														type="checkbox" id="checkAllEdit"></th>
-													<th class="text-center">View <input class="checkItem"
-														type="checkbox" id="checkAllView"></th>
-													<th class="text-center">Delete <input
-														class="checkItem" type="checkbox" id="checkAllDelete"></i></th>
-													<th class="text-center">Permission <input
-														class="checkItem" type="checkbox" id="checkAll"></th>
+													<th class="text-center">Add </th>
+													<th class="text-center">Edit </th>
+													<th class="text-center">View </th>
+													<th class="text-center">Delete </th>
+													<th class="text-center">Permission </th>
+													<th class="text-center">Limit </th>
 												</tr>
 											</thead>
 											<tbody id="extraPermissionList">

@@ -514,7 +514,7 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 									<div class="pr-1">
 										<button class="btn btn-success btn-sm" id="btnEdit"
-											onclick="editAction()">
+											onclick="newEditAction()">
 											<i class="fa fa-pencil-square"></i> Edit
 										</button>
 									</div>

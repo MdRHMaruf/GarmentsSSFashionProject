@@ -34,7 +34,7 @@ import pg.OrganizationModel.OrganizationInfo;
 import pg.exception.UserBlockedException;
 import pg.model.Ware;
 import pg.model.WareInfo;
-import pg.model.roleManagement;
+import pg.model.RoleManagement;
 import pg.registerModel.FactoryModel;
 import pg.model.Login;
 import pg.model.Menu;
@@ -314,7 +314,7 @@ public class PasswordController {
 
 		//List<Menu> menulist=(List<Menu>)session.getAttribute("menulist");
 		//List<FactoryModel> factoryList = registerService.getAllFactories();
-		List<roleManagement> roleList = settingService.getAllRoleName();
+		List<RoleManagement> roleList = settingService.getAllRoleName();
 		
 		map.put("roleList", roleList);
 

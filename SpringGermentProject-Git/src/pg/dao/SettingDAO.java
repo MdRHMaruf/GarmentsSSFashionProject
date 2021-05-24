@@ -17,7 +17,7 @@ import pg.model.Password;
 import pg.model.SubMenuInfo;
 import pg.model.Ware;
 import pg.model.WareInfo;
-import pg.model.roleManagement;
+import pg.model.RoleManagement;
 
 public interface SettingDAO {
 
@@ -61,10 +61,10 @@ public interface SettingDAO {
 	public String submitFileAccessPermit(String fileAccessPermit);
 
 	public JSONArray getMenus(String userId);
-	public List<roleManagement> getSubmenu(String moduleId);
-	public boolean saveRolePermission(roleManagement v);
-	public List<roleManagement> getAllRoleName();
-	public List<roleManagement> getAllPermissions(String id);
-	public boolean editRolePermission(roleManagement v);
+	public List<RoleManagement> getSubmenu(String moduleId);
+	public boolean saveRolePermission(RoleManagement v);
+	public List<RoleManagement> getAllRoleName();
+	public List<RoleManagement> getAllPermissions(String id);
+	public boolean editRolePermission(RoleManagement v);
 
 }

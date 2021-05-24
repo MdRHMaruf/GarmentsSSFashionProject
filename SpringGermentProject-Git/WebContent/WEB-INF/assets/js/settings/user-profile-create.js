@@ -89,7 +89,7 @@ function loadExtraPermissionInTable(){
                 success: function(data){
                     $("#extraPermissionList").empty();
                     setTableData(data);
-                    checkedPermissionWise(permissionList);
+                    
                 }
             });
         }else{
@@ -121,12 +121,13 @@ function saveAction(){
 
     const rowList=$("#extraPermissionList tr").length;
 	let accessList = [];
+    let limitList = '';
 	
 	for (let i = 1; i <=rowList; i++) {
 
 		let rId = $("#R"+i).attr("data-id");
-
-		if($("#check_"+rId).is(":checked")){
+        console.log("rID=",rId," I=",i);
+		if($("#check_permit_"+rId).is(":checked")){
 
 			let moduleId=0,headId=0,subId=0,add=0,edit=0,view=0,del=0;
 
@@ -168,9 +169,12 @@ function saveAction(){
                 view: view,
                 delete: del
             });
-		}
-	}
+		}else if($("#check_limit_"+rId).is(":checked")){
+            limitList += rId+","
+        }
 
+	}
+    limitList = limitList.slice(0,-1);
 	//let valueList="["+accessList+"]";
 
     if(employeeId != "0" && employeeId != ""){
@@ -191,7 +195,8 @@ function saveAction(){
                                     userRoles: userRoles,
                                     activeStatus: activeStatus,
                                     userId: userId,
-                                    extraPermissionList: accessList
+                                    extraPermissionList: accessList,
+                                    limitList: limitList
                                 })
                             },
                             success: function(data){
@@ -237,12 +242,13 @@ function editAction(){
 
     const rowList=$("#extraPermissionList tr").length;
 	let accessList = [];
+    let limitList = '';
 	
 	for (let i = 1; i <=rowList; i++) {
 
 		let rId = $("#R"+i).attr("data-id");
-
-		if($("#check_"+rId).is(":checked")){
+        console.log("rID=",rId," I=",i);
+		if($("#check_permit_"+rId).is(":checked")){
 
 			let moduleId=0,headId=0,subId=0,add=0,edit=0,view=0,del=0;
 
@@ -284,11 +290,15 @@ function editAction(){
                 view: view,
                 delete: del
             });
-		}
+		}else if($("#check_limit_"+rId).is(":checked")){
+            limitList += rId+","
+        }
 	}
 
 	//let valueList="["+accessList+"]";
-
+    console.log(limitList)
+    limitList = limitList.slice(0,-1);
+    console.log(limitList)
     if(employeeId != "0" && employeeId != ""){
         if(userName != ''){
             if(password != ''){
@@ -308,7 +318,8 @@ function editAction(){
                                     userRoles: userRoles,
                                     activeStatus: activeStatus,
                                     userId: userId,
-                                    extraPermissionList: accessList
+                                    extraPermissionList: accessList,
+                                    limitList: limitList
                                 })
                             },
                             success: function(data){
@@ -383,17 +394,17 @@ function drawRolePermissionTable(data) {
     let rows = ''
     for (let i = 0; i < data.length; i++) {
         let permission = data[i];
-        rows += `<tr data-id=${permission.subMenuId} id="R${i}">
+        rows += `<tr data-id=${permission.subMenuId} ">
 
 				<td class="row-index text-center"> ${i + 1} </td>
 
 				<td class="row-index text-center" id='moduleName_${permission.subMenuId}'>${permission.moduleName}</td>
 				<td class="row-index" id='sub_${permission.subMenuId}' data-sub="${permission.subMenuId}"> ${permission.subMenuName} </td>
 
-				<td class="row-index text-center"> <input id="add_${permission.subMenuId}" class="add" type="checkbox" ${permission.enter == '0' ? '' : 'checked'}> </td>
-				<td class="row-index text-center"> <input id="edit_${permission.subMenuId}" class="edit" type="checkbox" ${permission.edit == '0' ? '' : 'checked'}> </td>	
-				<td class="row-index text-center"> <input id="view_${permission.subMenuId}" class="view" type="checkbox" ${permission.view == '0' ? '' : 'checked'}> </td>
-				<td class="row-index text-center"> <input id="delete_${permission.subMenuId}" class="delete" type="checkbox" ${permission.delete == '0' ? '' : 'checked'}> </td>
+				<td class="row-index text-center"> <input type="checkbox" ${permission.enter == '0' ? '' : 'checked'}> </td>
+				<td class="row-index text-center"> <input type="checkbox" ${permission.edit == '0' ? '' : 'checked'}> </td>	
+				<td class="row-index text-center"> <input type="checkbox" ${permission.view == '0' ? '' : 'checked'}> </td>
+				<td class="row-index text-center"> <input type="checkbox" ${permission.delete == '0' ? '' : 'checked'}> </td>
 		</tr>`;
     }
     $("#permissionList").append(rows);
@@ -418,9 +429,27 @@ function setTableData(data){
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="edit_${data[i].subId}" class="edit" type="checkbox"> </td>	
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="view_${data[i].subId}" class="view" type="checkbox"> </td>
 				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="delete_${data[i].subId}" class="delete" type="checkbox"> </td>
-				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="check_${data[i].subId}" class="check" type="checkbox"> </td>
+				<td class="row-index text-center"> <input data-sub="${data[i].subId}" id="check_permit_${data[i].subId}" class="check" type="checkbox" onclick="extraPermissionLimitClick(this)"> </td>
+                <td class="row-index text-center"> <input data-sub="${data[i].subId}" id="check_limit_${data[i].subId}" class="check" type="checkbox" onclick="extraPermissionLimitClick(this)"> </td>
 
 		</tr>`);
 	}
 	rowIdx=0;
+}
+
+
+function extraPermissionLimitClick(input){
+    let inputId = input.id;
+    let subId = input.getAttribute("data-sub");
+   
+    if(inputId.search('check_permit_') >= 0){
+        if(input.checked){
+            $("#check_limit_"+subId).prop('checked',false);
+        }
+    }else{
+        if(input.checked){
+            $("#check_permit_"+subId).prop('checked',false);
+        }
+    }
+    
 }

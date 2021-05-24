@@ -18,6 +18,7 @@ import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.format.datetime.standard.TemporalAccessorPrinter;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -2919,7 +2920,7 @@ public class OrderDAOImpl implements OrderDAO{
 			tx=session.getTransaction();
 			tx.begin();
 
-			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(ai.styleNo,'')as StyleNo,ai.Itemid,ISNULL(ai.itemName,'') as ItemName,ai.ColorId,ISNULL(ai.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty,isnull(ai.sqNumber,'')as sqNumber,ISNULL(ai.skuNumber,'')as skuNumber \r\n" + 
+			String sql="select ai.AINo,ai.AccIndentId,ai.PurchaseOrder,ai.styleid,isnull(ai.styleNo,'')as StyleNo,ai.Itemid,ISNULL(ai.itemName,'') as ItemName,ai.ColorId,ISNULL(ai.colorName,'')as Color,ai.ShippingMarks,ai.size,ISNULL(ss.sizeName,'') as SizeName,ai.OrderQty,ai.QtyInDozen,ai.ReqPerPices,ai.ReqPerDoz,ai.PerUnit,ai.TotalBox,ai.DividedBy,ai.PercentageExtra,ai.PercentageExtraQty,ai.TotalQty,ai.accessoriesItemId,ISNULL(aItem.itemname,'') as AccessoriesName,ai.accessoriesSize,ai.IndentColorId,isnull(ic.Colorname,'') as indentColor,ai.IndentBrandId ,ISNULL(b.name,'') as BrandName,ai.UnitId,ISNULL(u.unitname,'') as UnitName,ai.RequireUnitQty,isnull(ai.sqNumber,'')as sqNumber,ISNULL(ai.skuNumber,'')as skuNumber,isnull(ss.groupId,'0') as sizeGroupId \r\n" + 
 					"from tbAccessoriesIndent ai  \r\n" + 
 					"left join tbbrands b \r\n" + 
 					"on ai.IndentBrandId = b.id \r\n" + 
@@ -2993,6 +2994,7 @@ public class OrderDAOImpl implements OrderDAO{
 				tempIndent.setRequiredUnitQty(element[31].toString());
 				tempIndent.setSqNo(element[32].toString());
 				tempIndent.setSkuNo(element[33].toString());
+				tempIndent.setSizeGroupId(element[34].toString());
 				dataList.add(tempIndent);
 			}
 
@@ -3052,6 +3054,55 @@ public class OrderDAOImpl implements OrderDAO{
 
 		return false;
 
+	}
+	
+	@Override
+	public String newEditAccessoriesIndent(String changedIndentList) {
+		// TODO Auto-generated method stub
+		
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+
+		List<CommonModel> query=new ArrayList<CommonModel>();
+
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			JSONParser jsonParser = new JSONParser();
+			System.out.println(changedIndentList);
+			//JSONObject indentObject = (JSONObject)jsonParser.parse(changedIndentList);
+			JSONArray indentList = (JSONArray) jsonParser.parse(changedIndentList);
+
+			
+			for(int i=0;i<indentList.size();i++) {
+				JSONObject indent = (JSONObject) indentList.get(i);
+				String sql="update tbAccessoriesIndent set  purchaseOrder='"+indent.get("purchaseOrder")+"',styleId='"+indent.get("styleId")+"',itemId='"+indent.get("itemId")+"',colorId='"+indent.get("itemColorId")+"',shippingMarks='"+indent.get("shippingmark")+"',accessoriesItemId='"+indent.get("accessoriesId")+"',accessoriesSize='"+indent.get("accessoriessize")+"',indentColorId='"+indent.get("accessoriesColorId")+"',indentBrandId='"+indent.get("indentBrandId")+"',unitId='"+indent.get("unitId")+"',PerUnit='"+indent.get("perunit")+"',TotalBox='"+indent.get("totalbox")+"',OrderQty='"+indent.get("orderqty")+"',QtyInDozen='"+indent.get("qtyindozen")+"',"
+						+ "ReqPerPices='"+indent.get("reqperpcs")+"',ReqPerDoz='"+indent.get("reqperdozen")+"',DividedBy='"+indent.get("dividedby")+"',PercentageExtra='"+indent.get("extrainpercent")+"',PercentageExtraQty='"+indent.get("percentqty")+"',"
+						+ "TotalQty='"+indent.get("totalqty")+"',RequireUnitQty='"+indent.get("grandqty")+"',sqNumber='"+indent.get("sqNo")+"',skuNumber='"+indent.get("skuNo")+"',IndentDate=GETDATE(),IndentTime=GETDATE(),IndentPostBy='"+indent.get("user")+"' where AccIndentId='"+indent.get("autoid")+"' and aino='"+indent.get("aiNo")+"'";
+
+				session.createSQLQuery(sql).executeUpdate();
+			}
+			
+
+
+			tx.commit();
+
+			return "successful";
+		}
+		catch(Exception e){
+
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+
+		return "Something Wrong";
 	}
 
 	@Override
@@ -9002,6 +9053,7 @@ public class OrderDAOImpl implements OrderDAO{
 		}
 		return datalist;
 	}
+
 
 	@Override
 	public boolean updateConfirmCostingNewVersion(Costing v) {

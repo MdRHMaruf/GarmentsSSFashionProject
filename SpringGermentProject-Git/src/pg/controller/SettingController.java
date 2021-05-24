@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import pg.model.roleManagement;
+import pg.model.RoleManagement;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -586,23 +586,23 @@ public class SettingController {
 
 	
 	@RequestMapping(value = "/getSubmenu/{moduleId}", method = RequestMethod.POST)
-	public @ResponseBody List<roleManagement> getSubmenu(@PathVariable ("moduleId") String moduleId) {
+	public @ResponseBody List<RoleManagement> getSubmenu(@PathVariable ("moduleId") String moduleId) {
 
-		List<roleManagement> getSubmenu = settingService.getSubmenu(moduleId);
+		List<RoleManagement> getSubmenu = settingService.getSubmenu(moduleId);
 
 		return getSubmenu;
 	}
 	
 	@RequestMapping(value = "/saveRolePermission", method = RequestMethod.POST)
-	public @ResponseBody boolean saveRolePermission(roleManagement v) {
+	public @ResponseBody boolean saveRolePermission(RoleManagement v) {
 		boolean saveRolePermission = settingService.saveRolePermission(v);
 		return saveRolePermission;
 	}
 	
 	@RequestMapping(value = "/getAllRoleName", method = RequestMethod.POST)
-	public @ResponseBody List<roleManagement> getAllRoleName() {
+	public @ResponseBody List<RoleManagement> getAllRoleName() {
 
-		List<roleManagement> getAllRoleName = settingService.getAllRoleName();
+		List<RoleManagement> getAllRoleName = settingService.getAllRoleName();
 
 		return getAllRoleName;
 	}
@@ -610,13 +610,13 @@ public class SettingController {
 	@RequestMapping(value = "/getAllPermissions/{id}", method = RequestMethod.GET)
 	public @ResponseBody JSONObject getAllPermissions(@PathVariable ("id") String id) {
 		JSONObject obj = new JSONObject();
-		List<roleManagement> getAllPermissions = settingService.getAllPermissions(id);
+		List<RoleManagement> getAllPermissions = settingService.getAllPermissions(id);
 		obj.put("permissionList", getAllPermissions);
 		return obj;
 	}
 	
 	@RequestMapping(value = "/editRolePermission", method = RequestMethod.POST)
-	public @ResponseBody boolean editRolePermission(roleManagement v) {
+	public @ResponseBody boolean editRolePermission(RoleManagement v) {
 		boolean editRolePermission = settingService.editRolePermission(v);
 		return editRolePermission;
 	}
