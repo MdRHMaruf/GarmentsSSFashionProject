@@ -1,8 +1,21 @@
+let departmentsByFactoryId  = JSON;
+let departmentIdForSet = 0;
 
 window.onload = () => {
 	document.title = "Employee Create";
 	allEmployee();
-
+	$("#loader").show();
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: './departmentLoadByFactory',
+        data: {},
+        success: function (obj) {
+          departmentsByFactoryId = [];
+          departmentsByFactoryId = obj.departmentList;
+          $("#loader").hide();
+        }
+    });
 }
 
 /*$("#contact").focusout(function(){
@@ -12,11 +25,33 @@ window.onload = () => {
 	}
 });*/
 
+function loadDepartmentByFactory() {
+	let factoryId = $("#factory").val().trim();
+	
+	let length= departmentsByFactoryId['factId'+factoryId].length;
+	let options = "<option value='0'>Select Department</option>";
+	
+	for(let i=0;i<length;i++){
+	  options += "<option value='"+departmentsByFactoryId['factId'+factoryId][i].departmentId+"'>"+departmentsByFactoryId['factId'+factoryId][i].departmentName+"</option>"
+	}
+	console.log("department factory id",departmentsByFactoryId);
+	console.log("options",options);
+	document.getElementById("department").innerHTML = options;
+	$('#department').selectpicker('refresh');
+	$("#department").val(departmentIdForSet).change();
+	//document.getElementById("department").value = departmentIdForSet;
+	departmentIdForSet = 0;
+	
+	
+  }
+  
+
 function saveAction() {
 
 	var employeeCode = $("#employeeCode").val();
 	var employeeName = $("#employeeName").val();
 	var cardNo = $("#cardNo").val();
+	var factoryId = $("#factory").val();
 	var department = $("#department").val();
 	var designation = $("#designation").val();
 	var line = $("#line").val();
@@ -42,7 +77,7 @@ function saveAction() {
 				data: {
 
 					employeeCode: employeeCode,employeeName: employeeName,
-					cardNo: cardNo,department: department,
+					cardNo: cardNo,factoryId: factoryId,department: department,
 					designation: designation,line: line,
 					grade: grade,joinDate: joinDate,
 					userId: userId,religion:religion,
@@ -82,6 +117,7 @@ function editAction() {
 	var employeeCode = $("#employeeCode").val();
 	var employeeName = $("#employeeName").val();
 	var cardNo = $("#cardNo").val();
+	var factoryId = $("#factory").val();
 	var department = $("#department").val();
 	var designation = $("#designation").val();
 	var line = $("#line").val();
@@ -106,7 +142,7 @@ function editAction() {
 			url: './editEmployee',
 			data: {
 				employeeCode: employeeCode,employeeName: employeeName,
-				cardNo: cardNo,department: department,
+				cardNo: cardNo,factoryId: factoryId,department: department,
 				designation: designation,line: line,
 				grade: grade,joinDate: joinDate,
 				userId: userId,religion:religion,
@@ -176,15 +212,16 @@ function drawRow(rowData, c) {
 	row.append($("<td>" + rowData.EmployeeName + "</td>"));
 	row.append($("<td>" + rowData.Department + "</td>"));
 	row.append($("<td>" + rowData.Designation + "</td>"));
-	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.EmployeeName) + "','" + encodeURIComponent(rowData.DepartmentId) + "','" + encodeURIComponent(rowData.DesignationId) + "','" + encodeURIComponent(rowData.EmployeeCode) + "','" + encodeURIComponent(rowData.CardNo) + "','" + encodeURIComponent(rowData.Line) + "','" + encodeURIComponent(rowData.Grade) + "','" + encodeURIComponent(rowData.JoinDate) + "','" + encodeURIComponent(rowData.religion) + "','" + encodeURIComponent(rowData.gender) + "','" + encodeURIComponent(rowData.email) + "','" + encodeURIComponent(rowData.contact) + "','" + encodeURIComponent(rowData.nationality) + "','" + encodeURIComponent(rowData.nationaliid) + "','" + encodeURIComponent(rowData.birthdate) + "') style='cursor : pointer;'> </i></td>"));
+	row.append($("<td class='text-center'><i class='fa fa-edit' onclick=setData('" + encodeURIComponent(rowData.EmployeeName) + "','" + encodeURIComponent(rowData.factoryId) + "','" + encodeURIComponent(rowData.DepartmentId) + "','" + encodeURIComponent(rowData.DesignationId) + "','" + encodeURIComponent(rowData.EmployeeCode) + "','" + encodeURIComponent(rowData.CardNo) + "','" + encodeURIComponent(rowData.Line) + "','" + encodeURIComponent(rowData.Grade) + "','" + encodeURIComponent(rowData.JoinDate) + "','" + encodeURIComponent(rowData.religion) + "','" + encodeURIComponent(rowData.gender) + "','" + encodeURIComponent(rowData.email) + "','" + encodeURIComponent(rowData.contact) + "','" + encodeURIComponent(rowData.nationality) + "','" + encodeURIComponent(rowData.nationaliid) + "','" + encodeURIComponent(rowData.birthdate) + "') style='cursor : pointer;'> </i></td>"));
 	row.append($("<td class='text-center'><i class='fa fa-trash' onclick=deleteEmployee('" + encodeURIComponent(rowData.EmployeeCode) + "') style='cursor : pointer;'> </i></td>"));
 
 	return row;
 }
 
-function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Line, Grade, JoinDate,rel,gen,em,con,nat,natId,birth) {
+function setData(EmployeeName, factoryId,Department, Designation, EmployeeCode, CardNo, Line, Grade, JoinDate,rel,gen,em,con,nat,natId,birth) {
 
 	var EmployeeName = decodeURIComponent(EmployeeName);
+	factoryId = decodeURIComponent(factoryId);
 	var Department = decodeURIComponent(Department);
 	var Designation = decodeURIComponent(Designation);
 
@@ -203,6 +240,7 @@ function setData(EmployeeName, Department, Designation, EmployeeCode, CardNo, Li
 	var birthDate = decodeURIComponent(birth);
 
 	$("#employeeName").val(EmployeeName);
+	$("#factory").val(factoryId).change();
 	$("#department").val(Department).change();
 	$("#designation").val(Designation).change();
 

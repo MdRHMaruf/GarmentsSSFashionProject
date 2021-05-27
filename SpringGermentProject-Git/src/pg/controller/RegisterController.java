@@ -2548,15 +2548,16 @@ public class RegisterController {
 		String userId=(String)session.getAttribute("userId");
 		String userName=(String)session.getAttribute("userName");
 
+		List<FactoryModel> factoryList = registerService.getAllFactories();
 		List<Line> lineList = registerService.getLineList();
 		List<Designation> designationList = registerService.getDesignationList();
-		List<Department> departmentList = registerService.getDepartmentList();
+		//List<Department> departmentList = registerService.getDepartmentList();
 		ModelAndView view = new ModelAndView("register/employee_create");
 
-		view.addObject("department",departmentList);
+		view.addObject("factorylist",factoryList);
+		//view.addObject("department",departmentList);
 		view.addObject("designation",designationList);
 		view.addObject("line",lineList);
-
 		map.addAttribute("userId",userId);
 		map.addAttribute("userName",userName);
 
@@ -2578,6 +2579,7 @@ public class RegisterController {
 			obj.put("EmployeeName", employeeList.get(i).getEmployeeName());
 			obj.put("Department", employeeList.get(i).getDepartment());
 			obj.put("Designation", employeeList.get(i).getDesignation());
+			obj.put("factoryId", employeeList.get(i).getFactoryId());
 			obj.put("DepartmentId", employeeList.get(i).getDepartmentId());
 			obj.put("DesignationId", employeeList.get(i).getDesignationId());
 

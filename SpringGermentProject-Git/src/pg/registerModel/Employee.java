@@ -10,6 +10,15 @@ public class Employee {
 	String department;
 	
 	String designationId;
+	String factoryId;
+	public String getFactoryId() {
+		return factoryId;
+	}
+
+	public void setFactoryId(String factoryId) {
+		this.factoryId = factoryId;
+	}
+
 	String departmentId;
 	
 	String line;
