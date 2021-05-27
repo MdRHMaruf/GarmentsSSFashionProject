@@ -60,34 +60,14 @@
 										name="text">
 								</div>
 
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label for="cardNo" class="mb-0">Card No</label> <input
 										type="text" class="form-control-sm" id="cardNo" name="text">
 								</div>
-
-								<div class="col-md-6">
-									<label for="department" class="mb-0">Department</label> <select
-										id="department" class="selectpicker form-control"
-										data-live-search="true"
-										data-style="btn-light btn-sm border-secondary form-control-sm">
-										<option value="0">Select Department</option>
-
-										<c:forEach items="${department}" var="department"
-											varStatus="counter">
-											<option value="${department.departmentId}">${department.departmentName}</option>
-										</c:forEach>
-
-									</select>
-								</div>
-
-							</div>
-
-							<div class="row">
-
+								
+								
 								<div class="col-md-6">
 									<label for="designation" class="mb-0">Designation</label> <select
 										id="designation" class="selectpicker form-control"
@@ -102,6 +82,40 @@
 
 									</select>
 								</div>
+								
+								<div class="col-md-6">
+									<label for="factory" class="mb-0">Factory Name</label> <select
+										id="factory" class="selectpicker form-control"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-secondary form-control-sm" onchange="loadDepartmentByFactory()">
+										<option value="0">Select Factory</option>
+
+										<c:forEach items="${factorylist}" var="factory"
+											varStatus="counter">
+											<option  value="${factory.factoryid}">${factory.factoryname}</option>
+										</c:forEach>
+
+									</select>
+								</div>
+
+								<div class="col-md-6">
+									<label for="department" class="mb-0">Department</label> <select
+										id="department" class="selectpicker form-control"
+										data-live-search="true"
+										data-style="btn-light btn-sm border-secondary form-control-sm">
+										<option value="0">Select Department</option>
+
+										<%-- <c:forEach items="${department}" var="department"
+											varStatus="counter">
+											<option value="${department.departmentId}">${department.departmentName}</option>
+										</c:forEach> --%>
+
+									</select>
+								</div>
+
+							
+
+								
 
 
 								<div class="col-md-6">
@@ -116,9 +130,7 @@
 									</select>
 								</div>
 
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label for="" grade"" class="mb-0">Grade</label> <input
@@ -129,9 +141,7 @@
 										type="date" class="form-control-sm col-sm-12 customDate" id="joinDate"  data-date-format="DD MMM YYYY"
 										name="text">
 								</div>
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label class="mb-0">Religion</label> <select
@@ -150,9 +160,7 @@
 										<option>Female</option>
 									</select>
 								</div>
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label class="mb-0">Email</label> <input type="text"
@@ -164,9 +172,7 @@
 										name="text"
 										oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
 								</div>
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label class="mb-0">Nationality</label> <input type="text"
@@ -177,16 +183,14 @@
 										type="text" class="form-control-sm col-sm-12" id="nationalId"
 										name="text">
 								</div>
-							</div>
-
-							<div class="row">
+							
 
 								<div class="col-md-6">
 									<label for="BirthDate" class="mb-0">BirthDate</label> <input
 										type="date" class="form-control-sm col-sm-12 customDate" id="birthDate"  data-date-format="DD MMM YYYY"
 										name="text">
 								</div>
-								<div class="col-md-6"></div>
+								
 							</div>
 
 							<div class="row mt-1">
