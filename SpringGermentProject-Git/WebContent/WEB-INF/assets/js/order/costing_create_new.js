@@ -1,6 +1,6 @@
 var i=1;
 
-var itemlist=null;
+let itemlist=null;
 var unitlist=null;
 
 window.onload = () => {
@@ -12,7 +12,7 @@ window.onload = () => {
         data: {
         },
         success: function (data) {
-            let item = data.costingFabricsList.map(rowData => rowData.itemName);
+        	itemlist = data.costingFabricsList.map(rowData => rowData.itemName);
           //  let item1 = data.costingItemList.map(rowData => rowData.itemName);
             
 	    	  unitlist=getUnitOptions(data.unitList);
@@ -28,7 +28,6 @@ window.onload = () => {
 							"<td style='width:80px;'><input  id='consumption-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm consumption-"+i+"'  value=''/></td>" +
 							"<td style='width:80px;'><input  id='rate-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm rate-"+i+"'  value=''/></td>" +
 							"<td style='width:80px;'><input readonly id='amount-"+i+"' style='width:80px;' type='number'   class='form-control-sm amount-"+i+"'  value=''/></td>" +
-							"<td ><i class='fa fa-edit' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>" +
 							"<td ><i class='fa fa-trash' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>"+ 
 									"</tr>");
 						i++;
@@ -39,12 +38,35 @@ window.onload = () => {
 			  }
             
 		  	 $(".itemId").autocomplete({
-	                source: item
+	                source: itemlist
 	            });
 	
         }
     });
 };
+
+function addNewRow(){
+	$('#dataList_costing').append("<tr class='itemrow' data-id='"+i+"'>" +
+			"<td style='width:60px;'>"+i+"</td>" +
+			"<td style='width:120px;'><select id='groupType-"+i+"'  class='selectpicker groupType-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray'  ><option value='1'>Fabrics</option><option value='2'>Others</option></select></td>" +
+			"<td style='width:460px;'><input type='text' class='form-control form-control-sm itemId' placeholder='Search Item' aria-describedby='findButton' id='itemId-"+i+"' ></td>" +
+			"<td style='width:120px;'><select id='unitId-"+i+"'  class='selectpicker unitId-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray' onchange='EditUnit("+i+")' >" + unitlist + "</select></td>" +
+			"<td style='width:60px;'><input  id='width-"+i+"' style='width:60px;' type='number'   class='form-control-sm width-"+i+"'  value=''/></td>" +
+			"<td style='width:80px;'><input  id='yard-"+i+"' style='width:80px;' type='number'  class='form-control-sm yard-"+i+"'  value=''/></td>" +
+			"<td style='width:80px;'><input readonly id='gsm-"+i+"' style='width:80px;' type='number'   class='form-control-sm gsm-"+i+"'  value=''/></td>" +
+			"<td style='width:80px;'><input  id='consumption-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm consumption-"+i+"'  value=''/></td>" +
+			"<td style='width:80px;'><input  id='rate-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm rate-"+i+"'  value=''/></td>" +
+			"<td style='width:80px;'><input readonly id='amount-"+i+"' style='width:80px;' type='number'   class='form-control-sm amount-"+i+"'  value=''/></td>" +
+			"<td ><i class='fa fa-trash' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>"+ 
+					"</tr>");
+		i++;
+		
+		$('.tableSelect').selectpicker('refresh');
+		
+		 $(".itemId").autocomplete({
+             source: itemlist
+         });
+}
 
 function getUnitOptions(dataUnitList) {
 
@@ -63,24 +85,7 @@ function getUnitOptions(dataUnitList) {
 
 
 
-function addNewRow(){
-	$('#dataList_costing').append("<tr class='itemrow' data-id='"+i+"'>" +
-			"<td style='width:60px;'>"+i+"</td>" +
-			"<td style='width:460px;'><select id='itemId-"+i+"'  class='selectpicker itemId-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray' >" + itemlist + "</select></td>" +
-			"<td style='width:120px;'><select id='unitId-"+i+"'  class='selectpicker unitId-"+i+" employee-width tableSelect  col-md-12 px-0' data-live-search='true'  data-style='btn-light btn-sm border-light-gray' onchange='EditUnit("+i+")' >" + unitlist + "</select></td>" +
-			"<td style='width:60px;'><input  id='width-"+i+"' style='width:60px;' type='number'  ' class='form-control-sm width-"+i+"'  value=''/></td>" +
-			"<td style='width:80px;'><input  id='yard-"+i+"' style='width:80px;' type='number'   class='form-control-sm yard-"+i+"'  value=''/></td>" +
-			"<td style='width:80px;'><input readonly id='gsm-"+i+"' style='width:80px;' type='number'   class='form-control-sm gsm-"+i+"'  value=''/></td>" +
-			"<td style='width:80px;'><input  id='consumption-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm consumption-"+i+"'  value=''/></td>" +
-			"<td style='width:80px;'><input  id='rate-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm rate-"+i+"'  value=''/></td>" +
-			"<td style='width:80px;'><input readonly id='amount-"+i+"' style='width:80px;' type='number'   class='form-control-sm amount-"+i+"'  value=''/></td>" +
-			"<td ><i class='fa fa-edit' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>" +
-			"<td ><i class='fa fa-trash' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>"+ 
-					"</tr>");
-		i++;
-		
-		$('.tableSelect').selectpicker('refresh');
-}
+
 
 function CostingConfrim(){
 	if (confirm("Are you sure to Submit?")) {		
@@ -162,6 +167,133 @@ function CostingConfrim(){
 	
 }
 
+
+function UpdateConfrimedCosting(){
+	if (confirm("Are you sure to Submit?")) {		
+		  
+		  let costingNo = $("#costingNo").val();
+		  let userId = $("#userId").val();
+		  let styleNo = $("#styleNo").val();
+		  let itemName = $("#itemName").val();
+		  let commission = $("#commission").val() == "" ? 0 : $("#commission").val();
+		  let submissionDate=$("#submissionDate").val();
+		
+		  if(styleNo!=''){
+			  if(itemName!=''){
+				  if(submissionDate!=''){
+						var resultList = [];
+						$('.itemrow').each(function () {
+
+							var id = $(this).attr("data-id");
+
+							var itemId=$('#itemId-'+id).val();
+							
+							if(itemId!=''){
+								var groupType=$('#groupType-'+id).val();
+								var unitId=$('#unitId-'+id).val();
+								
+								var width=$('#width-'+id).val()==''?"0":$('#width-'+id).val();
+								var yard=$('#yard-'+id).val()==''?"0":$('#yard-'+id).val();
+								var gsm=$('#gsm-'+id).val()==''?"0":$('#gsm-'+id).val();
+								var consumption=$('#consumption-'+id).val()==''?"0":$('#consumption-'+id).val();
+								var rate=$('#rate-'+id).val()==''?"0":$('#rate-'+id).val();
+								var amount=$('#amount-'+id).val()==''?"0":$('#amount-'+id).val();
+
+								resultList[i] = itemId + "*" + groupType + "*" + unitId+ "*" + width+ "*" + yard+ "*" + gsm+ "*" + consumption+ "*" + rate+ "*" + amount;
+								i++;
+							}
+						
+							
+						});
+
+						resultList = "[" + resultList + "]"
+					  
+						$.ajax({
+						    type: 'POST',
+						    dataType: 'json',
+						    url: './updateConfirmCostingNewVersion',
+						    data:{
+						    	costingNo:costingNo,
+						    	userId:userId,
+						    	styleNo:styleNo,
+						    	itemName:itemName,
+						    	commission:commission,
+						    	submissionDate:submissionDate,
+						    	resultList:resultList
+						    },
+						    success: function (data) {
+						    	if(data=='Costing Create Succesfully'){
+						    		alert("Costing Create Succesfully");
+						    		refreshAction();
+						    	}
+						    	else{
+						    		alert(data);
+						    	}
+						    	
+						    }
+						  });
+				  }
+				  else{
+					  alert("Provide Submission Date");
+				  }
+			  }
+			  else{
+				  alert("Provide Item Name");
+			  }
+		  }
+		  else{
+			  alert("Provide Style No");
+		  }
+
+	}
+}
+
+
+function cloneButtonAction() {
+	  let styleId = $("#styleName").val();
+	  let itemId = $("#itemName").val();
+	  if (styleId != 0) {
+	    if (itemId != 0) {
+	      $('#cloneModal').modal('show');
+	      let element = $(".alert");
+	      element.hide();
+	      
+	      
+	    } else {
+	      alert("Item Type not selected... Please Select Item Type");
+	      $("#itemName").focus();
+	    }
+	  } else {
+		  alert("Style No not selected... Please Select Style No");
+	    $("#styleName").focus();
+	  }
+	}
+
+
+function cloningCosting(costingNo) {
+	 $('#cloneModal').modal('hide');
+	
+	  let styleNo = $("#styleNo").val();
+	  let itemName = $("#itemName").val();
+	  let userId = $("#userId").val();
+	  
+	  $.ajax({
+		    type: 'POST',
+		    dataType: 'json',
+		    url: './cloneCostingNewVersion',
+		    data:{
+		    	costingNo:costingNo,
+		    	userId:userId,
+		    	styleNo:styleNo,
+		    	itemName:itemName
+		    },
+		    success: function (data) {
+		    	$('#dataList_costing').empty();	
+		    	fetechDataRow(data.result);	
+		    }
+		});
+	  
+}
 
 function refreshAction() {
 	location.reload();
@@ -255,7 +387,6 @@ function fetechDataRow(datalist){
 					"<td style='width:80px;'><input  id='consumption-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm consumption-"+i+"'  value=''/></td>" +
 					"<td style='width:80px;'><input  id='rate-"+i+"' style='width:80px;' type='number'  onkeyup='setAmount("+i+")' class='form-control-sm rate-"+i+"'  value=''/></td>" +
 					"<td style='width:80px;'><input readonly id='amount-"+i+"' style='width:80px;' type='number'   class='form-control-sm amount-"+i+"'  value=''/></td>" +
-					"<td ><i class='fa fa-edit' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>" +
 					"<td ><i class='fa fa-trash' onclick='costingItemSet('${id}','new')' style='cursor:pointer;'></i></td>"+ 
 							"</tr>");
 			
@@ -276,6 +407,12 @@ function fetechDataRow(datalist){
 			$('#styleNo').val(rowData.styleNo);
 			$('#itemName').val(rowData.itemName);
 			$('#commission').val(rowData.commission);
+			
+			$('#costingNo').val(rowData.costingNo);
+			
+			
+			  $("#btnNewCosting").hide();
+			  $("#btnEditCosting").show();
 	 }
 	 
 

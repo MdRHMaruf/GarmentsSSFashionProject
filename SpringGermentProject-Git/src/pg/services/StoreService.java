@@ -191,4 +191,8 @@ public interface StoreService {
 	//Stock Summery
 	List<StockItem> getStockItemSummeryList(String fromDate,String toDate,String departmentId);
 	List<StockItem> getStockItemDetailsList(String fromDate,String toDate,String departmentId);
+	
+	//File Upload
+	boolean storeFileUpload(String uploadFileName, String computerName, String string, String purpose, String user, String buyerName, String purchaseOrder);
+
 }

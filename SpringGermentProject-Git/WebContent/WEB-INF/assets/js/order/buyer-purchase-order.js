@@ -1097,6 +1097,7 @@ function onUploadComplete(e) {
 }
 
 function onUploadProgress(e) {
+	percentComplete=0;
 	if (e.lengthComputable) {
 		let percentComplete = parseInt((e.loaded + totalUploaded) * 100 / totalFileLength);
 		let bar = document.getElementById('bar');

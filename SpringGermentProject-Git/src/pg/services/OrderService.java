@@ -245,6 +245,10 @@ public interface OrderService {
 	boolean saveCostingNewVersion(Costing v);
 	List<Costing> getNewCostingList(String userId);
 	List<Costing> searchCostingNewVersion(String costingNo);
+	boolean updateConfirmCostingNewVersion(Costing v);
+	List<Costing> cloneCostingNewVersion(String costingNo, String userId, String styleNo, String itemName);
+	List<CommonModel> getBuyerStyleWisePO(String buyerId,String styleId);
+	
 	
 }
 

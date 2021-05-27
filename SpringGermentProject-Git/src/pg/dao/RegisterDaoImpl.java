@@ -265,11 +265,11 @@ public class RegisterDaoImpl implements RegisterDao{
 						+ "values('"+buyer.getBuyername()+"','"+buyer.getBuyercode()+"','"+buyer.getBuyerAddress()+"','"+buyer.getConsigneeAddress()+"','"+buyer.getNotifyAddress()+"','"+getCountryname(buyer.getCountry())+"','"+buyer.getTelephone()+"','"+buyer.getMobile()+"','"+buyer.getFax()+"','"+buyer.getEmail()+"','"+buyer.getSkypeid()+"','"+buyer.getBankname()+"','"+buyer.getBankaddress()+"','"+buyer.getSwiftcode()+"','"+getCountryname(buyer.getBankcountry())+"',GETDATE(),'"+buyer.getUser()+"')";
 
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql="select max(id) as maxId from tbBuyer";
 				List<?> list = session.createSQLQuery(sql).list();
 				String buyerId = list.get(0).toString();
-				
+
 				sql="select g2.groupId,g2.groupName,g2.memberId \r\n" + 
 						"from tbGroups g1\r\n" + 
 						"join tbGroups g2\r\n" + 
@@ -479,20 +479,32 @@ public class RegisterDaoImpl implements RegisterDao{
 			tx=session.getTransaction();
 			tx.begin();
 
-			
-			String sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' "
-					+ "union\r\n" + 
-					"select b.id, b.name, b.BuyerCode, b.BuyerAddress, b.ConsigneeAddress, b.NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BuyerCountry),'') as BuyerCountry, b.Telephone, b.MobileNo, b.Fax, b.Email, b.SkypeId, b.BankName, b.BankAddress, b.SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BankCountry),'') as  BankCount \r\n" + 
-					"from tbFileAccessPermission fap\r\n" + 
-					" inner join tbBuyer b\r\n" + 
-					" on fap.ownerId = b.UserId and b.id = fap.resourceId\r\n" + 
-					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.BUYER_CREATE.getId()+"'\r\n" + 
-					" order by id";
-			
-			if(userId.equals(MD_ID)) {
+
+			String sql="";
+			if(userId.equals("0")) {
+				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer "
+						+ "union\r\n" + 
+						"select b.id, b.name, b.BuyerCode, b.BuyerAddress, b.ConsigneeAddress, b.NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BuyerCountry),'') as BuyerCountry, b.Telephone, b.MobileNo, b.Fax, b.Email, b.SkypeId, b.BankName, b.BankAddress, b.SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BankCountry),'') as  BankCount \r\n" + 
+						"from tbFileAccessPermission fap\r\n" + 
+						" inner join tbBuyer b\r\n" + 
+						" on fap.ownerId = b.UserId and b.id = fap.resourceId\r\n" + 
+						"where fap.resourceType = '"+FormId.BUYER_CREATE.getId()+"'\r\n" + 
+						" order by id";
+			}
+			else if(!userId.equals(MD_ID) || !userId.equals("0")) {
+				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer where userId='"+userId+"' "
+						+ "union\r\n" + 
+						"select b.id, b.name, b.BuyerCode, b.BuyerAddress, b.ConsigneeAddress, b.NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BuyerCountry),'') as BuyerCountry, b.Telephone, b.MobileNo, b.Fax, b.Email, b.SkypeId, b.BankName, b.BankAddress, b.SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=b.BankCountry),'') as  BankCount \r\n" + 
+						"from tbFileAccessPermission fap\r\n" + 
+						" inner join tbBuyer b\r\n" + 
+						" on fap.ownerId = b.UserId and b.id = fap.resourceId\r\n" + 
+						"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.BUYER_CREATE.getId()+"'\r\n" + 
+						" order by id";
+			}
+			else if(userId.equals(MD_ID)) {
 				sql="select id, name, BuyerCode, BuyerAddress, ConsigneeAddress, NutifyAddress,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BuyerCountry),'') as BuyerCountry, Telephone, MobileNo, Fax, Email, SkypeId, BankName, BankAddress, SwiftCode,isnull((select concat(countryname,'*',autoId) from TbCountryInfo where CountryName=BankCountry),'') as  BankCount from tbBuyer order by id";
 			}
-			
+
 			System.out.println(" buyer details query ");
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -620,7 +632,7 @@ public class RegisterDaoImpl implements RegisterDao{
 	@Override
 	public List<Notifyer> getNotifyerList() {
 		// TODO Auto-generated method stub
-		
+
 		Session session=HibernateUtil.openSession();
 		Transaction tx=null;
 
@@ -2647,7 +2659,7 @@ public class RegisterDaoImpl implements RegisterDao{
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			String sql="select colorId,colorName,colorCode,UserId from tbColors where trash='0' order by colorName";
 
 			List<?> list = session.createSQLQuery(sql).list();
@@ -4311,7 +4323,7 @@ public class RegisterDaoImpl implements RegisterDao{
 					+ "'"+saveEmployee.getReligion()+"','"+saveEmployee.getGender()+"','"+saveEmployee.getEmail()+"',"
 					+ "'"+saveEmployee.getContact()+"','"+saveEmployee.getNationality()+"','"+saveEmployee.getNationalId()+"',"
 					+ "'"+saveEmployee.getBirthDate()+"')";
-//			System.err.println("sql : "+sql);
+			//			System.err.println("sql : "+sql);
 			session.createSQLQuery(sql).executeUpdate();
 			tx.commit();
 			return true;
@@ -4403,7 +4415,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 		return false;
 	}
-	
+
 	@Override
 	public Employee getEmployeeInfoByEmployeeCode(String employeeCode) {
 		// TODO Auto-generated method stub
@@ -4421,7 +4433,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			{	
 				Object[] element = (Object[]) iter.next();
 				employeeInfo = new Employee(element[0].toString(), element[1].toString(), element[3].toString(), element[2].toString(), element[4].toString(), "", element[5].toString(), "", element[6].toString(), element[7].toString(), element[8].toString());
-				
+
 			}
 			tx.commit();
 		}
@@ -4454,7 +4466,7 @@ public class RegisterDaoImpl implements RegisterDao{
 			{	
 				Object[] element = (Object[]) iter.next();
 				employeeInfo = new Employee(element[0].toString(), element[1].toString(), element[3].toString(), element[2].toString(), element[4].toString(), "", element[5].toString(), "", element[6].toString(), element[7].toString(), element[8].toString());
-				
+
 			}
 			tx.commit();
 		}
@@ -4519,11 +4531,11 @@ public class RegisterDaoImpl implements RegisterDao{
 			}
 			ee.printStackTrace();
 		}
-	
+
 		finally {
 			session.close();
 		}
-	
+
 		return false;
 	}
 
@@ -4873,7 +4885,7 @@ public class RegisterDaoImpl implements RegisterDao{
 
 				Object[] element = (Object[]) iter.next();
 
-				
+
 				dataList.add(new Bank(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString()));
 				i++;
 			}

@@ -18,6 +18,7 @@ import pg.model.CommonModel;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrderItem;
+import pg.orderModel.SampleRequisitionItem;
 import pg.orderModel.Style;
 import pg.share.HibernateUtil;
 import pg.share.ItemType;
@@ -5791,7 +5792,74 @@ public class StoreDAOImpl implements StoreDAO{
 
 
 
+	@Override
+	public boolean storeFileUpload(String Filename, String pcname, String ipaddress,String purpose,String user,String buyerName, String purchaseOrder) {
+		Session session=HibernateUtil.openSession();
+		boolean fileinsert=false;
+		Transaction tx=null;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			if (!duplicateFile(user, Filename)) {
+				String sql="insert into TbUploadFileLogInfo ( FileName, UploadBy, UploadIp, UploadMachine, Purpose, UploadDate, UploadEntryTime, buyerid, purchaseorder,Type) values('"+Filename+"','"+user+"','"+ipaddress+"','"+pcname+"','"+purpose+"',convert(varchar, getdate(), 23),CURRENT_TIMESTAMP,'"+buyerName+"','"+purchaseOrder+"','Store')";
+				session.createSQLQuery(sql).executeUpdate();
+				tx.commit();
+				fileinsert= true;
+			}
+		}
+		catch(Exception ee){
+
+			if (tx != null) {
+				tx.rollback();
+				return false;
+			}
+			ee.printStackTrace();
+		}
+
+		finally {
+			session.close();
+		}
+		session.close();
+		return fileinsert;
+	}
 
 
+	public boolean duplicateFile(String user, String filename) {
+
+		boolean exists=false;
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<SampleRequisitionItem> dataList=new ArrayList<SampleRequisitionItem>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql="select filename from TbUploadFileLogInfo where FileName like '"+filename+"' and uploadby='"+user+"'";
+			System.out.println(sql);
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				//Object[] element = (Object[]) iter.next();							
+				//dataList.add(new SampleRequisitionItem(element[0].toString(),element[1].toString(),element[2].toString(), element[3].toString(),element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(),element[10].toString(),element[11].toString(),element[12].toString(),element[13].toString(),element[14].toString()));
+				exists=true;
+			}
+
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return exists;
+
+
+	}
 
 }

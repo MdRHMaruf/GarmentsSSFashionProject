@@ -1,10 +1,16 @@
 package pg.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -17,18 +23,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sun.istack.internal.logging.Logger;
 
 import pg.orderModel.FabricsIndent;
 import pg.orderModel.PurchaseOrder;
 import pg.orderModel.PurchaseOrderItem;
+import pg.model.CommonModel;
 import pg.model.Login;
 import pg.orderModel.AccessoriesIndent;
 import pg.orderModel.AccessoriesIndentCarton;
+import pg.orderModel.BuyerPO;
 import pg.proudctionModel.CuttingInformation;
 import pg.registerModel.AccessoriesItem;
+import pg.registerModel.BuyerModel;
+import pg.registerModel.Color;
 import pg.registerModel.Department;
+import pg.registerModel.FactoryModel;
 import pg.registerModel.MerchandiserInfo;
+import pg.registerModel.SizeGroup;
 import pg.registerModel.SupplierModel;
 import pg.registerModel.Unit;
 import pg.services.OrderService;
@@ -62,6 +78,9 @@ import pg.storeModel.StoreGeneralReceived;
 @RestController
 public class StoreController {
 
+	
+	private static String UPLOAD_FILE_SAVE_FOLDER = "E:/uploadspringfiles/";
+	
 	@Autowired
 	private ProductionService productionService;
 
@@ -77,6 +96,13 @@ public class StoreController {
 
 	String InvoiceNo="";
 	String Type="";
+	
+	String empCode[],dept,userId;
+
+	int type;
+
+	boolean fileupload=false;
+
 
 	//Fabrics Receive 
 	@RequestMapping(value = "/fabrics_receive",method=RequestMethod.GET)
@@ -1687,4 +1713,150 @@ public class StoreController {
 
 			return objmain;
 		}
+		
+		//File Upload
+
+		@RequestMapping(value = "/store_file_resource",method=RequestMethod.GET)
+		public ModelAndView fileUpload(ModelMap map,HttpSession session) {
+
+
+			String userId=(String)session.getAttribute("userId");
+			String userName=(String)session.getAttribute("userName");
+			
+			List<SizeGroup> groupList = registerService.getStyleSizeGroupList();
+			List<BuyerModel> buyerList= registerService.getAllBuyers("0");
+			List<FactoryModel> factoryList = registerService.getAllFactories();
+			List<BuyerPO> buyerPoList = orderService.getBuyerPoList("0");
+
+			ModelAndView view = new ModelAndView("store/store_file_resource");
+			
+			view.addObject("buyerList",buyerList);
+			view.addObject("factoryList",factoryList);
+			view.addObject("buyerPoList",buyerPoList);
+
+			map.addAttribute("userId",userId);
+			map.addAttribute("userName",userName);
+			return view; //JSP - /WEB-INF/view/index.jsp
+		}
+
+		// Process multiple file upload action and return a result page to user. 
+		@RequestMapping(value="/save-store/{purpose}/{user}/{buyerName}/{purchaseOrderId}", method={RequestMethod.PUT, RequestMethod.POST})
+		public String uploadFileSubmit(
+				@PathVariable ("purpose") String purpose,
+				@PathVariable ("user") String user,
+				@PathVariable ("buyerName") String buyerName,
+				@PathVariable ("purchaseOrderId") String purchaseOrderId,
+				MultipartHttpServletRequest multipartRequest, HttpServletRequest request, HttpServletResponse response) {
+			try
+			{
+				Logger.getLogger(this.getClass()).warning("Inside Confirm Servlet");  
+				response.setContentType("text/html");
+
+				String hostname = request.getRemoteHost(); // hostname
+				System.out.println("hostname "+hostname);
+
+				String computerName = null;
+				String remoteAddress = request.getRemoteAddr();
+				InetAddress inetAddress=null;
+
+
+				inetAddress = InetAddress.getByName(remoteAddress);
+				System.out.println("inetAddress: " + inetAddress);
+				computerName = inetAddress.getHostName();
+
+				System.out.println("computerName: " + computerName);
+
+
+				if (computerName.equalsIgnoreCase("localhost")) {
+					computerName = java.net.InetAddress.getLocalHost().getCanonicalHostName();
+				}else if(hostname.equalsIgnoreCase("0:0:0:0:0:0:0:1")){
+					inetAddress = InetAddress.getLocalHost();
+					computerName=inetAddress.getHostName();
+				}
+				System.out.println("ip : " + inetAddress);
+				System.out.println("computerName: " + computerName);
+
+				//   Date date=new Date();
+				// Get multiple file control names.
+				Iterator<String> it = multipartRequest.getFileNames();
+
+				while(it.hasNext())
+				{
+					String fileControlName = it.next();
+
+					MultipartFile srcFile = multipartRequest.getFile(fileControlName);
+
+					String uploadFileName = purchaseOrderId+srcFile.getOriginalFilename();
+
+					System.out.println(" file names "+uploadFileName);
+
+
+
+					// Create server side target file path.
+
+
+					String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
+
+					File existingfile=new File(destFilePath);
+
+					System.out.println(" file exists "+uploadFileName+" "+existingfile.exists());
+
+					if (!existingfile.exists()) {
+						File destFile = new File(destFilePath);
+						// Save uploaded file to target.
+						srcFile.transferTo(destFile);
+						fileupload = true;
+
+						storeService.storeFileUpload(uploadFileName, computerName,inetAddress.toString(), purpose,user,buyerName,purchaseOrderId);
+
+						CommonModel saveFileAccessDetails=new CommonModel(empCode,dept,userId,type);
+						boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
+						fileupload=false;
+					}
+
+
+
+					if (fileupload) {
+
+					}
+					//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
+				}
+
+				// Set message that will be displayed in return page.
+				//  model.addAttribute("message", msgBuf.toString());
+
+
+
+			}catch(IOException ex)
+			{
+				ex.printStackTrace();
+			}finally
+			{
+				return "upload_file_result";
+			}
+		}
+		
+		
+		@ResponseBody
+		@RequestMapping(value = "/buyerStyleWisePurchaseOrder",method=RequestMethod.POST)
+		public JSONObject getAllColor(String buyerId,String styleId) {
+
+			JSONObject objmain = new JSONObject();
+			JSONArray mainarray = new JSONArray();
+			List<CommonModel>items=orderService.getBuyerStyleWisePO(buyerId,styleId);
+			for (int i = 0; i < items.size(); i++) {
+				JSONObject obj=new JSONObject();
+
+				obj.put("buyerOrderId", items.get(i).getId());
+				obj.put("purchaseOrder", items.get(i).getName());
+				mainarray.add(obj);
+			}
+
+			objmain.put("result", mainarray);
+
+
+			return objmain;
+
+		}
+		
 }

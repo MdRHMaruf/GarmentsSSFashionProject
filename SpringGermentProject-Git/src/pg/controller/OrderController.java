@@ -233,6 +233,22 @@ public class OrderController {
 		return view;
 	}
 	
+	@RequestMapping(value = "/updateConfirmCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody String updateConfirmCostingNewVersion(Costing v) {
+		String msg="";
+			boolean flag=orderService.updateConfirmCostingNewVersion(v);
+			System.out.println("flag "+flag);
+			if(flag) {
+				msg="Costing Update Succesfully";
+			}
+
+
+		return msg;
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/confirmCostingNewVersion",method=RequestMethod.POST)
 	public @ResponseBody String confirmCostingNewVersion(Costing v) {
 		String msg="";
@@ -248,6 +264,18 @@ public class OrderController {
 		}
 		return msg;
 	}
+	
+	
+	@RequestMapping(value = "/cloneCostingNewVersion",method=RequestMethod.POST)
+	public @ResponseBody JSONObject cloneCostingNewVersion(String costingNo,String userId,String styleNo,String itemName) {
+		JSONObject objmain = new JSONObject();
+		
+		JSONArray mainArray = new JSONArray();
+		List<Costing> costingList = orderService.cloneCostingNewVersion(costingNo,userId,styleNo,itemName);
+		objmain.put("result",costingList);
+		return objmain;
+	}
+
 	
 	@RequestMapping(value = "/searchCostingNewVersion",method=RequestMethod.POST)
 	public @ResponseBody JSONObject searchCostingNewVersion(String costingNo) {
