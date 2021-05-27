@@ -732,6 +732,13 @@ public class StoreServiceImpl implements StoreService{
 		return storeDao.getStockItemDetailsList(fromDate,toDate,departmentId);
 	}
 
+	@Override
+	public boolean storeFileUpload(String uploadFileName, String computerName, String string, String purpose,
+			String user, String buyerName, String purchaseOrder) {
+		// TODO Auto-generated method stub
+		return storeDao.storeFileUpload(uploadFileName, computerName, string, purpose, user, buyerName, purchaseOrder);
+	}
+
 	
 
 }

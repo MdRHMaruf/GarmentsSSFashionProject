@@ -1056,6 +1056,12 @@ public class OrderServiceImpl implements OrderService{
 		return orderDAO.cloneCostingNewVersion(costingNo, userId, styleNo, itemName);
 	}
 
+	@Override
+	public List<CommonModel> getBuyerStyleWisePO(String buyerId,String styleId) {
+		// TODO Auto-generated method stub
+		return orderDAO.getBuyerStyleWisePO(buyerId,styleId);
+	}
+
 	
 
 

@@ -255,6 +255,8 @@ public interface OrderDAO {
 	
 	boolean updateConfirmCostingNewVersion(Costing v);
 	List<Costing> cloneCostingNewVersion(String costingNo, String userId, String styleNo, String itemName);
+	
+	List<CommonModel> getBuyerStyleWisePO(String buyerId,String styleId);
 }
 
 

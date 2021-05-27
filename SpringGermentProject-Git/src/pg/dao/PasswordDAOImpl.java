@@ -684,7 +684,7 @@ public class PasswordDAOImpl implements PasswordDAO{
 				sql="insert into tbUserExtraPermission (userId, moduleid, head, sub, entry, edit, [view], clear, entryby) values ('"+maxUserId+"','"+extraPermission.get("moduleId")+"','"+extraPermission.get("headId")+"','"+extraPermission.get("subId")+"','"+extraPermission.get("add")+"','"+extraPermission.get("edit")+"','"+extraPermission.get("view")+"','"+extraPermission.get("delete")+"','"+permissionObject.get("userId")+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}
-			sql="insert into tbUserLimitPermission (userId, limitList) values ('"+maxUserId+"','"+permissionObject.get("limitList")+"'";
+			sql="insert into tbUserLimitPermission (userId, limitList) values ('"+maxUserId+"','"+permissionObject.get("limitList")+"')";
 			session.createSQLQuery(sql).executeUpdate();
 			
 			tx.commit();

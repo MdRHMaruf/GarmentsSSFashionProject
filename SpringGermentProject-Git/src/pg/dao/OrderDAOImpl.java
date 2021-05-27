@@ -1742,7 +1742,48 @@ public class OrderDAOImpl implements OrderDAO{
 			//tx=session.getTransaction();
 			//tx.begin();
 
-			String sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
+			String sql="";
+			if(userId.equals("0")) {
+				sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+						"	group by boed.PurchaseOrder\n" + 
+						"    FOR XML PATH('')),1,1,'') purchaseOrder, \n" + 
+						"	STUFF((SELECT ','+sc.StyleNo \n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
+						"	left join TbStyleCreate sc\n" + 
+						"	on boed.StyleId = sc.StyleId\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
+						"	group by sc.StyleNo\n" + 
+						"    FOR XML PATH('')),1,1,'') styleNo,\n" + 
+						"(select convert(varchar,bos.EntryTime,103))as date \n" + 
+						"from TbBuyerOrderEstimateSummary bos\n" + 
+						"join tbBuyer b\n" + 
+						"on b.id = bos.BuyerId\r\n" + 
+						" where bos.userId='"+userId+"' \r\n"
+						+ "union\r\n" + 
+						" select bos.autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \r\n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\r\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\r\n" + 
+						"	group by boed.PurchaseOrder\r\n" + 
+						"    FOR XML PATH('')),1,1,'') purchaseOrder, \r\n" + 
+						"	STUFF((SELECT ','+sc.StyleNo \r\n" + 
+						"    FROM TbBuyerOrderEstimateDetails boed\r\n" + 
+						"	left join TbStyleCreate sc\r\n" + 
+						"	on boed.StyleId = sc.StyleId\r\n" + 
+						"    WHERE boed.BuyerOrderId = bos.autoId\r\n" + 
+						"	group by sc.StyleNo\r\n" + 
+						"    FOR XML PATH('')),1,1,'') styleNo,\r\n" + 
+						"(select convert(varchar,bos.EntryTime,103))as date \r\n" + 
+						"from tbFileAccessPermission fap \r\n" + 
+						"inner join TbBuyerOrderEstimateSummary bos\r\n" + 
+						"on fap.ownerId = bos.UserId and bos.autoId = fap.resourceId\r\n" + 
+						"join tbBuyer b\r\n" + 
+						"on b.id = bos.BuyerId\r\n" + 
+						"where  fap.resourceType = '"+FormId.BUYER_PO.getId()+"' order by bos.autoId desc";
+			}
+			else if(! userId.equals(MD_ID) || !userId.equals("0")) {
+			sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
 					"    FROM TbBuyerOrderEstimateDetails boed\n" + 
 					"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
 					"	group by boed.PurchaseOrder\n" + 
@@ -1779,8 +1820,8 @@ public class OrderDAOImpl implements OrderDAO{
 					"join tbBuyer b\r\n" + 
 					"on b.id = bos.BuyerId\r\n" + 
 					"where fap.permittedUserId = '"+userId+"' and fap.resourceType = '"+FormId.BUYER_PO.getId()+"' order by bos.autoId desc";
-
-			if(userId.equals(MD_ID)) {
+			}
+			else if(userId.equals(MD_ID)) {
 				sql="select autoId,BuyerId,b.name as buyerName, STUFF((SELECT ','+boed.PurchaseOrder \n" + 
 						"    FROM TbBuyerOrderEstimateDetails boed\n" + 
 						"    WHERE boed.BuyerOrderId = bos.autoId\n" + 
@@ -9195,6 +9236,39 @@ public class OrderDAOImpl implements OrderDAO{
 			session.close();
 		}
 		return datalist;
+	}
+
+	@Override
+	public List<CommonModel> getBuyerStyleWisePO(String buyerId,String styleId) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		List<CommonModel> query=new ArrayList<CommonModel>();
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			String sql = "select BuyerOrderId,PurchaseOrder from TbBuyerOrderEstimateDetails where buyerId='"+buyerId+"' and StyleId='"+styleId+"' group by BuyerOrderId,PurchaseOrder";
+			List<?> list2 = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list2.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();	
+				query.add(new CommonModel(element[0].toString(), element[1].toString()));
+			}
+			
+
+			tx.commit();
+		}
+		catch(Exception e){
+			if (tx != null) {
+				tx.rollback();
+			}
+			e.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return query;
 	}
 
 
