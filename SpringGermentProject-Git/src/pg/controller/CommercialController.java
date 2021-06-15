@@ -76,6 +76,7 @@ public class CommercialController {
 	
 	String StyleId="",ItemId="";
 	
+	
 	@RequestMapping(value = "/master_lc")
 	public ModelAndView master_lc(ModelMap map,HttpSession session) {
 
@@ -136,9 +137,7 @@ public class CommercialController {
 			objmain.put("result", "something wrong");
 		}
 		return objmain;
-	}	
-	
-	
+	}
 	
 	@RequestMapping(value = "/searchMasterLC",method=RequestMethod.GET)
 	public @ResponseBody JSONObject searchMasterLC(String masterLCNo,String buyerId,String amendmentNo) {
@@ -146,18 +145,32 @@ public class CommercialController {
 
 		JSONArray mainArray = new JSONArray();
 		MasterLC masterLCInfo = commercialService.getMasterLCInfo(masterLCNo, buyerId, amendmentNo);
+		
 		List<StyleInfo> masterLCStyles = commercialService.getMasterLCStyles(masterLCNo, buyerId, amendmentNo);
 		List<MasterLC> ammendmentList = commercialService.getMasterLCAmendmentList(masterLCNo, buyerId);
 		List<ImportLC> importInvoiceList = commercialService.getImportLCList(masterLCNo);
 		List<Notifyer> notifyerList = registerService.getNotifyerListByBuyerId(buyerId);
 		
+		
 		objmain.put("masterLCInfo",masterLCInfo);
 		objmain.put("masterLCStyles", masterLCStyles);
+		objmain.put("masterUDAmendmentList", commercialService.getMasterUdAmendmentList(masterLCNo,masterLCInfo.getUdNo()));
 		objmain.put("amendmentList", ammendmentList);
 		objmain.put("importInvoiceList", importInvoiceList);
 		objmain.put("exportInvoiceList", commercialService.getExportInvoiceList(masterLCNo));
 		objmain.put("notifyerList", notifyerList);
 		return objmain;
+	}
+	
+	@RequestMapping(value = "/searchMasterUD",method = RequestMethod.GET)
+	public @ResponseBody JSONObject searchMasterUd(String autoId) {
+		JSONObject objMain = new JSONObject();
+		System.out.println("Call Autoid="+autoId);
+		JSONObject tempObj = commercialService.getMasterUdInfo(autoId);
+		objMain.put("udInfo", tempObj);
+		objMain.put("udStyles", commercialService.getMasterUDStyles(autoId, tempObj.get("udAmendmentNo").toString()));
+		
+		return objMain;
 	}
 	
 	@RequestMapping(value = "/getTypeWiseItems",method=RequestMethod.GET)
@@ -186,6 +199,30 @@ public class CommercialController {
 	}
 	
 	
+	@RequestMapping(value = "/masterUDAmendment",method=RequestMethod.POST)
+	public @ResponseBody JSONObject masterUDAmendment(MasterLC masterLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.masterUDAmendment(masterLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getMasterUdAmendmentList(masterLC.getMasterLCNo(), masterLC.getBuyerId()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+
+	@RequestMapping(value = "/masterUDEdit",method=RequestMethod.POST)
+	public @ResponseBody JSONObject masterUDEdit(MasterLC masterLC) {
+		JSONObject objmain = new JSONObject();
+		if(commercialService.masterUDEdit(masterLC).equals("success")) {
+			objmain.put("result", "success");
+			objmain.put("amendmentList", commercialService.getMasterUdAmendmentList(masterLC.getMasterLCNo(), masterLC.getBuyerId()));
+		}else {
+			objmain.put("result", "something wrong");
+		}
+		return objmain;
+	}
+
 	@RequestMapping(value = "/importLCSubmit",method=RequestMethod.POST)
 	public @ResponseBody JSONObject importLCSubmit(ImportLC importLC) {
 		JSONObject objmain = new JSONObject();
@@ -238,7 +275,6 @@ public class CommercialController {
 		objmain.put("amendmentList", ammendmentList);
 		objmain.put("importLCInfo", importLC);
 		objmain.put("importItemList", itemList);
-		objmain.put("importUDList",commercialService.getImportINvoiceUDList(invoiceNo));
 		objmain.put("billEntryList", commercialService.getBillOfEntryList(masterLCNo,invoiceNo));
 		return objmain;
 	}
@@ -251,7 +287,7 @@ public class CommercialController {
 				JSONParser jsonParser = new JSONParser();
 				JSONObject udObject = (JSONObject)jsonParser.parse(udInfo);
 				objmain.put("result", "success");
-				objmain.put("udList", commercialService.getImportINvoiceUDList(udObject.get("importInvoiceNo").toString()));
+				
 			}else {
 				objmain.put("result", "something wrong");
 			}
@@ -421,6 +457,40 @@ public class CommercialController {
 	}
 	
 
+	@RequestMapping(value = "/pass_book_form")
+	public ModelAndView pass_book_form(ModelMap map, HttpSession session) {
+		String userId=(String)session.getAttribute("userId");
+		String userName=(String)session.getAttribute("userName");
+		ModelAndView view = new ModelAndView("commercial/pass-book-form");
+		List<MasterLC> masterLCList= commercialService.getMasterLCList();
+		view.addObject("masterLCList",masterLCList);
+		map.addAttribute("userId",userId);
+		map.addAttribute("userName",userName);
+		
+		return view; 
+	}
 
 
+	@RequestMapping(value = "/searchMasterLCForPassBook",method=RequestMethod.GET)
+	public @ResponseBody JSONObject searchMasterLCForPassBook(String masterLCNo) {
+		return commercialService.getMasterLCSummaryForPassBook(masterLCNo);
+	}
+	
+	@RequestMapping(value = "/savePassBookData",method=RequestMethod.POST)
+	public  JSONObject savePassBookData(String passBookData) {
+		JSONObject mainObject = new JSONObject();
+		mainObject.put("result", commercialService.savePassBookData(passBookData));
+		return mainObject;
+	}
+	
+	
+	@RequestMapping(value = "/master_lc_pass_book_preview/{masterLC}",method=RequestMethod.GET)
+	public @ResponseBody ModelAndView printCostingReport(ModelMap map,@PathVariable("masterLC") String masterLC) {
+		
+		System.out.println("master lc="+masterLC);
+		ModelAndView view=new ModelAndView("commercial/printMasterPassBookSummery");
+		map.addAttribute("masterLC", masterLC);
+
+		return view;
+	}
 }

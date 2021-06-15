@@ -8,8 +8,8 @@
 <%@page import="java.util.List"%>
 
 <%
-String userId=(String)session.getAttribute("userId");
-String userName=(String)session.getAttribute("userName");
+	String userId = (String) session.getAttribute("userId");
+	String userName = (String) session.getAttribute("userName");
 %>
 
 <jsp:include page="../include/header.jsp" />
@@ -29,7 +29,8 @@ String userName=(String)session.getAttribute("userName");
 					<div class="d-flex justify-content-end">
 						<div class="mr-auto">
 							<h4 style="text-align: left;" class="font-weight-bold">
-								Accessories Indent <span class="badge badge-primary" id='accessoriesId'>New</span>
+								Accessories Indent <span class="badge badge-primary"
+									id='accessoriesId'>New</span>
 							</h4>
 						</div>
 
@@ -73,7 +74,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="purchaseOrder" class="col-form-label-sm mb-0 py-0">Purchase
-										Order<span style="color:red">*</span></label>
+										Order<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkPurchaseOrder" type="checkbox"
@@ -103,7 +105,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="styleNo" class="col-form-label-sm mb-0 py-0">Style
-										No<span style="color:red">*</span></label>
+										No<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkStyleNo" type="checkbox" class="form-check-input">
@@ -129,7 +132,8 @@ String userName=(String)session.getAttribute("userName");
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="itemName" class="col-form-label-sm mb-0 py-0">Item
-										Name<span style="color:red">*</span></label>
+										Name<span style="color: red">*</span>
+									</label>
 									<div class="form-check-inline">
 										<label class="form-check-label"> <input
 											id="checkItemName" type="checkbox" class="form-check-input">
@@ -205,23 +209,8 @@ String userName=(String)session.getAttribute("userName");
 												</button>
 											</div>
 										</div>
-										
-										<div class="row">
-											<div class="col-md-4 ml-3">
-											<label class="form-check-label"> <input
-													id="checkSQ" type="checkbox"
-													class="form-check-input">SQ
-												</label>
-											</div>
-											
-												<div class="col-md-4">
-												<label class="form-check-label"> <input
-													id="checkSKU" type="checkbox"
-													class="form-check-input">SKU
-												</label>
-												</div>
-												
-										</div>
+
+
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -239,18 +228,34 @@ String userName=(String)session.getAttribute("userName");
 											id="btnRecyclingData">
 											<i class="fa fa-recycle"></i> Recycling Data
 										</button>
-										<h6 id="sizeHeading">Size: <span id="size-name"></span></h6>
+										<h6 id="sizeHeading">
+											Size: <span id="size-name"></span>
+										</h6>
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-2 ml-3">
+									<label class="form-check-label"> <input id="checkSQ"
+										type="checkbox" class="form-check-input">SQ
+									</label>
+								</div>
 
+								<div class="col-md-4">
+									<label class="form-check-label"> <input id="checkSKU"
+										type="checkbox" class="form-check-input">Style SKU
+									</label>
+								</div>
+
+							</div>
 						</div>
 						<div class="col-md-4">
 							<div class="form-group  mb-1"
 								style="padding-left: 1px; padding-right: 1px;">
 								<div class="d-flex justify-content-between">
 									<label for="accessoriesItem"
-										class="col-form-label-sm mb-0 py-0">Accessories Item<span style="color:red">*</span></label>
+										class="col-form-label-sm mb-0 py-0">Accessories Item<span
+										style="color: red">*</span></label>
 								</div>
 								<div class="row">
 									<div class="col-md-12 input-group-append">
@@ -325,7 +330,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit<span style="color:red">*</span></label>
+											<label for="unit" class="col-form-label-sm mb-0 py-0">Unit<span
+												style="color: red">*</span></label>
 										</div>
 										<div class="row">
 											<div class="col-md-12">
@@ -334,7 +340,8 @@ String userName=(String)session.getAttribute("userName");
 													data-style="btn-light btn-sm border-light-gray"
 													onchange="setInPercentAndTotalInPreviewTable(),calculateTotalQtyAndUnitQty(),setUnitQty()">
 													<option value="0">Select Unit</option>
-													<c:forEach items="${unitList}" var="unit" varStatus="counter">
+													<c:forEach items="${unitList}" var="unit"
+														varStatus="counter">
 														<option value="${unit.unitId}">${unit.unitName}</option>
 													</c:forEach>
 												</select>
@@ -349,8 +356,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="unitQty" class="col-form-label-sm mb-0 py-0"><strong>Unit
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="unitQty" onkeyup="setTotalByUnitInEditMode()"
-											readonly>
+										<input type="number" class='form-control-sm' id="unitQty"
+											onkeyup="setTotalByUnitInEditMode()" readonly>
 									</div>
 								</div>
 							</div>
@@ -435,7 +442,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="divideBy" class="col-form-label-sm mb-0 py-0"><strong>Divide
 													By</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="divideBy" onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
+										<input type="number" class='form-control-sm' id="divideBy"
+											onkeyup="setUnitQty(),setInPercentAndTotalInPreviewTable()">
 									</div>
 								</div>
 							</div>
@@ -472,8 +480,8 @@ String userName=(String)session.getAttribute("userName");
 											<label for="totalQty" class="col-form-label-sm mb-0 py-0"><strong>Total
 													Qty</strong></label>
 										</div>
-										<input type="number" class='form-control-sm' id="totalQty" onkeyup="setUnitByTotalInEditMode()"
-											readonly>
+										<input type="number" class='form-control-sm' id="totalQty"
+											onkeyup="setUnitByTotalInEditMode()" readonly>
 									</div>
 								</div>
 							</div>
@@ -503,8 +511,9 @@ String userName=(String)session.getAttribute("userName");
 					<div class="row mt-1">
 						<div class="col-md-12">
 							<div class="d-flex justify-content-between">
-							<div class="w-25"> 
-									<input id="accessoriesIndentListSearch" type="text" class="form-control-sm" placeholder="Search Here Anything....">
+								<div class="w-25">
+									<input id="accessoriesIndentListSearch" type="text"
+										class="form-control-sm" placeholder="Search Here Anything....">
 								</div>
 								<div class="row">
 									<div class="ml-auto pr-1">
@@ -526,15 +535,14 @@ String userName=(String)session.getAttribute("userName");
 									</div>
 
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
 
 
 					<div class="row mt-1">
-						<div style="overflow: auto;"
-							class="col-sm-12 p-0 ">
+						<div style="overflow: auto;" class="col-sm-12 p-0 ">
 							<table id="dataTable"
 								class="table table-hover table-bordered table-sm mb-0 small-font">
 								<thead>
@@ -566,7 +574,8 @@ String userName=(String)session.getAttribute("userName");
 									<div class="pr-1">
 										<button class="btn btn-primary btn-sm"
 											onclick="confirmAction()" accesskey="C">
-											<i class="fas fa-save"></i><span style="text-decoration:underline;"> Confirm</span> 
+											<i class="fas fa-save"></i><span
+												style="text-decoration: underline;"> Confirm</span>
 										</button>
 									</div>
 									<div class="pr-1">
@@ -575,7 +584,8 @@ String userName=(String)session.getAttribute("userName");
 										</button>
 									</div>
 									<div class="pr-1">
-										<button class="btn btn-info btn-sm" onclick="printAccessories()">
+										<button class="btn btn-info btn-sm"
+											onclick="printAccessories()">
 											<i class="fas fa-print"></i> Preview
 										</button>
 									</div>
@@ -616,7 +626,7 @@ String userName=(String)session.getAttribute("userName");
 							<th>SL#</th>
 							<th>Indent No</th>
 							<th>Purchase Order</th>
-							<th>Indent Date</th>						
+							<th>Indent Date</th>
 							<th><span><i class="fa fa-search"></i></span></th>
 							<th><span><i class="fa fa-print"></i></span></th>
 						</tr>
@@ -629,9 +639,9 @@ String userName=(String)session.getAttribute("userName");
 								<td>${list.aiNo}</td>
 								<td>${list.purchaseOrder}</td>
 								<td>${list.indentDate}</td>
-								<td><i class="fa fa-search" style="cursor:pointer;"
+								<td><i class="fa fa-search" style="cursor: pointer;"
 									onclick="searchAccessoriesIndent('${list.aiNo}')"> </i></td>
-									<td><i class="fa fa-print" style="cursor:pointer;"
+								<td><i class="fa fa-print" style="cursor: pointer;"
 									onclick="printAccessoriesIndent('${list.aiNo}')"> </i></td>
 							</tr>
 						</c:forEach>
@@ -646,7 +656,7 @@ String userName=(String)session.getAttribute("userName");
 <jsp:include page="../include/footer.jsp" />
 <script
 	src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-	<script
+<script
 	src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
 <script
 	src="${pageContext.request.contextPath}/assets/js/order/accessories_indent.js"></script>

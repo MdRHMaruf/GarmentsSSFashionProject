@@ -271,6 +271,17 @@ function masterStyleAddAction() {
 
                 $("#masterStyleList").append(row);
 
+                row = `<tr id='masterUDRow-${id}' class='masterUDNewStyle' data-type='newStyle' data-master-lc-no='${masterLCNo}' data-buyer-id='${buyerId}' data-style-id='${styleId}' data-item-id='${itemId}' data-purchase-order-id='${purchaseOrderId}' >
+                            <td id='masterUDStyleNo-${id}'>${styleNo}</td>
+                            <td id='masterUDPurchaseOrder-${id}'>${purchaseOrder}</td>
+                            <td><input type="number" id='masterUDQuantity-${id}' class="form-control-sm max-width-100" onfocusout="setUDAmount(${id})" value="${quantity}"/></td>
+                            <td><input type="number" id='masterUDUnitPrice-${id}' class="form-control-sm max-width-100" onfocusout="setUDAmount(${id})" value="${unitPrice}"/></td>
+                            <td id='masterUDAmount-${id}'>${amount}</td>
+                            <td ><i class='fa fa-trash' onclick="deleteMasterStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
+                          </tr>`;
+
+                $("#masterUDStyleList").append(row);
+
                 totalValueCount();
 
                 sessionObject = {
@@ -325,6 +336,8 @@ function deleteMasterStyle(autoId, rowType) {
       sessionStorage.setItem("pendingMasterLcStyleItem", JSON.stringify(pendingMasterLcStyleItem));
 
       $("#masterRow-" + autoId).remove();
+
+      $("#masterUDRow-" + autoId).remove();
     } else {
       $("#loader").show();
       $.ajax({
@@ -441,9 +454,14 @@ function masterSubmitAction() {
     let shipmentDate = $("#masterShipmentDate").val();
     let expiryDate = $("#masterExpiryDate").val();
     let remarks = $("#masterRemarks").val();
+    let udNo = $("#masterUDNo").val();
+    let udDate = $("#masterUdDate").val();
     let userId = $("#userId").val();
     let styleItems = {};
     styleItems['list'] = [];
+
+    let udStyleItems = {};
+    udStyleItems['list'] = [];
 
     if (masterLCNo != '') {
       if (buyerId != '0') {
@@ -467,6 +485,26 @@ function masterSubmitAction() {
 
                 styleItems.list.push(item);
               }
+
+              let udRowList = $("#masterUDStyleList tr");
+              length = udRowList.length;
+              for (let i = 0; i < length; i++) {
+                const newRow = udRowList[i];
+                const id = newRow.id.slice(12);
+
+                const item = {
+                  buyerId: newRow.getAttribute('data-buyer-id'),
+                  styleId: newRow.getAttribute('data-style-id'),
+                  itemId: newRow.getAttribute('data-item-id'),
+                  purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                  quantity: $("#masterUDQuantity-" + id).val(),
+                  unitPrice: $("#masterUDUnitPrice-" + id).val(),
+                  amount: $("#masterUDAmount-" + id).text(),
+                  userId: userId
+                }
+
+                udStyleItems.list.push(item);
+              }
               if (confirm("Are you sure to confirm..")) {
                 $("#loader").show();
                 $.ajax({
@@ -485,11 +523,14 @@ function masterSubmitAction() {
                     currencyId: currencyId,
                     shipmentDate: shipmentDate,
                     expiryDate: expiryDate,
+                    udNo: udNo,
+                    udDate: udDate,
                     remarks: remarks,
                     userId: userId,
                     amendmentNo: '0',
                     amendmentDate: date,
                     styleList: JSON.stringify(styleItems),
+                    udStyleList: JSON.stringify(udStyleItems),
                   },
                   success: function (data) {
                     if (data.result == 'success') {
@@ -539,6 +580,7 @@ function masterEditAction() {
     length = rowList.length;
     let masterLCAutoId = $("#masterLCAutoId").val();
     let masterLCNo = $("#masterLCNo").val();
+    let previousMasterLCNo = $("#previousMasterLCNo").val();
     let amendmentNo = $("#masterAmendmentNo").val();
     let buyerId = $("#masterBuyerName").val();
     let sendBankId = $("#masterSendBankName").val();
@@ -551,6 +593,9 @@ function masterEditAction() {
     let shipmentDate = $("#masterShipmentDate").val();
     let expiryDate = $("#masterExpiryDate").val();
     let remarks = $("#masterRemarks").val();
+    let previousUdNo = $("#previousUdNo").val();
+    let udNo = $("#masterUDNo").val();
+    let udDate = $("#masterUdDate").val();
     let userId = $("#userId").val();
     let styleItems = {};
     styleItems['list'] = [];
@@ -611,6 +656,7 @@ function masterEditAction() {
                   data: {
                     autoId: masterLCAutoId,
                     masterLCNo: masterLCNo,
+                    previousMasterLCNo: previousMasterLCNo,
                     buyerId: buyerId,
                     senderBankId: sendBankId,
                     receiverBankId: receiveBankId,
@@ -622,6 +668,9 @@ function masterEditAction() {
                     shipmentDate: shipmentDate,
                     expiryDate: expiryDate,
                     remarks: remarks,
+                    udNo: udNo,
+                    previousUdNo: previousUdNo,
+                    udDate: udDate,
                     userId: userId,
                     amendmentNo: amendmentNo,
                     amendmentDate: date,
@@ -667,6 +716,110 @@ function masterEditAction() {
 }
 
 
+function masterUdEditAction() {
+  let rowList = $("#masterUDStyleList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    rowList = $("tr.masterNewStyle");
+    length = rowList.length;
+    let masterLCAutoId = $("#masterLCAutoId").val();
+    let masterUDAutoId = $("#masterUdAutoId").val();
+    let masterLCNo = $("#masterLCNo").val();
+    let amendmentNo = $("#masterAmendmentNo").val();
+    let date = $("#masterDate").val();
+    let udNo = $("#masterUDNo").val();
+    let udDate = $("#masterUdDate").val();
+    let userId = $("#userId").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    let editedStyleItems = {};
+    editedStyleItems['list'] = [];
+
+    if (masterLCNo != '') {
+
+      for (let i = 0; i < length; i++) {
+        const newRow = rowList[i];
+        const id = newRow.id.slice(12);
+
+        const item = {
+          buyerId: newRow.getAttribute('data-buyer-id'),
+          styleId: newRow.getAttribute('data-style-id'),
+          itemId: newRow.getAttribute('data-item-id'),
+          purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+          quantity: $("#masterUDQuantity-" + id).val(),
+          unitPrice: $("#masterUDUnitPrice-" + id).val(),
+          amount: $("#masterUDAmount-" + id).text(),
+          userId: userId
+        }
+
+        styleItems.list.push(item);
+      }
+
+      let editedRowList = $("#masterUDStyleList tr.editedRow");
+      length = editedRowList.length;
+
+      for (let i = 0; i < length; i++) {
+        const editedRow = editedRowList[i];
+        const id = editedRow.id.slice(12);
+
+        const item = {
+          autoId: editedRow.getAttribute('data-auto-id'),
+          buyerId: editedRow.getAttribute('data-buyer-id'),
+          styleId: editedRow.getAttribute('data-style-id'),
+          itemId: editedRow.getAttribute('data-item-id'),
+          purchaseOrderId: editedRow.getAttribute('data-purchase-order-id'),
+          quantity: $("#masterUDQuantity-" + id).val(),
+          unitPrice: $("#masterUDUnitPrice-" + id).val(),
+          amount: $("#masterUDAmount-" + id).text(),
+          userId: userId
+        }
+
+        editedStyleItems.list.push(item);
+      }
+      if (confirm("Are you sure to confirm..")) {
+        $("#loader").show();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: './masterUDEdit',
+          data: {
+            autoId: masterLCAutoId,
+            udAutoId: masterUDAutoId,
+            masterLCNo: masterLCNo,
+            udNo: udNo,
+            udDate: udDate,
+            userId: userId,
+            amendmentNo: amendmentNo,
+            amendmentDate: date,
+            styleList: JSON.stringify(styleItems),
+            editedStyleList: JSON.stringify(editedStyleItems)
+          },
+          success: function (data) {
+            if (data.result == 'success') {
+              alert("Successfully Submitted");
+              $("#masterAmendmentList").empty();
+              drawMasterLCAmendmentList(data.amendmentList);
+            } else {
+              alert("Master LC Insertion Failed")
+            }
+            $("#loader").hide();
+          }
+        });
+
+      }
+
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#masterLCNo").focus();
+    }
+  } else {
+    alert("Please Enter Any Style Item...");
+  }
+}
+
+
 function masterAmendmentAction() {
   let rowList = $("#masterStyleList tr");
   let length = rowList.length;
@@ -675,6 +828,7 @@ function masterAmendmentAction() {
     let styleList = '';
 
     let masterLCNo = $("#masterLCNo").val();
+    let previousMasterLCNo = $("#previousMasterLCNo").val();
     let buyerId = $("#masterBuyerName").val();
     let sendBankId = $("#masterSendBankName").val();
     let receiveBankId = $("#masterReceiveBankName").val();
@@ -720,6 +874,7 @@ function masterAmendmentAction() {
                   url: './masterLCAmendment',
                   data: {
                     masterLCNo: masterLCNo,
+                    previousMasterLCNo: previousMasterLCNo,
                     buyerId: buyerId,
                     senderBankId: sendBankId,
                     receiverBankId: receiveBankId,
@@ -775,6 +930,77 @@ function masterAmendmentAction() {
 
 }
 
+
+function masterUdAmendmentAction() {
+  let rowList = $("#masterUDStyleList tr");
+  let length = rowList.length;
+
+  if (length > 0) {
+    let styleList = '';
+
+    let masterLCNo = $("#masterLCNo").val();
+    let udNo = $("#masterUDNo").val();
+    let userId = $("#userId").val();
+    let date = $("#masterDate").val();
+    let styleItems = {};
+    styleItems['list'] = [];
+
+    if (masterLCNo != '') {
+      for (let i = 0; i < length; i++) {
+        const newRow = rowList[i];
+        const id = newRow.id.slice(12);
+
+        const item = {
+          buyerId: newRow.getAttribute('data-buyer-id'),
+          styleId: newRow.getAttribute('data-style-id'),
+          itemId: newRow.getAttribute('data-item-id'),
+          purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+          quantity: $("#masterUDQuantity-" + id).val(),
+          unitPrice: $("#masterUDUnitPrice-" + id).val(),
+          amount: $("#masterUDAmount-" + id).text(),
+          userId: userId
+        }
+
+        styleItems.list.push(item);
+      }
+      if (confirm("Are you sure to confirm..")) {
+        $("#loader").show();
+        $.ajax({
+          type: 'POST',
+          dataType: 'json',
+          url: './masterUDAmendment',
+          data: {
+            masterLCNo: masterLCNo,
+            udNo: udNo,
+            userId: userId,
+            amendmentNo: '0',
+            amendmentDate: date,
+            udStyleList: JSON.stringify(styleItems),
+          },
+          success: function (data) {
+            if (data.result == 'success') {
+              alert("Successfully Submitted");
+              $("#masterAmendmentList").empty();
+              drawMasterLCAmendmentList(data.amendmentList);
+            } else {
+              alert("Master LC Insertion Failed")
+            }
+            $("#loader").hide();
+          }
+        });
+
+      }
+
+    } else {
+      alert("Please Enter Master LC No...");
+      $("#masterLCNo").focus();
+    }
+  } else {
+    alert("Please Enter Any Style Item...");
+  }
+
+}
+
 function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
 
   //const masterLc = fakeData.masterLcList[autoId];
@@ -789,7 +1015,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       amendmentNo: amendmentNo
     },
     success: function (data) {
-      console.log(data)
+
       const masterLCInfo = data.masterLCInfo;
       const masterLCStyles = data.masterLCStyles;
       $("#masterLCAutoId").val(masterLCInfo.autoId);
@@ -797,6 +1023,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterLCNo").prop('readonly', true);
       $("#importMasterLcNo").val(masterLCInfo.masterLCNo);
       $("#exportMasterLcNo").val(masterLCInfo.masterLCNo);
+      $("#previousMasterLCNo").val(masterLCInfo.masterLCNo);
       $("#masterAmendmentNo").val(masterLCStyles.amendmentNo);
       $("#masterBuyerName").val(masterLCInfo.buyerId).change();
       let buyerName = $("#masterBuyerName option:selected").text();
@@ -811,7 +1038,13 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterShipmentDate").val(masterLCInfo.shipmentDate);
       $("#masterExpiryDate").val(masterLCInfo.expiryDate);
       $("#remarks").val(masterLCInfo.remarks);
-      console.log("notifierList",data.notifyerList);
+
+      $("#previousUdNo").val(masterLCInfo.udNo);
+      $("#masterUDNo").val(masterLCInfo.udNo);
+      $("#masterUdDate").val(masterLCInfo.udDate);
+      $("#masterUdAmendmentList").empty();
+      drawMasterUDAmendmentList(data.masterUDAmendmentList);
+      loadImportUDSelect(data.masterUDAmendmentList);
       $("#exportNotifyTo").empty();
       loadNotifyer(data.notifyerList);
       $("#masterStyleList").empty();
@@ -825,6 +1058,8 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterSubmitBtn").hide();
       $("#masterAmendmentBtn").show();
       $("#masterEditBtn").show();
+      $("#masterUdAmendmentBtn").show();
+      $("#masterUdEditBtn").show();
       $("#masterPreviewBtn").show();
       $("#loader").hide();
     }
@@ -833,11 +1068,44 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
   $("#searchModal").modal('hide');
 }
 
+function loadImportUDSelect(dataList) {
 
-function loadNotifyer(data){
+  let options = "<option value='0' selected>Select UD Amendment</option>";
+  let length = dataList.length;
+  for (let i = 0; i < length; i++) {
+    options += "<option value='" + dataList[i].autoId + "'>" + dataList[i].udAmendmentNo + " Date:" + dataList[i].udAmendmentDate + "</option>";
+  };
+  $("#importUdAmendmentNo").html(options);
+  $("#importUdAmendmentNo").selectpicker('refresh');
+}
+
+
+function setUdStyles(autoId) {
+
+  $("#loader").show();
+  $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    url: './searchMasterUD',
+    data: {
+      autoId: autoId
+    },
+    success: function (data) {
+
+      let udInfo = data.udInfo;
+      $("#masterUDStyleList").empty();
+      drawMasterUDStyleList(data.udStyles);
+      $("#loader").hide();
+    }
+  });
+
+}
+
+
+function loadNotifyer(data) {
   let options = '';
-  data.forEach((notify,index)=>{
-    options += `<option id='${notify.id}'>${notify.name}</option>`;
+  data.forEach((notify, index) => {
+    options += `<option value='${notify.id}'>${notify.name}</option>`;
   });
   $("#exportNotifyTo").append(options);
   $("#exportNotifyTo").selectpicker('refresh');
@@ -981,64 +1249,74 @@ function exportSubmitAction() {
       if (buyerId != '0') {
         if (exportInvoiceNo != '') {
           if (exportInvoiceDate) {
+            if (billEntryNo != '') {
+              if (billEntryDate) {
+                for (let i = 0; i < length; i++) {
+                  const newRow = rowList[i];
+                  const id = newRow.id.slice(10);
 
-            for (let i = 0; i < length; i++) {
-              const newRow = rowList[i];
-              const id = newRow.id.slice(10);
-
-              const item = {
-                buyerId: newRow.getAttribute('data-buyer-id'),
-                styleId: newRow.getAttribute('data-style-id'),
-                itemId: newRow.getAttribute('data-item-id'),
-                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
-                quantity: $("#exportQuantity-" + id).val(),
-                unitPrice: $("#exportUnitPrice-" + id).val(),
-                amount: $("#exportAmount-" + id).text(),
-                cartonQty: $("#exportCartonQty-" + id).val(),
-                userId: userId
-              }
-
-              styleItems.list.push(item);
-            }
-            if (confirm("Are you sure to confirm..")) {
-              $("#loader").show();
-              $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: './exportLCSubmit',
-                data: {
-                  masterLCNo: masterLCNo,
-                  buyerId: buyerId,
-                  notifyTo: notifyTo,
-                  invoiceNo: exportInvoiceNo,
-                  invoiceDate: exportInvoiceDate,
-                  contractNo: exportContractNo,
-                  contractDate: exportContractDate,
-                  expNo: expNo,
-                  expDate: expDate,
-                  billEntryNo: billEntryNo,
-                  billEntryDate: billEntryDate,
-                  blNo: blNo,
-                  blDate: blDate,
-                  shippingMark: shippingMark,
-                  shippingDate: shippingDate,
-                  userId: userId,
-                  styleList: JSON.stringify(styleItems),
-                },
-                success: function (data) {
-                  if (data.result == 'success') {
-                    alert("Successfully Submitted");
-                    $("#exportShipmentList").empty();
-                    drawExportLCInvoiceList(data.exportInvoiceList);
-                  } else {
-                    alert("Export LC Insertion Failed")
+                  const item = {
+                    buyerId: newRow.getAttribute('data-buyer-id'),
+                    styleId: newRow.getAttribute('data-style-id'),
+                    itemId: newRow.getAttribute('data-item-id'),
+                    purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                    quantity: $("#exportQuantity-" + id).val(),
+                    unitPrice: $("#exportUnitPrice-" + id).val(),
+                    amount: $("#exportAmount-" + id).text(),
+                    cartonQty: $("#exportCartonQty-" + id).val(),
+                    userId: userId
                   }
-                  $("#loader").hide();
+
+                  styleItems.list.push(item);
                 }
-              });
+                if (confirm("Are you sure to confirm..")) {
+                  $("#loader").show();
+                  $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: './exportLCSubmit',
+                    data: {
+                      masterLCNo: masterLCNo,
+                      buyerId: buyerId,
+                      notifyTo: notifyTo,
+                      invoiceNo: exportInvoiceNo,
+                      invoiceDate: exportInvoiceDate,
+                      contractNo: exportContractNo,
+                      contractDate: exportContractDate,
+                      expNo: expNo,
+                      expDate: expDate,
+                      billEntryNo: billEntryNo,
+                      billEntryDate: billEntryDate,
+                      blNo: blNo,
+                      blDate: blDate,
+                      shippingMark: shippingMark,
+                      shippingDate: shippingDate,
+                      userId: userId,
+                      styleList: JSON.stringify(styleItems),
+                    },
+                    success: function (data) {
+                      if (data.result == 'success') {
+                        alert("Successfully Submitted");
+                        $("#exportShipmentList").empty();
+                        drawExportLCInvoiceList(data.exportInvoiceList);
+                      } else {
+                        alert("Export LC Insertion Failed")
+                      }
+                      $("#loader").hide();
+                    }
+                  });
 
+                }
+
+
+              } else {
+                alert("Please Select Bill Entry Date...");
+                $("#exportBillEntryDate").focus();
+              }
+            } else {
+              alert("Please Enter Bill Entry No...");
+              $("#exportBillEntryNo").focus();
             }
-
           } else {
             alert("Please Select Export Invoice Date...");
             $("#exportInvoiceDate").focus();
@@ -1075,7 +1353,7 @@ function searchExportLc(masterLCNo, invoiceNO) {
       invoiceNo: invoiceNO
     },
     success: function (data) {
-      console.log(data)
+
       const exportLCInfo = data.exportLCInfo;
       const exportLCStyles = data.exportLCStyles;
       $("#exportLCAutoId").val(exportLCInfo.autoId);
@@ -1144,88 +1422,96 @@ function exportEditAction() {
       if (buyerId != '0') {
         if (exportInvoiceNo != '') {
           if (exportInvoiceDate) {
+            if (billEntryNo != '') {
+              if (billEntryDate) {
+                for (let i = 0; i < length; i++) {
+                  const newRow = rowList[i];
+                  const id = newRow.id.slice(10);
 
-            for (let i = 0; i < length; i++) {
-              const newRow = rowList[i];
-              const id = newRow.id.slice(10);
-
-              const item = {
-                buyerId: newRow.getAttribute('data-buyer-id'),
-                styleId: newRow.getAttribute('data-style-id'),
-                itemId: newRow.getAttribute('data-item-id'),
-                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
-                quantity: $("#exportQuantity-" + id).val(),
-                unitPrice: $("#exportUnitPrice-" + id).val(),
-                amount: $("#exportAmount-" + id).text(),
-                cartonQty: $("#exportCartonQty-" + id).text(),
-                userId: userId
-              }
-
-              styleItems.list.push(item);
-            }
-
-            let editedRowList = $("#exportStyleList tr.editedRow");
-            length = editedRowList.length;
-
-            for (let i = 0; i < length; i++) {
-              const editedRow = editedRowList[i];
-              const id = editedRow.id.slice(10);
-
-              const item = {
-                buyerId: newRow.getAttribute('data-buyer-id'),
-                styleId: newRow.getAttribute('data-style-id'),
-                itemId: newRow.getAttribute('data-item-id'),
-                purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
-                quantity: $("#exportQuantity-" + id).val(),
-                unitPrice: $("#exportUnitPrice-" + id).val(),
-                amount: $("#exportAmount-" + id).text(),
-                cartonQty: $("#exportCartonQty-" + id).text(),
-                userId: userId
-              }
-
-              editedStyleItems.list.push(item);
-            }
-            if (confirm("Are you sure to confirm..")) {
-              $("#loader").show();
-              $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                url: './exportLCEdit',
-                data: {
-                  autoId: autoId,
-                  masterLCNo: masterLCNo,
-                  buyerId: buyerId,
-                  notifyTo: notifyTo,
-                  invoiceNo: exportInvoiceNo,
-                  invoiceDate: exportInvoiceDate,
-                  contractNo: exportContractNo,
-                  contractDate: exportContractDate,
-                  expNo: expNo,
-                  expDate: expDate,
-                  billEntryNo: billEntryNo,
-                  billEntryDate: billEntryDate,
-                  blNo: blNo,
-                  blDate: blDate,
-                  shippingMark: shippingMark,
-                  shippingDate: shippingDate,
-                  userId: userId,
-                  styleList: JSON.stringify(styleItems),
-                  editedStyleList: JSON.stringify(editedStyleItems)
-                },
-                success: function (data) {
-                  if (data.result == 'success') {
-                    alert("Successfully Edited");
-                    //$("#exportShipmentList").empty();
-                    //drawExportLCInvoiceList(data.exportInvoiceList);
-                  } else {
-                    alert("Export LC Insertion Failed")
+                  const item = {
+                    buyerId: newRow.getAttribute('data-buyer-id'),
+                    styleId: newRow.getAttribute('data-style-id'),
+                    itemId: newRow.getAttribute('data-item-id'),
+                    purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                    quantity: $("#exportQuantity-" + id).val(),
+                    unitPrice: $("#exportUnitPrice-" + id).val(),
+                    amount: $("#exportAmount-" + id).text(),
+                    cartonQty: $("#exportCartonQty-" + id).text(),
+                    userId: userId
                   }
-                  $("#loader").hide();
+
+                  styleItems.list.push(item);
                 }
-              });
 
+                let editedRowList = $("#exportStyleList tr.editedRow");
+                length = editedRowList.length;
+
+                for (let i = 0; i < length; i++) {
+                  const editedRow = editedRowList[i];
+                  const id = editedRow.id.slice(10);
+
+                  const item = {
+                    buyerId: newRow.getAttribute('data-buyer-id'),
+                    styleId: newRow.getAttribute('data-style-id'),
+                    itemId: newRow.getAttribute('data-item-id'),
+                    purchaseOrderId: newRow.getAttribute('data-purchase-order-id'),
+                    quantity: $("#exportQuantity-" + id).val(),
+                    unitPrice: $("#exportUnitPrice-" + id).val(),
+                    amount: $("#exportAmount-" + id).text(),
+                    cartonQty: $("#exportCartonQty-" + id).text(),
+                    userId: userId
+                  }
+
+                  editedStyleItems.list.push(item);
+                }
+                if (confirm("Are you sure to confirm..")) {
+                  $("#loader").show();
+                  $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: './exportLCEdit',
+                    data: {
+                      autoId: autoId,
+                      masterLCNo: masterLCNo,
+                      buyerId: buyerId,
+                      notifyTo: notifyTo,
+                      invoiceNo: exportInvoiceNo,
+                      invoiceDate: exportInvoiceDate,
+                      contractNo: exportContractNo,
+                      contractDate: exportContractDate,
+                      expNo: expNo,
+                      expDate: expDate,
+                      billEntryNo: billEntryNo,
+                      billEntryDate: billEntryDate,
+                      blNo: blNo,
+                      blDate: blDate,
+                      shippingMark: shippingMark,
+                      shippingDate: shippingDate,
+                      userId: userId,
+                      styleList: JSON.stringify(styleItems),
+                      editedStyleList: JSON.stringify(editedStyleItems)
+                    },
+                    success: function (data) {
+                      if (data.result == 'success') {
+                        alert("Successfully Edited");
+                        //$("#exportShipmentList").empty();
+                        //drawExportLCInvoiceList(data.exportInvoiceList);
+                      } else {
+                        alert("Export LC Insertion Failed")
+                      }
+                      $("#loader").hide();
+                    }
+                  });
+
+                }
+              } else {
+                alert("Please Select Bill Entry Date...");
+                $("#exportBillEntryDate").focus();
+              }
+            } else {
+              alert("Please Enter Bill Entry No...");
+              $("#exportBillEntryNo").focus();
             }
-
           } else {
             alert("Please Select Export Invoice Date...");
             $("#exportInvoiceDate").focus();
@@ -1253,9 +1539,9 @@ function exportRefreshAction() {
   $("#exportInvoiceNo").val('');
   $("#exportContractNo").val('');
   $("#exportExpNo").val('');
-  $("#exportBillEntryNo").val();
-  $("#exportBLNo").val();
-  $("#exportShippingMark").val();
+  $("#exportBillEntryNo").val('');
+  $("#exportBLNo").val('');
+  $("#exportShippingMark").val('');
   $("#exportStyleList").empty();
 
   $("#exportSubmitBtn").show();
@@ -1325,15 +1611,38 @@ function drawMasterLCStyleList(data) {
 
 
 
-function drawExportLCStyleList(data) {
+function drawMasterUDStyleList(data) {
   let rows = "";
   const length = data.length;
 
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
+    rows += `<tr id='masterUDRow-${id}' class='masterOldStyle' data-auto-id='${rowData.autoId}' data-type='oldStyle' data-master-lc-no='${rowData.masterLCNo}' data-buyer-id='${rowData.buyerId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-purchase-order-id='${rowData.purchaseOrderId}' >
+              <td id='masterUDStyleNo-${id}'>${rowData.styleNo}</td>
+              <td id='masterUDPurchaseOrder-${id}'>${rowData.purchaseOrder}</td>
+              <td><input type="number" id='masterUDQuantity-${id}' class="form-control-sm max-width-100" onkeyup="editedMasterUDRow('${id}')" onfocusout="setUDAmount(${id})" value="${Number(rowData.quantity).toFixed(2)}"/></td>
+              <td><input type="number" id='masterUDUnitPrice-${id}' class="form-control-sm max-width-100" onkeyup="editedMasterUDRow('${id}')" onfocusout="setUDAmount(${id})" value="${Number(rowData.unitPrice).toFixed(2)}"/></td>
+              <td id='masterUDAmount-${id}'>${Number(rowData.amount).toFixed(2)}</td>
+              <td ><i class='fa fa-trash' onclick="deleteMasterStyle('${id}','new')" style="cursor:pointer;" title="Delete"></i></td>
+            </tr>`;
+    //rows.push(drawRowDataTable(data[i], i));
+  }
+  $("#masterUDStyleList").append(rows);
+}
+
+
+
+function drawExportLCStyleList(data) {
+  let rows = "";
+  const length = data.length;
+
+  for (var i = 0; i < length; i++) {
+    const rowData = data[i];
+    console.log("row = ",rowData);
+    const id = rowData.autoId;
     rows += `<tr id='exportRow-${id}' class='exportOldStyle' data-auto-id='${rowData.autoId}' data-type='oldStyle' data-export-lc-no='${rowData.exportLCNo}' data-buyer-id='${rowData.buyerId}' data-style-id='${rowData.styleId}' data-item-id='${rowData.itemId}' data-purchase-order-id='${rowData.purchaseOrderId}' >
-              <td id='exportStyleNo-${id}'>${rowData.styleNo}</td>
+              <td id='exportStyleNo-${id}'>${rowData.StyleNo}</td>
               <td id='exportPurchaseOrder-${id}'>${rowData.purchaseOrder}</td>
               <td><input type="number" id='exportQuantity-${id}' class="form-control-sm max-width-100" onkeyup="editedExportRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.quantity).toFixed(2)}"/></td>
               <td><input type="number" id='exportUnitPrice-${id}' class="form-control-sm max-width-100" onkeyup="editedExportRow('${id}')" onfocusout="setAmount(${id}),totalValueCount()" value="${Number(rowData.unitPrice).toFixed(2)}"/></td>
@@ -1365,21 +1674,21 @@ function drawImportLCAmendmentList(data) {
 
 }
 
-function drawImportUDList(data) {
+function drawMasterUDAmendmentList(data) {
   let rows = "";
   const length = data.length;
 
   for (var i = 0; i < length; i++) {
     const rowData = data[i];
     const id = rowData.autoId;
-    rows += `<tr id='udRow-${id}'  data-import-auto-id='${id}' style='cursor:pointer;'>
-					<td id='importUDNo-${id}'>${rowData.udNo}</td>
-					<td id='importUDDate-${id}'>${rowData.udDate}</td>
+    rows += `<tr id='udRow-${id}' onclick="setUdStyles(${id})"  data-master-auto-id='${id}' style='cursor:pointer;'>
+					<td id='masterUDNo-${id}'>${rowData.udAmendmentNo}</td>
+					<td id='masterUDDate-${id}'>${rowData.udAmendmentDate}</td>
 				</tr>`;
     //rows.push(drawRowDataTable(data[i], i));
   }
 
-  $("#importUDList").append(rows);
+  $("#masterUdAmendmentList").append(rows);
 
 }
 
@@ -1478,6 +1787,10 @@ function editedMasterRow(rowId) {
   $("#masterRow-" + rowId).addClass('editedRow');
 }
 
+function editedMasterUDRow(rowId) {
+  $("#masterUDRow-" + rowId).addClass('editedRow');
+}
+
 function shippedAction(styleAutoId) {
 
   const rowList = $("#shippingStyleList tr");
@@ -1492,7 +1805,7 @@ function shippedAction(styleAutoId) {
   }
 
   if (existId != 0) {
-    console.log("existId-", existId);
+
     $("#shippedStyleNo-" + existId).text($("#styleNo-" + styleAutoId).text());
     $("#shippedQuantity-" + existId).val($("#quantity-" + styleAutoId).val());
   } else {
@@ -1518,7 +1831,6 @@ function entryAction(rowId) {
   }
 
   if (existId != 0) {
-    console.log("existId-", existId);
 
     $("#billTotalQty-" + existId).val($("#importTotalQty-" + rowId).val());
   } else {
@@ -1536,11 +1848,11 @@ function entryAction(rowId) {
     let colorName = $("#importColor-" + id).text();
     let size = $("#importSize-" + id).text();
     let unit = $("#importUnit-" + id).text();
-    let width = Number($("#importWidth-" + id).text().trim()==''?0:$("#importWidth-" + id).text().trim()).toFixed(2);
-    let gsm =  Number($("#importGsm-" + id).text().trim() == ''?0:$("#importGsm-" + id).text().trim()).toFixed(2);
-    let totalQty = Number($("#importTotalQty-" + id).text().trim() == ''?0:$("#importTotalQty-" + id).text().trim()).toFixed(2);
-    let price = Number($("#importPrice-" + id).text().trim() == ''?0:$("#importPrice-" + id).text().trim()).toFixed(2);
-    let totalValue = Number($("#importTotalValue-" + id).text().trim() == ''?0:$("#importTotalValue-" + id).text().trim()).toFixed(2);
+    let width = Number($("#importWidth-" + id).text().trim() == '' ? 0 : $("#importWidth-" + id).text().trim()).toFixed(2);
+    let gsm = Number($("#importGsm-" + id).text().trim() == '' ? 0 : $("#importGsm-" + id).text().trim()).toFixed(2);
+    let totalQty = Number($("#importTotalQty-" + id).text().trim() == '' ? 0 : $("#importTotalQty-" + id).text().trim()).toFixed(2);
+    let price = Number($("#importPrice-" + id).text().trim() == '' ? 0 : $("#importPrice-" + id).text().trim()).toFixed(2);
+    let totalValue = Number($("#importTotalValue-" + id).text().trim() == '' ? 0 : $("#importTotalValue-" + id).text().trim()).toFixed(2);
 
     let row = `<tr id='billItemRow-${id}' class='newRow' data-style-id='${styleId}' data-purchase-order-id='${poId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
                   <td>${styleNo}</td>
@@ -1621,7 +1933,6 @@ function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
       amendmentNo: amendmentNo
     },
     success: function (data) {
-      console.log(data)
       const importLCInfo = data.importLCInfo;
       const importLCItems = data.masterLCStyles;
       $("#importLCAutoId").val(importLCInfo.autoId);
@@ -1641,8 +1952,8 @@ function searchImportInvoiceLc(masterLCNo, invoiceNo, amendmentNo) {
       $("#importAmendmentNo").val(amendmentNo);
       $("#importAmendmentList").empty();
       drawImportLCAmendmentList(data.amendmentList);
-      $("#importUDList").empty();
-      drawImportUDList(data.importUDList);
+      //$("#importUDList").empty();
+      //drawImportUDList(data.importUDList);
       $("#importItemList").empty();
       drawImportItemList(data.importItemList);
       $("#billOfEntryList").empty();
@@ -1674,7 +1985,6 @@ function searchBillOfEntry(masterLCNo, invoiceNo, billNo) {
       billNo: billNo
     },
     success: function (data) {
-      console.log(data)
 
       let billOfEntry = data.billOfEntry;
       $("#billOfEntryAutoId").val(billOfEntry.autoId);
@@ -1758,6 +2068,10 @@ function setAmount(id) {
   $("#masterAmount-" + id).text((parseFloat($("#masterQuantity-" + id).val()) * parseFloat($("#masterUnitPrice-" + id).val())).toFixed(2));
 }
 
+function setUDAmount(id) {
+  $("#masterUDAmount-" + id).text((parseFloat($("#masterUDQuantity-" + id).val()) * parseFloat($("#masterUDUnitPrice-" + id).val())).toFixed(2));
+}
+
 function importItemAddAction() {
 
   const rowList = $("#importItemList tr");
@@ -1775,6 +2089,7 @@ function importItemAddAction() {
   let size = $("#importSize").val();
   let unitId = $("#importUnit").val();
   let unit = $("#importUnit option:selected").text();
+  let consumption = $("#importConsumption").val();
   let width = $("#importWidth").val();
   let gsm = $("#importGSM").val();
   let totalQty = $("#importTotalQty").val();
@@ -1785,7 +2100,7 @@ function importItemAddAction() {
     if (purchaseOrderId != '0') {
       if (accessoriesItemId != '0') {
         if (unitId != '0') {
-          let row = `<tr id='importRow-${id}' class='newRow' data-style-id='${styleId}' data-purchase-order-id='${purchaseOrderId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}'>
+          let row = `<tr id='importRow-${id}' class='newRow' data-style-id='${styleId}' data-purchase-order-id='${purchaseOrderId}' data-item-type='${itemType}' data-accessories-item-id='${accessoriesItemId}' data-color-id='${colorId}' data-unit-id='${unitId}' data-consumption='${consumption}'>
                         <td id='importStyleNo-${id}'>${styleNo}</td>
                         <td id='importPoNo-${id}'>${purchaseOrder}</td>
                         <td id='importAccessoriesName-${id}'>${accessoriesItemName}</td>
@@ -1832,6 +2147,7 @@ function importSubmitAction() {
 
     let masterLCNo = $("#importMasterLcNo").val();
     let lcType = $("#importLCType").val();
+    let udAutoId = $("#importUdAmendmentNo").val();
     let invoiceNo = $("#importInvoiceNo").val();
     let date = $("#importInvoiceDate").val();
     let senderBankId = $("#importSenderBankName").val();
@@ -1863,6 +2179,7 @@ function importSubmitAction() {
                 colorId: newRow.getAttribute('data-color-id'),
                 unitId: newRow.getAttribute('data-unit-id'),
                 size: $("#importSize-" + id).text(),
+                consumption: newRow.getAttribute('data-consumption'),
                 width: $("#importWidth-" + id).text(),
                 gsm: $("#importGSM-" + id).text(),
                 totalQty: $("#importTotalQty-" + id).text(),
@@ -1881,6 +2198,7 @@ function importSubmitAction() {
                 data: {
                   masterLCNo: masterLCNo,
                   importLCType: lcType,
+                  udAutoId: udAutoId,
                   invoiceNo: invoiceNo,
                   invoiceDate: date,
                   senderBank: senderBankId,
@@ -1946,6 +2264,7 @@ function importEditAction() {
     let importLCAutoId = $("#importLCAutoId").val();
     let masterLCNo = $("#importMasterLcNo").val();
     let lcType = $("#importLCType").val();
+    let udAutoId = $("#importUdAmendmentNo").val();
     let invoiceNo = $("#importInvoiceNo").val();
     let amendmentNo = $("#importAmendmentNo").val();
     let date = $("#importInvoiceDate").val();
@@ -1982,6 +2301,7 @@ function importEditAction() {
                 colorId: newRow.getAttribute('data-color-id'),
                 unitId: newRow.getAttribute('data-unit-id'),
                 size: $("#importSize-" + id).text(),
+                consumption: newRow.getAttribute('data-consumption'),
                 width: $("#importWidth-" + id).text(),
                 gsm: $("#importGSM-" + id).text(),
                 totalQty: $("#importTotalQty-" + id).text(),
@@ -2023,6 +2343,7 @@ function importEditAction() {
                   autoId: importLCAutoId,
                   masterLCNo: masterLCNo,
                   importLCType: lcType,
+                  udAutoId: udAutoId,
                   invoiceNo: invoiceNo,
                   invoiceDate: date,
                   senderBank: senderBankId,
@@ -2087,6 +2408,7 @@ function importAmendmentAction() {
 
     let masterLCNo = $("#importMasterLcNo").val();
     let lcType = $("#importLCType").val();
+    let udAutoId = $("#importUdAmendmentNo").val();
     let invoiceNo = $("#importInvoiceNo").val();
     let date = $("#importInvoiceDate").val();
     let senderBankId = $("#importSenderBankName").val();
@@ -2118,6 +2440,7 @@ function importAmendmentAction() {
                 colorId: newRow.getAttribute('data-color-id'),
                 unitId: newRow.getAttribute('data-unit-id'),
                 size: $("#importSize-" + id).text(),
+                consumption: newRow.getAttribute('data-consumption'),
                 width: $("#importWidth-" + id).text(),
                 gsm: $("#importGSM-" + id).text(),
                 totalQty: $("#importTotalQty-" + id).text(),
@@ -2137,6 +2460,7 @@ function importAmendmentAction() {
                 data: {
                   masterLCNo: masterLCNo,
                   importLCType: lcType,
+                  udAutoId: udAutoId,
                   invoiceNo: invoiceNo,
                   invoiceDate: date,
                   senderBank: senderBankId,
@@ -2164,7 +2488,6 @@ function importAmendmentAction() {
               });
 
             }
-
           } else {
             alert("Please Select Receiver Bank Name...");
             $("#importReceiverBankName").focus();
@@ -2190,13 +2513,13 @@ function importAmendmentAction() {
 
 function importUDAddAction() {
 
-  let importUDNo = $("#importUDNo").val();
-  let importUdDate = $("#importUdDate").val();
+  let masterUDNo = $("#masterUDNo").val();
+  let masterUdDate = $("#masterUdDate").val();
   let importInvoiceNo = $("#importInvoiceNo").val();
   let importLCAutoId = $("#importLCAutoId").val();
   let userId = $("#userId").val();
-  if (importUDNo != '') {
-    if (importUdDate != '') {
+  if (masterUDNo != '') {
+    if (masterUdDate != '') {
       if (importInvoiceNo != '') {
         $("#loader").show();
         $.ajax({
@@ -2205,8 +2528,8 @@ function importUDAddAction() {
           url: './importInvoiceUDAdd',
           data: {
             udInfo: JSON.stringify({
-              importUDNo: importUDNo,
-              importUdDate: importUdDate,
+              masterUDNo: masterUDNo,
+              masterUdDate: masterUdDate,
               importInvoiceNo: importInvoiceNo,
               importLCAutoId: importLCAutoId,
               userId: userId
@@ -2216,7 +2539,6 @@ function importUDAddAction() {
             if (data.result == 'success') {
               alert("Successfully Submitted");
               $("#importUDList").empty();
-              console.log(data.udList);
               drawImportUDList(data.udList);
             } else {
               alert("Import LC Insertion Failed")
@@ -2230,36 +2552,30 @@ function importUDAddAction() {
       }
     } else {
       alert("Please Select UD Date...");
-      $("#importUdDate").focus();
+      $("#masterUdDate").focus();
     }
   } else {
     alert("Please Entry UD No...");
-    $("#importUDNo").focus();
+    $("#masterUDNo").focus();
   }
 }
 
 function importItemTotalValueCalculate() {
   let totalQty = $("#importTotalQty").val() == '' ? 0 : $("#importTotalQty").val();
   let price = $("#importPrice").val() == '' ? 0 : $("#importPrice").val();
-
   let totalValue = totalQty * price;
-
   $("#importTotalValue").val(Number(totalValue).toFixed(2));
 }
 
 
 function importRefreshAction() {
-
-
   $("#importInvoiceNo").val();
   $("#importSenderBankName").val(0).change();
   $("#importReceiverBankName").val(0).change();
   $("#importSupplierName").val(0).change();
   $("#importDraftAt").val('');
   $("#importProformaInvoiceNo").val();
-
   $("#importItemList").empty();
-
   $("#importSubmitButton").show();
   $("#importAmendmentButton").show();
   $("#importEditButton").hide();
@@ -2320,9 +2636,8 @@ function billSubmitAction() {
                 userId: userId
               }
               styleItems.list.push(item);
-              console.log("id", id);
+
             }
-            console.log("style items", styleItems);
             if (confirm("Are you sure to confirm..")) {
               $("#loader").show();
               $.ajax({
@@ -2426,7 +2741,7 @@ function billEditAction() {
             for (let i = 0; i < length; i++) {
               const newRow = rowList[i];
               const id = newRow.id.slice(12);
-              console.log("id=",id);
+
               const item = {
                 billEntryNo: billOfEntryNo,
                 styleId: newRow.getAttribute('data-style-id'),
@@ -2468,7 +2783,7 @@ function billEditAction() {
               }
               editedItems.list.push(item);
             }
-            
+
             if (confirm("Are you sure to confirm..")) {
               $("#loader").show();
               $.ajax({
@@ -2584,4 +2899,9 @@ today = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '
 document.getElementById("masterDate").value = today;
 document.getElementById("exportShippingDate").value = today;
 document.getElementById("billOfEntryDate").value = today;
+document.getElementById("exportInvoiceDate").value = today;
+document.getElementById("importInvoiceDate").value = today;
+document.getElementById("exportBillEntryDate").value = today;
+
+
 

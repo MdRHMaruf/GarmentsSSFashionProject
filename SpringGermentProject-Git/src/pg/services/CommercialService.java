@@ -3,6 +3,7 @@ package pg.services;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Service;
 
 import pg.Commercial.BillOfEntry;
@@ -22,6 +23,11 @@ public interface CommercialService {
 	public List<MasterLC> getMasterLCList();
 	public MasterLC getMasterLCInfo(String masterLCNo,String buyerId,String amendmentNo);
 	public List<StyleInfo> getMasterLCStyles(String masterLCNo,String buyerId,String amendmentNo);
+	public JSONArray getMasterUdAmendmentList(String masterLCNo,String udNo);
+	public JSONObject getMasterUdInfo(String autoId);
+	public List<StyleInfo> getMasterUDStyles(String udAutoId,String amendmentNo);
+	public String masterUDEdit(MasterLC masterLC);
+	public String masterUDAmendment(MasterLC masterLC);
 
 	public boolean importLCSubmit(ImportLC importLC);
 	public String importLCEdit(ImportLC importLC);
@@ -31,7 +37,6 @@ public interface CommercialService {
 	public ImportLC getImportLCInfo(String masterLCNo, String invoiceNo, String amendmentNo);
 	public JSONArray getImportInvoiceItems(String importInvoiceAutoId);
 	public boolean importInvoiceUdAdd(String udInfo);
-	public JSONArray getImportINvoiceUDList(String importInvoiceNo);
 
 	//Bill Of Entry
 	public boolean billOfEntrySubmit(BillOfEntry billOfEntry);
@@ -51,5 +56,8 @@ public interface CommercialService {
 	public boolean insertDeedOfContact(deedOfContacts deedcontact);
 	public List<deedOfContacts> deedOfContractsList();
 	public List<deedOfContacts> deedOfContractDetails(String id);
-
+	
+	//Pass Book Form
+	public JSONObject getMasterLCSummaryForPassBook(String masterLCNo);
+	public String savePassBookData(String passBookData);
 }
