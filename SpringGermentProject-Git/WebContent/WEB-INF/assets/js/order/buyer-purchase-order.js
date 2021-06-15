@@ -4,6 +4,7 @@ let itemIdForSet = 0;
 let sizeValueListForSet = [];
 let sizesListByGroup = JSON;
 
+var searhValue=0;
 window.onload = () => {
 	document.getElementById('files').addEventListener('change', onFileSelect, false);
 	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
@@ -621,9 +622,11 @@ function searchBuyerPO(buyerPoNo) {
 				$("#btnPOEdit").show();
 				$("#btnPreview").show();
 				//$("#btnPreview").prop("disabled", false);
-
+				$('#fileList').empty();
 				files(data.fileList)
 				$("#loader").hide();
+				
+				searhValue=buyerPoNo;
 			}
 		}
 	});
@@ -1093,6 +1096,10 @@ function onUploadComplete(e) {
 		bar.style.width = '100%';
 		bar.innerHTML = '100% complete';
 		//notification();
+		if(searchValue!='0'){
+			searchBuyerPO(searchValue);
+		}
+		
 	}
 }
 
