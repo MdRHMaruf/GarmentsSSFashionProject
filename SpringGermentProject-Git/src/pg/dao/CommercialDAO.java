@@ -3,6 +3,7 @@ package pg.dao;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 
 import pg.Commercial.BillOfEntry;
@@ -23,6 +24,12 @@ public interface CommercialDAO {
 	public List<MasterLC> getMasterLCList();
 	public MasterLC getMasterLCInfo(String masterLCNo,String buyerId,String amendmentNo);
 	public List<StyleInfo> getMasterLCStyles(String masterLCNo,String buyerId,String amendmentNo);
+	public JSONArray getMasterUdAmendmendList(String masterLCNo,String udNo);
+	public JSONObject getMasterUdInfo(String autoId);
+	public List<StyleInfo> getMasterUDStyles(String udAutoId,String amendmentNo);
+	public String masterUDEdit(MasterLC masterLC);
+	public String masterUDAmendment(MasterLC masterLC);
+	
 	
 	public boolean importLCSubmit(ImportLC importLC);
 	public String importLCEdit(ImportLC importLC);
@@ -32,7 +39,6 @@ public interface CommercialDAO {
 	public ImportLC getImportLCInfo(String masterLCNo, String invoiceNo, String amendmentNo);
 	public JSONArray getImportInvoiceItems(String importInvoiceAutoId);
 	public boolean importInvoiceUdAdd(String udInfo);
-	public JSONArray getImportINvoiceUDList(String importInvoiceNo);
 	
 	//Bill Of Entry
 	public boolean billOfEntrySubmit(BillOfEntry billOfEntry);
@@ -52,5 +58,9 @@ public interface CommercialDAO {
 	public boolean insertDeedOfContact(deedOfContacts deedcontact);
 	public List<deedOfContacts> deedOfContractsList();
 	public List<deedOfContacts> deedOfContractDetails(String id);
+	
+	//Pass Book Form
+	public JSONObject getMasterLCSummaryForPassBook(String masterLCNo);
+	public String savePassBookData(String passBookData);
 
 }

@@ -3,6 +3,7 @@ package pg.services;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,6 +64,34 @@ public class CommercialServiceImpl implements CommercialService{
 	}
 	
 	@Override
+	public JSONArray getMasterUdAmendmentList(String masterLCNo, String udNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getMasterUdAmendmendList(masterLCNo, udNo);
+	}
+
+	@Override
+	public JSONObject getMasterUdInfo(String autoId) {
+		return commercialDao.getMasterUdInfo(autoId);
+	}
+	
+	@Override
+	public List<StyleInfo> getMasterUDStyles(String udAutoId, String amendmentNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getMasterUDStyles(udAutoId, amendmentNo);
+	}
+	@Override
+	public String masterUDEdit(MasterLC masterLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.masterUDEdit(masterLC);
+	}
+
+	@Override
+	public String masterUDAmendment(MasterLC masterLC) {
+		// TODO Auto-generated method stub
+		return commercialDao.masterUDAmendment(masterLC);
+	}
+
+	@Override
 	public boolean importLCSubmit(ImportLC importLC) {
 		// TODO Auto-generated method stub
 		return commercialDao.importLCSubmit(importLC);
@@ -111,11 +140,6 @@ public class CommercialServiceImpl implements CommercialService{
 		return commercialDao.importInvoiceUdAdd(udInfo);
 	}
 
-	@Override
-	public JSONArray getImportINvoiceUDList(String importInvoiceNo) {
-		// TODO Auto-generated method stub
-		return commercialDao.getImportINvoiceUDList(importInvoiceNo);
-	}
 
 	@Override
 	public boolean insertDeedOfContact(deedOfContacts deedcontact) {
@@ -193,6 +217,18 @@ public class CommercialServiceImpl implements CommercialService{
 	public JSONArray getExportStyleItems(String exportInvoiceAutoId) {
 		// TODO Auto-generated method stub
 		return commercialDao.getExportStyleItems(exportInvoiceAutoId);
+	}
+
+	@Override
+	public JSONObject getMasterLCSummaryForPassBook(String masterLCNo) {
+		// TODO Auto-generated method stub
+		return commercialDao.getMasterLCSummaryForPassBook(masterLCNo);
+	}
+
+	@Override
+	public String savePassBookData(String passBookData) {
+		// TODO Auto-generated method stub
+		return commercialDao.savePassBookData(passBookData);
 	}
 
 }
