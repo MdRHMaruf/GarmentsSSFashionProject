@@ -46,11 +46,14 @@
 		type="hidden" id="fabricsId" value="0"> <input type="hidden"
 		id="unitId" value="0"> <input type="hidden" id="fabricsRate"
 		value="0"> <input type="hidden" id="masterLCAutoId" value="0">
-	<input type="hidden" id='masterAmendmentNo'> <input type="hidden" id="importLCAutoId" value="0">
-	<input type="hidden" id='importAmendmentNo'>
-	<input type="hidden" id='billOfEntryAutoId'>
-	<input type="hidden" id='exportLCAutoId'>
-	
+	<input type="hidden" id='masterAmendmentNo'> <input
+		type="hidden" id="importLCAutoId" value="0"> <input
+		type="hidden" id='importAmendmentNo'> <input type="hidden"
+		id='billOfEntryAutoId'> <input type="hidden"
+		id='exportLCAutoId'> <input type="hidden" id="masterUdAutoId">
+		<input type="hidden" id="previousUdNo">
+		<input type="hidden" id="previousMasterLCNo"> 
+
 
 
 	<div class="card-box">
@@ -211,8 +214,8 @@
 
 					</div>
 
-					<div class="col-md-3 ml-2">
-						<div class="row">
+					<div class="col-md-5">
+						<div class="row  px-2">
 							<table
 								class="table table-hover table-bordered table-sm mb-0 small-font">
 								<thead class="no-wrap-text">
@@ -225,7 +228,46 @@
 								</tbody>
 							</table>
 						</div>
+
+
+						<div class="row mt-3">
+							<div class="col-md-12 pr-1">
+								<div class="input-group input-group-sm mb-1">
+									<div class="input-group-prepend">
+										<span class="input-group-text" id="inputGroup-sizing-sm"><label
+											class="my-0" for="masterUDNo">UD No:<span
+												style="color: red">*</span></label></span>
+									</div>
+									<input id="masterUDNo" type="text" class="form-control"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"> <input
+										id="masterUdDate" type="date" class="form-control"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"
+										onkeyup="setTotalQtyForCarton()">
+									<!-- <button id="importUDAdd" type="button"
+										class="btn btn-primary btn-sm"
+										aria-label="Sizing example input"
+										aria-describedby="inputGroup-sizing-sm"
+										onclick="importUDAddAction()">Add</button> -->
+								</div>
+							</div>
+						</div>
+
+						<table
+							class="table table-hover table-bordered table-sm mb-2 small-font">
+							<thead class="no-wrap-text">
+								<tr>
+									<th>UD Amendment No</th>
+									<th>UD Amendment Date</th>
+								</tr>
+							</thead>
+							<tbody id="masterUdAmendmentList">
+
+							</tbody>
+						</table>
 					</div>
+
 				</div>
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
@@ -270,7 +312,6 @@
 									class="form-control-sm pr-0 pl-1">
 							</div>
 							<div class="col-md-4 pr-0 pl-1">
-
 								<button id="masterAddBtn" type="button"
 									style="margin-top: 1.3rem;" class="btn btn-primary btn-sm"
 									onclick="masterStyleAddAction()">
@@ -301,23 +342,59 @@
 						</table>
 					</div>
 				</div>
+				
+				<hr class="my-1">
+				<div class="row mt-1">
+					<div style="overflow: auto; max-height: 300px;"
+						class="col-sm-12 px-1 table-responsive">
+						<table
+							class="table table-hover table-bordered table-sm mb-0 small-font">
+							<thead class="no-wrap-text">
+								<tr>
+									<th>Style No</th>
+									<th>P/O No</th>
+									<th>UD Quantity</th>
+									<th>UD Unit Price</th>
+									<th>UD Amount</th>
+								</tr>
+							</thead>
+							<tbody id="masterUDStyleList">
+
+							</tbody>
+						</table>
+					</div>
+				</div>
 
 				<div class="row mt-1">
 					<div class="col-md-12 d-flex justify-content-end">
 						<button id="masterSubmitBtn" type="button" accesskey="S"
 							class="btn btn-primary btn-sm" onclick="masterSubmitAction()">
-							<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
+							<i class="fas fa-save"></i><span
+								style="text-decoration: underline;"> Submit</span>
 						</button>
 						<button id="masterAmendmentBtn" type="button"
 							class="btn btn-primary btn-sm ml-1"
 							onclick="masterAmendmentAction()" style="display: none">
-							<i class="fas fa-save"></i> Amendment
+							<i class="fas fa-save"></i> Master Amendment
 						</button>
 						<button id="masterEditBtn" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="masterEditAction()"
 							style="display: none">
-							<i class="fa fa-pencil-square"></i> Edit
+							<i class="fa fa-pencil-square"></i> Master Edit
 						</button>
+						
+						<button id="masterUdAmendmentBtn" type="button"
+							class="btn btn-primary btn-sm ml-1"
+							onclick="masterUdAmendmentAction()" style="display: none">
+							<i class="fas fa-save"></i> UD Amendment
+						</button>
+						
+						<button id="masterUdEditBtn" type="button"
+							class="btn btn-primary btn-sm ml-1" onclick="masterUdEditAction()"
+							style="display: none">
+							<i class="fa fa-pencil-square"></i> UD Edit
+						</button>
+						
 						<button id="masterRefreshBtn" type="button"
 							class="btn btn-primary btn-sm ml-1" onclick="refreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
@@ -338,19 +415,44 @@
 								<div class="form-group mb-0  row">
 									<label for="importMasterLcNo"
 										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
-										LC No</label> <input id="importMasterLcNo" type="text"
-										class="col-md-8 form-control-sm" readonly>
+										LC No</label>
+									<div class="input-group col-md-8 px-0">
+										<div class="input-group-append">
+											<input id="importMasterLcNo" type="text"
+												class="form-control-sm" readonly>
+											<button id="findLCBtn" type="button"
+												class="btn btn-outline-dark btn-sm form-control-sm"
+												data-toggle="modal" data-target="#searchModal">
+												<i class="fa fa-search"></i>
+											</button>
+										</div>
+									</div>
+
+
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group mb-0  row">
 									<label for="importLCType"
-										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Import
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Imp.
 										LC Type</label> <select id="importLCType"
 										class="col-md-8 form-control-sm">
 										<option value="1">Invoice</option>
 										<option value="2">BTB LC</option>
 										<option value="3">TT LC</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group mb-0  row">
+									<label for="importUdAmendmentNo"
+										class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">UD Amend No</label> <select id="importUdAmendmentNo" onchange=""
+										class="selectpicker col-md-8 px-0" data-live-search="true"
+										data-style="btn-light btn-sm border-light-gray">
+										<option value="0">Select UD Amendment</option>
 									</select>
 								</div>
 							</div>
@@ -498,51 +600,14 @@
 							</tbody>
 						</table>
 
-						<div class="row">
-							<div class="col-md-12">
-								<div class="row">
-									<div class="col-md-12 pr-1">
-										<div class="input-group input-group-sm mb-1">
-											<div class="input-group-prepend">
-												<span class="input-group-text" id="inputGroup-sizing-sm"><label
-													class="my-0" for="importUDNo">UD No:<span
-														style="color: red">*</span></label></span>
-											</div>
-											<input id="importUDNo" type="text" class="form-control"
-												aria-label="Sizing example input"
-												aria-describedby="inputGroup-sizing-sm"> <input
-												id="importUdDate" type="date" class="form-control"
-												aria-label="Sizing example input"
-												aria-describedby="inputGroup-sizing-sm"
-												onkeyup="setTotalQtyForCarton()">
-											<button id="importUDAdd" type="button"
-												class="btn btn-primary btn-sm"
-												aria-label="Sizing example input"
-												aria-describedby="inputGroup-sizing-sm" onclick="importUDAddAction()">Add</button>
-										</div>
-									</div>
-								</div>
 
-								<table
-									class="table table-hover table-bordered table-sm mb-2 small-font">
-									<thead class="no-wrap-text">
-										<tr>
-											<th>UD No</th>
-											<th>UD Date</th>
-										</tr>
-									</thead>
-									<tbody id="importUDList">
-
-									</tbody>
-								</table>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="importStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="importStyleNo" onchange="styleWiseBuyerPOLoad(this)"
+							No</label> <select id="importStyleNo"
+							onchange="styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -564,7 +629,8 @@
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importItemType" class="col-form-label-sm my-0 py-0">Item
 							Type</label> <select id="importItemType"
-							class="col-md-12 form-control-sm px-0" onchange='itemTypeChangeAction()'>
+							class="col-md-12 form-control-sm px-0"
+							onchange='itemTypeChangeAction()'>
 							<option value="0">--Select Item Type--</option>
 							<option value="1">Fabrics</option>
 							<option value="2">Accessories</option>
@@ -588,8 +654,8 @@
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">--Select Color--</option>
 							<c:forEach items="${colorList}" var="color">
-									<option value="${color.colorId}">${color.colorName}</option>
-								</c:forEach>
+								<option value="${color.colorId}">${color.colorName}</option>
+							</c:forEach>
 						</select>
 					</div>
 
@@ -604,12 +670,17 @@
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">Select Unit</option>
-													<c:forEach items="${unitList}" var="unit" varStatus="counter">
-														<option value="${unit.unitId}">${unit.unitName}</option>
-													</c:forEach>
+							<c:forEach items="${unitList}" var="unit" varStatus="counter">
+								<option value="${unit.unitId}">${unit.unitName}</option>
+							</c:forEach>
 						</select>
 					</div>
 
+					<div class="col-md-1 pr-0 pl-1">
+						<label for="importConsumption" class="col-form-label-sm my-0 py-0">Consumption</label>
+						<input id="importConsumption" type="number"
+							class="form-control-sm pr-0 pl-1">
+					</div>
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importWidth" class="col-form-label-sm my-0 py-0">Width</label>
 						<input id="importWidth" type="number"
@@ -624,13 +695,15 @@
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importTotalQty" class="col-form-label-sm my-0 py-0">Total
 							Qty</label> <input id="importTotalQty" type="number"
-							class="form-control-sm pr-0 pl-1" onkeyup="importItemTotalValueCalculate()">
+							class="form-control-sm pr-0 pl-1"
+							onkeyup="importItemTotalValueCalculate()">
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="importPrice" class="col-form-label-sm my-0 py-0">Price</label>
 						<input id="importPrice" type="number"
-							class="form-control-sm pr-0 pl-1" onkeyup="importItemTotalValueCalculate()">
+							class="form-control-sm pr-0 pl-1"
+							onkeyup="importItemTotalValueCalculate()">
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
@@ -680,7 +753,9 @@
 							class="btn btn-primary btn-sm" onclick="importSubmitAction()">
 							<i class="fas fa-save"></i> Submit
 						</button>
-						<button id="importAmendmentButton" type="button" class="btn btn-primary btn-sm ml-1" onclick="importAmendmentAction()" style="">
+						<button id="importAmendmentButton" type="button"
+							class="btn btn-primary btn-sm ml-1"
+							onclick="importAmendmentAction()" style="">
 							<i class="fas fa-save"></i> Amendment
 						</button>
 						<button id="importEditButton" type="button"
@@ -689,17 +764,19 @@
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
 						<button id="importRefreshBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="importRefreshAction()">
+							class="btn btn-primary btn-sm ml-1"
+							onclick="importRefreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
 						<button id="importPreviewBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="importPreviewAction()" style="display: none;">
+							class="btn btn-primary btn-sm ml-1"
+							onclick="importPreviewAction()" style="display: none;">
 							<i class="fa fa-print"></i> Preview
 						</button>
 					</div>
 				</div>
-
 				<br>
+				<hr class="my-0">
 				<h3>Bill Of Entry</h3>
 				<div class="row">
 					<div class="col-md-7">
@@ -796,15 +873,14 @@
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">--Select Color--</option>
 							<c:forEach items="${colorList}" var="color">
-									<option value="${color.colorId}">${color.colorName}</option>
-								</c:forEach>
+								<option value="${color.colorId}">${color.colorName}</option>
+							</c:forEach>
 						</select>
 					</div>
 
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="billSize" class="col-form-label-sm my-0 py-0">Size</label>
-						<input id="billSize" type="text"
-							class="form-control-sm pr-0 pl-1">
+						<input id="billSize" type="text" class="form-control-sm pr-0 pl-1">
 					</div>
 					<div class="col-md-1 pr-0 pl-1">
 						<label for="billUnit" class="col-form-label-sm my-0 py-0">Unit</label>
@@ -812,9 +888,9 @@
 							data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option value="0">Select Unit</option>
-													<c:forEach items="${unitList}" var="unit" varStatus="counter">
-														<option value="${unit.unitId}">${unit.unitName}</option>
-													</c:forEach>
+							<c:forEach items="${unitList}" var="unit" varStatus="counter">
+								<option value="${unit.unitId}">${unit.unitName}</option>
+							</c:forEach>
 						</select>
 					</div>
 
@@ -846,7 +922,7 @@
 							Value</label> <input id="billTotalValue" type="number"
 							class="form-control-sm pr-0 pl-1">
 					</div>
-					
+
 					<div class="col-md-1 pr-0 pl-1">
 						<button id="bollAddBtn" type="button" style="margin-top: 1.3rem;"
 							class="btn btn-primary btn-sm" onclick="styleAddAction()">
@@ -883,21 +959,21 @@
 						</table>
 					</div>
 				</div>
-
+				
 				<div class="row mt-1">
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billBillNo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill No</label> 
-								<input id="billBillNo" type="text"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Bill
+								No</label> <input id="billBillNo" type="text"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billShippedOnBoardDate"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipped On Board Date:</label>
-							<input id="billShippedOnBoardDate" type="date"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Shipped
+								On Board Date:</label> <input id="billShippedOnBoardDate" type="date"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
@@ -914,8 +990,8 @@
 					<div class="col-md-6">
 						<div class="form-group mb-0  row">
 							<label for="billContainerNo"
-								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Container No</label> 
-								<input id="billContainerNo" type="text"
+								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Container
+								No</label> <input id="billContainerNo" type="text"
 								class="col-md-8 form-control-sm">
 						</div>
 					</div>
@@ -974,7 +1050,8 @@
 							<i class="fas fa-save"></i> Submit
 						</button>
 						<button id="billEditButton" type="button"
-							class="btn btn-primary btn-sm ml-1" style="display: none;" onclick="billEditAction()">
+							class="btn btn-primary btn-sm ml-1" style="display: none;"
+							onclick="billEditAction()">
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
 						<button id="billRefreshBtn" type="button"
@@ -996,8 +1073,20 @@
 						<div class="form-group mb-0  row">
 							<label for="exportMasterLcNo"
 								class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Master
-								LC</label> <input id="exportMasterLcNo" type="text"
-								class="col-md-8 form-control-sm" readonly>
+								LC</label>
+							<div class="input-group col-md-8 px-0">
+								<div class="input-group-append">
+									<input id="exportMasterLcNo" type="text"
+										class="form-control-sm" readonly>
+
+									<button id="findLCBtn" type="button"
+										class="btn btn-outline-dark btn-sm form-control-sm"
+										data-toggle="modal" data-target="#searchModal">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+
 						</div>
 
 						<div class="form-group mb-0  row">
@@ -1157,7 +1246,8 @@
 				<div class="row">
 					<div class="col-md-2 pr-0 pl-1">
 						<label for="exportStyleNo" class="col-form-label-sm my-0 py-0">Style
-							No</label> <select id="exportStyleNo" onchange="styleWiseItemLoad(this),styleWiseBuyerPOLoad(this)"
+							No</label> <select id="exportStyleNo"
+							onchange="styleWiseItemLoad(this),styleWiseBuyerPOLoad(this)"
 							class="selectpicker col-md-12 px-0" data-live-search="true"
 							data-style="btn-light btn-sm border-light-gray">
 							<option id="styleNo" value="0">Select Style</option>
@@ -1246,7 +1336,8 @@
 							<i class="fa fa-pencil-square"></i> Edit
 						</button>
 						<button id="exportRefreshBtn" type="button"
-							class="btn btn-primary btn-sm ml-1" onclick="exportRefreshAction()">
+							class="btn btn-primary btn-sm ml-1"
+							onclick="exportRefreshAction()">
 							<i class="fa fa-refresh"></i> Refresh
 						</button>
 						<button id="exportPreviewBtn" type="button"

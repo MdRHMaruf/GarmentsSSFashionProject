@@ -4,6 +4,7 @@ public class ImportLC {
 	String autoId;
 	String masterLCNo;
 	String importLCType;
+	String udAutoId;
 	String invoiceNo;
 	String invoiceDate;
 	String senderBank;
@@ -133,4 +134,11 @@ public class ImportLC {
 	public void setSupplierId(String supplierId) {
 		this.supplierId = supplierId;
 	}
+	public String getUdAutoId() {
+		return udAutoId;
+	}
+	public void setUdAutoId(String udAutoId) {
+		this.udAutoId = udAutoId;
+	}
+	
 }

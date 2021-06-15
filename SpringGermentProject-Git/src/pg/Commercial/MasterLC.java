@@ -21,6 +21,13 @@ public class MasterLC {
 	String editedStyleList;
 	String amendmentNo;
 	String amendmentDate;
+	String udAutoId;
+	String udNo;
+	String udDate;
+	String udStyleList;
+	
+	String previousMasterLCNo;
+	String previousUdNo;
 	
 	public MasterLC() {
 		super();
@@ -269,5 +276,56 @@ public class MasterLC {
 			this.amount = amount;
 		}	
 	}
+
+
+
+	public String getUdNo() {
+		return udNo;
+	}
+
+	public void setUdNo(String udNo) {
+		this.udNo = udNo;
+	}
+
+	public String getUdDate() {
+		return udDate;
+	}
+
+	public void setUdDate(String udDate) {
+		this.udDate = udDate;
+	}
+
+	public String getUdStyleList() {
+		return udStyleList;
+	}
+
+	public void setUdStyleList(String udStyleList) {
+		this.udStyleList = udStyleList;
+	}
+
+	public String getPreviousMasterLCNo() {
+		return previousMasterLCNo;
+	}
+
+	public void setPreviousMasterLCNo(String previousMasterLCNo) {
+		this.previousMasterLCNo = previousMasterLCNo;
+	}
+
+	public String getPreviousUdNo() {
+		return previousUdNo;
+	}
+
+	public void setPreviousUdNo(String previousUdNo) {
+		this.previousUdNo = previousUdNo;
+	}
+
+	public String getUdAutoId() {
+		return udAutoId;
+	}
+
+	public void setUdAutoId(String udAutoId) {
+		this.udAutoId = udAutoId;
+	}
+	
 	
 }
