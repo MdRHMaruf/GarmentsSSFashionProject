@@ -3,6 +3,7 @@ package pg.services;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,6 +142,23 @@ public class SettingServiceImpl implements SettingService{
 		return settDAO.getAllnoticesforSearch();
 	}
 
+	@Override
+	public JSONArray getDepartmentWiseUserList(String departmentIds) {
+		// TODO Auto-generated method stub
+		return settDAO.getDepartmentWiseUserList(departmentIds);
+	}
+	
+	@Override
+	public String notificationTargetAdd(JSONObject notificationObject, JSONArray targetList) {
+		// TODO Auto-generated method stub
+		return settDAO.notificationTargetAdd(notificationObject, targetList);
+	}
+	
+	@Override
+	public String notificationSeen(String targetId) {
+		// TODO Auto-generated method stub
+		return settDAO.notificationSeen(targetId);
+	}
 
 	@Override
 	public JSONArray getNotificationList(String targetId) {
@@ -242,5 +260,8 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.editRolePermission(v);
 	}
+
+
+	
 	
 }

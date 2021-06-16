@@ -97,7 +97,7 @@
 
 						<i class="fas fa-bell dropdown-toggle" id="notificationDropdown"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-							id="notificationCount" class="badge badge-info">0</span></i>
+							id="notificationCount" class="badge badge-info" onclick="seenFunction()">0</span></i>
 						<div id="notificationList" class="dropdown-menu"
 							aria-labelledby="notificationDropdown">
 

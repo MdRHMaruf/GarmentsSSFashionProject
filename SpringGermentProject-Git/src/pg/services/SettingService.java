@@ -3,6 +3,7 @@ package pg.services;
 import java.util.List;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import noticeModel.noticeModel;
 import pg.OrganizationModel.OrganizationInfo;
@@ -44,7 +45,10 @@ public interface SettingService{
 	public boolean savenotice(String heading, String departs, String textbody, String filename,String userid);
 	public List<noticeModel>getAllNoitice(String deptid,noticeModel nm);
 	
+	public JSONArray getDepartmentWiseUserList(String departmentIds);
 	public List<noticeModel>getAllnoticesforSearch();
+	public String notificationTargetAdd(JSONObject notificationObject,JSONArray targetList);
+	public String notificationSeen(String targetId);
 	
 	public JSONArray getUserList();
 	public String saveGroup(String group);
