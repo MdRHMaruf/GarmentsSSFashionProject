@@ -1,6 +1,7 @@
-
+let col9List = [];
 
 function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
+  col9List = [];
   $("#loader").show();
   $.ajax({
     type: 'GET',
@@ -15,6 +16,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       let date = data.date;
       let totalQty = data.totalQty;
       let totalValue = data.totalValue;
+      let udInfo = data.udInfo;
       let udAmendmentList = data.udAmendmentList;
       let importLCList = data.importLCList;
       let importLCItemList = data.importLCItemList;
@@ -27,7 +29,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       let col1summary = "";
       let col2summary = "";
       let col3summary = 0;
-      let col4summary = {};
+      let col4summary = `$${udInfo.udValue} <br/>QTY:${parseFloat(udInfo.udQuantity).toFixed(2)} PCS`;
       let col5summary = "";
       let col6summary = {};
       let col7summary = 0;
@@ -39,7 +41,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       let col12summary = 0;
       let col13summary = "";
       let col14summary = 0;
-      let col15summary = "";
+      let col15summary = 0;
       let col16summary = "";
       let col17summary = "";
       let col18summary = "";
@@ -117,12 +119,13 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
 
               col9 += `${parseFloat(style.quantity).toFixed(2)} PCS X ${parseFloat(fabrics.consumption).toFixed(2)} <br/>=${(parseFloat(style.quantity) * parseFloat(fabrics.consumption)).toFixed(2)} ${fabrics.unitName} <br/>`;
 
-              if (fabricsObject[fabrics.accessoriesItemId]) {
+              if (fabricsObject[fabrics.accessoriesItemId+fabrics.unitId]) {
                 fabricsObject[fabrics.accessoriesItemId].totalQty += (parseFloat(style.quantity) * parseFloat(fabrics.consumption));
               } else {
-                fabricsObject[fabrics.accessoriesItemId] = {
+                fabricsObject[fabrics.accessoriesItemId+fabrics.unitId] = {
                   fabricsId: fabrics.accessoriesItemId,
                   fabricsName: fabrics.itemName,
+                  unitName: fabrics.unitName,
                   totalQty: (parseFloat(style.quantity) * parseFloat(fabrics.consumption)).toFixed(2)
                 }
               }
@@ -136,16 +139,13 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
               }
             }
 
-
-            col9 += "<br/><br/>" + Object.keys(fabricsObject).map((key) => {
-              k++;
-              return (k + ")" + fabricsObject[key].fabricsName + "=" + fabricsObject[key].totalQty) + "<br/>";
-            });
-
-
             col10 += style.itemDescription + ",<br/>";
           }
-
+          col9 += "<br/>" + Object.keys(fabricsObject).map((key) => {
+            k++;
+            return (k + ")" + fabricsObject[key].fabricsName + "=" + fabricsObject[key].totalQty) +" "+fabricsObject[key].unitName+"<br/>";
+          });
+          col9List.push(col9);
           row += `<td id="col9-${index}">${col9}</td>
           <td id="col10-${index}">${col10}</td>
           <td id="col11-${index}">${parseFloat(exportInvoice.quantity).toFixed(2)} PCS <br/>${parseFloat(exportInvoice.cartonQty).toFixed(2)} CTN</td>
@@ -160,6 +160,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
           col12summary++;
           col14summary += parseFloat(exportInvoice.totalValue);
         } else {
+          col9List.push('');
           row += `<td id="col9-${index}"></td>
           <td id="col10-${index}"></td>
           <td id="col11-${index}"></td>
@@ -184,7 +185,7 @@ function searchMasterLc(masterLCNo, buyerId, amendmentNo) {
       $("#masterLC").val(masterLCNo);
       $("#col2Summary").val(col2summary);
       $("#col3Summary").val(col3summary);
-     
+      $("#col4Summary").val(col4summary);
       $("#col6Summary").val(Object.keys(col6summary).map(key =>{
         return col6summary[key].totalQty +" "+key;
       }));
@@ -213,11 +214,14 @@ function previewAction() {
   let rowList = $("#dataList tr");
   let length = rowList.length;
   let userId = $("#userId").val();
+  let col15summary = 0;
 
   let passBookDataList = [];
   for (let i = 0; i < length; i++) {
     const newRow = rowList[i];
     const id = newRow.id;
+    col15summary += Number($("#col15-" + id).text());
+      
     passBookDataList.push({
       col1: $("#col1-" + id).text(),
       col2: $("#col2-" + id).text(),
@@ -227,7 +231,7 @@ function previewAction() {
       col6: $("#col6-" + id).text(),
       col7: $("#col7-" + id).text(),
       col8: $("#col8-" + id).text(),
-      col9: $("#col9-" + id).text(),
+      col9: col9List[i],
       col10: $("#col10-" + id).text(),
       col11: $("#col11-" + id).text(),
       col12: $("#col12-" + id).text(),
@@ -266,7 +270,7 @@ function previewAction() {
         col12summary: $("#col12Summary").val(),
         col13summary: $("#col13Summary").val(),
         col14summary: $("#col14Summary").val(),
-        col15summary: $("#col15Summary").val(),
+        col15summary: col15summary,
         col16summary: $("#col16Summary").val(),
         col17summary: $("#col17Summary").val(),
         col18summary: $("#col18Summary").val(),

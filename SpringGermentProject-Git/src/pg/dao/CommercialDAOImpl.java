@@ -1898,6 +1898,21 @@ public class CommercialDAOImpl implements CommercialDAO{
 				masterInfo.put("totalQty", element[5].toString());
 			}
 			
+			sql="select sum(amount) as value,sum(quantity)as quantity from tbMasterUD mud\r\n" + 
+					"left join tbMasterLCDetails mlcd\r\n" + 
+					"on mud.autoId = mlcd.masterLCId\r\n" + 
+					"where masterLCNo = '"+masterLCNo+"' and udAmendmentNo = (select max(udAmendmentNo) from tbMasterUD where masterLCNo = '"+masterLCNo+"')\r\n" + 
+					"";
+			list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{
+				Object[] element = (Object[]) iter.next();
+				tempObject = new JSONObject();
+				tempObject.put("udValue", element[0].toString());
+				tempObject.put("udQuantity", element[1].toString());
+			}
+			masterInfo.put("udInfo", tempObject);
+			
 			sql="select udNo,udAmendmentNo,CONVERT(varchar,udAmendmentDate,25) as udAmendmentDate from tbMasterUD where masterLCNo = '"+masterLCNo+"' order by udAmendmentNo";
 			list = session.createSQLQuery(sql).list();
 			tempAray = new JSONArray(); 

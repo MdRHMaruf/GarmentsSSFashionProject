@@ -867,7 +867,7 @@ public class SettingDAOImpl implements SettingDAO {
 					"on nt.notificationId = n.id\r\n"
 					+ "left join Tblogin l\r\n" + 
 					"on n.createdBy = l.id\r\n" + 
-					"where nt.targetUserId= '"+2+"'";
+					"where nt.targetUserId= '"+targetId+"'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
