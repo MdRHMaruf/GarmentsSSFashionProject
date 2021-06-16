@@ -4,6 +4,7 @@ let itemIdForSet = 0;
 let sizeValueListForSet = [];
 let sizesListByGroup = JSON;
 
+var searchValue=0;
 window.onload = () => {
 	document.getElementById('files').addEventListener('change', onFileSelect, false);
 	document.getElementById('uploadButton').addEventListener('click', startUpload, false);
@@ -621,9 +622,11 @@ function searchBuyerPO(buyerPoNo) {
 				$("#btnPOEdit").show();
 				$("#btnPreview").show();
 				//$("#btnPreview").prop("disabled", false);
-
+				$('#fileList').empty();
 				files(data.fileList)
 				$("#loader").hide();
+				
+				searchValue=buyerPoNo;
 			}
 		}
 	});
@@ -649,6 +652,7 @@ function files(data) {
 
 
 function download(a) {
+	$("#loader").show();
 	var rowIndex = $(a).closest('tr').index();
 	var initindex = rowIndex + 1
 	var fileid = $("#filename-" + initindex).text();
@@ -693,6 +697,7 @@ function download(a) {
 						a.download = filename;
 						document.body.appendChild(a);
 						a.click();
+						$("#loader").hide();
 					}
 				} else {
 					window.location = downloadUrl;
@@ -1093,6 +1098,10 @@ function onUploadComplete(e) {
 		bar.style.width = '100%';
 		bar.innerHTML = '100% complete';
 		//notification();
+		if(searchValue!='0'){
+			searchBuyerPO(searchValue);
+		}
+		
 	}
 }
 
