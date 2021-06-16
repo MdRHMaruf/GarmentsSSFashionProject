@@ -877,18 +877,10 @@ public class OrderController {
 				String fileControlName = it.next();
 
 				MultipartFile srcFile = multipartRequest.getFile(fileControlName);
-
 				String uploadFileName = purchaseOrderId+srcFile.getOriginalFilename();
-
 				System.out.println(" file names "+uploadFileName);
-
-
-
 				// Create server side target file path.
-
-
 				String destFilePath = UPLOAD_FILE_SAVE_FOLDER+uploadFileName;
-
 				File existingfile=new File(destFilePath);
 
 				System.out.println(" file exists "+uploadFileName+" "+existingfile.exists());
@@ -905,20 +897,13 @@ public class OrderController {
 					boolean SaveGeneralDuty=orderService.saveFileAccessDetails(saveFileAccessDetails);
 					fileupload=false;
 				}
-
-
-
 				if (fileupload) {
 
 				}
 				//msgBuf.append("Upload file " + uploadFileName + " is saved to " + destFilePath + "<br/><br/>");
 			}
-
 			// Set message that will be displayed in return page.
 			//  model.addAttribute("message", msgBuf.toString());
-
-
-
 		}catch(IOException ex)
 		{
 			ex.printStackTrace();

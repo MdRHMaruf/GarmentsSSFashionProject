@@ -88,6 +88,41 @@ public class SettingController {
 
 		return view; //JSP - /WEB-INF/view/index.jsp
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/notificationTargetAdd"},method=RequestMethod.POST)
+	public String notificationTargetAdd(String object) {
+
+		try {
+			JSONParser jsonParser = new JSONParser();
+			JSONObject notificationObject = (JSONObject)jsonParser.parse(object);
+			//JSONArray itemList = (JSONArray) itemsObject.get("list");
+			JSONArray targetList = null;
+			if(notificationObject.get("type").equals("2")) {
+				targetList = settingService.getDepartmentWiseUserList("3029");
+			}
+			
+			
+			return settingService.notificationTargetAdd(notificationObject, targetList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "something wrong";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/notificationSeen"},method=RequestMethod.POST)
+	public String notificationSeen(String targetId) {
+
+		try {
+			return settingService.notificationSeen(targetId);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "something wrong";
+	}
 
 
 	@RequestMapping(value = "/getNotificationList",method=RequestMethod.GET)

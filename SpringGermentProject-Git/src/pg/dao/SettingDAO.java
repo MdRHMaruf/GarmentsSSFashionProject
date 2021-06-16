@@ -53,7 +53,10 @@ public interface SettingDAO {
 	public JSONArray getGroupList();
 	public JSONArray getGroupMembers(String groupId);
 	
+	public JSONArray getDepartmentWiseUserList(String departmentIds);
 	public JSONArray getNotificationList(String targetId);
+	public String notificationTargetAdd(JSONObject notificationObject,JSONArray targetList);
+	public String notificationSeen(String targetId);
 	
 
 	public JSONArray getFormPermitInvoiceList(String formId,String ownerId,String permittedUserId);

@@ -54,7 +54,25 @@ function notificationClickAction(notificationNo){
 }
 
 function notificationUpdate(){
+	
+}
 
+function seenFunction(){
+	let targetId = $("#userId").val();
+    console.log("Target Id",targetId);
+    $.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './notificationSeen',
+		data: {
+			targetId : targetId
+		},
+		success: function (data) {
+			$("#notificationCount").text('0');
+			//$("#notificationList").html('');
+			//loadNotification(data.notificationList);
+		}
+	});
 }
 
 function loadNotification(data){

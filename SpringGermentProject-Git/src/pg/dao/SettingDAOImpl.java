@@ -1,26 +1,18 @@
 package pg.dao;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import javax.management.Query;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import noticeModel.noticeModel;
-import pg.model.Ware;
-import pg.model.WareInfo;
-import pg.model.RoleManagement;
 import pg.OrganizationModel.OrganizationInfo;
 import pg.model.Menu;
 import pg.model.MenuInfo;
@@ -29,8 +21,10 @@ import pg.model.ModuleInfo;
 import pg.model.ModuleWiseMenu;
 import pg.model.ModuleWiseMenuSubMenu;
 import pg.model.Password;
+import pg.model.RoleManagement;
 import pg.model.SubMenuInfo;
-import pg.model.UserAccessModule;
+import pg.model.Ware;
+import pg.model.WareInfo;
 import pg.share.FormId;
 import pg.share.HibernateUtil;
 
@@ -848,6 +842,122 @@ public class SettingDAOImpl implements SettingDAO {
 	}
 
 
+	@Override
+	public JSONArray getDepartmentWiseUserList(String departmentIds) {
+		// TODO Auto-generated method stub
+		Session session=HibernateUtil.openSession();
+		Transaction tx=null;
+		JSONArray array=new JSONArray();
+		JSONObject object;
+		try{
+			tx=session.getTransaction();
+			tx.begin();
+
+			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
+			String sql="select l.id,l.fullname,ei.EmployeeCode,ei.Name,ei.DepartmentId from TbEmployeeInfo ei\n" + 
+					"join Tblogin l\n" + 
+					"on ei.AutoId = l.employeeId\n" + 
+					"where ei.DepartmentId in ("+departmentIds+")";
+
+			List<?> list = session.createSQLQuery(sql).list();
+			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
+			{	
+				Object[] element = (Object[]) iter.next();
+				object = new JSONObject();
+				object.put("id", element[0].toString());
+				object.put("fullName", element[1].toString());
+				object.put("employeeCode", element[2].toString());
+				object.put("name", element[3].toString());
+				object.put("departmentId", element[4].toString());
+				array.add(object);
+			}
+
+			tx.commit();
+
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			if (tx != null) {
+				tx.rollback();
+			}
+
+		}
+
+		finally {
+			session.close();
+		}
+
+		return array;
+
+	}
+
+	@Override
+	public String notificationTargetAdd(JSONObject notification,JSONArray targetList) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+
+			String sql="insert into tbNotification (subject,type,notificationContent,createdBy,createdTime,issueLinkId) values('"+notification.get("subject")+"','"+notification.get("type")+"','"+notification.get("notificationContent")+"','"+notification.get("createdBy")+"',CURRENT_TIMESTAMP,'"+notification.get("issueLinkedId")+"')";
+			session.createSQLQuery(sql).executeUpdate();
+
+			String notificationId = "0";
+			sql = "select max(id) as maxid from tbNotification";
+			List<?> list = session.createSQLQuery(sql).list();
+			if(list.size()>0) {
+				notificationId = list.get(0).toString();
+			}
+
+			for (int i=0; i< targetList.size();i++) {
+				JSONObject tempObject = (JSONObject)targetList.get(i);
+				sql = "insert into tbNotificationTargets (notificationId,targetUserId,targetSeen,isClear) values('"+notificationId+"','"+tempObject.get("id")+"','0','0');";
+				session.createSQLQuery(sql).executeUpdate();
+			}
+
+			tx.commit();
+			return "success";
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return "something wrong";
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return "something wrong";
+	}
+	
+	
+	@Override
+	public String notificationSeen(String targetId) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql="update tbNotificationTargets set targetSeen = '1' where targetUserId = '"+targetId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return "success";
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return "something wrong";
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return "something wrong";
+	}
 
 	@Override
 	public JSONArray getNotificationList(String targetId) {
@@ -867,7 +977,7 @@ public class SettingDAOImpl implements SettingDAO {
 					"on nt.notificationId = n.id\r\n"
 					+ "left join Tblogin l\r\n" + 
 					"on n.createdBy = l.id\r\n" + 
-					"where nt.targetUserId= '"+targetId+"'";
+					"where nt.targetUserId= '"+targetId+"' and nt.isClear='0'";
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -960,21 +1070,21 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			
+
 			JSONParser jsonParser = new JSONParser();
 			System.out.println(group);
 			JSONObject groupObject = (JSONObject)jsonParser.parse(group);;
-			
+
 			String sql="select groupId,groupName from tbGroups where memberId in("+groupObject.get("members")+")";
 			List<?> list = session.createSQLQuery(sql).list();
-			
+
 			if(list.size()==0) {
 				sql="select isnull(max(groupId),0)+1 as maxGroupId from tbGroups";
 				list = session.createSQLQuery(sql).list();
-				
+
 				int groupId = (int)list.get(0);
-				
-				
+
+
 				String[] idList = groupObject.get("members").toString().split(",");
 				for (String id: idList) {
 					sql = "insert into tbGroups (groupId,groupName,memberId,entryTime,entryBy) values ('"+groupId+"','"+groupObject.get("groupName")+"','"+id+"',CURRENT_TIMESTAMP,'"+groupObject.get("userId")+"');";
@@ -983,7 +1093,7 @@ public class SettingDAOImpl implements SettingDAO {
 			}else {
 				return "Members Already have another group";
 			}
-			
+
 			tx.commit();
 			return "success";
 
@@ -999,7 +1109,7 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 		return "something wrong";
 	}
-	
+
 	@Override
 	public String editGroup(String group) {
 		// TODO Auto-generated method stub
@@ -1008,24 +1118,24 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			
+
 			JSONParser jsonParser = new JSONParser();
 			System.out.println(group);
 			JSONObject groupObject = (JSONObject)jsonParser.parse(group);;
-			
+
 			String sql="select groupId,groupName from tbGroups where memberId in("+groupObject.get("members")+") and groupId != '"+groupObject.get("groupId")+"'";
 			List<?> list = session.createSQLQuery(sql).list();
-			
+
 			if(list.size()==0) {
 				sql = "delete from tbGroups where groupId = '"+groupObject.get("groupId")+"'";
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql="select isnull(max(groupId),0)+1 as maxGroupId from tbGroups";
 				list = session.createSQLQuery(sql).list();
-				
+
 				int groupId = (int)list.get(0);
-				
-				
+
+
 				String[] idList = groupObject.get("members").toString().split(",");
 				for (String id: idList) {
 					sql = "insert into tbGroups (groupId,groupName,memberId,entryTime,entryBy) values ('"+groupId+"','"+groupObject.get("groupName")+"','"+id+"',CURRENT_TIMESTAMP,'"+groupObject.get("userId")+"');";
@@ -1034,7 +1144,7 @@ public class SettingDAOImpl implements SettingDAO {
 			}else {
 				return "Members Already have another group";
 			}
-			
+
 			tx.commit();
 			return "success";
 
@@ -1050,7 +1160,7 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 		return "something wrong";
 	}
-	
+
 	@Override
 	public JSONArray getGroupList() {
 		// TODO Auto-generated method stub
@@ -1061,7 +1171,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select groupId,groupName from tbGroups group by groupId,groupName";
 
@@ -1087,7 +1197,7 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 		return array;
 	}
-	
+
 	@Override
 	public JSONArray getGroupMembers(String groupId) {
 		// TODO Auto-generated method stub
@@ -1098,7 +1208,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select g.autoId,groupId,groupName,memberId,l.fullname\r\n" + 
 					"from tbGroups g\r\n" + 
@@ -1130,9 +1240,9 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 		return array;
 	}
-	
-	
-	
+
+
+
 
 
 	@Override
@@ -1145,10 +1255,10 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql = "";
-			
+
 			if(formId.equals(String.valueOf(FormId.BUYER_CREATE.getId()))) {
 				sql = "select b.id,(select name from TbSubMenu where id= '"+formId+"') as FromName,b.name as IdNo,isnull(ap.autoId,0) as isPermitted \r\n" + 
 						"  from tbBuyer b\r\n" + 
@@ -1162,7 +1272,7 @@ public class SettingDAOImpl implements SettingDAO {
 						"left join tbFileAccessPermission ap\r\n" + 
 						"on ap.ownerId = '"+ownerId+"' and sc.styleId = ap.resourceId and ap.permittedUserId = '"+permittedUserId+"'\r\n" + 
 						" where UserId = '"+ownerId+"'";
-			
+
 			}else if(formId.equals(String.valueOf(FormId.COSTING_CREATE.getId()))) {
 				sql="select cc.costingNo,(select name from TbSubMenu where id= '"+formId+"') as FromName,cc.costingNo  as IdNo,isnull(ap.autoId,0) as isPermitted \r\n" + 
 						"  from TbCostingCreate cc\r\n" + 
@@ -1223,7 +1333,7 @@ public class SettingDAOImpl implements SettingDAO {
 						" where sr.UserId = '"+ownerId+"'\n" + 
 						" group by sr.sampleReqId,ap.autoId";
 			}
-			
+
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1260,18 +1370,18 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql = "";
-			
+
 			sql="select permittedUserId,l.fullname from tbFileAccessPermission fap\r\n" + 
 					" join Tblogin l\r\n" + 
 					" on fap.permittedUserId = l.id\r\n" + 
 					" where ownerId = '"+ownerId+"' and resourceType = '"+formId+"'\r\n" + 
 					" group by permittedUserId,l.fullname";
-			
-			
-			
+
+
+
 
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
@@ -1304,24 +1414,24 @@ public class SettingDAOImpl implements SettingDAO {
 		try {
 			tx = session.getTransaction();
 			tx.begin();
-			
+
 			JSONParser jsonParser = new JSONParser();
 			System.out.println(fileAccessPermit);
 			JSONObject permitObject = (JSONObject)jsonParser.parse(fileAccessPermit);
-			
+
 			JSONArray filePermitArray = (JSONArray)jsonParser.parse(permitObject.get("permittedFileList").toString());
-			
+
 			String sql="delete from tbFileAccessPermission where resourceType = '"+permitObject.get("resourceType")+"' and ownerId = '"+permitObject.get("ownerId")+"' and permittedUserId = '"+permitObject.get("permittedUserId")+"'";
 			session.createSQLQuery(sql).executeUpdate();
-			
-			
+
+
 			for(int i = 0; i<filePermitArray.size(); i++) {
 				JSONObject tempObject = (JSONObject)filePermitArray.get(i);
-				
+
 				sql = "insert into tbFileAccessPermission (resourceType,resourceId,ownerId,permittedUserId,entryTime,entryBy) values('"+tempObject.get("resourceType")+"','"+tempObject.get("resourceId")+"','"+tempObject.get("ownerId")+"','"+tempObject.get("permittedUserId")+"',CURRENT_TIMESTAMP,'"+tempObject.get("ownerId")+"')";
 				session.createSQLQuery(sql).executeUpdate();
 			}	
-			
+
 			tx.commit();
 			return "success";
 
@@ -1338,7 +1448,7 @@ public class SettingDAOImpl implements SettingDAO {
 		return "something wrong";
 	}
 
-	
+
 	@Override
 	public JSONArray getMenus(String userId) {
 		// TODO Auto-generated method stub
@@ -1349,7 +1459,7 @@ public class SettingDAOImpl implements SettingDAO {
 		try{
 			tx=session.getTransaction();
 			tx.begin();
-			
+
 			//String sql="select isnull(max(CuttingReqId),0)+1 from TbCuttingRequisitionDetails";
 			String sql="select sm.id,sm.module,sm.root,sm.name \r\n" + 
 					"from Tbuseraccess ua \r\n" + 
@@ -1555,10 +1665,10 @@ public class SettingDAOImpl implements SettingDAO {
 			sql="select roleName from tbRoleInfo where roleName='"+v.getRoleName()+"' and roleId!='"+v.getRoleId()+"' ";
 			List<?> list1 = session.createSQLQuery(sql).list();
 			if(list1.size()==0) {
-				
+
 				sql="update tbRoleInfo set roleName='"+v.getRoleName()+"' where roleId='"+v.getRoleId()+"'";
 				session.createSQLQuery(sql).executeUpdate();
-				
+
 				sql="delete from tbRolePermission where roleId='"+v.getRoleId()+"'";
 				session.createSQLQuery(sql).executeUpdate();
 

@@ -1029,6 +1029,7 @@ function uploadNext() {
 				debug('uploading ' + file.name);
 				xhr.send(fd);
 				add();
+				notificationTargetAdd();
 
 			} else {
 				alert("Select Department")
@@ -1044,6 +1045,27 @@ function uploadNext() {
 	}*/
 }
 
+function notificationTargetAdd(){
+	let userId = $("#userId").val();
+	let buyerPoId = $("#buyerPOId").val();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './notificationTargetAdd',
+		data: {
+			object : JSON.stringify({
+				type:'2',
+				subject:'File Upload',
+				notificationContent:'With Buyer PO',
+				createdBy: userId,
+				issueLinkedId: buyerPoId
+			})
+		},
+		success: function (data) {
+			console.log("successful");
+		},
+	});
+}
 
 function startUpload() {
 
