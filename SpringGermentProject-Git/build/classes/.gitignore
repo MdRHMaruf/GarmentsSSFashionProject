@@ -1,3 +1,6 @@
 /hibernate.cfg.xml
+/.gitignore
+/SizeValues.jasper
+/SizeValues.jrxml
 /noticeModel/
 /pg/
