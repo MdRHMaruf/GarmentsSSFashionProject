@@ -159,6 +159,12 @@ public class SettingServiceImpl implements SettingService{
 		// TODO Auto-generated method stub
 		return settDAO.notificationSeen(targetId);
 	}
+	
+	@Override
+	public String updateNotificationToSeen(String notificationId,String targetId) {
+		// TODO Auto-generated method stub
+		return settDAO.updateNotificationToSeen(notificationId, targetId);
+	}
 
 	@Override
 	public JSONArray getNotificationList(String targetId) {

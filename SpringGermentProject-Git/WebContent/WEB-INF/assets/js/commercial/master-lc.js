@@ -2583,8 +2583,6 @@ function importRefreshAction() {
 }
 
 function billSubmitAction() {
-
-
   let rowList = $("#billItemList tr");
   let length = rowList.length;
 

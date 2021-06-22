@@ -57,6 +57,7 @@ public interface SettingDAO {
 	public JSONArray getNotificationList(String targetId);
 	public String notificationTargetAdd(JSONObject notificationObject,JSONArray targetList);
 	public String notificationSeen(String targetId);
+	public String updateNotificationToSeen(String notificationId,String targetId);
 	
 
 	public JSONArray getFormPermitInvoiceList(String formId,String ownerId,String permittedUserId);

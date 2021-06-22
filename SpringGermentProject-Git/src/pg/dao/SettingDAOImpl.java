@@ -958,6 +958,32 @@ public class SettingDAOImpl implements SettingDAO {
 		}
 		return "something wrong";
 	}
+	
+	@Override
+	public String updateNotificationToSeen(String notificationId,String targetId) {
+		// TODO Auto-generated method stub
+		Session session = HibernateUtil.openSession();
+		Transaction tx = null;
+		try {
+			tx = session.getTransaction();
+			tx.begin();
+			String sql="update tbNotificationTargets set targetSeen = '1' where notificationId='"+notificationId+"' and targetUserId = '"+targetId+"'";
+			session.createSQLQuery(sql).executeUpdate();
+			tx.commit();
+			return "success";
+
+		} catch (Exception ee) {
+			if (tx != null) {
+				tx.rollback();
+				return "something wrong";
+			}
+			ee.printStackTrace();
+		}
+		finally {
+			session.close();
+		}
+		return "something wrong";
+	}
 
 	@Override
 	public JSONArray getNotificationList(String targetId) {

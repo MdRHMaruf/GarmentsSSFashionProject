@@ -39,7 +39,9 @@
 					<label for="orderDate"
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Order
 						Date<span style="color: red">*</span>
-					</label> <input id="orderDate" type="date" class="col-md-8 form-control-sm customDate" data-date-format="DD MMM YYYY">
+					</label> <input id="orderDate" type="date"
+						class="col-md-8 form-control-sm customDate"
+						data-date-format="DD MMM YYYY">
 
 				</div>
 				<div class="form-group mb-0  row">
@@ -47,7 +49,8 @@
 						class="col-md-4 col-form-label-sm pr-0 mb-1 pb-1">Delivery
 						Date<span style="color: red">*</span>
 					</label> <input id="deliveryDate" type="date"
-						class="col-md-8 form-control-sm customDate" data-date-format="DD MMM YYYY">
+						class="col-md-8 form-control-sm customDate"
+						data-date-format="DD MMM YYYY">
 
 				</div>
 
@@ -253,8 +256,10 @@
 					<div class="col-md-4 pr-0 pl-1">
 
 						<button id="btnAdd" type="button" style="margin-top: 1.3rem;"
-							class="btn btn-primary btn-sm" onclick="indentItemAdd()" accesskey="A">
-							<i class="fa fa-plus-circle"></i><span style="text-decoration:underline;"> Add</span>
+							class="btn btn-primary btn-sm" onclick="indentItemAdd()"
+							accesskey="A">
+							<i class="fa fa-plus-circle"></i><span
+								style="text-decoration: underline;"> Add</span>
 						</button>
 					</div>
 
@@ -284,13 +289,21 @@
 		</div>
 		<hr class="my-1">
 		<div class="row">
-			<div class='col-md-8'>
-			<div class='w-50'>
-			<input id="indentListSearch" type="text" class="form-control-sm"
-				placeholder="Search Here Anything....">
-		</div>
+			<div class='col-md-4'>
+					<input id="indentListSearch" type="text" class="form-control-sm"
+						placeholder="Search Here Anything....">
 			</div>
-			<div class="col-md-2">
+			<div class='col-md-4 px-1'>
+					<div class="input-group input-group-sm mb-1">
+					<div class="input-group-prepend">
+						<span class="input-group-text" for="fabricsContent">Fabrics Content</span>
+					</div>
+					<input id="fabricsContent" type="text" class="form-control"
+						aria-label="Sizing example input"
+						aria-describedby="inputGroup-sizing-sm">
+				</div>
+			</div>
+			<div class="col-md-2 px-1">
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
 						<span class="input-group-text" for="caNo">CA NO.</span>
@@ -300,18 +313,18 @@
 						aria-describedby="inputGroup-sizing-sm">
 				</div>
 			</div>
-			<div class="col-md-2">
+			<div class="col-md-2 px-1">
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
-						<span class="input-group-text" for="contentNo">Content NO.</span>
+						<span class="input-group-text" for="rnNo">RN NO.</span>
 					</div>
-					<input id="contentNo" type="text" class="form-control"
+					<input id="rnNo" type="text" class="form-control"
 						aria-label="Sizing example input"
 						aria-describedby="inputGroup-sizing-sm">
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="row mt-1">
 			<div style="overflow: auto; max-height: 300px;"
 				class="col-sm-12 px-1 table-responsive">
@@ -389,11 +402,12 @@
 						aria-describedby="inputGroup-sizing-sm"></textarea>
 				</div>
 			</div>
-			
+
 			<div class="col-md-6">
 				<div class="input-group input-group-sm mb-1">
 					<div class="input-group-prepend">
-						<span class="input-group-text" for="terms">Terms & Condition</span>
+						<span class="input-group-text" for="terms">Terms &
+							Condition</span>
 					</div>
 					<textarea id="terms" class="form-control"
 						aria-label="Sizing example input"
@@ -412,7 +426,8 @@
 					<div class="col-md-12 d-flex justify-content-end">
 						<button id="btnPOSubmit" type="button" accesskey="S"
 							class="btn btn-primary btn-sm" onclick="submitAction()">
-							<i class="fas fa-save"></i><span style="text-decoration:underline;"> Submit</span>
+							<i class="fas fa-save"></i><span
+								style="text-decoration: underline;"> Submit</span>
 						</button>
 						<button id="btnPOEdit" type="button"
 							class="btn btn-success btn-sm ml-1" onclick="purchaseOrderEdit()"
@@ -448,28 +463,30 @@
 									</div>
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
-											id="withSQNumberCheck"> <label class="form-check-label"
-											for="withSQNumberCheck">With SQ Number</label>
+											id="withSQNumberCheck"> <label
+											class="form-check-label" for="withSQNumberCheck">With
+											Color SKU Number</label>
 									</div>
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
-											id="withSKUNumberCheck"> <label class="form-check-label"
-											for="withSKUNumberCheck">With SKU Number</label>
+											id="withSKUNumberCheck"> <label
+											class="form-check-label" for="withSKUNumberCheck">With
+											Style SKU Number</label>
 									</div>
 									<div class="form-group form-check">
 										<input type="checkbox" class="form-check-input"
-											id="landscapeViewCheck"> <label class="form-check-label"
-											for="landscapeViewCheck">Landscape View</label>
+											id="landscapeViewCheck"> <label
+											class="form-check-label" for="landscapeViewCheck">Landscape
+											View</label>
 									</div>
-									 <a
-										class="dropdown-item" onclick="previewAction('withPcs')"
+									<a class="dropdown-item" onclick="previewAction('withPcs')"
 										href="#">With Pcs</a> <a class="dropdown-item"
 										onclick="previewAction('withOutPcs')" href="#">Without Pcs</a>
 									<a class="dropdown-item" onclick="previewAction()" href="#">Zipper
 										Preview</a> <a class="dropdown-item"
 										onclick="previewAction('general')" href="#">General
 										Preview</a>
-										
+
 								</div>
 							</div>
 						</div>

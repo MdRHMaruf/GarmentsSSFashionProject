@@ -5334,6 +5334,7 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "currency,"
 					+ "caNo,"
 					+ "contentNo,"
+					+ "fabricsContent,"
 					+ "Note,"
 					+ "Subject,"
 					+ "body,"
@@ -5354,7 +5355,8 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "'"+purchaseOrder.getPaymentType()+"',"
 					+ "'"+purchaseOrder.getCurrency()+"',"
 					+ "'"+purchaseOrder.getCaNo()+"',"
-					+ "'"+purchaseOrder.getContentNo()+"',"
+					+ "'"+purchaseOrder.getRnNo()+"',"
+					+ "'"+purchaseOrder.getFabricsContent()+"',"
 					+ "'"+purchaseOrder.getNote()+"',"
 					+ "'"+purchaseOrder.getSubject()+"',"
 					+ "'"+purchaseOrder.getBody()+"',"
@@ -5449,7 +5451,8 @@ public class OrderDAOImpl implements OrderDAO{
 					+ "paymentTerm = '"+purchaseOrder.getPaymentType()+"',"
 					+ "currency = '"+purchaseOrder.getCurrency()+"',"
 					+ "caNo = '"+purchaseOrder.getCaNo()+"',"
-					+ "contentNo = '"+purchaseOrder.getContentNo()+"',"
+					+ "contentNo = '"+purchaseOrder.getRnNo()+"',"
+							+ "fabricsContent = '"+purchaseOrder.getFabricsContent()+"',"
 					+ "Note = '"+purchaseOrder.getNote()+"',"
 					+ "Subject = '"+purchaseOrder.getSubject()+"',"
 					+ "body = '"+purchaseOrder.getBody()+"',"
@@ -5797,10 +5800,8 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Accessories")) {
-				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(ai.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.TotalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
 						" from tbAccessoriesIndent ai \r\n" + 
-						" left join TbStyleCreate style\r\n" + 
-						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
 						" left join tbColors c\r\n" + 
 						" on ai.ColorId = cast(c.ColorId as varchar)\r\n" + 
 						"left join tbStyleSize ss \r\n"
@@ -5818,10 +5819,8 @@ public class OrderDAOImpl implements OrderDAO{
 				}
 			}
 			if(poType.equalsIgnoreCase("Zipper And Others")) {
-				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(style.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.totalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
-						" from tbZipperIndent ai \r\n" + 
-						" left join TbStyleCreate style\r\n" + 
-						" on ai.styleid = cast(style.StyleId as varchar)\r\n" + 
+				sql=" select ai.AccIndentId,isnull(ai.purchaseOrder,'')as purchaseOrder,isnull(ai.StyleNo,'') as styleNo,isnull(accItem.itemname,'') as accessoriesname,ai.supplierId,ai.rate,ai.dolar,isnull(c.Colorname,'') as itemcolor,isnull(ss.sizeName,'') as sizeName,ai.totalQty,ai.RequireUnitQty,isnull(unit.unitname,'') as unitName,isnull(ai.currency,'') as currency\r\n" + 
+						" from tbZipperIndent ai \r\n" +  
 						" left join tbColors c\r\n" + 
 						" on ai.ColorId = cast(c.ColorId as varchar)\r\n"
 						+ "left join tbStyleSize ss \r\n"
@@ -5860,16 +5859,17 @@ public class OrderDAOImpl implements OrderDAO{
 
 
 
-			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,caNo,contentNo,terms,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
+			sql = "select poNo,(select convert(varchar,orderDate,103))as orderDate,(select convert(varchar,deliveryDate,103))as deliveryDate,supplierId,deliveryto,orderby,billto,ManualPo,paymentTerm,currency,Note,Subject,body,caNo,contentNo,fabricsContent,terms,entryBy from tbPurchaseOrderSummary where poNo='"+poNo+"'";
 			List<?> list = session.createSQLQuery(sql).list();
 			for(Iterator<?> iter = list.iterator(); iter.hasNext();)
 			{
 				Object[] element = (Object[]) iter.next();
-				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[16].toString());
+				purchaseOrder = new PurchaseOrder(element[0].toString(), element[1].toString(), element[2].toString(), element[3].toString(), element[4].toString(), element[5].toString(), element[6].toString(), element[7].toString(), element[8].toString(), element[9].toString(), element[10].toString(), element[11].toString(), dataList,poType, element[17].toString());
 				purchaseOrder.setBody(element[12].toString());
 				purchaseOrder.setCaNo(element[13].toString());
-				purchaseOrder.setContentNo(element[14].toString());
-				purchaseOrder.setTerms(element[15].toString());
+				purchaseOrder.setRnNo(element[14].toString());
+				purchaseOrder.setFabricsContent(element[15].toString());
+				purchaseOrder.setTerms(element[16].toString());
 			}
 
 			tx.commit();

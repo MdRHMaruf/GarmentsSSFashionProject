@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AccessoriesIndent" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c2b2a924-bedf-466f-811f-a9906dcece05">
 	<property name="ireport.zoom" value="1.4641000000000028"/>
-	<property name="ireport.x" value="182"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="46"/>
 	<parameter name="Sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select a.AINo,a.PurchaseOrder,a.ShippingMarks,(select StyleNo from TbStyleCreate where StyleId=a.styleid) as StyleNo,(select ItemName from tbItemDescription where ItemId=a.Itemid) as ItemName,(select colorName from tbColors where ColorId=a.ColorId) as Color,ISNULL((select name from tbbrands where id=a.IndentBrandId),'') as BrandName,(select ItemName from TbAccessoriesItem where Itemid=a.accessoriesItemId) as AccessoriesName,a.accessoriesSize,(select SizeName from tbStyleSize where id=a.size) as SizeName,(select UnitName from tbunits where UnitId=a.UnitId) as UnitName,a.TotalQty,(select Signature from TbMerchendiserInfo where MUserId=a.IndentPostBy) as Signatur from tbAccessoriesIndent a where AiNo ='4' order by a.ColorId,a.accessoriesItemId,a.size"]]></defaultValueExpression>
@@ -211,36 +211,36 @@
 				<reportElement x="0" y="-1" width="803" height="1" uuid="e2380383-3165-4c93-8de6-12b0cd8c19be"/>
 			</line>
 			<line>
-				<reportElement x="0" y="13" width="803" height="1" uuid="c337b7b3-bb57-4ed3-a3f1-57483cb1ddad"/>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="13" width="803" height="1" uuid="c337b7b3-bb57-4ed3-a3f1-57483cb1ddad"/>
 			</line>
 			<line>
-				<reportElement x="0" y="-1" width="1" height="14" uuid="0f5a6251-f3cd-4f8c-8453-580427a6bf8c"/>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="-1" width="1" height="14" uuid="0f5a6251-f3cd-4f8c-8453-580427a6bf8c"/>
 			</line>
 			<line>
-				<reportElement x="27" y="0" width="1" height="14" uuid="96926078-0852-4db9-9e43-7f948d1bea3d"/>
+				<reportElement stretchType="RelativeToBandHeight" x="27" y="0" width="1" height="14" uuid="96926078-0852-4db9-9e43-7f948d1bea3d"/>
 			</line>
 			<line>
-				<reportElement x="185" y="0" width="1" height="14" uuid="9a23ed07-b504-45dd-afef-bc5730f142e2"/>
+				<reportElement stretchType="RelativeToBandHeight" x="185" y="0" width="1" height="14" uuid="9a23ed07-b504-45dd-afef-bc5730f142e2"/>
 			</line>
 			<line>
-				<reportElement x="455" y="0" width="1" height="14" uuid="5893a864-e950-49b5-a1b9-c784aca05b0b"/>
+				<reportElement stretchType="RelativeToBandHeight" x="455" y="0" width="1" height="14" uuid="5893a864-e950-49b5-a1b9-c784aca05b0b"/>
 			</line>
 			<line>
-				<reportElement x="592" y="-1" width="1" height="14" uuid="8615f32c-4719-436a-b976-2262a3d232a8"/>
+				<reportElement stretchType="RelativeToBandHeight" x="592" y="-1" width="1" height="14" uuid="8615f32c-4719-436a-b976-2262a3d232a8"/>
 			</line>
 			<line>
-				<reportElement x="639" y="0" width="1" height="14" uuid="36e51d0a-7fc1-440c-af47-81a724d6527f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="639" y="0" width="1" height="14" uuid="36e51d0a-7fc1-440c-af47-81a724d6527f"/>
 			</line>
 			<line>
-				<reportElement x="695" y="0" width="1" height="14" uuid="fb8855f7-1535-4d97-a0dd-025ac137827f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="695" y="0" width="1" height="14" uuid="fb8855f7-1535-4d97-a0dd-025ac137827f"/>
 			</line>
 			<line>
-				<reportElement x="751" y="-1" width="1" height="14" uuid="64666b6a-ac7e-4b90-80f1-0596bc8357e0"/>
+				<reportElement stretchType="RelativeToBandHeight" x="751" y="-1" width="1" height="14" uuid="64666b6a-ac7e-4b90-80f1-0596bc8357e0"/>
 			</line>
 			<line>
-				<reportElement x="802" y="-1" width="1" height="14" uuid="7deb3d3c-3a5c-4431-bcfd-bc51d5e38d90"/>
+				<reportElement stretchType="RelativeToBandHeight" x="802" y="-1" width="1" height="14" uuid="7deb3d3c-3a5c-4431-bcfd-bc51d5e38d90"/>
 			</line>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="186" y="0" width="187" height="13" uuid="27cbe994-1113-4987-91d2-f96258db9a41"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -248,7 +248,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{AccessoriesName}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="374" y="0" width="81" height="13" uuid="e4e0625d-4093-4003-9535-48b95ce16773"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -256,7 +256,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Color}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="456" y="0" width="53" height="13" uuid="7e306c7f-31c7-43ed-8ad7-b3212d754c6c"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -264,7 +264,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{BrandName}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement x="594" y="0" width="45" height="13" uuid="ba2c1eab-d79a-4777-bb6b-7a5f33ce66b6"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -272,7 +272,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{SizeName}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="true">
 				<reportElement x="640" y="0" width="55" height="13" uuid="a63ad1f2-2d46-410d-9cdf-8e54bc95ea29"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -280,7 +280,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{TotalQty}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="696" y="0" width="55" height="13" uuid="d0c4f772-0a0e-4c5f-a651-ca591f388103"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement textAlignment="Right">
@@ -288,7 +288,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{RequireUnitQty}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="752" y="0" width="50" height="13" uuid="7353d923-2a93-4b64-bea1-2c80f0445f01"/>
 				<box leftPadding="2"/>
 				<textElement>
@@ -296,7 +296,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{UnitName}.toUpperCase()]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0" isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement x="1" y="0" width="26" height="13" uuid="d3285d7a-2332-49b4-8673-d72291298455"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
@@ -304,16 +304,16 @@
 				<textFieldExpression><![CDATA[$V{sl}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="509" y="-1" width="1" height="14" uuid="05de373a-db3d-479e-9f34-0a796bb87c0f"/>
+				<reportElement stretchType="RelativeToBandHeight" x="509" y="-1" width="1" height="14" uuid="05de373a-db3d-479e-9f34-0a796bb87c0f"/>
 			</line>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="512" y="0" width="80" height="13" uuid="2af63804-ec47-49f3-a4c0-b7ea86e0b98f"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{accessoriesSize}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="96" y="-1" width="89" height="14" uuid="0a946b5a-c164-41bd-b9de-11bf28d2aa32"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>
@@ -321,12 +321,12 @@
 				<textFieldExpression><![CDATA[$F{StyleNo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="373" y="-1" width="1" height="14" uuid="c652c4f2-0581-420e-acbd-713d81717eeb"/>
+				<reportElement stretchType="RelativeToBandHeight" x="373" y="-1" width="1" height="14" uuid="c652c4f2-0581-420e-acbd-713d81717eeb"/>
 			</line>
 			<line>
-				<reportElement x="95" y="-1" width="1" height="14" uuid="c7694be0-dd7c-4428-8932-95c5e31ba3ab"/>
+				<reportElement stretchType="RelativeToBandHeight" x="95" y="-1" width="1" height="14" uuid="c7694be0-dd7c-4428-8932-95c5e31ba3ab"/>
 			</line>
-			<textField isBlankWhenNull="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement isPrintRepeatedValues="false" x="28" y="0" width="68" height="13" uuid="ea46af27-dfee-45e0-bbac-10fafe128b40"/>
 				<textElement textAlignment="Center">
 					<font isBold="false"/>

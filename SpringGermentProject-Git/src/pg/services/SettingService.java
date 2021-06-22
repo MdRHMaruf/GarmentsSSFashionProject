@@ -49,6 +49,7 @@ public interface SettingService{
 	public List<noticeModel>getAllnoticesforSearch();
 	public String notificationTargetAdd(JSONObject notificationObject,JSONArray targetList);
 	public String notificationSeen(String targetId);
+	public String updateNotificationToSeen(String notificationId,String targetId);
 	
 	public JSONArray getUserList();
 	public String saveGroup(String group);

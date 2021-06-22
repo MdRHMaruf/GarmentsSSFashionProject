@@ -41,8 +41,9 @@ function notificationClickAction(notificationNo){
     $.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: './getNotificationList',
+		url: './updateNotificationToSeen',
 		data: {
+			notificationId : notificationNo,
 			targetId : targetId
 		},
 		success: function (data) {
@@ -54,10 +55,24 @@ function notificationClickAction(notificationNo){
 }
 
 function notificationUpdate(){
-	
+	let targetId = $("#userId").val();
+    console.log("Target Id",targetId);
+    $.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './notificationSeen',
+		data: {
+			targetId : targetId
+		},
+		success: function (data) {
+			$("#notificationCount").text('0');
+			//$("#notificationList").html('');
+			//loadNotification(data.notificationList);
+		}
+	});
 }
 
-function seenFunction(){
+function clearAllFunction(){
 	let targetId = $("#userId").val();
     console.log("Target Id",targetId);
     $.ajax({
@@ -81,7 +96,7 @@ function loadNotification(data){
 	for(let i = 0; i<length ;i++){
 		let li = data[i];
 		console.log(li);
-		listItem += `<li onclick='notificationClickAction("${li.notificationId}")' style="cursor: pointer;"><p>${li.createdBy}
+		listItem += `<li onclick='${li.targetSeen==0?`notificationClickAction("${li.notificationId})`:""}' class="${li.targetSeen==0?'unseen':'seen'}" style="cursor: pointer;"><p>${li.createdBy}
 									${li.subject} ${li.content} Time-${li.createdTime}</p></li>`;
 	}
 	$("#notificationList").append(listItem);
