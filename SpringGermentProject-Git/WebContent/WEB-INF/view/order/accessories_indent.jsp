@@ -182,11 +182,11 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-md-6">
+								<div class="col-md-12">
 									<div class="form-group  mb-1"
 										style="padding-left: 1px; padding-right: 1px;">
 										<div class="d-flex justify-content-between">
-											<label for="shippingMark" class="col-form-label-sm mb-0 py-0">Ship.
+											<label for="shippingMark" class="col-form-label-sm mb-0 py-0">Shipping
 												Mark</label>
 											<div class="form-check-inline">
 												<label class="form-check-label"> <input
@@ -213,41 +213,12 @@
 
 									</div>
 								</div>
-								<div class="col-md-6">
-									<div class="form-group  mb-1"
-										style="padding-left: 1px; padding-right: 1px;">
-										<div class="d-flex justify-content-start">
-											<div class="form-check-inline">
-												<label class="form-check-label"> <input
-													id="checkSizeRequired" type="checkbox"
-													class="form-check-input" value=""><strong>Size
-														Required</strong></label>
-											</div>
-										</div>
-										<button class="btn btn-sm btn-primary" type="button"
-											id="btnRecyclingData">
-											<i class="fa fa-recycle"></i> Recycling Data
-										</button>
-										<h6 id="sizeHeading">
-											Size: <span id="size-name"></span>
-										</h6>
-									</div>
-								</div>
+								
 							</div>
-							<div class="row">
-								<div class="col-md-2 ml-3">
-									<label class="form-check-label"> <input id="checkSQ"
-										type="checkbox" class="form-check-input">SQ
-									</label>
-								</div>
+							
 
-								<div class="col-md-4">
-									<label class="form-check-label"> <input id="checkSKU"
-										type="checkbox" class="form-check-input">Style SKU
-									</label>
-								</div>
-
-							</div>
+								
+							
 						</div>
 						<div class="col-md-4">
 							<div class="form-group  mb-1"
@@ -361,7 +332,48 @@
 									</div>
 								</div>
 							</div>
-
+							<div class="row">
+								
+								
+								<div class="col-md-12">
+									<input id="checkSQ"
+										type="checkbox" > <label for="checkSQ">Color SKU</label>
+									<!-- <label class="form-check-label"> <input id="checkSQ"
+										type="checkbox" class="form-check-input">Color SKU
+									</label> -->
+								</div>
+								
+								
+								<div class="col-md-12">
+								<input id="checkSKU"
+										type="checkbox" onchange="checkStyleSKUChangeAction()"> <label for="checkSKU" class='mb-1'>Style SKU</label>
+										<input class="form-control-sm" type="text" id="styleSKU" placeholder="Enter Style SKU" style="display:none">
+									<!-- <label class="form-check-label"> <input id="checkSKU"
+										type="checkbox" class="form-check-input">Style SKU
+									</label> -->
+								</div>
+								
+							<div class="col-md-12 mt-1">
+									<div class="form-group  mb-1"
+										style="padding-left: 1px; padding-right: 1px;">
+										<div class="d-flex justify-content-start">
+											<div class="form-check-inline">
+												<label class="form-check-label"> <input
+													id="checkSizeRequired" type="checkbox"
+													class="form-check-input" value=""><strong>Size
+														Required</strong></label>
+											</div>
+										</div>
+										<button class="btn btn-sm btn-primary" type="button"
+											id="btnRecyclingData">
+											<i class="fa fa-recycle"></i> Recycling Data
+										</button>
+										<h6 id="sizeHeading">
+											Size: <span id="size-name"></span>
+										</h6>
+									</div>
+								</div>
+							</div>
 						</div>
 
 						<div class="col-md-4">

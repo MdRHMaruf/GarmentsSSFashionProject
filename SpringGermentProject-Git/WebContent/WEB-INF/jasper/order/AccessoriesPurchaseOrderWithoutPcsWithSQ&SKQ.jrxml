@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SupplierWise Purchase Order" language="groovy" pageWidth="595" pageHeight="842" columnWidth="545" leftMargin="30" rightMargin="20" topMargin="30" bottomMargin="20" uuid="dec8f9ea-9b4d-4475-a7e7-c4951bba8020">
 	<property name="ireport.zoom" value="1.4641000000000017"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="8"/>
+	<property name="ireport.x" value="66"/>
+	<property name="ireport.y" value="344"/>
 	<parameter name="sql" class="java.lang.String">
 		<defaultValueExpression><![CDATA["select (select dbo.number((select ISNULL(sum(amount),0) as Amount from tbAccessoriesIndent where styleid=b.styleid and supplierid=b.supplierid and  pono=a.pono),dolar)) as Taka,b.ShippingMarks,(select StyleNo from  TbStyleCreate where StyleId=b.styleid) as StyleNo,(select ItemName from TbAccessoriesItem where itemid=b.accessoriesItemId) as AccessorisItem,(select colorName from tbColors where ColorId=b.ColorId) as ColorName,b.accessoriesSize,b.size,(select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,a.ManualPo,(select Signature from TbMerchendiserInfo where MUserId=b.IndentPostBy) as Signature,(select Signature from TbMerchendiserInfo where MUserId='1011') as MdSignature,b.mdapproval from tbPurchaseOrderSummary a join tbAccessoriesIndent b on a.pono=b.pono  where  b.styleid='13' and a.pono='9' and supplierid='1' and a.type='Accessories' order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc"]]></defaultValueExpression>
 	</parameter>
@@ -79,6 +79,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 	<field name="caNo" class="java.lang.String"/>
 	<field name="contentNo" class="java.lang.String"/>
 	<field name="terms" class="java.lang.String"/>
+	<field name="garmentsColor" class="java.lang.String"/>
 	<variable name="grossamount" class="java.lang.Double" calculation="Sum">
 		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
@@ -89,15 +90,15 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 		<variableExpression><![CDATA[$F{RequireUnitQty}]]></variableExpression>
 	</variable>
 	<group name="STGP">
-		<groupExpression><![CDATA[$F{StyleNo}]]></groupExpression>
+		<groupExpression><![CDATA[$F{StyleNo}+$F{garmentsColor}]]></groupExpression>
 		<groupHeader>
 			<band height="13">
-				<textField>
-					<reportElement x="0" y="1" width="320" height="11" uuid="d6dcd569-16be-4288-bfe6-21e7b4438110"/>
-					<textElement>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="0" y="2" width="392" height="11" uuid="d6dcd569-16be-4288-bfe6-21e7b4438110"/>
+					<textElement verticalAlignment="Middle">
 						<font size="7" isBold="true"/>
 					</textElement>
-					<textFieldExpression><![CDATA["STYLE# "+$F{StyleNo}+"    P.O.# "+$F{PurchaseOrder}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["STYLE# "+$F{StyleNo}+"    Color# "+$F{garmentsColor}+"    P.O.# "+$F{PurchaseOrder}]]></textFieldExpression>
 				</textField>
 				<line>
 					<reportElement x="544" y="1" width="1" height="11" uuid="690047ed-85f4-47b2-83ba-7fe5d199ab83"/>
@@ -124,12 +125,12 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 					</graphicElement>
 				</line>
 				<textField isStretchWithOverflow="true">
-					<reportElement isPrintRepeatedValues="false" x="318" y="1" width="56" height="12" uuid="3187e4cb-1a0e-4d99-bd81-b4a8bf299d3f"/>
+					<reportElement isPrintRepeatedValues="false" x="418" y="2" width="123" height="11" uuid="3187e4cb-1a0e-4d99-bd81-b4a8bf299d3f"/>
 					<box leftPadding="4"/>
 					<textElement verticalAlignment="Middle">
-						<font size="9"/>
+						<font size="7"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{ShippingMarks}]]></textFieldExpression>
+					<textFieldExpression><![CDATA["Shipping Mark: "+$F{ShippingMarks}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupHeader>
@@ -631,7 +632,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SQ Number]]></text>
+				<text><![CDATA[Color SKU No.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="229" y="0" width="52" height="11" uuid="9fa96196-258c-4a00-9699-58814e429ad7"/>
@@ -639,7 +640,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				<textElement verticalAlignment="Middle">
 					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[SKU Number]]></text>
+				<text><![CDATA[Style SKU No.]]></text>
 			</staticText>
 			<line>
 				<reportElement x="228" y="0" width="1" height="11" uuid="af0839db-f1a9-473f-bce7-6b1c2b0299f0"/>
@@ -750,7 +751,7 @@ order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.Ship
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement isPrintRepeatedValues="false" x="278" y="0" width="61" height="9" uuid="fea48790-4eac-405d-8063-295c3a3a52f5"/>
+				<reportElement isPrintRepeatedValues="false" x="281" y="0" width="58" height="9" uuid="fea48790-4eac-405d-8063-295c3a3a52f5"/>
 				<box leftPadding="2"/>
 				<textElement verticalAlignment="Middle">
 					<font size="7"/>

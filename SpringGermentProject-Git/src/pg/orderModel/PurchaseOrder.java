@@ -15,7 +15,8 @@ public class PurchaseOrder {
 	String paymentType;
 	String currency;
 	String caNo;
-	String contentNo;
+	String rnNo;
+	String fabricsContent;
 	String note;
 	String subject;
 	String body;
@@ -263,17 +264,23 @@ public class PurchaseOrder {
 	public void setCaNo(String caNo) {
 		this.caNo = caNo;
 	}
-	public String getContentNo() {
-		return contentNo;
+	public String getRnNo() {
+		return rnNo;
 	}
-	public void setContentNo(String contentNo) {
-		this.contentNo = contentNo;
+	public void setRnNo(String rnNo) {
+		this.rnNo = rnNo;
 	}
 	public String getTerms() {
 		return terms;
 	}
 	public void setTerms(String terms) {
 		this.terms = terms;
+	}
+	public String getFabricsContent() {
+		return fabricsContent;
+	}
+	public void setFabricsContent(String fabricsContent) {
+		this.fabricsContent = fabricsContent;
 	}
 
 }

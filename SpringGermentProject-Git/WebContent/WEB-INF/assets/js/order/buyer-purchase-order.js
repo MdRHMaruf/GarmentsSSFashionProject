@@ -463,6 +463,7 @@ function submitAction() {
 								dangerAlert("Duplicate Buyer Name..This Unit Name Already Exist")
 							} else {
 								successAlert("Buyer Purchase Order Save Successfully");
+								buyerPOCreateNotificationAdd();
 								refreshAction();
 							}
 							$("#loader").hide();
@@ -1029,7 +1030,7 @@ function uploadNext() {
 				debug('uploading ' + file.name);
 				xhr.send(fd);
 				add();
-				notificationTargetAdd();
+				fileUploadNotificationAdd();
 
 			} else {
 				alert("Select Department")
@@ -1045,7 +1046,7 @@ function uploadNext() {
 	}*/
 }
 
-function notificationTargetAdd(){
+function fileUploadNotificationAdd(){
 	let userId = $("#userId").val();
 	let buyerPoId = $("#buyerPOId").val();
 	$.ajax({
@@ -1058,7 +1059,31 @@ function notificationTargetAdd(){
 				subject:'File Upload',
 				notificationContent:'With Buyer PO',
 				createdBy: userId,
-				issueLinkedId: buyerPoId
+				issueLinkedId: buyerPoId,
+				targetDepartmentId : '3029',
+			})
+		},
+		success: function (data) {
+			console.log("successful");
+		},
+	});
+}
+
+function buyerPOCreateNotificationAdd(){
+	let userId = $("#userId").val();
+	let buyerPoId = $("#buyerPOId").val();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './notificationTargetAdd',
+		data: {
+			object : JSON.stringify({
+				type:'3',
+				subject:'New Buyer PO',
+				notificationContent:' Create',
+				createdBy: userId,
+				issueLinkedId: buyerPoId,
+				targetDepartmentId : '1020,3029'
 			})
 		},
 		success: function (data) {

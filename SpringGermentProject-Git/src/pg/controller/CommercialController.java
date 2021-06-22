@@ -109,6 +109,7 @@ public class CommercialController {
 		if(commercialService.masterLCSubmit(masterLC)) {
 			objmain.put("result", "success");
 			objmain.put("amendmentList", commercialService.getMasterLCAmendmentList(masterLC.getMasterLCNo(), masterLC.getBuyerId()));
+			objmain.put("masterUDAmendmentList", commercialService.getMasterUdAmendmentList(masterLC.getMasterLCNo(),masterLC.getUdNo()));
 		}else {
 			objmain.put("result", "something wrong");
 		}

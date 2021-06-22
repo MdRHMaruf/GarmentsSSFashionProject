@@ -380,6 +380,16 @@ function refreshShippingMarkList() {
 	$("#shippingMark").selectpicker('deselectAll');
 }
 
+function checkStyleSKUChangeAction(){
+
+	if($("#checkSKU").prop('checked')){
+		$("#styleSKU").show();
+	}else{
+		$("#styleSKU").hide();
+		$("#styleSKU").val("");
+	}
+}
+
 $("#btnRecyclingData").click(() => {
 
 	let buyersId = $("#buyerName").val();
@@ -565,7 +575,7 @@ $("#btnRecyclingData").click(() => {
 							let isClosingNeed = false;
 							let rowSpan = 3;
 							if (checkSQ) rowSpan++;
-							if (checkSKU) rowSpan++;
+							//if (checkSKU) rowSpan++;
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
 
@@ -641,7 +651,7 @@ $("#btnRecyclingData").click(() => {
 								}
 								if (checkSQ) {
 									tables += `</tr><tr>
-								<td>SQ</td>`
+								<td>Color SKU</td>`
 									for (let j = 0; j < sizeListLength; j++) {
 										if (sizeList[j].sizeQuantity > 0) {
 											tables += `<td><input id='sq-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 sq-${i}' type='text'/></td>`;
@@ -650,7 +660,7 @@ $("#btnRecyclingData").click(() => {
 										}
 									}
 								}
-								if (checkSKU) {
+								/*if (checkSKU) {
 									tables += `</tr><tr>
 								<td>SKU</td>`
 									for (let j = 0; j < sizeListLength; j++) {
@@ -660,7 +670,7 @@ $("#btnRecyclingData").click(() => {
 											tables += `<td></td>`;
 										}
 									}
-								}
+								}*/
 								tables += "</tr>"
 							}
 							tables += "</tbody></table> </div></div>";
@@ -754,8 +764,8 @@ $("#btnRecyclingData").click(() => {
 															<th >% Qty</th>
 															<th >Total Qty</th>
 															<th >Unit Qty</th>
-															${checkSQ ? '<th >SQ</th>' : ''}
-															${checkSKU ? '<th >SKU</th>' : ''}
+															${checkSQ ? '<th >Color SKU</th>' : ''}
+															
 														</tr>
 													</thead>
 													<tbody id="orderList" class="orderPreview">`
@@ -775,7 +785,7 @@ $("#btnRecyclingData").click(() => {
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}'  type='hidden' value=""/></td>
 											${checkSQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sq-${i}' type='text' /></td>` : ''}
-											${checkSKU ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sku-${i}' type='text' /></td>` : ''}
+											
 										</tr>`;
 
 							}
@@ -910,7 +920,7 @@ $("#btnAdd").click(() => {
 								let totalQty = $("#totalQty-" + cellId).val();
 								let unitQty = $("#unitQty-" + cellId).val();
 								let sqNo = checkSQ ? $("#sq-" + cellId).val() : '';
-								let skuNo = checkSKU ? $("#sku-" + cellId).val() : '';
+								let skuNo = checkSKU ? $("#styleSKU").val() : '';
 								if (unitQty > 0) {
 
 									let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' data-size-group-id='${sizeGroupId}' data-size-id='${sizeId}' 
@@ -955,7 +965,7 @@ $("#btnAdd").click(() => {
 							let totalQty = $("#totalQty-" + rowId).val();
 							let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
 							let sqNo = checkSQ ? $("#sq-" + rowId).val() : '';
-							let skuNo = checkSKU ? $("#sku-" + rowId).val() : '';
+							let skuNo = checkSKU ? $("#styleSKU").val() : '';
 
 							let newRow = `<tr id='newIndentRow-${++listRowId}' class='newIndentRow' data-style-id='${styleId}' data-item-id='${itemId}' data-color-id='${colorId}' 
 											data-size-group-id='${sizeGroupId}' data-size-id='' data-accessories-size='${accessoriesSize}' data-accessories-item-id='${accessoriesItemId}' data-accessories-color-id='${accessoriesColorId}' 
@@ -1318,7 +1328,7 @@ function newEditAction() {
 							let totalQty = $("#totalQty-" + cellId).val();
 							let unitQty = $("#unitQty-" + cellId).val();
 							let sqNo = checkSQ ? $("#sq-" + cellId).val() : '';
-							let skuNo = checkSKU ? $("#sku-" + cellId).val() : '';
+							let skuNo = checkSKU ? $("#styleSKU").val() : '';
 							if (unitQty > 0) {
 								let tempRow = searchRow(styleId, itemId, colorId, sizeGroupId, sizeId, previousAccessoriesItemId, previousAccessoriesColorId, previousUnitId)
 								if (tempRow != undefined) {
@@ -1422,7 +1432,7 @@ function newEditAction() {
 						let totalQty = $("#totalQty-" + rowId).val();
 						let unitQty = ((totalQty / divideBy) / unitValue).toFixed(2);
 						let sqNo = checkSQ ? $("#sq-" + rowId).val() : '';
-						let skuNo = checkSKU ? $("#sku-" + rowId).val() : '';
+						let skuNo = checkSKU ? $("#styleSKU").val() : '';
 
 						let tempRow = searchRow(styleId, itemId, colorId, sizeGroupId, sizeId, previousAccessoriesItemId, previousAccessoriesColorId, previousUnitId)
 						if (tempRow != undefined) {
@@ -1585,7 +1595,8 @@ function refreshAction() {
 	$("#checkShippingMark").prop('checked', false);
 	$("#checkSizeRequired").prop('checked', false);
 	$("#checkSQ").prop('checked', false);
-	$("#checkSKU").prop('checked', false);
+	$("#checkSKU").prop('checked', false).change();
+	
 
 	$("#accessoriesItem").val(0).change();
 	$("#accessoriesSize").val("");
@@ -1746,8 +1757,8 @@ function setIndentItem(rowId, indentType) {
 	else $("#checkSizeRequired").prop('checked', false);
 	if (row.attr('data-sq-no').length > 0) $("#checkSQ").prop('checked', true)
 	else $("#checkSQ").prop('checked', false);
-	if (row.attr('data-sku-no').length > 0) $("#checkSKU").prop('checked', true)
-	else $("#checkSKU").prop('checked', false);
+	if (row.attr('data-sku-no').length > 0) $("#checkSKU").prop('checked', true).change();
+	else $("#checkSKU").prop('checked', false).change();
 
 	$("#accessoriesItem").val(row.attr('data-accessories-item-id')).change();
 	previousAccessoriesItemId = row.attr('data-accessories-item-id');
@@ -1978,7 +1989,7 @@ function recyclingActionForEdit() {
 							let isClosingNeed = false;
 							let rowSpan = 3;
 							if (checkSQ) rowSpan++;
-							if (checkSKU) rowSpan++;
+							//if (checkSKU) rowSpan++;
 							for (let i = 0; i < length; i++) {
 								let item = dataList[i];
 
@@ -2054,7 +2065,7 @@ function recyclingActionForEdit() {
 								}
 								if (checkSQ) {
 									tables += `</tr><tr>
-								<td>SQ</td>`
+								<td>Color SKU</td>`
 									for (let j = 0; j < sizeListLength; j++) {
 										if (sizeList[j].sizeQuantity > 0) {
 											tables += `<td><input id='sq-${i}${sizeList[j].sizeId}' class='form-control-sm max-width-100 min-width-60 sq-${i}' type='text'/></td>`;
@@ -2063,7 +2074,7 @@ function recyclingActionForEdit() {
 										}
 									}
 								}
-								if (checkSKU) {
+								/*if (checkSKU) {
 									tables += `</tr><tr>
 								<td>SKU</td>`
 									for (let j = 0; j < sizeListLength; j++) {
@@ -2073,7 +2084,7 @@ function recyclingActionForEdit() {
 											tables += `<td></td>`;
 										}
 									}
-								}
+								}*/
 								tables += "</tr>"
 							}
 							tables += "</tbody></table> </div></div>";
@@ -2110,7 +2121,7 @@ function recyclingActionForEdit() {
 											$(`#unitQty-${i}${sizeList[j].sizeId}`).val($("#indentUnitQty-" + rowId).text());
 											$(`#hiddenAutoId-${i}${sizeList[j].sizeId}`).val(rowId);
 											if(checkSQ) $(`#sq-${i}${sizeList[j].sizeId}`).val(tempRow.getAttribute("data-sq-no"));
-											if(checkSKU) $(`#sku-${i}${sizeList[j].sizeId}`).val(tempRow.getAttribute("data-sku-no"));
+											if(checkSKU) $(`#styleSKU`).val(tempRow.getAttribute("data-sku-no"));
 											//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
 										}
 
@@ -2165,8 +2176,8 @@ function recyclingActionForEdit() {
 															<th >% Qty</th>
 															<th >Total Qty</th>
 															<th >Unit Qty</th>
-															${checkSQ ? '<th >SQ</th>' : ''}
-															${checkSKU ? '<th >SKU</th>' : ''}
+															${checkSQ ? '<th >Color SKU</th>' : ''}
+															
 														</tr>
 													</thead>
 													<tbody id="orderList" class="orderPreview">`
@@ -2186,7 +2197,7 @@ function recyclingActionForEdit() {
 											<td><input class='form-control-sm max-width-100 min-width-60' id='totalQty-${i}' type="number" onkeyup="setInPercentInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/></td>
 											<td><input class='form-control-sm max-width-100 min-width-60' id='unitQty-${i}' type="number" onkeyup="setTotalByUnitQtyInPreviewTable('${i}'),calculateTotalQtyAndUnitQty()" value="${(parseFloat(item.orderqty * reqPerPcs) + ((item.orderqty * reqPerPcs * inPercent) / 100)).toFixed(1)}"/><input id='hiddenAutoId-${i}'  type='hidden' value=""/></td>
 											${checkSQ ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sq-${i}' type='text' /></td>` : ''}
-											${checkSKU ? `<td><input class='form-control-sm max-width-100 min-width-60' id='sku-${i}' type='text' /></td>` : ''}
+											
 										</tr>`;
 
 							}
@@ -2218,7 +2229,7 @@ function recyclingActionForEdit() {
 									$(`#unitQty-${i}`).val($("#indentUnitQty-" + rowId).text());
 									$(`#hiddenAutoId-${i}`).val(rowId);
 									if(checkSQ) $(`#sq-${i}`).val(tempRow.getAttribute("data-sq-no"));
-									if(checkSKU) $(`#sku-${i}`).val(tempRow.getAttribute("data-sku-no"));
+									if(checkSKU) $(`#styleSKU`).val(tempRow.getAttribute("data-sku-no"));
 									//$(`#percentQty-${i}${sizeList[j].sizeId}`).text(tempRow.getAttribute("data-percent-qty"));
 								}
 							}

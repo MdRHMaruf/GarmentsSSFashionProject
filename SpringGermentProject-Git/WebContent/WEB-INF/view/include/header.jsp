@@ -97,16 +97,24 @@
 
 						<i class="fas fa-bell dropdown-toggle" id="notificationDropdown"
 							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span
-							id="notificationCount" class="badge badge-info" onclick="seenFunction()">0</span></i>
-						<div id="notificationList" class="dropdown-menu"
+							id="notificationCount" class="badge badge-info">0</span></i>
+						<div class="dropdown-menu"
 							aria-labelledby="notificationDropdown">
-
+							<div  id="notificationList">
 							<li style="cursor: pointer;"><p>Mr.Shahinur Rahman
 									Created New Buyer PO Time-2021-02-16</p></li>
 
 							<li style="cursor: pointer;"><p>Mr.Bablu Created New
 									Purchase Order PO-324 Time-2021-02-16</p></li>
+							</div>
+							
+							<li>
+							<button class="btn btn-primary btn-sm" onclick="clearAllFunction()">Clear All</button>
+							</li>
 						</div>
+						
+							
+						
 					</ul>
 					<ul class="nav navbar-nav navbar-right user-menu pull-right">
 						<div class="dropdown">

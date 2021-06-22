@@ -75,11 +75,11 @@
 		if(type.equalsIgnoreCase("Accessories")) {
 			
 			sql="select (select dbo.number((select sum(amount) from tbAccessoriesIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,b.ShippingMarks,b.PurchaseOrder, \r\n"+
-					"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
+					"isnull(b.StyleNo,'') as StyleNo,isnull(gc.colorName,'') as garmentsColor,   \r\n"+
 					" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
 					"ISNULL(c.Colorname,'') as ColorName,isnull(b.sqNumber,'')as sqNumber,isnull(b.skuNumber,'')as skuNumber,isnull(brand.name,'') as brand,b.accessoriesSize,ss.sizeName as size, \r\n"+
 					"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
-					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+					"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,a.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 					"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
 					"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
 					"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+
@@ -90,8 +90,8 @@
 					"from tbPurchaseOrderSummary a   \r\n"+
 					"join tbAccessoriesIndent b   \r\n"+
 					"on a.pono=b.pono    \r\n"+
-					" left join TbStyleCreate sc  \r\n"+
-					" on b.styleId = cast(sc.StyleId as varchar)  \r\n"+
+					"left join tbColors gc \r\n"+
+ 					"on b.ColorId = cast(gc.ColorId as varchar) \r\n"+
 					" left join tbAccessoriesItem ai  \r\n"+
 					" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
 					" left join tbColors c  \r\n"+
@@ -101,7 +101,7 @@
 					"left join tbbrands brand\r\n"+
 					"on b.IndentBrandId = brand.id\r\n"+
 					"where  a.pono='"+poNo+"' and b.supplierid = '"+supplierId+"'   \r\n"+
-					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.ShippingMarks,b.SizeSorting asc";
+					"order by b.styleid,b.PurchaseOrder,b.Itemid,b.accessoriesItemId,b.ColorId,b.IndentColorId,b.ShippingMarks,b.SizeSorting asc";
 			if(previewType.equalsIgnoreCase("withoutPcs")){
 				if(landscapeCheck){
 					jrxmlFile = session.getServletContext().getRealPath("WEB-INF/jasper/order/AccessoriesPurchaseOrderLandscape.jrxml");
@@ -137,12 +137,12 @@
 			if(previewType.equalsIgnoreCase("general")){
 				
 				sql="select (select dbo.number((select sum(amount) from tbZipperIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,b.ShippingMarks,b.PurchaseOrder, \r\n"+
-						"isnull(sc.StyleNo,'') as StyleNo,  \r\n"+
+						"isnull(b.StyleNo,'') as StyleNo,  \r\n"+
 						" isnull(ai.ItemName,'') as AccessorisItem,  \r\n"+
 						"ISNULL(c.Colorname,'') as ColorName,b.accessoriesSize,ss.sizeName as size, \r\n"+
 						"(select unitname from tbunits where UnitId=b.UnitId) as UnitName,  \r\n"+
 						"(select unitname from tbunits where UnitId=b.lengthUnitId) as lengthUnitName, \r\n"+
-						"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
+						"b.TotalQty,b.RequireUnitQty,b.rate,b.dolar,b.amount ,a.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+
 						"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby)   \r\n"+
 						"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+
 						"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+
@@ -153,8 +153,6 @@
 						"from tbPurchaseOrderSummary a   \r\n"+
 						"join tbZipperIndent b   \r\n"+
 						"on a.pono=b.pono    \r\n"+
-						" left join TbStyleCreate sc  \r\n"+
-						" on b.styleId = cast(sc.StyleId as varchar)  \r\n"+
 						" left join tbAccessoriesItem ai  \r\n"+
 						" on b.accessoriesItemId = cast(ai.itemId as varchar)  \r\n"+
 						" left join tbColors c  \r\n"+
@@ -177,7 +175,7 @@
 						 "b.accessoriesItemId,isnull(ai.ItemName,'') as AccessorisItem,b.colorId, \r\n"+  
 						"ISNULL(c.Colorname,'') as ColorName,b.SizeGroupId, \r\n"+
 						"(select unitname from tbunits where UnitId=b.UnitId) as UnitName, \r\n"+  
-						"b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
+						"a.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
 						"(select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) \r\n"+   
 						"OrderBy,(select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,  \r\n"+  
 						"(select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
@@ -210,7 +208,7 @@
 				
 		}else if(type.equalsIgnoreCase("Fabrics")) {
 			sql="select (select dbo.number((select sum(amount) from tbFabricsIndent where pono=a.pono and supplierId=b.supplierid),b.dolar)) as Taka,' ' as ShippingMarks,isnull(sc.StyleNo,'') as StyleNo, isnull(fi.ItemName,'') as AccessorisItem,  ISNULL(c.Colorname,'') as ColorName,isnull(brand.name,'') as brandName,'' as accessoriesSize,'' as size,    \r\n"+
-				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.sqNumber,b.skuNumber,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
+				" (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.width,b.GSM,b.TotalQty,b.TotalQty as RequireUnitQty,b.sqNumber,b.skuNumber,b.dolar,b.rate,b.dolar,b.amount,a.currency,b.poManual,a.orderDate,deliveryDate,  \r\n"+  
 					" (select MerchendiserName from TbMerchendiserInfo  where MerchendiserId=a.orderby) OrderBy,    \r\n"+
 					" (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile,    \r\n"+
 					" (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo,  \r\n"+  
@@ -253,7 +251,7 @@
 					 "  (select colorName from tbColors where ColorId=b.ColorId) as ColorName,  \r\n"+
 					  " b.cartonSize as accessoriesSize,isnull((select ss.sizeName from tbStyleSize ss  where ss.id = b.sizeId),'') as size, \r\n"+ 
 					 " (select unitname from tbunits where UnitId=b.UnitId) as UnitName,b.Ply,b.type,b.Length1,b.Width1,b.Height1,b.cbm,  \r\n"+
-					  " b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,b.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
+					  " b.Qty,b.Qty as RequireUnitQty,b.dolar,b.rate,b.dolar,b.amount,a.currency,b.poManual,a.orderDate,deliveryDate,   \r\n"+
 					  " (select username from Tblogin  where id=a.orderby) OrderBy,   \r\n"+
 					  " (select Mobile from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerMobile, \r\n"+  
 					  " (select Email from TbMerchendiserInfo  where MerchendiserId=a.orderby) as MerEmail,a.Note,a.Subject,cast(a.body as varchar(300)) as body,a.ManualPo, \r\n"+  
@@ -275,6 +273,7 @@
 		}
     	
     	System.out.println(sql);
+    	System.out.println("jrxml file="+jrxmlFile);
         SpringRootConfig sp=new SpringRootConfig();
         
         InputStream input = new FileInputStream(new File(jrxmlFile));

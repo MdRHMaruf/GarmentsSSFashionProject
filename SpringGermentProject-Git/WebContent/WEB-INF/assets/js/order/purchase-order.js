@@ -192,7 +192,8 @@ function submitAction() {
   const paymentType = $("#paymentType").val();
   const currency = $("#currency").val();
   const caNo = $("#caNo").val();
-  const contentNo = $("#contentNo").val();
+  const rnNo = $("#rnNo").val();
+  const fabricsContent = $("#fabricsContent").val();
   const subject = $("#subject").val();
   const body = $("#body").val();
   const note = $("#note").val();
@@ -246,7 +247,8 @@ function submitAction() {
                       paymentType: paymentType,
                       currency: currency,
                       caNo: caNo,
-                      contentNo: contentNo,
+                      rnNo: rnNo,
+                      fabricsContent: fabricsContent,
                       note: note,
                       subject: subject,
                       body: body,
@@ -261,7 +263,9 @@ function submitAction() {
                         dangerAlert("Duplicate Item Name..This Item Name Already Exist")
                       } else {
                         alert("Successfully Submit...");
+                        purchaseOrderCreateNotificationAdd();
                         refreshAction();
+
                       }
                       $("#loader").hide();
                     }
@@ -270,7 +274,6 @@ function submitAction() {
               } else {
                 warningAlert("Please Select Any Item Checked..");
               }
-
             } else {
               warningAlert("Please Select Currency..");
               $("#currency").focus();
@@ -321,7 +324,8 @@ function purchaseOrderEdit() {
   const paymentType = $("#paymentType").val();
   const currency = $("#currency").val();
   const caNo = $("#caNo").val();
-  const contentNo = $("#contentNo").val();
+  const rnNo = $("#rnNo").val();
+  const fabricsContent = $("#fabricsContent").val();
   const note = $("#note").val();
   const subject = $("#subject").val();
   const body = $("#body").val();
@@ -367,7 +371,8 @@ function purchaseOrderEdit() {
                   paymentType: paymentType,
                   currency: currency,
                   caNo: caNo,
-                  contentNo: contentNo,
+                  rnNo: rnNo,
+                  fabricsContent: fabricsContent,
                   note: note,
                   body: body,
                   subject: subject,
@@ -485,6 +490,29 @@ function showPreview(poNo, supplierId, type,previewType='primary') {
 };
 
 
+function purchaseOrderCreateNotificationAdd(){
+	let userId = $("#userId").val();
+	let buyerPoId = $("#buyerPOId").val();
+	$.ajax({
+		type: 'POST',
+		dataType: 'json',
+		url: './notificationTargetAdd',
+		data: {
+			object : JSON.stringify({
+				type:'4',
+				subject:'Purchase Order',
+				notificationContent:' Create',
+				createdBy: userId,
+				issueLinkedId: buyerPoId,
+				targetDepartmentId : '3029'
+			})
+		},
+		success: function (data) {
+			console.log("successful");
+		},
+	});
+}
+
 function getOptions(elementId) {
   let options = "";
   $("#" + elementId + " option").each(function () {
@@ -530,7 +558,8 @@ function searchPurchaseOrder(poNo,poType) {
         $("#paymentType").val(purchaseOrder.paymentType);
         $("#currency").val(purchaseOrder.currency);
         $("#caNo").val(purchaseOrder.caNo);
-        $("#contentNo").val(purchaseOrder.contentNo);
+        $("#rnNo").val(purchaseOrder.rnNo);
+        $("#fabricsContent").val(purchaseOrder.fabricsContent);
         $("#note").val(purchaseOrder.note);
         $("#subject").val(purchaseOrder.subject);
         $("#body").val(purchaseOrder.body);

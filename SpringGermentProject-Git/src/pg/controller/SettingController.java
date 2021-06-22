@@ -98,11 +98,7 @@ public class SettingController {
 			JSONObject notificationObject = (JSONObject)jsonParser.parse(object);
 			//JSONArray itemList = (JSONArray) itemsObject.get("list");
 			JSONArray targetList = null;
-			if(notificationObject.get("type").equals("2")) {
-				targetList = settingService.getDepartmentWiseUserList("3029");
-			}
-			
-			
+			targetList = settingService.getDepartmentWiseUserList(notificationObject.get("targetDepartmentId").toString());
 			return settingService.notificationTargetAdd(notificationObject, targetList);
 			
 		} catch (Exception e) {
@@ -121,6 +117,18 @@ public class SettingController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return "something wrong";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = {"/updateNotificationToSeen"},method=RequestMethod.POST)
+	public String updateNotificationToSeen(String notificationId,String targetId) {
+		try {
+			return settingService.updateNotificationToSeen(notificationId, targetId);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		return "something wrong";
 	}
 
