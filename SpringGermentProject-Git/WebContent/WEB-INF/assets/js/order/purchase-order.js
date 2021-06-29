@@ -459,7 +459,6 @@ function searchIndentItem(indentId, indentType) {
 
 function refreshAction() {
   location.reload();
-
 }
 
 function previewAction(previewType = "general"){
