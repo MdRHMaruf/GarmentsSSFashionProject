@@ -608,4 +608,4 @@
 <jsp:include page="../include/footer.jsp" />
 
 <script
-	src="${pageContext.request.contextPath}/assets/js/order/purchase-order.js"></script>
+	src="${pageContext.request.contextPath}/assets/js/order/purchase-order.js?v=0.1"></script>

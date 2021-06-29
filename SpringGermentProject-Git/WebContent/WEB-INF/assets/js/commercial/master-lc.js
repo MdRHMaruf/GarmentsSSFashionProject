@@ -537,6 +537,8 @@ function masterSubmitAction() {
                       alert("Successfully Submitted");
                       $("#masterAmendmentList").empty();
                       drawMasterLCAmendmentList(data.amendmentList);
+                      $("#masterUdAmendmentList").empty();
+                      drawMasterUDAmendmentList(data.masterUDAmendmentList);
                     } else {
                       alert("Master LC Insertion Failed")
                     }
